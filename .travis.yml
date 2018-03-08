@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "8.9"
+
+branches:
+  only:
+    - master
+    - develop
+before_script:
+
+script:
+  - npx ng build --build-optimizer --prod
