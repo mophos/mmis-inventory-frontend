@@ -9,24 +9,35 @@ export class SearchGenericWarehouseAutocompleteComponent implements OnInit {
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();
   @Input('clearOnSelected') clearOnSelected: EventEmitter<boolean> = new EventEmitter<boolean>();
-  _disabled: boolean = false;
-
+  
   @Input('disabled')
   set setDisabled(value: boolean) {
     this._disabled = value;
   }
+  
+  @Input('warehouseId')
+  set setWarehouseId(value: any) {
+    this.setApiUrl(value);
+  } 
+  
+  _disabled: boolean = false;
+  _warehouseId: any;
 
   token: any;
   query: any = null;
-  searchGenericUrl: any;
+  url: any;
 
   constructor(
     @Inject('API_URL') private apiUrl: string) {
     this.token = sessionStorage.getItem('token');
-    this.searchGenericUrl = `${this.apiUrl}/generics/warehouse/search/autocomplete?token=${this.token}`;
+    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${this._warehouseId}&token=${this.token}`;
   }
 
   ngOnInit() {
+  }
+
+  setApiUrl(warehouseId: any) {
+    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${warehouseId}&token=${this.token}`;
   }
 
   clearSearch() {

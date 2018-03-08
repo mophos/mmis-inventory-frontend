@@ -47,10 +47,9 @@ export class ModalReceiveApproveComponent implements OnInit {
       }
     };
 
-    let token = sessionStorage.getItem('token');
-    let decoded = this.jwtHelper.decodeToken(token);
+    const token = sessionStorage.getItem('token');
+    const decoded = this.jwtHelper.decodeToken(token);
     this.isConfirmApprove = decoded.WM_APPROVE_ALERT === 'Y' ? true : false;
-    
   }
 
   openModal() {
@@ -77,9 +76,7 @@ export class ModalReceiveApproveComponent implements OnInit {
   }
 
   saveApprove() {
-
     const _approveDate = `${this.approveDate.date.year}-${this.approveDate.date.month}-${this.approveDate.date.day}`;
-
     try {
       if (!this.receiveIds.length) {
         this.alertService.error('กรุณาระบุเลขที่ใบรับ')

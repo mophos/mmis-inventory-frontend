@@ -20,11 +20,11 @@ export class AccessCheck {
         // console.log('can access: ', this.rights);
     }
 
-    getRighs(){
+    getRighs() {
         return this.rights;
     }
 
-    can(permissionName: string){
+    can(permissionName: string) {
         if (_.indexOf(this.rights, permissionName) > -1) {
             return true;
         } else {
@@ -32,9 +32,9 @@ export class AccessCheck {
         }
     }
 
-    confirm(permissionName: string, msg: string = 'คุณไม่ได้รับสิทธิ์การเข้าใช้งานส่วนนี้!'){
-        if(this.can(permissionName) === false){
-            this.alertService.error(msg,'Access denied!');
+    confirm(permissionName: string, msg: string = 'คุณไม่ได้รับสิทธิ์การเข้าใช้งานส่วนนี้!') {
+        if (this.can(permissionName) === false) {
+            this.alertService.error(msg, 'Access denied!');
             return false;
         }
         return true;
