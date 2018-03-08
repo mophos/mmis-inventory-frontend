@@ -10,7 +10,8 @@ export class NumberWithoutDotDirective {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    let e = <KeyboardEvent>event;
+    const e = <KeyboardEvent>event;
+
     if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
       // Allow: Ctrl+A
       (e.keyCode == 65 && e.ctrlKey === true) ||
@@ -27,12 +28,16 @@ export class NumberWithoutDotDirective {
       // let it happen, don't do anything
       return;
     }
-    let ch = String.fromCharCode(e.keyCode);
-    let regEx = new RegExp(this.regex);
-    if (regEx.test(ch))
-      return;
-    else
+    const ch = String.fromCharCode(e.keyCode);
+    const regEx = new RegExp(this.regex);
+    // เช็คว่าเป็นตัวเลขหรือไม่
+    if (isNaN(+e.key)) {
       e.preventDefault();
+    } else if (regEx.test(ch)) {
+      return;
+    } else {
+      e.preventDefault();
+    }
   }
 
   @HostListener('focus', ['$event'])
