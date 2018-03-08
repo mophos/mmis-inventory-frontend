@@ -846,9 +846,9 @@ export class ReceivePurchaseComponent implements OnInit {
     
     if (this.receiveExpired) {
       for (const v of this.products) {
-        if (!moment(v.expired_date).isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
-          console.log('err วันหมดอายุ');
+          console.log('err กรุณาระบุวันหมดอายุ');
           this.isExpired = true;
         }
       }
@@ -857,7 +857,7 @@ export class ReceivePurchaseComponent implements OnInit {
     if (!this.isExpired) {
       let count = 0;
       for (const v of this.products) {
-        if (moment(v.expired_date).isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
           const d: any = v.expired_date.split('/');
           const expired_date: any = new Date(d[2], d[1] - 1, d[0]);
           const diffday = moment(expired_date).diff(moment(), 'days');
@@ -879,7 +879,7 @@ export class ReceivePurchaseComponent implements OnInit {
       let checkDiffExpired;
       let count = 0;
       for (const v of this.products) {
-        if (moment(v.expired_date).isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
           const d: any = v.expired_date.split('/');
           const expired_date = moment(new Date(d[2], d[1] - 1, d[0])).format('YYYY-MM-DD');
           checkDiffExpired = await this.receiveService.getPurchaseCheckExpire(v.generic_id, expired_date);
