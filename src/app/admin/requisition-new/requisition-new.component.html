@@ -4,9 +4,9 @@
   <span class="breadcrumb-item active">ขอเบิก</span>
 </nav>
 
-<div class="card" style="padding: 0px 3px 0 3px;">
+<div class="card" style="padding: 0px 3px 0 3px; height: 150px;">
   <div class="card-block" style="padding: 0px 3px 0 3px;">
-    <form>
+    <form style="padding-top: 0px;">
       <section class="form-block">
         <div class="form-group row">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -90,21 +90,16 @@
   </div>
 </div>
 
-<clr-datagrid>
-  <clr-dg-column style="width: 15px;">ลำดับ</clr-dg-column>
-  <clr-dg-column style="width: 100px;">Working Code</clr-dg-column>
-  <clr-dg-column style="width: 300px;">ชื่อ Generic</clr-dg-column>
+<clr-datagrid class="order-form">
+  <clr-dg-column>ชื่อ Generic</clr-dg-column>
   <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
   <clr-dg-column style="width: 200px;">Package</clr-dg-column>
-  <clr-dg-column style="width: 100px;">รวม (Base Unit)</clr-dg-column>
+  <clr-dg-column style="width: 120px;">รวม (Base)</clr-dg-column>
+  <clr-dg-column style="width: 120px;">คงเหลือ (Base)</clr-dg-column>
   <clr-dg-column style="width: 50px;"></clr-dg-column>
 
   <clr-dg-row *ngFor="let g of products;let idx=index;">
-    <clr-dg-cell style="text-align: right;">
-      {{ idx +1}}
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{ g.working_code }}</clr-dg-cell>
-    <clr-dg-cell>{{ g.generic_name }}</clr-dg-cell>
+    <clr-dg-cell>{{idx+1}}. <strong>{{ g.working_code }}</strong> - {{ g.generic_name }}</clr-dg-cell>
     <clr-dg-cell>
       <input type="text" #qty (keyup)="onChangeEditQty(idx, qty.value)" [value]="g.requisition_qty" style="width: 100%; text-align: right; background-color:#FFF9C4"
         placeholder="" wmNumberWithOutDot>
@@ -113,7 +108,7 @@
       <wm-select-receive-unit [genericId]="g.generic_id" [selectedUnitGenericId]="g.unit_generic_id" (onSelect)="onChangeEditUnit($event, idx)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{g.to_unit_qty * g.requisition_qty | number}}</clr-dg-cell>
-    <!-- <clr-dg-cell style="text-align: right;">0</clr-dg-cell> -->
+    <clr-dg-cell style="text-align: right;">{{g.remain_qty | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="removeItem(idx)">
@@ -124,11 +119,8 @@
   </clr-dg-row>
   <!-- แถวเพิ่ม Manual -->
   <clr-dg-row class="newLine">
-    <clr-dg-cell>&nbsp;</clr-dg-cell>
-    <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell>
-      <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="false" [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"
-        (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
+      <wm-search-generic-warehouse-autocomplete [clearOnSelected]="false" [warehouseId]="wmWithdraw" #searchGenericCmp [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"></wm-search-generic-warehouse-autocomplete>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" [(ngModel)]="selectedRequisitionQty" wmNumberWithOutDot style="width: 100%; text-align: right; background-color:#FFF9C4"
@@ -138,11 +130,14 @@
       <wm-select-receive-unit #selectUnits (onSelect)="onChangeUnit($event)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{ selectedRequisitionQty * selectedSmallQty | number }}</clr-dg-cell>
-    <!-- <clr-dg-cell style="text-align: right;">0</clr-dg-cell> -->
+    <clr-dg-cell style="text-align: right;">
+      <span [ngStyle]="{'color: red': selectedRemainQty < (selectedRequisitionQty * selectedSmallQty), 'color: green': selectedRemainQty >= (selectedRequisitionQty * selectedSmallQty)}">{{selectedRemainQty || 0 | number}}</span>
+      <!-- <span style="color: green;" *ngIf=" ">{{selectedRemainQty | number}}</span> -->
+    </clr-dg-cell>
 
     <clr-dg-cell>
       <div class="btn-group btn-primary">
-        <button [disabled]="!selectedSmallQty || !selectedRequisitionQty || !selectedGenericId || !selectedUnitGenericId" class="btn btn-success btn-sm wm-small-btn"
+        <button [disabled]="!selectedSmallQty || !selectedRequisitionQty || !selectedGenericId || !selectedUnitGenericId || (selectedRemainQty < (selectedRequisitionQty * selectedSmallQty))" class="btn btn-success btn-sm wm-small-btn"
           (click)="addProduct()">
           <clr-icon shape="floppy"></clr-icon>
         </button>
