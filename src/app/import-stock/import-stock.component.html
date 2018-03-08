@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="form-group">
+  <select [(ngModel)]="wareHouseSelect" class="select" (change)="openData($event)">
+    <option *ngFor="let item of wareHouse" [value]="item.warehouse_id">{{item.warehouse_id}} - {{item.warehouse_name}}</option>
+  </select>
+</div>
+</div>
+<div class="row wid99">
+<div *ngIf="datagrid">
+<clr-datagrid >
+    <clr-dg-column>Warehouse ID</clr-dg-column>
+    <clr-dg-column>working code</clr-dg-column>
+    <clr-dg-column>product_id</clr-dg-column>
+    <clr-dg-column>unit_id</clr-dg-column>
+    <clr-dg-column>qty</clr-dg-column>
+    <clr-dg-column>min</clr-dg-column>
+    <clr-dg-column>max</clr-dg-column>
+
+    <clr-dg-row *ngFor="let i of importList">
+        <clr-dg-cell>{{i.warehouse}}</clr-dg-cell>
+        <clr-dg-cell>{{i.working_code}}</clr-dg-cell>
+        <clr-dg-cell>
+            <select >
+                <option *ngFor="let p of i.product" [value]="p.product_id">{{p.product_name}}</option>
+              </select>
+        </clr-dg-cell>
+        <clr-dg-cell>{{i.unit_id}}</clr-dg-cell>
+        <clr-dg-cell>{{i.qty}}</clr-dg-cell>
+        <clr-dg-cell>{{i.min}}</clr-dg-cell>
+        <clr-dg-cell>{{i.max}}</clr-dg-cell>
+    </clr-dg-row>
+
+    <!-- <clr-dg-footer>{{users.length}} users</clr-dg-footer> -->
+</clr-datagrid>
+
+</div>
+</div>
+

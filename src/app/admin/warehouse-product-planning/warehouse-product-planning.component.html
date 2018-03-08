@@ -1,0 +1,103 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/warehouse">คลังสินค้า</a>
+  <span class="breadcrumb-item active">กำหนดรายการสินค้าในคลัง</span>
+</nav>
+
+<div class="card" style="padding: 0px;">
+  <div class="card-block">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="">คลังสินค้า
+          <strong>{{warehouseId}} - {{ warehouseName }}</strong>
+        </label>
+      </div>
+      <div class="col-md-6">
+        <div class="btn-group" style="float: right;">
+          <button class="btn btn-sm btn-success" (click)="save()" [disabled]="!products.length">
+            <clr-icon shape="floppy"></clr-icon> บันทึกรายการ
+          </button>
+          <button class="btn btn-sm btn-danger" routerLink="/admin/warehouse">
+            <clr-icon shape="home"></clr-icon> ยกเลิก/กลับ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row" style="padding-top: 10px;">
+  <div class="col-md-6">
+    <label for="slGrops">เลือกทั้งหมดจาก</label>
+    <div class="select" style="display: inline-block; width: 200px;">
+      <select id="slGrops" name="slGrops" [(ngModel)]="groupId">
+        <option *ngFor="let t of groups" [value]="t.generic_type_id">{{ t.generic_type_name }}</option>
+      </select>
+    </div>
+    <button class="btn btn-sm btn-success" (click)="getProductInGroups()" [disabled]="!groupId">
+      <clr-icon shape="plus"></clr-icon> เพิ่มรายการ
+    </button>
+
+    <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelAll()" [disabled]="!products.length">
+      <clr-icon shape="trash"></clr-icon> ยกเลิกทั้งหมด
+    </button>
+  </div>
+  <div class="col-md-1">
+    <label for="">เพิ่มรายการ</label>
+  </div>
+  <div class="col-md-4">
+    <wm-search-generic-autocomplete (onSelect)="setSelectedProduct($event)"></wm-search-generic-autocomplete>
+  </div>
+  <!-- <div class="col-md-1">
+    <button class="btn btn-sm btn-success wm-small-btn" (click)="doAddProduct()" [disabled]="!selected">
+      <clr-icon shape="plus"></clr-icon> เพิ่ม
+    </button>
+  </div> -->
+</div>
+
+<clr-datagrid class="grid-order">
+  <clr-dg-column style="width: 120px;" [clrDgField]="'working_code'">Working Code</clr-dg-column>
+  <!-- <clr-dg-column [clrDgField]="'generic_name'">ชื่อสามัญ (Generic name)</clr-dg-column> -->
+  <clr-dg-column [clrDgField]="'generic_name'">ชื่อเวชภัณฑ์ (Generic Name)</clr-dg-column>
+  <clr-dg-column style="width: 100px;">Base Unit</clr-dg-column>
+  <clr-dg-column style="width: 120px;">Minimum</clr-dg-column>
+  <clr-dg-column style="width: 120px;">Maximum</clr-dg-column>
+  <clr-dg-column style="width: 120px;">Modifier</clr-dg-column>
+  <clr-dg-column style="width: 120px;">Requisition Quota</clr-dg-column>
+  <clr-dg-column style="width: 100px;"></clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let product of products; let idx = index;">
+    <clr-dg-cell>{{product.working_code}}</clr-dg-cell>
+    <clr-dg-cell>{{product.generic_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">{{product.unit_name}}</clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #max (keyup)="changeMax(product.generic_id, max.value)" class="wm-edit-box-number" [value]="product.max_qty"
+        style="width: 100%; background-color: #FFF9C4" wmNumberOnly />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #min (keyup)="changeMin(product.generic_id, min.value)" class="wm-edit-box-number" [value]="product.min_qty"
+        style="width: 100%; background-color: #FFF9C4" wmNumberOnly />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #modifier (keyup)="changeModifier(product.generic_id, modifier.value)" class="wm-edit-box-number" [value]="product.min_modifier_qty"
+        style="width: 100%; background-color: #FFF9C4" wmNumberOnly />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #qouta (keyup)="changeQuota(product.generic_id, quota.value)" class="wm-edit-box-number" [value]="product.requisition_quota_qty"
+        style="width: 100%; background-color: #FFF9C4" wmNumberOnly />
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <button class="btn btn-sm btn-danger btn-icon" (click)="remove(product.generic_id)">
+        <clr-icon shape="trash"></clr-icon>
+      </button>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="20"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

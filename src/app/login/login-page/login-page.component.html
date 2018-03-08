@@ -1,0 +1,25 @@
+<clr-main-container>
+  <!-- <clr-header class="header-6">
+    <div class="branding">
+      <a class="nav-link">
+        <img src="./assets/images/logo-mmis.png" style="width: 100px; height: 70px; padding-right: 5px;" alt="mmis logo" />        <span class="title">Warehouse & Inventory</span>
+      </a>
+    </div>
+  </clr-header> -->
+  <div class="login-wrapper">
+    <form class="login">
+      <label class="title">
+            Inventory Management&#174;
+        </label>
+      <div class="login-group">
+        <input (keypress)="enterLogin($event)" autocomplete="off" class="username" [(ngModel)]="username" type="text" name="login_username" placeholder="ชื่อผู้ใช้งาน">
+        <input (keypress)="enterLogin($event)" class="password" [(ngModel)]="password" type="password" name="login_password" placeholder="รหัสผ่าน">
+        <div style="text-align: center" *ngIf="isLogging">
+          <span class="spinner spinner-inline">กรุณารอซักครู่...</span>
+          <span>กรุณารอซักครู่...</span>
+        </div>
+        <button type="button" (click)="doLogin()" class="btn btn-primary" [disabled]="!username || !password || isLogging">เข้าสู่ระบบ</button>
+      </div>
+    </form>
+  </div>
+</clr-main-container>

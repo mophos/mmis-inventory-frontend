@@ -1,0 +1,47 @@
+<nav class="breadcrumb">
+    <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+    <a class="breadcrumb-item" href="javascript://" routerLink="/staff/requisition">เบิกยาและเวชภัณฑ์</a>
+  </nav>
+  <div class="card">
+    <div class="card-header primary">Template ชุดเบิก</div>
+    <div class="card-block">    
+        <button class="btn btn-sm btn-success" [routerLink]="['/staff/requisition-templates/new']">
+          + สร้าง Template ชุดเบิก
+        </button>
+    </div>
+       <div style="padding-top: 10px;"></div>
+          <clr-datagrid>
+            <!-- <clr-dg-column [clrDgField]="'template_id'">เลขที่ Template</clr-dg-column> -->
+            <clr-dg-column [clrDgField]="'template_subject'">ชื่อ Template</clr-dg-column>
+            <clr-dg-column [clrDgField]="'src_warehouse_name'">คลังที่ใช้เบิก</clr-dg-column>
+            <clr-dg-column [clrDgField]="'dst_warehouse_name'">เบิกจากคลัง</clr-dg-column>
+            <clr-dg-column>#</clr-dg-column>
+            <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+            <clr-dg-row *clrDgItems="let w of templates">
+              <wm-product-in-template-detail *clrIfExpanded [templateId]="w.template_id" ngProjectAs="clr-dg-row-detail"></wm-product-in-template-detail>
+              <!-- <clr-dg-cell>{{w.template_id}}</clr-dg-cell> -->
+              <clr-dg-cell>{{w.template_subject}}</clr-dg-cell>   
+              <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell>                     
+              <clr-dg-cell>{{w.src_warehouse_name}}</clr-dg-cell>                     
+              <clr-dg-cell style="text-align: center;">
+                <div class="btn-group">
+                  <button title="ส่งออก Excel" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="print(w.template_id)">
+                    <clr-icon shape="printer" ></clr-icon>
+                  </button>
+                  <button title="แก้ไข" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/staff/requisition-templates/edit/', w.template_id]">
+                    <clr-icon shape="note"></clr-icon>
+                  </button>
+                  <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeTemplate(w)">
+                    <clr-icon shape="trash"></clr-icon>
+                  </button>
+                </div>
+              </clr-dg-cell>
+            </clr-dg-row>
+            <clr-dg-footer>
+              {{pageWait.firstItem + 1}} - {{pageWait.lastItem + 1}} of {{pageWait.totalItems}} รายการ
+              <clr-dg-pagination #pageWait [clrDgPageSize]="20"></clr-dg-pagination>
+            </clr-dg-footer>
+          </clr-datagrid>
+  </div>
+
+  <wm-loading-modal #modalLoading></wm-loading-modal>

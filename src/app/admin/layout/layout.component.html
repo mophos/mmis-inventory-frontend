@@ -1,0 +1,208 @@
+<clr-main-container>
+  <clr-header class="header-6">
+    <div class="branding" style="padding-left: 0px;">
+      <a class="nav-link">
+        <img src="./assets/images/logo-mmis.png" style="width: 100px; height: 70px; padding-right: 5px;" alt="mmis logo">
+        <span class="title">Inventory Management</span>
+      </a>
+    </div>
+    <div class="header-nav">
+      <a class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" href="javascript://" (click)="goHome()">
+        <clr-icon shape="home"></clr-icon>
+        <span class="tooltip-content">Home</span>
+      </a>
+      <a href="{{env.purchasingUrl}}" *ngIf="Purchasing" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+        <clr-icon shape="shopping-cart"></clr-icon>
+        <span class="tooltip-content">Purchasing</span>
+      </a>
+      <a href="{{env.planningUrl}}" *ngIf="Planning" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right"
+        role="tooltip" aria-haspopup="true">
+        <clr-icon shape="event"></clr-icon>
+        <span class="tooltip-content">Planning</span>
+      </a>
+      <a href="{{env.inventoryUrl}}" routerLink="{{env.inventoryUrl}}" routerLinkActive="active" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+        <clr-icon shape="data-cluster"></clr-icon>
+        <span class="tooltip-content">Inventory</span>
+      </a>
+      <a href="{{env.materialsUrl}}" *ngIf="Materials" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+        <clr-icon shape="storage"></clr-icon>
+        <span class="tooltip-content">Materials</span>
+      </a>
+      <a href="{{env.contractsUrl}}" *ngIf="Contracts" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+        <clr-icon shape="scroll"></clr-icon>
+        <span class="tooltip-content">Contracts</span>
+      </a>
+      <a href="{{env.umUrl}}" *ngIf="Administrator" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+        <clr-icon shape="cog"></clr-icon>
+        <span class="tooltip-content">Administrator</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-text" clrDropdownTrigger>
+          {{fullname}} ({{warehouseCode}} - {{ warehouseName }})
+          <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <a href="javascript://" (click)="showManualStaff()" clrDropdownItem>คู่มือเจ้าหน้าที่หน่วยเบิก/รพ.สต.</a>
+          <a href="javascript://" (click)="openChangePasswordModal()" clrDropdownItem>เปลี่ยนรหัสผ่าน</a>
+          <a href="javascript://" (click)="logout()" clrDropdownItem>ออกจากระบบ</a>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </clr-header>
+
+  <div class="content-container">
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+
+    <clr-vertical-nav class="is-collapsed" [clrVerticalNavCollapsible]="collapsible" [(clrVerticalNavCollapsed)]="collapse">
+      <a clrVerticalNavLink routerLink="/admin/transfer-dashboard" title="เวชภัณฑ์ที่ถึงจุดเบิก" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="alarm-clock" class="has-badge is-solid"></clr-icon>
+        เวชภัณฑ์ที่ถึงจุดเบิก
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/products" title="รายการสินค้า" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="folder"></clr-icon>
+        รายการสินค้า
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/receives" title="รับสินค้าเข้าคลัง" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="plus"></clr-icon>
+        รับสินค้าเข้าคลัง
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/issues" title="ตัดจ่ายสินค้า" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="scissors"></clr-icon>
+        ตัดจ่ายสินค้า
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/transfer" title="โอนสินค้า" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="two-way-arrows"></clr-icon>
+        โอนสินค้า
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/requisition" title="เบิกสินค้า" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="tools"></clr-icon>
+        เบิกสินค้า
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/alert-expired" title="แจ้งเตือนยาหมดอายุ" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="alarm-clock"></clr-icon>
+        แจ้งเตือนยาหมดอายุ
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/period" title="ปิดรอบบัญชี" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="shield-check"></clr-icon>
+        ปิดรอบบัญชี
+      </a>
+      <!-- <a clrVerticalNavLink routerLink="/admin/counting" title="นับสินค้าคงเหลือ" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="clipboard"></clr-icon>
+        นับสินค้าคงเหลือ
+      </a> -->
+      <a clrVerticalNavLink routerLink="/admin/his-issue-transaction" title="ตัดจ่ายจาก HIS" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="sync"></clr-icon>
+        ตัดจ่ายจาก HIS
+      </a>
+      <!-- <a clrVerticalNavLink routerLink="/admin/abc-ven" title="กำหนดรายการ ABC/VEN" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="organization"></clr-icon>
+        กำหนดรายการ ABC/VEN
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/abc-setting" title="ตั้งค่า ABC" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="slider"></clr-icon>
+        ตั้งค่า ABC
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/ven-setting" title="ตั้งค่า VEN" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="slider"></clr-icon>
+        ตั้งค่า VEN
+      </a> -->
+
+      <clr-vertical-nav-group routerLinkActive="active">
+        <a clrVerticalNavLink href="javascript://" title="กำหนดข้อมูลพื้นฐาน">
+          <clr-icon shape="settings" clrVerticalNavIcon></clr-icon>
+          กำหนดข้อมูลพื้นฐาน
+        </a>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <a clrVerticalNavLink routerLink="/admin/warehouse" routerLinkActive="active">
+            <clr-icon shape="library"></clr-icon>
+            คลังสินค้า
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/warehouse-type" routerLinkActive="active">
+            <clr-icon shape="library"></clr-icon>
+            ประเภทคลังสินค้า
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/requisition-type" routerLinkActive="active">
+            <clr-icon shape="note"></clr-icon>
+            ประเภทการเบิก
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/transection-type" routerLinkActive="active">
+            <clr-icon shape="note"></clr-icon>
+            ประเภทการตัดจ่าย
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/receiveother-type" routerLinkActive="active">
+            <clr-icon shape="note"></clr-icon>
+            ประเภทการรับแบบอื่นๆ
+          </a>
+          <!-- <a clrVerticalNavLink routerLink="/admin/warehouse-products" routerLinkActive="active">
+            <clr-icon shape="folder"></clr-icon>
+            กำหนดสินค้าในคลัง
+          </a> -->
+          <a clrVerticalNavLink routerLink="/admin/requisition-templates" routerLinkActive="active">
+            <clr-icon shape="plugin"></clr-icon>
+            Template ชุดเบิก
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/shipping-network" routerLinkActive="active">
+            <clr-icon shape="car"></clr-icon>
+            Shipping Network
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/receive-planning" routerLinkActive="active">
+            <clr-icon shape="folder-open"></clr-icon>
+            กำหนดการรับสินค้า
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/his-mapping" routerLinkActive="active">
+            <clr-icon shape="share"></clr-icon>
+            Map รหัสยากับ HIS
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/donators" routerLinkActive="active">
+            <clr-icon shape="organization"></clr-icon>
+            ผู้บริจาค
+          </a>
+        </clr-vertical-nav-group-children>
+      </clr-vertical-nav-group>
+      <clr-vertical-nav-group routerLinkActive="active">
+        <a clrVerticalNavLink href="javascript://">
+          <clr-icon shape="printer" clrVerticalNavIcon></clr-icon>
+          ระบบรายงาน
+        </a>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <a clrVerticalNavLink routerLink="/admin/reports/product-remain" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            สินค้าคงเหลือ
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/reports/product-expired" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            สินค้าใกล้หมดอายุ
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/reports/product-manufacture" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            รายงานการผลิต
+          </a>
+          <!-- <a clrVerticalNavLink routerLink="/admin/reports/receives" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            ประวัติการตรวจรับสินค้า
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/reports/value-products" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            รายงานมูลค่ายาและเวชภัณฑ์คงคลัง
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/reports/product-summary" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            สรุปงานคลังเวชภัณฑ์
+          </a> -->
+        </clr-vertical-nav-group-children>
+      </clr-vertical-nav-group>
+      <!-- <a clrVerticalNavLink routerLinkActive="active" routerLink="./credit">
+        <clr-icon shape="certificate" clrVerticalNavIcon></clr-icon>
+        Credit
+      </a> -->
+    </clr-vertical-nav>
+
+  </div>
+
+</clr-main-container>
+
+<wm-change-password-modal #modalChangePassword></wm-change-password-modal>

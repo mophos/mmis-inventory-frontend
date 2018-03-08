@@ -1,0 +1,134 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <span class="breadcrumb-item active">กำหนดยอดคงเหลือ/min-max</span>
+</nav>
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink id="link1">กำหนดสินค้าคงเหลือ</button>
+    <clr-tab-content id="content1" *clrIfActive>
+      <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+          <div class="col-md-9">
+              ค้นหา : <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
+              <!-- <input type="text" class="form-control"> -->
+            </div>
+        <div class="col-md-3" style="text-align: right;">
+          <div class="select">
+            <select [(ngModel)]="genericType" name="genericType" (change)="getProducts()">
+              <option value="">ทั้งหมด</option>
+              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <clr-datagrid [style.height.%]="80">
+        <clr-dg-column [clrDgField]="'working_code'" [style.width.px]="150">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            Working Code
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">ชื่อเวชภัณฑ์</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">
+          <ng-container *clrDgHideableColumn="{hidden: true}">
+            คงเหลือ(pack)
+          </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column [style.width.px]="100">คงเหลือ</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">Base Unit</clr-dg-column>
+        <clr-dg-column [clrDgField]="'lot_no'" [style.width.px]="150">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            Lot no.
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="150">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            วันหมดอายุ
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="50"></clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการสินค้าในคลัง</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let p of products; let idx = index;" [clrDgItem]="p">
+          <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
+          <clr-dg-cell>
+            <span class="p4">{{p.generic_name}}</span>
+            <br>
+            <span class="p7">{{p.product_name}}</span>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.base_unit_name}})</clr-dg-cell>
+          <clr-dg-cell>
+            <input type="text" #qty (keyup)="onChangeQty(p, qty.value)" [value]="p.qty" style="width: 100%; text-align: right; background-color:#FFF9C4"
+              placeholder="0" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.base_unit_name}}</clr-dg-cell>
+          <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+          <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center">
+            <button class="btn btn-sm btn-icon btn-success" (click)="saveQty(p)" [disabled]="p.old_qty === p.qty">
+              <clr-icon shape="floppy"></clr-icon>
+            </button>
+          </clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
+          <clr-dg-pagination #paginationA [clrDgPageSize]="100"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="getGenerics()">กำหนด MIN/MAX</button>
+    <clr-tab-content *clrIfActive>
+      <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+      <div class="col-md-9">
+          ค้นหา : <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchMinMax($event)" style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
+          <!-- <input type="text" class="form-control"> -->
+        </div>
+        <div class="col-md-3" style="text-align: right;">
+          <div class="select">
+            <select [(ngModel)]="genericType" name="genericType" (change)="getGenerics()">
+              <option value="">ทั้งหมด</option>
+              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <clr-datagrid [style.height.%]="75">
+
+        <clr-dg-column [clrDgField]="'working_code'" [style.width.px]="160">Working Code</clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">ชื่อเวชภัณฑ์</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">Base Unit</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">MIN</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">MAX</clr-dg-column>
+
+        <clr-dg-placeholder>ไม่พบรายการสินค้าในคลัง</clr-dg-placeholder>
+
+        <clr-dg-row *clrDgItems="let g of generics; let idx = index;" [clrDgItem]="g">
+          <clr-dg-cell>{{g.working_code}}</clr-dg-cell>
+          <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
+          <clr-dg-cell>{{g.unit_name}}</clr-dg-cell>
+          <clr-dg-cell>
+            <input type="text" #min (keyup)="onChangeMin(g, min.value)" [value]="g.min_qty" style="width: 100%; text-align: right; background-color:#FFF9C4"
+              placeholder="0" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell>
+            <input type="text" #max (keyup)="onChangeMax(g, max.value)" [value]="g.max_qty" style="width: 100%; text-align: right; background-color:#FFF9C4"
+              placeholder="0" wmNumberWithOutDot>
+          </clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          <button class="btn btn-sm btn-success" (click)="saveMinMax()">
+            <clr-icon shape="floppy"></clr-icon> บันทึกข้อมูล
+          </button>
+
+          {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
+          <clr-dg-pagination #paginationA [clrDgPageSize]="100"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
+
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

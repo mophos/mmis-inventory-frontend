@@ -1,0 +1,24 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column [style.width.%]="40">ชื่อยา</clr-dg-column>
+    <clr-dg-column [style.width.%]="15">จำนวนที่โอน</clr-dg-column>
+    <clr-dg-column [style.width.%]="15">หน่วย</clr-dg-column>
+    <clr-dg-column [style.width.%]="15">Lot No.</clr-dg-column>
+    <clr-dg-column [style.width.%]="15">หมดอายุ</clr-dg-column>
+    <clr-dg-row *clrDgItems="let p of items">
+      <clr-dg-cell>
+        <span class="p4">{{p.generic_name}}</span>  
+        <br> 
+        <span class="p7">{{p.product_name}}</span>   
+      </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{p.transfer_qty | number}}</clr-dg-cell>
+      <clr-dg-cell >{{p.from_unit_name}} ({{p.conversion_qty | number}} {{p.to_unit_name}})</clr-dg-cell>
+      <clr-dg-cell >{{p.lot_no}}</clr-dg-cell>
+      <clr-dg-cell >{{p.expired_date | expiredDate}}</clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+      <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>

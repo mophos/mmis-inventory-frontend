@@ -1,0 +1,22 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+    <clr-dg-column>วันหมดอายุ</clr-dg-column>
+    <clr-dg-column>จำนวนตัดจ่าย</clr-dg-column>
+    <clr-dg-column>หน่วยบรรจุ</clr-dg-column>
+    <clr-dg-column>รวม(base unit)</clr-dg-column>
+    <clr-dg-column>คงเหลือ(base unit)</clr-dg-column>
+    <clr-dg-row *ngFor="let r of items;let idx=index">
+      <clr-dg-cell>{{r.product_name}}</clr-dg-cell>
+      <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
+      <clr-dg-cell>
+        <input type="text" #qty (keyup)="onChangeQty(qty, idx)" style="width: 100%; text-align: right; background-color:#FFF9C4"
+        placeholder="0" wmNumberWithOutDot [value]="r.product_qty">
+      </clr-dg-cell>
+      <clr-dg-cell>{{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}})</clr-dg-cell>
+      <clr-dg-cell style="text-align: right">{{r.product_qty * r.conversion_qty | number}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right">{{r.small_remain_qty | number}}</clr-dg-cell>
+    </clr-dg-row>
+    <!-- <clr-dg-footer>{{r.length}} รายการ</clr-dg-footer> -->
+  </clr-datagrid>
+</div>

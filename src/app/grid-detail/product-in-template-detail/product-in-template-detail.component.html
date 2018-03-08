@@ -1,0 +1,10 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column [style.width.%]="10">รหัสสินค้า</clr-dg-column>
+    <clr-dg-column [style.width.%]="80">ชื่อสินค้า</clr-dg-column>
+    <clr-dg-row *ngFor="let r of productsdetail">
+      <clr-dg-cell>{{ r.generic_id }}</clr-dg-cell>
+      <clr-dg-cell>{{ r.generic_name }}</clr-dg-cell>
+    </clr-dg-row>
+  </clr-datagrid>
+</div>

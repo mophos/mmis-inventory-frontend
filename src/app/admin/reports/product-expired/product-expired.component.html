@@ -1,0 +1,73 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">รายการยาใกล้หมดอายุ</span>
+</nav>
+
+<form>
+  <section class="form-block">
+    <div class="form-group row wid99">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">คลัง</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="select">
+          <select name="warehouseId"  [(ngModel)]="warehouseId">
+            <option value="0">ทุกคลังสินค้า</option>
+              <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+                {{ w.warehouse_id }}-{{ w.warehouse_name }}
+                </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">เวชภัณฑ์</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <!-- <div class="select">
+          <select name="warehouseId"  [(ngModel)]="warehouseId">
+            <option value="">ทุกคลังสินค้า</option>
+              <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+                {{ w.warehouse_id }}-{{ w.warehouse_name }}
+                </option>
+          </select>
+        </div> -->
+        <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="false"  (onSelect)="setSelectedGeneric($event)"
+        (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
+      </div>
+      </div>
+      <!-- <div class="form-group row wid99">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ตั้งแต่</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+      </div>
+    </div> -->
+    <div class="form-group row">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ตั้งแต่</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="endDate" class="required">ถึง</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary" [disabled]="isPreview" (click)="showReport()">แสดงรายงาน</button>
+        <button class="btn btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button>
+      </div>
+    </div>
+  </section>
+</form>
+<span class="spinner spinner-inline" *ngIf="isPreview">
+  Loading...
+</span>
+<span *ngIf="isPreview">
+  Loading...
+</span>
+
+<wm-html-preview #htmlPreview></wm-html-preview>

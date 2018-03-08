@@ -1,0 +1,69 @@
+<h4 class="text-danger">คลังสินค้า {{ warehouseId }}</h4>
+<p>เลือกสินค้าที่ต้องการใช้ในคลัง</p>
+<form class="search">
+  <label for="search_input">
+            <input id="search_input" name="query" [(ngModel)]="query" (keyup)="doSearch()" style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
+        </label>
+</form>
+<clr-datagrid [style.height.px]="250" [clrDgLoading]="loading">
+  <clr-dg-column [style.width.%]="40">ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column>ชื่อ Generic</clr-dg-column>
+  <clr-dg-column>หน่วย</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let p of allProducts" [clrDgItem]="p">
+    <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+    <clr-dg-cell>{{p.generic_name}}</clr-dg-cell>
+    <clr-dg-cell>{{p.unit_name}}</clr-dg-cell>
+    <clr-dg-cell>
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-success" [disabled]="p.is_selected == 'Y'" (click)="addProduct(p)">เพิ่ม</button>
+        <!-- <button class="btn btn-sm btn-outline-success" [disabled]="p.is_selected == 'Y'" (click)="showLots(p)">คงเหลือ</button> -->
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+  </clr-dg-footer>
+
+</clr-datagrid>
+
+<p>รายการสินค้าในคลัง</p>
+<clr-datagrid [style.height.px]="300">
+  <clr-dg-column [style.width.%]="40">ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column>ชื่อ Generic</clr-dg-column>
+  <clr-dg-column>หน่วย</clr-dg-column>
+  <clr-dg-column>Min</clr-dg-column>
+  <clr-dg-column>Max</clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let g of products" [clrDgItem]="g">
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="removeSelected(g)">
+              <clr-icon shape="trash" class="is-error"></clr-icon>
+              ลบรายการ</button>
+    </clr-dg-action-overflow>
+    <clr-dg-cell>{{g.product_name}}</clr-dg-cell>
+    <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
+    <clr-dg-cell>{{g.unit_id}}</clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" style="width: 100px; text-align: right;" #min (keyup)="setMin(g, min.value)" [value]="g.min || 0">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" style="width: 100px; text-align: right;"  #max (keyup)="setMax(g, max.value)" [value]="g.max || 0">
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{paginationSelected.firstItem + 1}} - {{paginationSelected.lastItem + 1}} จาก {{paginationSelected.totalItems}} รายการ
+    <clr-dg-pagination #paginationSelected [clrDgPageSize]="50"></clr-dg-pagination>
+  </clr-dg-footer>
+
+</clr-datagrid>
+
+
+ <div class="card-footer">
+    <button class="btn btn-sm btn-primary" [disabled]="!products.length" (click)="saveWarehouseProduct()">บันทึกขอเบิก</button>
+    <a href="#/admin/requisition" class="btn btn-sm btn-danger">ยกเลิก</a>
+  </div> 

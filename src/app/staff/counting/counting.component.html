@@ -1,0 +1,76 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ตรวจนับสินค้าตามรอบการนับ</span>
+</nav>
+<br> คลิกที่
+<clr-icon shape="ellipsis-vertical" size="14"></clr-icon> ในช่องรายการ เพื่อดูเมนูใช้งาน
+<div style="padding-top: 10px;"></div>
+<clr-datagrid [clrDgLoading]="loading" [style.height.px]="480">
+  <clr-dg-column [clrDgField]="'count_date'">วันที่นับ</clr-dg-column>
+  <clr-dg-column [clrDgField]="'product_id'">
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      รหัสสินค้า
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-column [clrDgField]="'product_name'">ชื่อสินค้า (ชื่อการค้า)</clr-dg-column>
+  <clr-dg-column [clrDgField]="'lot_no'">Lot no</clr-dg-column>
+  <clr-dg-column [clrDgField]="'expired_date'">
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      วันหมดอายุ
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-column [clrDgField]="'lot_no'">คงเหลือ</clr-dg-column>
+  <clr-dg-column [clrDgField]="'small_unit'">
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      หน่วย
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+  <clr-dg-row *clrDgItems="let l of cycleLogs" [clrDgItem]="l">
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="showModalRemark(l)">
+            <clr-icon shape="note"></clr-icon>
+            บันทึกหมายเหตุการนับ (กรณีไม่ตรงกับยอดนับจริง)</button>
+    </clr-dg-action-overflow>
+    <clr-dg-cell>{{ l.count_date | toThaiDate }}</clr-dg-cell>
+    <clr-dg-cell>{{l.product_id}}</clr-dg-cell>
+    <clr-dg-cell>{{l.product_name}}</clr-dg-cell>
+    <clr-dg-cell>{{l.lot_no}}</clr-dg-cell>
+    <clr-dg-cell>{{l.expired_date | expiredDate}}</clr-dg-cell>
+    <clr-dg-cell>{{l.qty | number}}</clr-dg-cell>
+    <clr-dg-cell>{{l.small_unit}}</clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="openModalRemark">
+  <h3 class="modal-title">บันทึกเหตุผลเพิ่มเติม (กรณีไม่ตรงกับยอดนับจริง)</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <div class="form-group">
+          <label class="required" for="txtProductName">ชื่อสินค้า</label>
+          <input type="text" id="txtProductName" disabled name="txtProductName" [(ngModel)]="productName" size="45">
+        </div>
+        <div class="form-group">
+          <label class="required" for="txtRemainAcc">ยอดคงเหลือในบัญชี</label>
+          <input type="text" id="txtRemainAcc" disabled name="txtRemainAcc"  wmNumberOnly [(ngModel)]="remainAcc" size="45">
+        </div>
+        <div class="form-group">
+          <label class="required" for="txtRemainStock">ยอดคงเหลือจริง</label>
+          <input type="text" id="txtRemainStock" name="txtRemainStock" wmNumberOnly [(ngModel)]="remainStock" size="45">
+        </div>
+        <div class="form-group">
+          <label class="required" for="txtRemark">เหตุผลเพิ่มเติม</label>
+          <textarea id="txtRemark" name="txtRemark" [(ngModel)]="remark" rows="3"></textarea>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" [disabled]="!remark || !remainAcc || !remainStock || !productName" class="btn btn-primary" (click)="saveRemark()">บันทึก</button>
+  </div>
+</clr-modal>

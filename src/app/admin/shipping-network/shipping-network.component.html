@@ -1,0 +1,177 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">Shipping Network</span>
+</nav>
+<button class="btn btn-sm btn-success" (click)="openModal()">
+  <clr-icon shape="plus"></clr-icon>
+  เพิ่ม Network
+</button>
+<clr-datagrid [style.height.%]="90">
+  <clr-dg-column [clrDgField]="'src_warehouse_name'">คลังต้นทาง</clr-dg-column>
+  <clr-dg-column [clrDgField]="'transfer_type'" [style.width.px]="200">ประเภท</clr-dg-column>
+  <clr-dg-column [clrDgField]="'dst_warehouse_name'">คลังปลายทาง</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">ใช้งาน</clr-dg-column>
+  <clr-dg-column [style.width.px]="300"></clr-dg-column>
+  <!-- <clr-dg-row class="newLine">
+    <clr-dg-cell>
+      <wm-select-warehouses [selectedId]="srcWarehouseId" (onSelect)="onSelectSource($event)"></wm-select-warehouses>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <div class="select" id="topElm">
+        <select name="networkType" id="networkType" [(ngModel)]="transferTypeCode" style="border-bottom: 0px;" >
+          <option value="">เลือกประเภท</option>
+          <option [value]="n.transfer_code" *ngFor="let n of networkTypes">{{n.transfer_code}} - {{n.transfer_desc}}</option>
+        </select>
+      </div>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-warehouses [selectedId]="dstWarehouseId" (onSelect)="onSelectDestination($event)"></wm-select-warehouses>            
+    </clr-dg-cell>
+    <clr-dg-cell>
+        <div class="toggle-switch">
+            <input type="checkbox" id="isActive" [(ngModel)]="isActive">
+            <label for="isActive"></label>
+          </div>
+    </clr-dg-cell>
+    
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-success btn-sm wm-small-btn" (click)="saveNetwork()" [disabled]="isSaving || !transferTypeCode || !dstWarehouseId || !srcWarehouseId || (dstWarehouseId === srcWarehouseId)">
+          เพิ่ม/อัปเดท
+        </button>
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
+          ปิด
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row> -->
+
+  <clr-dg-row *clrDgItems="let n of networks; let idx = index;">
+    <clr-dg-cell>{{n.src_warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell>{{n.transfer_type}} - {{n.transfer_desc}}</clr-dg-cell>
+    <clr-dg-cell>{{n.dst_warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell>
+      <div class="toggle-switch">
+        <input type="checkbox" id="chk-{{idx}}" #active name="isActive" [checked]="n.is_active==='Y'" (change)="setisActive($event, n.shipping_network_id)">
+        <label for="chk-{{idx}}"></label>
+      </div>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-success wm-small-btn" (click)="setEdit(n)">
+          <clr-icon shape="note"></clr-icon>
+        </button>
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeNetwork(n.shipping_network_id)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>
+    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} of {{pagination.totalItems | number}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="_isOpenModal" [clrModalSize]="'lg'" [clrModalClosable]="false">
+  <h3 class="modal-title">แก้ไข Shipping Network</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <div class="form-group">
+          <label for="aForm_1">คลังต้นทาง</label>
+          <wm-select-warehouses [selectedId]="srcWarehouseId" (onSelect)="onSelectSource($event)" [disabled]="true"></wm-select-warehouses>
+        </div>
+        <div class="form-group">
+          <label for="">ประเภท</label>
+          <div class="select" id="topElm">
+            <select name="networkType" id="networkType" [(ngModel)]="transferTypeCode">
+              <option>เลือกประเภท</option>
+              <option [value]="n.transfer_code" *ngFor="let n of networkTypes">{{n.transfer_code}} - {{n.transfer_desc}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="">คลังปลายทาง</label>
+          <wm-select-warehouses [selectedId]="dstWarehouseId" (onSelect)="onSelectDestination($event)" [disabled]="true"></wm-select-warehouses>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-lg" (click)="saveNetwork()" [disabled]="!selectNetwork || !inventory || !inventory1">บันทึก</button>
+    <button type="button" class="btn btn-outline-danger btn-lg" (click)="_isOpenModal = false">ปิด</button>
+  </div>
+</clr-modal>
+<clr-modal [(clrModalOpen)]="isOpenModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">เพิ่ม Shipping Network</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <div class="row">
+          <div class="col-xs-5">
+            <clr-datagrid [(clrDgSelected)]="inventory" [style.height.px]="256">
+              <clr-dg-column [clrDgField]="'warehouse_name'">คลังต้นทาง</clr-dg-column>
+              <clr-dg-row *clrDgItems="let w of wh" [clrDgItem]="w">
+                <clr-dg-cell>{{w.short_code}} - {{w.warehouse_name}}</clr-dg-cell>
+              </clr-dg-row>
+            </clr-datagrid>
+            <clr-datagrid [style.height.px]="150" style="margin-top: 1%;">
+              <clr-dg-column>รายการที่เลือก</clr-dg-column>
+              <clr-dg-row *ngFor="let w of inventory">
+                <clr-dg-cell>{{w.short_code}} - {{w.warehouse_name}}</clr-dg-cell>
+              </clr-dg-row>
+            </clr-datagrid>
+          </div>
+          <div class="col-xs-2">
+            <clr-datagrid [(clrDgSelected)]="selectNetwork">
+              <clr-dg-column [clrDgField]="'transfer_type'">ประเภท</clr-dg-column>
+              <clr-dg-row *clrDgItems="let n of networkTypes" [clrDgItem]="n">
+                <clr-dg-cell>{{n.transfer_code}} - {{n.transfer_desc}}</clr-dg-cell>
+              </clr-dg-row>
+            </clr-datagrid>
+          </div>
+          <div class="col-xs-5">
+            <clr-datagrid [(clrDgSelected)]="inventory1" [style.height.px]="256">
+              <clr-dg-column [clrDgField]="'warehouse_name'">คลังปลายทาง</clr-dg-column>
+              <clr-dg-row *clrDgItems="let w of whs" [clrDgItem]="w">
+                <clr-dg-cell>{{w.short_code}} - {{w.warehouse_name}}</clr-dg-cell>
+              </clr-dg-row>
+            </clr-datagrid>
+            <clr-datagrid [style.height.px]="150" style="margin-top: 1%;">
+              <clr-dg-column>รายการที่เลือก</clr-dg-column>
+              <clr-dg-row *ngFor="let w of inventory1">
+                <clr-dg-cell>{{w.short_code}} - {{w.warehouse_name}}</clr-dg-cell>
+              </clr-dg-row>
+            </clr-datagrid>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-5">
+            <div class="form-group" style="margin-top:2%; margin-left: -200px;">
+              <!-- <div style="padding: 5px;">เปิดใช้งาน</div>
+              <div class="toggle-switch">
+                <input type="checkbox" name="isActive" id="isActive" [(ngModel)]="isActive">
+                <label for="isActive"></label>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <section class="form-block" style="margin-left: 10%;">
+              <clr-checkbox name="isTwoways" id="isTwoways" [(ngModel)]="isTwoways">
+                <div style="font-size: 10pt;">Two Ways</div>
+              </clr-checkbox>
+            </section>
+          </div>
+          <div class="col-xs-5"></div>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-lg" (click)="saveNetwork()" [disabled]="!selectNetwork || !inventory || !inventory1">บันทึก</button>
+    <button type="button" class="btn btn-outline-danger btn-lg " (click)="isOpenModal = false">ปิด</button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

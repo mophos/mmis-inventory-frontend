@@ -1,0 +1,45 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ตั้งค่า VEN</span>
+</nav>
+
+<div class="row">
+  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+    <div class="card">
+      <div class="card-header">
+        กำหนดเปอร์เซ็นต์การคำนวณ
+        <div class="toggle-switch" style="float: right;">
+          <input type="checkbox" id="isActive" [checked]="isActive" name="isActive" (click)="setActiveStatus()">
+          <label for="isActive">เปิดการตั้งค่า VEN</label>
+        </div>
+      </div>
+      <div class="card-block">
+        <div class="card-text">
+
+          <form>
+            <section class="form-block">
+              <div class="form-group row" *ngFor="let item of venList">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                  <label for="txtTypeA">{{item.ven_name}}</label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                  <input class="form-control" #qty name="qtyA" (change)="changeQty(item.ven_id, qty.value)" [value]="item.cycle_month" wmNumberOnly
+                    type="text">
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                  <label for="txtMonthA">เดือน</label>
+                </div>
+              </div>
+            </section>
+          </form>
+
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" (click)="saveVen()">บันทึก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

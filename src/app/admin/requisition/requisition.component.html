@@ -1,0 +1,203 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">เบิกยาและเวชภัณฑ์</span>
+</nav>
+
+<div class="row" style="padding-top: 5px; padding-bottom: 5px;">
+  <div class="col-md-6">
+    <button class="btn btn-sm btn-success" routerLink="/admin/requisition/new">
+      <clr-icon shape="plus"></clr-icon> เบิกสินค้าและเวชภัณฑ์
+    </button>
+  </div>
+</div>
+
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink id="link1" (click)="getWaiting()">
+      <clr-icon shape="file"></clr-icon>
+      รายการขอเบิก
+      <span class="badge badge-info">{{orders.length | number}}</span>
+    </button>
+    <clr-tab-content id="content1" *clrIfActive="true">
+      <clr-datagrid style="padding-top: 5px;">
+        <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_date'">วันที่เบิก</clr-dg-column>
+        <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_code'">เลขที่เบิก</clr-dg-column>
+        <clr-dg-column>หน่วยเบิก</clr-dg-column>
+        <!-- <clr-dg-column>เบิกจาก</clr-dg-column> -->
+        <clr-dg-column>ประเภทการเบิก</clr-dg-column>
+        <clr-dg-column style="width: 100px;">สินค้าไม่พอจ่าย</clr-dg-column>
+        <clr-dg-column style="width: 100px;" [clrDgField]="'is_cancel'">ยกเลิก</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let order of orders" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y'}">
+          <clr-dg-action-overflow>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y' || !order.total_remain || order.total_remain <= 0" [routerLink]="['/admin/requisition/confirm']" [queryParams]="{requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'" [routerLink]="['/admin/requisition/edit/', order.requisition_order_id]">แก้ไขใบเบิก</button>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrder(order)">ยกเลิกใบเบิก</button>
+            <!-- <button class="action-item" (click)="onDelete(user)">พิมพ์ใบเบิก</button> -->
+          </clr-dg-action-overflow>
+          <wm-requisition-order-items *clrIfExpanded [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items>
+          <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{order.withdraw_warehouse_name}}</clr-dg-cell> -->
+          <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <clr-icon shape="check" class="is-danger" *ngIf="!order.total_remain || order.total_remain <=0"></clr-icon>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <clr-icon shape="check" *ngIf="order.is_cancel === 'Y'" class="is-danger"></clr-icon>
+          </clr-dg-cell>
+          <!-- <clr-dg-cell style="text-align: center;">
+            <button [disabled]="order.is_cancel === 'Y'" title="จ่ายเวชภัณฑ์" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/requisition/confirm']" [queryParams]="{requisitionId: order.requisition_order_id}">
+              <clr-icon shape="note"></clr-icon>
+            </button>
+          </clr-dg-cell> -->
+
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
+          <clr-dg-pagination #pageWorking [clrDgPageSize]="20"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+  <clr-tab>
+    <button clrTabLink (click)="getWaitingApprove()">
+      <clr-icon shape="clock"></clr-icon>
+      รายการรออนุมัติ
+      <span class="badge badge-warning">{{waitingApproves.length | number}}</span>
+    </button>
+    <clr-tab-content *clrIfActive>
+      <clr-datagrid style="padding-top: 5px;">
+        <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_date'">วันที่เบิก</clr-dg-column>
+        <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_code'">เลขที่เบิก</clr-dg-column>
+        <clr-dg-column>หน่วยเบิก</clr-dg-column>
+        <!-- <clr-dg-column>เบิกจาก</clr-dg-column> -->
+        <clr-dg-column>ประเภทการเบิก</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let order of waitingApproves" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y', 'isWarning': order.confirm_qty <= 0 || !order.confirm_qty}">
+          <clr-dg-action-overflow>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0" (click)="approveRequisitionCheck(order)">อนุมัติใบจ่าย</button>                        
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrderConfirm(order)">ยกเลิกใบจ่าย</button>
+          </clr-dg-action-overflow>
+          <wm-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items-pay>
+          <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{order.withdraw_warehouse_name}}</clr-dg-cell> -->
+          <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
+
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
+          <clr-dg-pagination #pageWorking [clrDgPageSize]="20"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+  <clr-tab>
+    <button clrTabLink (click)="getUnPaid()">
+      <clr-icon shape="sad-face"></clr-icon>
+      รายการค้างจ่าย
+      <span class="badge badge-danger">{{unpaids.length | number}}</span>
+    </button>
+    <clr-tab-content *clrIfActive>
+      <clr-datagrid style="padding-top: 5px;">
+        <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
+        <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
+        <clr-dg-column>หน่วยเบิก</clr-dg-column>
+        <!-- <clr-dg-column>เบิกจาก</clr-dg-column> -->
+        <clr-dg-column>ประเภทการเบิก</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let order of unpaids" [clrDgItem]="order">
+          <clr-dg-action-overflow>
+            <button class="action-item" [routerLink]="['/admin/requisition/confirm-unpaid/']" [queryParams]="{unpaidId: order.requisition_order_unpaid_id, requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button>
+            <button class="action-item" (click)="cancelUnpaid(order)">ยกเลิกค้างจ่าย</button>
+          </clr-dg-action-overflow>
+          <wm-requisition-order-unpaid-items *clrIfExpanded [unpaidId]="order.requisition_order_unpaid_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-unpaid-items>
+          <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_warehouse}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{order.withdraw_warehouse}}</clr-dg-cell> -->
+          <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
+
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
+          <clr-dg-pagination #pageWorking [clrDgPageSize]="10"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+  <clr-tab>
+    <button clrTabLink (click)="getApproved()">
+      <clr-icon shape="happy-face"></clr-icon>
+      รายการผ่านการอนุมัติ
+      <span class="badge badge-success">{{approveds.length | number}}</span>
+    </button>
+    <clr-tab-content *clrIfActive>
+      <clr-datagrid style="padding-top: 5px;">
+        <clr-dg-column style="width: 150px;">วันที่อนุมัติ</clr-dg-column>
+        <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
+        <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
+        <clr-dg-column>หน่วยเบิก</clr-dg-column>
+        <!-- <clr-dg-column>เบิกจาก</clr-dg-column> -->
+        <clr-dg-column>ประเภทการเบิก</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let order of approveds" [clrDgItem]="order">
+          <clr-dg-action-overflow>
+            <!-- <button class="action-item" [routerLink]="['/admin/requisition/confirm/']" [queryParams]="{requisitionId: order.requisition_order_id, confirmId: order.confirm_id}">แก้ไขรายการจ่ายเวชภัณฑ์</button>
+            <button class="action-item" (click)="removeOrder(order)">ยกเลิกใบจ่าย</button> -->
+            <button class="action-item" (click)="printApprove(order)">พิมพ์ใบอนุมัติเบิก</button>
+            <button class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button>
+          </clr-dg-action-overflow>
+          <wm-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [showUnpaid]="false" [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items-pay>
+          <clr-dg-cell>{{order.approve_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
+          <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{order.withdraw_warehouse_name}}</clr-dg-cell> -->
+          <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
+
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
+          <clr-dg-pagination #pageWorking [clrDgPageSize]="20"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+</clr-tabs>
+<clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
+  <h3 class="modal-title">สิทธิ์การอนุมัติ{{title}}</h3>
+  <div class="modal-body" style="height:150px">
+
+    <form>
+      <section class="form-block">
+        <div class="form-group">
+          <label for="aForm_1" class="required">User Name</label>
+          <input autocomplete="nope" type="text" id="username" name="username" [(ngModel)]="username" >
+        </div>
+        <div class="form-group">
+          <label for="aForm_1" class="required"> password</label>
+          <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password"  (keyup.enter)="checkApprove(username,password)">
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer" style="padding-top: 0px;">
+    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password"
+      (click)="checkApprove(username,password)">บันทึก</button>
+    <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
+  </div>
+</clr-modal>
+<wm-html-preview #htmlPreview></wm-html-preview>
+<wm-loading-modal #modalLoading></wm-loading-modal>

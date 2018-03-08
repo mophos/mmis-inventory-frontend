@@ -1,0 +1,88 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/receive-planning">กำหนดการรับสินค้า (Receive Planning)</a>
+  <span class="breadcrumb-item active">แก้ไขรายการ</span>
+</nav>
+
+<div class="card" style="padding: 0px;">
+  <div class="card-block">
+    <div class="row">
+      <div class="col-md-2">
+        <label for="">คลังสินค้า
+          <strong>{{warehouseId}} - {{ warehouseName }}</strong>
+        </label>
+      </div>
+      <div class="col-md-10">
+        <div class="btn-group" style="float: right;">
+          <button class="btn btn-sm btn-success" [clrLoading]="isSaving" (click)="save()" [disabled]="!warehouseId || !generics.length || isSaving">
+            <clr-icon shape="floppy"></clr-icon> บันทึกรายการ
+          </button>
+          <button class="btn btn-sm btn-danger" routerLink="/admin/receive-planning">
+            <clr-icon shape="home"></clr-icon> กลับหน้าหลัก
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="padding: 0px;">
+  <div class="card-block">
+    <div class="row">
+      <div class="col-md-3">
+        <wm-search-generic-autocomplete [clearOnSelected]="false" #slSearchGeneric (onSelect)="setSelectedGeneric($event)"></wm-search-generic-autocomplete>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-sm btn-success" (click)="addGeneric()" [disabled]="!warehouseId || !selectedGenericId">
+          <clr-icon shape="plus"></clr-icon> เพิ่มรายการ
+        </button>
+        <div class="btn-group">
+          <button class="btn btn-sm btn-icon btn-primary tooltip tooltip-sm" role="tooltip" aria-haspopup="true" (click)="getAllGenerics()" [disabled]="!warehouseId">
+            <clr-icon shape="copy"></clr-icon>
+            <span class="tooltip-content">เพิ่มทุกรายการ</span>
+          </button>
+
+          <button class="btn btn-sm btn-icon btn-danger tooltip tooltip-sm" role="tooltip" aria-haspopup="true" (click)="removeAllGenerics()" [disabled]="!warehouseId">
+            <clr-icon shape="trash"></clr-icon>
+            <span class="tooltip-content">ลบรายการทั้งหมด</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="slTypes">เลือกทั้งหมดจาก</label>
+        <div class="select" style="display: inline-block; width: 200px;">
+          <select id="slTypes" name="slTypes" [(ngModel)]="genericTypeId">
+            <option *ngFor="let t of types" [value]="t.generic_type_id">{{ t.generic_type_name }}</option>
+          </select>
+        </div>
+        <button class="btn btn-sm btn-success" (click)="getByGenericTypes()" [disabled]="!genericTypeId || !warehouseId">
+          <clr-icon shape="plus"></clr-icon> เพิ่มรายการ
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<clr-datagrid class="grid-order" [clrDgLoading]="loading">
+  <clr-dg-column style="width: 150px;" [clrDgField]="'working_code'">Working Code</clr-dg-column>
+  <clr-dg-column [clrDgField]="'generic_name'">ชื่อสามัญ (Generic name)</clr-dg-column>
+  <clr-dg-column style="width: 100px;"></clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let generic of generics; let idx = index;">
+    <!-- <clr-dg-cell>{{prodcut.working_code}}</clr-dg-cell> -->
+    <clr-dg-cell>{{generic.working_code}}</clr-dg-cell>
+    <clr-dg-cell>{{generic.generic_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <button class="btn btn-sm btn-danger btn-icon tooltip tooltip-sm tooltip-left" role="tooltip" aria-haspopup="true" (click)="remove(generic.generic_id)">
+        <clr-icon shape="trash"></clr-icon>
+        <span class="tooltip-content">ลบรายการ</span>
+      </button>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

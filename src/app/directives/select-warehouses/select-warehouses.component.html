@@ -1,0 +1,12 @@
+<span *ngIf="loading" class="spinner spinner-sm">
+  Loading...
+</span>
+
+<div class="select" *ngIf="!loading">
+    <select name="warehouseId" [disabled]="disabled" [(ngModel)]="warehouseId" (change)="setSelect($event)">
+      <option selected>เลือกคลังสินค้า</option>
+      <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+       {{w.short_code}} - {{ w.warehouse_name }}
+      </option>
+    </select>
+  </div>

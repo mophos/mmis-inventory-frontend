@@ -1,0 +1,88 @@
+<clr-main-container>
+  <clr-header class="header-7">
+    <div class="branding">
+      <a class="nav-link">
+        <img src="./assets/images/logo-mmis.png" style="width: 100px; height: 70px; padding-right: 5px;" alt="mmis logo" />
+        <span class="title">Inventory Management (เจ้าหน้าที่หน่วยเบิก)</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-text" clrDropdownTrigger>
+          {{fullname}} ({{warehouseCode}} - {{ warehouseName }})
+          <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <a href="javascript://" (click)="showManualStaff()" clrDropdownItem>คู่มือเจ้าหน้าที่หน่วยเบิก/รพ.สต.</a>
+          <a href="javascript://" (click)="openChangePasswordModal()" clrDropdownItem>เปลี่ยนรหัสผ่าน</a>
+          <a href="javascript://" (click)="logout()" clrDropdownItem>ออกจากระบบ</a>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </clr-header>
+
+  <div class="content-container">
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+
+    <clr-vertical-nav class="is-collapsed" [clrVerticalNavCollapsible]="collapsible" [(clrVerticalNavCollapsed)]="collapse">
+      <a clrVerticalNavLink routerLink="/staff/main" title="สินค้าคงเหลือ" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="folder"></clr-icon>
+        สินค้าคงเหลือ
+      </a>
+      <a clrVerticalNavLink routerLink="/staff/requisition" title="เบิกยาและเวชภัณฑ์" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="export"></clr-icon>
+        เบิกยาและเวชภัณฑ์
+      </a>
+      <!-- ซ่อนเมนูนี้ออกไปก่อน อย่าเพิ่งลบ -->
+      <!-- <a clrVerticalNavLink routerLink="/staff/issue" title="จ่ายยาและเวชภัณฑ์" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="shopping-cart"></clr-icon>
+        จ่ายยาและเวชภัณฑ์
+      </a> -->
+      <!-- สิ้นสุดส่วนซ่อนเมนู -->
+      <a clrVerticalNavLink routerLink="/staff/transfer" title="โอนยาและเวชภัณฑ์" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="two-way-arrows"></clr-icon>
+        โอนยาและเวชภัณฑ์
+      </a>
+      <a clrVerticalNavLink routerLink="/staff/issue-transaction" title="บันทึกตัดจ่าย (อื่นๆ)" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="scissors"></clr-icon>
+        บันทึกตัดจ่าย (อื่นๆ)
+      </a>
+      <a clrVerticalNavLink routerLink="/staff/his-issue-transaction" title="ตัดจ่ายจาก HIS" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="sync"></clr-icon>
+        ตัดจ่ายจาก HIS
+      </a>
+      <!-- <a clrVerticalNavLink routerLink="/staff/counting" title="นับสินค้าคงเหลือ" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="clipboard"></clr-icon>
+        นับสินค้าคงเหลือ
+      </a> -->
+      <a clrVerticalNavLink routerLink="/staff/requisition-templates" title="Template ชุดเบิก" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="plugin"></clr-icon>
+        Template ชุดเบิก
+      </a>
+      <a clrVerticalNavLink routerLink="/staff/planning" title="กำหนดยอดคงเหลือ/min-max" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="note"></clr-icon>
+        กำหนดยอดคงเหลือ/min-max
+      </a>
+      <a clrVerticalNavLink routerLink="/staff/his-mappings" title="Map รหัสยาและเวชภัณฑ์" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="share"></clr-icon>
+        Map รหัสยาและเวชภัณฑ์
+      </a>
+      <a clrVerticalNavLink routerLink="/staff/products" title="รายการยาทั้งหมด" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="folder"></clr-icon>
+        รายการยาทั้งหมด
+      </a>
+
+      <!-- <a clrVerticalNavLink routerLinkActive="active" routerLink="./credit">
+        <clr-icon shape="certificate" clrVerticalNavIcon></clr-icon>
+        Credit
+      </a> -->
+
+    </clr-vertical-nav>
+
+  </div>
+
+</clr-main-container>
+
+<wm-change-password-modal #modalChangePassword></wm-change-password-modal>

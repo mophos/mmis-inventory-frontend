@@ -1,0 +1,12 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>Generic Code</clr-dg-column>
+    <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+
+    <clr-dg-row *ngFor="let r of list">
+      <clr-dg-cell>{{r.working_code}}</clr-dg-cell>
+      <clr-dg-cell>{{r.generic_name}}</clr-dg-cell>
+    </clr-dg-row>
+    <!-- <clr-dg-footer>{{r.length}} รายการ</clr-dg-footer> -->
+  </clr-datagrid>
+</div>

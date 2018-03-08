@@ -1,0 +1,180 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/issues">ตัดจ่าย (อื่นๆ)</a>
+  <span class="breadcrumb-item active">บันทึกตัดจ่าย</span>
+</nav>
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">วันที่</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="issueDate" required></my-date-picker-th>
+          </div>
+
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label class="required" for="gForm_1">ประเภท</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <div class="select">
+              <select name="slStatus" [(ngModel)]="transactionId">
+                <option value="">
+                  <กรุณาเลือกประเภท>
+                </option>
+                <option *ngFor="let s of issues" [value]="s.transaction_id">{{ s.transaction_name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="refDocument" class="required">อ้างอิง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="refDocument" [(ngModel)]="refDocument">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="comment" [(ngModel)]="comment">
+          </div>
+          <div class=" col-lg-5 col-md-5 col-sm-12 col-xs-12">
+            <div class="btn-group">
+              <!-- <button class="btn btn-primary btn-sm" disabled (click)="showUploadModal()">
+                <clr-icon shape="import"></clr-icon>
+                นำเข้ารายการจาก Excel
+              </button> -->
+              <button type="button" class="btn btn-outline-primary btn-sm" (click)="openModal()">
+                <clr-icon shape="search"></clr-icon> เลือกจากประวัติ
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+<!-- <div class="card">
+    <div class="card-block">
+        <div class="card-text">
+          <div style="width:50%;">
+            <wm-search-generic-warehouse-autocomplete [clearOnSelected]="true" #slSearchGeneric (onSelect)="setSelectedGeneric($event)"></wm-search-generic-warehouse-autocomplete>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<clr-datagrid>
+  <clr-dg-column>#</clr-dg-column>
+  <clr-dg-column [style.width.px]="300">ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column>จำนวนตัดจ่าย</clr-dg-column>
+  <clr-dg-column>หน่วยตัดจ่าย</clr-dg-column>
+  <clr-dg-column>รวม (Base Unit)</clr-dg-column>
+  <clr-dg-column>คงเหลือ (Base Unit)</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
+
+  <clr-dg-row *ngFor="let product of products; let idx = index;">
+    <wm-issue-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="product.items" ngProjectAs="clr-dg-row-detail"></wm-issue-product>
+
+    <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{product.generic_name}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="line-height: 25px;">{{product.expired_date | toEngDate}}</clr-dg-cell> -->
+    <clr-dg-cell>
+      <input type="text" #issueQty (keyup)="editChangeIssueQty(idx, issueQty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberOnly [value]="product.issue_qty" />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
+        [genericId]="product.generic_id"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.issue_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.issue_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-row class="newLine">
+    <clr-dg-cell>&nbsp;</clr-dg-cell>
+    <clr-dg-cell>
+      <wm-search-generic-warehouse-zero [warehouseId]="warehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" class="wm-edit-box-number" style="width: 100px;" style="background-color: #FFF9C4" [disabled]="!genericId"
+        [(ngModel)]="issueQty" autocomplete="off" wmNumberWithOutDot placeholder="">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}">{{ issueQty*conversionQty | number }}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty | number }}</clr-dg-cell>
+    <!-- <clr-dg-cell style="text-align: center; line-height: 25px;">{{ primaryUnitName }}</clr-dg-cell> -->
+
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId || !issueQty || !unitGenericId || ((issueQty * conversionQty) > remainQty)"
+          (click)="addProduct()">
+          เพิ่ม
+        </button>
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
+          ยกเลิก
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+</clr-datagrid>
+
+<div>
+  <button class="btn btn-success btn-sm" (click)="saveIssue()" [disabled]="!transactionId || !issueDate || !refDocument || !products.length">
+    <clr-icon shape="floppy"></clr-icon>
+    บันทึกตัดจ่ายสินค้า
+  </button>
+  <button class="btn btn-danger btn-sm" [routerLink]="['/admin/issues']">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+</div>
+
+<clr-modal [(clrModalOpen)]="isOpenModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">ประวัติการตัดจ่าย</h3>
+  <div class="modal-body">
+    <clr-datagrid style="height: 300px;">
+      <clr-dg-column>เลขที่</clr-dg-column>
+      <clr-dg-column>วันที่ตัดจ่าย</clr-dg-column>
+      <clr-dg-column>หมายเหตุ</clr-dg-column>
+      <clr-dg-column></clr-dg-column>
+
+      <clr-dg-row *ngFor="let i of hlistIssues">
+        <wma-issues-list *clrIfExpanded [issueId]="i.issue_id" ngProjectAs="clr-dg-row-detail"></wma-issues-list>
+
+        <clr-dg-cell>{{i.issue_code}}</clr-dg-cell>
+        <clr-dg-cell>{{i.issue_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{i.ref_ducoment}}</clr-dg-cell>
+        <clr-dg-cell>
+          <button type="button" class="btn btn-primary btn-sm wm-small-btn" (click)="addIssue(i.issue_id)">+ เพิ่ม</button>
+        </clr-dg-cell>
+      </clr-dg-row>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="isOpenModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

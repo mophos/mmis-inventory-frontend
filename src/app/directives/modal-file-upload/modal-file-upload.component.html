@@ -1,0 +1,52 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">ไฟล์เอกสาร</h3>
+  <div class="modal-body">
+
+    <clr-datagrid [clrDgLoading]="loadingFiles">
+      <!--<clr-dg-column [style.width.%]="10">#</clr-dg-column>-->
+      <clr-dg-column [style.width.%]="50">ชื่อไฟล์</clr-dg-column>
+      <clr-dg-column [style.width.%]="20">วันที่อัปโหลด</clr-dg-column>
+      <clr-dg-column [style.width.%]="30">
+        <label class="btn btn-sm btn-success" style="margin: 0px;">
+        <input type="file" #file
+            accept="image/*,.pdf"
+            class="hidden"
+            multiple
+            (change)="fileChangeEvent($event)">
+        + เพิ่มไฟล์...({{filesToUpload.length}})
+      </label>
+        <button class="btn btn-sm btn-danger" (click)="upload()" [disabled]="!filesToUpload.length">อัปโหลด</button>
+        <span class="spinner spinner-inline" *ngIf="isUploading">
+          Uploading...
+      </span>
+        <span *ngIf="isUploading">
+          Uploading...
+      </span>
+      </clr-dg-column>
+      <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+      <clr-dg-row *clrDgItems="let f of files; let idx = index;">
+        <clr-dg-cell>{{f.originalname}}</clr-dg-cell>
+        <clr-dg-cell>{{f.uploaded_at}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">
+          <button class="btn btn-link btn-sm" style="min-width: 38px;" (click)="getFile(f.document_id)" title="เปิดไฟล์">
+            <clr-icon shape="pop-out" size="20"></clr-icon>
+          </button>
+          <button class="btn btn-link btn-sm" style="min-width: 38px;" (click)="removeFile(f.document_id, idx)" title="ลบไฟล์">
+            <clr-icon shape="trash" size="20" class="is-error"></clr-icon>
+          </button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        {{pagination2.firstItem + 1}} - {{pagination2.lastItem + 1}} of {{pagination2.totalItems}} ไฟล์
+        <clr-dg-pagination #pagination2 [clrDgPageSize]="5"></clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="open = false">
+          ปิดหน้าต่าง
+      </button>
+  </div>
+</clr-modal>

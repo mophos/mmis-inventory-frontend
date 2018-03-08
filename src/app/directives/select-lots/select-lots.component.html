@@ -1,0 +1,8 @@
+<div class="select">
+  <select name="lotNo" (change)="setSelect($event)" [(ngModel)]="SelectedlotNo">
+    <option>เลือก Lot</option>
+    <option *ngFor="let l of lots" [value]="l.lot_no">
+      {{ l.lot_no }} - ราคา {{ l.cost | number : '1.2-2'}} || คงเหลือ {{ l.remain_qty }} || หมดอายุใน {{ l.count_expired }} วัน
+    </option>
+  </select>
+</div>

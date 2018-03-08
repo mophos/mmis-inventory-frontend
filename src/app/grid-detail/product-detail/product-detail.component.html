@@ -1,0 +1,31 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+    <clr-dg-column>จำนวนรับ</clr-dg-column>
+    <clr-dg-column>รวม (Base unit)</clr-dg-column>
+    <!-- <clr-dg-column>ค้างรับ (Base unit)</clr-dg-column> -->
+    <clr-dg-column>ราคาต่อแพค (บาท)</clr-dg-column>
+    <clr-dg-column>รวม (บาท)</clr-dg-column>
+    <clr-dg-column>ส่วนลด (บาท)</clr-dg-column>
+    <clr-dg-column>Lot no.</clr-dg-column>
+    <clr-dg-column>Expired</clr-dg-column>
+    <clr-dg-column>ของแถม</clr-dg-column>
+
+    <clr-dg-row *ngFor="let r of products">
+      <clr-dg-cell> {{r.product_name}} </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.receive_qty | number}} {{r.from_unit_name}}  ({{r.conversion_qty | number}} {{r.base_unit_name}})</clr-dg-cell>
+      <!-- <clr-dg-cell style="text-align: right;">{{r.receive_qty * r.conversion_qty | number}} {{ r.base_unit_name }}</clr-dg-cell> -->
+      <clr-dg-cell style="text-align: right;">{{r.receive_qty * r.conversion_qty | number}} {{ r.base_unit_name }}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.cost | number: '1.2-2'}} </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{(r.cost * r.receive_qty) - +r.discount | number: '1.2-2'}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.discount | number: '1.2-2'}}</clr-dg-cell>
+      <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
+      <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
+      <clr-dg-cell>
+        <clr-icon shape="close" class="is-error" *ngIf="r.is_free === 'N'"></clr-icon>
+        <clr-icon shape="check" class="is-success" *ngIf="r.is_free === 'Y'"></clr-icon>
+      </clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>{{products.length}} รายการ</clr-dg-footer>
+  </clr-datagrid>
+</div>

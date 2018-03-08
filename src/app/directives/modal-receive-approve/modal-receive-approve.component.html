@@ -1,0 +1,34 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false">
+  <h3 class="modal-title">ยืนยันการอนุมัติรับสินค้าเข้าคลัง</h3>
+  <div class="modal-body">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">วันที่อนุมัติ</label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="approveDate" required></my-date-picker-th>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="dateReceive">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <textarea name="comment" rows="2" [(ngModel)]="comment"></textarea>
+          </div>
+        </div>
+
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="!approveDate" (click)="saveApprove()">
+          อนุมัติ
+      </button>
+    <button type="button" class="btn btn-danger" (click)="open = false">
+          ยกเลิก
+      </button>
+  </div>
+</clr-modal>

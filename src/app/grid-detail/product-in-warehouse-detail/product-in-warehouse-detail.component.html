@@ -1,0 +1,18 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>รหัสสินค้า</clr-dg-column>
+    <clr-dg-column>ชื่อสินค้า (ชื่อการค้า)</clr-dg-column>
+    <clr-dg-column>ชิ้อ Generic</clr-dg-column>
+    <clr-dg-column>หน่วยนับ</clr-dg-column>
+    <clr-dg-column>Min</clr-dg-column>
+    <clr-dg-column>Max</clr-dg-column>
+    <clr-dg-row *ngFor="let r of productsdetail">
+      <clr-dg-cell>{{ r.product_id }}</clr-dg-cell>
+      <clr-dg-cell>{{ r.product_name }}</clr-dg-cell>
+      <clr-dg-cell>{{ r.generic_name }}</clr-dg-cell>
+      <clr-dg-cell>{{ r.unit_id }}</clr-dg-cell>
+      <clr-dg-cell>{{ r.min }}</clr-dg-cell>
+      <clr-dg-cell>{{ r.max }}</clr-dg-cell>
+    </clr-dg-row>
+  </clr-datagrid>
+</div>

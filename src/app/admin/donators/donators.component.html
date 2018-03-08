@@ -1,0 +1,74 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ผู้บริจาค</span>
+</nav>
+
+<button type="button" class="btn btn-success btn-sm" (click)="addNew()">+ เพิ่มรายการ</button>
+<clr-datagrid>
+  <clr-dg-column [clrDgField]="'donator_name'">ชื่อผู้บริจาค</clr-dg-column>
+  <clr-dg-column [clrDgField]="'donator_address'">ที่อยู่</clr-dg-column>
+  <clr-dg-column [clrDgField]="'donator_telephone'">โทรศัพท์</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+  <clr-dg-row *clrDgItems="let d of donators" [clrDgItem]="d">
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="showEdit(d)">แก้ไขข้อมูล</button>
+      <button class="action-item" (click)="remove(d)">ลบข้อมูล</button>
+    </clr-dg-action-overflow>
+    <clr-dg-cell>{{d.donator_name}}</clr-dg-cell>
+    <clr-dg-cell>{{d.donator_address}}</clr-dg-cell>
+    <clr-dg-cell>{{d.donator_telephone}}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false">
+  <h3 class="modal-title">เพิ่ม/แก้ไข ผู้บริจาค</h3>
+  <div class="modal-body">
+
+    <form>
+      <section class="form-block">
+        <label>ข้อมูล ผู้บริจาค</label>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label class="required" for="donatorName">ชื่อผู้บริจาค</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="donatorName" [(ngModel)]="donatorName" placeholder="">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="donatorAddress">ที่อยู่</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="donatorAddress" [(ngModel)]="donatorAddress" placeholder="">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="donatorTelephone">เบอร์โทรศัพท์</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="donatorTelephone" [(ngModel)]="donatorTelephone" placeholder="">
+          </div>
+        </div>
+      </section>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!donatorName">
+        บันทึก
+    </button>
+    <button type="button" class="btn btn-danger-outline" (click)="opened = false">
+        ปิด
+    </button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

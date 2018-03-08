@@ -1,0 +1,84 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/counting">ตรวจนับสินค้า</a>
+  <span class="breadcrumb-item active">บันทึกการตรวจนับสินค้า</span>
+</nav>
+
+<div class="card">
+  <div class="card-header">
+    ตรวจนับสินค้า
+  </div>
+  <div class="card-block">
+    <div class="card-text">
+
+      <div class="form-group row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <label for="dateReceive" class="required">วันที่นับ</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="countDate" required></my-date-picker-th>
+        </div>
+      </div>
+      <div class="form-group row" style="padding-bottom: 20px;">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <label class="required" for="slLabeler">คลังสินค้า</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <div class="select">
+            <select id="slWarehouse" name="slWarehouse" [(ngModel)]="warehouseId">
+                <option value=""><กรุณาเลือกคลัง></option>
+                <option *ngFor="let w of wareHouses" [value]="w.warehouse_id">{{ w.warehouse_name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <button class="btn btn-sm btn-success" [disabled]="!warehouseId" (click)="getProductAllByWarehouse()">แสดงรายการสินค้า</button>
+        </div>
+      </div>
+
+      <clr-datagrid *ngIf="!isPrepared" [clrDgLoading]="loading" [(clrDgSelected)]="selectedProduct" [style.height.px]="300">
+        <clr-dg-column [clrDgField]="'product_id'">รหัส</clr-dg-column>
+        <clr-dg-column [clrDgField]="'product_name'">ชื่อทางการค้า</clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">Generic name</clr-dg-column>
+        <clr-dg-column [clrDgField]="'lot_no'">Lot no.</clr-dg-column>
+        <clr-dg-column>คงเหลือ</clr-dg-column>
+        <clr-dg-column>หน่วยนับ</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
+          <clr-dg-cell>{{p.product_id}}</clr-dg-cell>
+          <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+          <clr-dg-cell>{{p.generic_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.lot_no}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{p.qty | number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.unit_name}}</clr-dg-cell>
+        </clr-dg-row>
+      </clr-datagrid>
+
+      <clr-datagrid *ngIf="isPrepared" [clrDgLoading]="loading" [(clrDgSelected)]="selectedProduct2" [style.height.px]="300">
+        <clr-dg-column [clrDgField]="'product_id'">รหัส</clr-dg-column>
+        <clr-dg-column [clrDgField]="'product_name'">ชื่อทางการค้า</clr-dg-column>
+        <clr-dg-column [clrDgField]="'lot_no'">Lot no.</clr-dg-column>
+        <clr-dg-column>ยอดตามบัญชี</clr-dg-column>
+        <clr-dg-column [clrDgField]="'unit_name'">หน่วยนับ</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let p of productsPrepare" [clrDgItem]="p">
+          <clr-dg-cell>{{p.product_id}}</clr-dg-cell>
+          <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.lot_no}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{p.qty | number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.unit_name}}</clr-dg-cell>
+        </clr-dg-row>
+      </clr-datagrid>
+
+    </div>
+  </div>
+  <div class="card-footer">
+    <clr-checkbox [(ngModel)]="isPrintCounting" *ngIf="isPrepared">
+      พิมพ์ใบตรวจนับหลังจากบันทึก
+    </clr-checkbox>
+    <button class="btn btn-sm btn-success" [disabled]="selectedProduct.length === 0" *ngIf="!isPrepared" (click)="doPrepare()">ตรวจนับสินค้า</button>
+    <button class="btn btn-sm btn-success" [disabled]="selectedProduct2.length === 0" *ngIf="isPrepared" (click)="saveCounting()">บันทึกการตรวจนับ</button>
+    <button class="btn btn-sm btn-danger" [disabled]="selectedProduct2.length === 0" *ngIf="isPrepared" (click)="cancelPrepare()">ยกเลิกการตรวจนับ</button>
+
+  </div>
+</div>

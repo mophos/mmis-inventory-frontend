@@ -1,0 +1,87 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">
+    <clr-icon shape="search" size="32" class="is-info"></clr-icon>
+    ค้นหาใบสั่งซื้อ (รอตรวจรับ/รับยังไม่ครบ)
+  </h3>
+  <div class="modal-body">
+    <clr-datagrid [clrLoading]="loading">
+      <clr-dg-column [clrDgField]="'purchase_order_number'">เลขที่ใบสั่งซื้อ</clr-dg-column>
+      <clr-dg-column [clrDgField]="'order_date'">วันที่</clr-dg-column>
+      <clr-dg-column [clrDgField]="'contract_id'">เลขที่สัญญา</clr-dg-column>
+      <clr-dg-column [clrDgField]="'labeler_name'">ผู้จำหน่าย</clr-dg-column>
+      <clr-dg-column [clrDgField]="'purchase_method_name'">วิธีการจัดซื้อ</clr-dg-column>
+      <clr-dg-column>มูลค่าซื้อ</clr-dg-column>
+      <clr-dg-column>มูลค่ารับ</clr-dg-column>
+      <clr-dg-column>เลือก</clr-dg-column>
+      <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+      <clr-dg-row *clrDgItems="let purchase of purchases; let idx = index">
+        <clr-dg-cell>{{purchase.purchase_order_number}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">{{purchase.order_date | toThaiDate }}</clr-dg-cell>
+        <clr-dg-cell>{{purchase.contract_id}}</clr-dg-cell>
+        <clr-dg-cell>{{purchase.labeler_name}}</clr-dg-cell>
+        <clr-dg-cell>{{purchase.purchase_method_name}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{purchase.purchase_price || 0 | number: '1.2-2'}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{purchase.receive_price || 0 | number: '1.2-2'}}</clr-dg-cell>
+        <clr-dg-cell>
+          <button class="btn btn-sm btn-primary wm-small-btn" [disabled]="purchase.receive_price >= purchase.purchase_price" (click)="setSelected(purchase)">
+            เลือก
+          </button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+        <clr-dg-pagination #pagination [clrDgPageSize]="7"></clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="closeModal()">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
+
+<clr-modal [(clrModalOpen)]="openConflict" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">ตรวจสอบรายการสินค้าที่ต้องการรับ</h3>
+  <div class="modal-body">
+    <clr-datagrid [(clrDgSelected)]="selectedPurchaseItem" [clrLoading]="loading">
+      <!-- <clr-dg-column>Working Code</clr-dg-column> -->
+      <!-- <clr-dg-column>ชื่อสามัญ (Generic Name)</clr-dg-column> -->
+      <clr-dg-column>ชื่อสินค้า (Trade Name)</clr-dg-column>
+      <clr-dg-column>ราคา (แพค)</clr-dg-column>
+      <clr-dg-column>จำนวนสั่งซื้อ</clr-dg-column>
+      <clr-dg-column style="width: 100px;">รับแล้ว</clr-dg-column>
+      <clr-dg-column style="width: 100px;">ค้างรับ</clr-dg-column>
+      <clr-dg-column style="width: 100px;">ของแถม</clr-dg-column>
+
+      <clr-dg-row *clrDgItems="let product of productPurchases" [clrDgItem]="product">
+        <!-- <clr-dg-cell>{{product.working_code}}</clr-dg-cell> -->
+        <!-- <clr-dg-cell>{{product.generic_name}}</clr-dg-cell> -->
+        <clr-dg-cell>{{product.product_name}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{product.cost | number: '1.2-2'}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{product.purchase_qty | number}} {{product.from_unit_name}} ({{product.conversion_qty | number}} {{product.to_unit_name}})</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{product.total_received_qty | number}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{product.purchase_qty - product.total_received_qty | number}}</clr-dg-cell>
+        <clr-dg-cell>
+          <clr-icon shape="close" class="is-error" *ngIf="product.is_free === 'N'"></clr-icon>
+          <clr-icon shape="check" class="is-success" *ngIf="product.is_free === 'Y'"></clr-icon>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{productPurchases.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-success" (click)="closePurchase()" [disabled]="productPurchases.length">
+      ปิดใบสั่งซื้อนี้
+    </button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="addPurchaseProduct()" [disabled]="!selectedPurchaseItem.length">
+      ตกลง
+    </button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="openConflict = false">
+      ยกเลิก
+    </button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #mdlLoading></wm-loading-modal>

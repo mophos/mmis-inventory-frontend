@@ -1,0 +1,35 @@
+<div [clrLoading]="loading">
+  <span class="p4" style="padding-left: 15px;">รายการจ่ายเวชภัณฑ์</span>
+  <clr-datagrid>
+    <clr-dg-column style="width: 100px;">Working Code</clr-dg-column>
+    <clr-dg-column>ชื่อ Generic</clr-dg-column>
+    <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
+    <clr-dg-column style="width: 100px;">จำนวนจ่าย</clr-dg-column>
+    <clr-dg-column style="width: 100px;" *ngIf="showUnpaid">ค้างจ่าย</clr-dg-column>
+    <clr-dg-row *clrDgItems="let i of items">
+      <clr-dg-cell>{{ i.working_code }}</clr-dg-cell>
+      <clr-dg-cell>{{ i.generic_name }}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        {{ i.requisition_qty | number}} {{ i.order_from_unit_name }} (
+        <span class="p4">{{i.order_conversion_qty | number}} {{ i.order_to_unit_name }}</span>) =
+        <span class="p4" style="color: #318700;">{{i.requisition_qty * i.order_conversion_qty | number}} {{ i.order_to_unit_name }}</span>
+      </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        <div *ngIf="i.confirm_qty">
+          <span class="p4" style="color: #318700;">{{ i.small_confirm_qty | number}} {{ i.order_to_unit_name }}</span>
+        </div>
+        <div *ngIf="!i.confirm_qty">
+          <span class="p4" style="color: #E62700;">ไม่พอจ่าย</span>
+        </div>
+      </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;" *ngIf="showUnpaid">
+        <span class="p4" style="color: #E62700;">{{i.small_requisition_qty - i.small_confirm_qty | number}} {{ i.order_to_unit_name }}</span>
+      </clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>
+      <clr-dg-pagination #pagination [clrDgPageSize]="10">
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+      </clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>

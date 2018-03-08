@@ -1,0 +1,113 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ตรวจนับสินค้า</span>
+</nav>
+
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink clrTabLinkId="link1">Cycle Counting</button>
+    <clr-tab-content clrContentId="content1" *clrIfActive>
+      <button class="btn btn-sm btn-success" (click)="setCycleCounting()">กำหนดค่าการนับ</button>
+      <div class="btn-group btn-primary" style="float: right; padding-top: 5px;">
+        <button class="btn btn-sm btn-primary" (click)="startNewCycleCounting()">เริ่มนับรายการใหม่</button>
+        <button class="btn btn-sm btn-primary" [disabled]="eventStatus" (click)="startCycleCounting()">Start Counting</button>
+        <button class="btn btn-sm btn-danger" [disabled]="!eventStatus" (click)="stopCycleCounting()">Stop Counting</button>
+      </div>
+      <clr-datagrid [style.height.px]="450">
+        <clr-dg-column [clrDgField]="'count_date'">วันที่นับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'product_id'">รหัสสินค้า</clr-dg-column>
+        <clr-dg-column [clrDgField]="'product_name'">ชื่อสินค้า (ชื่อการค้า)</clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">Generic name</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let l of cycleLogs" [clrDgItem]="l">
+          <wm-detail-cycle-warehouse-remain *clrIfExpanded [productId]="l.product_id" ngProjectAs="clr-dg-row-detail"></wm-detail-cycle-warehouse-remain>
+          <clr-dg-cell>{{ l.count_date | toThaiDate }}</clr-dg-cell>
+          <clr-dg-cell>{{l.product_id}}</clr-dg-cell>
+          <clr-dg-cell>{{l.product_name}}</clr-dg-cell>
+          <clr-dg-cell>{{l.generic_name}}</clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink>Physical Counting</button>
+    <clr-tab-content *clrIfActive>
+      <button class="btn btn-sm btn-success" routerLink="/admin/counting/new">ตรวจนับสินค้าคงเหลือ</button>
+
+      <clr-datagrid [style.height.px]="450">
+        <clr-dg-column [clrDgField]="'count_date'">วันที่นับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'warehouse_name'">คลังสินค้า</clr-dg-column>
+        <clr-dg-column>ตรวจสอบแล้ว</clr-dg-column>
+        <clr-dg-column [clrDgField]="'count_check_date'">วันที่ตรวจสอบ</clr-dg-column>
+        <clr-dg-column>ปรับยอดแล้ว</clr-dg-column>
+        <clr-dg-column>วันที่ปรับยอด</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let i of items" [clrDgItem]="i">
+          <clr-dg-action-overflow>
+            <button class="action-item" (click)="doPrintCountingWithOutRemain(i.count_id)" [disabled]="i.verify_date">
+            <clr-icon shape="printer"></clr-icon>
+            พิมพ์ใบตรวจสอบยอดคงเหลือ (ไม่แสดงยอดคงเหลือ)
+          </button>
+            <button class="action-item" (click)="doPrintCountingWithRemain(i.count_id)" [disabled]="i.verify_date">
+            <clr-icon shape="printer"></clr-icon>
+            พิมพ์ใบตรวจสอบยอดคงเหลือ (แสดงยอดคงเหลือ)
+          </button>
+            <button class="action-item" [disabled]="i.verify_date" [routerLink]="['/admin/counting/verify/', i.count_id]">
+            <clr-icon shape="note"></clr-icon>
+            บันทึกยอดคงเหลือ (ยอดการนับจริง)</button>
+            <button class="action-item" [disabled]="i.adjust_date || !i.verify_date" [routerLink]="['/admin/counting/adjust/', i.count_id]">
+            <clr-icon shape="slider"></clr-icon>
+            ปรับยอดคงเหลือสินค้า</button>
+            <button class="action-item" [disabled]="i.adjust_date" (click)="removeCounting(i.count_id)">
+            <clr-icon shape="trash" class="is-error"></clr-icon>
+            ยกเลิกใบนับ</button>
+          </clr-dg-action-overflow>
+          <clr-dg-cell>{{ i.count_date | toThaiDate }}</clr-dg-cell>
+          <clr-dg-cell>{{ i.warehouse_name }}</clr-dg-cell>
+          <clr-dg-cell>
+            <button *ngIf="i.verify_date" class="btn btn-success btn-link btn-sm" style="min-width: 38px;">
+            <clr-icon shape="success" size="16" class="is-success"></clr-icon>
+          </button>
+            <button *ngIf="!i.verify_date" class="btn btn-success btn-link btn-sm" style="min-width: 38px;">
+            <clr-icon shape="close" size="16" class="is-danger"></clr-icon>
+          </button>
+          </clr-dg-cell>
+          <clr-dg-cell>{{i.verify_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>
+            <button *ngIf="i.adjust_date" class="btn btn-success btn-link btn-sm" style="min-width: 38px;">
+            <clr-icon shape="success" size="16" class="is-success"></clr-icon>
+          </button>
+            <button *ngIf="!i.adjust_date" class="btn btn-success btn-link btn-sm" style="min-width: 38px;">
+            <clr-icon shape="close" size="16" class="is-danger"></clr-icon>
+          </button>
+          </clr-dg-cell>
+          <clr-dg-cell>{{i.adjust_date | toThaiDate}}</clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
+
+
+<clr-modal [(clrModalOpen)]="modalSetCounting" [clrModalClosable]="false">
+  <h3 class="modal-title">กำหนดค่าการนับแบบ Cycle</h3>
+  <div class="modal-body">
+    กำหนดเวลาที่ต้องการนับ (ทุกวัน) ในเวลา
+    <input name="expiredDate" placeholder="12:20" [textMask]="{mask: maskTime}" [(ngModel)]="eventTime" size="10" type="text"
+    /> น.
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modalSetCounting = false">ปิดหน้าต่าง</button>
+    <button type="button" class="btn btn-primary" (click)="saveCycleCounting()">บันทึก</button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

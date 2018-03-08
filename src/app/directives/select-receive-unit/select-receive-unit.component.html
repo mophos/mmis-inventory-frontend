@@ -1,0 +1,12 @@
+<span *ngIf="loading" class="spinner spinner-sm">
+  Loading...
+</span>
+
+<div class="select" *ngIf="!loading">
+  <select name="unit" [disabled]="disabled" [(ngModel)]="selectedUnitGenericId" style="border-bottom: 0px; width: 100%;" (change)="setSelect($event)">
+    <!-- <option value="">เลือกหน่วย</option> -->
+    <option *ngFor="let unit of units" [value]="unit.unit_generic_id">
+      {{ unit.from_unit_name }} ({{unit.qty | number}} {{unit.to_unit_name}})
+    </option>
+  </select>
+</div>

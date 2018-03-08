@@ -1,0 +1,66 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false" [clrModalSize]="'lg'">
+  <h3 class="modal-title">แก้ไขข้อมูล LOT</h3>
+  <div class="modal-body">
+
+    <table class="table" style="width: 100%;">
+      <thead>
+        <tr>
+          <th style="width: 50%" class="left">Lot no.</th>
+          <th class="left">Expire date</th>
+          <th>Active</th>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="wm-add-row">
+            <input type="text" #inputLot placeholder="ปล่อยว่างสร้างอัตโนมัติ" [(ngModel)]="lotNo" style="text-align: left; width: 100%;">
+          </td>
+          <td class="left wm-add-row">
+            <input type="text" placeholder="21-12-2018" [textMask]="{mask: mask}" [(ngModel)]="expiredDate" style="width: 100%; text-align: left;">
+          </td>
+          <td class="wm-add-row">
+            <clr-checkbox name="isActive" [(ngModel)]="isActive"></clr-checkbox>
+          </td>
+          <td class="wm-add-row">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-success wm-small-btn" [disabled]="!expiredDate || isSaving" (click)="saveLot()">
+              <clr-icon shape="floppy" size="16"></clr-icon>
+            </button>
+              <button class="btn btn-sm btn-danger wm-small-btn" [disabled]="!expiredDate || isSaving" (click)="resetForm()">
+              <clr-icon shape="refresh" size="16"></clr-icon>
+            </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" *ngIf="!lots.length">ไม่พบรายการ</td>
+        </tr>
+        <tr *ngFor="let lot of lots" [class.editLine]="lot.is_update === 'Y'">
+          <td class="left">{{lot.lot_no}}</td>
+          <td class="left">{{lot.expired_date | expiredDate}}</td>
+          <td>
+            <clr-icon shape="success" *ngIf="lot.is_active === 'Y'" class="is-success"></clr-icon>
+            <clr-icon shape="close" *ngIf="lot.is_active === 'N' || !lot.is_active" class="is-danger"></clr-icon>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button [disabled]="lot.is_update === 'Y'" class="btn btn-sm btn-success wm-small-btn" (click)="editLot(lot)">
+              <clr-icon shape="note" size="16"></clr-icon>
+            </button>
+              <button disabled class="btn btn-sm btn-danger wm-small-btn">
+              <clr-icon shape="trash" size="16"></clr-icon>
+            </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeModal()">
+      ปิดหน้าต่าง
+    </button>
+  </div>
+</clr-modal>

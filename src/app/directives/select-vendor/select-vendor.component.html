@@ -1,0 +1,8 @@
+<div class="select">
+  <select name="vendor" style="border-bottom: 0px;" (change)="setSelect($event)">
+    <!-- <option>เลือกผู้จำหน่าย</option> -->
+    <option *ngFor="let vendor of vendors" [value]="vendor.labeler_id">
+     {{ vendor.labeler_name }}
+    </option>
+  </select>
+</div>

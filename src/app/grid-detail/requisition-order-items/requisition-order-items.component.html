@@ -1,0 +1,24 @@
+<div [clrLoading]="loading">
+  <span class="p4" style="padding-left: 15px;">รายการขอเบิกเวชภัณฑ์ {{items.length | number }} รายการ</span>
+  <clr-datagrid>
+    <clr-dg-column [clrDgField]="'working_code'" style="width: 100px;">Working Code</clr-dg-column>
+    <clr-dg-column [clrDgField]="'generic_name'">ชื่อ Generic</clr-dg-column>
+    <clr-dg-column style="width: 100px;">จำนวนขอเบิก</clr-dg-column>
+    <!-- <clr-dg-column style="width: 100px;">Package</clr-dg-column> -->
+    <clr-dg-row *clrDgItems="let i of items">
+      <clr-dg-cell>{{ i.working_code }}</clr-dg-cell>
+      <clr-dg-cell>{{ i.generic_name }}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        {{ i.requisition_qty | number}} {{ i.from_unit_name }} (
+        <span class="p4">{{i.conversion_qty | number}} {{ i.to_unit_name }}</span>) =
+        <span class="p4" style="color: #318700;">{{i.conversion_qty * i.requisition_qty | number}} {{ i.to_unit_name }}</span>
+      </clr-dg-cell>
+      <!-- <clr-dg-cell>{{ i.from_unit_name }} ({{ i.conversion_qty }} {{ i.to_unit_name }})</clr-dg-cell> -->
+    </clr-dg-row>
+    <clr-dg-footer>
+      <clr-dg-pagination #pagination [clrDgPageSize]="10">
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+      </clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>

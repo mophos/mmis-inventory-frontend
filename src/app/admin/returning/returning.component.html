@@ -1,0 +1,199 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/borrow">ยืม-คืนยา</a>
+  <span class="breadcrumb-item active">รับคืน</span>
+</nav>
+
+<clr-stack-view>
+  <clr-stack-block [clrSbExpanded]="false">
+    <clr-stack-label>ประเภทการยืม: <strong>{{borrowTypeName}}</strong></clr-stack-label>
+    <clr-stack-content>วันที่ยืม: <strong>{{borrowDate}}</strong></clr-stack-content>
+    <clr-stack-block>
+      <clr-stack-label>คลังที่ขอยืม</clr-stack-label>
+      <clr-stack-content>{{borrowWarehouseId}} - {{borrowWarehouseName}}</clr-stack-content>
+    </clr-stack-block>
+    <clr-stack-block>
+      <clr-stack-label>คลังที่ให้ยืม</clr-stack-label>
+      <clr-stack-content>{{ownerWarehouseId}} - {{ownerWarehouseName}}</clr-stack-content>
+    </clr-stack-block>
+    <clr-stack-block>
+      <clr-stack-label>ระยะเวลาส่งคืน (วัน)</clr-stack-label>
+      <clr-stack-content>{{dueReturnDay}}</clr-stack-content>
+    </clr-stack-block>
+    <clr-stack-block>
+      <clr-stack-label>วันที่กำหนดส่งคืน</clr-stack-label>
+      <clr-stack-content>{{dueReturnDate}}</clr-stack-content>
+    </clr-stack-block>
+  </clr-stack-block>
+</clr-stack-view>
+
+<form>
+  <section>
+    <div class="form-group row">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label for="returnDate" class="required">วันที่รับคืน</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="returnDate" [options]="myDatePickerOptions" [(ngModel)]="returnDate" required></my-date-picker-th>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label for="dstWarehouseId" class="required">รับเข้าคลัง</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <span class="label label-success">{{ownerWarehouseId}} - {{ownerWarehouseName}}</span>
+      </div>
+    </div>
+  </section>
+</form>
+
+<clr-datagrid [clrDgLoading]="isSearching" [style.height.px]="200">
+  <clr-dg-column [style.width.%]="15" [clrDgField]="'product_id'">รหัสยา</clr-dg-column>
+  <clr-dg-column [style.width.%]="55" [clrDgField]="'product_name'">ชื่อยา (ชื่อการค้า)</clr-dg-column>
+  <clr-dg-column [style.width.%]="10">คงเหลือ</clr-dg-column>
+  <clr-dg-column [style.width.%]="10">หน่วย</clr-dg-column>
+  <clr-dg-column [style.width.%]="10"></clr-dg-column>
+  <clr-dg-row *clrDgItems="let p of products">
+    <clr-dg-cell>{{p.product_id}}</clr-dg-cell>
+    <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+    <clr-dg-cell>{{p.qty | number}}</clr-dg-cell>
+    <clr-dg-cell>{{p.small_unit}}</clr-dg-cell>
+    <clr-dg-cell>
+      <button class="btn btn-success btn-link btn-sm" style="min-width: 38px;" (click)="showConfirmReturn(p)">
+        <clr-icon shape="note" size="20" class="is-highlight"></clr-icon>
+      </button>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<h4>รายการรับคืนแล้ว</h4>
+<clr-datagrid [style.height.px]="200">
+  <clr-dg-column [style.width.%]="15" [clrDgField]="'product_id'">รหัสยา</clr-dg-column>
+  <clr-dg-column [style.width.%]="20" [clrDgField]="'product_name'">ชื่อยา (ชื่อการค้า)</clr-dg-column>
+  <clr-dg-column [style.width.%]="20">จำนวนรับคืน</clr-dg-column>
+  <clr-dg-column [style.width.%]="15">หน่วย</clr-dg-column>
+  <clr-dg-column [style.width.%]="15">มูลค่า (บาท)</clr-dg-column>
+  <clr-dg-column [style.width.%]="10"></clr-dg-column>
+  <clr-dg-row *clrDgItems="let p of selectedProducts; let idx = index">
+    <clr-dg-cell>{{p.product_id}}</clr-dg-cell>
+    <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+    <clr-dg-cell>{{p.return_qty | number}}</clr-dg-cell>
+    <clr-dg-cell>{{p.small_unit}}</clr-dg-cell>
+    <clr-dg-cell>{{p.cost*p.return_qty | number: '1.2-2'}}</clr-dg-cell>
+    <clr-dg-cell>
+      <button class="btn btn-success btn-link btn-sm" style="min-width: 38px;" (click)="removeReturnQty(idx)">
+        <clr-icon shape="trash" size="20" class="is-danger"></clr-icon>
+      </button>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>
+    <!--จำนวนรายการ <span class="badge badge-orange">{{ totalProduct | number }}</span>            -->
+    มูลค่ารวม: <span class="badge badge-success">{{ totalCost | number: '1.2-2' }}</span>
+    {{pagination2.firstItem + 1}} - {{pagination2.lastItem + 1}} จาก {{pagination2.totalItems}} รายการ
+    <clr-dg-pagination #pagination2 [clrDgPageSize]="20"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<div style="padding: 20px;">
+  <button class="btn btn-success btn-sm" (click)="doSave()" 
+  [clrLoading]="isSaving" [disabled]="!selectedProducts.length || isSaving || !returnDate || !ownerWarehouseId">
+    <clr-icon shape="flopply"></clr-icon> บันทึก
+  </button>
+  <button class="btn btn-danger btn-sm" routerLink="/admin/borrow">
+    <clr-icon shape="home"></clr-icon> ยกเลิก/กลับ
+  </button>
+</div>
+
+<clr-modal [(clrModalOpen)]="openBorrowQty" [clrModalClosable]="false">
+  <h3 class="modal-title">ระบุจำนวนที่ต้องการคืน</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="gForm_1">ชื่อยา (ชื่อการค้า)</label>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" disabled [(ngModel)]="selProductName" name="txtName" placeholder="ชื่อยา">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="gForm_1">Lot</label>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <div class="select">
+              <select name="slType" [(ngModel)]="selectedProductId" (change)="changeLot()">
+                <option value=""><เลือก Lot></option>
+                <option *ngFor="let p of productLots" [value]="p.id">
+                  {{ p.lot_no }} (หมดอายุ: {{ p.expired_date | expiredDate }} แพ็คเก็จ: {{p.large_unit}}x{{p.small_unit}})
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="gForm_1">คงเหลือ</label>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <input class="form-control" disabled wmNumberOnly type="text" [(ngModel)]="remainQty" name="remainQty" placeholder="0">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="gForm_1">จำนวนรับ</label>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <input class="form-control" wmNumberOnly type="text" [(ngModel)]="returnQty" name="returnQty" placeholder="0">
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="!returnQty" (click)="doAddProduct()">ตกลง</button>
+    <button type="button" class="btn btn-danger" (click)="openBorrowQty = false">ยกเลิก/ปิด</button>
+  </div>
+</clr-modal>
+<!--
+<clr-modal [(clrModalOpen)]="openBorrowEditQty" [clrModalClosable]="false">
+  <h3 class="modal-title">แก้ไขจำนวนที่ต้องการอนุมัติ</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="gForm_1">ชื่อยา (ชื่อการค้า)</label>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" disabled [(ngModel)]="editProductName" name="editProductName">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="gForm_1">Lot</label>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <input disabled class="form-control" wmNumberOnly type="text" [(ngModel)]="editLotNo" name="editLotNo">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="gForm_1">จำนวนอนุมัติ</label>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <input class="form-control" wmNumberOnly type="text" [(ngModel)]="editBorrowQty" name="editBorrowQty">
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="openBorrowEditQty = false">ยกเลิก/ปิด</button>
+    <button type="button" class="btn btn-primary" [disabled]="!editBorrowQty" (click)="doUpdateQty()">ตกลง</button>
+  </div>
+</clr-modal>-->

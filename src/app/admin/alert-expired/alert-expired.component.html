@@ -1,0 +1,111 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">แจ้งเตือนเวชภัณฑ์หมดอายุ</span>
+</nav>
+<!-- <div class="toggle-switch" style="float: right;">
+  <input type="checkbox" id="isAlert" [checked]="isAlert" name="isAlert" (click)="setAlertStatus()">
+  <label for="isAlert">เปิดใช้งานการแจ้งเตือน</label>
+</div> -->
+<!-- <h4>รายการยาทั้งหมด</h4> -->
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink (click)="getProductExpired()">
+      รายการเวชภัณฑ์หมดอายุ</button>
+    <clr-tab-content *clrIfActive>
+      <clr-datagrid  [style.height.%]="85">
+        <clr-dg-column [style.width.px]="150" [clrDgField]="'working_code'">Trade Code</clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">Trade name</clr-dg-column>
+        <clr-dg-column>Lot No.</clr-dg-column>
+        <clr-dg-column>วันหมดอายุ</clr-dg-column>
+        <clr-dg-column>วันที่ต่าง</clr-dg-column>
+        <clr-dg-column>จำนวนวันแจ้งเตือนหมดอายุ</clr-dg-column>
+        <clr-dg-column>คลัง</clr-dg-column>
+  
+        <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p"  [ngClass]="{'expired-date-status': (p.diff < 0)}">
+          <clr-dg-cell>{{p.product_code}}</clr-dg-cell>
+          <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+          <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+          <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
+          <clr-dg-cell>{{p.diff}}</clr-dg-cell>
+          <clr-dg-cell>{{p.num_days}}</clr-dg-cell>
+          <clr-dg-cell>{{p.warehouse_name}}</clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems | number}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="getAllProducts()">
+      ตั้งค่าวันหมดอายุ</button>
+    <clr-tab-content *clrIfActive>
+      <div style="padding-top: 5px; padding-bottom: 5px; display:inline-block;">
+        <div class="btn-group btn-sm">
+          <div class="radio btn">
+            <input type="radio" (click)="getAllProducts()" [checked]="isAll" name="btn-group-demo-radios" id="btn-demo-radio-1">
+            <label for="btn-demo-radio-1">รายการทั้งหมด</label>
+          </div>
+          <div class="radio btn">
+            <input type="radio" (click)="getUnsetProducts()" [checked]="!isAll" name="btn-group-demo-radios" id="btn-demo-radio-2">
+            <label for="btn-demo-radio-2">เฉพาะยังไม่กำหนด</label>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button [disabled]="!selectedGenerics.length" class="btn btn-sm btn-success" (click)="setExpireCount()">กำหนดวันหมดอายุ</button>
+        <div class="col-md-2" style="text-align: right; display:inline-block; float: right;">
+          <div class="select">
+            <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
+              <option value="all">ทั้งหมด</option>
+              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <clr-datagrid [(clrDgSelected)]="selectedGenerics" [style.height.%]="85">
+        <clr-dg-column [style.width.px]="150" [clrDgField]="'working_code'">Generic Code</clr-dg-column>
+        <!-- <clr-dg-column [style.width.%]="35" [clrDgField]="'product_name'">ชื่อยา (ชื่อการค้า)</clr-dg-column> -->
+        <clr-dg-column [clrDgField]="'generic_name'">Generic name</clr-dg-column>
+        <clr-dg-column [style.width.px]="150">ก่อนวันหมดอายุ (วัน)</clr-dg-column>
+        <!--<clr-dg-column [style.width.%]="10">#</clr-dg-column>-->
+        <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let generic of allGenerics" [clrDgItem]="generic">
+          <!-- <clr-dg-cell>{{product.product_id}}</clr-dg-cell> -->
+          <clr-dg-cell>{{generic.working_code}}</clr-dg-cell>
+          <clr-dg-cell>{{generic.generic_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{generic.num_days | number}}</clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems | number}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="100"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
+
+
+<clr-modal [(clrModalOpen)]="openSetSingleExpire" [clrModalClosable]="false">
+  <h3 class="modal-title">กำหนดจำนวนวันแจังเตือนให้กับสินค้า</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <div class="form-group">
+          <label for="txtExpiredCount">แจ้งเตือนก่อนวันหมดอายุ (วัน)</label>
+          <input type="text" wmNumberOnly [(ngModel)]="numDays" name="txtExpiredCount" placeholder="..">
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" [disabled]="submitLoading" (click)="openSetSingleExpire = false">ยกเลิก</button>
+    <button type="button" class="btn btn-primary" (click)="saveExpireCount()" [clrLoading]="submitLoading" [disabled]="!selectedGenericIds.length || !numDays || submitLoading">บันทึก</button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

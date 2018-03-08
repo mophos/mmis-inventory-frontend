@@ -1,0 +1,65 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/requisition">เบิกยาและเวชภัณฑ์</a>
+</nav>
+<div class="card">
+  <div class="card-header primary">รายการสินค้าในคลัง</div>
+  <!-- <div class="card-block">
+    <button class="btn btn-sm btn-success" [routerLink]="['/admin/requisition-templates/new']">
+        + เพิ่มรายการสินค้าในคลัง
+        <clr-icon shape="unarchive"></clr-icon>
+      </button>
+  </div> -->
+  <div style="padding-top: 10px;"></div>
+  <clr-datagrid [clrDgLoading]="loading">
+    <clr-dg-column [clrDgField]="'warehouse_name'">ชื่อคลังสินค้า</clr-dg-column>
+    <clr-dg-column [clrDgField]="'short_code'">keywords</clr-dg-column>
+    <clr-dg-column [clrDgField]="'type_name'">ประเภท</clr-dg-column>
+    <clr-dg-column [clrDgField]="'location'">สถานที่</clr-dg-column>
+    <clr-dg-column>สถานะ</clr-dg-column>
+    <clr-dg-column>รับเข้าคลัง</clr-dg-column>
+    <clr-dg-column>จำนวนสินค้า</clr-dg-column>
+    <clr-dg-column>แก้ไขรายการ</clr-dg-column>
+    <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+    <clr-dg-row *clrDgItems="let h of warehouses" [clrDgItem]="h">
+      <wm-product-in-warehouse-detail *clrIfExpanded [warehouseId]="h.warehouse_id" ngProjectAs="clr-dg-row-detail"></wm-product-in-warehouse-detail>
+      <clr-dg-action-overflow>
+        <button class="action-item" (click)="showEdit(h)">
+        <clr-icon shape="note"></clr-icon> แก้ไขข้อมูล
+      </button>
+        <button disabled class="action-item" (click)="remove(h)">
+        <clr-icon shape="trash"></clr-icon> ลบข้อมูล
+      </button>
+        <button class="action-item" (click)="goDetail(h.warehouse_id)">
+        <clr-icon shape="search"></clr-icon> ดูรายละเอียดสินค้าในคลัง
+      </button>
+      </clr-dg-action-overflow>
+      <clr-dg-cell>{{h.warehouse_name}}</clr-dg-cell>
+      <clr-dg-cell>{{h.short_code}}</clr-dg-cell>
+      <clr-dg-cell>{{h.type_name}}</clr-dg-cell>
+      <clr-dg-cell>{{h.location}}</clr-dg-cell>
+      <clr-dg-cell>
+        <clr-icon shape="close" class="is-error" *ngIf="h.is_enable === 'N'"></clr-icon>
+        <clr-icon shape="check" class="is-success" *ngIf="h.is_enable === 'Y'"></clr-icon>
+      </clr-dg-cell>
+      <clr-dg-cell>
+        <clr-icon shape="close" class="is-error" *ngIf="h.is_receive === 'N'"></clr-icon>
+        <clr-icon shape="check" class="is-success" *ngIf="h.is_receive === 'Y'"></clr-icon>
+      </clr-dg-cell>
+      <clr-dg-cell>{{h.items}}</clr-dg-cell>
+      <clr-dg-cell>
+        <button *ngIf="h.is_enable === 'N'" disabled class="btn btn-error btn-link btn-sm" style="min-width: 38px;" [routerLink]="['/admin/warehouse-products/details/', h.warehouse_id]">
+                <clr-icon shape="note" size="20" class="is-highlight"></clr-icon>
+        </button>
+        <button *ngIf="h.is_enable === 'Y'" enabled class="btn btn-success btn-link btn-sm" style="min-width: 38px;" [routerLink]="['/admin/warehouse-products/details/', h.warehouse_id]">
+                <clr-icon shape="note" size="20" class="is-highlight"></clr-icon>
+        </button>
+      </clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-footer>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} รายการ
+      <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>

@@ -1,0 +1,11 @@
+<div class="select">
+  <select name="lotId" style="border-bottom: 0px; width: 100%;" (change)="setSelect($event)" [(ngModel)]="lotNo">
+    <!-- <option>เลือก Lot</option> -->
+    <option *ngFor="let l of lots" [value]="l.lot_no">
+      {{ l.lot_no }} ({{l.expired_date | expiredDate}})
+    </option>
+    <!-- <option value="_ADD_" *ngIf="showAdd">จัดการ LOT...</option> -->
+  </select>
+</div>
+
+<!-- <wm-add-lots-modal [productId]="productId" (onSuccess)="onCloseLotModal($event)" #modalLot></wm-add-lots-modal> -->

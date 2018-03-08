@@ -1,0 +1,72 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">กำหนดรายการ ABC/VEN</span>
+</nav>
+
+<div class="row">
+  <div class="col-md-6">
+    <button class="btn btn-sm btn-success" (click)="processingAbc()">
+      <clr-icon shape="sync"></clr-icon>
+      ประมวลผล ABC</button>
+    <button [disabled]="!selectedProducts.length" class="btn btn-sm btn-success" (click)="setAbcVen()">
+      <clr-icon shape="floppy"></clr-icon>
+      กำหนด VEN</button>
+  </div>
+  <div class="col-md-6">
+    <div class="btn-group btn-sm" style="float: right; padding-top: 5px;">
+      <div class="radio btn">
+        <input type="radio" (click)="getProducts()" [checked]="isAll" name="btn-group-demo-radios" id="btn-demo-radio-1">
+        <label for="btn-demo-radio-1">รายการทั้งหมด</label>
+      </div>
+      <div class="radio btn">
+        <input type="radio" (click)="getProductsUnset()" [checked]="!isAll" name="btn-group-demo-radios" id="btn-demo-radio-2">
+        <label for="btn-demo-radio-2">เฉพาะยังไม่กำหนด</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<clr-datagrid [(clrDgSelected)]="selectedProducts" [style.height.%]="85">
+  <clr-dg-column [style.width.%]="15" [clrDgField]="'generic_id'">Generic ID</clr-dg-column>
+  <clr-dg-column [style.width.%]="25" [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
+  <clr-dg-column [style.width.%]="25" [clrDgField]="'account_name'">ED/NED</clr-dg-column>
+  <clr-dg-column [style.width.%]="15" [clrDgField]="'abc_name'">ประเภท ABC</clr-dg-column>
+  <clr-dg-column [style.width.%]="15" [clrDgField]="'ven_name'">ประเภท VEN</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
+  <clr-dg-row *clrDgItems="let product of allProducts" [clrDgItem]="product">
+    <clr-dg-cell>{{product.generic_id}}</clr-dg-cell>
+    <clr-dg-cell>{{product.generic_name}}</clr-dg-cell>
+    <clr-dg-cell>{{product.account_name}}</clr-dg-cell>
+    <clr-dg-cell>{{product.abc_name}}</clr-dg-cell>
+    <clr-dg-cell>{{product.ven_name}}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="openAbcVen" [clrModalClosable]="false">
+  <h3 class="modal-title">กำหนดค่า VEN</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <div class="form-group" style="padding-left: 150px;">
+          <label for="slVen" style="width: 100px;">ประเภท VEN</label>
+          <div class="select">
+            <select id="slVen" [(ngModel)]="venId" name="venId">
+              <option [value]="v.ven_id" *ngFor="let v of venList">{{v.ven_name}}</option>
+            </select>
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="openAbcVen = false">ยกเลิก</button>
+    <button type="button" class="btn btn-primary" (click)="saveAbcVen()" [disabled]="!selectedProductIds.length || !venId">บันทึก</button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

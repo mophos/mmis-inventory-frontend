@@ -1,0 +1,81 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">โอนเวชภัณฑ์ระหว่างคลัง</span>
+</nav>
+<div class="progress loop" *ngIf="loading">
+  <progress></progress>
+</div>
+<div class="row wid99">
+  <div class="col-md-8">
+    <button class="btn btn-sm btn-success" [routerLink]="['/admin/transfer/new']">
+      + บันทึกการโอนสินค้า
+    </button>
+  </div>
+  <div class="col-md-2" style="padding-top: 5px;">
+    <div class="btn-group" style="float:right;margin: 0px 0px 0px 0px;" >
+      <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="doApprove()">
+        <clr-icon shape="note"></clr-icon> อนุมัติใบโอน ({{selectedApprove.length | number}} รายการ)
+      </button>
+      <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
+        <clr-button [disabled]="!selectedApprove.length" [clrInMenu]="true" class="btn btn-sm btn-primary" (click)="printReport()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติโอน
+        </clr-button>
+        <clr-button [disabled]="!selectedApprove.length" [clrInMenu]="true" class="btn btn-sm btn-primary" (click)="printReport2()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบโอน
+        </clr-button>
+      </clr-button-group>
+    </div>
+  </div>
+
+  <div class="col-md-2" style="padding-top: 5px;">
+    <div class="select">
+      <select id="selects_3" name="approveStatus" [(ngModel)]="approveStatus" (change)="getTransfer($event)">
+        <option value="1">ทั้งหมด</option>
+        <option value="2">อนุมัติแล้ว</option>
+        <option value="3">รออนุมัติ</option>
+        <option value="4">ยกเลิก</option>
+      </select>
+    </div>
+  </div>
+</div>
+<clr-datagrid [clrDgLoading]="loading" [(clrDgSelected)]="selectedApprove" (clrDgRefresh)="refresh($event)">
+  <clr-dg-column style="width: 120px;">เลขที่โอน</clr-dg-column>
+  <clr-dg-column style="width: 120px;">วันที่โอน</clr-dg-column>
+  <clr-dg-column>โอนจากคลัง</clr-dg-column>
+  <clr-dg-column>ไปคลัง</clr-dg-column>
+  <clr-dg-column style="width: 100px;">Deleted</clr-dg-column>
+  <clr-dg-column style="width: 100px;"></clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+  <clr-dg-row *ngFor="let t of transfers" [clrDgItem]="t" [ngClass]="{'approve-status': t.approved === 'Y'}">
+    <!-- <clr-dg-action-overflow>
+      <button class="action-item" [disabled]="t.approved === 'Y' || t.mark_deleted=='N' || isSaving" (click)="activeTransfer(t)">เปลี่ยนสถานะ</button>
+      <button class="action-item" [disabled]="t.mark_deleted=='Y' || isSaving" (click)="showReport(t)">พิมพ์ใบโอน</button>
+    </clr-dg-action-overflow> -->
+    <wm-transfer-detail *clrIfExpanded [transferId]="t.transfer_id" ngProjectAs="clr-dg-row-detail"></wm-transfer-detail>
+    <clr-dg-cell>{{t.transfer_code}}</clr-dg-cell>
+    <clr-dg-cell>{{t.transfer_date | toThaiDate}}</clr-dg-cell>
+    <clr-dg-cell>{{t.src_warehouse_code}} - {{t.src_warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell>{{t.dst_warehouse_code}} - {{t.dst_warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <clr-icon shape="check" *ngIf="t.mark_deleted=='Y'" class="is-danger"></clr-icon>
+      <span *ngIf="t.mark_deleted=='N'">-</span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-sm">
+        <button title="แก้ไขรายการ" [routerLink]="['/admin/transfer/edit']" [queryParams]="{transferId: t.transfer_id}" class="btn btn-success wm-small-btn"
+          [disabled]="t.approved === 'Y' || t.mark_deleted=='Y' || isSaving">
+          <clr-icon shape="note"></clr-icon>
+        </button>
+        <button title="ลบรายการ" class="btn btn-danger wm-small-btn" (click)="removeTransfer(t)" [disabled]="t.approved === 'Y' || t.mark_deleted=='Y' || isSaving">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="total"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+<wm-html-preview #htmlPreview></wm-html-preview>
+<wm-loading-modal #modalLoading></wm-loading-modal>

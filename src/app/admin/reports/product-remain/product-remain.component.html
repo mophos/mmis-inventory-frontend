@@ -1,0 +1,89 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">รายงานสินค้าคงเหลือ</span>
+</nav>
+<section class="form-block">
+  <div class="form-group row">
+    <div class="col-md-2">
+      <label for="selects_1">ระบุคลังสินค้า</label>
+    </div>
+    <div class="col-md-4">
+      <div class="select">
+        <select name="warehouseId" [(ngModel)]="warehouseId">
+          <option value="">ทุกคลังสินค้า</option>
+            <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+              {{ w.warehouse_id }}-{{ w.warehouse_name }}
+              </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <button class="btn btn-sm btn-primary" (click)="getRemain()">
+        แสดงรายการคงเหลือ
+      </button>
+      <div class="btn-group btn-sm">
+        <button class="btn btn-outline-success" [disabled]="!products.length || loading" (click)="pdfExport()">ส่งออก PDF</button>
+        <button class="btn btn-success" [disabled]="!products.length || loading" (click)="excelExport()">ส่งออก Excel</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<clr-datagrid [clrDgLoading]="loading">
+  <clr-dg-column [style.width.%]="20">รหัสสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.%]="50">ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.%]="20">จำนวนคงเหลือ</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+  <clr-dg-row *ngFor="let product of products">
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="getRemainAllWarehouse(product)">ดูยอดคงเหลือแยกรายคลัง</button>
+      <button class="action-item" (click)="showGraph(product.product_id)">สถิติการจัดซื้อ</button>
+    </clr-dg-action-overflow>
+    <clr-dg-cell>{{product.product_id}}</clr-dg-cell>
+    <clr-dg-cell>{{product.product_name}}</clr-dg-cell>
+    <clr-dg-cell>{{product.total | number}}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>{{products.length}} รายการ</clr-dg-footer>
+</clr-datagrid>
+
+
+<chart [options]="demoOption"></chart>
+
+<clr-modal [(clrModalOpen)]="openGraph" [clrModalSize]="'lg'">
+  <h3 class="modal-title">สถิติการรับสินค้าเข้าคลัง</h3>
+  <div class="modal-body">
+    <chart [options]="chartOptions"></chart>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="openGraph = false">ตกลง</button>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="openAllWarehouse" [clrModalSize]="'lg'">
+  <h3 class="modal-title">รายการสินค้าคงเหลือแลกตามคลังสินค้า</h3>
+  <div class="modal-body">
+    <clr-datagrid [clrDgLoading]="loadingAll">
+      <clr-dg-column [style.width.%]="20">คลังสินค้า</clr-dg-column>
+      <clr-dg-column [style.width.%]="40">จำนวนคงเหลือ</clr-dg-column>
+      <clr-dg-column [style.width.%]="20">Lot</clr-dg-column>
+      <clr-dg-column [style.width.%]="20">วันหมดอายุ</clr-dg-column>
+      <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+      <clr-dg-row *ngFor="let w of allWarehouseProducts">
+        <clr-dg-cell>{{w.warehouse_name}}</clr-dg-cell>
+        <clr-dg-cell>{{w.qty / w.large_qty}}x{{w.small_qty}} {{w.small_unit}}</clr-dg-cell>
+        <clr-dg-cell>{{w.lot_no}}</clr-dg-cell>
+        <clr-dg-cell>{{w.expired_date | expiredDate}}</clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        {{paginationSearch.firstItem + 1}} - {{paginationSearch.lastItem + 1}} จาก {{paginationSearch.totalItems}} users
+        <clr-dg-pagination #paginationSearch [clrDgPageSize]="10"></clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="openAllWarehouse = false">พิมพ์รายการ</button>
+    <button type="button" class="btn btn-outline-danger" (click)="openAllWarehouse = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>

@@ -1,0 +1,81 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ข้อมูลประเภทคลังสินค้า</span>
+</nav>
+<button type="button" class="btn btn-success btn-sm" (click)="addNew()">+ เพิ่มรายการ</button>
+<clr-datagrid [style.height.%]="80">
+  <!--<clr-dg-column [clrDgField]="'warehouse_id'">รหัส</clr-dg-column>-->
+  <clr-dg-column [clrDgField]="'type_name'">ชื่อประเภทคลังสินค้า</clr-dg-column>
+  <clr-dg-column>รายละเอียด</clr-dg-column>
+  <clr-dg-column [style.width.%]="10">เป็นคลังหลัก</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+  <clr-dg-row *clrDgItems="let t of types" [clrDgItem]="t">
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="showEdit(t)">แก้ไขข้อมูล</button>
+      <!-- <button class="action-item" (click)="remove(t)">ลบข้อมูล</button> -->
+    </clr-dg-action-overflow>
+    <!--<clr-dg-cell>{{h.warehouse_id}}</clr-dg-cell>-->
+    <clr-dg-cell>{{t.type_name}}</clr-dg-cell>
+    <clr-dg-cell>{{t.type_desc}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <clr-icon shape="check" class="is-success" *ngIf="t.is_main === 'Y'"></clr-icon>
+      <clr-icon shape="close" class="is-danger" *ngIf="t.is_main === 'N'"></clr-icon>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false">
+  <h3 class="modal-title">เพิ่ม/แก้ไข ประเภทคลังสินค้า</h3>
+  <div class="modal-body">
+
+    <form>
+      <section class="form-block">
+        <label>ข้อมูล ประเภทคลังสินค้า</label>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label class="required" for="warehouseName">ชื่อประเภทคลังสินค้า</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="typeName" [(ngModel)]="typeName" placeholder="">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label class="required" for="typeId">รายละเอียด</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="typeDesc" [(ngModel)]="typeDesc" placeholder="">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label class="required" for="typeId">รายละเอียด</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <clr-checkbox [(ngModel)]="isMain" name="isMain">
+              เป็นคลังหลัก
+            </clr-checkbox>
+          </div>
+        </div>
+
+      </section>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!typeName || !typeDesc">
+        บันทึก
+    </button>
+    <button type="button" class="btn btn-danger-outline" (click)="opened = false">
+        ปิด
+    </button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

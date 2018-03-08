@@ -1,0 +1,17 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>คลังสินค้า</clr-dg-column>
+    <clr-dg-column>Lot no</clr-dg-column>
+    <clr-dg-column>วันหมดอายุ</clr-dg-column>
+    <clr-dg-column>คงเหลือ</clr-dg-column>
+    <clr-dg-column>หน่วย</clr-dg-column>
+
+    <clr-dg-row *ngFor="let i of items">
+        <clr-dg-cell>{{i.warehouse_name}}</clr-dg-cell>
+        <clr-dg-cell>{{i.lot_no}}</clr-dg-cell>
+        <clr-dg-cell>{{i.expired_date | expiredDate}}</clr-dg-cell>
+        <clr-dg-cell>{{i.qty | number}}</clr-dg-cell>
+        <clr-dg-cell>{{i.small_unit}}</clr-dg-cell>
+    </clr-dg-row>
+</clr-datagrid>
+</div>

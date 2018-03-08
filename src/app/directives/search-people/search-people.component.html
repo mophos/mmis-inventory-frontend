@@ -1,0 +1,8 @@
+<div class="select">
+    <select name="peopleId" [disabled]="disabled" (change)="setSelect($event)">
+      <option>เลือกเจ้าหน้าที่</option>
+      <option *ngFor="let person of people" [value]="person.people_id">
+          {{ person.title_name}} {{ person.fname}} {{ person.lname}}
+      </option>
+    </select>
+  </div>

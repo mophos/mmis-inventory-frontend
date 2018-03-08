@@ -1,0 +1,32 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>ชื่อเวชภัณฑ์ <br> (Trade name)</clr-dg-column>
+    <clr-dg-column>Lot No.</clr-dg-column>
+    <clr-dg-column>วันหมดอายุ</clr-dg-column>
+    <clr-dg-column>คงเหลือ <br> (Package)</clr-dg-column>
+    <clr-dg-column>คงเหลือ <br> (Base Unit)</clr-dg-column>
+    <clr-dg-column>จำนวนโอน <br> (Package)</clr-dg-column>
+    <clr-dg-column>รวม <br> (Base Unit)</clr-dg-column>
+    <clr-dg-column>คงเหลือหลังโอน <br> (Base Unit)</clr-dg-column>
+    <clr-dg-placeholder>ไม่พบรายการเวชภัณฑ์สำหรับโอน</clr-dg-placeholder>
+    <clr-dg-row *ngFor="let p of products; let idx = index;">
+      <clr-dg-cell>{{ p.product_name }}</clr-dg-cell>
+      <clr-dg-cell>{{ p.lot_no }}</clr-dg-cell>
+      <clr-dg-cell>{{ p.expired_date | expiredDate }}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{ p.pack_remain_qty | number }} {{ p.from_unit_name }} ({{p.conversion_qty | number}} {{p.to_unit_name}})</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        <span [ngClass]="{'error-message': (p.product_qty*p.conversion_qty) > p.small_remain_qty}">
+          {{p.small_remain_qty | number}}</span> {{p.to_unit_name}}
+      </clr-dg-cell>
+      <clr-dg-cell>
+        <input type="text" #qty (keyup)="changeQty(qty, idx)" style="width: 100%; text-align: right; background-color:#FFF9C4"
+          placeholder="0" wmNumberWithOutDot [value]="p.product_qty">
+      </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{p.product_qty*p.conversion_qty || 0 | number}} {{p.to_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        <span [ngClass]="{'error-message': (p.product_qty*p.conversion_qty) > p.small_remain_qty}">
+          {{p.small_remain_qty - (p.product_qty*p.conversion_qty) | number}}</span> {{p.to_unit_name}}
+      </clr-dg-cell>
+    </clr-dg-row>
+  </clr-datagrid>
+</div>

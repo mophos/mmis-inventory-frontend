@@ -1,0 +1,72 @@
+<clr-modal [(clrModalOpen)]="openPackagesModal" [clrModalClosable]="false" [clrModalSize]="'lg'">
+  <h3 class="modal-title">รายการ Packages</h3>
+  <div class="modal-body">
+    <clr-datagrid [style.height.px]="300" [clrDgLoading]="loading">
+      <clr-dg-column [clrDgField]="'large_unit'">ชื่อหน่วยใหญ่</clr-dg-column>
+      <clr-dg-column [clrDgField]="'small_unit'">ชื่อหน่วยเล็ก</clr-dg-column>
+      <clr-dg-column>จำนวนหน่วยใหญ่</clr-dg-column>
+      <clr-dg-column>จำนวนหน่วยเล็ก</clr-dg-column>
+      <clr-dg-column></clr-dg-column>
+      <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+      <clr-dg-row *clrDgItems="let l of productPackages" [clrDgItem]="l">
+        <clr-dg-cell>{{l.large_unit}}</clr-dg-cell>
+        <clr-dg-cell>{{l.small_unit}}</clr-dg-cell>
+        <clr-dg-cell>{{l.large_qty | number}}</clr-dg-cell>
+        <clr-dg-cell>{{l.small_qty | number}}</clr-dg-cell>
+        <clr-dg-cell>
+          <button class="btn btn-link" (click)="removePackage(l)">
+            <clr-icon shape="trash" class="is-error" size="20"></clr-icon>
+          </button>
+        </clr-dg-cell>
+
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} รายการ
+        <clr-dg-pagination #pagination [clrDgPageSize]="20"></clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" (click)="addPackage()">
+        + เพิ่ม Package
+    </button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeModal()">
+        ปิดหน้าต่าง
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="openPackages" [clrModalClosable]="false" [clrModalSize]="'lg'">
+  <h3 class="modal-title">Packages ทั้งหมด</h3>
+  <div class="modal-body">
+    <clr-datagrid [style.height.px]="300" [clrDgLoading]="loadingPackages" [(clrDgSelected)]="selectedPackages">
+      <clr-dg-column [clrDgField]="'large_unit'">ชื่อหน่วยใหญ่</clr-dg-column>
+      <clr-dg-column [clrDgField]="'small_unit'">ชื่อหน่วยเล็ก</clr-dg-column>
+      <clr-dg-column>จำนวนหน่วยใหญ่</clr-dg-column>
+      <clr-dg-column>จำนวนหน่วยเล็ก</clr-dg-column>
+      <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+      <clr-dg-row *clrDgItems="let l of packages" [clrDgItem]="l">
+        <clr-dg-cell>{{l.large_unit}}</clr-dg-cell>
+        <clr-dg-cell>{{l.small_unit}}</clr-dg-cell>
+        <clr-dg-cell>{{l.large_qty | number}}</clr-dg-cell>
+        <clr-dg-cell>{{l.small_qty | number}}</clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        {{pagination4.firstItem + 1}} - {{pagination4.lastItem + 1}} of {{pagination4.totalItems}} รายการ
+        <clr-dg-pagination #pagination4 [clrDgPageSize]="50"></clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" [disabled]="!selectedPackages.length" class="btn btn-sm btn-success" (click)="savePackages()">
+      เลือก Package
+    </button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="openPackages = false">
+      ปิดหน้าต่าง
+    </button>
+  </div>
+</clr-modal>

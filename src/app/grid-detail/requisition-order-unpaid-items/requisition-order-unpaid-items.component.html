@@ -1,0 +1,19 @@
+<div [clrLoading]="loading">
+  <span class="p4" style="padding-left: 15px;">รายการค้างจ่าย {{items.length | number }} รายการ</span>
+  <clr-datagrid>
+    <clr-dg-column style="width: 100px;">Working Code</clr-dg-column>
+    <clr-dg-column>ชื่อ Generic</clr-dg-column>
+    <clr-dg-column style="width: 100px;">จำนวนค้างจ่าย</clr-dg-column>
+    <!-- <clr-dg-column style="width: 100px;">Package</clr-dg-column> -->
+    <clr-dg-row *ngFor="let i of items">
+      <clr-dg-cell>{{ i.working_code }}</clr-dg-cell>
+      <clr-dg-cell>{{ i.generic_name }}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        {{ i.unpaid_qty | number}} {{ i.from_unit_name }} 
+        (<span class="p4">{{i.conversion_qty | number}} {{ i.to_unit_name }}</span>)
+        = <span class="p4" style="color: red;">{{i.conversion_qty * i.unpaid_qty | number}} {{ i.to_unit_name }}</span>
+      </clr-dg-cell>
+      <!-- <clr-dg-cell>{{ i.from_unit_name }} ({{ i.conversion_qty }} {{ i.to_unit_name }})</clr-dg-cell> -->
+    </clr-dg-row>
+  </clr-datagrid>
+</div>

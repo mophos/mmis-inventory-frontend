@@ -1,0 +1,212 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">Period</span>
+</nav>
+<!-- <div class="progress loop" *ngIf="loading">
+  <progress></progress>
+</div> -->
+
+<div style="padding-top: 5px; padding-bottom: 5px;">
+  <!-- <select name="" id="">
+    <option value="">{{test}}</option>
+    <option value="">123</option>
+  </select> -->
+
+  <div class="row wid99" style="padding-top: 10px">
+    <div class="col-md-1">
+      <label for="">ปีงบประมาณ</label>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="select" style="width: 100px;">
+          <select [(ngModel)]="budget_select" (ngModelChange)="change($event)">
+            <option *ngFor="let b of budget_year" [value]="b.budget_year">{{b.budget_year | yearThai}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- <clr-datagrid [(clrDgSingleSelected)]="selectedUser" [clrDgLoading]="loding" > -->
+  <clr-datagrid class="grid-order">
+    <clr-dg-column [style.width.px]="100">Status</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">Status</clr-dg-column>
+    <clr-dg-column>Period</clr-dg-column>
+    <!-- <clr-dg-column>Num</clr-dg-column>
+    <clr-dg-column>Year</clr-dg-column> -->
+    <clr-dg-column>From</clr-dg-column>
+    <clr-dg-column>To</clr-dg-column>
+    <clr-dg-column style="text-align: center;">Close Date</clr-dg-column>
+    <clr-dg-column>Final CLose</clr-dg-column>
+
+    <clr-dg-row *ngFor="let user of users;" [clrDgItem]="user" [ngClass]="{'approve-status': user.close_date}">
+      <!-- <clr-dg-cell >{{user.status}}</clr-dg-cell> -->
+      <clr-dg-cell class="text-right">
+        <div class="toggle-switch">
+          <input type="checkbox" id="toggle_{{user.period_id}}" [disabled]="user.disabled ||user.status === 'final_close'" [checked]="user.status === 'open'"
+            (change)="switchStatus($event,user.period_id)">
+          <label for="toggle_{{user.period_id}}"></label>
+        </div>
+      </clr-dg-cell>
+      <clr-dg-cell>{{user.status}}</clr-dg-cell>
+      <clr-dg-cell>{{user.period_month | monthToTh}} {{user.period_year | yearThai}}</clr-dg-cell>
+      <!-- <clr-dg-cell>{{user.period_month}}</clr-dg-cell>
+      <clr-dg-cell>{{user.period_year | yearThai}}</clr-dg-cell> -->
+      <clr-dg-cell>01 {{user.period_month | monthToTh}} {{user.period_year | yearThai}} </clr-dg-cell>
+      <clr-dg-cell>{{user.period_month | monthDateperiod}} {{user.period_month | monthToTh}} {{user.period_year | yearThai}} </clr-dg-cell>
+      <clr-dg-cell style="text-align: center;">{{user.close_date | toThaiDate}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: center;">
+        <button class="btn btn-sm btn-success" [disabled]="user.status === 'open'||user.status === 'final_close' || user.disabled"
+          (click)="finalclose(user.period_id,user.status)">Final Close</button>
+      </clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-footer>{{users.length}} รายการ</clr-dg-footer>
+  </clr-datagrid>
+
+</div>
+
+<!-- <clr-modal [(clrModalOpen)]="basic" >
+    <h3 class="modal-title">กำหนดสถานะ</h3>
+    <div class="modal-body">
+      <form>
+        <section class="form-block">
+          <div class="form-group" style="padding-left: 150px;">
+            <label style="width: 100px;">สถานะ</label>
+            <div class="select">
+              <select   name="status" [(ngModel)]="status">
+                  <option value="close" selected>Close</option>
+                  <option value="open">Open</option>
+              </select>
+            </div>
+          </div>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary"  (click)="check()" [clrLoading]="submitLoading" [disabled]="!status">บันทึก</button>
+      <button type="button" class="btn btn-outline" (click)="basic = false" [disabled]="submitLoading" >ยกเลิก</button>
+    </div>
+  </clr-modal> -->
+
+<clr-modal [(clrModalOpen)]="show" [clrModalSize]="'xl'">
+  <h3 class="modal-title">รายการที่ยังทำไม่สำเร็จ</h3>
+  <div class="modal-body">
+    <clr-tabs>
+      <clr-tab *ngIf="po.length">
+        <button clrTabLink id="link1">ใบสั่งซื้อ</button>
+        <clr-tab-content id="content1" *clrIfActive="po.length">
+          <clr-datagrid>
+            <clr-dg-column>เลขที่ใบสั่งซื้อ</clr-dg-column>
+            <clr-dg-column>วันที่สั่งซื้อ</clr-dg-column>
+            <clr-dg-column>สถานะ</clr-dg-column>
+            <clr-dg-row *ngFor="let p of po;" [clrDgItem]="p">
+              <clr-dg-cell>{{p.purchase_order_number}}</clr-dg-cell>
+              <clr-dg-cell>{{p.order_date | toThaiDate}}</clr-dg-cell>
+              <clr-dg-cell>{{p.purchase_order_status}}</clr-dg-cell>
+              <!-- <clr-dg-cell><clr-icon shape="note"></clr-icon></clr-dg-cell> -->
+              <!-- <clr-dg-cell><clr-icon shape="printer"></clr-icon></clr-dg-cell> -->
+            </clr-dg-row>
+            <!-- <clr-dg-footer>{{p.length}} item</clr-dg-footer> -->
+          </clr-datagrid>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab *ngIf="receive.length">
+        <button clrTabLink>ใบรับสินค้าการการสั่งซื้อ</button>
+        <clr-tab-content *clrIfActive="receive.length">
+          <clr-datagrid>
+            <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+            <clr-dg-column>วันที่รับ</clr-dg-column>
+            <clr-dg-column>สถานะ</clr-dg-column>
+            <clr-dg-row *ngFor="let p of receive;" [clrDgItem]="p">
+              <clr-dg-cell>{{p.receive_code}}</clr-dg-cell>
+              <clr-dg-cell>{{p.receive_date | toThaiDate}}</clr-dg-cell>
+              <clr-dg-cell>ยังไม่อนุมัติ</clr-dg-cell>
+
+            </clr-dg-row>
+            <!-- <clr-dg-footer>{{p.length}} item</clr-dg-footer> -->
+          </clr-datagrid>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab *ngIf="receiveOther.length">
+        <button clrTabLink>ใบรับสินค้าอื่นๆ</button>
+        <clr-tab-content *clrIfActive="receiveOther.length">
+          <clr-datagrid>
+            <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+            <clr-dg-column>วันที่รับ</clr-dg-column>
+            <clr-dg-column>สถานะ</clr-dg-column>
+            <clr-dg-row *ngFor="let p of receiveOther;" [clrDgItem]="p">
+              <clr-dg-cell>{{p.receive_code}}</clr-dg-cell>
+              <clr-dg-cell>{{p.receive_date | toThaiDate}}</clr-dg-cell>
+              <clr-dg-cell>ยังไม่อนุมัติ</clr-dg-cell>
+
+            </clr-dg-row>
+            <!-- <clr-dg-footer>{{p.length}} item</clr-dg-footer> -->
+          </clr-datagrid>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab *ngIf="requisition.length">
+        <button clrTabLink>ใบเบิกสินค้า</button>
+        <clr-tab-content *clrIfActive="requisition.length">
+          <clr-datagrid>
+            <clr-dg-column>เลขที่ใบเบิก</clr-dg-column>
+            <clr-dg-column>วันที่เบิก</clr-dg-column>
+            <clr-dg-column>สถานะ</clr-dg-column>
+            <clr-dg-row *ngFor="let p of requisition;" [clrDgItem]="p">
+              <clr-dg-cell>{{p.requisition_code}}</clr-dg-cell>
+              <clr-dg-cell>{{p.requisition_date | toThaiDate}}</clr-dg-cell>
+              <clr-dg-cell>ยังไม่สิ้นสุด</clr-dg-cell>
+
+            </clr-dg-row>
+            <!-- <clr-dg-footer>{{p.length}} item</clr-dg-footer> -->
+          </clr-datagrid>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab *ngIf="issue.length">
+        <button clrTabLink>ใบจ่ายสินค้า</button>
+        <clr-tab-content *clrIfActive="issue.length">
+          <clr-datagrid>
+            <clr-dg-column>เลขที่ใบจ่าย</clr-dg-column>
+            <clr-dg-column>วันที่จ่าย</clr-dg-column>
+            <clr-dg-column>สถานะ</clr-dg-column>
+            <clr-dg-row *ngFor="let p of issue;" [clrDgItem]="p">
+              <clr-dg-cell>{{p.issue_code}}</clr-dg-cell>
+              <clr-dg-cell>{{p.issue_date | toThaiDate}}</clr-dg-cell>
+              <clr-dg-cell>ยังไม่สิ้นสุด</clr-dg-cell>
+
+            </clr-dg-row>
+            <!-- <clr-dg-footer>{{p.length}} item</clr-dg-footer> -->
+          </clr-datagrid>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab *ngIf="transfer.length">
+        <button clrTabLink>ใบโอนสินค้า</button>
+        <clr-tab-content *clrIfActive="transfer.length">
+          <clr-datagrid>
+            <clr-dg-column>เลขที่ใบโอน</clr-dg-column>
+            <clr-dg-column>วันที่จ่าย</clr-dg-column>
+            <clr-dg-column>สถานะ</clr-dg-column>
+            <clr-dg-row *ngFor="let p of transfer;" [clrDgItem]="p">
+              <clr-dg-cell>{{p.transfer_code}}</clr-dg-cell>
+              <clr-dg-cell>{{p.transfer_date | toThaiDate}}</clr-dg-cell>
+              <clr-dg-cell>ยังไม่สิ้นสุด</clr-dg-cell>
+
+            </clr-dg-row>
+            <!-- <clr-dg-footer>{{p.length}} item</clr-dg-footer> -->
+          </clr-datagrid>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab>
+        <button clrTabLink style="display:none"></button>
+        <clr-tab-content *clrIfActive="false">
+        </clr-tab-content>
+      </clr-tab>
+    </clr-tabs>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-primary"  (click)="check()" [clrLoading]="submitLoading" [disabled]="!status">บันทึก</button> -->
+    <button type="button" class="btn btn-outline" (click)="show = false">ยกเลิก</button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

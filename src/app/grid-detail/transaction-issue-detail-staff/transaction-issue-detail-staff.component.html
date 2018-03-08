@@ -1,0 +1,18 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+    <clr-dg-column>จำนวนจ่าย (Pack)</clr-dg-column>
+    <clr-dg-column>หน่วย</clr-dg-column>
+    <clr-dg-column>รวม (Base Unit)</clr-dg-column>
+    <clr-dg-column>ยอดจ่ายจริง (Base Unit)</clr-dg-column>
+
+    <clr-dg-row *ngFor="let r of products">
+      <clr-dg-cell><span class="p4">{{r.generic_name}}</span></clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.qty / r.conversion_qty | number}} </clr-dg-cell>
+      <clr-dg-cell>{{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}})</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.qty | number}} {{r.to_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.qty_real | number}} {{r.to_unit_name}}</clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>{{products.length}} รายการ</clr-dg-footer>
+  </clr-datagrid>
+</div>

@@ -1,0 +1,93 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/warehouse">คลังสินค้า</a>
+  <span class="breadcrumb-item active">รายละเอียดคลังสินค้า</span>
+</nav>
+
+<clr-stack-view>
+  <clr-stack-block [clrSbExpanded]="false">
+    <clr-stack-label>รหัส:
+      <strong>{{warehouseId}}</strong>
+    </clr-stack-label>
+    <clr-stack-content>ชื่อคลัง:
+      <strong>{{warehouseName}}</strong>
+    </clr-stack-content>
+
+    <clr-stack-block>
+      <clr-stack-label>ประเภทคลัง</clr-stack-label>
+      <clr-stack-content>{{warehouseType}}</clr-stack-content>
+    </clr-stack-block>
+    <clr-stack-block>
+      <clr-stack-label>สถานที่ตั้ง</clr-stack-label>
+      <clr-stack-content>{{warehouseLocation}}</clr-stack-content>
+    </clr-stack-block>
+    <clr-stack-block>
+      <clr-stack-label>วันที่สร้าง</clr-stack-label>
+      <clr-stack-content>{{warehouseCreateDate | toThaiDate }}</clr-stack-content>
+    </clr-stack-block>
+  </clr-stack-block>
+</clr-stack-view>
+
+<h4>รายการสินค้า</h4>
+<!--  <label>ระบุเงื่อนไข</label>
+<input (keyup)="enterSearch($event)" type="text" name="query" placeholder="ระบุคำค้นหา...(ปล่อยว่างเพื่อแสดงทั้งหมด)" [(ngModel)]="query" size="45">
+<button class="btn btn-primary btn-sm" (click)="searchProduct()">ค้นหา</button>
+<small>เงื่อนไข: ชื่อยา, รหัสยา</small>
+<br> คลิกที่
+<clr-icon shape="ellipsis-vertical" size="14"></clr-icon> ในช่องรายการ เพื่อดูเมนูใช้งาน
+<div style="padding-top: 10px;"></div> -->
+<clr-datagrid [style.height.%]="75">
+  <!-- <clr-dg-column [clrDgField]="'product_id'" [style.width.%]="15">รหัสยา</clr-dg-column> -->
+  <clr-dg-column [clrDgField]="'product_name'" [style.width.%]="40">ชื่อยา (ชื่อทางการค้า)</clr-dg-column>
+  <clr-dg-column [style.width.%]="15">คงเหลือ</clr-dg-column>
+  <clr-dg-column [style.width.%]="10">มูลค่า/หน่วยใหญ่</clr-dg-column>
+  <clr-dg-column [clrDgField]="'lot_no'" [style.width.%]="10">LOT</clr-dg-column>
+  <clr-dg-column [style.width.%]="10">วันหมดอายุ</clr-dg-column>
+  <clr-dg-column [clrDgField]="'location_name'" [style.width.%]="10">สถานที่เก็บ</clr-dg-column>
+  <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="changeQty(p)">
+        <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ
+      </button>
+      <button class="action-item" (click)="changeCost(p)">
+        <clr-icon shape="note"></clr-icon> ปรับราคาต่อหน่วย
+      </button>
+    </clr-dg-action-overflow>
+    <!-- <clr-dg-cell>{{p.product_id}}</clr-dg-cell> -->
+    <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{p.qty | number}} {{p.base_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{p.cost*p.qty | number: '1.2-2'}}</clr-dg-cell>
+    <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+    <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
+    <clr-dg-cell>{{p.location_name}} - {{p.location_desc}}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} of {{paginationA.totalItems}} รายการ
+    <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="openCost" [clrModalClosable]="true">
+  <h3 class="modal-title">ปรับราคาต่อหน่วย (Base unit)</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <label for="">{{productName}}</label>
+        <div class="form-group">
+          <label for="aForm_1">ราคาต่อหน่วย (Base Unit)</label>
+          <input type="number" name="cost" [(ngModel)]="cost" id="cost" placeholder="0">
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="!cost" (click)="saveCost()">
+      บันทึกปรับราคา
+    </button>
+  </div>
+</clr-modal>
+
+<wm-adjust-product-modal [isCounting]="false" #modalAdjust [openModalAdjust]="openModalQty" (onSuccess)="successAdjust($event)"></wm-adjust-product-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

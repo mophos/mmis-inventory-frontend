@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0">
+  <meta http-equiv="expires" content="0">
+  <meta http-equiv="pragma" content="no-cache">
+  
+  <title>Inventory Management (v1.0.0)</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    .single4 {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 6px solid #BFBFBF;
+      border-top-color: #EC644B;
+      border-bottom-color: #EC644B;
+      -webkit-animation: single4 2.5s infinite ease-in-out;
+      animation: single4 2.5s infinite ease-in-out;
+
+      position: absolute;
+      /*it can be fixed too*/
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+
+      max-width: 100%;
+      max-height: 100%;
+      overflow: auto;
+    }
+
+    @-webkit-keyframes single4 {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(540deg);
+        transform: rotate(540deg);
+      }
+    }
+
+    @keyframes single4 {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(540deg);
+        transform: rotate(540deg);
+      }
+    }
+
+    .single9 {
+      height: 6px;
+      width: 100px;
+      background-color: #d8d7d7;
+      position: absolute;
+      /*it can be fixed too*/
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+
+      max-width: 100%;
+      max-height: 100%;
+      overflow: auto;
+    }
+
+    .single9:before {
+      content: '';
+      height: 6px;
+      width: 10px;
+      position: absolute;
+      left: 0;
+      background-color: #EC644B;
+      -webkit-animation: single9anim 4s infinite ease-in-out;
+      animation: single9anim 4s infinite ease-in-out;
+    }
+
+    @-webkit-keyframes single9anim {
+      0%,
+      100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+      }
+      50% {
+        -webkit-transform: translateX(90px);
+        transform: translateX(90px);
+      }
+    }
+
+    @keyframes single9anim {
+      0%,
+      100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+      }
+      50% {
+        -webkit-transform: translateX(90px);
+        transform: translateX(90px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <wm-root>
+    <div class="single4"></div>
+  </wm-root>
+</body>
+
+</html>

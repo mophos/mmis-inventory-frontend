@@ -1,0 +1,87 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">แก้ไขข้อมูล Location</h3>
+  <div class="modal-body">
+    <table class="table" style="width: 100%;">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Width (cm)</th>
+          <th>Height (cm)</th>
+          <th>Length (cm)</th>
+          <th>Max Items</th>
+          <th>Active</th>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="wm-add-row">
+            <input type="text" [(ngModel)]="locationName" style="width: 100%;">
+          </td>
+          <td class="left wm-add-row">
+            <input type="text" [(ngModel)]="locationDesc" style="width: 100%;">
+          </td>
+          <td class="left wm-add-row">
+            <input type="text" wmNumberWithOutDot [(ngModel)]="dimensionWidth" style="width: 100%; text-align: right;">
+          </td>
+          <td class="left wm-add-row">
+            <input type="text" wmNumberWithOutDot [(ngModel)]="dimensionHeight" style="width: 100%; text-align: right;">
+          </td>
+          <td class="left wm-add-row">
+            <input type="text" wmNumberWithOutDot [(ngModel)]="dimensionLength" style="width: 100%; text-align: right;">
+          </td>
+          <td class="left wm-add-row">
+            <input type="text" wmNumberWithOutDot [(ngModel)]="locationMaxItems" style="width: 100%; text-align: right;">
+          </td>
+          <td class="wm-add-row">
+            <clr-checkbox name="isActive" [(ngModel)]="isActive"></clr-checkbox>
+          </td>
+          <td class="wm-add-row">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-success wm-small-btn" [disabled]="!locationName" (click)="saveLocation()">
+              <clr-icon shape="floppy" size="16"></clr-icon>
+            </button>
+              <button class="btn btn-sm btn-danger wm-small-btn" [disabled]="!locationName" (click)="resetForm()">
+              <clr-icon shape="refresh" size="16"></clr-icon>
+            </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" *ngIf="!locations.length">ไม่พบรายการ</td>
+        </tr>
+        <tr *ngFor="let location of locations" [class.editLine]="location.is_update === 'Y'">
+          <td class="left">{{location.location_name}}</td>
+          <td class="left">{{location.location_desc}}</td>
+          <td style="text-align: right;">{{location.dimension_width | number: '1.2-2'}}</td>
+          <td style="text-align: right;">{{location.dimension_height | number: '1.2-2'}}</td>
+          <td style="text-align: right;">{{location.dimension_length | number: '1.2-2'}}</td>
+          <td style="text-align: right;">{{location.max_items | number}}</td>
+          <td>
+            <clr-icon shape="success" *ngIf="location.is_active === 'Y'" class="is-success"></clr-icon>
+            <clr-icon shape="close" *ngIf="location.is_active === 'N' || !location.is_active" class="is-danger"></clr-icon>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button [disabled]="location.is_update === 'Y'" class="btn btn-sm btn-success wm-small-btn" (click)="editLocation(location)">
+              <clr-icon shape="note" size="16"></clr-icon>
+            </button>
+              <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeLocation(location)">
+              <clr-icon shape="trash" size="16"></clr-icon>
+            </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeModal()">
+      ปิดหน้าต่าง
+    </button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

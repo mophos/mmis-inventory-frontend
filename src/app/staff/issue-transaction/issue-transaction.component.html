@@ -1,0 +1,96 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ตัดจ่าย (อื่นๆ)</span>
+</nav>
+<div class="row">
+  <div class="col-md-6">
+    <button type="button" class="btn btn-sm btn-success" routerLink="/staff/issue-transaction/new">
+      <clr-icon shape="plus"></clr-icon> บันทึกตัดจ่าย
+    </button>
+  </div>
+  <div class="col-md-6">
+    <div style="float:right">
+      <button type="button" class="btn btn-sm btn-primary" (click)="showReport('')" [disabled]="!selectedApprove.length">
+          <clr-icon shape="printer"></clr-icon> พิมรายงานตัดจ่าย
+        </button>
+      <button style="display:inline-block" type="button" class="btn btn-sm btn-success" (click)="approveIssueCheck()" [disabled]="!selectedApprove.length">
+        <clr-icon shape="plus"></clr-icon> อนุมัติตัดจ่าย
+      </button>
+      <div class="select" style="display:inline-block">
+        <select [(ngModel)]="status" name="status" (change)="filterApproved(status)">
+          <option value="">ทั้งหมด</option>
+          <option value="Y">อนุมัติแล้ว</option>
+          <option value="N">รออนุมัติ</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px;" [style.height.%]="85" [(clrDgSelected)]="selectedApprove">
+  <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
+  <clr-dg-column style="width: 180px;">เลขที่</clr-dg-column>
+  <clr-dg-column>ประเภท</clr-dg-column>
+  <clr-dg-column style="width: 180px;">อ้างอิง</clr-dg-column>
+  <!-- <clr-dg-column style="width: 180px;">จำนวนรายการ</clr-dg-column> -->
+  <!-- <clr-dg-column>หมายเหตุ</clr-dg-column> -->
+  <clr-dg-column>#</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+  <clr-dg-row *ngFor="let s of issues" [clrDgItem]="s" [ngClass]="{'approve-status': s.approved === 'Y'}">
+    <wm-transaction-issue-detail-staff *clrIfExpanded [issueId]="s.issue_id" ngProjectAs="clr-dg-row-detail"></wm-transaction-issue-detail-staff>
+    <clr-dg-cell>{{s.issue_date | toThaiDate}}</clr-dg-cell>
+    <clr-dg-cell>{{s.issue_code}}</clr-dg-cell>
+    <clr-dg-cell>{{s.transaction_name}}</clr-dg-cell>
+    <clr-dg-cell>{{s.ref_document}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="text-align: right;">{{s.total | number}}</clr-dg-cell> -->
+    <!-- <clr-dg-cell>{{s.comment}}</clr-dg-cell> -->
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group">
+        <button [disabled]="s.approved === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/staff/issue-transaction/edit" [queryParams]="{issueId: s.issue_id}">
+          <clr-icon shape="note"></clr-icon>
+        </button>
+        <button [disabled]="s.approved === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="removeIssue(s)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+
+        <button class="btn btn-sm btn-icon btn-primary tooltip tooltip-sm tooltip-left" role="tooltip" aria-haspopup="true" (click)="showReport(s.issue_id)">
+            <clr-icon shape="printer"></clr-icon>
+            <span class="tooltip-content">พิมพ์ใบตัดจ่าย</span>
+          </button>
+
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pageWait.firstItem + 1 | number}} - {{pageWait.lastItem + 1 | number}} จาก 
+    {{pageWait.totalItems | number}} รายการ
+    <clr-dg-pagination #pageWait [clrDgPageSize]="perPage" [clrDgTotalItems]="total"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+<clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
+  <h3 class="modal-title">สิทธิ์การอนุมัติ{{titel}}</h3>
+  <div class="modal-body" style="height:150px">
+
+    <form>
+      <section class="form-block">
+        <div class="form-group">
+          <label for="aForm_1" class="required">User Name</label>
+          <input autocomplete="nope" type="text" id="username" name="username" [(ngModel)]="username" >
+        </div>
+        <div class="form-group">
+          <label for="aForm_1" class="required"> password</label>
+          <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password"  (keyup.enter)="checkApprove(username,password)">
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer" style="padding-top: 0px;">
+    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password"
+      (click)="checkApprove(username,password)">บันทึก</button>
+    <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
+  </div>
+</clr-modal>
+<wm-loading-modal #modalLoading></wm-loading-modal>
+<wm-html-preview #htmlPreview></wm-html-preview>

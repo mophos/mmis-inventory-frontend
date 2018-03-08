@@ -1,0 +1,73 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ข้อมูลหน่วยเบิก</span>
+</nav>
+<button type="button" class="btn btn-success btn-sm" (click)="addNew()">+ เพิ่มรายการ</button>
+<clr-datagrid [clrDgLoading]="loading">
+  <!--<clr-dg-column [clrDgField]="'warehouse_id'">รหัส</clr-dg-column>-->
+  <clr-dg-column [clrDgField]="'type_name'">ชื่อหน่วยเบิก</clr-dg-column>
+  <clr-dg-column>รายละเอียด</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+  <clr-dg-row *clrDgItems="let u of unitissues" [clrDgItem]="u">
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="showEdit(u)">แก้ไขข้อมูล</button>
+      <button class="action-item" (click)="remove(u)">ลบข้อมูล</button>
+    </clr-dg-action-overflow>
+    <!--<clr-dg-cell>{{h.warehouse_id}}</clr-dg-cell>-->
+    <clr-dg-cell>{{u.unitissue_name}}</clr-dg-cell>
+    <clr-dg-cell>{{u.unitissue_desc}}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false">
+  <h3 class="modal-title">เพิ่ม/แก้ไข หน่วยเบิก</h3>
+  <div class="modal-body">
+
+    <form>
+      <section class="form-block">
+        <label>ข้อมูล หน่วยเบิก</label>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label class="required" for="unitissueName">ชื่อหน่วยเบิก</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="unitIssueName" [(ngModel)]="unitIssueName" placeholder="">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label class="required" for="typeId">รายละเอียด</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="unitIssueDesc" [(ngModel)]="unitIssueDesc" placeholder="">
+          </div>
+        </div>
+        <div class="form-grop row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label class="required" for="typeId">หน่วยผลิต</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <clr-checkbox name="isRawmaterial" [(ngModel)]="isRawmaterial"></clr-checkbox>
+          </div>
+        </div>
+
+
+      </section>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!unitIssueName || !unitIssueDesc || isSaving">
+        บันทึก
+    </button>
+    <button type="button" class="btn btn-danger-outline" (click)="opened = false">
+        ปิด
+    </button>
+  </div>
+</clr-modal>

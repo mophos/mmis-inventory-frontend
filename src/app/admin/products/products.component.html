@@ -1,0 +1,92 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">รายการสินค้าทั้งหมด</span>
+</nav>
+<div class="progress loop" *ngIf="loading">
+  <progress></progress>
+</div>
+<div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+  <div class="col-md-1">
+    <label for="">ค้นหา</label>
+  </div>
+  <div class="col-md-3">
+    <input type="text" (keyup)="search($event)" placeholder="พิมพ์แล้วกด Enter" name="query" style="width: 90%;" id="query" [(ngModel)]="query">
+  </div>
+  <div class="col-md-2 push-md-6" style="text-align: right;">
+    <div class="select">
+      <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
+        <option value="">ทั้งหมด</option>
+        <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<clr-datagrid (clrDgRefresh)="refresh($event)">
+  <!-- <clr-dg-column>
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      Working Code
+    </ng-container>
+  </clr-dg-column> -->
+  <!-- <clr-dg-column>
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      ชื่อทางการค้า
+    </ng-container>
+  </clr-dg-column> -->
+  <clr-dg-column>
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      ชื่อเวชภัณฑ์
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-column style="width: 120px;">
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      MIN/MAX (Base Unit)
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-column style="width: 150px;">
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      คงเหลือ (Base Unit)
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-column style="width: 100px;">
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      หน่วย
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-column style="width: 150px;">
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      มูลค่ารวม
+    </ng-container>
+  </clr-dg-column>
+  <clr-dg-column style="width: 100px;">
+    #
+  </clr-dg-column>
+  <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+  <clr-dg-row *ngFor="let p of products">
+    <wm-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-product-stock-remain>
+    <!-- <clr-dg-cell></clr-dg-cell>
+    <clr-dg-cell></clr-dg-cell> -->
+    <clr-dg-cell>
+      <span class="p4">{{p.generic_working_code}} - {{p.generic_name}}</span>
+      <br>
+      <span class="p7">{{p.working_code}} - {{p.product_name}}</span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.qty, 'success-message': p.min_qty < p.qty}">{{p.qty | number}}</clr-dg-cell>
+
+    <clr-dg-cell>{{p.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{p.total_cost | number: '1.2'}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <button class="btn btn-sm btn-success wm-small-btn" (click)="showStockCard(p)">
+        <clr-icon shape="printer"></clr-icon>
+      </button>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="totalProducts"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<wm-html-preview #htmlPreview></wm-html-preview>
+<wm-loading-modal #modalLoading></wm-loading-modal>

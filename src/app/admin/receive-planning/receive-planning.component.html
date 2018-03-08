@@ -1,0 +1,34 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">กำหนดการรับสินค้า (Receive Planning)</span>
+</nav>
+
+<button class="btn btn-sm btn-success" routerLink="/admin/receive-planning/new">
+  <clr-icon shape="plus"></clr-icon> เพิ่มรายการ
+</button>
+
+<clr-datagrid [clrDgLoading]="loading">
+  <clr-dg-column>คลังรับสินค้า</clr-dg-column>
+  <!-- <clr-dg-column>วันที่สร้าง</clr-dg-column> -->
+  <!-- <clr-dg-column>วันที่ปรับปรุง</clr-dg-column> -->
+  <clr-dg-column style="width: 100px;">#</clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let warehouse of warehouses">
+      <clr-dg-cell>{{warehouse.warehouse_name}}</clr-dg-cell>
+      <!-- <clr-dg-cell>{{warehouse.created_at | toThaiDate}}</clr-dg-cell> -->
+      <!-- <clr-dg-cell>{{warehouse.updated_at | toThaiDate}}</clr-dg-cell> -->
+      <clr-dg-cell>
+        <button class="btn btn-success btn-sm btn-icon wm-small-btn" [routerLink]="['/admin/receive-planning/edit', warehouse.warehouse_id]">
+          <clr-icon shape="note"></clr-icon>
+        </button>
+      </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}}
+    จาก {{pagination.totalItems | number}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="20"></clr-dg-pagination>
+</clr-dg-footer>
+</clr-datagrid>
+
+<wm-loading-modal #modalLoading></wm-loading-modal> 

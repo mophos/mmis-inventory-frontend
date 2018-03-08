@@ -1,0 +1,47 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/counting">ตรวจนับสินค้า (Physical counting)</a>
+  <span class="breadcrumb-item active">ปรับยอดคงเหลือ</span>
+</nav>
+
+<div class="card">
+  <div class="card-header">
+    ปรับยอดสินค้าคงเหลือ
+  </div>
+  <div class="card-block">
+    <div class="card-text">
+      <clr-datagrid [clrDgLoading]="loading" [style.height.px]="300">
+        <clr-dg-column [clrDgField]="'product_id'">รหัส</clr-dg-column>
+        <clr-dg-column [clrDgField]="'product_name'" [style.width.%]="20">ชื่อทางการค้า</clr-dg-column>
+        <clr-dg-column [clrDgField]="'lot_no'">Lot no.</clr-dg-column>
+        <clr-dg-column [clrDgField]="'product_name'">หน่วยนับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'wm_qty'">ยอดตามบัญชี</clr-dg-column>
+        <clr-dg-column [clrDgField]="'check_qty'">ยอดนับจริง</clr-dg-column>
+        <clr-dg-column [clrDgField]="'remain_qty'">ผลต่าง</clr-dg-column>
+        <clr-dg-column>ยืนยัน</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let p of products; let idx = index;" [clrDgItem]="p">
+          <clr-dg-cell>{{p.product_id}}</clr-dg-cell>
+          <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+          <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+          <clr-dg-cell>{{p.small_unit}}</clr-dg-cell>
+          <clr-dg-cell>{{p.wm_qty | number}}</clr-dg-cell>
+          <clr-dg-cell>{{p.check_qty | number}}</clr-dg-cell>
+          <clr-dg-cell>{{p.remain_qty | number}}</clr-dg-cell>
+          <clr-dg-cell>
+            <button class="btn btn-sm btn-success" [disabled]="p.isAdjust === 'Y' || p.remain_qty === 0" (click)="doAdjust(p.product_new_id, p.wm_qty)">
+              ปรับยอด
+            </button>
+          </clr-dg-cell>
+        </clr-dg-row>
+      </clr-datagrid>
+
+    </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-sm btn-success" (click)="saveAdjustCounting()">ปรับสถานะเป็นปรับยอดแล้ว</button>
+    <button class="btn btn-sm btn-danger" (click)="cancelVerify()">กลับหน้าหลัก</button>
+  </div>
+</div>
+
+<wm-adjust-product-modal [isCounting]="true" #modalAdjust [openModalAdjust]="openModalAdjust" (onSuccess)="successAdjust($event)"></wm-adjust-product-modal>

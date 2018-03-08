@@ -1,0 +1,55 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/counting">ตรวจนับสินค้า</a>
+  <span class="breadcrumb-item active">บันทึกยอดคงเหลือ (ยอดการนับจริง)</span>
+</nav>
+
+
+<div class="form-group row" style="padding-top: 10px;">
+  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+    <label for="dateReceive" class="required">วันที่ตรวจสอบ</label>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="verifyDate" required></my-date-picker-th>
+  </div>
+  <div class="col-md-7">
+   <div class="btn-group" style="float: right;">
+    <button class="btn btn-sm btn-success" [disabled]="!products.length || !verifyDate" (click)="saveCheckCounting()">บันทึกยืนยันการตรวจนับ</button>
+    <button class="btn btn-sm btn-danger" (click)="cancelVerify()">ยกเลิกการตรวจสอบ</button>
+   </div>
+  </div>
+  <!-- <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+    <label for="dateReceive" class="required">เจ้าหน้าที่</label>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <div class="select">
+      <select id="selects_1" name="slPeople" [(ngModel)]="peopleId">
+        <option>เลือกเจ้าหน้าที่ตรวจนับ</option>
+        <option value="p.people_id" *ngFor="let p of people">{{p.fullname}}</option>
+      </select>
+    </div>
+  </div> -->
+</div>
+
+<clr-datagrid [clrDgLoading]="loading" [style.height.%]="85">
+  <clr-dg-column [clrDgField]="'working_code'">รหัส</clr-dg-column>
+  <clr-dg-column [clrDgField]="'product_name'" [style.width.%]="30">ชื่อทางการค้า</clr-dg-column>
+  <clr-dg-column [clrDgField]="'lot_no'">Lot no.</clr-dg-column>
+  <clr-dg-column [clrDgField]="'product_name'">หน่วยนับ</clr-dg-column>
+  <clr-dg-column>ยอดตามบัญชี</clr-dg-column>
+  <clr-dg-column>ยอดนับจริง</clr-dg-column>
+  <clr-dg-column>ผลต่าง</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+  <clr-dg-row *clrDgItems="let p of products; let idx = index;" [clrDgItem]="p">
+    <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
+    <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+    <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+    <clr-dg-cell>{{p.base_unit_name}}</clr-dg-cell>
+    <clr-dg-cell>{{p.wm_qty | number}}</clr-dg-cell>
+    <clr-dg-cell>
+      <input style="background-color: #FFFCE8; text-align: right;" type="text" wmNumberOnly #checkQty name="checkQty" size="10" (keyup)="changeCheckQty(idx, checkQty.value)">
+    </clr-dg-cell>
+    <clr-dg-cell>{{p.remain_qty | number}}</clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>{{products.length | number}} รายการ</clr-dg-footer>
+</clr-datagrid>

@@ -1,0 +1,8 @@
+<div class="select">
+  <select name="lotId" style="border-bottom: 0px; width: 100%;" (change)="setSelect($event)" [(ngModel)]="lotNo">
+    <!-- <option>เลือก Lot</option> -->
+    <option *ngFor="let l of lots" [value]="l.lot_no">
+      {{ l.lot_no }} ({{l.expired_date | expiredDate}})
+    </option>
+  </select>
+</div>

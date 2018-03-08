@@ -1,0 +1,7 @@
+<div class="select">
+    <select name="unit" (change)="setSelect($event)" [(ngModel)]="selectedUnitGenericId">
+      <option *ngFor="let unit of units" [value]="unit.unit_generic_id">
+       {{ unit.from_unit_name }} ({{unit.qty}} {{unit.to_unit_name}})
+      </option>
+    </select>
+  </div> 

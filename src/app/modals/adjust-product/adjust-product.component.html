@@ -1,0 +1,108 @@
+<clr-modal [(clrModalOpen)]="openModalAdjust" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">ปรับยอดคงเหลือ</h3>
+  <div class="modal-body">
+    <clr-tabs>
+      <clr-tab>
+        <button clrTabLink clrTabLinkId="link1">ปรับยอดคงเหลือ</button>
+        <clr-tab-content clrContentId="content1" *clrIfActive>
+          <form>
+            <section class="form-block">
+              <div class="form-group">
+                <label for="formFields_7">รหัส</label>
+                <input type="text" name="txtId" disabled [(ngModel)]="adjProductId" placeholder="..." size="45">
+              </div>
+              <div class="form-group">
+                <label for="formFields_7">ชื่อยา</label>
+                <input type="text" name="txtName" disabled [(ngModel)]="adjProductName" placeholder="..." size="45">
+              </div>
+              <div class="form-group">
+                <label class="required" for="formFields_7">Lot no.</label>
+                <input type="text" disabled name="txtLotNo" [(ngModel)]="adjLot" placeholder="..." size="45">
+              </div>
+              <div class="form-group">
+                <label class="required" for="formFields_7">วันหมดอายุ</label>
+                <input type="text" disabled name="txtExpired" [(ngModel)]="adjExpiredDate" placeholder="..." size="45">
+              </div>
+              <!-- <div class="form-group">
+                <label class="required" for="formFields_7">Package</label>
+                <input type="text" disabled name="txtLargeUnit" [(ngModel)]="largeUnit" placeholder="...">
+                <label class="required" for="formFields_7">Base Unit</label>
+                <input type="text" disabled name="txtSmallUnit" [value]="totalSmallQty | number" placeholder="...">
+              </div> -->
+              <div class="form-group">
+                <label class="required" for="formFields_7">จำนวนขอปรับ</label>
+                <div class="radio-inline">
+                  <input type="radio" name="gridRadios1" id="checkBase" (change)="chageCheck($event)" checked>
+                  <label for="checkBase">หน่วยย่อย</label>
+              </div>
+                <input type="text" style="text-align: right;" size="10" name="txtQtyBase" (keyup)="countSmallQty($event)" [disabled]="isCounting" wmNumberWithOutDot [(ngModel)]="adjQtyBase">
+              <label> {{baseUnitName}}</label>
+              <!-- <clr-checkbox name="checkBase" (change)="chageCheck($event)" [(ngModel)]="checkBase" [clrChecked]="true" [clrInline]="true">
+                Base Unit ({{baseUnitName}})
+              </clr-checkbox> -->
+              <!-- <input type="radio" name="checkBase" (change)="chageCheck($event)" [(ngModel)]="checkBase" id="checkBase"> -->
+             
+            </div>
+              <div class="form-group">
+                <label  for="formFields_7"></label>
+                <div class="radio-inline">
+                  <input type="radio" name="gridRadios1"  id="checkPackage" (change)="chageCheck($event)" >
+                  <label for="checkPackage">หน่วยใหญ่</label>
+              </div>
+                <input type="text" style="text-align: right;" size="10" name="txtQtyPackage" (keyup)="countLargeQty($event)" [disabled]="isCounting" wmNumberWithOutDot [(ngModel)]="adjQtyPackage" >
+              <label> {{largeUnit}}</label>
+              <!-- <clr-checkbox name="checkBase" (change)="chageCheck($event)" [(ngModel)]="checkPackage" [clrChecked]="true" [clrInline]="true">
+                Package {{largeUnit}}
+              </clr-checkbox> -->
+              <!-- <input type="radio" name="checkBase" (change)="chageCheck($event)" [(ngModel)]="checkPackage" id="checkPackage"> -->
+            
+            </div>
+            <div class="form-group">
+              <label class="required" for="formFields_7">รวม</label>
+                <input type="text" style="text-align:right;" size="23" disabled name="txtSmallUnit" [value]="totalSmallQty | number"> {{baseUnitName}}
+            </div>
+              <div class="form-group">
+                <label class="required" for="formFields_8">เหตุผลการขอปรับ</label>
+                <textarea name="txtReason" [(ngModel)]="adjReason" rows="3"></textarea>
+              </div>
+
+              <button type="button" class="btn btn-primary" [disabled]="!adjProductId || !adjProductName || !adjReason || !baseUnitName" (click)="saveAdjQty()">ยืนยันการปรับยอด</button>
+
+            </section>
+          </form>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab>
+        <button clrTabLink>ประวัติการปรับยอด</button>
+        <clr-tab-content *clrIfActive>
+          <clr-datagrid>
+            <clr-dg-column>วันที่ปรับ</clr-dg-column>
+            <clr-dg-column>ยอดเดิม</clr-dg-column>
+            <clr-dg-column>ยอดใหม่</clr-dg-column>
+            <clr-dg-column>เจ้าหน้าที่</clr-dg-column>
+            <clr-dg-column>เหตุผลการขอปรับ</clr-dg-column>
+
+            <clr-dg-row *clrDgItems="let log of logs">
+              <clr-dg-cell>{{log.adj_date | toThaiDate}} {{log.adj_time}}</clr-dg-cell>
+              <clr-dg-cell>{{log.old_qty }}</clr-dg-cell>
+              <clr-dg-cell>{{log.new_qty }}</clr-dg-cell>
+              <clr-dg-cell>{{log.people_name}}</clr-dg-cell>
+              <clr-dg-cell>{{log.reason}}</clr-dg-cell>
+            </clr-dg-row>
+
+            <clr-dg-footer>
+              {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} รายการ
+              <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+            </clr-dg-footer>
+          </clr-datagrid>
+        </clr-tab-content>
+      </clr-tab>
+    </clr-tabs>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="closeModal()">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

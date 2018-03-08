@@ -1,0 +1,8 @@
+<div class="select">
+  <select name="unit" (change)="setSelect($event)" [(ngModel)]="selectedUnitGenericId">
+    <option>เลือกหน่วย</option>
+    <option *ngFor="let unit of units" [value]="unit.unit_generic_id">
+     {{ unit.from_unit_name }}
+    </option>
+  </select>
+</div> 

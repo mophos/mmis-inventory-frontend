@@ -1,0 +1,66 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">
+    <clr-icon shape="search" size="32" class="is-info"></clr-icon>
+    ค้นหาใบเบิกที่อนุมัติแล้ว
+  </h3>
+  <div class="modal-body">
+    <clr-datagrid>
+      <clr-dg-column>เลขที่ใบเบิก</clr-dg-column>
+      <clr-dg-column>วันที่เบิก</clr-dg-column>
+      <clr-dg-column>หน่วยเบิก</clr-dg-column>
+      <clr-dg-column>เบิกจาก</clr-dg-column>
+      <clr-dg-column>เลือก</clr-dg-column>
+      <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+      <clr-dg-row *clrDgItems="let req of requisitions; let idx = index">
+        <clr-dg-cell>{{req.requisition_id}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">{{req.requisition_date | toThaiDate }}</clr-dg-cell>
+        <clr-dg-cell>{{req.wm_requisition_name}}</clr-dg-cell>
+        <clr-dg-cell>{{req.wm_withdraw_name}}</clr-dg-cell>
+        <clr-dg-cell>
+          <button class="btn btn-sm btn-primary" (click)="setSelected(idx)">
+            เลือก
+          </button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{requisitions.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="closeModal()">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
+
+<clr-modal [(clrModalOpen)]="openDetail" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">เลือกรายการสินค้าที่ต้องการเบิก</h3>
+  <div class="modal-body">
+    <clr-datagrid [(clrDgSelected)]="selectedRequisitionItem">
+      <clr-dg-column>รหัสสินค้า</clr-dg-column>
+      <clr-dg-column>ชื่อสินค้า (ชื่อการค้า)</clr-dg-column>
+      <clr-dg-column>จำนวน</clr-dg-column>
+      <clr-dg-column>ต้นทุนรวม (บาท)</clr-dg-column>
+      <clr-dg-column>Lot no.</clr-dg-column>
+      <clr-dg-column>วันหมดอายุ</clr-dg-column>
+      <clr-dg-row *clrDgItems="let r of requisitionDetail" [clrDgItem]="r">
+        <clr-dg-cell>{{r.product_id}}</clr-dg-cell>
+        <clr-dg-cell>{{r.generic_name }} [ {{r.product_name}} ]</clr-dg-cell>
+        <clr-dg-cell>{{r.requisition_qty / r.unit_qty | number}} {{r.large_unit_name}} x {{ r. unit_qty }} {{ r.small_unit_name }}</clr-dg-cell>
+        <clr-dg-cell>{{r.cost * r.requisition_qty | number: '1.2-2'}}</clr-dg-cell>
+        <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">{{r.expired_date | expiredDate}}</clr-dg-cell>
+      </clr-dg-row>
+      <clr-dg-footer>{{requisitionDetail.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" (click)="addRequisitionProduct()" [disabled]="!selectedRequisitionItem.length">
+      ตกลง
+    </button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="openDetail = false">
+      ยกเลิก
+    </button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

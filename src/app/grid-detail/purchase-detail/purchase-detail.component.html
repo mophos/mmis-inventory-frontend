@@ -1,0 +1,24 @@
+<clr-datagrid [clrLoading]="loading">
+  <clr-dg-column>ชื่อเวชภัณฑ์</clr-dg-column>
+  <clr-dg-column [style.width.px]="120">หน่วยจัดซื้อ</clr-dg-column>
+  <clr-dg-column [style.width.px]="80">ราคาต่อแพค</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">จำนวนสั่งซื้อ</clr-dg-column>
+  <clr-dg-column [style.width.px]="150">รวมเป็นเงิน</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">รับแล้ว</clr-dg-column>
+  <clr-dg-column [style.width.px]="80">ของแถม</clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let product of productPurchases" [clrDgItem]="product">
+    <clr-dg-cell>{{product.generic_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{product.from_unit_name}} ({{product.conversion_qty | number}} {{product.to_unit_name}})</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{product.cost | number: '1.2-2'}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{product.purchase_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{product.purchase_qty * product.cost | number: '1.2-2'}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{product.total_received_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <clr-icon shape="close" class="is-error" *ngIf="product.giveaway === 'N'"></clr-icon>
+      <clr-icon shape="check" class="is-success" *ngIf="product.giveaway === 'Y'"></clr-icon>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>{{productPurchases.length}} รายการ</clr-dg-footer>
+</clr-datagrid>
