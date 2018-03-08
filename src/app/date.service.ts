@@ -26,7 +26,6 @@ export class DateService {
       var dx = new Date(d[2], d[1], d[0]);
       const valid = moment(dx).isValid();
       const between = moment(dx).isBetween('2015-01-01', '2090-12-31');
-      console.log(dx);
       if (valid && between) {
         return true;
       } else {
