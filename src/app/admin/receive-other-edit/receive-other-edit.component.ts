@@ -640,7 +640,7 @@ export class ReceiveOtherEditComponent implements OnInit {
     this.isItemExpired = false;
     if (this.receiveExpired) {
       for (const v of this.products) {
-        if (v.expired_date === '' || v.expired_date === null) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
           console.log('err วันหมดอายุ');
           this.isExpired = true;
@@ -650,11 +650,13 @@ export class ReceiveOtherEditComponent implements OnInit {
     if (!this.isExpired) {
       let count = 0;
       for (const v of this.products) {
-        const d: any = v.expired_date.split('/');
-        const expired_date: any = new Date(d[2], d[1] - 1, d[0]);
-        const diffday = moment(expired_date).diff(moment(), 'days');
-        if (diffday < 0) {
-          count++;
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
+          const d: any = v.expired_date.split('/');
+          const expired_date: any = new Date(d[2], d[1] - 1, d[0]);
+          const diffday = moment(expired_date).diff(moment(), 'days');
+          if (diffday < 0) {
+            count++;
+          }
         }
       }
       if (count > 0) {
@@ -667,11 +669,14 @@ export class ReceiveOtherEditComponent implements OnInit {
       let checkDiffExpired;
       let count = 0;
       for (const v of this.products) {
-        const d: any = v.expired_date.split('/');
-        const expired_date = moment(new Date(d[2], d[1] - 1, d[0])).format('YYYY-MM-DD');
-        checkDiffExpired = await this.receiveService.getPurchaseCheckExpire(v.generic_id, expired_date);
-        if (!checkDiffExpired.ok) {
-          count++;
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
+          const d: any = v.expired_date.split('/');
+          const expired_date: any = moment(new Date(d[2], d[1] - 1, d[0])).format('YYYY-MM-DD');
+          checkDiffExpired = await this.receiveService.getPurchaseCheckExpire(v.generic_id, expired_date);
+          // console.log(checkDiffExpired);
+          if (!checkDiffExpired.ok) {
+            count++;
+          }
         }
       }
       if (count > 0) {
