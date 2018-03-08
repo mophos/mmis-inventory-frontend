@@ -10,9 +10,8 @@ export class NumberOnlyDirective {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    let e = <KeyboardEvent>event;
-    
-    if ([46, 8, 9, 27, 13, 110, 190].indexOf(e.keyCode) !== -1 ||
+    const e: any = <KeyboardEvent>event;
+    if ([46, 8, 9, 27, 13, 110, 190, 222].indexOf(e.keyCode) !== -1 ||
       // Allow: Ctrl+A
       (e.keyCode == 65 && e.ctrlKey === true) ||
       // Allow: Ctrl+C
@@ -28,12 +27,15 @@ export class NumberOnlyDirective {
       // let it happen, don't do anything
       return;
     }
-    let ch = String.fromCharCode(e.keyCode);
-    let regEx = new RegExp(this.regex);
-    if (regEx.test(ch))
-      return;
-    else
+    const ch = String.fromCharCode(e.keyCode);
+    const regEx = new RegExp(this.regex);
+    if (isNaN(+e.key) && (e.keyCode !== 110 || e.keyCode !== 190 || e.keyCode !== 222)) {
       e.preventDefault();
+    } else if (regEx.test(ch)){
+      return;
+    } else {
+      e.preventDefault();
+    }
   }
 
   @HostListener('focus', ['$event'])

@@ -361,7 +361,7 @@ export class ReceiveComponent implements OnInit {
     let check = false
     let accessName: any
     this.titel = 'รายการรับสินค้า'
-    if (access == 1) {
+    if (access === 1) {
       accessName = 'WM_RECEIVE_APPROVE'
       this.action = 'WM_RECEIVES'
       this.page = 1
@@ -384,36 +384,31 @@ export class ReceiveComponent implements OnInit {
     }
 
     if (check) {
-      if (this.accessCheck.can(accessName))
-        this.page == 1 ? this.saveApprove() : this.saveApproveOther()
-      else {
+      const rs = await this.accessCheck.can(accessName);
+      if (rs) {
+        this.page === 1 ? this.saveApprove() : this.saveApproveOther();
+      } else {
         this.username = ''
         this.password = ''
         this.openModalConfirm = true
       }
     }
-
-
   }
 
   async checkApprove(username: any, password: any) {
-    let rs: any = await this.receiveService.checkApprove(username, password, this.action);
-    console.log(rs);
-
+    const rs: any = await this.receiveService.checkApprove(username, password, this.action);
     if (rs.ok) {
-      if (this.page === 1) this.saveApprove()
-      else this.saveApproveOther()
+      this.page === 1 ? this.saveApprove() : this.saveApproveOther();
     } else {
       this.alertService.error('ไม่มีสิทธิ์อนุมัติ' + this.titel);
     }
-    this.openModalConfirm = false
-
+    this.openModalConfirm = false;
   }
 
   close() {
     this.openModalConfirm = false
-    this.username = ''
-    this.password = ''
+    this.username = '';
+    this.password = '';
   }
 
   saveApprove() {
@@ -584,11 +579,11 @@ export class ReceiveComponent implements OnInit {
           receiveIds.forEach((v: any) => {
             strIds += `receiveID=${v}&`;
           });
-          
+
           const url = `${this.apiUrl}/report/product/receive?${strIds}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
-    
+
         });
 
     } else {
