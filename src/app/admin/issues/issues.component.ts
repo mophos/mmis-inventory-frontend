@@ -17,19 +17,20 @@ export class IssuesComponent implements OnInit {
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
   issues = [];
-  loading: boolean = false;
+  loading = false;
   total = 0;
   perPage = 20;
   isSaving = false;
   status: any = '';
+  token: any;
 
   selectedApprove: any = [];
   jwtHelper: JwtHelper = new JwtHelper();
 
   titel: any;
   isConfirm: any;
-  openModalConfirm: boolean = false
-  confirmApprove: boolean = false
+  openModalConfirm = false
+  confirmApprove = false
   tmpOderApprove: any
   username: any
   password: any
@@ -42,8 +43,9 @@ export class IssuesComponent implements OnInit {
     private router: Router,
     private accessCheck: AccessCheck,
     @Inject('API_URL') private apiUrl: string
-
-  ) { }
+  ) {
+    this.token = sessionStorage.getItem('token')
+  }
 
   ngOnInit() {
     this.getIssues();
@@ -52,7 +54,7 @@ export class IssuesComponent implements OnInit {
   async getIssues() {
     this.modalLoading.show();
     try {
-      let rs = await this.issueService.list();
+      const rs = await this.issueService.list();
       if (rs.ok) {
         this.issues = rs.rows;
       } else {
@@ -70,7 +72,7 @@ export class IssuesComponent implements OnInit {
     this.alertService.confirm(`ต้องการลบรายการนี้ [${s.issue_code}] ใช่หรือไม่?`)
       .then(async () => {
         try {
-          let rs: any = await this.issueService.removeIssue(s.issue_id);
+          const rs: any = await this.issueService.removeIssue(s.issue_id);
           if (rs.ok) {
             this.alertService.success();
             this.getIssues();
@@ -94,7 +96,7 @@ export class IssuesComponent implements OnInit {
     this.page = 1
     this.action = 'WM_ISSUES'
     this.titel = 'รายการใบตัดจ่าย'
-    
+
     if (this.accessCheck.can(accessName)) {
       this.approveIssue()
     } else {
@@ -103,7 +105,7 @@ export class IssuesComponent implements OnInit {
   }
 
   async checkApprove(username: any, password: any) {
-    let rs: any = await this.issueService.checkApprove(username, password, this.action);
+    const rs: any = await this.issueService.checkApprove(username, password, this.action);
 
     if (rs.ok) {
       if (this.page === 1) {
@@ -111,7 +113,7 @@ export class IssuesComponent implements OnInit {
         this.openModalConfirm = false
       }
     } else {
-      this.alertService.error('ไม่มีสิทธิ์อนุมัติ'+this.titel);
+      this.alertService.error('ไม่มีสิทธิ์อนุมัติ' + this.titel);
     }
   }
 
@@ -137,7 +139,7 @@ export class IssuesComponent implements OnInit {
       this.alertService.confirm(`มีรายการ ${issueIds.length} รายการ ที่ต้องการอนุมัติรายการใบตัดจ่าย ยืนยันใช่หรือไม่?`)
         .then(async () => {
           try {
-            let rs: any = await this.issueService.approveIssue(issueIds);
+            const rs: any = await this.issueService.approveIssue(issueIds);
             if (rs.ok) {
               this.alertService.success();
               this.getIssues();
@@ -174,13 +176,13 @@ export class IssuesComponent implements OnInit {
     } else {
       poItems.push('issue_id=' + issues_id);
     }
-    const url = this.apiUrl + '/report/issue/?' + poItems.join('&');
+    const url = this.apiUrl + `/report/issue/?token=${this.token}&` + poItems.join('&');
     this.htmlPreview.showReport(url);
   }
 
   async filterApproved(value: any) {
     try {
-      let rs = await this.issueService.list();
+      const rs = await this.issueService.list();
       if (rs.ok) {
         if (value) {
           this.issues = rs.rows.filter(g => g.approved === value);

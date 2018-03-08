@@ -16,6 +16,7 @@ export class ProductsComponent implements OnInit {
   totalProducts = 0;
   perPage = 20;
   isSearching = false;
+  token: any;
 
   query: any;
 
@@ -27,7 +28,7 @@ export class ProductsComponent implements OnInit {
     private productService: ProductsService,
     @Inject('API_URL') private apiUrl: string,
   ) {
-
+    this.token = sessionStorage.getItem('token')
   }
 
   ngOnInit() {
@@ -109,7 +110,7 @@ export class ProductsComponent implements OnInit {
   }
 
   showStockCard(p: any) {
-    const url = `${this.apiUrl}/report/product/balance/${p.product_id}`;
+    const url = `${this.apiUrl}/report/product/balance/${p.product_id}?token=${this.token}&`;
     this.htmlPreview.showReport(url);
   }
 

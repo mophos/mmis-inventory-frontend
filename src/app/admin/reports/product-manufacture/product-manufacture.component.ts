@@ -23,10 +23,12 @@ export class ProductManufactureComponent implements OnInit {
   };
 
   options: any;
+  token: any;
 
-  constructor( @Inject('API_URL') private apiUrl: string,
+  constructor(@Inject('API_URL') private apiUrl: string,
     private warehouseService: WarehouseService,
-    private alertService: AlertService ) {
+    private alertService: AlertService) {
+    this.token = sessionStorage.getItem('token')
     this.options = {
       pdfOpenParams: { toolbar: '1' },
       height: "450px"
@@ -58,12 +60,12 @@ export class ProductManufactureComponent implements OnInit {
     const decodedToken: any = this.jwtHelper.decodeToken(token);
     const warehouseId = decodedToken.warehouseId;
     console.log(decodedToken);
-      const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/product/manufacture/warehouse/?warehouseId=${warehouseId}&startDate=${startDate}&endDate=${endDate}`;
+    const url = `${this.apiUrl}/report/product/manufacture/warehouse/?warehouseId=${warehouseId}&startDate=${startDate}&endDate=${endDate}?token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
-  refresh(){
+  refresh() {
     console.log('test');
   }
 }

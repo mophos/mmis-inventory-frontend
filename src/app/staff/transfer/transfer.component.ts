@@ -182,7 +182,7 @@ export class TransferComponent implements OnInit {
       count++;
     });
     if (count > 0) {
-      const url = this.apiUrl + '/report/tranfers?' + transfer_id.join('&');
+      const url = this.apiUrl + `/report/tranfers?token=${this.token}&` + transfer_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
@@ -196,7 +196,7 @@ export class TransferComponent implements OnInit {
       count++;
     });
     if (count > 0) {
-      const url = this.apiUrl + '/report/tranfers2?' + transfer_id.join('&');
+      const url = this.apiUrl + `/report/tranfers2?token=${this.token}&` + transfer_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');

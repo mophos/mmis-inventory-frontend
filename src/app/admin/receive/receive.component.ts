@@ -47,6 +47,7 @@ export class ReceiveComponent implements OnInit {
   sIDpo: any;
   eIDpo: any;
   showOption = 1
+  token: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -82,7 +83,7 @@ export class ReceiveComponent implements OnInit {
     @Inject('REV_PREFIX') private documentPrefix: string,
     @Inject('API_URL') private apiUrl: string
   ) {
-
+    this.token = sessionStorage.getItem('token')
   }
 
   ngOnInit() {
@@ -425,10 +426,10 @@ export class ReceiveComponent implements OnInit {
     eDate = eDate.date.year + '-' + eDate.date.month + '-' + eDate.date.day
     let url: any
     if (showOption === 1) {
-      const urls = await `${this.apiUrl}/report/list/receiveDate/${sDate}/${eDate}`;
+      const urls = await `${this.apiUrl}/report/list/receiveDate/${sDate}/${eDate}?token=${this.token}`;
       url = urls
     } else if (showOption === 2) {
-      const urls = await `${this.apiUrl}/report/list/receiveDateOther/${sDate}/${eDate}`;
+      const urls = await `${this.apiUrl}/report/list/receiveDateOther/${sDate}/${eDate}?token=${this.token}`;
       url = urls
     } else {
       // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
@@ -441,10 +442,10 @@ export class ReceiveComponent implements OnInit {
     this.openModal = false;
     let url: any
     if (showOption === 1) {
-      const urls = await `${this.apiUrl}/report/list/receiveCode/${sID}/${eID}`;
+      const urls = await `${this.apiUrl}/report/list/receiveCode/${sID}/${eID}?token=${this.token}`;
       url = urls
     } else if (showOption === 2) {
-      const urls = await `${this.apiUrl}/report/list/receiveCodeOther/${sID}/${eID}`;
+      const urls = await `${this.apiUrl}/report/list/receiveCodeOther/${sID}/${eID}?token=${this.token}`;
       url = urls
     } else {
       // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
@@ -459,7 +460,7 @@ export class ReceiveComponent implements OnInit {
     this.openModal = false;
     let url: any
     if (showOption === 1) {
-      const urls = await `${this.apiUrl}/report/list/receivePo/${sID}/${eID}`;;
+      const urls = await `${this.apiUrl}/report/list/receivePo/${sID}/${eID}?token=${this.token}`;
       url = urls
     }
     this.htmlPreview.showReport(url, 'landscape')
@@ -503,7 +504,7 @@ export class ReceiveComponent implements OnInit {
             strIds += `receiveOtherID=${v}&`;
           });
           //       console.log(strIds);
-          const url = `${this.apiUrl}/report/list/receiveOther?${strIds}`;
+          const url = `${this.apiUrl}/report/list/receiveOther?${strIds}?token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
           // cancel
@@ -531,7 +532,7 @@ export class ReceiveComponent implements OnInit {
             strIds += `receiveID=${v}&`;
           });
           console.log(strIds);
-          const url = `${this.apiUrl}/report/list/receive?${strIds}`;
+          const url = `${this.apiUrl}/report/list/receive?${strIds}?token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
           // cancel
@@ -558,7 +559,7 @@ export class ReceiveComponent implements OnInit {
             strIds += `receiveID=${v}&`;
           });
 
-          const url = `${this.apiUrl}/report/product/receive?${strIds}`;
+          const url = `${this.apiUrl}/report/product/receive?${strIds}?token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
 

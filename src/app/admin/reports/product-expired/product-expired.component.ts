@@ -19,6 +19,7 @@ export class ProductExpiredComponent implements OnInit {
   warehouseId: number = 0;
   isPreview = false;
   selectedGenericId = 0;
+  token: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -28,9 +29,10 @@ export class ProductExpiredComponent implements OnInit {
 
   options: any;
 
-  constructor( @Inject('API_URL') private apiUrl: string,
+  constructor(@Inject('API_URL') private apiUrl: string,
     private warehouseService: WarehouseService,
     private alertService: AlertService, ) {
+    this.token = sessionStorage.getItem('token')
     this.options = {
       pdfOpenParams: { toolbar: '1' },
       height: "450px"
@@ -60,9 +62,9 @@ export class ProductExpiredComponent implements OnInit {
 
   showReport() {
     console.log(this.warehouseId);
-      const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/${this.selectedGenericId}`;
+    const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/${this.selectedGenericId}?token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
   getWarehouseList() {
@@ -78,7 +80,7 @@ export class ProductExpiredComponent implements OnInit {
   setSelectedGeneric(generic) {
     this.selectedGenericId = generic.generic_id;
   }
-  changeSearchGeneric(generic){
+  changeSearchGeneric(generic) {
     this.selectedGenericId = generic.generic_id;
   }
   refresh() {
