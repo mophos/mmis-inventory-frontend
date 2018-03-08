@@ -425,20 +425,11 @@ export class ReceiveComponent implements OnInit {
     sDate = sDate.date.year + '-' + sDate.date.month + '-' + sDate.date.day
     eDate = eDate.date.year + '-' + eDate.date.month + '-' + eDate.date.day
     let url: any
-<<<<<<< HEAD
-    if (showOption == 1) {
+    if (showOption === 1) {
       const urls = await `${this.apiUrl}/report/list/receiveDate/${sDate}/${eDate}?token=${this.token}`;
       url = urls
-    }
-    else if (showOption == 2) {
-      const urls = await `${this.apiUrl}/report/list/receiveDateOther/${sDate}/${eDate}?token=${this.token}`;
-=======
-    if (showOption === 1) {
-      const urls = await `${this.apiUrl}/report/list/receiveDate/${sDate}/${eDate}`;
-      url = urls
     } else if (showOption === 2) {
-      const urls = await `${this.apiUrl}/report/list/receiveDateOther/${sDate}/${eDate}`;
->>>>>>> 5af856be9fc87d08ccb4d886614f1d1b3bd0e7d7
+      const urls = await `${this.apiUrl}/report/list/receiveDateOther/${sDate}/${eDate}?token=${this.token}`;
       url = urls
     } else {
       // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
