@@ -33,13 +33,13 @@ export class ReceiveComponent implements OnInit {
   waitings: any = [];
   others: any = [];
   purchases: any = [];
-  totalReceive: number = 0;
-  totalReceiveOther: number = 0;
-  perPage: number = 15;
+  totalReceive = 0;
+  totalReceiveOther = 0;
+  perPage = 15;
   query: string;
-  isSearching: boolean = false;
-  isSearch: boolean = false;
-  openModal: boolean = false;
+  isSearching = false;
+  isSearch = false;
+  openModal = false;
   sDate: any;
   eDate: any;
   sID: any;
@@ -63,13 +63,13 @@ export class ReceiveComponent implements OnInit {
 
   titel: any;
   isConfirm: any;
-  openModalConfirm: boolean = false
-  confirmApprove: boolean = false
-  tmpOderApprove: any
-  username: any
-  password: any
-  action: any
-  page: any
+  openModalConfirm = false;
+  confirmApprove = false;
+  tmpOderApprove: any;
+  username: any;
+  password: any;
+  action: any;
+  page: any;
   receiveIds = [];
   receiveOtherIds = [];
   jwtHelper: JwtHelper = new JwtHelper();
@@ -153,24 +153,21 @@ export class ReceiveComponent implements OnInit {
         await this.getReceiveExpiredSearch(this.query);
         await this.getReceiveOtherExpiredSearch();
         this.others = rs.rows;
-        //console.log(this.others)
         this.totalReceive = rs.total;
         this.isSearching = true;
         this.modalLoading.hide();
       }
     } catch (error) {
       this.modalLoading.hide();
-      //console.log(error);
       this.alertService.error(error.message);
     }
   }
 
   async refreshOther(state: State) {
-    // this.loading = true;
     this.isSearch = true;
     const offset = +state.page.from;
     const limit = +state.page.size;
-    this.modalLoading.show();//111111
+    this.modalLoading.show();
     if (!this.isSearching) {
       try {
         const rs = await this.receiveService.getReceiveOther(limit, offset);
@@ -197,7 +194,7 @@ export class ReceiveComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let rs: any = await this.receiveService.removeReceive(w.receive_id);
+          const rs: any = await this.receiveService.removeReceive(w.receive_id);
           if (rs.ok) {
             this.alertService.success();
             const idx = _.findIndex(this.waitings, { receive_id: w.receive_id });
@@ -205,12 +202,10 @@ export class ReceiveComponent implements OnInit {
               this.waitings.splice(idx, 1);
             }
           } else {
-            //console.log(rs.error);
             this.alertService.error();
           }
           this.modalLoading.hide();
         } catch (error) {
-          //console.log(error);
           this.modalLoading.hide();
           this.alertService.serverError();
         }
@@ -225,7 +220,7 @@ export class ReceiveComponent implements OnInit {
     this.alertService.confirm(`ต้องการลบรายการนี้ [${receive.receive_code}] ใช่หรือไม่?`)
       .then(async () => {
         try {
-          let rs: any = await this.receiveService.removeReceiveOther(receive.receive_other_id);
+          const rs: any = await this.receiveService.removeReceiveOther(receive.receive_other_id);
           if (rs.ok) {
             const idx = _.findIndex(this.others, { receive_other_id: receive.receive_other_id });
             if (idx > -1) {
@@ -294,7 +289,6 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getExpired();
       if (rs.ok) {
         this.expired = rs.rows;
-        //console.log(this.expired);
       } else {
         this.alertService.error(rs.error);
       }
@@ -311,7 +305,6 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getExpiredSearch(q);
       if (rs.ok) {
         this.expired = rs.rows;
-        //console.log(this.expired);
       } else {
         this.alertService.error(rs.error);
       }
@@ -328,8 +321,6 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getOtherExpired();
       if (rs.ok) {
         this.otherExpired = rs.rows;
-        //console.log(this.expired);
-
       } else {
         this.alertService.error(rs.error);
       }
@@ -346,7 +337,6 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getOtherExpiredSearch(this.query);
       if (rs.ok) {
         this.otherExpired = rs.rows;
-        //console.log(this.expired);
       } else {
         this.alertService.error(rs.error);
       }
@@ -406,13 +396,12 @@ export class ReceiveComponent implements OnInit {
   }
 
   close() {
-    this.openModalConfirm = false
+    this.openModalConfirm = false;
     this.username = '';
     this.password = '';
   }
 
   saveApprove() {
-
     this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + this.receiveIds.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
       .then(() => {
         this.modalApprove.setReceiveIds(this.receiveIds);
@@ -435,54 +424,43 @@ export class ReceiveComponent implements OnInit {
     sDate = sDate.date.year + '-' + sDate.date.month + '-' + sDate.date.day
     eDate = eDate.date.year + '-' + eDate.date.month + '-' + eDate.date.day
     let url: any
-    if (showOption == 1) {
+    if (showOption === 1) {
       const urls = await `${this.apiUrl}/report/list/receiveDate/${sDate}/${eDate}`;
       url = urls
-    }
-    else if (showOption == 2) {
+    } else if (showOption === 2) {
       const urls = await `${this.apiUrl}/report/list/receiveDateOther/${sDate}/${eDate}`;
       url = urls
     } else {
       // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
       // url = urls
     }
-
     this.htmlPreview.showReport(url, 'landscape')
 
   }
   async printDeliveryId(showOption: any, sID: any, eID: any) {
     this.openModal = false;
     let url: any
-    if (showOption == 1) {
+    if (showOption === 1) {
       const urls = await `${this.apiUrl}/report/list/receiveCode/${sID}/${eID}`;
       url = urls
-    }
-    else if (showOption == 2) {
+    } else if (showOption === 2) {
       const urls = await `${this.apiUrl}/report/list/receiveCodeOther/${sID}/${eID}`;
       url = urls
     } else {
       // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
       // url = urls
     }
-    this.htmlPreview.showReport(url, 'landscape')
+    this.htmlPreview.showReport(url, 'landscape');
     this.sID = ''
     this.eID = ''
-
   }
 
   async printPoId(showOption: any, sID: any, eID: any) {
     this.openModal = false;
     let url: any
-    if (showOption == 1) {
+    if (showOption === 1) {
       const urls = await `${this.apiUrl}/report/list/receivePo/${sID}/${eID}`;;
       url = urls
-    }
-    else if (showOption == 2) {
-      // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
-      // url = urls
-    } else {
-      // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
-      // url = urls
     }
     this.htmlPreview.showReport(url, 'landscape')
     this.sIDpo = ""
@@ -635,5 +613,4 @@ export class ReceiveComponent implements OnInit {
       })
       .catch(() => { });
   }
-
 }
