@@ -17,7 +17,7 @@ export class IssueTransactionComponent implements OnInit {
   total = 0;
   perPage = 20;
   status = '';
-  
+
   selectedApprove: any = [];
   titel: any;
   isConfirm: any;
@@ -28,12 +28,15 @@ export class IssueTransactionComponent implements OnInit {
   password: any
   action: any
   page: any
+  token: any;
   constructor(
     private issueService: IssueTransactionService,
     private alertService: AlertService,
     private accessCheck: AccessCheck,
     @Inject('API_URL') private apiUrl: string
-  ) { }
+  ) {
+    this.token = sessionStorage.getItem('token')
+  }
 
   ngOnInit() {
     this.getIssues();
@@ -87,12 +90,12 @@ export class IssueTransactionComponent implements OnInit {
   }
 
   async approveIssueCheck() {
-   const accessName = 'WM_ISSUE_APPROVE'
+    const accessName = 'WM_ISSUE_APPROVE'
     this.page = 1
     this.action = 'WM_ISSUES'
     this.titel = 'รายการใบตัดจ่าย'
     console.log(accessName);
-    
+
     if (this.accessCheck.can(accessName)) {
       this.approveIssue()
       this.openModalConfirm = false
@@ -110,7 +113,7 @@ export class IssueTransactionComponent implements OnInit {
         this.approveIssue()
       }
     } else {
-      this.alertService.error('ไม่มีสิทธิ์อนุมัติ'+this.titel);
+      this.alertService.error('ไม่มีสิทธิ์อนุมัติ' + this.titel);
     }
   }
 
@@ -148,7 +151,7 @@ export class IssueTransactionComponent implements OnInit {
     } else {
       this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     }
-    
+
     this.selectedApprove = [];
   }
 
@@ -165,7 +168,7 @@ export class IssueTransactionComponent implements OnInit {
     } else {
       poItems.push('issue_id=' + issues_id);
     }
-    const url = this.apiUrl + '/report/issueStraff/?' + poItems.join('&');
+    const url = this.apiUrl + `/report/issueStraff/?token=${this.token}&` + poItems.join('&');
     console.log(poItems);
     console.log(url);
 

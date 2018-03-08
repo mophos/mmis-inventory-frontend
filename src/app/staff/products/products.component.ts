@@ -13,6 +13,7 @@ export class ProductsComponent implements OnInit {
   genericType: any;
   products = [];
   query: any;
+  token: any;
   _genericTypes: any = [];
   _genericType: any;
   @ViewChild('modalLoading') public modalLoading: any;
@@ -22,7 +23,9 @@ export class ProductsComponent implements OnInit {
     private staffService: StaffService,
     private alertService: AlertService,
     @Inject('API_URL') private apiUrl: string,
-  ) { }
+  ) {
+    this.token = sessionStorage.getItem('token')
+  }
 
   ngOnInit() {
     this.getGenericType();
@@ -81,16 +84,15 @@ export class ProductsComponent implements OnInit {
     this._genericType.forEach(e => {
       types.push('genericTypeId=' + e);
     });
-    const url = this.apiUrl + '/report/product/all?' + types.join('&');
+    const url = this.apiUrl + `/report/product/all?token=${this.token}&` + types.join('&');
     this.htmlPreview.showReport(url);
   }
-  outExcel(){
+  outExcel() {
     const types = [];
     this._genericType.forEach(e => {
       types.push('genericTypeId=' + e);
     });
-    const token = sessionStorage.getItem('token');
-    const exportUrl = `${this.apiUrl}/report/product/all/excel?token=${token}&` + types.join('&');;
+    const exportUrl = `${this.apiUrl}/report/product/all/excel?token=${this.token}&` + types.join('&');
     window.open(exportUrl);
 
   }
