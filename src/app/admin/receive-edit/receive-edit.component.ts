@@ -953,7 +953,7 @@ export class ReceiveEditComponent implements OnInit {
   }
 
   printReceive() {
-    const url = `${this.apiUrl}/report/check/receive?receiveID=${this.receiveId}?token=${this.token}`;
+    const url = `${this.apiUrl}/report/check/receive?receiveID=${this.receiveId}&token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
 
