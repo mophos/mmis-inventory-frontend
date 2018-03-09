@@ -11,7 +11,8 @@ export class HisMappingsDirectivesComponent implements OnInit {
   @Input() public genericId: any;
 
   products: any = []
-
+  loading: boolean = false;
+  
   constructor(
     private warehouseService: WarehouseService,
     private alertService: AlertService
@@ -22,10 +23,13 @@ export class HisMappingsDirectivesComponent implements OnInit {
   }
 
   async getProducts() {
+    this.loading = true;
     try {
       let rs: any = await this.warehouseService.getMappingsProducts(this.genericId);
       this.products = rs.rows;
+      this.loading = false;
     } catch (error) {
+      this.loading = false;
       this.alertService.error(error.message);
     }
   }
