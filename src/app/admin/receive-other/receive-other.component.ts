@@ -114,6 +114,9 @@ export class ReceiveOtherComponent implements OnInit {
   isExpired = false // false = กรอกวันหมดอายุ   true = ไม่กรอกวันหมดอายุ
   isReceiveHoliday = false; // false = รับได้ true = เป็นวันหยุด
   isReceivePeriod = false; // false = รับได้ true = ปิดรอบ
+
+  hospcode: any; // ใช้ชั่วคราว
+  isCheckUpdateCost = false;
   constructor(
     private wareHouseService: WarehouseService,
     private receiveService: ReceiveService,
@@ -132,6 +135,11 @@ export class ReceiveOtherComponent implements OnInit {
     const decodedToken: any = this.jwtHelper.decodeToken(this.token);
     this.userWarehouseId = +decodedToken.warehouseId;
     this.receiveExpired = decodedToken.WM_RECEIVE_OTHER_EXPIRED === 'Y' ? true : false;
+
+    // ใช้ชั่วคราว เฉพาะโรงพยาบาลสิงห์บุรี
+    const hospital = JSON.parse(decodedToken.SYS_HOSPITAL);
+    this.hospcode = hospital.hospcode;
+
 
   }
 
@@ -305,7 +313,6 @@ export class ReceiveOtherComponent implements OnInit {
       product.receive_qty = this.selectedReceiveQty;
       product.primary_unit_id = this.primaryUnitId;
       product.primary_unit_name = this.primaryUnitName;
-      // product.lot_id = this.selectedLotId;
       product.lot_no = this.selectedLotNo ? this.selectedLotNo.toUpperCase() : null;
       product.generic_id = this.selectedGenericId;
 
@@ -327,7 +334,7 @@ export class ReceiveOtherComponent implements OnInit {
       product.is_lot_control = this.isLotControl;
 
       if (this.selectedExpiredDate) {
-        let valid = this.dateService.isValidDateExpire(this.selectedExpiredDate);
+        const valid = this.dateService.isValidDateExpire(this.selectedExpiredDate);
         if (valid) {
           product.expired_date = this.selectedExpiredDate;
           if (product.is_lot_control === 'Y') {
@@ -358,7 +365,6 @@ export class ReceiveOtherComponent implements OnInit {
       }
 
     }
-
   }
 
   countTotalCost() {
@@ -418,11 +424,8 @@ export class ReceiveOtherComponent implements OnInit {
   }
 
   editChangeUnit(idx: any, event: any) {
-    // console.log(event);
     try {
       if (event) {
-        // this.products[idx].unit_name = event.unit_name;
-        // this.products[idx].unit_id = event.unit_id;
         this.products[idx].unit_generic_id = event.unit_generic_id;
         this.products[idx].conversion_qty = +event.qty;
         this.products[idx].cost = +event.cost;
@@ -431,7 +434,6 @@ export class ReceiveOtherComponent implements OnInit {
         this.alertService.error('กรุณาเลือกหน่วยสินค้า')
       }
     } catch (error) {
-      //
     }
   }
 
@@ -491,14 +493,14 @@ export class ReceiveOtherComponent implements OnInit {
         console.log(rs);
         if (rs.ok) {
           this.isReceiveHoliday = false;
-            await this.checkExpired();
+          await this.checkExpired();
         } else {
           this.isReceiveHoliday = true; // วันหยุด
           console.log('err วันที่คุณเลือกเป็นวันหยุดราชการ จะรับสินค้าหรือไม่');
           this.alertService.confirm(rs.error)
             .then(async () => {
               this.isReceiveHoliday = false; // วันหยุด
-                await this.checkExpired();
+              await this.checkExpired();
             })
             .catch(() => {
               this.isReceiveHoliday = true;
@@ -577,6 +579,12 @@ export class ReceiveOtherComponent implements OnInit {
               }
 
               let receiveOtherId: any = await this.receiveService.saveReceiveOther(summary, this.products);
+
+
+              // ใช้ชั่วคราว
+              if (this.checkUpdateCost) {
+                await this.receiveService.saveCost(this.products);
+              }
 
               /////Save and Approve 
               if (this.isApprove === 'N') {
@@ -679,5 +687,10 @@ export class ReceiveOtherComponent implements OnInit {
         }
       }
     } // expired
+  }
+  checkUpdateCost(e) {
+    this.isCheckUpdateCost = !this.isCheckUpdateCost;
+    console.log(this.isCheckUpdateCost);
+    
   }
 }
