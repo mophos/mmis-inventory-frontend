@@ -380,5 +380,11 @@ export class ReceiveService {
     }).toPromise();
     return rs.json();
   }
+  async saveCost(products: any) {
+    const rs: any = await this.authHttp.put(`${this.url}/receives/update/cost`, {
+      products: products
+    }).toPromise();
+    return rs.json();
+  }
 
 }
