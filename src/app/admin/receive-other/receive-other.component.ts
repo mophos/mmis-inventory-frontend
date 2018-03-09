@@ -428,7 +428,9 @@ export class ReceiveOtherComponent implements OnInit {
       if (event) {
         this.products[idx].unit_generic_id = event.unit_generic_id;
         this.products[idx].conversion_qty = +event.qty;
-        this.products[idx].cost = +event.cost;
+        // if (this.products[idx].cost !== +event.cost) {
+        //   this.products[idx].cost = +event.cost;
+        // }
         this.countTotalCost();
       } else {
         this.alertService.error('กรุณาเลือกหน่วยสินค้า')
