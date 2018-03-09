@@ -23,8 +23,13 @@ export class WarehouseService {
     });
   }
 
-  async getMappings() {
-    let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings`).toPromise();
+  async getMappingsGenerics() {
+    let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics`).toPromise();
+    return rs.json();
+  }
+
+  async getMappingsProducts(genericId: any) {
+    let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-products/${genericId}`).toPromise();
     return rs.json();
   }
 
@@ -32,7 +37,7 @@ export class WarehouseService {
     let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings`).toPromise();
     return rs.json();
   }
-  async getShipingNetwork(warehouseId: any,  type: any) {
+  async getShipingNetwork(warehouseId: any, type: any) {
     let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-shippingnetwork-list/${warehouseId}/${type}`).toPromise();
     return rs.json();
   }
