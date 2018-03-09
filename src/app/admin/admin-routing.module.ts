@@ -45,6 +45,7 @@ import { ReturningComponent } from './returning/returning.component';
 // reports
 import { ProductRemainComponent as ReportProductRemain } from './reports/product-remain/product-remain.component';
 import { ReceivesComponent as ReportReceives } from './reports/receives/receives.component';
+import { StockCardComponent } from './reports/stock-card/stock-card.component';
 
 // receive other
 import { ReceiveOtherComponent } from './receive-other/receive-other.component';
@@ -123,6 +124,7 @@ const routes: Routes = [
       { path: 'reports/product-remain', component: ReportProductRemain },
       { path: 'reports/product-expired', component: ProductExpiredComponent },
       { path: 'reports/product-manufacture', component: ProductManufactureComponent },
+      { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },

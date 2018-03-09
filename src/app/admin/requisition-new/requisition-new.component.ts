@@ -236,7 +236,7 @@ export class RequisitionNewComponent implements OnInit {
     this.selectedWorkingCode = generic.working_code;
     this.selectedRemainQty = generic.qty;
     this.selectedRequisitionQty = 1;
-    
+
     this.selectUnits.getUnits(generic.generic_id);
   }
 
@@ -335,7 +335,8 @@ export class RequisitionNewComponent implements OnInit {
 
   async save() {
     this.isSave = true;
-    const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-${this.requisitionDate.date.day}` : null;
+    const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-
+    ${this.requisitionDate.date.day}` : null;
     this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
       .then(async () => {
         const order: IRequisitionOrder = {};
@@ -390,7 +391,7 @@ export class RequisitionNewComponent implements OnInit {
         this.isSave = false;
         this.modalLoading.hide();
       })
-    
+
   }
 
   async getTemplates(event: any) {
