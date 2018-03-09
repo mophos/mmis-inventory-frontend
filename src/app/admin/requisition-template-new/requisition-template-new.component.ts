@@ -167,4 +167,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
     const idx = _.findIndex(this.products2,{'generic_id':g.generic_id})   
     this.products2[idx].unit_generic_id = e.unit_generic_id
   }
+  sort() {
+    this.products2 = _.sortBy(this.products2, ['generic_name']);
+  }
 }
