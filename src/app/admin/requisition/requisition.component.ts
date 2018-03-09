@@ -234,11 +234,11 @@ export class RequisitionComponent implements OnInit {
       });
   }
   printApprove(order: any) {
-    let url = this.url + '/report/approve/requis/' + order.requisition_order_id;
+    let url = this.url + `/report/approve/requis/` + order.requisition_order_id + `?token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
   printSetProduct(order: any) {
-    let url = this.url + '/report/list/requis/' + order.requisition_order_id;
+    let url = this.url + `/report/list/requis/` + order.requisition_order_id + `?token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
   cancelUnpaid(order: any) {

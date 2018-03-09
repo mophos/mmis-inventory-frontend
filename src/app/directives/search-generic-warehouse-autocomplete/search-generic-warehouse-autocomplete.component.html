@@ -1,7 +1,7 @@
 <input type="text" autocomplete="off" [disabled]="_disabled" [(ngModel)]="query" name="query" (keyup)="clearSelected($event)"
 style="width: 100%;" placeholder="ค้นหาสินค้า (Generic)..." 
 agxTypeahead 
-[taUrl]="searchGenericUrl"
+[taUrl]="url"
 taApi="http" 
 [taItemTpl]="itemTpl"
 (taSelected)="handleResultSelected($event)">

@@ -26,5 +26,5 @@ export interface IGeneric {
   unit_cost?: any;
   updated_at?: any;
   working_code?: any;
-  remain_qty?: number;
+  qty?: number;
 }

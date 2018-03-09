@@ -83,6 +83,7 @@ export class RequisitionNewComponent implements OnInit {
   selectedRequisitionQty: any;
   selectedTotalSmallQty: any = 0;
   requisitionCode: any;
+  selectedRemainQty: any = 0;
 
   isUpdate = false;
   isSave = false;
@@ -225,6 +226,7 @@ export class RequisitionNewComponent implements OnInit {
     this.selectedSmallQty = 0;
     this.selectedTotalSmallQty = 0;
     this.selectedRequisitionQty = '';
+    this.selectedRemainQty = 0;
     this.searchGenericCmp.clearSearch();
   }
 
@@ -232,6 +234,9 @@ export class RequisitionNewComponent implements OnInit {
     this.selectedGenericId = generic.generic_id;
     this.selectedGenericName = generic.generic_name;
     this.selectedWorkingCode = generic.working_code;
+    this.selectedRemainQty = generic.qty;
+    this.selectedRequisitionQty = 1;
+    
     this.selectUnits.getUnits(generic.generic_id);
   }
 
@@ -267,6 +272,7 @@ export class RequisitionNewComponent implements OnInit {
       product.to_unit_qty = this.selectedSmallQty;
       product.unit_generic_id = this.selectedUnitGenericId;
       product.working_code = this.selectedWorkingCode;
+      product.remain_qty = this.selectedRemainQty;
 
       this.products.push(product);
       this.clearItem();
@@ -287,6 +293,7 @@ export class RequisitionNewComponent implements OnInit {
           product.to_unit_qty = 0;
           product.unit_generic_id = null;
           product.working_code = v.working_code;
+          product.remain_qty = 0;
 
           this.products.push(product);
         });
@@ -339,21 +346,19 @@ export class RequisitionNewComponent implements OnInit {
         order.wm_withdraw = this.wmWithdraw;
 
         const products: Array<IRequisitionOrderItem> = [];
-        let isError = false;
 
         this.products.forEach((v: IRequisitionOrderItem) => {
-          if (v.requisition_qty <= 0) {
-            isError = true;
+          if (v.requisition_qty > 0) {
+            const obj: IRequisitionOrderItem = {};
+            obj.generic_id = v.generic_id;
+            obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
+            obj.unit_generic_id = v.unit_generic_id;
+            products.push(obj);
           }
-          const obj: IRequisitionOrderItem = {};
-          obj.generic_id = v.generic_id;
-          obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
-          obj.unit_generic_id = v.unit_generic_id;
-          products.push(obj);
         });
 
-        if (isError) {
-          this.alertService.error('กรุณาระบุจำนวนให้ครบถ้วน เช่น จำนวนต้องมากกว่า 0');
+        if (!products.length) {
+          this.alertService.error('กรุณาระบุจำนวนสินค้าที่ต้องการเบิก');
         } else {
           this.modalLoading.show();
           try {

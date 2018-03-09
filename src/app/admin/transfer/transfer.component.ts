@@ -29,6 +29,7 @@ export class TransferComponent implements OnInit {
   isSearching: boolean = false;
   perPage: number = 15;
   loading = false;
+  token: any;
 
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('htmlPreview') public htmlPreview: any;
@@ -39,7 +40,9 @@ export class TransferComponent implements OnInit {
     private router: Router,
     private ref: ChangeDetectorRef,
     @Inject('API_URL') private apiUrl: string
-  ) { }
+  ) {
+    this.token = sessionStorage.getItem('token')
+  }
 
   ngOnInit() {
 
@@ -170,7 +173,7 @@ export class TransferComponent implements OnInit {
   }
 
   showReport(t) {
-    const url = `${this.apiUrl}/report/tranfer/${t.transfer_id}`;
+    const url = `${this.apiUrl}/report/tranfer/${t.transfer_id}?token=${this.token}`;
     this.htmlPreview.showReport(url);
 
   }
@@ -183,7 +186,7 @@ export class TransferComponent implements OnInit {
       count++;
     });
     if (count > 0) {
-      const url = this.apiUrl + '/report/tranfers?' + transfer_id.join('&');
+      const url = this.apiUrl + `/report/tranfers?token=${this.token}&` + transfer_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
@@ -198,7 +201,7 @@ export class TransferComponent implements OnInit {
       count++;
     });
     if (count > 0) {
-      const url = this.apiUrl + '/report/tranfers2?' + transfer_id.join('&');
+      const url = this.apiUrl + `/report/tranfers2?token=${this.token}&` + transfer_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
