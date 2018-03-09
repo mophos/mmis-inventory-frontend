@@ -504,7 +504,7 @@ export class ReceiveComponent implements OnInit {
             strIds += `receiveOtherID=${v}&`;
           });
           //       console.log(strIds);
-          const url = `${this.apiUrl}/report/list/receiveOther?${strIds}?token=${this.token}`;
+          const url = `${this.apiUrl}/report/list/receiveOther?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
           // cancel
@@ -532,7 +532,7 @@ export class ReceiveComponent implements OnInit {
             strIds += `receiveID=${v}&`;
           });
           console.log(strIds);
-          const url = `${this.apiUrl}/report/list/receive?${strIds}?token=${this.token}`;
+          const url = `${this.apiUrl}/report/list/receive?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
           // cancel
@@ -559,7 +559,7 @@ export class ReceiveComponent implements OnInit {
             strIds += `receiveID=${v}&`;
           });
 
-          const url = `${this.apiUrl}/report/product/receive?${strIds}?token=${this.token}`;
+          const url = `${this.apiUrl}/report/product/receive?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
 
