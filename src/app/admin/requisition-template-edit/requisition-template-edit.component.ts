@@ -157,7 +157,10 @@ export class RequisitionTemplateEditComponent implements OnInit {
     }
   }
   editChangeUnit(g, e) {
-    const idx = _.findIndex(this.products,{'generic_id':g.generic_id})   
+    const idx = _.findIndex(this.products, { 'generic_id': g.generic_id })
     this.products[idx].unit_generic_id = e.unit_generic_id
+  }
+  sort() {
+    this.products = _.sortBy(this.products, ['generic_name']);
   }
 }
