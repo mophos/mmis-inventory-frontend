@@ -16,7 +16,7 @@ test_script:
   - node --version
   - npm --version
   # run tests
-  - ng build --target production --environment prod --build-optimizer
+  - ng build --build-optimizer --prod
 
 # Don't actually build.
 build: off
