@@ -347,21 +347,19 @@ export class RequisitionNewComponent implements OnInit {
         order.wm_withdraw = this.wmWithdraw;
 
         const products: Array<IRequisitionOrderItem> = [];
-        let isError = false;
 
         this.products.forEach((v: IRequisitionOrderItem) => {
-          if (v.requisition_qty <= 0) {
-            isError = true;
+          if (v.requisition_qty > 0) {
+            const obj: IRequisitionOrderItem = {};
+            obj.generic_id = v.generic_id;
+            obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
+            obj.unit_generic_id = v.unit_generic_id;
+            products.push(obj);
           }
-          const obj: IRequisitionOrderItem = {};
-          obj.generic_id = v.generic_id;
-          obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
-          obj.unit_generic_id = v.unit_generic_id;
-          products.push(obj);
         });
 
-        if (isError) {
-          this.alertService.error('กรุณาระบุจำนวนให้ครบถ้วน เช่น จำนวนต้องมากกว่า 0');
+        if (!products.length) {
+          this.alertService.error('กรุณาระบุจำนวนสินค้าที่ต้องการเบิก');
         } else {
           this.modalLoading.show();
           try {
