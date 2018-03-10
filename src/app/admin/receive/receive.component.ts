@@ -263,8 +263,6 @@ export class ReceiveComponent implements OnInit {
   }
 
   clearSelectedApproved() {
-    console.log(this.purchases);
-
     this.selectedApprove = [];
     this.selectedOtherApprove = [];
   }
@@ -276,8 +274,6 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getWaiting(this.perPage, 0);
       if (rs.ok) {
         this.waitings = rs.rows;
-        console.log(this.waitings);
-
         this.totalReceive = rs.total;
       } else {
         this.alertService.error(rs.error);
