@@ -51,10 +51,12 @@
   
           <p>รายการเบิก</p>
           <clr-datagrid [style.height.px]="300" style="width:99%">
-            <clr-dg-column [style.width.%]="5">#</clr-dg-column>
-            <clr-dg-column [style.width.%]="30">ชื่อสินค้า</clr-dg-column>
-            <clr-dg-column [style.width.%]="20">หน่วย</clr-dg-column>
-            <clr-dg-column [style.width.%]="20"></clr-dg-column>
+              <clr-dg-column [style.width.%]="1">#</clr-dg-column>
+              <clr-dg-column [style.width.%]="30">ชื่อสินค้า</clr-dg-column>
+              <clr-dg-column [style.width.%]="15">หน่วย</clr-dg-column>
+              <clr-dg-column [style.width.%]="20">
+                <button (click)="sort()" class="btn btn-sm btn-icon btn-success wm-small-btn">เรียง ก-ฮ A-Z</button>
+              </clr-dg-column>
   
             <clr-dg-row *clrDgItems="let g of products;let idx=index" [clrDgItem]="g">
               <clr-dg-action-overflow>
@@ -78,7 +80,7 @@
                     <clr-icon shape="caret down"></clr-icon>
                     <!-- เลื่อนลง -->
                 </button>
-                <input type="text" class="form-control" #goto placeholder="ระบุลำดับ เพื่อเลื่อน..">
+                <input type="text" class="form-control" size="14" #goto placeholder="ระบุลำดับ เพื่อเลื่อน..">
                 <button title="เลื่อนไปที่" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productGoTo(g,goto.value)">
                     <clr-icon shape="upload"></clr-icon>
                     <!-- เลื่อนขึ้น -->

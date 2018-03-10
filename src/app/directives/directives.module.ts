@@ -42,6 +42,7 @@ import { SearchProductWarehouseStaffComponent } from 'app/directives/search-prod
 import { SearchGenericWarehouseAutocompleteComponent } from 'app/directives/search-generic-warehouse-autocomplete/search-generic-warehouse-autocomplete.component';
 import { SearchGenericWarehouseZeroComponent } from './search-generic-warehouse-zero/search-generic-warehouse-zero.component';
 import { ShowUnitsComponent } from './show-units/show-units.component';
+import { HisMappingsDirectivesComponent } from './his-mappings-directives/his-mappings-directives.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -86,7 +87,8 @@ import { ShowUnitsComponent } from './show-units/show-units.component';
         SearchProductWarehouseStaffComponent,
         SearchGenericWarehouseAutocompleteComponent,
         SearchGenericWarehouseZeroComponent,
-        ShowUnitsComponent
+        ShowUnitsComponent,
+        HisMappingsDirectivesComponent
     ],
     providers: [BasicService],
     exports: [
@@ -122,7 +124,8 @@ import { ShowUnitsComponent } from './show-units/show-units.component';
         SearchProductWarehouseStaffComponent,
         SearchGenericWarehouseAutocompleteComponent,
         SearchGenericWarehouseZeroComponent,
-        ShowUnitsComponent
+        ShowUnitsComponent,
+        HisMappingsDirectivesComponent  
     ]
 })
 export class DirectivesModule { }

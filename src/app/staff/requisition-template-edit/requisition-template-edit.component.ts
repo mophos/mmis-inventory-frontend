@@ -55,9 +55,9 @@ export class RequisitionTemplateEditComponent implements OnInit {
         this.templates = rs.rows[0];
         this.templateSubject = this.templates['template_subject'];
         this.dstWarehouseName = this.templates['dst_warehouse_name'];
-        this.dstWarehouseId = this.templates['dst_warehouse_id'];
+        this.dstWarehouseId = this.templates['dst_warehouse_code'];
         this.srcWarehouseName = this.templates['src_warehouse_name'];
-        this.srcWarehouseId = this.templates['src_warehouse_id'];
+        this.srcWarehouseId = this.templates['src_warehouse_code'];
         // this.ref.detectChanges();
       } else {
         this.alertService.error(rs.error);
@@ -163,5 +163,8 @@ export class RequisitionTemplateEditComponent implements OnInit {
   editChangeUnit(g, e) {
     const idx = _.findIndex(this.products,{'generic_id':g.generic_id})   
     this.products[idx].unit_generic_id = e.unit_generic_id
+  }
+  sort() {
+    this.products = _.sortBy(this.products, ['generic_name']);
   }
 }
