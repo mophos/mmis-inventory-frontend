@@ -21,13 +21,13 @@ export class TransferComponent implements OnInit {
   transfers: any = [];
   transferDetails: any = [];
   openDetail = false;
-  isApprove: boolean = true;
-  isNotApprove: boolean = false;
-  isAll: boolean = false;
+  isApprove = true;
+  isNotApprove = false;
+  isAll = false;
 
-  isSaving: boolean = false;
-  isSearching: boolean = false;
-  perPage: number = 15;
+  isSaving = false;
+  isSearching = false;
+  perPage = 15;
   loading = false;
   token: any;
 
@@ -55,7 +55,7 @@ export class TransferComponent implements OnInit {
   async getTransferList() {
     this.modalLoading.show();
     try {
-      let rs = await this.transferService.list(this.approveStatus, this.perPage, 0);
+      const rs = await this.transferService.list(this.approveStatus, this.perPage, 0);
       if (rs.ok) {
         this.transfers = rs.rows;
         this.total = rs.total;
@@ -97,7 +97,7 @@ export class TransferComponent implements OnInit {
       .then(async () => {
         this.modalLoading.show();
         try {
-          let rs: any = await this.transferService.remove(t.transfer_id);
+          const rs: any = await this.transferService.remove(t.transfer_id);
           if (rs.ok) {
             this.alertService.success();
             this.getTransferList();
@@ -116,7 +116,7 @@ export class TransferComponent implements OnInit {
   doApprove() {
     const transferIds = [];
     this.selectedApprove.forEach(v => {
-      if (v.approved !== 'Y' && v.mark_deleted == 'N') {
+      if (v.approved !== 'Y' && v.mark_deleted === 'N') {
         transferIds.push(v.transfer_id);
       }
     });
@@ -126,7 +126,7 @@ export class TransferComponent implements OnInit {
         .then(async () => {
           try {
             this.modalLoading.show();
-            let rs: any = await this.transferService.approveAll(transferIds);
+            const rs: any = await this.transferService.approveAll(transferIds);
             if (rs.ok) {
               this.alertService.success();
               this.selectedApprove = [];
@@ -154,7 +154,7 @@ export class TransferComponent implements OnInit {
       .then(async () => {
         this.modalLoading.hide();
         try {
-          let rs: any = await this.transferService.approve(t.transfer_id);
+          const rs: any = await this.transferService.approve(t.transfer_id);
           if (rs.ok) {
             this.alertService.success();
             this.getTransferList();

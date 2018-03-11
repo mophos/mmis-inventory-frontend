@@ -131,6 +131,7 @@ import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { ProductManufactureComponent } from './reports/product-manufacture/product-manufacture.component';
 import { AccessCheck } from '../access-check';
+import { StockCardComponent } from './reports/stock-card/stock-card.component';
 
 
 export function highchartsFactory() {
@@ -220,6 +221,7 @@ Highcharts.setOptions({
     RequisitionConfirmComponent,
     RequisitionConfirmUnpaidComponent,
     ProductManufactureComponent,
+    StockCardComponent,
   ],
   providers: [
     MainService,

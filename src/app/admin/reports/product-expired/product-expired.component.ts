@@ -16,7 +16,7 @@ export class ProductExpiredComponent implements OnInit {
   startDate: any;
   endDate: any;
   warehouses: any = [];
-  warehouseId: number = 0;
+  warehouseId = 0;
   isPreview = false;
   selectedGenericId = 0;
   token: any;
@@ -64,7 +64,8 @@ export class ProductExpiredComponent implements OnInit {
     console.log(this.warehouseId);
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/${this.selectedGenericId}?token=${this.token}`;
+    const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/
+    ${this.selectedGenericId}?token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
   getWarehouseList() {
