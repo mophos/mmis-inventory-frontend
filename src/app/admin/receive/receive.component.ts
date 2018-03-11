@@ -132,7 +132,7 @@ export class ReceiveComponent implements OnInit {
         _.forEach(_receiveApprovePO, (opject) => {
           _receiveApprovePO = _.drop(_receiveApprovePO)
           _.forEach(_receiveApprovePO, (opjectTmp) => {
-            if(_.isEqual(opjectTmp,opject)) {
+            if (_.isEqual(opjectTmp, opject)) {
               this.receiveApprovePO.push(opject)
             }
           })
@@ -552,7 +552,6 @@ export class ReceiveComponent implements OnInit {
           receiveIds.forEach((v: any) => {
             strIds += `receiveID=${v}&`;
           });
-          console.log(strIds);
           const url = `${this.apiUrl}/report/list/receive?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
@@ -564,17 +563,53 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-  printreceiveApprovePO(id: any) {
-    if (id) {
-      this.alertService.confirm('พิมพ์ใบตรวจรับตามใบสั่งซื้อเลขที่ ' + id + ' ใช่หรือไม่?')
+  printReceive() {
+    const receiveIds = [];
+    //  console.log(this.selectedApprove);
+    _.forEach(this.selectedApprove, (v) => {
+      if (v.purchase_order_number) {
+        receiveIds.push(v.receive_id);
+      }
+    });
+    if (receiveIds.length) {
+      this.alertService.confirm('พิมพ์ใบตรวจรับ ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
         .then(() => {
-          const url = `${this.apiUrl}/report/check/receives?PO_ID=${id}&token=${this.token}`;
+          let strIds = '';
+          receiveIds.forEach((v: any) => {
+            strIds += `receiveID=${v}&`;
+          });
+          const url = `${this.apiUrl}/report/check/receive?${strIds}&token=${this.token}`;
+          this.htmlPreview.showReport(url);
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.alertService.error('ไม่พบรายการที่ต้องการพิมพ์ (เลือกรายการที่มีใบสั่งซื้อเท่านั้น)');
+    }
+  }
+
+  printreceiveApprovePO() {
+    const receiveIds = [];
+    _.forEach(this.selectedApprove, (v) => {
+      if (v.purchase_order_number) {
+        receiveIds.push(v.receive_id);
+      }
+    });
+
+    if (receiveIds.length) {
+      this.alertService.confirm('พิมพ์ใบตรวจรับตามใบสั่งซื้อ ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
+        .then(() => {
+          let strIds = '';
+          receiveIds.forEach((v: any) => {
+            strIds += `receiveID=${v}&`;
+          });
+          const url = `${this.apiUrl}/report/check/receives?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url);
         }).catch(() => {
 
         });
     } else {
-      this.alertService.error('ใบตรวจรับ');
+      this.alertService.error('ไม่พบรายการที่ต้องการพิมพ์ (เลือกรายการที่มีใบสั่งซื้อเท่านั้น)');
     }
   }
 

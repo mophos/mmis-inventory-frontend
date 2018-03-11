@@ -96,7 +96,10 @@
                   <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printProductRecive()">
                     <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
                   </clr-button>
-                  <clr-button [clrInMenu]="true" (click)="printRecivePO()">
+                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printReceive()">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับ
+                  </clr-button>
+                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printreceiveApprovePO()">
                     <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ
                   </clr-button>
                 </clr-button-group>
