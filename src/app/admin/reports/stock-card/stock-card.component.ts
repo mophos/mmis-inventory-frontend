@@ -21,6 +21,13 @@ export class StockCardComponent implements OnInit {
   token: any;
   warehouseId: any;
 
+  myDatePickerOptions: IMyOptions = {
+    inline: false,
+    dateFormat: 'dd mmm yyyy',
+    editableDateField: false,
+    showClearDateBtn: false
+  };
+
   constructor(
     @Inject('API_URL') private apiUrl: string
   ) {
