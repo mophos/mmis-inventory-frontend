@@ -425,7 +425,7 @@
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
 </clr-modal>
-<clr-modal [(clrModalOpen)]="modalReportFPO" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
+<!-- <clr-modal [(clrModalOpen)]="modalReportFPO" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
   <h3 class="modal-title">พิมพ์ใบตรวจรับตามใบสั่งซื้อ{{titel}}</h3>
   <div class="modal-body" style="height:150px">
     <div class="select">
@@ -439,7 +439,7 @@
     <button type="button" class="btn btn-md btn-primary" [disabled]="receiveApprovePO_id === ''" (click)="printreceiveApprovePO(receiveApprovePO_id)">บันทึก</button>
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
-</clr-modal>
+</clr-modal> -->
 <wm-modal-receive-approve #modalApprove (onSuccess)="approveSuccess($event)"></wm-modal-receive-approve>
 <wm-modal-receive-approve-other #modalApproveOther (onSuccess)="approveSuccessOther($event)"></wm-modal-receive-approve-other>
 

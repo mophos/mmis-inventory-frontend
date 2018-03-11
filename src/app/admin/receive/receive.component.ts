@@ -74,8 +74,6 @@ export class ReceiveComponent implements OnInit {
   receiveIds = [];
   receiveOtherIds = [];
   modalReportFPO = false;
-  receiveApprovePO: any = [];
-  receiveApprovePO_id: any = ''
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -114,9 +112,7 @@ export class ReceiveComponent implements OnInit {
   async refresh(state: State) {
     const offset = +state.page.from;
     const limit = +state.page.size;
-    let _receiveApprovePO: any = []
     this.isSearch = false;
-    this.receiveApprovePO = []
     this.modalLoading.show();
     if (!this.isSearching) {
       try {
@@ -125,19 +121,6 @@ export class ReceiveComponent implements OnInit {
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
         this.modalLoading.hide();
-        _.forEach(this.waitings, (opject) => {
-          const tmp = _.pick(opject, ['purchase_order_id', 'purchase_order_number'])
-          _receiveApprovePO.push(tmp)
-        })
-        _.forEach(_receiveApprovePO, (opject) => {
-          _receiveApprovePO = _.drop(_receiveApprovePO)
-          _.forEach(_receiveApprovePO, (opjectTmp) => {
-            if (_.isEqual(opjectTmp, opject)) {
-              this.receiveApprovePO.push(opject)
-            }
-          })
-        })
-        this.receiveApprovePO = _.uniqWith(this.receiveApprovePO, _.isEqual);
       } catch (error) {
         this.modalLoading.hide();
         this.alertService.error(error.message);
@@ -416,7 +399,6 @@ export class ReceiveComponent implements OnInit {
   }
 
   close() {
-    this.receiveApprovePO_id = '';
     this.modalReportFPO = false;
     this.openModalConfirm = false;
     this.username = '';
@@ -613,9 +595,9 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-  printRecivePO() {
-    this.modalReportFPO = true;
-  }
+  // printRecivePO() {
+  //   this.modalReportFPO = true;
+  // }
 
   printProductRecive() {
     const receiveIds = [];
