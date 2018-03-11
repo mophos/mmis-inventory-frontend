@@ -4,12 +4,15 @@
 </nav>
 <div class="row" style="padding:1em">
   <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-    <label for="startDate" class="required">เลือกเวชภัณฑ์</label>
+    <label class="required">เลือกเวชภัณฑ์</label>
   </div>
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="false" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
   </div>
-  <div>
+  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+    <label class="required">คลัง</label>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <wm-select-warehouses (onSelect)="setSelectedWarehouse($event)">
 
     </wm-select-warehouses>
