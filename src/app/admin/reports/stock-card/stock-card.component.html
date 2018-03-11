@@ -9,6 +9,11 @@
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="false" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
   </div>
+  <div>
+    <wm-select-warehouses (onSelect)="setSelectedWarehouse($event)">
+
+    </wm-select-warehouses>
+  </div>
 </div>
 
 <div class="row" style="padding:1em">
@@ -25,7 +30,8 @@
     <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
   </div>
   <div class="col-md-2">
-    <button class="btn btn-primary" [disabled]="isPreview" (click)="showReport()">แสดงรายงาน</button>
+    <button class="btn btn-primary" [disabled]="isPreview || !startDate || !endDate || !selectedGenericId || !warehouseId" (click)="showReport()">แสดงรายงาน</button>
     <button class="btn btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button>
   </div>
 </div>
+<wm-html-preview #htmlPreview></wm-html-preview>

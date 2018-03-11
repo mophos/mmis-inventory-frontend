@@ -132,7 +132,7 @@ export class ReceiveComponent implements OnInit {
         _.forEach(_receiveApprovePO, (opject) => {
           _receiveApprovePO = _.drop(_receiveApprovePO)
           _.forEach(_receiveApprovePO, (opjectTmp) => {
-            if(_.isEqual(opjectTmp,opject)) {
+            if (_.isEqual(opjectTmp, opject)) {
               this.receiveApprovePO.push(opject)
             }
           })
