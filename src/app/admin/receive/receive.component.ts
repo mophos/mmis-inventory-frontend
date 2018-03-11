@@ -121,19 +121,6 @@ export class ReceiveComponent implements OnInit {
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
         this.modalLoading.hide();
-        _.forEach(this.waitings, (opject) => {
-          const tmp = _.pick(opject, ['purchase_order_id', 'purchase_order_number'])
-          _receiveApprovePO.push(tmp)
-        })
-        _.forEach(_receiveApprovePO, (opject) => {
-          _receiveApprovePO = _.drop(_receiveApprovePO)
-          _.forEach(_receiveApprovePO, (opjectTmp) => {
-            if (_.isEqual(opjectTmp, opject)) {
-              this.receiveApprovePO.push(opject)
-            }
-          })
-        })
-        this.receiveApprovePO = _.uniqWith(this.receiveApprovePO, _.isEqual);
       } catch (error) {
         this.modalLoading.hide();
         this.alertService.error(error.message);
