@@ -293,7 +293,7 @@ export class RequisitionNewComponent implements OnInit {
           product.to_unit_qty = 0;
           product.unit_generic_id = null;
           product.working_code = v.working_code;
-          product.remain_qty = 0;
+          product.remain_qty = v.remain_qty;
 
           this.products.push(product);
         });

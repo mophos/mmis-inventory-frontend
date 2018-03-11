@@ -96,7 +96,10 @@
                   <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printProductRecive()">
                     <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
                   </clr-button>
-                  <clr-button [clrInMenu]="true" (click)="printRecivePO()">
+                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printReceive()">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับ
+                  </clr-button>
+                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printreceiveApprovePO()">
                     <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ
                   </clr-button>
                 </clr-button-group>
@@ -419,21 +422,6 @@
   </div>
   <div class="modal-footer" style="padding-top: 0px;">
     <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkApprove(username,password)">บันทึก</button>
-    <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
-  </div>
-</clr-modal>
-<clr-modal [(clrModalOpen)]="modalReportFPO" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
-  <h3 class="modal-title">พิมพ์ใบตรวจรับตามใบสั่งซื้อ{{titel}}</h3>
-  <div class="modal-body" style="height:150px">
-    <div class="select">
-      <select id="receiveApprovePO" [(ngModel)]="receiveApprovePO_id" name="receiveApprovePO">
-        <option value='' >เลือกใบสั่งซื้อ</option>
-        <option [value]="v.purchase_order_id" *ngFor="let v of receiveApprovePO">{{v.purchase_order_number}}</option>
-      </select>
-    </div>
-  </div>
-  <div class="modal-footer" style="padding-top: 0px;">
-    <button type="button" class="btn btn-md btn-primary" [disabled]="receiveApprovePO_id === ''" (click)="printreceiveApprovePO(receiveApprovePO_id)">บันทึก</button>
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
 </clr-modal>
