@@ -4,34 +4,18 @@
 </nav>
 
 <clr-datagrid [style.height.%]="90">
-  <!--<clr-dg-column [clrDgField]="'warehouse_id'">รหัส</clr-dg-column>-->
-  <clr-dg-column [clrDgField]="'product_id'">รหัสยา (MMIS)</clr-dg-column>
-  <clr-dg-column [clrDgField]="'product_name'">รายละเอียด</clr-dg-column>
+  <clr-dg-column [clrDgField]="'generic_id'">รหัสยา (MMIS)</clr-dg-column>
+  <clr-dg-column [clrDgField]="'generic_name'">รายละเอียด</clr-dg-column>
   <clr-dg-column [clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
-  <clr-dg-column [clrDgField]="'his'">รหัสยา (HIS)</clr-dg-column>
-  <clr-dg-column>Conversion</clr-dg-column>
-  <clr-dg-column></clr-dg-column>
+  <clr-dg-column [clrDgField]="''"></clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let m of mappings; let idx = index">
-    <clr-dg-cell>{{m.product_id}}</clr-dg-cell>
-    <clr-dg-cell>{{m.product_name}} ({{m.generic_name}})</clr-dg-cell>
+    <wm-his-mappings-directives *clrIfExpanded ngProjectAs="clr-dg-row-detail" [genericId]="m.generic_id"></wm-his-mappings-directives>
+    <clr-dg-cell>{{m.generic_id}}</clr-dg-cell>
+    <clr-dg-cell>{{m.generic_name}} ({{m.generic_name}})</clr-dg-cell>
     <clr-dg-cell>{{m.base_unit_name}}</clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4" #his [value]="m.his">
-    </clr-dg-cell>
-    <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4" #conversion
-      [value]="m.conversion || 1">
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: center;">
-      <div class="btn-group">
-        <button class="btn btn-success btn-sm wm-small-btn" (click)="saveItem(m.product_id, his.value, conversion.value)">
-          <clr-icon shape="floppy"></clr-icon>
-        </button>
-        <button class="btn btn-danger btn-sm wm-small-btn" (click)="removeItem(idx, m.product_id)">
-          <clr-icon shape="trash"></clr-icon>
-        </button>
-      </div>
+        <clr-icon shape="check" class="is-success" *ngIf="m.his > 0"></clr-icon>
     </clr-dg-cell>
   </clr-dg-row>
 

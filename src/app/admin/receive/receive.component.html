@@ -24,7 +24,9 @@
 
   <clr-tab>
     <button clrTabLink (click)="getPurchaseList()">
-      <clr-icon shape="alarm-clock" class="has-badge is-solid"></clr-icon> ใบสั่งซื้อที่รอรับเข้าคลัง <span class="badge badge-danger">{{ purchases.length | number }}</span></button>
+      <clr-icon shape="alarm-clock" class="has-badge is-solid"></clr-icon> ใบสั่งซื้อที่รอรับเข้าคลัง
+      <span class="badge badge-danger">{{ purchases.length | number }}</span>
+    </button>
     <clr-tab-content *clrIfActive>
       <clr-datagrid class="grid-order">
         <clr-dg-column style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
@@ -87,12 +89,18 @@
                 <button style="float: right;" class="btn btn-success btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="approveReceiveCheck(1)">
                   <clr-icon shape="note"></clr-icon> อนุมัติใบรับ
                 </button>
-                <button style="float: right;" class="btn btn-primary btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="printDeliveryNote()">
-                  <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
-                </button>
-                <button style="float: right;" class="btn btn-primary btn-sm btn-icon btn-outline" [disabled]="!selectedApprove.length" (click)="printProductRecive()">
-                  <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
-                </button>
+                <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
+                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printDeliveryNote()">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
+                  </clr-button>
+                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printProductRecive()">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
+                  </clr-button>
+                  <clr-button [clrInMenu]="true" (click)="printRecivePO()">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ
+                  </clr-button>
+                </clr-button-group>
+
               </div>
             </div>
           </div>
@@ -400,18 +408,32 @@
       <section class="form-block">
         <div class="form-group">
           <label for="aForm_1" class="required">User Name</label>
-          <input autocomplete="nope" type="text" id="username" name="username" [(ngModel)]="username" >
+          <input autocomplete="nope" type="text" id="username" name="username" [(ngModel)]="username">
         </div>
         <div class="form-group">
           <label for="aForm_1" class="required"> password</label>
-          <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password"  (keyup.enter)="checkApprove(username,password)">
+          <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password" (keyup.enter)="checkApprove(username,password)">
         </div>
       </section>
     </form>
   </div>
   <div class="modal-footer" style="padding-top: 0px;">
-    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password"
-      (click)="checkApprove(username,password)" >บันทึก</button>
+    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkApprove(username,password)">บันทึก</button>
+    <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
+  </div>
+</clr-modal>
+<clr-modal [(clrModalOpen)]="modalReportFPO" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
+  <h3 class="modal-title">พิมพ์ใบตรวจรับตามใบสั่งซื้อ{{titel}}</h3>
+  <div class="modal-body" style="height:150px">
+    <div class="select">
+      <select id="receiveApprovePO" [(ngModel)]="receiveApprovePO_id" name="receiveApprovePO">
+        <option value='' >เลือกใบสั่งซื้อ</option>
+        <option [value]="v.purchase_order_id" *ngFor="let v of receiveApprovePO">{{v.purchase_order_number}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer" style="padding-top: 0px;">
+    <button type="button" class="btn btn-md btn-primary" [disabled]="receiveApprovePO_id === ''" (click)="printreceiveApprovePO(receiveApprovePO_id)">บันทึก</button>
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
 </clr-modal>

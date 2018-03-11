@@ -21,8 +21,8 @@
               <wm-product-in-template-detail *clrIfExpanded [templateId]="w.template_id" ngProjectAs="clr-dg-row-detail"></wm-product-in-template-detail>
               <!-- <clr-dg-cell>{{w.template_id}}</clr-dg-cell> -->
               <clr-dg-cell>{{w.template_subject}}</clr-dg-cell>   
-              <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell>                     
               <clr-dg-cell>{{w.src_warehouse_name}}</clr-dg-cell>                     
+              <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell>                     
               <clr-dg-cell style="text-align: center;">
                 <div class="btn-group">
                   <button title="ส่งออก Excel" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="print(w.template_id)">
