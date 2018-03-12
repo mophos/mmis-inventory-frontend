@@ -67,4 +67,28 @@ export class HisMappingsComponent implements OnInit {
     }
     console.log(generic);
   }
+
+  async removeMapping(generic: any) {
+    this.alertService.confirm('ต้องการลบ Mapping นี้ใช่หรือไม่?')
+      .then(async () => {
+        try {
+          this.modalLoading.show();
+          let rs: any = await this.warehouseService.removeMapping(generic.generic_id);
+          this.modalLoading.hide();
+          if (rs.ok) {
+            let idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
+            if (idx > -1) {
+              this.mappings[idx].conversion = 1;
+              this.mappings[idx].his = null;
+            }
+            this.alertService.success();
+          } else {
+            this.alertService.error(rs.error);
+          }
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(JSON.stringify(error));
+        }
+      }).catch(() => { });
+  }
 }
