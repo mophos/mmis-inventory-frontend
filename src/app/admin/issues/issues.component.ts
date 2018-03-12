@@ -47,16 +47,30 @@ export class IssuesComponent implements OnInit {
     this.token = sessionStorage.getItem('token')
   }
 
-  ngOnInit() {
-    this.getIssues();
+  ngOnInit() { }
+
+  async refresh(state: State) {
+    const offset = +state.page.from;
+    const limit = +state.page.size;
+    this.modalLoading.show();
+    try {
+      const rs = await this.issueService.list(limit, offset, this.status);
+      this.issues = rs.rows;
+      this.total = rs.total;
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
   }
 
   async getIssues() {
     this.modalLoading.show();
     try {
-      const rs = await this.issueService.list();
+      const rs = await this.issueService.list(this.perPage, 0, this.status);
       if (rs.ok) {
         this.issues = rs.rows;
+        this.total = +rs.total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -75,7 +89,7 @@ export class IssuesComponent implements OnInit {
           const rs: any = await this.issueService.removeIssue(s.issue_id);
           if (rs.ok) {
             this.alertService.success();
-            this.getIssues();
+            // this.getIssues();
           } else {
             this.alertService.error(rs.error);
           }
@@ -164,9 +178,6 @@ export class IssuesComponent implements OnInit {
     this.isSaving = false;
   }
 
-  refresh(state: State) {
-
-  }
   showReport(issues_id: any) {
     const poItems: Array<any> = [];
     if (issues_id === '') {
@@ -180,23 +191,8 @@ export class IssuesComponent implements OnInit {
     this.htmlPreview.showReport(url);
   }
 
-  async filterApproved(value: any) {
-    try {
-      const rs = await this.issueService.list();
-      if (rs.ok) {
-        if (value) {
-          this.issues = rs.rows.filter(g => g.approved === value);
-        } else {
-          this.issues = rs.rows;
-        }
-      } else {
-        this.alertService.error(rs.error);
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error.message);
-    }
-    // console.log(this.issues);
+  changeStatus() {
+    this.getIssues();
   }
+
 }
