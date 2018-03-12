@@ -8,8 +8,8 @@ import * as _ from 'lodash';
 
 import { BasicService } from 'app/basic.service';
 import { IssueTransactionService } from 'app/staff/issue-transaction.service';
-import { HisTransactionService } from 'app/staff/his-transaction.service';
 import { PeriodService } from './../period.service';
+import { UploadingService } from 'app/uploading.service';
 
 @Component({
   selector: 'wm-issue-transaction-new',
@@ -72,7 +72,7 @@ export class IssueTransactionNewComponent implements OnInit {
     private route: ActivatedRoute,
     private basicService: BasicService,
     private issueService: IssueTransactionService,
-    private hisTransactionService: HisTransactionService,
+    private uploadingService: UploadingService,
     @Inject('API_URL') private apiUrl: string,
     private zone: NgZone,
     private periodService: PeriodService
@@ -115,7 +115,6 @@ export class IssueTransactionNewComponent implements OnInit {
   }
 
   changeUnit(event: any) {
-    console.log(event);
     try {
       this.conversionQty = event.qty ? event.qty : 0;
       this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
@@ -123,7 +122,6 @@ export class IssueTransactionNewComponent implements OnInit {
       //
     }
   }
-
 
   clearProductSearch() {
     this.productId = null;
@@ -163,8 +161,6 @@ export class IssueTransactionNewComponent implements OnInit {
     try {
       const idx = _.findIndex(this.products, { generic_id: genericId })
       let _data = {};
-      console.log(idx);
-      console.log(genericId);
 
       if (idx > -1) {
         _data = {
@@ -175,7 +171,6 @@ export class IssueTransactionNewComponent implements OnInit {
 
       const data_ = [];
       data_.push(_data);
-      console.log(data_);
 
       const result: any = await this.issueService.getIssuesProduct(data_);
       if (result.ok) {
@@ -184,7 +179,6 @@ export class IssueTransactionNewComponent implements OnInit {
         if (idxp > -1) {
           this.products[idxp].items = list;
         }
-        console.log(list);
 
       } else {
         console.log(result.error);
@@ -213,7 +207,6 @@ export class IssueTransactionNewComponent implements OnInit {
       this.products[idx].unit_generic_id = event.unit_generic_id;
       this.products[idx].conversion_qty = event.qty;
     }
-    console.log(this.products);
 
   }
 
@@ -340,7 +333,6 @@ export class IssueTransactionNewComponent implements OnInit {
   }
 
   // file upload
-
   showUploadModal() {
     this.openUpload = true;
   }
@@ -350,49 +342,70 @@ export class IssueTransactionNewComponent implements OnInit {
     this.fileName = this.file[0].name;
   }
 
+
   async doUpload() {
     try {
       this.modalLoading.show();
+      let rs: any = await this.uploadingService.uploadStaffIssueTransaction(this.file[0]);
+      this.modalLoading.hide();
+      // clear products
+      this.products = [];
 
-      this.hisTransactionService.uploadTransaction(this.file[0])
-        .then((result: any) => {
-          if (result.ok) {
-            this.openUpload = false;
-            // add product
-            this.products = [];
-            result.rows.forEach(v => {
-              const obj = {
-                product_id: v.product_id,
-                product_name: v.product_name,
-                generic_id: v.generic_id,
-                lot_no: null,
-                expired_date: null,
-                issue_qty: +v.qty,
-                remain_qty: 0,
-                unit_generic_id: null,
-                conversion_qty: 0,
-                location_id: null,
-                warehouse_id: this.warehouseId
-              };
+      if (rs.ok) {
+        let data = [];
+        rs.rows.forEach(v => {
+          const obj: any = {};
+          obj.issue_qty = v.issue_qty;
+          obj.generic_id = v.generic_id;
+          obj.generic_name = v.generic_name;
+          obj.remain_qty = +v.remain_qty;
+          obj.conversion_qty = 0;
+          obj.unit_generic_id = null;
+          obj.warehouse_id = this.warehouseId;
+          obj.items = [];
+          this.products.push(obj);
 
-              this.products.push(obj);
-            });
-
-          } else {
-            this.alertService.error(JSON.stringify(result.error));
-          }
-          this.modalLoading.hide();
-        }, (error) => {
-          this.modalLoading.hide();
-          this.alertService.error(JSON.stringify(error));
+          data.push({
+            genericId: v.generic_id,
+            genericQty: v.issue_qty
+          });
         });
+
+        this.getAllowcateData(data);
+
+        this.openUpload = false;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(JSON.stringify(error));
     }
   }
+  
+  async getAllowcateData(data) {
+    const result: any = await this.issueService.getIssuesProduct(data);
+    if (result.ok) {
+      const list = result.rows;
+      this.products.forEach((v, i) => {
+        let idx = _.findIndex(list, { generic_id: v.generic_id });
+        if (idx > -1) {
+          this.products[i].items.push(list[idx]);
+        }
+      });
+
+    } else {
+      console.log(result.error);
+      this.alertService.error();
+    }
+  }
+
+  setSelectedGeneric(e) {
+    this.products.push(e);
+  }
+
   changeQtyGrid(e) {
-    console.log(e);
     let total_base = 0;
     e.forEach(v => {
       total_base += (+v.product_qty * +v.conversion_qty);

@@ -20,7 +20,8 @@ export class StockCardComponent implements OnInit {
   end: any;
   token: any;
   warehouseId: any;
-
+  datageneric = [];
+  generic_id = [];
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -40,6 +41,12 @@ export class StockCardComponent implements OnInit {
 
   setSelectedGeneric(generic) {
     this.selectedGenericId = generic.generic_id;
+    this.datageneric.push({
+      generic_id: generic.generic_id,
+      generic_name: generic.generic_name,
+    });
+    this.generic_id.push('genericId=' + generic.generic_id)
+    console.log(this.generic_id);
   }
 
   changeSearchGeneric(generic) {
@@ -50,10 +57,9 @@ export class StockCardComponent implements OnInit {
     if (this.selectedGenericId !== '' && this.startDate !== '' && this.endDate !== '') {
       this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
       this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-      const url = `${this.apiUrl}/report/generic/stock/${this.selectedGenericId}?&warehouseId=${this.warehouseId}
-      &startDate=${this.start}&endDate=${this.end}&token=${this.token}`;
+      const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}
+      &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
       this.htmlPreview.showReport(url);
-      console.log(this.warehouseId);
     }
   }
 
@@ -61,6 +67,7 @@ export class StockCardComponent implements OnInit {
     this.selectedGenericId = '';
     this.startDate = '';
     this.endDate = '';
+    this.datageneric = [];
   }
 
   setSelectedWarehouse(event) {

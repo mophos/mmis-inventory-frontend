@@ -24,7 +24,7 @@
       &nbsp;&nbsp;&nbsp;
       <div style="display:inline-block">
         <div class="select">
-          <select [(ngModel)]="status" name="status" (change)="filterApproved(status)">
+          <select [(ngModel)]="status" name="status" (change)="changeStatus()">
             <option value="">ทั้งหมด</option>
             <option value="Y">อนุมัติแล้ว</option>
             <option value="N">รออนุมัติ</option>
@@ -73,10 +73,11 @@
   </clr-dg-row>
 
   <clr-dg-footer>
-    {{pageWait.firstItem + 1 | number}} - {{pageWait.lastItem + 1 | number}} of {{pageWait.totalItems | number}} รายการ
+    {{pageWait.firstItem + 1 | number}} - {{pageWait.lastItem + 1 | number}} จาก {{pageWait.totalItems | number}} รายการ
     <clr-dg-pagination #pageWait [clrDgPageSize]="perPage" [clrDgTotalItems]="total"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
+
 <clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
   <h3 class="modal-title">สิทธิ์การอนุมัติ{{titel}}</h3>
   <div class="modal-body" style="height:150px">
