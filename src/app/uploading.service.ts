@@ -85,6 +85,28 @@ export class UploadingService {
     });
   }
 
+  uploadStaffIssueTransaction(files: File) {
+    return new Promise((resolve, reject) => {
+      const formData: any = new FormData();
+      const xhr = new XMLHttpRequest();
+
+      formData.append("file", files, files.name);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(JSON.parse(xhr.response));
+          } else {
+            reject(xhr.response);
+          }
+        }
+      };
+
+      const url = `${this.url}/staff/upload/issue?token=${this.token}`;
+      xhr.open("POST", url, true);
+      xhr.send(formData);
+    });
+  }
+
   // =============== document service =============== //
   async getFiles(documentCode) {
     const res: any = await this.authHttp.get(`${this.docUrl}/uploads/info/${documentCode}`).toPromise();
