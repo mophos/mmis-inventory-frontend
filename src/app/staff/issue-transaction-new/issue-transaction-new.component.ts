@@ -196,7 +196,7 @@ export class IssueTransactionNewComponent implements OnInit {
   }
   editChangeIssueQty(idx: any, qty: any) {
     if (+qty.value > +this.products[idx].qty) {
-      this.alertService.error('จำนวนจ่าย มากว่าจำนวนคงเหลือ');
+      this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
       qty.value = this.products[idx].qty;
     } else {
       this.products[idx].issue_qty = +qty.value;

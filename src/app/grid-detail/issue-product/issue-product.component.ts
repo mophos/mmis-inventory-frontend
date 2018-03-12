@@ -24,8 +24,13 @@ export class IssueProductComponent implements OnInit {
   ngOnInit() { }
 
   onChangeQty(qty, idx) {
-    this.items[idx].product_qty = qty.value;
-    this.onChange.emit(this.items);
+    if ((+qty.value * this.items[idx].conversion_qty) > +this.items[idx].small_remain_qty) {
+      this.alertService.error('จำนวนตัดจ่าย มากว่าจำนวนคงเหลือ');
+      this.items[idx].product_qty = ''
+    } else {
+      this.items[idx].product_qty = +qty.value;
+      this.onChange.emit(this.items);
+    }
   }
 
-}  
+}
