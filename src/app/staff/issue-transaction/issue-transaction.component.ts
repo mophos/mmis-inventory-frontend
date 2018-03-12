@@ -15,7 +15,7 @@ export class IssueTransactionComponent implements OnInit {
 
   issues = [];
   total = 0;
-  perPage = 20;
+  perPage = 2;
   status = '';
 
   selectedApprove: any = [];
@@ -38,18 +38,30 @@ export class IssueTransactionComponent implements OnInit {
     this.token = sessionStorage.getItem('token')
   }
 
-  ngOnInit() {
-    this.getIssues();
+  ngOnInit() { }
+
+  async refresh(state: State) {
+    const offset = +state.page.from;
+    const limit = +state.page.size;
+    this.modalLoading.show();
+    try {
+      const rs = await this.issueService.list(limit, offset, this.status);
+      this.issues = rs.rows;
+      this.total = rs.total;
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
   }
-
-
 
   async getIssues() {
     this.modalLoading.show();
     try {
-      const rs = await this.issueService.list();
+      const rs = await this.issueService.list(this.perPage, 0, this.status);
       if (rs.ok) {
         this.issues = rs.rows;
+        this.total = +rs.total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -90,23 +102,21 @@ export class IssueTransactionComponent implements OnInit {
   }
 
   async approveIssueCheck() {
-    const accessName = 'WM_ISSUE_APPROVE'
-    this.page = 1
-    this.action = 'WM_ISSUES'
-    this.titel = 'รายการใบตัดจ่าย'
-    console.log(accessName);
+    const accessName = 'WM_ISSUE_APPROVE';
+    this.page = 1;
+    this.action = 'WM_ISSUES';
+    this.titel = 'รายการใบตัดจ่าย';
 
     if (this.accessCheck.can(accessName)) {
       this.approveIssue()
-      this.openModalConfirm = false
+      this.openModalConfirm = false;
     } else {
-      this.openModalConfirm = true
+      this.openModalConfirm = true;
     }
   }
 
   async checkApprove(username: any, password: any) {
     let rs: any = await this.issueService.checkApprove(username, password, this.action);
-    console.log(rs);
 
     if (rs.ok) {
       if (this.page === 1) {
@@ -155,10 +165,6 @@ export class IssueTransactionComponent implements OnInit {
     this.selectedApprove = [];
   }
 
-  refresh(state: State) {
-
-  }
-
   showReport(issues_id: any) {
     const poItems: Array<any> = [];
     if (issues_id === '') {
@@ -169,29 +175,12 @@ export class IssueTransactionComponent implements OnInit {
       poItems.push('issue_id=' + issues_id);
     }
     const url = this.apiUrl + `/report/issueStraff/?token=${this.token}&` + poItems.join('&');
-    console.log(poItems);
-    console.log(url);
 
     this.htmlPreview.showReport(url);
   }
 
   async filterApproved(value: any) {
-    try {
-      const rs = await this.issueService.list();
-      if (rs.ok) {
-        if (value) {
-          this.issues = rs.rows.filter(g => g.approved === value);
-        } else {
-          this.issues = rs.rows;
-        }
-      } else {
-        this.alertService.error(rs.error);
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error.message);
-    }
+    this.getIssues();
   }
 
 }
