@@ -79,6 +79,8 @@
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let order of waitingApproves" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y', 'isWarning': order.confirm_qty <= 0 || !order.confirm_qty}">
           <clr-dg-action-overflow>
+            <button class="action-item" (click)="printApprove(order)">พิมพ์ใบอนุมัติเบิก</button>
+            <button class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button>
             <button class="action-item" [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0" (click)="approveRequisitionCheck(order)">อนุมัติใบจ่าย</button>                        
             <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrderConfirm(order)">ยกเลิกใบจ่าย</button>
           </clr-dg-action-overflow>
