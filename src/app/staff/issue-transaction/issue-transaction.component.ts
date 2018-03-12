@@ -15,7 +15,7 @@ export class IssueTransactionComponent implements OnInit {
 
   issues = [];
   total = 0;
-  perPage = 2;
+  perPage = 20;
   status = '';
 
   selectedApprove: any = [];
