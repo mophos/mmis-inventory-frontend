@@ -335,8 +335,7 @@ export class RequisitionNewComponent implements OnInit {
 
   async save() {
     this.isSave = true;
-    const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-
-    ${this.requisitionDate.date.day}` : null;
+    const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-${this.requisitionDate.date.day}` : null;
     this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
       .then(async () => {
         const order: IRequisitionOrder = {};
