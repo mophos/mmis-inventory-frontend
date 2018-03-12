@@ -9,7 +9,7 @@
   <clr-dg-column style="width: 120px;"[clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
   <clr-dg-column style="width: 200px;" [clrDgField]="'his'">รหัสยา (HIS)</clr-dg-column>
   <clr-dg-column style="width: 120px;" [clrDgField]="'conversion'">Conversion</clr-dg-column>
-  <clr-dg-column style="width: 100px; text-align: center;">#</clr-dg-column>
+  <clr-dg-column style="width: 120px; text-align: center;">#</clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let m of mappings; let idx = index">
     <!-- <wm-his-mappings-directives *clrIfExpanded ngProjectAs="clr-dg-row-detail" [genericId]="m.generic_id"></wm-his-mappings-directives> -->
@@ -22,10 +22,15 @@
     <clr-dg-cell>
       <input type="text" wmNumberWithOutDot class="wm-edit-box-number" #conversion (keyup)="onChangeConversion(conversion.value, m)" style="background-color: #FFF9C4" #conversion [value]="m.conversion || 1">
     </clr-dg-cell>
-    <clr-dg-cell>
-      <button class="btn btn-sm btn-success wm-small-btn" (click)="save(m)">
-        <clr-icon shape="floppy"></clr-icon>
-      </button>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group">
+        <button class="btn btn-sm btn-success wm-small-btn" (click)="save(m)">
+          <clr-icon shape="floppy"></clr-icon>
+        </button>
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeMapping(m)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
     </clr-dg-cell>
   </clr-dg-row>
 

@@ -70,9 +70,9 @@ export class WarehouseService {
     });
   }
 
-  removeMapping(productId: any) {
+  removeMapping(genericId: any) {
     return new Promise((resolve, reject) => {
-      this.authHttp.delete(`${this.url}/warehouses/mapping/remove/${productId}`)
+      this.authHttp.delete(`${this.url}/warehouses/mapping/remove/${genericId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
