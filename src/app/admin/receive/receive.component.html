@@ -39,7 +39,8 @@
         <clr-dg-column style="width: 120px;">เลือก</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let purchase of purchases; let idx = index">
-          <clr-dg-cell>{{purchase.purchase_order_number}}</clr-dg-cell>
+          <clr-dg-cell *ngIf="!purchase.purchase_order_book_number">{{purchase.purchase_order_number}}</clr-dg-cell>
+          <clr-dg-cell *ngIf="purchase.purchase_order_book_number">{{purchase.purchase_order_book_number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{purchase.order_date | toThaiDate }}</clr-dg-cell>
           <clr-dg-cell>{{purchase.contract_id}}</clr-dg-cell>
           <clr-dg-cell>{{purchase.labeler_name}}</clr-dg-cell>
@@ -118,7 +119,8 @@
           <wm-product-detail *clrIfExpanded [receiveId]="w.receive_id" ngProjectAs="clr-dg-row-detail"></wm-product-detail>
           <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_code || w.receive_tmp_code}}</clr-dg-cell>
-          <clr-dg-cell>{{w.purchase_order_number}}</clr-dg-cell>
+          <clr-dg-cell *ngIf="!w.purchase_order_book_number">{{w.purchase_order_number}}</clr-dg-cell>
+          <clr-dg-cell *ngIf="w.purchase_order_book_number">{{w.purchase_order_book_number}}</clr-dg-cell>
           <clr-dg-cell>{{w.labeler_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">
             <div class="btn-group btn-success">
