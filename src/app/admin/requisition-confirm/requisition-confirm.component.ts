@@ -136,10 +136,10 @@ export class RequisitionConfirmComponent implements OnInit {
               }
             });
           }
+
           this.products.push(obj);
         });
 
-        console.log(this.products);
       } else {
         this.alertService.error(rs.error);
       }
