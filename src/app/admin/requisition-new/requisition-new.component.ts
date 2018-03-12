@@ -236,7 +236,7 @@ export class RequisitionNewComponent implements OnInit {
     this.selectedWorkingCode = generic.working_code;
     this.selectedRemainQty = generic.qty;
     this.selectedRequisitionQty = 1;
-    
+
     this.selectUnits.getUnits(generic.generic_id);
   }
 
@@ -293,7 +293,7 @@ export class RequisitionNewComponent implements OnInit {
           product.to_unit_qty = 0;
           product.unit_generic_id = null;
           product.working_code = v.working_code;
-          product.remain_qty = 0;
+          product.remain_qty = v.remain_qty;
 
           this.products.push(product);
         });
@@ -388,7 +388,7 @@ export class RequisitionNewComponent implements OnInit {
         this.isSave = false;
         this.modalLoading.hide();
       })
-    
+
   }
 
   async getTemplates(event: any) {

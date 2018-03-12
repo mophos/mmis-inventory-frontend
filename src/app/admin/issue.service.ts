@@ -43,8 +43,8 @@ export class IssueService {
     return rs.json();
   }
 
-  async list() {
-    const rs = await this.authHttp.get(`${this.url}/issues`).toPromise();
+  async list(limit: number, offset: number, status: any = '') {
+    const rs = await this.authHttp.get(`${this.url}/issues?limit=${limit}&offset=${offset}&status=${status}`).toPromise();
     return rs.json();
   }
 

@@ -97,7 +97,10 @@
                   <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printProductRecive()">
                     <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
                   </clr-button>
-                  <clr-button [clrInMenu]="true" (click)="printRecivePO()">
+                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printReceive()">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับ
+                  </clr-button>
+                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printreceiveApprovePO()">
                     <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ
                   </clr-button>
                 </clr-button-group>
@@ -237,6 +240,7 @@
           </div>
         </div>
       </div>
+
       <clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px;">
         <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
@@ -266,8 +270,8 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pageOther.firstItem + 1 | number}} - {{pageOther.lastItem + 1 | number}} จาก {{pageOther.totalItems | number}} รายการ
-          <clr-dg-pagination #pageOther [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceiveOther"></clr-dg-pagination>
+          {{pagePurchaseExpired.firstItem + 1 | number}} - {{pagePurchaseExpired.lastItem + 1 | number}} จาก {{pagePurchaseExpired.totalItems | number}} รายการ
+          <clr-dg-pagination #pagePurchaseExpired [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -293,7 +297,7 @@
           </div>
         </div>
       </div>
-      <clr-datagrid (clrDgRefresh)="refreshOther($event)" [style.height.%]="83">
+      <clr-datagrid [style.height.%]="83">
         <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column style="width: 180px;">ประเภทการรับ</clr-dg-column>
@@ -303,7 +307,7 @@
         <clr-dg-column>หมายเหตุ</clr-dg-column>
         <!-- <clr-dg-column style="width: 150px;"></clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let w of otherExpired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
+        <clr-dg-row *clrDgItems="let w of otherExpired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
           <wm-product-receive-other-detail [receiveOtherId]="w.receive_other_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-product-receive-other-detail>
           <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_code}}</clr-dg-cell>
@@ -312,22 +316,11 @@
           <clr-dg-cell style="text-align: right;">{{w.total | number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{w.cost | number: '1.2-2'}}</clr-dg-cell>
           <clr-dg-cell>{{w.comment_expired}}</clr-dg-cell>
-          <!-- <clr-dg-cell style="text-align: center;">
-              <div class="btn-group btn-success">
-                <button title="แก้ไขข้อมูล/อนุมัติ" class="btn btn-primary btn-icon btn-sm wm-small-btn" [disabled]="w.approve_id" [routerLink]="['/admin/receives/other/edit']"
-                  [queryParams]="{receiveOtherId: w.receive_other_id}">
-                  <clr-icon shape="note"></clr-icon>
-                </button>
-                <button title="ยกเลิกใบรับ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeReceiveOther(w)" [disabled]="loading || w.approve_id">
-                  <clr-icon shape="trash"></clr-icon>
-                </button>
-              </div>
-            </clr-dg-cell> -->
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pageOther.firstItem + 1 | number}} - {{pageOther.lastItem + 1 | number}} จาก {{pageOther.totalItems | number}} รายการ
-          <clr-dg-pagination #pageOther [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceiveOther"></clr-dg-pagination>
+          {{pageOtherCancel.firstItem + 1 | number}} - {{pageOtherCancel.lastItem + 1 | number}} จาก {{pageOtherCancel.totalItems | number}} รายการ
+          <clr-dg-pagination #pageOtherCancel [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -421,21 +414,6 @@
   </div>
   <div class="modal-footer" style="padding-top: 0px;">
     <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkApprove(username,password)">บันทึก</button>
-    <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
-  </div>
-</clr-modal>
-<clr-modal [(clrModalOpen)]="modalReportFPO" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
-  <h3 class="modal-title">พิมพ์ใบตรวจรับตามใบสั่งซื้อ{{titel}}</h3>
-  <div class="modal-body" style="height:150px">
-    <div class="select">
-      <select id="receiveApprovePO" [(ngModel)]="receiveApprovePO_id" name="receiveApprovePO">
-        <option value='' >เลือกใบสั่งซื้อ</option>
-        <option [value]="v.purchase_order_id" *ngFor="let v of receiveApprovePO">{{v.purchase_order_number}}</option>
-      </select>
-    </div>
-  </div>
-  <div class="modal-footer" style="padding-top: 0px;">
-    <button type="button" class="btn btn-md btn-primary" [disabled]="receiveApprovePO_id === ''" (click)="printreceiveApprovePO(receiveApprovePO_id)">บันทึก</button>
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
 </clr-modal>

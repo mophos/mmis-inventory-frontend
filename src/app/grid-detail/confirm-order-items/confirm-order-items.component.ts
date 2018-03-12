@@ -96,8 +96,6 @@ export class ConfirmOrderItemsComponent implements OnInit {
             obj.confirm_qty = 0;
           }
           obj.total_small_qty = v.confirm_qty * v.conversion_qty;
-
-          console.log(obj);
           this.items.push(obj);
         });
         this.calTotal();
