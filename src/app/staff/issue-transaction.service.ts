@@ -61,8 +61,8 @@ export class IssueTransactionService {
     return rs.json();
   }
 
-  async list() {
-    const rs = await this.authHttp.get(`${this.url}/staff/issue-transaction`).toPromise();
+  async list(limit: number = 10, offset: number = 0, status = '') {
+    const rs = await this.authHttp.get(`${this.url}/staff/issue-transaction?limit=${limit}&offset=${offset}&status=${status}`).toPromise();
     return rs.json();
   }
 
@@ -88,10 +88,12 @@ export class IssueTransactionService {
     const rs = await this.authHttp.get(`${this.url}/staff/issue-transaction/info/summary?issueId=${issueId}`).toPromise();
     return rs.json();
   }
+
   async getGenericQty(genericId: any, warehouseId: any) {
     const rs = await this.authHttp.get(`${this.url}/staff/issue-transaction/generic/qty/${genericId}/${warehouseId}`).toPromise();
     return rs.json();
   }
+  
   async getIssuesProduct(data: any) {
     const rs = await this.authHttp.post(`${this.url}/generics/allocate`, {data: data}).toPromise();
     return rs.json();
