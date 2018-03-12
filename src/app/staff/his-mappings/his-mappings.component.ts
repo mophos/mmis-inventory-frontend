@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { WarehouseService } from './../../admin/warehouse.service';
 import { AlertService } from '../../alert.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'wm-his-mappings',
@@ -8,10 +9,11 @@ import { AlertService } from '../../alert.service';
 })
 export class HisMappingsComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
-
   mappings = [];
 
-  constructor(private warehouseService: WarehouseService, private alertService: AlertService) { }
+  constructor(
+    private warehouseService: WarehouseService,
+    private alertService: AlertService) { }
 
   ngOnInit() {
     this.getMappings();
@@ -29,42 +31,39 @@ export class HisMappingsComponent implements OnInit {
     }
   }
 
-  removeItem(idx: any, productId: any) {
-    this.alertService.confirm('ต้องการยกเลิกรายการ Mapping นี้ ใช่หรือไม่?')
-      .then(() => {
-        this.modalLoading.show();
-        this.warehouseService.removeMapping(productId)
-          .then((rs: any) => {
-            if (rs.ok) {
-              this.alertService.success();
-              this.mappings[idx].conversion = 1;
-              this.mappings[idx].his = null;
-            } else {
-              this.alertService.error(rs.error);
-            }
-            this.modalLoading.hide();
-          })
-          .catch((error: any) => {
-            this.modalLoading.hide();
-            this.alertService.error(error.message);
-          });
-      }).catch(() => { });
+  onChangeCode(his: any, generic: any) {
+    let idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.mappings[idx].mmis = generic.generic_id;
+      this.mappings[idx].his = his;
+    }
   }
 
-  saveItem(mmis: any, his: any, conversion: any) {
-    this.modalLoading.show();
-    this.warehouseService.saveMapping(mmis, his, conversion)
-      .then((rs: any) => {
+  onChangeConversion(conversion: any, generic: any) {
+    let idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.mappings[idx].mmis = generic.generic_id;
+      this.mappings[idx].conversion = +conversion;
+    }
+  }
+
+  async save(generic: any) {
+    if (generic.mmis && generic.his) {
+      try {
+        let conversion = generic.conversion || 1;
+        let rs: any = await this.warehouseService.saveMapping(generic.mmis, generic.his, conversion);
         if (rs.ok) {
           this.alertService.success();
         } else {
           this.alertService.error(rs.error);
         }
-        this.modalLoading.hide();
-      })
-      .catch((error: any) => {
-        this.modalLoading.hide();
-        this.alertService.error(error.message);
-      });
+      } catch (error) {
+        console.log(error);
+        this.alertService.error(JSON.stringify(error));
+      }
+    } else {
+      this.alertService.error('กรุณาระบุข้อมูลให้ครบ')
+    }
+    console.log(generic);
   }
 }

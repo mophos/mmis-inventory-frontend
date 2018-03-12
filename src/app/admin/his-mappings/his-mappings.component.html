@@ -1,27 +1,37 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
-  <span class="breadcrumb-item active">Map รหัสยากับ HIS</span>
+  <span class="breadcrumb-item active">Map รหัสยา (Generic) กับ HIS</span>
 </nav>
 
-<clr-datagrid [style.height.%]="90">
-  <clr-dg-column [clrDgField]="'generic_id'">รหัสยา (MMIS)</clr-dg-column>
+<clr-datagrid class="order-form">
+  <clr-dg-column style="width: 150px;" [clrDgField]="'working_code'">Working Code</clr-dg-column>
   <clr-dg-column [clrDgField]="'generic_name'">รายละเอียด</clr-dg-column>
-  <clr-dg-column [clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
-  <clr-dg-column [clrDgField]="''"></clr-dg-column>
+  <clr-dg-column style="width: 120px;"[clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
+  <clr-dg-column style="width: 200px;" [clrDgField]="'his'">รหัสยา (HIS)</clr-dg-column>
+  <clr-dg-column style="width: 120px;" [clrDgField]="'conversion'">Conversion</clr-dg-column>
+  <clr-dg-column style="width: 100px; text-align: center;">#</clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let m of mappings; let idx = index">
-    <wm-his-mappings-directives *clrIfExpanded ngProjectAs="clr-dg-row-detail" [genericId]="m.generic_id"></wm-his-mappings-directives>
+    <!-- <wm-his-mappings-directives *clrIfExpanded ngProjectAs="clr-dg-row-detail" [genericId]="m.generic_id"></wm-his-mappings-directives> -->
     <clr-dg-cell>{{m.generic_id}}</clr-dg-cell>
-    <clr-dg-cell>{{m.generic_name}} ({{m.generic_name}})</clr-dg-cell>
-    <clr-dg-cell>{{m.base_unit_name}}</clr-dg-cell>
+    <clr-dg-cell>{{m.generic_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">{{m.base_unit_name}}</clr-dg-cell>
     <clr-dg-cell>
-        <clr-icon shape="check" class="is-success" *ngIf="m.his > 0"></clr-icon>
+      <input type="text" class="wm-edit-box-number" #his (keyup)="onChangeCode(his.value, m)" style="background-color: #FFF9C4" #his [value]="m.his">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" wmNumberWithOutDot class="wm-edit-box-number" #conversion (keyup)="onChangeConversion(conversion.value, m)" style="background-color: #FFF9C4" #conversion [value]="m.conversion || 1">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <button class="btn btn-sm btn-success wm-small-btn" (click)="save(m)">
+        <clr-icon shape="floppy"></clr-icon>
+      </button>
     </clr-dg-cell>
   </clr-dg-row>
 
   <clr-dg-footer>
     {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
-    <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
+    <clr-dg-pagination #pagination [clrDgPageSize]="20"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
 
