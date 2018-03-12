@@ -25,5 +25,5 @@ export class HisTransactionService {
     }).toPromise();
     return resp.json();
   }
-
+  
 }

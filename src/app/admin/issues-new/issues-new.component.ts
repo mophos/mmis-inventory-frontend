@@ -12,8 +12,8 @@ import { ProductsService } from '../products.service';
 import { BasicService } from 'app/basic.service';
 import { IssueService } from 'app/admin/issue.service';
 import { SettingService } from '../../setting.service';
-// import { HisTransactionService } from 'app/staff/his-transaction.service';
-// import { HisTransactionService } from 'app/admin/his-transaction.service';
+import { UploadingService } from 'app/uploading.service';
+
 @Component({
   selector: 'wm-issues-new',
   templateUrl: './issues-new.component.html',
@@ -83,7 +83,7 @@ export class IssuesNewComponent implements OnInit {
     private productService: ProductsService,
     private basicService: BasicService,
     private issueService: IssueService,
-    // private hisTransactionService: HisTransactionService,
+    private uploadingService: UploadingService,
     @Inject('API_URL') private apiUrl: string,
     private zone: NgZone,
     private periodService: PeriodService,
@@ -205,12 +205,11 @@ export class IssuesNewComponent implements OnInit {
     }
     this.clearForm();
   }
+
   async alowcate(genericId) {
     try {
       const idx = _.findIndex(this.products, { generic_id: genericId })
       let _data = {};
-      console.log(idx);
-      console.log(genericId);
       
       if (idx > -1) {
         _data = {
@@ -218,16 +217,9 @@ export class IssuesNewComponent implements OnInit {
           genericQty: this.products[idx].issue_qty * this.products[idx].conversion_qty
         };
       }
-      // else {
-      //   const _data = {
-      //     genericId: this.products[0].genericId,
-      //     genericQty: this.products[0].issue_qty * this.products[0].conversion_qty
-      //   };
-      // }
-     
+
       const data_ = [];
       data_.push(_data);
-      console.log(data_);
       
       const result: any = await this.issueService.getIssuesProduct(data_);
       if (result.ok) {
@@ -236,9 +228,6 @@ export class IssuesNewComponent implements OnInit {
         if (idx > -1) {
           this.products[idx].items = list;
         }
-        console.log(list);
-
-        // console.log(this.list);
       } else {
         console.log(result.error);
         this.alertService.error();
@@ -247,6 +236,7 @@ export class IssuesNewComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
+
   editChangeIssueQty(idx: any, qty: any) {
     // const oldQty = +this.products[idx].issue_qty;
     if (+qty.value > +this.products[idx].qty) {
@@ -267,7 +257,6 @@ export class IssuesNewComponent implements OnInit {
       this.products[idx].unit_generic_id = event.unit_generic_id;
       this.products[idx].conversion_qty = event.qty;
     }
-    console.log(this.products);
 
   }
 
@@ -396,67 +385,82 @@ export class IssuesNewComponent implements OnInit {
   }
 
   // file upload
+  showUploadModal() {
+    this.openUpload = true;
+  }
 
-  // showUploadModal() {
-  //   this.openUpload = true;
-  // }
+  fileChangeEvent(fileInput: any) {
+    this.file = <Array<File>>fileInput.target.files;
+    this.fileName = this.file[0].name;
+  }
 
-  // fileChangeEvent(fileInput: any) {
-  //   this.file = <Array<File>>fileInput.target.files;
-  //   this.fileName = this.file[0].name;
-  // }
+  async doUpload() {
+    try {
+      this.modalLoading.show();
+      let rs: any = await this.uploadingService.uploadIssueTransaction(this.file[0]);
+      this.modalLoading.hide();
+      // clear products
+      this.products = [];
 
-  // async doUpload() {
-  //   try {
-  //     this.modalLoading.show();
+      if (rs.ok) {
+        let data = [];
+        rs.rows.forEach(v => {
+          const obj: any = {};
+          obj.issue_qty = v.issue_qty;
+          obj.generic_id = v.generic_id;
+          obj.generic_name = v.generic_name;
+          obj.remain_qty = +v.remain_qty;
+          obj.conversion_qty = 0;
+          obj.unit_generic_id = null;
+          obj.warehouse_id = this.warehouseId;
+          obj.items = [];
+          this.products.push(obj);
 
-  //     this.hisTransactionService.uploadTransaction(this.file[0])
-  //       .then((result: any) => {
-  //         if (result.ok) {
-  //           this.openUpload = false;
-  //           // add product
-  //           this.products = [];
-  //           result.rows.forEach(v => {
-  //             const obj = {
-  //               product_id: v.product_id,
-  //               product_name: v.product_name,
-  //               generic_id: v.generic_id,
-  //               lot_no: null,
-  //               expired_date: null,
-  //               issue_qty: +v.qty,
-  //               remain_qty: 0,
-  //               unit_generic_id: null,
-  //               conversion_qty: 0,
-  //               location_id: null,
-  //               warehouse_id: this.warehouseId
-  //             };
+          data.push({
+            genericId: v.generic_id,
+            genericQty: v.issue_qty
+          });
+        });
 
-  //             this.products.push(obj);
-  //           });
+        this.getAllowcateData(data);
 
-  //         } else {
-  //           this.alertService.error(JSON.stringify(result.error));
-  //         }
-  //         this.modalLoading.hide();
-  //       }, (error) => {
-  //         this.modalLoading.hide();
-  //         this.alertService.error(JSON.stringify(error));
-  //       });
-  //   } catch (error) {
-  //     this.modalLoading.hide();
-  //     this.alertService.error(JSON.stringify(error));
-  //   }
-  // }
+        this.openUpload = false;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+      
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
+    }
+  }
+
+  async getAllowcateData(data) {
+    const result: any = await this.issueService.getIssuesProduct(data);
+    if (result.ok) {
+      const list = result.rows;
+      this.products.forEach((v, i) => {
+        let idx = _.findIndex(list, { generic_id: v.generic_id });
+        if (idx > -1) {
+          this.products[i].items.push(list[idx]);
+        }
+      });
+
+    } else {
+      console.log(result.error);
+      this.alertService.error();
+    }
+  }
+
   setSelectedGeneric(e) {
     this.products.push(e);
   }
+
   changeQtyGrid(e) {
-    console.log(e);
     let total_base = 0;
     e.forEach(v => {
       total_base += (+v.product_qty * +v.conversion_qty);
     });
-    console.log(total_base);
     
     let idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
     if (idx > -1) {
