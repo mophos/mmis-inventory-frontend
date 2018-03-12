@@ -24,7 +24,7 @@ export class TransferComponent implements OnInit {
   token: string;
   jwtHelper: JwtHelper = new JwtHelper();
   warehouseId: string;
-  isRemoving: boolean = false;
+  isRemoving = false;
   approveStatus = 1;
 
   notApproveReceiveItems = [];
@@ -205,7 +205,7 @@ export class TransferComponent implements OnInit {
 
   async getTransfer(value: any) {
     try {
-      let rs: any = await this.transferService.all(this.warehouseId)
+      const rs: any = await this.transferService.all(this.warehouseId)
       if (rs.ok) {
         if (value === '1') {
           this.transfers = rs.rows;
