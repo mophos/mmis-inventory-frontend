@@ -176,7 +176,7 @@ export class ReceiveComponent implements OnInit {
         const rs = await this.receiveService.getReceiveOther(limit, offset);
         await this.getReceiveOtherExpired();
         this.others = rs.rows;
-        this.totalReceive = rs.total;
+        this.totalReceiveOther = rs.total;
         this.modalLoading.hide();
       } catch (error) {
         this.modalLoading.hide();
@@ -186,7 +186,7 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getWaitingSearchOther(limit, offset, this.query);
       await this.getReceiveOtherExpiredSearch();
       this.others = rs.rows;
-      this.totalReceive = rs.total;
+      this.totalReceiveOther = rs.total;
       this.isSearching = true;
       this.modalLoading.hide();
     }
