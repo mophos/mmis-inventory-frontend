@@ -234,12 +234,12 @@ export class RequisitionComponent implements OnInit {
       });
   }
   printApprove(order: any) {
-    let url = this.url + `/report/approve/requis/` + order.requisition_order_id + `?token=${this.token}`;
+    const url = this.url + `/report/approve/requis/` + order.requisition_order_id + `?token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
   printSetProduct(order: any) {
-    let url = this.url + `/report/list/requis/` + order.requisition_order_id + `?token=${this.token}`;
-    this.htmlPreview.showReport(url);
+    const url = this.url + `/report/list/requis/` + order.requisition_order_id + `?token=${this.token}`;
+    this.htmlPreview.showReport(url, 'landscape');
   }
   cancelUnpaid(order: any) {
     this.alertService.confirm('ต้องการเปลี่ยนสถานะเป็น ไม่ค้างจ่าย ใช่หรือไม่?')
