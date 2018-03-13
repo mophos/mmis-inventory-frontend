@@ -16,15 +16,15 @@ export class RequisitionOrderItemsPayComponent implements OnInit {
 
   constructor(private requisitionService: RequisitionService, private alertService: AlertService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loading = true;
-    this.getGenericList();
+    await this.getGenericList();
   }
 
   async getGenericList() {
 
     try {
-      let rs: any = await this.requisitionService.getRequisitionOrderItemsPay(this.requisitionId, this.confirmId);
+      const rs: any = await this.requisitionService.getRequisitionOrderItemsPay(this.requisitionId, this.confirmId);
       this.loading = false;
       if (rs.ok) {
         this.items = rs.rows;
@@ -33,7 +33,7 @@ export class RequisitionOrderItemsPayComponent implements OnInit {
       }
     } catch (error) {
       this.loading = false;
-      this.alertService.error(error.message); 
+      this.alertService.error(error.message);
     }
   }
 
