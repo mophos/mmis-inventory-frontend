@@ -56,7 +56,7 @@
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="select">
-              <select [disabled]="isUpdate" name="slWarehouse" id="slWarehouse" [(ngModel)]="wmWithdraw" (change)="getTemplates($event)">
+              <select [disabled]="isUpdate" name="slWarehouse" id="slWarehouse" [(ngModel)]="wmWithdraw" (change)="getTemplates()">
                 <option value="">
                   <กรุณาเลือกคลัง>
                 </option>
@@ -95,7 +95,7 @@
   <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
   <clr-dg-column style="width: 200px;">Package</clr-dg-column>
   <clr-dg-column style="width: 120px;">รวม (Base)</clr-dg-column>
-  <clr-dg-column style="width: 120px;">คงเหลือ (Base)</clr-dg-column>
+  <clr-dg-column style="width: 120px;">คงเหลือ (Pack)</clr-dg-column>
   <clr-dg-column style="width: 50px;"></clr-dg-column>
 
   <clr-dg-row *ngFor="let g of products;let idx=index;">
@@ -108,7 +108,7 @@
       <wm-select-receive-unit [genericId]="g.generic_id" [selectedUnitGenericId]="g.unit_generic_id" (onSelect)="onChangeEditUnit($event, idx)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{g.to_unit_qty * g.requisition_qty | number}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{g.remain_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{(g.remain_qty - (g.to_unit_qty * g.requisition_qty))/g.to_unit_qty | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="removeItem(idx)">
@@ -131,7 +131,7 @@
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{ selectedRequisitionQty * selectedSmallQty | number }}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
-      <span [ngStyle]="{'color: red': selectedRemainQty < (selectedRequisitionQty * selectedSmallQty), 'color: green': selectedRemainQty >= (selectedRequisitionQty * selectedSmallQty)}">{{selectedRemainQty || 0 | number}}</span>
+      <span [ngStyle]="{'color: red': selectedRemainQty < (selectedRequisitionQty * selectedSmallQty), 'color: green': selectedRemainQty >= (selectedRequisitionQty * selectedSmallQty)}">{{(selectedRemainQty - (selectedRequisitionQty * selectedSmallQty)) / selectedSmallQty || 0 | number}}</span>
       <!-- <span style="color: green;" *ngIf=" ">{{selectedRemainQty | number}}</span> -->
     </clr-dg-cell>
 

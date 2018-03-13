@@ -44,7 +44,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
     try {
       const resp: any = await this.warehouseService.getWarehouse();
       if (resp.ok) {
-        this.srcWarehouses = _.sortBy(resp.rows, 'warehouse_id');
+        this.srcWarehouses = _.sortBy(resp.rows, 'short_code');
       } else {
         this.alertService.error(resp.error);
       }
@@ -68,7 +68,6 @@ export class RequisitionTemplateNewComponent implements OnInit {
       this.alertService.error('มีรายการนี้อยู่แล้ว');
     } else {
       this.products2.push(e);
-      
       this.genericSearch.clearSearch();
     }
   }
@@ -164,7 +163,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
       });
   }
   editChangeUnit(g, e) {
-    const idx = _.findIndex(this.products2,{'generic_id':g.generic_id})   
+    const idx = _.findIndex(this.products2, { 'generic_id': g.generic_id })
     this.products2[idx].unit_generic_id = e.unit_generic_id
   }
   sort() {
