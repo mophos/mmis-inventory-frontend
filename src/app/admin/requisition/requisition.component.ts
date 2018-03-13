@@ -36,7 +36,7 @@ export class RequisitionComponent implements OnInit {
   approveds: any = [];
   unpaids: any = [];
   waitingApproves: any = [];
-  
+  requisitionSelected: Array<any> = [];
   title: any;
   isConfirm: any;
   openModalConfirm: boolean = false
@@ -46,7 +46,7 @@ export class RequisitionComponent implements OnInit {
   password: any
   action: any
   page: any
-
+  tabSelect: any = 0
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
@@ -72,6 +72,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getWaiting() {
+    this.tabSelect = 1
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getWating();
@@ -88,6 +89,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getUnPaid() {
+    this.tabSelect = 4
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getUnPaid();
@@ -104,6 +106,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getWaitingApprove() {
+    this.tabSelect = 2
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getWaitingApprove();
@@ -120,6 +123,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getApproved() {
+    this.tabSelect = 3
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getApproved();
@@ -201,7 +205,7 @@ export class RequisitionComponent implements OnInit {
         this.openModalConfirm = false
       }
     } else {
-      this.alertService.error('ไม่มีสิทธิ์อนุมัติ'+this.title);
+      this.alertService.error('ไม่มีสิทธิ์อนุมัติ' + this.title);
     }
   }
 
@@ -233,13 +237,37 @@ export class RequisitionComponent implements OnInit {
         this.modalLoading.hide();
       });
   }
-  printApprove(order: any) {
-    const url = this.url + `/report/approve/requis/` + order.requisition_order_id + `?token=${this.token}`;
-    this.htmlPreview.showReport(url);
+  printApprove() {
+    let requisition_id: any = []
+    let count: any = 0
+    this.requisitionSelected.forEach(e => {
+      if (e.is_cancel !== 'Y') {
+        requisition_id.push('requisId=' + e.requisition_order_id);
+        count++;
+      }
+    });
+    if (count > 0) {
+      const url = this.url + `/report/approve/requis?token=${this.token}&` + requisition_id.join('&');
+      this.htmlPreview.showReport(url);
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
   }
-  printSetProduct(order: any) {
-    const url = this.url + `/report/list/requis/` + order.requisition_order_id + `?token=${this.token}`;
-    this.htmlPreview.showReport(url, 'landscape');
+  printSetProduct() {
+    let requisition_id: any = []
+    let count: any = 0
+    this.requisitionSelected.forEach(e => {
+      if (e.is_cancel !== 'Y') {
+        requisition_id.push('requisId=' + e.requisition_order_id);
+        count++;
+      }
+    });
+    if (count > 0) {
+      const url = this.url + `/report/list/requis?token=${this.token}&` + requisition_id.join('&');
+      this.htmlPreview.showReport(url, 'landscape');
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
   }
   cancelUnpaid(order: any) {
     this.alertService.confirm('ต้องการเปลี่ยนสถานะเป็น ไม่ค้างจ่าย ใช่หรือไม่?')
