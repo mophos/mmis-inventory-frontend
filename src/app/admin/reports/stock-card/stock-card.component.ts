@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 @Component({
   selector: 'wm-stock-card',
   templateUrl: './stock-card.component.html',
@@ -46,7 +47,7 @@ export class StockCardComponent implements OnInit {
       generic_name: generic.generic_name,
     });
     this.generic_id.push('genericId=' + generic.generic_id)
-    console.log(this.generic_id);
+    // console.log(this.generic_id);
   }
 
   changeSearchGeneric(generic) {
@@ -54,13 +55,11 @@ export class StockCardComponent implements OnInit {
   }
 
   showReport() {
-    if (this.selectedGenericId !== '' && this.startDate !== '' && this.endDate !== '') {
-      this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
-      this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-      const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}
-      &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
-      this.htmlPreview.showReport(url);
-    }
+    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}
+    &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
+    // this.htmlPreview.showReport(url);
   }
 
   refresh() {
@@ -73,6 +72,16 @@ export class StockCardComponent implements OnInit {
 
   setSelectedWarehouse(event) {
     this.warehouseId = event.warehouse_id;
+  }
+
+  removeSelected(g) {
+    const idx = _.findIndex(this.datageneric, { generic_id: g.generic_id });
+    if (idx > -1) {
+      this.datageneric.splice(idx, 1);
+      this.generic_id.splice(idx, 1)
+    }
+    // console.log(this.datageneric);
+    // console.log(this.generic_id);
   }
 
 }
