@@ -9,8 +9,18 @@
       <clr-icon shape="plus"></clr-icon> เบิกสินค้าและเวชภัณฑ์
     </button>
   </div>
-</div>
 
+  <div *ngIf="tabSelect === 2" class="col-md-6"  style="padding-top: 5px; padding-bottom: 5px;float:right;">
+    <clr-button-group >
+      <clr-button  [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printApprove()">
+        <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติเบิก
+      </clr-button>
+      <clr-button  [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printSetProduct()">
+        <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก
+      </clr-button>
+    </clr-button-group>
+  </div>
+</div>
 <clr-tabs>
   <clr-tab>
     <button clrTabLink id="link1" (click)="getWaiting()">
@@ -69,8 +79,9 @@
       รายการรออนุมัติ
       <span class="badge badge-warning">{{waitingApproves.length | number}}</span>
     </button>
+    
     <clr-tab-content *clrIfActive>
-      <clr-datagrid style="padding-top: 5px;" >
+      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_date'">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_code'">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -79,8 +90,8 @@
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let order of waitingApproves" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y', 'isWarning': order.confirm_qty <= 0 || !order.confirm_qty}">
           <clr-dg-action-overflow>
-            <button class="action-item" (click)="printApprove(order)">พิมพ์ใบอนุมัติเบิก</button>
-            <button class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button>
+            <!-- <button class="action-item" (click)="printApprove(order)">พิมพ์ใบอนุมัติเบิก</button>
+            <button class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button> -->
             <button class="action-item" [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0" (click)="approveRequisitionCheck(order)">อนุมัติใบจ่าย</button>                        
             <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrderConfirm(order)">ยกเลิกใบจ่าย</button>
           </clr-dg-action-overflow>
