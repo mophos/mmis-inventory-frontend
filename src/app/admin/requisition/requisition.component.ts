@@ -36,7 +36,7 @@ export class RequisitionComponent implements OnInit {
   approveds: any = [];
   unpaids: any = [];
   waitingApproves: any = [];
-
+  
   title: any;
   isConfirm: any;
   openModalConfirm: boolean = false

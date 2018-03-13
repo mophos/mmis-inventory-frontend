@@ -23,6 +23,7 @@ export interface IRequisitionOrderItem {
   primary_unit_name?: any;
   unit_generic_id?: any;
   remain_qty?: number;
+  conversion_qty?: number;
 }
 
 export interface IRequisitionOrder {

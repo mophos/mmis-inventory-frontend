@@ -44,7 +44,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
     try {
       const resp: any = await this.warehouseService.getWarehouse();
       if (resp.ok) {
-        this.srcWarehouses = _.sortBy(resp.rows, 'warehouse_id');
+        this.srcWarehouses = _.sortBy(resp.rows, 'short_code');
       } else {
         this.alertService.error(resp.error);
       }

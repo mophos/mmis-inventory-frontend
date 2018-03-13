@@ -83,7 +83,7 @@ export class RequisitionNewComponent implements OnInit {
   selectedRequisitionQty: any;
   selectedTotalSmallQty: any = 0;
   requisitionCode: any;
-  selectedRemainQty: any = 0;
+  selectedRemainQty: number = 0;
 
   isUpdate = false;
   isSave = false;
@@ -149,7 +149,7 @@ export class RequisitionNewComponent implements OnInit {
       const rs: any = await this.wareHouseService.getWarehouse();
       this.modalLoading.hide();
       if (rs.ok) {
-        this.warehouses = rs.rows;
+        this.warehouses = _.sortBy(rs.rows, 'short_code');
         // this.wareHouses = _.clone(this.tmpwareHouses);
       }
     } catch (error) {
@@ -273,7 +273,6 @@ export class RequisitionNewComponent implements OnInit {
       product.unit_generic_id = this.selectedUnitGenericId;
       product.working_code = this.selectedWorkingCode;
       product.remain_qty = this.selectedRemainQty;
-
       this.products.push(product);
       this.clearItem();
     }
