@@ -68,6 +68,7 @@ export class StockCardComponent implements OnInit {
     this.startDate = '';
     this.endDate = '';
     this.datageneric = [];
+    this.generic_id = [];
   }
 
   setSelectedWarehouse(event) {
