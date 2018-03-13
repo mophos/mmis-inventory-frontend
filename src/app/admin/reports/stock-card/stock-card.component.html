@@ -40,14 +40,21 @@
 <div>
   <clr-datagrid [style.height.%]="85">
     <clr-dg-column [style.width.%]="15" [clrDgField]="'generic_id'">Generic ID</clr-dg-column>
-    <clr-dg-column [style.width.%]="25" [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
+    <clr-dg-column [style.width.%]="50" [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
+    <clr-dg-column [style.width.%]="25"></clr-dg-column>
     <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
     <clr-dg-row *clrDgItems="let product of datageneric" [clrDgItem]="product">
       <clr-dg-cell>{{product.generic_id}}</clr-dg-cell>
       <clr-dg-cell>{{product.generic_name}}</clr-dg-cell>
- 
+      <clr-dg-cell>
+        <div class="btn-group">
+          <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeSelected(product)">
+            <clr-icon shape="trash"></clr-icon>
+          </button>
+        </div>
+      </clr-dg-cell>
     </clr-dg-row>
-  
+
     <clr-dg-footer>
       {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
       <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
