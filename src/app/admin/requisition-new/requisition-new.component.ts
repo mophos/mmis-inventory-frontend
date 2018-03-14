@@ -323,6 +323,11 @@ export class RequisitionNewComponent implements OnInit {
       if (rs.ok) {
         this.templates = [];
         this.withDrawWarehouses = rs.rows;
+        console.log(rs.rows[0]);
+        if (rs.rows.length > 0) {
+          this.wmWithdraw = rs.rows[0].destination_warehouse_id;
+          this.getTemplates();
+        }
       } else {
         this.alertService.error(rs.error);
       }
@@ -390,7 +395,7 @@ export class RequisitionNewComponent implements OnInit {
 
   }
 
-  async getTemplates(event: any) {
+  async getTemplates() {
     try {
       const dstWarehouseId = this.wmWithdraw;
       const srcWarehouseId = this.wmRequisition;
