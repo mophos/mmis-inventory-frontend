@@ -59,7 +59,7 @@ export class StockCardComponent implements OnInit {
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}
     &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
-    // this.htmlPreview.showReport(url);
+    this.htmlPreview.showReport(url);
   }
 
   refresh() {
