@@ -143,6 +143,13 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async cancelUnpaid(requisitionIds: any[]) {
+    let rs: any = await this.authHttp.post(`${this.url}/requisition/unpaid/cancel-unpaid`, {
+      requisitionOrderIds: requisitionIds
+    }).toPromise();
+    return rs.json();
+  }
+
   async saveUnpaidConfirm(unpaidId: any, requisitionId: any, items: any[]) {
     let rs: any = await this.authHttp.post(`${this.url}/requisition/unpaid/confirm`, {
       unpaidId: unpaidId,
