@@ -35,7 +35,7 @@ export class SelectWarehousesComponent implements OnInit {
     this.loading = true;
     try {
       this.warehouses = [];
-      let res = await this.basicService.getWarehouses();
+      const res = await this.basicService.getWarehouses();
       this.loading = false;
       if (res.ok) {
         this.warehouses = res.rows;
@@ -49,7 +49,7 @@ export class SelectWarehousesComponent implements OnInit {
   }
 
   setSelect(event) {
-    let idx = _.findIndex(this.warehouses, { warehouse_id: +this.warehouseId });
+    const idx = _.findIndex(this.warehouses, { warehouse_id: +this.warehouseId });
     this.onSelect.emit(this.warehouses[idx]);
   }
 

@@ -119,7 +119,10 @@
       <span class="badge badge-danger">{{unpaids.length | number}}</span>
     </button>
     <clr-tab-content *clrIfActive>
-      <clr-datagrid style="padding-top: 5px;">
+      <button class="btn btn-sm btn-danger btn-icon" *ngIf="selectedCancel.length" (click)="doCancelUnpaids()">
+        <clr-icon shape="trash"></clr-icon> ยกเลิกค้างจ่าย ({{selectedCancel.length | number}} รายการ)
+      </button>
+      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="selectedCancel">
         <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
