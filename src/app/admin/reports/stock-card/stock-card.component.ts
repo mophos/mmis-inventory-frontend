@@ -13,7 +13,6 @@ export class StockCardComponent implements OnInit {
   @ViewChild('searchGenericCmp') public searchGenericCmp: SearchGenericAutocompleteComponent;
   @ViewChild('htmlPreview') public htmlPreview: any;
 
-  selectedGenericId: any;
   startDate: any;
   endDate: any;
   isPreview = false;
@@ -38,10 +37,25 @@ export class StockCardComponent implements OnInit {
 
 
   ngOnInit() {
+    const date = new Date();
+
+    this.startDate = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
+    this.endDate = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
   }
 
   setSelectedGeneric(generic) {
-    this.selectedGenericId = generic.generic_id;
     this.datageneric.push({
       generic_id: generic.generic_id,
       generic_name: generic.generic_name,
@@ -51,7 +65,6 @@ export class StockCardComponent implements OnInit {
   }
 
   changeSearchGeneric(generic) {
-    this.selectedGenericId = generic.generic_id;
   }
 
   showReport() {
@@ -63,7 +76,6 @@ export class StockCardComponent implements OnInit {
   }
 
   refresh() {
-    this.selectedGenericId = '';
     this.startDate = '';
     this.endDate = '';
     this.datageneric = [];
