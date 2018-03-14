@@ -39,14 +39,16 @@ export class RequisitionComponent implements OnInit {
   requisitionSelected: Array<any> = [];
   title: any;
   isConfirm: any;
-  openModalConfirm: boolean = false
-  confirmApprove: boolean = false
-  tmpOderApprove: any
-  username: any
-  password: any
-  action: any
-  page: any
-  tabSelect: any = 0
+  openModalConfirm: boolean = false;
+  confirmApprove: boolean = false;
+  tmpOderApprove: any;
+  username: any;
+  password: any;
+  action: any;
+  page: any;
+  selectedCancel: any[] = [];
+  tabSelect: any = 0;
+
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
@@ -269,12 +271,16 @@ export class RequisitionComponent implements OnInit {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
     }
   }
+
   cancelUnpaid(order: any) {
     this.alertService.confirm('ต้องการเปลี่ยนสถานะเป็น ไม่ค้างจ่าย ใช่หรือไม่?')
       .then(async () => {
         this.modalLoading.show();
+        let ids: any = [];
+        ids.push(order.requisition_order_id);
+
         try {
-          let rs: any = await this.requisitionService.changeToPaid(order.requisition_order_id);
+          let rs: any = await this.requisitionService.cancelUnpaid(ids);
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
@@ -290,6 +296,41 @@ export class RequisitionComponent implements OnInit {
       .catch(() => {
         this.modalLoading.hide();
       });
+  }
+
+  // cancel unpaids 
+  doCancelUnpaids() {
+    let ids: any = [];
+
+    this.selectedCancel.forEach(v => {
+      ids.push(v.requisition_order_id);
+    });
+
+    if (ids) {
+      this.alertService.confirm('ต้องการเปลี่ยนสถานะเป็น ไม่ค้างจ่าย ใช่หรือไม่?')
+        .then(async () => {
+          this.modalLoading.show();
+          try {
+            let rs: any = await this.requisitionService.cancelUnpaid(ids);
+            this.modalLoading.hide();
+            if (rs.ok) {
+              this.alertService.success();
+              this.getUnPaid();
+            } else {
+              this.alertService.error(rs.error);
+            }
+          } catch (error) {
+            this.modalLoading.hide();
+            this.alertService.error(JSON.stringify(error));
+          }
+        })
+        .catch(() => {
+          this.modalLoading.hide();
+        });
+    } else {
+      this.alertService.error('กรุณาระบุรายการที่ต้องการยกเลิก');
+    }
+
   }
 }
 
