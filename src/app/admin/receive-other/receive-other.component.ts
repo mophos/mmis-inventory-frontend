@@ -584,7 +584,7 @@ export class ReceiveOtherComponent implements OnInit {
 
 
               // ใช้ชั่วคราว
-              if (this.checkUpdateCost) {
+              if (this.isCheckUpdateCost) {
                 await this.receiveService.saveCost(this.products);
               }
 
