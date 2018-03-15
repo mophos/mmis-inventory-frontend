@@ -301,7 +301,7 @@ export class ReceiveOtherComponent implements OnInit {
 
   addProduct() {
 
-    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate });
+    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost });
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้วไม่สามารถเพิ่มได้ กรุณาแก้ไขรายการ');
     } else {
