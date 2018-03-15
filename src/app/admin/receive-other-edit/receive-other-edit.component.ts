@@ -298,7 +298,7 @@ export class ReceiveOtherEditComponent implements OnInit {
 
   addProduct() {
 
-    const idx = _.findIndex(this.products, { product_id: this.selectedProductId });
+    const idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost });
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้วไม่สามารถเพิ่มได้ กรุณาแก้ไขรายการ');
     } else {
