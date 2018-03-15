@@ -330,7 +330,7 @@ export class ReceiveOtherComponent implements OnInit {
 
       product.unit_generic_id = this.selectedUnitGenericId;
       product.conversion_qty = +this.conversionQty;
-      product.cost = this.selectedCost;
+      product.cost = this.selectedCost || 0;
       product.is_lot_control = this.isLotControl;
 
       if (this.selectedExpiredDate) {
@@ -546,7 +546,7 @@ export class ReceiveOtherComponent implements OnInit {
           }
         }
 
-        if (v.receive_qty <= 0 || v.cost <= 0) {
+        if (v.receive_qty <= 0) {
           isError = true;
         }
 

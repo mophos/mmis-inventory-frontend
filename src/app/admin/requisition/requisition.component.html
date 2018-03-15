@@ -11,7 +11,7 @@
   </div>
 
   <div *ngIf="tabSelect === 2" class="col-md-6"  style="padding-top: 5px; padding-bottom: 5px;float:right;">
-    <clr-button-group >
+    <clr-button-group style="float:right;">
       <clr-button  [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printApprove()">
         <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติเบิก
       </clr-button>
