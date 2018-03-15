@@ -34,7 +34,8 @@ export class RequisitionComponent implements OnInit {
   approveds: any = [];
   unpaids: any = [];
   waitingApproves: any = [];
-
+  requisitionSelected: Array<any> = []
+  tabSelect: any = 0
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
@@ -55,11 +56,13 @@ export class RequisitionComponent implements OnInit {
   async loadData() {
     await this.getWaiting();
     await this.getWaitingApprove();
-    await this.getApproved();
     await this.getUnPaid();
+    await this.getApproved();
+    
   }
 
   async getWaiting() {
+    this.tabSelect = 1
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getWating();
@@ -76,6 +79,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getUnPaid() {
+    this.tabSelect = 3
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getUnPaid();
@@ -92,6 +96,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getWaitingApprove() {
+    this.tabSelect = 2
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getWaitingApprove();
@@ -108,6 +113,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getApproved() {
+    this.tabSelect = 4
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getApproved();
@@ -174,5 +180,25 @@ export class RequisitionComponent implements OnInit {
     let url = this.url + '/report/list/requis/' + order.requisition_order_id + `?token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
+
+  printUnPaid() {
+    let requisition_id: any = []
+    let count: any = 0
+    this.requisitionSelected.forEach(e => {
+      if (e.is_cancel !== 'Y') {
+        requisition_id.push('requisId=' + e.requisition_order_id);
+        count++;
+      }
+    });
+    if (count > 0) {
+      const url = this.url + `/report/UnPaid/requis?token=${this.token}&` + requisition_id.join('&');
+      this.htmlPreview.showReport(url);
+      console.log(url);
+      
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
+  }
+
 }
 

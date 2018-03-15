@@ -9,6 +9,13 @@
       <clr-icon shape="plus"></clr-icon> เบิกสินค้าและเวชภัณฑ์
     </button>
   </div>
+  <div *ngIf="tabSelect === 3" class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+    <clr-button-group style="float:right;">
+      <clr-button  [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printUnPaid()">
+        <clr-icon shape="printer"></clr-icon> พิมพ์รายการค้างจ่าย
+      </clr-button>
+    </clr-button-group>
+  </div>
 </div>
 
 <clr-tabs>
@@ -63,7 +70,7 @@
       <span class="badge badge-warning">{{waitingApproves.length | number}}</span>
     </button>
     <clr-tab-content *clrIfActive>
-      <clr-datagrid style="height: 90%;" style="padding-top: 5px;">
+      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" >
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -96,7 +103,7 @@
       <span class="badge badge-danger">{{unpaids.length | number}}</span>
     </button>
     <clr-tab-content *clrIfActive>
-      <clr-datagrid style="height: 90%;" style="padding-top: 5px;">
+      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
