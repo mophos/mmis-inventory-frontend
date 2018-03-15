@@ -329,7 +329,7 @@ export class ReceiveOtherEditComponent implements OnInit {
       product.conversion_qty = +this.conversionQty;
       product.is_lot_control = this.isLotControl;
 
-      product.cost = this.selectedCost;
+      product.cost = this.selectedCost || 0;
 
       if (this.selectedWarehouseId && this.selectedGenericId && this.selectedProductId && this.selectedReceiveQty) {
         if (this.selectedExpiredDate) {
@@ -513,7 +513,7 @@ export class ReceiveOtherEditComponent implements OnInit {
             isError = true;
           }
         }
-        if (v.receive_qty <= 0 || v.cost <= 0) {
+        if (v.receive_qty <= 0) {
           isError = true;
         }
 
