@@ -209,7 +209,7 @@ export class IssuesNewComponent implements OnInit {
 
   async alowcate(genericId) {
     try {
-      if(this.products){
+      if (this.products) {
         let idx = _.findIndex(this.products, { generic_id: genericId })
         let _data = {};
 
@@ -269,7 +269,7 @@ export class IssuesNewComponent implements OnInit {
       this.products[idx].conversion_qty = event.qty;
       await this.alowcate(event.generic_id);
       console.log(this.products);
-      
+
     }
 
   }
@@ -432,7 +432,7 @@ export class IssuesNewComponent implements OnInit {
           obj.items = [];
           this.products.push(obj);
           console.log(this.products);
-          
+
           data.push({
             genericId: v.generic_id,
             genericQty: v.issue_qty
@@ -462,7 +462,8 @@ export class IssuesNewComponent implements OnInit {
           this.products[i].items.push(list[idx]);
         }
       });
-
+      console.log(this.products);
+      
     } else {
       console.log(result.error);
       this.alertService.error();
@@ -476,7 +477,7 @@ export class IssuesNewComponent implements OnInit {
   changeQtyGrid(e) {
     let total_base = 0;
     e.forEach(v => {
-      total_base += (+v.product_qty * +v.conversion_qty);
+      total_base += (+v.product_qty);
     });
 
     let idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
