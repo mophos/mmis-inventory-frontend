@@ -301,7 +301,7 @@ export class ReceiveOtherComponent implements OnInit {
 
   addProduct() {
 
-    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate });
+    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost });
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้วไม่สามารถเพิ่มได้ กรุณาแก้ไขรายการ');
     } else {
@@ -584,7 +584,7 @@ export class ReceiveOtherComponent implements OnInit {
 
 
               // ใช้ชั่วคราว
-              if (this.checkUpdateCost) {
+              if (this.isCheckUpdateCost) {
                 await this.receiveService.saveCost(this.products);
               }
 
@@ -693,6 +693,5 @@ export class ReceiveOtherComponent implements OnInit {
   checkUpdateCost(e) {
     this.isCheckUpdateCost = !this.isCheckUpdateCost;
     console.log(this.isCheckUpdateCost);
-    
   }
 }
