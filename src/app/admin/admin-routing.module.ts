@@ -1,3 +1,6 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
 import { TransectionTypeComponent } from './transection-type/transection-type.component';
 import { ReceiveotherTypeComponent } from './receiveother-type/receiveother-type.component';
 import { PeriodComponent } from './period/period.component';
@@ -12,8 +15,6 @@ import { DonatorsComponent } from './donators/donators.component';
 import { TransferNewComponent } from './transfer-new/transfer-new.component';
 import { TransferComponent } from './transfer/transfer.component';
 import { AdminGuard } from './../admin-guard';
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../auth-guard.service';
 import { LayoutComponent } from './layout/layout.component';
 // pages
@@ -80,6 +81,8 @@ import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
+import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
+import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
 
 const routes: Routes = [
   {
@@ -146,6 +149,9 @@ const routes: Routes = [
       { path: 'receive-planning', component: ReceivePlanningComponent },
       { path: 'receive-planning/new', component: ReceivePlanningNewComponent },
       { path: 'receive-planning/edit/:warehouseId', component: ReceivePlanningEditComponent },
+      // borrow note
+      { path: 'borrow-note', component: BorrowNoteComponent },
+      { path: 'borrow-note/new', component: BorrowNoteNewComponent },
     ]
   }
 ];
