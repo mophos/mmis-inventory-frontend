@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { SelectReceiveUnitComponent } from '../../directives/select-receive-unit/select-receive-unit.component';
 import { SearchProductComponent } from '../../directives/search-product/search-product.component';
 import { AlertService } from 'app/alert.service';
+import { SearchGenericAutocompleteComponent } from '../../directives/search-generic-autocomplete/search-generic-autocomplete.component';
 
 @Component({
   selector: 'wm-borrow-note-new',
@@ -13,17 +14,16 @@ import { AlertService } from 'app/alert.service';
 export class BorrowNoteNewComponent implements OnInit {
 
   @ViewChild('elUnitList') elUnitList: SelectReceiveUnitComponent;
-  @ViewChild('elSearchProduct') elSearchProduct: SearchProductComponent;
+  @ViewChild('elSearchGeneric') elSearchGeneric: SearchGenericAutocompleteComponent;
 
-  products: any = [];
+  generics: any = [];
   borrowDate: any;
   peopleId: any;
   warehouseName: any;
   remark: any;
 
-  selectedProductId: any;
-  selectedProductName: any;
   selectedGenericId: any;
+  selectedGenericName: any;
   selectedUnitGenericId: any;
   selectedQty: number = 0;
   selectedConversionQty: number = 0;
@@ -55,58 +55,60 @@ export class BorrowNoteNewComponent implements OnInit {
 
   addProduct() {
     let obj: any = {};
-    obj.product_id = this.selectedProductId;
+    obj.product_id = this.selectedGenericId;
     obj.generic_id = this.selectedGenericId;
-    obj.product_name = this.selectedProductName;
+    obj.generic_name = this.selectedGenericName;
     obj.unit_generic_id = this.selectedUnitGenericId;
     obj.qty = this.selectedQty; // pack
     obj.conversion_qty = this.selectedConversionQty;
     obj.to_unit_name = this.selectedPrimaryUnitName;
     
-    this.products.push(obj);
-    this.elSearchProduct.clearProductSearch();
+    this.generics.push(obj);
+    this.elSearchGeneric.clearSearch();
     this.elUnitList.clearUnits();
+
+    this.clearForm();
   }
 
   clearForm() {
-    this.elSearchProduct.clearProductSearch();
-    this.selectedProductId = null;
+    this.elSearchGeneric.clearSearch();
+    this.selectedGenericId = null;
     this.selectedConversionQty = 0;
     this.selectedGenericId = null;
     this.selectedPrimaryUnitName = null;
-    this.selectedProductName = null;
+    this.selectedGenericName = null;
     this.selectedQty = 0;
   }
 
   editChangeQty(idx: number, qty: number) {
-    this.products[idx].qty = qty;
+    this.generics[idx].qty = qty;
   }
 
   editChangeUnit(idx: number, event: any) {
-    this.products[idx].conversion_qty = event.qty;
-    this.products[idx].to_unit_name = event.to_unit_name;
-    this.products[idx].unit_generic_id = event.unit_generic_id;
+    this.generics[idx].conversion_qty = event.qty;
+    this.generics[idx].to_unit_name = event.to_unit_name;
+    this.generics[idx].unit_generic_id = event.unit_generic_id;
   }
 
-  removeSelectedProduct(idx: number) {
+  removeSelectedGeneric(idx: number) {
     this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
       .then(() => {
-        this.products[idx].splice(idx, 1);
+        this.generics[idx].splice(idx, 1);
       }).catch(() => { });
   }
 
-  setSelectedProduct(event: any) {
+  setSelectedGeneric(event: any) {
     console.log(event);
-    this.selectedProductId = event ? event.product_id : null;
-    this.selectedProductName = event ? event.product_name : null;
+    this.selectedGenericName = event ? event.generic_name : null;
     this.selectedGenericId = event ? event.generic_id : null;
     this.selectedQty = 1;
 
     this.elUnitList.getUnits(this.selectedGenericId);
   }
 
-  changeSearchProduct(event: any) {
-    if (event) this.selectedProductId = null;
+  onChangeSearchGeneric(event: any) {
+    console.log(event);
+    if (event) this.selectedGenericId = null;
   }
 
   changeUnit(event: any) {
