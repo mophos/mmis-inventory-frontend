@@ -51,7 +51,6 @@ export class BorrowNoteComponent implements OnInit {
     this.getList(limit, offset);
   }
 
-
   enterSearch(event: any) {
     if (event.keyCode === 13) {
       if (this.query) {

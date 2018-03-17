@@ -1,5 +1,5 @@
-<input type="text" [(ngModel)]="query" style="width: 100%;" placeholder="ค้นหา..." agxTypeahead
-  [taUrl]="url" taApi="http" [taItemTpl]="itemTpl" (keyup)="onChangeQuery($event)" (taSelected)="handleResultSelected($event)">
+<input type="text" [(ngModel)]="query" style="width: 100%;" placeholder="ค้นหา..." agxTypeahead [taUrl]="url" taApi="http"
+  [taItemTpl]="itemTpl" (keyup)="onChangeQuery($event)" (taSelected)="handleResultSelected($event)">
 
 <ng-template #itemTpl let-result>
   {{ result.result.title_name }}{{ result.result.fname }} {{ result.result.lname }} ({{ result.result.position_name }})

@@ -226,7 +226,7 @@ Highcharts.setOptions({
     ProductManufactureComponent,
     StockCardComponent,
     BorrowNoteComponent,
-    BorrowNoteNewComponent,
+    BorrowNoteNewComponent
   ],
   providers: [
     MainService,

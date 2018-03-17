@@ -8,7 +8,7 @@ import { AlertService } from './../../alert.service';
   templateUrl: './search-people-autocomplete.component.html'
 })
 export class SearchPeopleAutoCompleteComponent implements OnInit {
-  
+
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() public peopleId: any;
@@ -49,6 +49,5 @@ export class SearchPeopleAutoCompleteComponent implements OnInit {
     this.onSelect.emit(event);
     this.query = `${event.title_name}${event.fname} ${event.lname}`;
   }
-
 
 }
