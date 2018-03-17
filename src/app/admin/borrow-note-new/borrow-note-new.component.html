@@ -21,11 +21,15 @@
             <label for="peopleName" class="required">เจ้าหน้าที่</label>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-             <wm-search-people-autocomplete (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
+            <wm-search-people-autocomplete (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
           </div>
           <div class="col-lg-1 col-md-1">
-            <span *ngIf="peopleId"><clr-icon shape="check" class="is-success"></clr-icon></span>
-            <span *ngIf="!peopleId"><clr-icon shape="close" class="is-danger"></clr-icon></span>
+            <span *ngIf="peopleId">
+              <clr-icon shape="check" class="is-success"></clr-icon>
+            </span>
+            <span *ngIf="!peopleId">
+              <clr-icon shape="close" class="is-danger"></clr-icon>
+            </span>
           </div>
         </div>
         <div class="form-group row wid99">
@@ -42,7 +46,7 @@
 </div>
 
 <clr-datagrid class="grid-order" [style.padding-top.px]="5">
-  <clr-dg-column >ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column>ชื่อสินค้า</clr-dg-column>
   <clr-dg-column [style.width.px]="180">จำนวน</clr-dg-column>
   <clr-dg-column [style.width.px]="180">หน่วย</clr-dg-column>
   <clr-dg-column [style.width.px]="180">รวม (Base)</clr-dg-column>
@@ -57,11 +61,10 @@
         wmNumberWithOutDot [value]="generic.qty" />
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-receive-unit (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="generic.unit_generic_id"
-        [genericId]="generic.generic_id"></wm-select-receive-unit>
+      <wm-select-receive-unit (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="generic.unit_generic_id" [genericId]="generic.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">{{generic.qty * generic.conversion_qty | number}} {{generic.to_unit_name}}</clr-dg-cell>
-   
+
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedGeneric(idx)">
@@ -85,7 +88,7 @@
     <clr-dg-cell style="line-height: 25px; text-align: right;">
       {{+selectedQty * +selectedConversionQty | number}} {{selectedPrimaryUnitName}}
     </clr-dg-cell>
- 
+
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedGenericId || !selectedQty || !selectedUnitGenericId"

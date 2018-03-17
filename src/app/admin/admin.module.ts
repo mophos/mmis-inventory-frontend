@@ -134,6 +134,7 @@ import { AccessCheck } from '../access-check';
 import { StockCardComponent } from './reports/stock-card/stock-card.component';
 import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
+import { BorrowNoteService } from './borrow-note.service';
 
 
 export function highchartsFactory() {
@@ -272,6 +273,7 @@ Highcharts.setOptions({
     ReceiveotherTypeService,
     TransferDashboardService,
     AccessCheck,
+    BorrowNoteService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })

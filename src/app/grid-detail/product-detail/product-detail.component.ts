@@ -4,8 +4,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'wm-product-detail',
-  templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.css']
+  templateUrl: './product-detail.component.html'
 })
 export class ProductDetailComponent implements OnInit {
   @Input() receiveId: any;

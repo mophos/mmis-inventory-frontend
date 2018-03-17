@@ -5,6 +5,8 @@ import { SelectReceiveUnitComponent } from '../../directives/select-receive-unit
 import { SearchProductComponent } from '../../directives/search-product/search-product.component';
 import { AlertService } from 'app/alert.service';
 import { SearchGenericAutocompleteComponent } from '../../directives/search-generic-autocomplete/search-generic-autocomplete.component';
+import { BorrowNoteService } from '../borrow-note.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wm-borrow-note-new',
@@ -38,7 +40,9 @@ export class BorrowNoteNewComponent implements OnInit {
   };
 
   constructor(
-    private alertService: AlertService
+    private alertService: AlertService,
+    private borrowNoteService: BorrowNoteService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -98,7 +102,6 @@ export class BorrowNoteNewComponent implements OnInit {
   }
 
   setSelectedGeneric(event: any) {
-    console.log(event);
     this.selectedGenericName = event ? event.generic_name : null;
     this.selectedGenericId = event ? event.generic_id : null;
     this.selectedQty = 1;
@@ -107,12 +110,10 @@ export class BorrowNoteNewComponent implements OnInit {
   }
 
   onChangeSearchGeneric(event: any) {
-    console.log(event);
     if (event) this.selectedGenericId = null;
   }
 
   changeUnit(event: any) {
-    console.log(event);
     this.selectedUnitGenericId = event ? event.unit_generic_id : null;
     this.selectedConversionQty = event ? event.qty : 0;
     this.selectedPrimaryUnitName = event ? event.to_unit_name : null;
@@ -127,7 +128,39 @@ export class BorrowNoteNewComponent implements OnInit {
   }
 
   save() {
+    let borrowDate = `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`;
+    if (this.peopleId && this.borrowDate && this.generics.length) {
+      this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
+        .then(async () => {
+          try {
 
+            let notes: any = {};
+            notes.borrow_date = borrowDate;
+            notes.people_id = this.peopleId;
+            notes.remark = this.remark;
+
+            let detail: any = [];
+            this.generics.forEach(v => {
+              let obj: any = {};
+              obj.generic_id = v.generic_id;
+              obj.unit_generic_id = v.unit_generic_id;
+              obj.qty = v.qty; // pack
+              detail.push(obj);
+            });
+
+            let rs: any = await this.borrowNoteService.save(notes, detail);
+            if (rs.ok) {
+              this.router.navigate(['/admin/borrow-notes'])
+            } else {
+              this.alertService.error(rs.error);
+            }
+          } catch (error) {
+            
+          }
+        }).catch(() => { });
+    } else {
+      this.alertService.error('กรุณาระบุข้อมูลให้ครบถ้วน')
+    }
   }
 
 }
