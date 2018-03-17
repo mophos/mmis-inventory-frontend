@@ -95,8 +95,8 @@
   <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
   <clr-dg-column style="width: 200px;">Package</clr-dg-column>
   <clr-dg-column style="width: 120px;">รวม (Base)</clr-dg-column>
-  <clr-dg-column style="width: 120px;">คงเหลือ (Pack)</clr-dg-column>
-  <clr-dg-column style="width: 50px;"></clr-dg-column>
+  <clr-dg-column style="width: 200px;">คงเหลือ</clr-dg-column>
+  <clr-dg-column style="width: 30px;;"></clr-dg-column>
 
   <clr-dg-row *ngFor="let g of products;let idx=index;">
     <clr-dg-cell>{{idx+1}}. <strong>{{ g.working_code }}</strong> - {{ g.generic_name }}</clr-dg-cell>
@@ -108,7 +108,7 @@
       <wm-select-receive-unit [genericId]="g.generic_id" [selectedUnitGenericId]="g.unit_generic_id" (onSelect)="onChangeEditUnit($event, idx)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{g.to_unit_qty * g.requisition_qty | number}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{(g.remain_qty - (g.to_unit_qty * g.requisition_qty))/g.to_unit_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{(g.remain_qty - (g.to_unit_qty * g.requisition_qty))/g.to_unit_qty | number}} {{g.from_unit_name}} ({{g.to_unit_qty}} {{g.to_unit_name}})</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="removeItem(idx)">

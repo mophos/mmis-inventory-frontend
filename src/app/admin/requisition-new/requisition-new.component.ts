@@ -248,6 +248,9 @@ export class RequisitionNewComponent implements OnInit {
   onChangeEditUnit(event: IUnit, idx: any) {
     this.products[idx].unit_generic_id = event.unit_generic_id;
     this.products[idx].to_unit_qty = event.qty;
+    this.products[idx].from_unit_name = event.from_unit_name;
+    this.products[idx].to_unit_name = event.to_unit_name;
+    this.products[idx].qty = event.qty;
   }
 
   onChangeEditQty(idx: any, qty: any) {
@@ -280,6 +283,7 @@ export class RequisitionNewComponent implements OnInit {
 
   async getTemplateItems(templateId: any) {
     try {
+      console.log(templateId)
       const rs: any = await this.requisitionService.getTemplateItems(templateId);
       if (rs.ok) {
         this.products = [];
@@ -291,11 +295,15 @@ export class RequisitionNewComponent implements OnInit {
           product.generic_name = v.generic_name;
           product.to_unit_qty = 0;
           product.unit_generic_id = null;
+          product.from_unit_name = null;
+          product.to_unit_name = null;
+          product.qty = null;
           product.working_code = v.working_code;
           product.remain_qty = v.remain_qty;
 
           this.products.push(product);
         });
+        console.log(this.products)
       }
     } catch (error) {
       this.alertService.error(error.message);

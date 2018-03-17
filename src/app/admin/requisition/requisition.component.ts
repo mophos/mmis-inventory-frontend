@@ -108,6 +108,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getWaitingApprove() {
+    this.requisitionSelected = []
     this.tabSelect = 2
     this.modalLoading.show();
     try {
@@ -125,7 +126,8 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getApproved() {
-    this.tabSelect = 3
+    this.requisitionSelected = []
+    this.tabSelect = 2
     this.modalLoading.show();
     try {
       let rs: any = await this.requisitionService.getApproved();
