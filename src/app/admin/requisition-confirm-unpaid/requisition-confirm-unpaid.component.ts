@@ -158,9 +158,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   }
 
   async savePay() {
-    let isError = false;
     let totalQty = 0;
-
     let items = [];
 
     this.products.forEach((v: any) => {
@@ -178,7 +176,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
     if (totalQty) {
       this.modalLoading.show();
       try {
-        let rs: any = await this.requisitionService.saveUnpaidConfirm(this.unpaidId, this.requisitionId, items);
+        const rs: any = await this.requisitionService.saveUnpaidConfirm(this.unpaidId, this.requisitionId, items);
 
         this.modalLoading.hide();
         if (rs.ok) {
