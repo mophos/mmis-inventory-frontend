@@ -32,15 +32,12 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   isEdit: boolean = false;
   actionMsg: string = null;
 
-  titel: any;
   isConfirm: any;
   openModalConfirm: boolean = false
   confirmApprove: boolean = false
   tmpOderApprove: any
   username: any
   password: any
-  action: any
-  page: any
 
   @ViewChild('modalLoading') public modalLoading: any;
 
@@ -161,9 +158,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   }
 
   async savePay() {
-    let isError = false;
     let totalQty = 0;
-
     let items = [];
 
     this.products.forEach((v: any) => {
@@ -181,7 +176,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
     if (totalQty) {
       this.modalLoading.show();
       try {
-        let rs: any = await this.requisitionService.saveUnpaidConfirm(this.unpaidId, this.requisitionId, items);
+        const rs: any = await this.requisitionService.saveUnpaidConfirm(this.unpaidId, this.requisitionId, items);
 
         this.modalLoading.hide();
         if (rs.ok) {
@@ -200,29 +195,20 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   }
 
   async approveRequisitionCheck() {
-    const accessName = 'WM_REQUISITION_APPROVE'
-    this.page = 1
-    this.action = 'WM_REQUSITTION'
-    this.titel = 'รายการเบิกสินค้า'
-    console.log(accessName);
-    if (this.accessCheck.can(accessName)) {
-      this.savePay()
+    if (this.accessCheck.can('WM_REQUISITION_APPROVE')) {
+      this.savePay();
     } else {
       this.openModalConfirm = true
     }
   }
 
   async checkApprove(username: any, password: any) {
-    let rs: any = await this.requisitionService.checkApprove(username, password, this.action);
-    console.log(rs);
-
+    const rs: any = await this.requisitionService.checkApprove(username, password, 'WM_REQUSITTION');
     if (rs.ok) {
-      if (this.page === 1) {
-        this.savePay()
+        this.savePay();
         this.openModalConfirm = false
-      }
     } else {
-      this.alertService.error('ไม่มีสิทธิ์อนุมัติ'+this.titel);
+      this.alertService.error('ไม่มีสิทธิ์อนุมัติ รายการเบิกสินค้า');
     }
   }
 
