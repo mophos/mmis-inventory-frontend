@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import * as moment from 'moment';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import * as _ from 'lodash';
 @Component({
   selector: 'wm-stock-card',
@@ -28,11 +29,13 @@ export class StockCardComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
-
+  jwtHelper: JwtHelper = new JwtHelper();
   constructor(
     @Inject('API_URL') private apiUrl: string
   ) {
-    this.token = sessionStorage.getItem('token')
+    this.token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
+     this.warehouseId = decodedToken.warehouseId;    
   }
 
 

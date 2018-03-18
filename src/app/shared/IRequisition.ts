@@ -20,7 +20,10 @@ export interface IRequisitionOrderItem {
   generic_name?: any;
   requisition_qty?: number;
   to_unit_qty?: number;
+  qty?: number;
   primary_unit_name?: any;
+  from_unit_name?: any;
+  to_unit_name?: any;
   unit_generic_id?: any;
   remain_qty?: number;
   conversion_qty?: number;

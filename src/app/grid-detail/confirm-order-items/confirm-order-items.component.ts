@@ -74,6 +74,8 @@ export class ConfirmOrderItemsComponent implements OnInit {
 
       if (rs.ok) {
         let _items = rs.rows;
+        console.log(rs.rows);
+        
         _items.forEach((v: any) => {
           let _idx = _.findIndex(this._confirmItems, {wm_product_id: v.wm_product_id});
 
@@ -96,6 +98,8 @@ export class ConfirmOrderItemsComponent implements OnInit {
             obj.confirm_qty = 0;
           }
           obj.total_small_qty = v.confirm_qty * v.conversion_qty;
+          obj.book_qty = +v.remain_qty - +v.book_qty;
+          
           this.items.push(obj);
         });
         this.calTotal();
