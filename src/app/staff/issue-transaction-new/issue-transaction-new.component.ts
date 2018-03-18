@@ -131,6 +131,7 @@ export class IssueTransactionNewComponent implements OnInit {
 
     const idx = _.findIndex(this.products, { generic_id: this.genericId });
     if (idx > -1) {
+      this.alertService.success('รายการซ้ำ', 'จำนวนจะไปเพิ่มในรายการเดิม');
       const newQty = +this.products[idx].issue_qty + +this.issueQty;
       if (newQty > +this.products[idx].remain_qty) {
         this.products[idx].issue_qty = this.products[idx].remain_qty;
@@ -188,26 +189,28 @@ export class IssueTransactionNewComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
+
   editChangeIssueQty(idx: any, qty: any) {
-    if (+qty.value > +this.products[idx].qty) {
+    if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].remain_qty) {
       this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
-      qty.value = this.products[idx].qty;
+      this.products[idx].issue_qty = '';
     } else {
       this.products[idx].issue_qty = +qty.value;
+      this.alowcate(this.products[idx].generic_id);
     }
-    this.alowcate(this.products[idx].generic_id);
   }
 
-  editChangeUnit(idx: any, event: any, unitCmp: any) {
-    if (this.products[idx].qty < (this.products[idx].issue_qty * event.conversion_qty)) {
-      this.alertService.error('รายการไม่พอจ่าย');
+  async editChangeUnit(idx: any, event: any, unitCmp: any) {
+    if (this.products[idx].remain_qty < (this.products[idx].issue_qty * event.qty)) {
+      this.products[idx].issue_qty = 0;
+      this.products[idx].unit_generic_id = event.unit_generic_id;
+      this.products[idx].conversion_qty = event.qty;
       unitCmp.getUnits(this.products[idx].generic_id);
-      unitCmp.setSelectedUnit(this.products[idx].unit_generic_id);
     } else {
       this.products[idx].unit_generic_id = event.unit_generic_id;
       this.products[idx].conversion_qty = event.qty;
+      await this.alowcate(event.generic_id);
     }
-
   }
 
   removeSelectedProduct(idx: any) {
@@ -262,12 +265,12 @@ export class IssueTransactionNewComponent implements OnInit {
             this.modalLoading.hide();
           } else {
             this.issueService.saveIssue(summary, this.products)
-              .then((rs: any) => {
-                if (rs.ok) {
+              .then((result: any) => {
+                if (result.ok) {
                   this.alertService.success();
                   this.router.navigate(['/staff/issue-transaction']);
                 } else {
-                  this.alertService.error(rs.error);
+                  this.alertService.error(result.error);
                 }
                 this.modalLoading.hide();
               })
@@ -346,22 +349,23 @@ export class IssueTransactionNewComponent implements OnInit {
   async doUpload() {
     try {
       this.modalLoading.show();
-      let rs: any = await this.uploadingService.uploadStaffIssueTransaction(this.file[0]);
+      const rs: any = await this.uploadingService.uploadStaffIssueTransaction(this.file[0]);
       this.modalLoading.hide();
       // clear products
       this.products = [];
 
       if (rs.ok) {
-        let data = [];
+        const data = [];
         rs.rows.forEach(v => {
           const obj: any = {};
           obj.issue_qty = v.issue_qty;
           obj.generic_id = v.generic_id;
           obj.generic_name = v.generic_name;
           obj.remain_qty = +v.remain_qty;
-          obj.conversion_qty = 0;
+          obj.conversion_qty = 1;
           obj.unit_generic_id = null;
           obj.warehouse_id = this.warehouseId;
+          obj.unit_name = v.unit_name;
           obj.items = [];
           this.products.push(obj);
 
@@ -383,13 +387,13 @@ export class IssueTransactionNewComponent implements OnInit {
       this.alertService.error(JSON.stringify(error));
     }
   }
-  
+
   async getAllowcateData(data) {
     const result: any = await this.issueService.getIssuesProduct(data);
     if (result.ok) {
       const list = result.rows;
       this.products.forEach((v, i) => {
-        let idx = _.findIndex(list, { generic_id: v.generic_id });
+        const idx = _.findIndex(list, { generic_id: v.generic_id });
         if (idx > -1) {
           this.products[i].items.push(list[idx]);
         }
@@ -408,9 +412,8 @@ export class IssueTransactionNewComponent implements OnInit {
   changeQtyGrid(e) {
     let total_base = 0;
     e.forEach(v => {
-      total_base += (+v.product_qty * +v.conversion_qty);
+      total_base += (+v.product_qty);
     });
-    console.log(total_base);
 
     const idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
     if (idx > -1) {
