@@ -41,7 +41,7 @@ export class IssuesNewComponent implements OnInit {
   issueQty: any;
   expiredDate: any = null;
   lotNo: any;
-  conversionQty: number = 0;
+  conversionQty = 0;
   unitGenericId: null;
 
   warehouseId: any;
@@ -250,7 +250,6 @@ export class IssuesNewComponent implements OnInit {
 
     if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].remain_qty) {
       this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
-      // qty.value = this.products[idx].qty; 
       this.products[idx].issue_qty = '';
     } else {
       this.products[idx].issue_qty = +qty.value;
@@ -260,10 +259,10 @@ export class IssuesNewComponent implements OnInit {
 
   async editChangeUnit(idx: any, event: any, unitCmp: any) {
     if (this.products[idx].remain_qty < (this.products[idx].issue_qty * event.qty)) {
-      // this.alertService.error('รายการไม่พอจ่าย');
       this.products[idx].issue_qty = 0;
+      this.products[idx].unit_generic_id = event.unit_generic_id;
+      this.products[idx].conversion_qty = event.qty;
       unitCmp.getUnits(this.products[idx].generic_id);
-      // unitCmp.setSelectedUnit(this.products[idx].unit_generic_id);
     } else {
       this.products[idx].unit_generic_id = event.unit_generic_id;
       this.products[idx].conversion_qty = event.qty;
@@ -271,7 +270,6 @@ export class IssuesNewComponent implements OnInit {
       console.log(this.products);
 
     }
-
   }
 
   removeSelectedProduct(idx: any) {
@@ -328,12 +326,12 @@ export class IssuesNewComponent implements OnInit {
             this.modalLoading.hide();
           } else {
             this.issueService.saveIssue(summary, this.products)
-              .then((rs: any) => {
-                if (rs.ok) {
+              .then((results: any) => {
+                if (results.ok) {
                   this.alertService.success();
                   this.router.navigate(['/admin/issues']);
                 } else {
-                  this.alertService.error(rs.error);
+                  this.alertService.error(results.error);
                 }
                 this.modalLoading.hide();
               })
@@ -356,7 +354,7 @@ export class IssuesNewComponent implements OnInit {
 
   async getIssues() {
     try {
-      let res = await this.issueService._getIssues(this.warehouseId)
+      const res = await this.issueService._getIssues(this.warehouseId)
       if (res.ok) {
         this.hlistIssues = res.rows;
       } else {
@@ -373,10 +371,10 @@ export class IssuesNewComponent implements OnInit {
     this.products = []
     this.isOpenModal = false;
     try {
-      let res = await this.issueService.getGenericList(id)
+      const res = await this.issueService.getGenericList(id)
       if (res.ok) {
         this.objProduct = res.rows;
-        for (let v of this.objProduct) {
+        for (const v of this.objProduct) {
           const obj: any = {};
           obj.issue_qty = 0;
           obj.generic_id = v.generic_id;
@@ -412,7 +410,7 @@ export class IssuesNewComponent implements OnInit {
     this.isImport = true;
     try {
       this.modalLoading.show();
-      let rs: any = await this.uploadingService.uploadIssueTransaction(this.file[0]);
+      const rs: any = await this.uploadingService.uploadIssueTransaction(this.file[0]);
       this.modalLoading.hide();
       // clear products
       this.products = [];
@@ -431,7 +429,6 @@ export class IssuesNewComponent implements OnInit {
           obj.unit_name = v.unit_name;
           obj.items = [];
           this.products.push(obj);
-          console.log(this.products);
 
           data.push({
             genericId: v.generic_id,
@@ -457,13 +454,11 @@ export class IssuesNewComponent implements OnInit {
     if (result.ok) {
       const list = result.rows;
       this.products.forEach((v, i) => {
-        let idx = _.findIndex(list, { generic_id: v.generic_id });
+        const idx = _.findIndex(list, { generic_id: v.generic_id });
         if (idx > -1) {
           this.products[i].items.push(list[idx]);
         }
       });
-      console.log(this.products);
-      
     } else {
       console.log(result.error);
       this.alertService.error();
@@ -480,11 +475,10 @@ export class IssuesNewComponent implements OnInit {
       total_base += (+v.product_qty);
     });
 
-    let idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
+    const idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
     if (idx > -1) {
-      let qty = Math.floor(total_base / +this.products[idx].conversion_qty);
+      const qty = Math.floor(total_base / +this.products[idx].conversion_qty);
       this.products[idx].issue_qty = qty;
     }
-
   }
 }
