@@ -35,7 +35,7 @@ export class StockCardComponent implements OnInit {
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
-     this.warehouseId = decodedToken.warehouseId;    
+    this.warehouseId = decodedToken.warehouseId;
   }
 
 
@@ -74,6 +74,14 @@ export class StockCardComponent implements OnInit {
     this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}
+    &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
+    this.htmlPreview.showReport(url);
+  }
+
+  showReport2() {
+    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/generic/stock2?&warehouseId=${this.warehouseId}
     &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
     this.htmlPreview.showReport(url);
   }
