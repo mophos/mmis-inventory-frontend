@@ -422,6 +422,7 @@ export class RequisitionConfirmComponent implements OnInit {
 
           if (rs.ok) {
             this.alertService.success();
+            await this.getOrderItems();
           } else {
             this.alertService.error(rs.error);
             this.selectedBorrowNotes = [];
