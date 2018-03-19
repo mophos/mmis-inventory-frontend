@@ -17,7 +17,8 @@
      </div>
       <clr-datagrid (clrDgRefresh)="refresh($event)">
         <clr-dg-column style="width: 120px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 320px;">ชื่อ-สกุล</clr-dg-column>
+        <clr-dg-column>ชื่อ-สกุล</clr-dg-column>
+        <clr-dg-column>หน่วยเบิก/คลัง</clr-dg-column>
         <clr-dg-column>หมายเหตุ</clr-dg-column>
         <clr-dg-column style="width: 100px;"></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
@@ -25,6 +26,7 @@
           <wm-borrow-notes-detail *clrIfExpanded [borrowNoteId]="note.borrow_note_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-notes-detail>
           <clr-dg-cell>{{note.borrow_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{note.title_name}}{{note.fname}} {{note.lname}}</clr-dg-cell>
+          <clr-dg-cell>{{note.warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{note.remark}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">
             <div class="btn-group">

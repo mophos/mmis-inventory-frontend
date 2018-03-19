@@ -44,6 +44,7 @@ export class BorrowNoteNewComponent implements OnInit {
   };
 
   borrowNoteId: any;
+  warehouseId: any;
 
   constructor(
     private alertService: AlertService,
@@ -71,6 +72,10 @@ export class BorrowNoteNewComponent implements OnInit {
     }
   }
 
+  onSelectedWarehouse(event: any) {
+    this.warehouseId = event.warehouse_id;
+  }
+
   async getNotesWithItems() {
     try {
       let rs: any = await this.borrowNoteService.getDetailWithItems(this.borrowNoteId);
@@ -82,15 +87,17 @@ export class BorrowNoteNewComponent implements OnInit {
           this.borrowDate = {
             date: {
               year: moment(detail.borrow_date).get('year'),
-              month: moment(detail.borrow_date).get('month'),
+              month: moment(detail.borrow_date).get('month') + 1,
               day: moment(detail.borrow_date).get('date')
             }
           };
         }
 
-        this.remark = detail.remark || null;
-        this.elSearchPeople.setDefault(detail.fullname);
-        this.peopleId = detail.people_id;
+        this.remark = detail ? detail.remark : '';
+        let fullname = detail ? detail.fullname : '';
+        this.elSearchPeople.setDefault(fullname);
+        this.peopleId = detail ? detail.people_id : '';
+        this.warehouseId = detail ? detail.warehouse_id : '';
       }
     } catch (error) {
       this.alertService.error(JSON.stringify(error));
@@ -183,6 +190,7 @@ export class BorrowNoteNewComponent implements OnInit {
             notes.borrow_date = borrowDate;
             notes.people_id = this.peopleId;
             notes.remark = this.remark;
+            notes.warehouse_id = this.warehouseId;
 
             let detail: any = [];
             this.generics.forEach(v => {

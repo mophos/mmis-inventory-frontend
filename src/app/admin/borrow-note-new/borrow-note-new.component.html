@@ -18,18 +18,19 @@
         </div>
         <div class="form-group row wid99">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-            <label for="peopleName" class="required">เจ้าหน้าที่</label>
+            <label for="peopleName" class="required">
+              <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
+              <span *ngIf="peopleId">เจ้าหน้าที่</span>
+            </label>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
           </div>
-          <div class="col-lg-1 col-md-1">
-            <span *ngIf="peopleId">
-              <clr-icon shape="check" class="is-success"></clr-icon>
-            </span>
-            <span *ngIf="!peopleId">
-              <clr-icon shape="close" class="is-danger"></clr-icon>
-            </span>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="warehouse" class="required">หน่วยเบิก</label>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <wm-select-warehouses style="width: 100%;" (onSelect)="onSelectedWarehouse($event)" [selectedId]="warehouseId"></wm-select-warehouses>
           </div>
         </div>
         <div class="form-group row wid99">
