@@ -298,7 +298,7 @@ export class RequisitionNewComponent implements OnInit {
           product.requisition_qty = 0;
           product.generic_name = v.generic_name;
           product.to_unit_qty = 0;
-          product.unit_generic_id = null;
+          product.unit_generic_id = v.unit_generic_id;
           product.working_code = v.working_code;
           product.remain_qty = v.remain_qty;
 
