@@ -58,4 +58,17 @@ export class BorrowNoteComponent implements OnInit {
       }
     }
   }
+
+  cancelNote(borrowNoteId: any) {
+    this.alertService.confirm('ต้องการยกเลิกรายการนี้ ใช่หรือไม่?')
+      .then(async () => {
+        this.modalLoading.show();
+        let rs: any = await this.borrowNoteService.cancelNote(borrowNoteId);
+        this.modalLoading.hide();
+        if (rs.ok) {
+          this.alertService.success();
+          this.getList(this.perPage, 0);
+        }
+      }).catch(() => { });
+  }
 }

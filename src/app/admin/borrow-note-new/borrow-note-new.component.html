@@ -21,7 +21,7 @@
             <label for="peopleName" class="required">เจ้าหน้าที่</label>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <wm-search-people-autocomplete (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
+            <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
           </div>
           <div class="col-lg-1 col-md-1">
             <span *ngIf="peopleId">
@@ -92,7 +92,7 @@
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedGenericId || !selectedQty || !selectedUnitGenericId"
-          (click)="addProduct()">
+          (click)="addGeneric()">
           เพิ่ม
         </button>
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">

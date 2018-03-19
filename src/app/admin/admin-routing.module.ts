@@ -150,6 +150,7 @@ const routes: Routes = [
       { path: 'receive-planning/edit/:warehouseId', component: ReceivePlanningEditComponent },
       { path: 'borrow-notes', component: BorrowNoteComponent },
       { path: 'borrow-notes/new', component: BorrowNoteNewComponent },
+      { path: 'borrow-notes/:borrowNoteId/edit', component: BorrowNoteNewComponent },
     ]
   }
 ];

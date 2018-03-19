@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import * as moment from 'moment';
+import * as _ from 'lodash';
+
 import { SelectReceiveUnitComponent } from '../../directives/select-receive-unit/select-receive-unit.component';
 import { SearchProductComponent } from '../../directives/search-product/search-product.component';
 import { AlertService } from 'app/alert.service';
 import { SearchGenericAutocompleteComponent } from '../../directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import { BorrowNoteService } from '../borrow-note.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { SearchPeopleAutoCompleteComponent } from '../../directives/search-people-autocomplete/search-people-autocomplete.component';
 
 @Component({
   selector: 'wm-borrow-note-new',
@@ -17,7 +20,8 @@ export class BorrowNoteNewComponent implements OnInit {
 
   @ViewChild('elUnitList') elUnitList: SelectReceiveUnitComponent;
   @ViewChild('elSearchGeneric') elSearchGeneric: SearchGenericAutocompleteComponent;
-
+  @ViewChild('elSearchPeople') elSearchPeople: SearchPeopleAutoCompleteComponent;
+  
   generics: any = [];
   borrowDate: any;
   peopleId: any;
@@ -39,13 +43,18 @@ export class BorrowNoteNewComponent implements OnInit {
     componentDisabled: false
   };
 
+  borrowNoteId: any;
+
   constructor(
     private alertService: AlertService,
     private borrowNoteService: BorrowNoteService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private route: ActivatedRoute
+  ) { 
+    this.borrowNoteId = this.route.snapshot.params.borrowNoteId;
+  }
 
-  ngOnInit() {
+  async ngOnInit() {
     const date = new Date();
 
     this.borrowDate = {
@@ -55,23 +64,59 @@ export class BorrowNoteNewComponent implements OnInit {
         day: date.getDate()
       }
     };
+
+    if (this.borrowNoteId) {
+      // get detail
+      await this.getNotesWithItems();
+    }
   }
 
-  addProduct() {
-    let obj: any = {};
-    obj.product_id = this.selectedGenericId;
-    obj.generic_id = this.selectedGenericId;
-    obj.generic_name = this.selectedGenericName;
-    obj.unit_generic_id = this.selectedUnitGenericId;
-    obj.qty = this.selectedQty; // pack
-    obj.conversion_qty = this.selectedConversionQty;
-    obj.to_unit_name = this.selectedPrimaryUnitName;
-    
-    this.generics.push(obj);
-    this.elSearchGeneric.clearSearch();
-    this.elUnitList.clearUnits();
+  async getNotesWithItems() {
+    try {
+      let rs: any = await this.borrowNoteService.getDetailWithItems(this.borrowNoteId);
+      if (rs.ok) {
+        this.generics = rs.items || null;
+        let detail = rs.detail || {};
+        
+        if (detail.borrow_date) {
+          this.borrowDate = {
+            date: {
+              year: moment(detail.borrow_date).get('year'),
+              month: moment(detail.borrow_date).get('month'),
+              day: moment(detail.borrow_date).get('date')
+            }
+          };
+        }
 
-    this.clearForm();
+        this.remark = detail.remark || null;
+        this.elSearchPeople.setDefault(detail.fullname);
+        this.peopleId = detail.people_id;
+      }
+    } catch (error) {
+      this.alertService.error(JSON.stringify(error));
+    }
+  }
+
+  addGeneric() {
+    let idx = _.findIndex(this.generics, { generic_id: this.selectedGenericId });
+
+    if (idx === -1) {
+      let obj: any = {};
+      obj.generic_id = this.selectedGenericId;
+      obj.generic_name = this.selectedGenericName;
+      obj.unit_generic_id = this.selectedUnitGenericId;
+      obj.qty = this.selectedQty; // pack
+      obj.conversion_qty = this.selectedConversionQty;
+      obj.to_unit_name = this.selectedPrimaryUnitName;
+
+      this.generics.push(obj);
+      this.elSearchGeneric.clearSearch();
+      this.elUnitList.clearUnits();
+
+      this.clearForm();
+    } else {
+      this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาเลือกรายการใหม่')
+    }
   }
 
   clearForm() {
@@ -148,7 +193,13 @@ export class BorrowNoteNewComponent implements OnInit {
               detail.push(obj);
             });
 
-            let rs: any = await this.borrowNoteService.save(notes, detail);
+            let rs: any;
+            if (this.borrowNoteId) {
+              rs = await this.borrowNoteService.update(this.borrowNoteId, notes, detail);
+            } else {
+              rs = await this.borrowNoteService.save(notes, detail);
+            }
+            
             if (rs.ok) {
               this.router.navigate(['/admin/borrow-notes'])
             } else {
