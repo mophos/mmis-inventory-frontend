@@ -36,7 +36,7 @@ export class ConfirmOrderItemsComponent implements OnInit {
   @Input('confirmItems')
   set setConfirmItems(value: any) {
     this._confirmItems = value;
-    this.getProductList();
+    // this.getProductList();
   }
 
   @Input('isEdit')
@@ -57,7 +57,7 @@ export class ConfirmOrderItemsComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    // this.getProductList();
+    this.getProductList();
     this.currentTotalSmallQty = 0;
   }
 

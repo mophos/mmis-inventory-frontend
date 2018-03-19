@@ -93,7 +93,7 @@ export class RequisitionConfirmComponent implements OnInit {
       // calculate new allowcate_qty
       this.products[idx].allowcate_qty = 0;
       this.products[idx].confirmItems.forEach(v => {
-        this.products[idx].small_remain_qty += v.remain_small_qty;
+        // this.products[idx].small_remain_qty += v.remain_small_qty;
         this.products[idx].allowcate_qty += (v.confirm_qty * v.conversion_qty);
       });
     }
@@ -128,7 +128,8 @@ export class RequisitionConfirmComponent implements OnInit {
             unit_generic_id: v.unit_generic_id,
             working_code: v.working_code,
             confirmItems: [],
-            small_remain_qty: 0 // small qty
+            small_remain_qty: v.remain_qty, // small qty
+            small_book_qty: v.book_qty, // small qty
           }
 
           if (rs.pays) {
