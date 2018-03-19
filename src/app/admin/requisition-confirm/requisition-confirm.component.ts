@@ -92,7 +92,6 @@ export class RequisitionConfirmComponent implements OnInit {
 
       // calculate new allowcate_qty
       this.products[idx].allowcate_qty = 0;
-      this.products[idx].small_remain_qty = 0;
       this.products[idx].confirmItems.forEach(v => {
         this.products[idx].small_remain_qty += v.remain_small_qty;
         this.products[idx].allowcate_qty += (v.confirm_qty * v.conversion_qty);

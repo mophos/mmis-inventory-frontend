@@ -2,7 +2,7 @@
   <clr-datagrid class="grid-order">
     <!-- <clr-dg-column style="width: 100px;">Working Code</clr-dg-column> -->
     <clr-dg-column>ชื่อเวชภัณฑ์ (Trade name)</clr-dg-column>
-    <clr-dg-column >Lot No.</clr-dg-column>
+    <clr-dg-column>Lot No.</clr-dg-column>
     <clr-dg-column [style.width.px]="50">วันหมดอายุ</clr-dg-column>
     <clr-dg-column>คงเหลือ</clr-dg-column>
     <clr-dg-column>คงเหลือ(หักยอดจอง)</clr-dg-column>
@@ -19,18 +19,19 @@
           {{i.remain_qty * i.conversion_qty | number}}</span> {{i.to_unit_name}}
       </clr-dg-cell>
       <!-- <clr-dg-cell>{{ i.book_qty  | number }}</clr-dg-cell> -->
-      <clr-dg-cell style="text-align: right;">{{ i.book_qty | number }} {{ i.from_unit_name }} ({{i.conversion_qty | number}} {{i.to_unit_name}}) =
+      <clr-dg-cell style="text-align: right;">{{ i.remain_qty - i.book_qty | number }} {{ i.from_unit_name }} ({{i.conversion_qty | number}} {{i.to_unit_name}}) =
         <span [ngClass]="{'error-message': (i.confirm_qty*i.conversion_qty) > i.remain_small_qty}">
-          {{i.book_qty * i.conversion_qty | number}}</span> {{i.to_unit_name}}
+          {{(i.remain_qty - i.book_qty) * i.conversion_qty | number}}</span> {{i.to_unit_name}}
       </clr-dg-cell>
       <clr-dg-cell>
         <input type="text" #qty (keyup)="onChangeQty(qty, idx)" style="width: 100%; text-align: right; background-color:#FFF9C4"
           placeholder="0" wmNumberWithOutDot [value]="i.confirm_qty">
       </clr-dg-cell>
-      <clr-dg-cell style="text-align: right;">{{i.confirm_qty*i.conversion_qty || 0 | number}} {{i.to_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{i.confirm_qty * i.conversion_qty || 0 | number}} {{i.to_unit_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
-        <span [ngClass]="{'error-message': (i.confirm_qty * i.conversion_qty) > i.remain_small_qty}">
-          {{(i.book_qty * i.conversion_qty) - (i.confirm_qty * i.conversion_qty) | number}}</span> {{i.to_unit_name}}
+        <span style="color: red; font-weight: bold;" *ngIf="(((i.remain_qty - i.book_qty) * i.conversion_qty) - (i.confirm_qty * i.conversion_qty)) < 0">{{((i.remain_qty - i.book_qty) * i.conversion_qty) - (i.confirm_qty * i.conversion_qty) | number}}</span>
+        <span style="color: green; font-weight: bold;" *ngIf="(((i.remain_qty - i.book_qty) * i.conversion_qty) - (i.confirm_qty * i.conversion_qty)) >= 0">{{ ((i.remain_qty - i.book_qty) * i.conversion_qty) - (i.confirm_qty * i.conversion_qty) | number}}</span>
+         {{ i.to_unit_name }}
       </clr-dg-cell>
     </clr-dg-row>
 
