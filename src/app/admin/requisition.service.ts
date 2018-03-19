@@ -169,6 +169,14 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async getBorrowNotes(warehouseId: any, genericIds: any[]) {
+    let rs: any = await this.authHttp.post(`${this.url}/requisition/borrow-notes`, {
+      genericIds: genericIds,
+      warehouseId: warehouseId
+    }).toPromise();
+    return rs.json();
+  }
+
   /********************************************/
   async getLots(productId: any, warehouseId: any) {
     const response = await this.authHttp.post(`${this.url}/requisition/get-lots`, {
