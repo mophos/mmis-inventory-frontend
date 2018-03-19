@@ -29,8 +29,8 @@
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{i.confirm_qty*i.conversion_qty || 0 | number}} {{i.to_unit_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
-        <span [ngClass]="{'error-message': (i.confirm_qty*i.conversion_qty) > i.remain_small_qty}">
-          {{i.remain_small_qty - (i.confirm_qty*i.conversion_qty) | number}}</span> {{i.to_unit_name}}
+        <span [ngClass]="{'error-message': (i.confirm_qty * i.conversion_qty) > i.remain_small_qty}">
+          {{(i.book_qty * i.conversion_qty) - (i.confirm_qty * i.conversion_qty) | number}}</span> {{i.to_unit_name}}
       </clr-dg-cell>
     </clr-dg-row>
 

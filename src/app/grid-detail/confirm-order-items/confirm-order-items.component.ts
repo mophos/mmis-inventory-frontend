@@ -74,7 +74,6 @@ export class ConfirmOrderItemsComponent implements OnInit {
 
       if (rs.ok) {
         let _items = rs.rows;
-        console.log(rs.rows);
         
         _items.forEach((v: any) => {
           let _idx = _.findIndex(this._confirmItems, {wm_product_id: v.wm_product_id});
@@ -85,23 +84,26 @@ export class ConfirmOrderItemsComponent implements OnInit {
           obj.expired_date = v.expired_date;
           obj.from_unit_name = v.from_unit_name;
           obj.generic_id = v.generic_id;
-          obj.lot_no = v.log_no;
+          obj.lot_no = v.lot_no;
           obj.product_name = v.product_name;
-          obj.remain_qty = +v.remain_qty;
+          obj.remain_qty = +v.remain_qty; // pack
           obj.to_unit_name = v.to_unit_name;
           obj.unit_generic_id = v.unit_generic_id;
           if (_idx > -1) {
-            obj.confirm_qty = this._confirmItems[_idx].confirm_qty;
-            obj.remain_small_qty = this._confirmItems[_idx].remain_qty;
+            obj.confirm_qty = +this._confirmItems[_idx].confirm_qty; // pack
+            // obj.remain_small_qty = +this._confirmItems[_idx].remain_qty; // base
           } else {
             // allowcate
             obj.confirm_qty = 0;
           }
-          obj.total_small_qty = v.confirm_qty * v.conversion_qty;
-          obj.book_qty = +v.remain_qty - +v.book_qty;
+
+          obj.remain_small_qty = obj.remain_qty * obj.conversion_qty; // base
+          obj.total_small_qty = +obj.confirm_qty * +obj.conversion_qty;
+          obj.book_qty = +obj.remain_qty - +v.book_qty; // pack
           
           this.items.push(obj);
         });
+
         this.calTotal();
       } else {
         this.alertService.error(rs.error);

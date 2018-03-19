@@ -77,8 +77,6 @@ export class RequisitionConfirmComponent implements OnInit {
   }
 
   onSuccessConfirm(event: any) {
-    console.log(event);
-
     let idx = _.findIndex(this.products, { generic_id: event.generic_id });
 
     if (idx > -1) {

@@ -65,7 +65,7 @@
   <clr-dg-column style="width: 110px;">รวม (Base)</clr-dg-column>
   <clr-dg-column style="width: 110px;">ยอดจ่าย (Base)</clr-dg-column>
   <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
-  <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="{'isSuccess': g.allowcate_qty >= g.requisition_qty, 'isError': g.allowcate_qty < g.requisition_qty}">
+  <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="{'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty), 'isWarning': g.allowcate_qty < (g.conversion_qty * g.requisition_qty), 'isError': g.allowcate_qty === 0}">
     <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
       [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="g.requisition_qty"
       [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
