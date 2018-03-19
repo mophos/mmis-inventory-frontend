@@ -28,7 +28,6 @@ export class RequisitionOrderItemsPayComponent implements OnInit {
       this.loading = false;
       if (rs.ok) {
         this.items = rs.rows;
-        console.log(this.items);
       } else {
         this.alertService.error(rs.error);
       }

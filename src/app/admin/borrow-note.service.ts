@@ -30,6 +30,13 @@ export class BorrowNoteService {
     return resp.json();
   }
 
+  async updateRequisitionBorrow(requisitionOrderId: any, data: any[]) {
+    const resp = await this.authHttp.put(`${this.url}/borrow-notes/update-requisition/${requisitionOrderId}`, {
+      data: data
+    }).toPromise();
+    return resp.json();
+  }
+
   async getDetailList(borrowNoteId: any) {
     const resp = await this.authHttp.get(`${this.url}/borrow-notes/${borrowNoteId}/detail-list`).toPromise();
     return resp.json();
