@@ -41,7 +41,7 @@ export class IssuesNewComponent implements OnInit {
   issueQty: any;
   expiredDate: any = null;
   lotNo: any;
-  conversionQty: number = 0;
+  conversionQty = 0;
   unitGenericId: null;
 
   warehouseId: any;
@@ -55,7 +55,9 @@ export class IssuesNewComponent implements OnInit {
   filePath: string;
   fileName: any = null;
   file: any;
-  
+
+  isImport = false;
+
   isOpenModal = false;
   @ViewChild('unitList') public unitList: any;
   @ViewChild('lotModal') public lotModal: any;
@@ -134,8 +136,7 @@ export class IssuesNewComponent implements OnInit {
     }
   }
 
-  changeUnit(event: any) {
-    console.log(event);
+  async changeUnit(event: any) {
     try {
       this.conversionQty = event.qty ? event.qty : 0;
       this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
@@ -208,29 +209,35 @@ export class IssuesNewComponent implements OnInit {
 
   async alowcate(genericId) {
     try {
-      const idx = _.findIndex(this.products, { generic_id: genericId })
-      let _data = {};
-      
-      if (idx > -1) {
-        _data = {
-          genericId: this.products[idx].generic_id,
-          genericQty: this.products[idx].issue_qty * this.products[idx].conversion_qty
-        };
-      }
-
-      const data_ = [];
-      data_.push(_data);
-      
-      const result: any = await this.issueService.getIssuesProduct(data_);
-      if (result.ok) {
-        const list = result.rows;
+      if (this.products) {
         let idx = _.findIndex(this.products, { generic_id: genericId })
+        let _data = {};
+
         if (idx > -1) {
-          this.products[idx].items = list;
+          _data = {
+            genericId: this.products[idx].generic_id,
+            unitGenericId: this.products[idx].unit_generic_id,
+            genericQty: this.products[idx].issue_qty * this.products[idx].conversion_qty
+          };
         }
-      } else {
-        console.log(result.error);
-        this.alertService.error();
+
+        const data_ = [];
+        data_.push(_data);
+
+        const result: any = await this.issueService.getIssuesProduct(data_);
+        if (result.ok) {
+          const list = result.rows;
+          list.forEach(v => {
+            v.unit_generic_id = this.products[idx].unit_generic_id
+          });
+          idx = _.findIndex(this.products, { generic_id: genericId })
+          if (idx > -1) {
+            this.products[idx].items = list;
+          }
+        } else {
+          console.log(result.error);
+          this.alertService.error();
+        }
       }
     } catch (error) {
       this.alertService.error(error.message);
@@ -240,27 +247,29 @@ export class IssuesNewComponent implements OnInit {
   editChangeIssueQty(idx: any, qty: any) {
     // const oldQty = +this.products[idx].issue_qty;
     console.log(this.products);
-    
-    if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].remain_qty ) {
+
+    if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].remain_qty) {
       this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
-      // qty.value = this.products[idx].qty; 
-      this.products[idx].issue_qty='';
+      this.products[idx].issue_qty = '';
     } else {
       this.products[idx].issue_qty = +qty.value;
       this.alowcate(this.products[idx].generic_id);
     }
   }
 
-  editChangeUnit(idx: any, event: any, unitCmp: any) {
-    if (this.products[idx].qty < (this.products[idx].issue_qty * event.conversion_qty)) {
-      this.alertService.error('รายการไม่พอจ่าย');
+  async editChangeUnit(idx: any, event: any, unitCmp: any) {
+    if (this.products[idx].remain_qty < (this.products[idx].issue_qty * event.qty)) {
+      this.products[idx].issue_qty = 0;
+      this.products[idx].unit_generic_id = event.unit_generic_id;
+      this.products[idx].conversion_qty = event.qty;
       unitCmp.getUnits(this.products[idx].generic_id);
-      unitCmp.setSelectedUnit(this.products[idx].unit_generic_id);
     } else {
       this.products[idx].unit_generic_id = event.unit_generic_id;
       this.products[idx].conversion_qty = event.qty;
-    }
+      await this.alowcate(event.generic_id);
+      console.log(this.products);
 
+    }
   }
 
   removeSelectedProduct(idx: any) {
@@ -295,48 +304,48 @@ export class IssuesNewComponent implements OnInit {
       this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถตัดจ่ายได้')
     } else {
       this.alertService.confirm('ต้องการบันทึกรายการ ตัดจ่าย ใช่หรือไม่?')
-      .then(() => {
-        this.modalLoading.show();
-        const summary: any = {};
-        summary.issueDate = this.issueDate ? `${this.issueDate.date.year}-${this.issueDate.date.month}-${this.issueDate.date.day}` : null;
-        summary.transactionId = this.transactionId;
-        summary.comment = this.comment;
-        summary.refDocument = this.refDocument;
+        .then(() => {
+          this.modalLoading.show();
+          const summary: any = {};
+          summary.issueDate = this.issueDate ? `${this.issueDate.date.year}-${this.issueDate.date.month}-${this.issueDate.date.day}` : null;
+          summary.transactionId = this.transactionId;
+          summary.comment = this.comment;
+          summary.refDocument = this.refDocument;
 
-        // check product remain
-        let isError = false;
-        this.products.forEach(v => {
-          const totalIssue = v.issue_qty * v.conversion_qty;
-          if (totalIssue > v.remain_qty || v.issue_qty <= 0) {
-            isError = true;
+          // check product remain
+          let isError = false;
+          this.products.forEach(v => {
+            const totalIssue = v.issue_qty * v.conversion_qty;
+            if (totalIssue > v.remain_qty || v.issue_qty <= 0) {
+              isError = true;
+            }
+          });
+
+          if (isError) {
+            this.alertService.error('มีจำนวนที่มียอดจ่ายมากกว่ายอดคงเหลือ');
+            this.modalLoading.hide();
+          } else {
+            this.issueService.saveIssue(summary, this.products)
+              .then((results: any) => {
+                if (results.ok) {
+                  this.alertService.success();
+                  this.router.navigate(['/admin/issues']);
+                } else {
+                  this.alertService.error(results.error);
+                }
+                this.modalLoading.hide();
+              })
+              .catch((error: any) => {
+                this.modalLoading.hide();
+                this.alertService.error(error.message);
+              });
           }
-        });
-        
-        if (isError) {
-          this.alertService.error('มีจำนวนที่มียอดจ่ายมากกว่ายอดคงเหลือ');
-          this.modalLoading.hide();
-        } else {
-          this.issueService.saveIssue(summary, this.products)
-            .then((rs: any) => {
-              if (rs.ok) {
-                this.alertService.success();
-                this.router.navigate(['/admin/issues']);
-              } else {
-                this.alertService.error(rs.error);
-              }
-              this.modalLoading.hide();
-            })
-            .catch((error: any) => {
-              this.modalLoading.hide();
-              this.alertService.error(error.message);
-            });
-        }
 
-      }).catch(() => {
-        this.modalLoading.hide();
-      });
+        }).catch(() => {
+          this.modalLoading.hide();
+        });
+    }
   }
-}
 
   openModal() {
     this.isOpenModal = true;
@@ -345,7 +354,7 @@ export class IssuesNewComponent implements OnInit {
 
   async getIssues() {
     try {
-      let res = await this.issueService._getIssues(this.warehouseId)
+      const res = await this.issueService._getIssues(this.warehouseId)
       if (res.ok) {
         this.hlistIssues = res.rows;
       } else {
@@ -362,21 +371,21 @@ export class IssuesNewComponent implements OnInit {
     this.products = []
     this.isOpenModal = false;
     try {
-      let res = await this.issueService.getGenericList(id)
+      const res = await this.issueService.getGenericList(id)
       if (res.ok) {
         this.objProduct = res.rows;
-          for(let v of this.objProduct){
-            const obj: any = {};
-            obj.issue_qty = 0;
-            obj.generic_id = v.generic_id;
-            obj.generic_name = v.generic_name;
-            obj.remain_qty = +v.remain_qty;
-            obj.conversion_qty = +v.conversion_qty;
-            obj.unit_generic_id = v.unit_generic_id;
-            obj.warehouse_id = this.warehouseId;
-            this.products.push(obj);
-            await this.alowcate(v.generic_id);
-          }
+        for (const v of this.objProduct) {
+          const obj: any = {};
+          obj.issue_qty = 0;
+          obj.generic_id = v.generic_id;
+          obj.generic_name = v.generic_name;
+          obj.remain_qty = +v.remain_qty;
+          obj.conversion_qty = +v.conversion_qty;
+          obj.unit_generic_id = v.unit_generic_id;
+          obj.warehouse_id = this.warehouseId;
+          this.products.push(obj);
+          await this.alowcate(v.generic_id);
+        }
       } else {
         this.alertService.error(res.error);
       }
@@ -398,24 +407,26 @@ export class IssuesNewComponent implements OnInit {
   }
 
   async doUpload() {
+    this.isImport = true;
     try {
       this.modalLoading.show();
-      let rs: any = await this.uploadingService.uploadIssueTransaction(this.file[0]);
+      const rs: any = await this.uploadingService.uploadIssueTransaction(this.file[0]);
       this.modalLoading.hide();
       // clear products
       this.products = [];
 
       if (rs.ok) {
-        let data = [];
+        const data = [];
         rs.rows.forEach(v => {
           const obj: any = {};
           obj.issue_qty = v.issue_qty;
           obj.generic_id = v.generic_id;
           obj.generic_name = v.generic_name;
           obj.remain_qty = +v.remain_qty;
-          obj.conversion_qty = 0;
+          obj.conversion_qty = 1;
           obj.unit_generic_id = null;
           obj.warehouse_id = this.warehouseId;
+          obj.unit_name = v.unit_name;
           obj.items = [];
           this.products.push(obj);
 
@@ -431,7 +442,7 @@ export class IssuesNewComponent implements OnInit {
       } else {
         this.alertService.error(JSON.stringify(rs.error));
       }
-      
+
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(JSON.stringify(error));
@@ -443,12 +454,11 @@ export class IssuesNewComponent implements OnInit {
     if (result.ok) {
       const list = result.rows;
       this.products.forEach((v, i) => {
-        let idx = _.findIndex(list, { generic_id: v.generic_id });
+        const idx = _.findIndex(list, { generic_id: v.generic_id });
         if (idx > -1) {
           this.products[i].items.push(list[idx]);
         }
       });
-
     } else {
       console.log(result.error);
       this.alertService.error();
@@ -462,14 +472,13 @@ export class IssuesNewComponent implements OnInit {
   changeQtyGrid(e) {
     let total_base = 0;
     e.forEach(v => {
-      total_base += (+v.product_qty * +v.conversion_qty);
+      total_base += (+v.product_qty);
     });
-    
-    let idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
+
+    const idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
     if (idx > -1) {
-      let qty = Math.floor(total_base / +this.products[idx].conversion_qty);
+      const qty = Math.floor(total_base / +this.products[idx].conversion_qty);
       this.products[idx].issue_qty = qty;
     }
-
   }
 }

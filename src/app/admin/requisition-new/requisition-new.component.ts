@@ -371,6 +371,7 @@ export class RequisitionNewComponent implements OnInit {
 
         if (!products.length) {
           this.alertService.error('กรุณาระบุจำนวนสินค้าที่ต้องการเบิก');
+          this.isSave = false;
         } else {
           this.modalLoading.show();
           try {

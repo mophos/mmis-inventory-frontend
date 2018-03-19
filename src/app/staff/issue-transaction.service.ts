@@ -93,20 +93,18 @@ export class IssueTransactionService {
     const rs = await this.authHttp.get(`${this.url}/staff/issue-transaction/generic/qty/${genericId}/${warehouseId}`).toPromise();
     return rs.json();
   }
-  
+
   async getIssuesProduct(data: any) {
-    const rs = await this.authHttp.post(`${this.url}/generics/allocate`, {data: data}).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/generics/allocate/baseunit`, { data: data }).toPromise();
     return rs.json();
   }
 
   async checkApprove(username: any, password: any, action: any) {
-    let rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
+    const rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
       username: username,
       password: password,
       action: action
     }).toPromise();
     return rs.json();
   }
-
-
 }
