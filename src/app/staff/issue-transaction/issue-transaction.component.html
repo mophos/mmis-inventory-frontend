@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px;" [style.height.%]="85" [(clrDgSelected)]="selectedApprove">
+<clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px;" [(clrDgSelected)]="selectedApprove">
   <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
   <clr-dg-column style="width: 180px;">เลขที่</clr-dg-column>
   <clr-dg-column>ประเภท</clr-dg-column>
@@ -37,7 +37,7 @@
   <!-- <clr-dg-column>หมายเหตุ</clr-dg-column> -->
   <clr-dg-column>#</clr-dg-column>
   <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-  <clr-dg-row *ngFor="let s of issues" [clrDgItem]="s" [ngClass]="{'approve-status': s.approved === 'Y'}">
+  <clr-dg-row *ngFor="let s of issues" [clrDgItem]="s" [ngClass]="{'isSuccess': s.approved === 'Y', 'isError': s.is_cancel === 'Y'}">
     <wm-transaction-issue-detail-staff *clrIfExpanded [issueId]="s.issue_id" ngProjectAs="clr-dg-row-detail"></wm-transaction-issue-detail-staff>
     <clr-dg-cell>{{s.issue_date | toThaiDate}}</clr-dg-cell>
     <clr-dg-cell>{{s.issue_code}}</clr-dg-cell>
@@ -47,10 +47,10 @@
     <!-- <clr-dg-cell>{{s.comment}}</clr-dg-cell> -->
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group">
-        <button [disabled]="s.approved === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/staff/issue-transaction/edit" [queryParams]="{issueId: s.issue_id}">
+        <button [disabled]="s.approved === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/staff/issue-transaction/edit" [queryParams]="{issueId: s.issue_id}">
           <clr-icon shape="note"></clr-icon>
         </button>
-        <button [disabled]="s.approved === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="removeIssue(s)">
+        <button [disabled]="s.approved === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="removeIssue(s)">
           <clr-icon shape="trash"></clr-icon>
         </button>
 

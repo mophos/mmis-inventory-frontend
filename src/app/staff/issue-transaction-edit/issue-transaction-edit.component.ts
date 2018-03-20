@@ -355,7 +355,13 @@ export class IssueTransactionEditComponent implements OnInit {
         summary.transactionId = this.transactionId;
         summary.comment = this.comment;
         summary.refDocument = this.refDocument;
-        this.issueService.updateIssue(this.issueId, summary, this.products)
+
+        let _products = [];
+        this.products.forEach(v => {
+          if (v.issue_qty > 0) _products.push(v);
+        })
+
+        this.issueService.updateIssue(this.issueId, summary, _products)
           .then((rs: any) => {
             if (rs.ok) {
               this.alertService.success();
@@ -371,9 +377,24 @@ export class IssueTransactionEditComponent implements OnInit {
           });
       }).catch(() => { });
   }
+
   setSelectedGeneric(e) {
     e.issue_qty = 0;
     this.products.push(e);
+  }
+
+  changeQtyGrid(e) {
+    let total_base = 0;
+    e.forEach(v => {
+      total_base += (+v.product_qty);
+    });
+
+    const idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
+    if (idx > -1) {
+      const qty = Math.floor(total_base / +this.products[idx].conversion_qty);
+      this.products[idx].issue_qty = qty;
+    }
+
   }
 
 }
