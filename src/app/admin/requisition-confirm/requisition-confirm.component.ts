@@ -381,16 +381,16 @@ export class RequisitionConfirmComponent implements OnInit {
         slData.forEach((v, i) => {
           let idx = _.findIndex(data, { generic_id: v.generic_id });
           if (idx > -1) {
-            data[idx].qty += v.qty;
+            data[idx].qty += v.qty * v.conversion_qty;
           } else data.push(v);
         });
 
         this.products.forEach((x, i) => {
           let idx = _.findIndex(data, { generic_id: x.generic_id });
           if (idx > -1) {
-            let selectedQty = data[idx].qty * data[idx].conversion_qty;
+            // let selectedQty = data[idx].qty * data[idx].conversion_qty;
             let pQty = this.products[i].requisition_qty * this.products[i].conversion_qty;
-            let reqQty = pQty + selectedQty;
+            let reqQty = pQty + data[idx].qty;
             // จำนวนจ่ายจริง
             this.products[i].requisition_qty = Math.floor(reqQty / this.products[i].conversion_qty);
             // จำนวนที่ยืมไป
@@ -421,7 +421,7 @@ export class RequisitionConfirmComponent implements OnInit {
             }
           });
         });
-        
+
         try {
           this.modalLoading.show();
           let rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow, borrowItems);
