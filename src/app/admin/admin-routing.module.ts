@@ -80,6 +80,8 @@ import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
+import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
+import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
 
 const routes: Routes = [
   {
@@ -146,6 +148,9 @@ const routes: Routes = [
       { path: 'receive-planning', component: ReceivePlanningComponent },
       { path: 'receive-planning/new', component: ReceivePlanningNewComponent },
       { path: 'receive-planning/edit/:warehouseId', component: ReceivePlanningEditComponent },
+      { path: 'borrow-notes', component: BorrowNoteComponent },
+      { path: 'borrow-notes/new', component: BorrowNoteNewComponent },
+      { path: 'borrow-notes/:borrowNoteId/edit', component: BorrowNoteNewComponent },
     ]
   }
 ];

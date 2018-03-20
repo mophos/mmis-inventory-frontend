@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { AlertService } from 'app/alert.service';
 import * as uuid from 'uuid/v4';
 import * as _ from 'lodash';
+import { BorrowNoteService } from '../borrow-note.service';
 
 @Component({
   selector: 'wm-requisition-confirm',
@@ -21,12 +22,20 @@ export class RequisitionConfirmComponent implements OnInit {
   requisitionCode: any = null;
   requisitionWarehouseName: any = null;
   withdrawWarehouseName: any = null;
+  wmRequisitionId: any;
+
   requisitionType: any = null;
   confirmId: any;
   isVerify: boolean = false;
 
   isEdit: boolean = false;
   actionMsg: string = null;
+
+  genericIds: any = [];
+  borrowNotes: any = [];
+  borrowRequisitions: any = [];
+  selectedBorrowNotes: any = [];
+  openBorrowNote: boolean = false;
 
   @ViewChild('modalLoading') public modalLoading: any;
 
@@ -39,6 +48,7 @@ export class RequisitionConfirmComponent implements OnInit {
   };
   constructor(
     private requisitionService: RequisitionService,
+    private borrowNoteService: BorrowNoteService,
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService
@@ -70,14 +80,6 @@ export class RequisitionConfirmComponent implements OnInit {
   }
 
   onSuccessConfirm(event: any) {
-    // let obj: any = {
-    //   confirm_qty: event.confirm_qty,
-    //   remain_qty: event.remain_qty,
-    //   conversion_qty: event.conversion_qty,
-    //   wm_product_id: event.wm_product_id,
-    //   generic_id: event.generic_id
-    // }
-
     let idx = _.findIndex(this.products, { generic_id: event.generic_id });
 
     if (idx > -1) {
@@ -90,6 +92,13 @@ export class RequisitionConfirmComponent implements OnInit {
       } else {
         this.products[idx].confirmItems.push(event);
       }
+
+      // calculate new allowcate_qty
+      this.products[idx].allowcate_qty = 0;
+      this.products[idx].confirmItems.forEach(v => {
+        // this.products[idx].small_remain_qty += v.remain_small_qty;
+        this.products[idx].allowcate_qty += (v.confirm_qty * v.conversion_qty);
+      });
     }
   }
 
@@ -101,6 +110,9 @@ export class RequisitionConfirmComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         rs.rows.forEach((v: any) => {
+
+          this.genericIds.push(v.generic_id);
+
           let obj: any = {
             conversion_qty: v.conversion_qty,
             confirm_qty: v.confirm_qty,
@@ -113,11 +125,14 @@ export class RequisitionConfirmComponent implements OnInit {
             primary_unit_name: v.priamry_unit_name,
             requisition_item_id: v.requisition_item_id,
             requisition_order_id: v.requisition_order_id,
-            requisition_qty: v.requisition_qty,
+            requisition_qty: v.requisition_qty, // pack
+            borrow_qty: 0, // pack
             to_unit_name: v.to_unit_name,
             unit_generic_id: v.unit_generic_id,
             working_code: v.working_code,
-            confirmItems: []
+            confirmItems: [],
+            small_remain_qty: v.remain_qty, // small qty
+            small_book_qty: v.book_qty, // small qty
           }
 
           if (rs.pays) {
@@ -140,6 +155,9 @@ export class RequisitionConfirmComponent implements OnInit {
           this.products.push(obj);
         });
 
+        // get borrow note
+        await this.getBorrowNotes();
+
       } else {
         this.alertService.error(rs.error);
       }
@@ -147,6 +165,22 @@ export class RequisitionConfirmComponent implements OnInit {
       this.modalLoading.hide();
       console.log(error);
       this.alertService.error(error.message);
+    }
+  }
+
+  async getBorrowNotes() {
+    try {
+      this.modalLoading.show();
+      let rs: any = await this.requisitionService.getBorrowNotes(this.wmRequisitionId, this.genericIds);
+      this.modalLoading.hide();
+      if (rs.ok) {
+        this.borrowNotes = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
     }
   }
 
@@ -161,6 +195,7 @@ export class RequisitionConfirmComponent implements OnInit {
         this.requisitionWarehouseName = detail ? detail.requisition_warehouse_name : null;
         this.withdrawWarehouseName = detail ? detail.withdraw_warehouse_name : null;
         this.requisitionType = detail ? detail.requisition_type : null;
+        this.wmRequisitionId = detail ? detail.wm_requisition : null;
 
         if (detail.requisition_date) {
           this.requisitionDate = {
@@ -270,9 +305,7 @@ export class RequisitionConfirmComponent implements OnInit {
           this.saveWithOutUnPaid(data);
         }
       })
-      .catch(() => {
-      
-      });
+      .catch(() => { });
   }
 
   async saveWithOutUnPaid(data: any) {
@@ -329,5 +362,84 @@ export class RequisitionConfirmComponent implements OnInit {
       }).catch(() => {
 
       });
+  }
+
+  // open borrow notes
+  showBorrowNotes() {
+    this.openBorrowNote = true;
+  }
+
+  doCalculateRequisition() {
+    this.alertService.confirm('ต้องการปรับยอดการเบิกจากการยืมใหม่ ใช่หรือไม่?')
+      .then(async () => {
+      
+        let dataBorrow = [];
+        let data = [];
+        let slData: any = _.clone(this.selectedBorrowNotes);
+
+        slData.forEach((v, i) => {
+          let idx = _.findIndex(data, { generic_id: v.generic_id });
+          if (idx > -1) {
+            data[idx].qty += v.qty;
+          } else data.push(v);
+        });
+
+        this.products.forEach((x, i) => {
+          let idx = _.findIndex(data, { generic_id: x.generic_id });
+          if (idx > -1) {
+            let selectedQty = data[idx].qty * data[idx].conversion_qty;
+            let pQty = this.products[i].requisition_qty * this.products[i].conversion_qty;
+            let reqQty = pQty + selectedQty;
+            // จำนวนจ่ายจริง
+            this.products[i].requisition_qty = Math.floor(reqQty / this.products[i].conversion_qty);
+            // จำนวนที่ยืมไป
+            dataBorrow.push({
+              borrowNoteDetailId: data[idx].borrow_note_detail_id,
+              requisitionId: this.requisitionId,
+              genericId: this.products[i].generic_id,
+              requisitionQty: reqQty,
+              unitGenericId: this.products[i].unit_generic_id
+            });
+          }
+
+          // remove selected
+          this.selectedBorrowNotes.forEach((b, ix) => {
+            if (b.generic_id === x.generic_id) {
+              let idxB = _.findIndex(this.borrowNotes, { borrow_note_detail_id: this.selectedBorrowNotes[ix].borrow_note_detail_id });
+              if (idxB > -1) this.borrowNotes.splice(idxB, 1);
+              this.selectedBorrowNotes.splice(ix, 1);
+            }
+            
+          });
+        });
+        
+        // console.log(dataBorrow);
+
+        try {
+          this.modalLoading.show();
+          let rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow);
+          this.modalLoading.hide();
+
+          if (rs.ok) {
+            this.alertService.success();
+            await this.getOrderItems();
+          } else {
+            this.alertService.error(rs.error);
+            this.selectedBorrowNotes = [];
+            this.borrowNotes = [];
+            await this.getBorrowNotes();
+          }
+          this.openBorrowNote = false;
+        } catch (error) {
+          console.log(error);
+          this.alertService.error();
+          this.selectedBorrowNotes = [];
+          this.borrowNotes = [];
+          await this.getBorrowNotes();
+          await this.getOrderItems();
+          this.openBorrowNote = false;
+        }
+      }).catch(() => { this.openBorrowNote = false; });
+    
   }
 }
