@@ -3,17 +3,12 @@
   <span class="breadcrumb-item active">บันทึกช่วยจำการยืมยา/เวชภัณฑ์</span>
 </nav>
 
-<div class="row">
-  <div class="col-md-6">
-    <label for="query">ค้นหา</label>
-    <input type="text" placeholder="ระบุคำค้นหา" id="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 220px;">
-  </div>
-  <div class="col-md-6">
-    <button style="float: right;" class="btn btn-sm btn-success btn-icon" routerLink="/admin/borrow-notes/new">
-      <clr-icon shape="plus"></clr-icon> เพิ่มรายการ
-    </button>
-  </div>
-</div>
+<button class="btn btn-sm btn-success btn-icon" routerLink="/admin/borrow-notes/new">
+  <clr-icon shape="plus"></clr-icon> บันทึกยืมยา
+</button>
+
+<label for="query">ค้นหา</label>
+<input type="text" placeholder="ระบุคำค้นหา" id="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;">
 
 <clr-datagrid (clrDgRefresh)="refresh($event)">
   <clr-dg-column style="width: 120px;">วันที่</clr-dg-column>
