@@ -382,7 +382,11 @@ export class RequisitionConfirmComponent implements OnInit {
           let idx = _.findIndex(data, { generic_id: v.generic_id });
           if (idx > -1) {
             data[idx].qty += v.qty * v.conversion_qty;
-          } else data.push(v);
+          } else {
+            let obj: any = v;
+            obj.qty = v.qty * v.conversion_qty;
+            data.push(obj);
+          }
         });
 
         this.products.forEach((x, i) => {
@@ -392,7 +396,7 @@ export class RequisitionConfirmComponent implements OnInit {
             let pQty = this.products[i].requisition_qty * this.products[i].conversion_qty;
             let reqQty = pQty + data[idx].qty;
             // จำนวนจ่ายจริง
-            this.products[i].requisition_qty = Math.floor(reqQty / this.products[i].conversion_qty);
+            // this.products[i].requisition_qty = Math.floor(reqQty / this.products[i].conversion_qty);
             // จำนวนที่ยืมไป
             dataBorrow.push({
               // borrowNoteDetailId: data[idx].borrow_note_detail_id,
@@ -429,13 +433,15 @@ export class RequisitionConfirmComponent implements OnInit {
 
           if (rs.ok) {
             this.alertService.success();
-            await this.getOrderItems();
           } else {
             this.alertService.error(rs.error);
             this.selectedBorrowNotes = [];
             this.borrowNotes = [];
-            await this.getBorrowNotes();
           }
+          
+          await this.getOrderItems();
+          await this.getBorrowNotes();
+
           this.openBorrowNote = false;
         } catch (error) {
           console.log(error);
