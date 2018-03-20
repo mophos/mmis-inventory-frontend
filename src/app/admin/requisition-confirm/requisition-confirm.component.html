@@ -122,10 +122,12 @@
       <clr-dg-column>ชื่อ Generic</clr-dg-column>
       <clr-dg-column style="width: 150px;">จำนวน</clr-dg-column>
       <clr-dg-column style="width: 150px;">รวม (Base)</clr-dg-column>
+      <clr-dg-column>เจ้าหน้าที่ยืม</clr-dg-column>
       <clr-dg-row *clrDgItems="let generic of borrowNotes" [clrDgItem]="generic">
         <clr-dg-cell> {{generic.generic_name}} </clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{generic.qty | number}} {{generic.from_unit_name}} (x {{generic.conversion_qty | number}} {{generic.to_unit_name}})</clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{generic.qty * generic.conversion_qty | number}} {{ generic.to_unit_name }}</clr-dg-cell>
+        <clr-dg-cell>{{generic.title_name}}{{ generic.fname }} {{generic.lname}}</clr-dg-cell>
       </clr-dg-row>
       <clr-dg-footer>{{borrowNotes.length}} รายการ</clr-dg-footer>
     </clr-datagrid>
