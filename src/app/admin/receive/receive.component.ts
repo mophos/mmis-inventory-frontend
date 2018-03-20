@@ -353,13 +353,10 @@ export class ReceiveComponent implements OnInit {
   }
 
   async approveReceiveCheck(access: any, action: any) {
-    console.log(this.selectedOtherApprove);
-    // let receivesIds = [];
     
     let check = false
     let accessName: any;
-    // this.receiveIds = [];
-
+    
     this.titel = 'รายการรับสินค้า';
 
     if (access === 1) {
@@ -409,7 +406,7 @@ export class ReceiveComponent implements OnInit {
 
     let ids = [];
     this.selectedApprove.forEach(v => {
-      if (!v.approve_id && !v.purchase_order_number) ids.push(v.receive_id);
+      if (!v.approve_id && v.purchase_order_number) ids.push(v.receive_id);
     });
 
     this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
