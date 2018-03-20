@@ -374,6 +374,7 @@ export class RequisitionConfirmComponent implements OnInit {
       .then(async () => {
       
         let dataBorrow = [];
+        let borrowItems = [];
         let data = [];
         let slData: any = _.clone(this.selectedBorrowNotes);
 
@@ -394,7 +395,7 @@ export class RequisitionConfirmComponent implements OnInit {
             this.products[i].requisition_qty = Math.floor(reqQty / this.products[i].conversion_qty);
             // จำนวนที่ยืมไป
             dataBorrow.push({
-              borrowNoteDetailId: data[idx].borrow_note_detail_id,
+              // borrowNoteDetailId: data[idx].borrow_note_detail_id,
               requisitionId: this.requisitionId,
               genericId: this.products[i].generic_id,
               requisitionQty: reqQty,
@@ -403,21 +404,27 @@ export class RequisitionConfirmComponent implements OnInit {
           }
 
           // remove selected
-          this.selectedBorrowNotes.forEach((b, ix) => {
+          slData.forEach((b, ix) => {
             if (b.generic_id === x.generic_id) {
-              let idxB = _.findIndex(this.borrowNotes, { borrow_note_detail_id: this.selectedBorrowNotes[ix].borrow_note_detail_id });
+              
+              let _idx = _.findIndex(dataBorrow, { genericId: b.generic_id });
+              if (_idx > -1) {
+                let obj: any = {};
+                obj.borrowNoteDetailId = b.borrow_note_detail_id;
+                obj.requisitionId = dataBorrow[_idx].requisitionId;
+                borrowItems.push(obj);
+              }
+
+              let idxB = _.findIndex(this.borrowNotes, { borrow_note_detail_id: b.borrow_note_detail_id });
               if (idxB > -1) this.borrowNotes.splice(idxB, 1);
               this.selectedBorrowNotes.splice(ix, 1);
             }
-            
           });
         });
         
-        // console.log(dataBorrow);
-
         try {
           this.modalLoading.show();
-          let rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow);
+          let rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow, borrowItems);
           this.modalLoading.hide();
 
           if (rs.ok) {
