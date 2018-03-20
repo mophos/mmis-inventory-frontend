@@ -374,27 +374,32 @@ export class RequisitionConfirmComponent implements OnInit {
       .then(async () => {
       
         let dataBorrow = [];
+        let borrowItems = [];
         let data = [];
         let slData: any = _.clone(this.selectedBorrowNotes);
 
         slData.forEach((v, i) => {
           let idx = _.findIndex(data, { generic_id: v.generic_id });
           if (idx > -1) {
-            data[idx].qty += v.qty;
-          } else data.push(v);
+            data[idx].qty += v.qty * v.conversion_qty;
+          } else {
+            let obj: any = v;
+            obj.qty = v.qty * v.conversion_qty;
+            data.push(obj);
+          }
         });
 
         this.products.forEach((x, i) => {
           let idx = _.findIndex(data, { generic_id: x.generic_id });
           if (idx > -1) {
-            let selectedQty = data[idx].qty * data[idx].conversion_qty;
+            // let selectedQty = data[idx].qty * data[idx].conversion_qty;
             let pQty = this.products[i].requisition_qty * this.products[i].conversion_qty;
-            let reqQty = pQty + selectedQty;
+            let reqQty = pQty + data[idx].qty;
             // จำนวนจ่ายจริง
-            this.products[i].requisition_qty = Math.floor(reqQty / this.products[i].conversion_qty);
+            // this.products[i].requisition_qty = Math.floor(reqQty / this.products[i].conversion_qty);
             // จำนวนที่ยืมไป
             dataBorrow.push({
-              borrowNoteDetailId: data[idx].borrow_note_detail_id,
+              // borrowNoteDetailId: data[idx].borrow_note_detail_id,
               requisitionId: this.requisitionId,
               genericId: this.products[i].generic_id,
               requisitionQty: reqQty,
@@ -403,32 +408,40 @@ export class RequisitionConfirmComponent implements OnInit {
           }
 
           // remove selected
-          this.selectedBorrowNotes.forEach((b, ix) => {
+          slData.forEach((b, ix) => {
             if (b.generic_id === x.generic_id) {
-              let idxB = _.findIndex(this.borrowNotes, { borrow_note_detail_id: this.selectedBorrowNotes[ix].borrow_note_detail_id });
+              
+              let _idx = _.findIndex(dataBorrow, { genericId: b.generic_id });
+              if (_idx > -1) {
+                let obj: any = {};
+                obj.borrowNoteDetailId = b.borrow_note_detail_id;
+                obj.requisitionId = dataBorrow[_idx].requisitionId;
+                borrowItems.push(obj);
+              }
+
+              let idxB = _.findIndex(this.borrowNotes, { borrow_note_detail_id: b.borrow_note_detail_id });
               if (idxB > -1) this.borrowNotes.splice(idxB, 1);
               this.selectedBorrowNotes.splice(ix, 1);
             }
-            
           });
         });
-        
-        // console.log(dataBorrow);
 
         try {
           this.modalLoading.show();
-          let rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow);
+          let rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow, borrowItems);
           this.modalLoading.hide();
 
           if (rs.ok) {
             this.alertService.success();
-            await this.getOrderItems();
           } else {
             this.alertService.error(rs.error);
             this.selectedBorrowNotes = [];
             this.borrowNotes = [];
-            await this.getBorrowNotes();
           }
+          
+          await this.getOrderItems();
+          await this.getBorrowNotes();
+
           this.openBorrowNote = false;
         } catch (error) {
           console.log(error);

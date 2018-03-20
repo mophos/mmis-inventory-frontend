@@ -149,7 +149,7 @@ export class BorrowNoteNewComponent implements OnInit {
   removeSelectedGeneric(idx: number) {
     this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
       .then(() => {
-        this.generics[idx].splice(idx, 1);
+        this.generics.splice(idx, 1);
       }).catch(() => { });
   }
 

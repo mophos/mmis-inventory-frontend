@@ -238,7 +238,9 @@ export class IssueTransactionNewComponent implements OnInit {
 
   async saveIssue() {
     const issueDate = this.issueDate ? `${this.issueDate.date.year}-${this.issueDate.date.month}-${this.issueDate.date.day}` : null;
+    this.modalLoading.show();
     const rs = await this.periodService.getStatus(issueDate);
+    this.modalLoading.hide();
     if (rs.rows[0].status_close === 'Y') {
       this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถตัดจ่ายได้')
     } else {
@@ -253,7 +255,11 @@ export class IssueTransactionNewComponent implements OnInit {
 
           // check product remain
           let isError = false;
+
+          let _products = [];
+
           this.products.forEach(v => {
+            if (v.issue_qty > 0) _products.push(v);
             const totalIssue = v.issue_qty * v.conversion_qty;
             if (totalIssue > v.remain_qty || v.issue_qty <= 0) {
               isError = true;
@@ -264,7 +270,7 @@ export class IssueTransactionNewComponent implements OnInit {
             this.alertService.error('มีจำนวนที่มียอดจ่ายมากกว่ายอดคงเหลือ');
             this.modalLoading.hide();
           } else {
-            this.issueService.saveIssue(summary, this.products)
+            this.issueService.saveIssue(summary, _products)
               .then((result: any) => {
                 if (result.ok) {
                   this.alertService.success();

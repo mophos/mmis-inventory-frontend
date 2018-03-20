@@ -17,6 +17,7 @@ import { State } from "@clr/angular";
 import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { AccessCheck } from '../../access-check';
+import { isLoweredSymbol } from '@angular/compiler';
 
 @Component({
   selector: 'wm-receive',
@@ -171,7 +172,7 @@ export class ReceiveComponent implements OnInit {
     const offset = +state.page.from;
     const limit = +state.page.size;
     this.modalLoading.show();
-    if (!this.isSearching) {
+    if (!this.query) {
       try {
         const rs = await this.receiveService.getReceiveOther(limit, offset);
         await this.getReceiveOtherExpired();
@@ -352,32 +353,27 @@ export class ReceiveComponent implements OnInit {
   }
 
   async approveReceiveCheck(access: any, action: any) {
+    
     let check = false
-    let accessName: any
-    this.titel = 'รายการรับสินค้า'
+    let accessName: any;
+    
+    this.titel = 'รายการรับสินค้า';
+
     if (access === 1) {
       accessName = 'WM_RECEIVE_APPROVE'
       this.action = 'WM_RECEIVES'
-      this.page = 1
-      _.forEach(this.selectedApprove, (v) => {
-        if (!v.approve_id && v.purchase_order_number) {
-          this.receiveIds.push(v.receive_id);
-        }
-      });
-      this.receiveIds.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
+      this.page = 1;
+
+      this.selectedApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     } else if (access = 2) {
       accessName = 'WM_RECEIVE_OTHER_APPROVE'
       this.action = 'WM_RECEIVES_OTHER'
-      this.page = 2
-      _.forEach(this.selectedOtherApprove, (v) => {
-        if (!v.approve_id) {
-          this.receiveOtherIds.push(v.receive_other_id);
-        }
-      });
-      this.receiveOtherIds.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
+      this.page = 2;
+
+      this.selectedOtherApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     }
 
-    if (check) {
+    if (check) { //ตรวจสอบสิทธิการอนุมัติใบรับ
       const rs = await this.accessCheck.can(accessName);
       if (rs) {
         this.page === 1 ? this.saveApprove() : this.saveApproveOther();
@@ -407,17 +403,15 @@ export class ReceiveComponent implements OnInit {
   }
 
   saveApprove() {
-    this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + this.receiveIds.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
+
+    let ids = [];
+    this.selectedApprove.forEach(v => {
+      if (!v.approve_id && v.purchase_order_number) ids.push(v.receive_id);
+    });
+
+    this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
       .then(() => {
-        this.modalApprove.setReceiveIds(this.receiveIds);
-        // this.receiveService.getProductReceives()
-        //   .then((results: any) => {
-        //     results.rows.forEach(e => {
-        //       this.receiveService.updatePurchaseCompleted(e.purchase_order_id);
-        //     });
-        //   }).catch((error) => {
-        //     // console.log(error)
-        //   })
+        this.modalApprove.setReceiveIds(ids);
         this.modalApprove.openModal();
       }).catch(() => {
         // cancel
@@ -628,9 +622,14 @@ export class ReceiveComponent implements OnInit {
   }
 
   saveApproveOther() {
-    this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + this.receiveOtherIds.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
+    let ids = [];
+    this.selectedOtherApprove.forEach(v => {
+      if (!v.approve_id) ids.push(v.receive_other_id);
+    });
+
+    this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
       .then(() => {
-        this.modalApproveOther.setReceiveIds(this.receiveOtherIds);
+        this.modalApproveOther.setReceiveIds(ids);
         this.modalApproveOther.openModal();
       }).catch(() => {
         // cancel
