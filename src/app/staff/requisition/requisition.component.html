@@ -29,21 +29,21 @@
       <clr-datagrid style="height: 90%;" style="padding-top: 5px;">
         <clr-dg-column style="width: 120px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
-        <clr-dg-column>หน่วยเบิก</clr-dg-column>
+        <!-- <clr-dg-column>หน่วยเบิก</clr-dg-column> -->
         <clr-dg-column>เบิกจาก</clr-dg-column>
         <clr-dg-column>ประเภทการเบิก</clr-dg-column>
         <!-- <clr-dg-column>บันทึกชั่วคราว</clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-        <clr-dg-row *clrDgItems="let order of orders" [clrDgItem]="order">
+        <clr-dg-row *clrDgItems="let order of orders" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y'}">
           <clr-dg-action-overflow>
-            <button class="action-item" [routerLink]="['/staff/requisition/edit/', order.requisition_order_id]">แก้ไขใบเบิก</button>
-            <button class="action-item" (click)="removeOrder(order)">ยกเลิกใบเบิก</button>
+            <button [disabled]="order.is_cancel === 'Y'" class="action-item" [routerLink]="['/staff/requisition/edit/', order.requisition_order_id]">แก้ไขใบเบิก</button>
+            <button [disabled]="order.is_cancel === 'Y'" class="action-item" (click)="removeOrder(order)">ยกเลิกใบเบิก</button>
             <!-- <button class="action-item" (click)="onDelete(user)">พิมพ์ใบเบิก</button> -->
           </clr-dg-action-overflow>
           <wm-staff-requisition-order-items *clrIfExpanded [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-staff-requisition-order-items>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
-          <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell> -->
           <clr-dg-cell>{{order.withdraw_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
           <!-- <clr-dg-cell>
@@ -73,7 +73,7 @@
       <clr-datagrid style="height: 90%;" style="padding-top: 5px;" >
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
-        <clr-dg-column>หน่วยเบิก</clr-dg-column>
+        <!-- <clr-dg-column>หน่วยเบิก</clr-dg-column> -->
         <clr-dg-column>เบิกจาก</clr-dg-column>
         <clr-dg-column>ประเภทการเบิก</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
@@ -82,7 +82,7 @@
             ngProjectAs="clr-dg-row-detail"></wm-staff-requisition-order-items-pay>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
-          <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell> -->
           <clr-dg-cell>{{order.withdraw_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
 
@@ -106,7 +106,7 @@
       <clr-datagrid style="height: 90%;" style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
-        <clr-dg-column>หน่วยเบิก</clr-dg-column>
+        <!-- <clr-dg-column>หน่วยเบิก</clr-dg-column> -->
         <clr-dg-column>เบิกจาก</clr-dg-column>
         <clr-dg-column>ประเภทการเบิก</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
@@ -117,7 +117,7 @@
           <wm-staff-requisition-order-unpaid-items *clrIfExpanded [unpaidId]="order.requisition_order_unpaid_id" ngProjectAs="clr-dg-row-detail"></wm-staff-requisition-order-unpaid-items>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
-          <clr-dg-cell>{{order.requisition_warehouse}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{order.requisition_warehouse}}</clr-dg-cell> -->
           <clr-dg-cell>{{order.withdraw_warehouse}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
 
@@ -142,7 +142,7 @@
         <clr-dg-column style="width: 100px;">วันที่อนุมัติ</clr-dg-column>
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
-        <clr-dg-column>หน่วยเบิก</clr-dg-column>
+        <!-- <clr-dg-column>หน่วยเบิก</clr-dg-column> -->
         <clr-dg-column>เบิกจาก</clr-dg-column>
         <clr-dg-column>ประเภทการเบิก</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
@@ -158,7 +158,7 @@
           <clr-dg-cell>{{order.approve_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
-          <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell> -->
           <clr-dg-cell>{{order.withdraw_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
 
