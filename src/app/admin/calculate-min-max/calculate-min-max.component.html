@@ -21,7 +21,12 @@
     <div class="form-group row wid99">
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
         <button class="btn btn-sm btn-success" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate">
-          คำนวณ
+          <clr-icon shape="calculator"></clr-icon> คำนวณ
+        </button>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <button class="btn btn-sm btn-primary" (click)="save()" [disabled]="!fromDate || !toDate">
+          <clr-icon shape="floppy"></clr-icon> บันทึก
         </button>
       </div>
     </div>
