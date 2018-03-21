@@ -90,7 +90,11 @@ export class CalculateMinMaxComponent implements OnInit {
     if (idx > -1) {
       this.generics[idx].safty_stock_day = +value;
       this.generics[idx].min_qty = this.generics[idx].qty + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
-      this.generics[idx].max_qty = this.generics[idx].use_total + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
+      if (this.generics[idx].use_total > this.generics[idx].qty) {
+        this.generics[idx].max_qty = this.generics[idx].use_total + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
+      } else {
+        this.generics[idx].max_qty = this.generics[idx].min_qty + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
+      }
     }
   }
 
