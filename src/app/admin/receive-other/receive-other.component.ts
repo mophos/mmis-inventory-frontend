@@ -135,6 +135,7 @@ export class ReceiveOtherComponent implements OnInit {
     const decodedToken: any = this.jwtHelper.decodeToken(this.token);
     this.userWarehouseId = +decodedToken.warehouseId;
     this.receiveExpired = decodedToken.WM_RECEIVE_OTHER_EXPIRED === 'Y' ? true : false;
+    this.isApprove = decodedToken.WM_RECEIVE_OTHER_APPROVE === 'Y' ? true : false;
 
     // ใช้ชั่วคราว เฉพาะโรงพยาบาลสิงห์บุรี
     const hospital = JSON.parse(decodedToken.SYS_HOSPITAL);
@@ -157,8 +158,6 @@ export class ReceiveOtherComponent implements OnInit {
 
     this.getReceiveStatus();
     this.getReceiveTypes();
-    this.settings();
-
   }
 
   async getReceiveTypes() {
@@ -589,7 +588,7 @@ export class ReceiveOtherComponent implements OnInit {
               }
 
               /////Save and Approve 
-              if (this.isApprove === 'N') {
+              if (!this.isApprove) {
                 await this.receiveService.saveApproveOther(receiveOtherId.rows, _receiveDate, '');
               }
 
@@ -613,16 +612,6 @@ export class ReceiveOtherComponent implements OnInit {
     }
   }
 
-  async settings() {
-    try {
-      const results: any = await this.settingService.byModule('WM');
-      const settingConfig = results.rows;
-      const approve = _.find(settingConfig, { 'action_name': 'WM_RECEIVE_OTHER_APPROVE' });
-      this.isApprove = (approve.value == null || approve.value == '') ? approve.default : approve.value;
-    } catch (error) {
-      this.alertService.error(error.message);
-    }
-  }
   async checkExpired() {
     this.isExpired = false;
     this.isItemExpired = false;
