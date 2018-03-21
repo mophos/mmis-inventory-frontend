@@ -45,6 +45,9 @@
   <clr-dg-column [style.width.px]="100">
     หน่วย
   </clr-dg-column>
+  <clr-dg-column [style.width.px]="120" [clrDgField]="'use_total'">
+    ยอดการใช้
+  </clr-dg-column>
   <clr-dg-column [style.width.px]="120" [clrDgField]="'use_per_day'">
     อัตราการใช้ ต่อวัน
   </clr-dg-column>
@@ -67,6 +70,7 @@
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{g.qty | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{g.use_total | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{g.use_per_day | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <input type="text" class="wm-edit-box-number" #safty (keyup)="onChangeSaftyStock(safty.value, g)" style="background-color: #FFF9C4"
