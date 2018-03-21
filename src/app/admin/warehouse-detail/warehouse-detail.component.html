@@ -39,7 +39,8 @@
 <clr-datagrid [style.height.%]="75">
   <!-- <clr-dg-column [clrDgField]="'product_id'" [style.width.%]="15">รหัสยา</clr-dg-column> -->
   <clr-dg-column [clrDgField]="'product_name'" [style.width.%]="40">ชื่อยา (ชื่อทางการค้า)</clr-dg-column>
-  <clr-dg-column [style.width.%]="15">คงเหลือ</clr-dg-column>
+  <clr-dg-column [style.width.%]="10">คงเหลือ</clr-dg-column>
+  <clr-dg-column [style.width.%]="5">ราคา/แพ็ค</clr-dg-column>
   <clr-dg-column [style.width.%]="10">มูลค่า/หน่วยใหญ่</clr-dg-column>
   <clr-dg-column [clrDgField]="'lot_no'" [style.width.%]="10">LOT</clr-dg-column>
   <clr-dg-column [style.width.%]="10">วันหมดอายุ</clr-dg-column>
@@ -56,6 +57,7 @@
     <!-- <clr-dg-cell>{{p.product_id}}</clr-dg-cell> -->
     <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.qty | number}} {{p.base_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{p.packcost | number: '1.2-2'}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.cost*p.qty | number: '1.2-2'}}</clr-dg-cell>
     <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
     <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
