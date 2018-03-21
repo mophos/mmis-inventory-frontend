@@ -588,7 +588,7 @@ export class ReceiveOtherComponent implements OnInit {
               }
 
               /////Save and Approve 
-              if (this.isApprove === 'N') {
+              if (!this.isApprove) {
                 await this.receiveService.saveApproveOther(receiveOtherId.rows, _receiveDate, '');
               }
 
