@@ -1,0 +1,122 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">บันทึกช่วยจำการยืมยา/เวชภัณฑ์</span>
+</nav>
+
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">วันที่จ่าย</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate1" [options]="dateOption" [(ngModel)]="borrowDate" required></my-date-picker-th>
+          </div>
+
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="peopleName" class="required">
+              <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
+              <span *ngIf="peopleId">เจ้าหน้าที่</span>
+            </label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="warehouse" class="required">หน่วยเบิก</label>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <wm-select-warehouses style="width: 100%;" (onSelect)="onSelectedWarehouse($event)" [selectedId]="warehouseId"></wm-select-warehouses>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="remark">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <input id="remark" class="form-control" type="text" name="remark" [(ngModel)]="remark">
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+<clr-datagrid class="grid-order" [style.padding-top.px]="5">
+  <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="180">จำนวน</clr-dg-column>
+  <clr-dg-column [style.width.px]="180">หน่วย</clr-dg-column>
+  <clr-dg-column [style.width.px]="180">รวม (Base)</clr-dg-column>
+  <clr-dg-column [style.width.px]="150"></clr-dg-column>
+
+  <clr-dg-row *ngFor="let generic of generics; let idx = index;">
+    <clr-dg-cell style="line-height: 25px;">
+      {{idx + 1}}. {{generic.generic_name}}
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #qty (keyup)="editChangeQty(idx, qty.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberWithOutDot [value]="generic.qty" />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="generic.unit_generic_id" [genericId]="generic.generic_id"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{generic.qty * generic.conversion_qty | number}} {{generic.to_unit_name}}</clr-dg-cell>
+
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedGeneric(idx)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-row class="newLine">
+    <clr-dg-cell>
+      <wm-search-generic-autocomplete [clearOnSelected]="false" #elSearchGeneric (onSelect)="setSelectedGeneric($event)" (onChange)="onChangeSearchGeneric($event)"></wm-search-generic-autocomplete>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4" [disabled]="!selectedGenericId" [(ngModel)]="selectedQty"
+        wmNumberWithOutDot placeholder="">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #elUnitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">
+      {{+selectedQty * +selectedConversionQty | number}} {{selectedPrimaryUnitName}}
+    </clr-dg-cell>
+
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedGenericId || !selectedQty || !selectedUnitGenericId"
+          (click)="addGeneric()">
+          เพิ่ม
+        </button>
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
+          ยกเลิก
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>รวม {{generics.length | number}} รายการ</clr-dg-footer>
+</clr-datagrid>
+
+<div class="row wid99">
+  <div class="col-md-12">
+    <button (click)="save()" class="btn btn-success btn-sm" [disabled]="!generics.length">
+      <clr-icon shape="floppy"></clr-icon>
+      บันทึกข้อมูล
+    </button>
+    <button class="btn btn-danger btn-sm" routerLink="/admin/borrow-notes">
+      <clr-icon shape="home"></clr-icon>
+      กลับหน้าหลัก
+    </button>
+  </div>
+</div>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

@@ -119,7 +119,7 @@
       <span class="badge badge-danger">{{unpaids.length | number}}</span>
     </button>
     <clr-tab-content *clrIfActive>
-      <button class="btn btn-sm btn-danger btn-icon" *ngIf="selectedCancel.length" (click)="doCancelUnpaids()">
+      <button class="btn btn-sm btn-danger btn-icon" [disabled]="!selectedCancel.length" (click)="doCancelUnpaids()">
         <clr-icon shape="trash"></clr-icon> ยกเลิกค้างจ่าย ({{selectedCancel.length | number}} รายการ)
       </button>
       <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="selectedCancel">

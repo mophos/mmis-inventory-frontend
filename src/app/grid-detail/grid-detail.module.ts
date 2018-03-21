@@ -38,6 +38,7 @@ import { IssuesAdminComponent } from './issues-admin/issues-admin.component';
 import { TransferItemsComponent } from './transfer-items/transfer-items.component';
 import { IssueProductComponent } from './issue-product/issue-product.component';
 import { PurchaseDetailComponent } from './purchase-detail/purchase-detail.component';
+import { BorrowNotesDetailComponent } from './borrow-notes-detail/borrow-notes-detail.component';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import { PurchaseDetailComponent } from './purchase-detail/purchase-detail.compo
     IssuesAdminComponent,
     TransferItemsComponent,
     IssueProductComponent,
-    PurchaseDetailComponent
+    PurchaseDetailComponent,
+    BorrowNotesDetailComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -112,7 +114,8 @@ import { PurchaseDetailComponent } from './purchase-detail/purchase-detail.compo
     IssuesAdminComponent,
     TransferItemsComponent,
     IssueProductComponent,
-    PurchaseDetailComponent
+    PurchaseDetailComponent,
+    BorrowNotesDetailComponent
   ]
 })
 export class GridDetailModule { }

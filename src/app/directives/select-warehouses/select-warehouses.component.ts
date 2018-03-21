@@ -18,7 +18,7 @@ export class SelectWarehousesComponent implements OnInit {
   @Input('disabled') disabled;
 
   @Input('selectedId')
-  set in(val) {
+  set setSelectedId(val) {
     this.warehouseId = val;
   }
 
@@ -56,6 +56,7 @@ export class SelectWarehousesComponent implements OnInit {
   clearSelected() {
     this.warehouseId = null;
   }
+
   clearWarehouses() {
     this.warehouses = [];
   }
