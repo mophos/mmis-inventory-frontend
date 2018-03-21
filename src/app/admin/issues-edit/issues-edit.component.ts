@@ -361,7 +361,7 @@ export class IssuesEditComponent implements OnInit {
           .then((rs: any) => {
             if (rs.ok) {
               this.alertService.success();
-              this.router.navigate(['/staff/issue-transaction']);
+              this.router.navigate(['/admin/issues']);
             } else {
               this.alertService.error(rs.error);
             }

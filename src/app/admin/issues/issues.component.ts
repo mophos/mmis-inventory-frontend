@@ -82,14 +82,14 @@ export class IssuesComponent implements OnInit {
   }
 
   removeIssue(s: any) {
-    this.isSaving = true;
     this.alertService.confirm(`ต้องการลบรายการนี้ [${s.issue_code}] ใช่หรือไม่?`)
       .then(async () => {
         try {
+          this.modalLoading.show();
           const rs: any = await this.issueService.removeIssue(s.issue_id);
           if (rs.ok) {
             this.alertService.success();
-            // this.getIssues();
+            await this.getIssues();
           } else {
             this.alertService.error(rs.error);
           }
@@ -138,21 +138,18 @@ export class IssuesComponent implements OnInit {
   }
 
   approveIssue() {
-    // console.log(this.selectedApprove);
     const issueIds = [];
     this.selectedApprove.forEach((v: any) => {
-      if (v.approved !== 'Y') {
+      if (v.approved !== 'Y' && v.is_cancel !== 'Y') {
         issueIds.push(v.issue_id);
       }
     });
 
     if (issueIds.length) {
-
-      this.isSaving = true;
-
       this.alertService.confirm(`มีรายการ ${issueIds.length} รายการ ที่ต้องการอนุมัติรายการใบตัดจ่าย ยืนยันใช่หรือไม่?`)
         .then(async () => {
           try {
+            this.modalLoading.show();
             const rs: any = await this.issueService.approveIssue(issueIds);
             if (rs.ok) {
               this.alertService.success();
@@ -175,7 +172,6 @@ export class IssuesComponent implements OnInit {
       this.selectedApprove = [];
       this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     }
-    this.isSaving = false;
   }
 
   showReport(issues_id: any) {

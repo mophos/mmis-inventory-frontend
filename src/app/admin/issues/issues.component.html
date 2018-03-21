@@ -2,9 +2,6 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">ตัดจ่ายสินค้า</span>
 </nav>
-<div class="progress loop" *ngIf="isSaving">
-  <progress></progress>
-</div>
 <div class="row wid99">
   <div class="col-md-6">
     <button type="button" class="btn btn-sm btn-success" routerLink="/admin/issues/new">
@@ -44,7 +41,7 @@
   <clr-dg-column>หมายเหตุ</clr-dg-column>
   <clr-dg-column style="width: 150px;">#</clr-dg-column>
   <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-  <clr-dg-row *ngFor="let s of issues" [clrDgItem]="s" [ngClass]="{'approve-status': s.approved === 'Y'}">
+  <clr-dg-row *ngFor="let s of issues" [clrDgItem]="s" [ngClass]="{'isSuccess': s.approved === 'Y', 'isError': s.is_cancel === 'Y'}">
     <wm-transaction-issue-detail *clrIfExpanded [issueId]="s.issue_id" ngProjectAs="clr-dg-row-detail"></wm-transaction-issue-detail>
     <clr-dg-cell style="text-align: center;">{{s.issue_date | toThaiDate}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">{{s.issue_code}}</clr-dg-cell>
@@ -57,14 +54,14 @@
         <!-- <button [disabled]="isSaving" class="btn btn-sm btn-icon btn-primary" (click)="showReport(s.issue_id)">
           <clr-icon shape="printer"></clr-icon>
         </button> -->
-        <button [disabled]="isSaving || s.approved === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/admin/issues/edit"
+        <button [disabled]="s.approved === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/admin/issues/edit"
           [queryParams]="{issueId: s.issue_id}">
           <clr-icon shape="note"></clr-icon>
         </button>
-        <button [disabled]="isSaving || s.approved === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="removeIssue(s)">
+        <button [disabled]="s.approved === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="removeIssue(s)">
           <clr-icon shape="trash"></clr-icon>
         </button>
-        <button class="btn btn-sm btn-icon btn-primary tooltip tooltip-sm tooltip-left" role="tooltip" aria-haspopup="true" (click)="showReport(s.issue_id)">
+        <button [disabled]="s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-primary tooltip tooltip-sm tooltip-left" role="tooltip" aria-haspopup="true" (click)="showReport(s.issue_id)">
           <clr-icon shape="printer"></clr-icon>
           <span class="tooltip-content">พิมพ์ใบตัดจ่าย</span>
         </button>

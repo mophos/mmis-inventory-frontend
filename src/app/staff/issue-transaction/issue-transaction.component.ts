@@ -131,7 +131,7 @@ export class IssueTransactionComponent implements OnInit {
     // console.log(this.selectedApprove);
     const issueIds = [];
     this.selectedApprove.forEach((v: any) => {
-      if (v.approved !== 'Y') {
+      if (v.approved !== 'Y' && v.is_cancel !== 'Y') {
         issueIds.push(v.issue_id);
       }
     });

@@ -51,6 +51,10 @@
   </div>
 </div>
 
+<button class="btn btn-sm btn-icon btn-primary" *ngIf="borrowNotes.length" (click)="showBorrowNotes()">
+  รายการบันทึกยืม ({{borrowNotes.length | number}} รายการ)
+</button>
+
 <clr-datagrid style="padding-top: 5px;">
   <clr-dg-column style="width: 15px;">ลำดับ</clr-dg-column>
   <clr-dg-column style="width: 110px;">Working Code</clr-dg-column>
@@ -61,16 +65,27 @@
   <clr-dg-column style="width: 110px;">รวม (Base)</clr-dg-column>
   <clr-dg-column style="width: 110px;">ยอดจ่าย (Base)</clr-dg-column>
   <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
-  <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="{'isSuccess': g.allowcate_qty >= g.requisition_qty, 'isWarning': g.is_minus === true, 'isError': g.allowcate_qty < g.requisition_qty && g.is_minus === false}">
-    <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit" [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="g.requisition_qty" [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
+  <clr-dg-row *ngFor="let g of products; let idx=index;" 
+  [ngClass]="
+  {'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty) && g.allowcate_qty <= (g.small_remain_qty - g.small_book_qty), 
+  'isWarning': g.allowcate_qty < (g.conversion_qty * g.requisition_qty) && g.allowcate_qty > 0, 
+  'isError': g.allowcate_qty === 0 || g.allowcate_qty > ( g.small_remain_qty - g.small_book_qty)}
+  ">
+    <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
+      [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="g.requisition_qty"
+      [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ idx +1}}</span>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ g.working_code }}</span>
     </clr-dg-cell>
-    <clr-dg-cell><span class="p4">{{ g.generic_name }}</span></clr-dg-cell>
-    <clr-dg-cell style="text-align: right;"><span class="p4">{{ g.requisition_qty }}</span></clr-dg-cell>
+    <clr-dg-cell>
+      <span class="p4">{{ g.generic_name }}</span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <span class="p4">{{ g.requisition_qty }}</span>
+    </clr-dg-cell>
     <!-- <clr-dg-cell style="text-align: right;"><span *ngIf="isEdit" class="p4" style="color: red;">{{ g.requisition_qty - g.confirm_qty | number}}</span></clr-dg-cell> -->
     <clr-dg-cell>
       <span class="p4">{{ g.from_unit_name }} ({{g.conversion_qty | number}} {{g.to_unit_name}})</span>
@@ -99,5 +114,28 @@
   </clr-dg-footer>
 
 </clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="openBorrowNote" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">รายการยืม</h3>
+  <div class="modal-body">
+    <clr-datagrid [(clrDgSelected)]="selectedBorrowNotes">
+      <clr-dg-column>ชื่อ Generic</clr-dg-column>
+      <clr-dg-column style="width: 150px;">จำนวน</clr-dg-column>
+      <clr-dg-column style="width: 150px;">รวม (Base)</clr-dg-column>
+      <clr-dg-column>เจ้าหน้าที่ยืม</clr-dg-column>
+      <clr-dg-row *clrDgItems="let generic of borrowNotes" [clrDgItem]="generic">
+        <clr-dg-cell> {{generic.generic_name}} </clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{generic.qty | number}} {{generic.from_unit_name}} (x {{generic.conversion_qty | number}} {{generic.to_unit_name}})</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{generic.qty * generic.conversion_qty | number}} {{ generic.to_unit_name }}</clr-dg-cell>
+        <clr-dg-cell>{{generic.title_name}}{{ generic.fname }} {{generic.lname}}</clr-dg-cell>
+      </clr-dg-row>
+      <clr-dg-footer>{{borrowNotes.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="openBorrowNote = false">ปิดหน้าต่าง</button>
+    <button type="button" class="btn btn-primary" [disabled]="!selectedBorrowNotes.length" (click)="doCalculateRequisition()">ปรับยอดการเบิกใหม่</button>
+  </div>
+</clr-modal>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>

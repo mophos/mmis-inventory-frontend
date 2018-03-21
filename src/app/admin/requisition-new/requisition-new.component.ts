@@ -294,7 +294,7 @@ export class RequisitionNewComponent implements OnInit {
           product.requisition_qty = 0;
           product.generic_name = v.generic_name;
           product.to_unit_qty = 0;
-          product.unit_generic_id = null;
+          product.unit_generic_id = v.unit_generic_id;
           product.from_unit_name = null;
           product.to_unit_name = null;
           product.qty = null;
@@ -371,6 +371,7 @@ export class RequisitionNewComponent implements OnInit {
 
         if (!products.length) {
           this.alertService.error('กรุณาระบุจำนวนสินค้าที่ต้องการเบิก');
+          this.isSave = false;
         } else {
           this.modalLoading.show();
           try {

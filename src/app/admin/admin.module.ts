@@ -132,6 +132,9 @@ import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { ProductManufactureComponent } from './reports/product-manufacture/product-manufacture.component';
 import { AccessCheck } from '../access-check';
 import { StockCardComponent } from './reports/stock-card/stock-card.component';
+import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
+import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
+import { BorrowNoteService } from './borrow-note.service';
 
 
 export function highchartsFactory() {
@@ -222,6 +225,8 @@ Highcharts.setOptions({
     RequisitionConfirmUnpaidComponent,
     ProductManufactureComponent,
     StockCardComponent,
+    BorrowNoteComponent,
+    BorrowNoteNewComponent
   ],
   providers: [
     MainService,
@@ -268,6 +273,7 @@ Highcharts.setOptions({
     ReceiveotherTypeService,
     TransferDashboardService,
     AccessCheck,
+    BorrowNoteService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })
