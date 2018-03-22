@@ -92,8 +92,17 @@
           <clr-dg-action-overflow>
             <!-- <button class="action-item" (click)="printApprove(order)">พิมพ์ใบอนุมัติเบิก</button>
             <button class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button> -->
-            <button class="action-item" [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0" (click)="approveRequisitionCheck(order)">อนุมัติใบจ่าย</button>                        
-            <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrderConfirm(order)">ยกเลิกใบจ่าย</button>
+            <button class="action-item" 
+            [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0" routerLink="/admin/requisition/confirm/edit" [queryParams]="{requisitionId: order.requisition_order_id, confirmId: order.confirm_id}">
+              <clr-icon shape="note"></clr-icon> แก้ไขรายการ
+            </button>                        
+            <button class="action-item" 
+            [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0" (click)="approveRequisitionCheck(order)">
+              <clr-icon shape="check" class="is-success"></clr-icon> อนุมัติใบจ่าย
+            </button>                        
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrderConfirm(order)">
+              <clr-icon shape="trash" class="is-danger"></clr-icon> ยกเลิกใบจ่าย
+            </button>
           </clr-dg-action-overflow>
           <wm-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items-pay>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>

@@ -20,6 +20,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { IRequisitionOrderItem, IRequisitionOrder } from 'app/shared';
 import { AccessCheck } from '../../access-check';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wm-requisition',
@@ -52,11 +53,8 @@ export class RequisitionComponent implements OnInit {
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
-    private uploadingService: UploadingService,
-    private ref: ChangeDetectorRef,
     private accessCheck: AccessCheck,
-    @Inject('DOC_URL') private docUrl: string,
-    @Inject('REQ_PREFIX') private documentPrefix: string,
+    private router: Router,
     @Inject('API_URL') private url: string,
   ) {
     this.token = sessionStorage.getItem('token');

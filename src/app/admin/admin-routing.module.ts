@@ -82,6 +82,7 @@ import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
 import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
+import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
 
 const routes: Routes = [
   {
@@ -115,6 +116,7 @@ const routes: Routes = [
       { path: 'requisition/new', canActivate: [AuthRequisition], component: RequisitionNewComponent },
       { path: 'requisition/edit/:requisitionId', canActivate: [AuthRequisition], component: RequisitionNewComponent},
       { path: 'requisition/confirm', canActivate: [AuthRequisition], component: RequisitionConfirmComponent },
+      { path: 'requisition/confirm/edit', canActivate: [AuthRequisition], component: RequisitionConfirmEditComponent },
       { path: 'requisition/confirm-unpaid', canActivate: [AuthRequisition], component: RequisitionConfirmUnpaidComponent },
       { path: 'requisition-templates', canActivate: [AuthRequisition], component: RequisitionTemplateComponent },
       { path: 'requisition-templates/new', canActivate: [AuthRequisition], component: RequisitionTemplateNewComponent },
