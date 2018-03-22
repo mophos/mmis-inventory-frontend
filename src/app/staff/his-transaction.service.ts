@@ -13,8 +13,14 @@ export class HisTransactionService {
     this.token = sessionStorage.getItem('token');
   }
 
-  async getTransactionList() {
-    const resp = await this.authHttp.get(`${this.url}/staff/his-transaction/list`).toPromise();
+  async getGenericType() {
+    const resp = await this.authHttp.get(`${this.url}/generics/types`).toPromise();
+    return resp.json();
+  }
+
+  async getTransactionList(genericTypes: any) {
+    const resp = await this.authHttp.post(`${this.url}/staff/his-transaction/list`,
+      { genericTypes: genericTypes }).toPromise();
     return resp.json();
   }
 
