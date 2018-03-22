@@ -36,4 +36,12 @@ export class MinMaxService {
     return resp.json();
   }
 
+  async searchGenericPlanning(genericType: string, query: string) {
+    const resp = await this.authHttp.post(`${this.url}/min-max/search`, {
+      query: query,
+      genericType: genericType
+    }).toPromise();
+    return resp.json();
+  }
+
 }

@@ -1,6 +1,6 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
-  <span class="breadcrumb-item active">คำนวณ MIN - MAX</span>
+  <span class="breadcrumb-item active">กำหนด MIN - MAX</span>
 </nav>
 <form style="padding: 0px 5px 5px 5px;">
   <section class="form-block" style="margin-bottom: 0px;">
@@ -17,17 +17,25 @@
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
         <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
       </div>
-    </div>
-    <div class="form-group row wid99">
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <button class="btn btn-sm btn-success" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate">
-          <clr-icon shape="calculator"></clr-icon> คำนวณ
+        <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate" style="margin-top: 0px;">
+          <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX
         </button>
       </div>
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <button class="btn btn-sm btn-primary" (click)="save()" [disabled]="!fromDate || !toDate">
-          <clr-icon shape="floppy"></clr-icon> บันทึก
-        </button>
+    </div>
+    <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+      <div class="col-md-9">
+        ค้นหา :
+        <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;" type="text"
+          placeholder="ค้นหาสินค้า...">
+      </div>
+      <div class="col-md-3" style="text-align: right;">
+        <div class="select">
+          <select [(ngModel)]="genericType" name="genericType" (change)="searchGenericPlanning()">
+            <option value="">ทั้งหมด</option>
+            <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+          </select>
+        </div>
       </div>
     </div>
   </section>
@@ -91,5 +99,11 @@
     <clr-dg-pagination #pagination [clrDgPageSize]="20" [clrDgTotalItems]="generics.length"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
+
+<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+  <button class="btn btn-sm btn-success" (click)="save()">
+    <clr-icon shape="floppy"></clr-icon> บันทึกข้อมูล
+  </button>
+</div>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
