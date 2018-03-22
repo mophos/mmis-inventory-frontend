@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { LoadingModalComponent } from '../../modals/loading-modal/loading-modal.component';
 
 @Component({
   selector: 'wm-requisition-confirm-edit',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styles: []
 })
 export class RequisitionConfirmEditComponent implements OnInit {
+  @ViewChild('modalLoading') modalLoading: LoadingModalComponent;
+
+  products: any = [];
 
   constructor() { }
 
