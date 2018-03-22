@@ -19,6 +19,10 @@ export class HisIssueTransactionComponent implements OnInit {
   perPage = 20;
   selected = [];
 
+  genericTypes = [];
+  genericType: any;
+  _genericTypes: any = [];
+  _genericType: any;
   constructor(
     private alertService: AlertService,
     private hisTransactionService: HisTransactionService
@@ -26,13 +30,42 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getTransactionList();
+    this.getGenericType();
+    // this.getTransactionList();
+  }
+
+  async getGenericType() {
+    try {
+      const rs = await this.hisTransactionService.getGenericType();
+
+      if (rs.ok) {
+        this.genericTypes = rs.rows;
+        this._genericTypes = [];
+        this.genericTypes.forEach((e: any) => {
+          this._genericTypes.push(e.generic_type_id)
+        });
+        this.genericType = '';
+        this.getTransactionList() ;
+      } else {
+        this.alertService.error(rs.error);
+      }
+
+    } catch (error) {
+      console.log(error);
+      this.alertService.serverError();
+    }
   }
 
   async getTransactionList() {
     try {
+      if (this.genericType === '') {
+        this._genericType = this._genericTypes;
+      } else {
+        this._genericType = [];
+        this._genericType.push(this.genericType)
+      }
       this.modalLoading.show();
-      const rs: any = await this.hisTransactionService.getTransactionList();
+      const rs: any = await this.hisTransactionService.getTransactionList(this._genericType);
       if (rs.ok) {
         this.products = rs.rows;
       } else {
