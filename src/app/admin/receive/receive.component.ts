@@ -109,7 +109,6 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-
   async refresh(state: State) {
     const offset = +state.page.from;
     const limit = +state.page.size;
