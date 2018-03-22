@@ -59,7 +59,6 @@ export class ProductsComponent implements OnInit {
         this._genericType = [];
         this._genericType.push(this.genericType)
       }
-      console.log(this._genericType);
       this.modalLoading.show();
       const rs = await this.staffService.getProductAll(query, this._genericType);
 
