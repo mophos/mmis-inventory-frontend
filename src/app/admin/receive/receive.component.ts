@@ -47,7 +47,7 @@ export class ReceiveComponent implements OnInit {
   eID: any;
   sIDpo: any;
   eIDpo: any;
-  showOption = 1
+  showOption = 0;
   token: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -466,7 +466,8 @@ export class ReceiveComponent implements OnInit {
     this.eIDpo = ""
   }
 
-  printSelecOption() {
+  printSelecOption(event:any) {
+    this.showOption = event
     const date = new Date();
     this.sDate = {
       date: {

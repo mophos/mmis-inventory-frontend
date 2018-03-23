@@ -17,9 +17,9 @@
     <button type="button" routerLink="/admin/receives/other" clrDropdownItem>รับอื่นๆ (เช่นบริจาค)</button>
   </clr-dropdown-menu>
 </clr-dropdown>
-<button style="float: right;" class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption()">
+<!-- <button style="float: right;" class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption()">
   <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
-</button>
+</button> -->
 <clr-tabs>
 
   <clr-tab>
@@ -103,6 +103,9 @@
                   <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printreceiveApprovePO()">
                     <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ
                   </clr-button>
+                  <clr-button [clrInMenu]="true" style="float: right;" class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption(1)">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่งแบบมีเงื่อนไข
+                  </clr-button>
                 </clr-button-group>
 
               </div>
@@ -169,9 +172,15 @@
                 <button style="float: right;" class="btn btn-success btn-sm btn-icon" [disabled]="!selectedOtherApprove.length" (click)="approveReceiveCheck(2)">
                   <clr-icon shape="note"></clr-icon> อนุมัติใบรับ
                 </button>
-                <button style="float: right;" class="btn btn-primary btn-sm btn-icon" [disabled]="!selectedOtherApprove.length" (click)="printDeliveryNoteOther()">
-                  <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
-                </button>
+                <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
+                  <clr-button [clrInMenu]="true" style="float: right;" class="btn btn-primary btn-sm btn-icon" [disabled]="!selectedOtherApprove.length"
+                    (click)="printDeliveryNoteOther()">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
+                  </clr-button>
+                  <clr-button [clrInMenu]="true" style="float: right;" class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption(2)">
+                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่งแบบมีเงื่อนไข
+                  </clr-button>
+                </clr-button-group>
               </div>
             </div>
           </div>
@@ -270,7 +279,8 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pagePurchaseExpired.firstItem + 1 | number}} - {{pagePurchaseExpired.lastItem + 1 | number}} จาก {{pagePurchaseExpired.totalItems | number}} รายการ
+          {{pagePurchaseExpired.firstItem + 1 | number}} - {{pagePurchaseExpired.lastItem + 1 | number}} จาก {{pagePurchaseExpired.totalItems
+          | number}} รายการ
           <clr-dg-pagination #pagePurchaseExpired [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
@@ -319,7 +329,8 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pageOtherCancel.firstItem + 1 | number}} - {{pageOtherCancel.lastItem + 1 | number}} จาก {{pageOtherCancel.totalItems | number}} รายการ
+          {{pageOtherCancel.firstItem + 1 | number}} - {{pageOtherCancel.lastItem + 1 | number}} จาก {{pageOtherCancel.totalItems |
+          number}} รายการ
           <clr-dg-pagination #pageOtherCancel [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
@@ -334,13 +345,13 @@
       <div class="col-md-2">
         <label>เลือกโดย</label>
       </div>
-      <div class="select col-md-4">
+      <!-- <div class="select col-md-4">
         <select name="warehouseId" [(ngModel)]="showOption">
-          <!-- <option value="3" selected>ทั้งหมด</option> -->
+          <option value="3" selected>ทั้งหมด</option>
           <option value="1" selected>รับจากการซื้อ</option>
           <option value="2">รับอื่นๆ (เช่นบริจาค)</option>
         </select>
-      </div>
+      </div> -->
     </div>
     <div class="card">
       <div class="card-block">
@@ -357,7 +368,7 @@
           </div>
         </div>
       </div>
-      <div class="card-block" *ngIf='showOption == 1'>
+      <div class="card-block" *ngIf='showOption === 1'>
         <div class="row" style="margin:.5em">
           <div class="col-md-12">
             <label for="">เลขที่ใบสั่งซื้อ</label>
