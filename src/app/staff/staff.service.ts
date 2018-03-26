@@ -137,9 +137,11 @@ export class StaffService {
     return rs.json();
   }
 
-  async saveGenericMinMax(items: any[]) {
+  async saveGenericMinMax(items: any[], fromDate, toDate) {
     let rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-minmax`, {
-      items: items
+      items: items,
+      fromDate: fromDate,
+      toDate: toDate
     }).toPromise();
     return rs.json();
   }
@@ -182,11 +184,11 @@ export class StaffService {
         });
     });
   }
-  searchGenericsWarehosue(warehouseId: string, query: string) {
+  searchGenericsWarehosue(genericType: string, query: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/staff/warehouse/generics/min-max/search`, {
         query: query,
-        warehouseId: warehouseId
+        genericType: genericType
       })
         .map(res => res.json())
         .subscribe(data => {
@@ -362,6 +364,19 @@ export class StaffService {
   async getProductAll(query, genericTypes) {
     const resp = await this.authHttp.post(`${this.url}/staff/products/all`,
       { query: query, genericTypes: genericTypes }).toPromise();
+    return resp.json();
+  }
+
+  async getMinMaxHeader() {
+    const resp = await this.authHttp.get(`${this.url}/min-max/header`).toPromise();
+    return resp.json();
+  }
+
+  async calculateMinMax(fromDate: any, toDate: any) {
+    const resp = await this.authHttp.post(`${this.url}/min-max/calculate`, {
+      fromDate: fromDate,
+      toDate: toDate
+    }).toPromise();
     return resp.json();
   }
 
