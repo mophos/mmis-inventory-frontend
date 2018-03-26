@@ -87,6 +87,7 @@ export class WarehouseDetailComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           this.products = result.rows;
+          console.log(this.products)
           this.ref.detectChanges();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));

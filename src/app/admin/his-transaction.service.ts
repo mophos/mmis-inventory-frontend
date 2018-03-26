@@ -9,8 +9,14 @@ export class HisTransactionService {
     private authHttp: AuthHttp
   ) { }
 
-  async getTransactionList() {
-    const resp = await this.authHttp.get(`${this.url}/his-transaction/list`).toPromise();
+  async getGenericType() {
+    const resp = await this.authHttp.get(`${this.url}/generics/types`).toPromise();
+    return resp.json();
+  }
+
+  async getTransactionList(genericTypes: any) {    
+    const resp = await this.authHttp.post(`${this.url}/his-transaction/list`,
+      { genericTypes: genericTypes }).toPromise();
     return resp.json();
   }
 
@@ -25,5 +31,5 @@ export class HisTransactionService {
     }).toPromise();
     return resp.json();
   }
-  
+
 }
