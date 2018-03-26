@@ -53,6 +53,7 @@ export class TransferComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           this.transfers = result.rows;
+          this.approveStatus = 1;
           this.ref.detectChanges();
         } else {
           this.alertService.error(JSON.stringify(result.error));
@@ -212,7 +213,7 @@ export class TransferComponent implements OnInit {
         } else if (value === '2') {
           this.transfers = rs.rows.filter(g => g.approved === 'Y');
         } else if (value === '3') {
-          this.transfers = rs.rows.filter(g => g.approved === 'N');
+          this.transfers = rs.rows.filter(g => (g.confirmed === 'Y' && g.approved === 'N'));
         } else if (value === '4') {
           this.transfers = rs.rows.filter(g => g.confirmed === 'N');
         } else if (value === '5') {
