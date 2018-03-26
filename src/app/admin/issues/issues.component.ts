@@ -184,7 +184,7 @@ export class IssuesComponent implements OnInit {
       poItems.push('issue_id=' + issues_id);
     }
     const url = this.apiUrl + `/report/issue/?token=${this.token}&` + poItems.join('&');
-    this.htmlPreview.showReport(url);
+    this.htmlPreview.showReport(url, 'landscape');
   }
 
   changeStatus() {
