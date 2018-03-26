@@ -229,3 +229,9 @@ wm-loading-modal .modal-backdrop {
     padding: 5px 10px 5px 10px;
     line-height: 25px;
 }
+
+button.confirm {
+    background: #EDB200;
+    border-color: #EDB200;
+    color: white;
+}

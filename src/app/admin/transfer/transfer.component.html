@@ -13,6 +13,9 @@
   </div>
   <div class="col-md-2" style="padding-top: 5px;">
     <div class="btn-group" style="float:right;margin: 0px 0px 0px 0px;" >
+        <button [disabled]="!selectedApprove.length" class="btn btn-sm confirm" (click)="doConfirm()">
+            <clr-icon shape="note"></clr-icon> ยืนยันใบโอน ({{selectedApprove.length | number}} รายการ)
+          </button>
       <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="doApprove()">
         <clr-icon shape="note"></clr-icon> อนุมัติใบโอน ({{selectedApprove.length | number}} รายการ)
       </button>
@@ -33,7 +36,8 @@
         <option value="1">ทั้งหมด</option>
         <option value="2">อนุมัติแล้ว</option>
         <option value="3">รออนุมัติ</option>
-        <option value="4">ยกเลิก</option>
+        <option value="4">รอยืนยัน</option>
+        <option value="5">ยกเลิก</option>
       </select>
     </div>
   </div>
@@ -46,7 +50,7 @@
   <clr-dg-column style="width: 100px;">Deleted</clr-dg-column>
   <clr-dg-column style="width: 100px;"></clr-dg-column>
   <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
-  <clr-dg-row *ngFor="let t of transfers" [clrDgItem]="t" [ngClass]="{'approve-status': t.approved === 'Y'}">
+  <clr-dg-row *ngFor="let t of transfers" [clrDgItem]="t" [ngClass]="{'approve-status': t.approved === 'Y', 'cancel-status': t.mark_deleted === 'Y', 'confirm-status': t.confirmed === 'Y'}">
     <!-- <clr-dg-action-overflow>
       <button class="action-item" [disabled]="t.approved === 'Y' || t.mark_deleted=='N' || isSaving" (click)="activeTransfer(t)">เปลี่ยนสถานะ</button>
       <button class="action-item" [disabled]="t.mark_deleted=='Y' || isSaving" (click)="showReport(t)">พิมพ์ใบโอน</button>
@@ -63,10 +67,10 @@
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-sm">
         <button title="แก้ไขรายการ" [routerLink]="['/admin/transfer/edit']" [queryParams]="{transferId: t.transfer_id}" class="btn btn-success wm-small-btn"
-          [disabled]="t.approved === 'Y' || t.mark_deleted=='Y' || isSaving">
+          [disabled]="t.approved === 'Y' || t.mark_deleted === 'Y' || t.confirmed === 'Y' || isSaving">
           <clr-icon shape="note"></clr-icon>
         </button>
-        <button title="ลบรายการ" class="btn btn-danger wm-small-btn" (click)="removeTransfer(t)" [disabled]="t.approved === 'Y' || t.mark_deleted=='Y' || isSaving">
+        <button title="ลบรายการ" class="btn btn-danger wm-small-btn" (click)="removeTransfer(t)" [disabled]="t.approved === 'Y' || t.mark_deleted === 'Y' || t.confirmed === 'Y' || isSaving">
           <clr-icon shape="trash"></clr-icon>
         </button>
       </div>

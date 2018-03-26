@@ -228,4 +228,40 @@ export class TransferComponent implements OnInit {
           });
       }).catch(() => { })
   }
+
+  doConfirm() {
+    const transferIds = [];
+    this.selectedApprove.forEach(v => {
+      if (v.confirmed !== 'Y' && v.approved !== 'Y' && v.mark_deleted === 'N') {
+        transferIds.push(v.transfer_id);
+      }
+    });
+
+    if (transferIds.length) {
+      this.alertService.confirm('ต้องการยืนยันการโอน ใช่หรือไม่?')
+        .then(async () => {
+          try {
+            this.modalLoading.show();
+            const rs: any = await this.transferService.confirmAll(transferIds);
+            if (rs.ok) {
+              this.alertService.success();
+              this.selectedApprove = [];
+              this.getTransferList();
+            } else {
+              this.alertService.error(rs.error);
+            }
+            this.modalLoading.hide();
+          } catch (error) {
+            this.modalLoading.hide();
+            console.error(error);
+            this.alertService.error(error.message);
+          }
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.selectedApprove = [];
+      this.alertService.error('ไม่พบรายการที่ต้องการยืนยัน');
+    }
+  }
 }
