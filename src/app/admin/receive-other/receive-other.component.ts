@@ -595,6 +595,7 @@ export class ReceiveOtherComponent implements OnInit {
               this.modalLoading.hide();
 
               if (receiveOtherId.ok) {
+                sessionStorage.setItem('tabReceive', 'receiveOther');
                 this.router.navigate(['/admin/receives']);
               } else {
                 this.alertService.error(JSON.stringify(receiveOtherId.error));

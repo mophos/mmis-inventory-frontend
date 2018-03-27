@@ -77,7 +77,10 @@ export class ReceiveComponent implements OnInit {
   modalReportFPO = false;
   countApprove: any;
   countApproveOther: any;
-
+  fillterApprove = 'all';
+  tab: any;
+  _waitings: any;
+  _others: any;
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -94,6 +97,9 @@ export class ReceiveComponent implements OnInit {
   ngOnInit() {
     this.getPurchaseList();
     this.getApprove();
+    this.tab = sessionStorage.getItem('tabReceive');
+    console.log(this.tab);
+    
   }
 
   async getPurchaseList() {
@@ -125,6 +131,7 @@ export class ReceiveComponent implements OnInit {
         const rs = await this.receiveService.getWaiting(limit, offset);
         await this.getReceiveExpired();
         this.waitings = rs.rows;
+        this._waitings = _.clone(this.waitings)
         this.totalReceive = rs.total;
         this.modalLoading.hide();
       } catch (error) {
@@ -135,6 +142,7 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getWaitingSearch(limit, offset, this.query);
       await this.getReceiveExpiredSearch(this.query);
       this.waitings = rs.rows;
+      this._waitings = _.clone(this.waitings)
       this.totalReceive = rs.total;
       this.isSearching = true;
       this.modalLoading.hide();
@@ -154,6 +162,7 @@ export class ReceiveComponent implements OnInit {
         await this.getReceiveExpiredSearch(this.query);
         await this.getReceiveOtherExpiredSearch();
         this.waitings = rs.rows;
+        this._waitings = _.clone(this.waitings)
         this.totalReceive = rs.total;
         this.isSearching = true;
         this.modalLoading.hide();
@@ -162,6 +171,7 @@ export class ReceiveComponent implements OnInit {
         await this.getReceiveExpiredSearch(this.query);
         await this.getReceiveOtherExpiredSearch();
         this.others = rs.rows;
+        this._others = _.clone(this.others);
         this.totalReceive = rs.total;
         this.isSearching = true;
         this.modalLoading.hide();
@@ -183,6 +193,7 @@ export class ReceiveComponent implements OnInit {
         const rs = await this.receiveService.getReceiveOther(limit, offset);
         await this.getReceiveOtherExpired();
         this.others = rs.rows;
+        this._others = _.clone(this.others);
         this.totalReceiveOther = rs.total;
         this.modalLoading.hide();
       } catch (error) {
@@ -193,6 +204,7 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getWaitingSearchOther(limit, offset, this.query);
       await this.getReceiveOtherExpiredSearch();
       this.others = rs.rows;
+      this._others = _.clone(this.others);
       this.totalReceiveOther = rs.total;
       this.isSearching = true;
       this.modalLoading.hide();
@@ -264,7 +276,7 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getWaiting(this.perPage, 0);
       if (rs.ok) {
         this.waitings = rs.rows;
-        console.log(this.waitings)
+        this._waitings = _.clone(this.waitings)
         this.totalReceive = rs.total;
       } else {
         this.alertService.error(rs.error);
@@ -283,6 +295,7 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getReceiveOther(this.perPage, 0);
       if (rs.ok) {
         this.others = rs.rows;
+        this._others = _.clone(this.others);
         this.totalReceiveOther = rs.total;
       } else {
         this.alertService.error(rs.error);
@@ -692,5 +705,40 @@ export class ReceiveComponent implements OnInit {
     } catch (error) {
       this.alertService.error(JSON.stringify(error));
     }
+  }
+  changeFillterApprove() {
+    if (this.tab === 'receive') {
+      if (this.fillterApprove === 'Napprove') {
+        this.waitings = _.filter(this._waitings, { 'approve_id': null });
+      } else if (this.fillterApprove === 'approve') {
+        this.waitings = _.filter(this._waitings, function (o) { return o.approve_id != null; });
+      } else {
+        this.waitings = this._waitings;
+      }
+      this.totalReceive = this.waitings.length;
+    } else if (this.tab === 'receiveOther') {
+      if (this.fillterApprove === 'Napprove') {
+        this.others = _.filter(this._others, { 'approve_id': null });
+      } else if (this.fillterApprove === 'approve') {
+        this.others = _.filter(this._others, function (o) { return o.approve_id != null; });
+      } else {
+        this.others = this._others;
+      }
+      this.totalReceiveOther = this.others.length;
+    }
+
+  }
+  selectTabPo() {
+    this.tab = "po";
+  }
+  selectTabReceive() {
+    this.tab = "receive";
+    this.fillterApprove = 'all';
+    sessionStorage.setItem('tabReceive', this.tab);
+  }
+  selectTabReceiveOther() {
+    this.tab = "receiveOther";
+    this.fillterApprove = 'all';
+    sessionStorage.setItem('tabReceive', this.tab);
   }
 }
