@@ -74,7 +74,9 @@
   </clr-tab>
   <clr-tab>
     <button clrTabLink (click)="clearSelectedApproved()">
-      <clr-icon shape="tasks"></clr-icon> รับจากการซื้อ</button>
+      <clr-icon shape="tasks"></clr-icon> รับจากการซื้อ
+      <span class="badge badge-info" title="ยังไม่ได้อนุมัติอีก {{countApprove | number}} รายการ">{{countApprove | number}}</span>
+    </button>
     <clr-tab-content *clrIfActive>
       <div class="card">
         <div class="card-block" style="padding: 0px 5px 5px 5px;">
@@ -153,7 +155,9 @@
 
   <clr-tab>
     <button clrTabLink>
-      <clr-icon shape="truck"></clr-icon> รับอื่นๆ (เช่นบริจาค)</button>
+      <clr-icon shape="truck"></clr-icon> รับอื่นๆ (เช่นบริจาค)
+      <span class="badge badge-info" title="ยังไม่ได้อนุมัติอีก {{countApproveOther | number}} รายการ">{{countApproveOther | number}}</span>
+    </button>
     <clr-tab-content *clrIfActive>
       <div class="card">
         <div class="card-block" style="padding: 0px 5px 5px 5px;">

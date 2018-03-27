@@ -75,6 +75,9 @@ export class ReceiveComponent implements OnInit {
   receiveIds = [];
   receiveOtherIds = [];
   modalReportFPO = false;
+  countApprove: any;
+  countApproveOther: any;
+
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -90,6 +93,7 @@ export class ReceiveComponent implements OnInit {
 
   ngOnInit() {
     this.getPurchaseList();
+    this.getApprove();
   }
 
   async getPurchaseList() {
@@ -115,6 +119,7 @@ export class ReceiveComponent implements OnInit {
     const limit = +state.page.size;
     this.isSearch = false;
     this.modalLoading.show();
+    this.getApprove();
     if (!this.isSearching) {
       try {
         const rs = await this.receiveService.getWaiting(limit, offset);
@@ -172,6 +177,7 @@ export class ReceiveComponent implements OnInit {
     const offset = +state.page.from;
     const limit = +state.page.size;
     this.modalLoading.show();
+    this.getApprove();
     if (!this.query) {
       try {
         const rs = await this.receiveService.getReceiveOther(limit, offset);
@@ -353,10 +359,10 @@ export class ReceiveComponent implements OnInit {
   }
 
   async approveReceiveCheck(access: any, action: any) {
-    
+
     let check = false
     let accessName: any;
-    
+
     this.titel = 'รายการรับสินค้า';
 
     if (access === 1) {
@@ -373,7 +379,7 @@ export class ReceiveComponent implements OnInit {
       this.selectedOtherApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     }
 
-    if (check) { //ตรวจสอบสิทธิการอนุมัติใบรับ
+    if (check) { // ตรวจสอบสิทธิการอนุมัติใบรับ
       const rs = await this.accessCheck.can(accessName);
       if (rs) {
         this.page === 1 ? this.saveApprove() : this.saveApproveOther();
@@ -403,10 +409,11 @@ export class ReceiveComponent implements OnInit {
   }
 
   saveApprove() {
-
-    let ids = [];
+    const ids = [];
     this.selectedApprove.forEach(v => {
-      if (!v.approve_id && v.purchase_order_number) ids.push(v.receive_id);
+      if (!v.approve_id && v.purchase_order_number) {
+        ids.push(v.receive_id);
+      }
     });
 
     this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
@@ -622,9 +629,11 @@ export class ReceiveComponent implements OnInit {
   }
 
   saveApproveOther() {
-    let ids = [];
+    const ids = [];
     this.selectedOtherApprove.forEach(v => {
-      if (!v.approve_id) ids.push(v.receive_other_id);
+      if (!v.approve_id) {
+        ids.push(v.receive_other_id);
+      }
     });
 
     this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
@@ -669,5 +678,19 @@ export class ReceiveComponent implements OnInit {
           })
       })
       .catch(() => { });
+  }
+  async getApprove() {
+    try {
+      const rs = await this.receiveService.getApprove();
+      const rsOther = await this.receiveService.getApproveOther();
+      if (rs.ok) {
+        this.countApprove = rs.rows[0].count_approve;
+      }
+      if (rsOther.ok) {
+        this.countApproveOther = rsOther.rows[0].count_approve;
+      }
+    } catch (error) {
+      this.alertService.error(JSON.stringify(error));
+    }
   }
 }
