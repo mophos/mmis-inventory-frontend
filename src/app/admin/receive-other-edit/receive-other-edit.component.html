@@ -93,7 +93,7 @@
         wmNumberWithOutDot [value]="product.receive_qty" />
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="product.unit_generic_id"
+      <wm-select-receive-unit orderBy="DESC" [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="product.unit_generic_id"
         [genericId]="product.generic_id"></wm-select-receive-unit>
       <!-- <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitProductId]="product.unit_product_id" [productId]="product.product_id"></wm-select-receive-unit> -->
     </clr-dg-cell>
@@ -144,7 +144,7 @@
     </clr-dg-cell>
     <clr-dg-cell>
       <!-- <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)"></wm-select-receive-unit>           -->
-      <wm-select-receive-unit [showAdd]="true" #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+      <wm-select-receive-unit orderBy="DESC" [showAdd]="true" #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="vertical-align: middle; text-align: center; line-height: 25px;">
       {{+selectedReceiveQty * +conversionQty | number}} {{primaryUnitName}}
