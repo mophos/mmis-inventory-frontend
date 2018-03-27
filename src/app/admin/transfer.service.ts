@@ -136,4 +136,9 @@ export class TransferService {
     return rs.json();
   }
 
+  async request() {
+    const rs: any = await this.authHttp.get(`${this.url}/transfer/request`).toPromise();
+    return rs.json();
+  }
+
 }

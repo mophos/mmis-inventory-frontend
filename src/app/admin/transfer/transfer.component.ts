@@ -15,6 +15,8 @@ import { State } from '@clr/angular';
 })
 export class TransferComponent implements OnInit {
   selectedApprove = [];
+  notApproveReceiveItems = [];
+  transfersRequest = [];
 
   approveStatus = 1;
   total = 0;
@@ -45,11 +47,8 @@ export class TransferComponent implements OnInit {
   }
 
   ngOnInit() {
-
-  }
-
-  getTransfer(event) {
     this.getTransferList();
+    this.getRequestTransfer();
   }
 
   async getTransferList() {
@@ -101,6 +100,7 @@ export class TransferComponent implements OnInit {
           if (rs.ok) {
             this.alertService.success();
             this.getTransferList();
+            this.getRequestTransfer();
           } else {
             this.alertService.error(rs.error);
           }
@@ -122,24 +122,9 @@ export class TransferComponent implements OnInit {
     });
 
     if (transferIds.length) {
-      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบเบิก ใช่หรือไม่?')
+      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบโอน ใช่หรือไม่?')
         .then(async () => {
-          try {
-            this.modalLoading.show();
-            const rs: any = await this.transferService.approveAll(transferIds);
-            if (rs.ok) {
-              this.alertService.success();
-              this.selectedApprove = [];
-              this.getTransferList();
-            } else {
-              this.alertService.error(rs.error);
-            }
-            this.modalLoading.hide();
-          } catch (error) {
-            this.modalLoading.hide();
-            console.error(error);
-            this.alertService.error(error.message);
-          }
+          this.approve(transferIds);
         }).catch(() => {
           // cancel
         });
@@ -149,27 +134,44 @@ export class TransferComponent implements OnInit {
     }
   }
 
-  approve(t: any) {
-    this.alertService.confirm('ต้องการอนุมัติการโอน ใช่หรือไม่?')
-      .then(async () => {
-        this.modalLoading.hide();
-        try {
-          const rs: any = await this.transferService.approve(t.transfer_id);
-          if (rs.ok) {
-            this.alertService.success();
-            this.getTransferList();
-          } else {
-            this.alertService.error(rs.error);
-          }
-          this.modalLoading.hide();
-        } catch (error) {
-          this.modalLoading.hide();
-          this.alertService.error(error.message);
-        }
-      })
-      .catch(() => {
-        this.modalLoading.hide();
-      });
+  doApproveReceive() {
+    const transferIds = [];
+    this.selectedApprove.forEach(v => {
+      if (v.approved !== 'Y' && v.mark_deleted === 'N') {
+        transferIds.push(v.transfer_id);
+      }
+    });
+
+    if (transferIds.length) {
+      this.alertService.confirm('ต้องการยืนยันการรับสินค้าเข้าคลัง ใช่หรือไม่?')
+        .then(async () => {
+          this.approve(transferIds);
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.selectedApprove = [];
+      this.alertService.error('ไม่พบรายการที่ต้องการรับสินค้าเข้าคลัง');
+    }
+  }
+
+  async approve(transferIds: any[]) {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.transferService.approveAll(transferIds);
+      if (rs.ok) {
+        this.alertService.success();
+        this.selectedApprove = [];
+        this.getTransferList();
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      console.error(error);
+      this.alertService.error(error.message);
+    }
   }
 
   showReport(t) {
@@ -262,6 +264,23 @@ export class TransferComponent implements OnInit {
     } else {
       this.selectedApprove = [];
       this.alertService.error('ไม่พบรายการที่ต้องการยืนยัน');
+    }
+  }
+
+  async getRequestTransfer() {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.transferService.request();
+      if (rs.ok) {
+        this.transfersRequest = rs.rows;
+        this.notApproveReceiveItems = _.filter(this.transfersRequest, { approved: 'N', mark_deleted: 'N' });
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
     }
   }
 }
