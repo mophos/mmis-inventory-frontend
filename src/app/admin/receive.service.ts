@@ -386,5 +386,14 @@ export class ReceiveService {
     }).toPromise();
     return rs.json();
   }
-
+  async getApprove(){
+    const res = await this.authHttp.get(`${this.url}/receives/count/approve`)
+      .toPromise();
+    return res.json();
+  }
+  async getApproveOther(){
+    const res = await this.authHttp.get(`${this.url}/receives/count/approve/other`)
+      .toPromise();
+    return res.json();
+  }
 }
