@@ -114,7 +114,7 @@
         wmNumberWithOutDot [value]="product.receive_qty" />
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="product.unit_generic_id"
+      <wm-select-receive-unit orderBy="DESC" [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="product.unit_generic_id"
         [genericId]="product.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center; line-height: 25px;">{{product.receive_qty * product.conversion_qty | number}} {{product.to_unit_name}}</clr-dg-cell>
@@ -172,7 +172,7 @@
         wmNumberWithOutDot placeholder="">
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-receive-unit [showAdd]="true" #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+      <wm-select-receive-unit orderBy="DESC" [showAdd]="true" #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: center;">
       {{+selectedReceiveQty * +conversionQty | number}} {{primaryUnitName}}

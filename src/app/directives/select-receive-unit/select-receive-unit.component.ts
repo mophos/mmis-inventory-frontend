@@ -13,9 +13,11 @@ export class SelectReceiveUnitComponent implements OnInit {
   @Input() public showAdd: boolean;
   @Input() public selectedUnitGenericId: any;
   @Input() public disabled: any;
+  @Input('orderBy') orderBy = 'ASC';
+
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('modalUom') public modalUom: any;
-
+  
   units = [];
   unitGenericId = null;
   loading = false;
@@ -42,17 +44,21 @@ export class SelectReceiveUnitComponent implements OnInit {
     this.unitGenericId = unitGienericId;
   }
 
-  setGenericId(genericId: any) {
+  setGenericId(genericId: any, orderBy: any = 'ASC') {
     this.units = [];
     this.genericId = genericId;
-    this.getUnits(this.genericId);
+    let _orderBy = this.orderBy ? this.orderBy : orderBy;
+
+    this.getUnits(this.genericId, orderBy);
   }
 
-  async getUnits(genericId: any) {
+  async getUnits(genericId: any, orderBy: any = 'ASC') {
     try {
       this.loading = true;
       this.units = [];
-      const rs: any = await this.receiveService.getUnitConversion(genericId);
+      let _orderBy = this.orderBy ? this.orderBy : orderBy;
+
+      const rs: any = await this.receiveService.getUnitConversion(genericId, _orderBy);
       if (rs.ok) {
         this.units = rs.rows;
         this.loading = false;

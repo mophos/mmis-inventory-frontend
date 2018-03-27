@@ -24,8 +24,8 @@ export class ReceiveService {
     });
   }
   // get conversion
-  async getUnitConversion(genericId: any) {
-    const response = await this.authHttp.get(`${this.url}/units/conversion/${genericId}`)
+  async getUnitConversion(genericId: any, orderBy: string = 'ASC') {
+    const response = await this.authHttp.get(`${this.url}/units/conversion/${genericId}?orderBy=${orderBy}`)
       .toPromise();
     return response.json();
   }
