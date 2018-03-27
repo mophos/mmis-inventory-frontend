@@ -215,7 +215,7 @@ export class TransferComponent implements OnInit {
         } else if (value === '3') {
           this.transfers = rs.rows.filter(g => (g.confirmed === 'Y' && g.approved === 'N'));
         } else if (value === '4') {
-          this.transfers = rs.rows.filter(g => g.confirmed === 'N');
+          this.transfers = rs.rows.filter(g => g.confirmed === 'N' && g.mark_deleted === 'N');
         } else if (value === '5') {
           this.transfers = rs.rows.filter(g => g.mark_deleted === 'Y');
         }
