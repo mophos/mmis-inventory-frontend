@@ -34,8 +34,10 @@ export class RequisitionComponent implements OnInit {
   approveds: any = [];
   unpaids: any = [];
   waitingApproves: any = [];
-  requisitionSelected: Array<any> = []
-  tabSelect: any = 0
+  requisitionSelected: Array<any> = [];
+  tabSelect: any = 0;
+  selectedTab: any = 'waiting';
+
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
@@ -51,6 +53,13 @@ export class RequisitionComponent implements OnInit {
 
   async ngOnInit() {
     this.loadData();
+    this.selectedTab = sessionStorage.getItem('tabRequisitionStaff');
+
+  }
+
+  setTapActive(tab: any) {
+    this.selectedTab = tab;
+    sessionStorage.setItem('tabRequisitionStaff', tab);
   }
 
   async loadData() {

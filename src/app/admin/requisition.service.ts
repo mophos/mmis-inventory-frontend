@@ -119,6 +119,24 @@ export class RequisitionService {
     return rs.json();
   }
 
+  // update
+  async updateOrderConfirmItemsWithOutUnpaid(requisitionId: any, confirmId: any, items: any) {
+    let rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm-without-unpaid/${confirmId}`, {
+      requisitionId: requisitionId,
+      items: items
+    }).toPromise();
+    return rs.json();
+  }
+
+  async updateOrderConfirmItemsWithUnpaid(requisitionId: any, confirmId: any, items: any, generics: any) {
+    let rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm-with-unpaid/${confirmId}`, {
+      requisitionId: requisitionId,
+      items: items,
+      generics: generics
+    }).toPromise();
+    return rs.json();
+  }
+
   async updateOrderConfirmItems(confirmId: any, items: any) {
     let rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm/${confirmId}`, {
       items: items
