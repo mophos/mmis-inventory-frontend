@@ -18,7 +18,7 @@
   </clr-dropdown-menu>
 </clr-dropdown>
 <button style="float: right;" class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption()">
-  <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
+  <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง (แบบมีเงื่อนไข)
 </button>
 <clr-tabs>
 
@@ -28,7 +28,7 @@
       <span class="badge badge-danger">{{ purchases.length | number }}</span>
     </button>
     <clr-tab-content *clrIfActive="tab === 'po'">
-      <clr-datagrid class="grid-order">
+      <clr-datagrid class="grid-order" [style.height.%]="85">
         <clr-dg-column style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
         <clr-dg-column style="width: 150px;">วันที่จัดซื้อ</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่สัญญา</clr-dg-column>
@@ -83,7 +83,8 @@
           <div class="row wid99">
             <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searchWaiting($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบสั่งซื้อ, เลขที่ใบรับ, วันที่รับ เช่น 2561-01-31"
+              <input type="text" (keyup)="searchReceive($event)" name="query" 
+                [(ngModel)]="query" placeholder="เลขที่ใบสั่งซื้อ, เลขที่ใบรับ, วันที่รับ เช่น 2561-01-31"
                 style="width: 400px;">
             </div>
             <div class="col-md-2 push-md-4" style="padding-top: 5px;">
@@ -96,32 +97,31 @@
               </div> 
             </div>
             <div class="col-md-2" style="padding-top: 5px;">
-              <div class="btn-group " style="float: right;">
-                <button style="float: right;" class="btn btn-success btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="approveReceiveCheck(1)">
-                  <clr-icon shape="note"></clr-icon> อนุมัติใบรับ
-                </button>
-                <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
-                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printDeliveryNote()">
-                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
-                  </clr-button>
-                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printProductRecive()">
-                    <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
-                  </clr-button>
-                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printReceive()">
-                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับ
-                  </clr-button>
-                  <clr-button [clrInMenu]="true" [disabled]="!selectedApprove.length" (click)="printreceiveApprovePO()">
-                    <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ
-                  </clr-button>
-                </clr-button-group>
-
+              
+              <div style="float: right;">
+                <clr-dropdown>
+                  <button type="button" [disabled]="!selectedApprove.length" class="btn btn-sm btn-primary" clrDropdownTrigger>
+                    ดำเนินการ...
+                    <clr-icon shape="caret down"></clr-icon>
+                  </button>
+                  <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+                    <label class="dropdown-header">เมนูใช้งาน ({{selectedApprove.length | number}} รายการที่ถูกเลือก)</label>
+                    <button type="button" clrDropdownItem (click)="approveReceiveCheck(1)"><clr-icon class="is-success" shape="check"></clr-icon> อนุมัติใบรับ</button>  
+                    <div class="dropdown-divider"></div>
+                    <button type="button" clrDropdownItem (click)="printDeliveryNote()"><clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง</button>  
+                    <button type="button" clrDropdownItem (click)="printProductRecive()"><clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ</button>  
+                    <button type="button" clrDropdownItem (click)="printReceive()"><clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับ</button>  
+                    <button type="button" clrDropdownItem (click)="printreceiveApprovePO()"><clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ</button>  
+                  
+                  </clr-dropdown-menu>
+                </clr-dropdown>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px;" [(clrDgSelected)]="selectedApprove">
+      <clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px; height: 83%;" [(clrDgSelected)]="selectedApprove">
         <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
@@ -172,7 +172,8 @@
           <div class="row wid99">
             <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searchWaiting($event)" name="query" [(ngModel)]="query" placeholder="ชื่อผู้บริจาค, เลขที่ใบรับ..."
+              <input type="text" (keyup)="searchReceiveOther($event)" 
+                name="queryOther" [(ngModel)]="queryOther" placeholder="ชื่อผู้บริจาค, เลขที่ใบรับ..."
                 style="width: 250px;">
               <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
             </div>
@@ -186,19 +187,29 @@
                 </div> 
               </div>
             <div class="col-md-2" style="padding-top: 5px;">
-              <div class="btn-group " style="float: right;">
-                <button style="float: right;" class="btn btn-success btn-sm btn-icon" [disabled]="!selectedOtherApprove.length" (click)="approveReceiveCheck(2)">
-                  <clr-icon shape="note"></clr-icon> อนุมัติใบรับ
-                </button>
-                <button style="float: right;" class="btn btn-primary btn-sm btn-icon" [disabled]="!selectedOtherApprove.length" (click)="printDeliveryNoteOther()">
-                  <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
-                </button>
+              <div style="float: right;">
+                <clr-dropdown>
+                  <button type="button" [disabled]="!selectedOtherApprove.length" class="btn btn-sm btn-primary" clrDropdownTrigger>
+                    ดำเนินการ...
+                    <clr-icon shape="caret down"></clr-icon>
+                  </button>
+                  <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+                    <label class="dropdown-header">เมนูใช้งาน ({{selectedOtherApprove.length | number}} รายการที่ถูกเลือก)</label>
+                    <button type="button" clrDropdownItem (click)="approveReceiveCheck(2)">
+                      <clr-icon class="is-success" shape="check"></clr-icon> อนุมัติใบรับ
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" clrDropdownItem (click)="printDeliveryNoteOther()">
+                      <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
+                    </button>
+                  </clr-dropdown-menu>
+                </clr-dropdown>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <clr-datagrid (clrDgRefresh)="refreshOther($event)" [(clrDgSelected)]="selectedOtherApprove">
+      <clr-datagrid (clrDgRefresh)="refreshOther($event)" [(clrDgSelected)]="selectedOtherApprove" [style.height.%]="83">
         <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column style="width: 180px;">ประเภทการรับ</clr-dg-column>
@@ -239,15 +250,15 @@
     <button clrTabLink>
       <clr-icon shape="truck"></clr-icon> รับจากการซื้อ ใกล้วันหมดอายุ</button>
     <clr-tab-content *clrIfActive>
-      <div class="card">
+      <!-- <div class="card">
         <div class="card-block" style="padding: 0px 5px 5px 5px;">
           <div class="row wid99">
             <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
               <input type="text" (keyup)="searchWaiting($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบสั่งซื้อ, เลขที่ใบรับ..."
-                style="width: 250px;">
+                style="width: 250px;"> -->
               <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
-            </div>
+            <!-- </div> -->
             <!-- <div class="col-md-6" style="padding-top: 5px;">
                 <div class="btn-group" style="float: right;">
                   <button style="float: right;" class="btn btn-success btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="saveApprove()">
@@ -258,11 +269,11 @@
                   </button>
                 </div>
               </div> -->
-          </div>
+          <!-- </div>
         </div>
-      </div>
+      </div> -->
 
-      <clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px;">
+      <clr-datagrid style="padding-top: 5px;" [style.height.%]="83">
         <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
@@ -270,7 +281,7 @@
         <clr-dg-column>หมายเหตุ</clr-dg-column>
         <!-- <clr-dg-column style="width: 150px;"></clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let w of expired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
+        <clr-dg-row *clrDgItems="let w of expired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
           <wm-product-detail *clrIfExpanded [receiveId]="w.receive_id" ngProjectAs="clr-dg-row-detail"></wm-product-detail>
           <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_code || w.receive_tmp_code}}</clr-dg-cell>
@@ -301,23 +312,23 @@
     <button clrTabLink>
       <clr-icon shape="truck"></clr-icon> รับอื่นๆ ใกล้วันหมดอายุ</button>
     <clr-tab-content *clrIfActive>
-      <div class="card">
-        <div class="card-block" style="padding: 0px 5px 5px 5px;">
-          <div class="row wid99">
-            <div class="col-md-6" style="padding-top: 5px;">
+      <!-- <div class="card">
+        <div class="card-block" style="padding: 0px 5px 5px 5px;"> -->
+          <!-- <div class="row wid99"> -->
+            <!-- <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searchWaiting($event)" name="query" [(ngModel)]="query" placeholder="ชื่อผู้บริจาค, เลขที่ใบรับ..."
-                style="width: 250px;">
+              <input type="text" (keyup)="searchReceiveOther($event)" name="queryOtherExpire" [(ngModel)]="queryOtherExpire" placeholder="ชื่อผู้บริจาค, เลขที่ใบรับ..."
+                style="width: 250px;"> -->
               <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
-            </div>
+            <!-- </div> -->
             <!-- <div class="col-md-6" style="padding-top: 5px;">
                 <button style="float: right;" class="btn btn-success btn-sm btn-icon" [disabled]="!selectedOtherApprove.length" (click)="saveApproveOther()">
                   <clr-icon shape="note"></clr-icon> อนุมัติใบรับ
                 </button>
               </div> -->
-          </div>
+          <!-- </div>
         </div>
-      </div>
+      </div> -->
       <clr-datagrid [style.height.%]="83">
         <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
