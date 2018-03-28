@@ -66,7 +66,7 @@
   'isWarning': g.confirm_qty < (g.conversion_qty * g.requisition_qty) && g.confirm_qty > 0, 
   'isError': g.confirm_qty === 0 || g.confirm_qty > ( g.small_remain_qty - g.small_book_qty)}
   ">
-    <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" [isEdit]="isEdit"
+    <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
       [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="g.requisition_qty"
       [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
     <clr-dg-cell>

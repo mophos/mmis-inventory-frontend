@@ -76,7 +76,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
 
     if (idx > -1) {
       let _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: event.wm_product_id });
-      this.products[idx].allowcate_qty = event.confirm_qty * event.conversion_qty;
+      this.products[idx].confirm_qty = event.confirm_qty * event.conversion_qty;
 
       if (_idx > -1) {
         this.products[idx].confirmItems[_idx].confirm_qty = event.confirm_qty;
@@ -84,11 +84,11 @@ export class RequisitionConfirmEditComponent implements OnInit {
         this.products[idx].confirmItems.push(event);
       }
 
-      // calculate new allowcate_qty
-      this.products[idx].allowcate_qty = 0;
+      // calculate new confirm_qty
+      this.products[idx].confirm_qty = 0;
       this.products[idx].confirmItems.forEach(v => {
         // this.products[idx].small_remain_qty += v.remain_small_qty;
-        this.products[idx].allowcate_qty += (v.confirm_qty * v.conversion_qty);
+        this.products[idx].confirm_qty += (v.confirm_qty * v.conversion_qty);
       });
     }
   }
