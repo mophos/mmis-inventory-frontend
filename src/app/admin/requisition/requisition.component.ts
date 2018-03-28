@@ -52,6 +52,8 @@ export class RequisitionComponent implements OnInit {
   selectedCancel: any[] = [];
   tabSelect: any = 0;
 
+  perPage = 20;
+  
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
@@ -64,12 +66,12 @@ export class RequisitionComponent implements OnInit {
 
   async ngOnInit() {
     this.loadData();
-    this.selectedTab = sessionStorage.getItem('reqTab');
+    this.selectedTab = sessionStorage.getItem('tabRequisition');
   }
 
   setTapActive(tab: any) {
     this.selectedTab = tab;
-    sessionStorage.setItem('reqTab', tab);
+    sessionStorage.setItem('tabRequisition', tab);
   }
 
   async loadData() {

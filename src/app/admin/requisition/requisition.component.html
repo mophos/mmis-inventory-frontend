@@ -29,7 +29,7 @@
       <span class="badge badge-info">{{orders.length | number}}</span>
     </button>
     <clr-tab-content id="content1" *clrIfActive="selectedTab === 'waiting'">
-      <clr-datagrid style="padding-top: 5px;">
+      <clr-datagrid style="padding-top: 5px; height: 85%;">
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_date'">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_code'">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -67,7 +67,7 @@
 
         <clr-dg-footer>
           {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
-          <clr-dg-pagination #pageWorking [clrDgPageSize]="20"></clr-dg-pagination>
+          <clr-dg-pagination #pageWorking [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -81,7 +81,7 @@
     </button>
     
     <clr-tab-content *clrIfActive="selectedTab === 'waitingApprove'">
-      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
+      <clr-datagrid style="padding-top: 5px; height: 85%;" [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_date'">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_code'">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -115,7 +115,7 @@
 
         <clr-dg-footer>
           {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
-          <clr-dg-pagination #pageWorking [clrDgPageSize]="20"></clr-dg-pagination>
+          <clr-dg-pagination #pageWorking [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -131,7 +131,7 @@
       <button class="btn btn-sm btn-danger btn-icon" [disabled]="!selectedCancel.length" (click)="doCancelUnpaids()">
         <clr-icon shape="trash"></clr-icon> ยกเลิกค้างจ่าย ({{selectedCancel.length | number}} รายการ)
       </button>
-      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="selectedCancel">
+      <clr-datagrid style="padding-top: 5px; height: 82%;" [(clrDgSelected)]="selectedCancel">
         <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -154,7 +154,7 @@
 
         <clr-dg-footer>
           {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
-          <clr-dg-pagination #pageWorking [clrDgPageSize]="10"></clr-dg-pagination>
+          <clr-dg-pagination #pageWorking [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -167,7 +167,7 @@
       <span class="badge badge-success">{{approveds.length | number}}</span>
     </button>
     <clr-tab-content *clrIfActive="selectedTab === 'approved'">
-      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
+      <clr-datagrid style="padding-top: 5px; height: 85%;" [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 150px;">วันที่อนุมัติ</clr-dg-column>
         <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
@@ -194,7 +194,7 @@
 
         <clr-dg-footer>
           {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
-          <clr-dg-pagination #pageWorking [clrDgPageSize]="20"></clr-dg-pagination>
+          <clr-dg-pagination #pageWorking [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
