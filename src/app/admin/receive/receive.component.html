@@ -155,7 +155,7 @@
           <span class="badge badge-white">รออนุมัติ</span>
           <span class="badge badge-success">อนุมัติแล้ว</span>
           | {{pageWait.firstItem + 1 | number}} - {{pageWait.lastItem + 1 | number}} จาก {{pageWait.totalItems | number}} รายการ
-          <clr-dg-pagination #pageWait [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceive"></clr-dg-pagination>
+          <clr-dg-pagination #pageWait [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceive"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -241,7 +241,7 @@
 
         <clr-dg-footer>
           {{pageOther.firstItem + 1 | number}} - {{pageOther.lastItem + 1 | number}} จาก {{pageOther.totalItems | number}} รายการ
-          <clr-dg-pagination #pageOther [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceiveOther"></clr-dg-pagination>
+          <clr-dg-pagination #pageOther [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceiveOther"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -362,7 +362,7 @@
 <clr-modal [(clrModalOpen)]="openModal" [clrModalSize]="'lg'" [clrModalClosable]="false">
   <h3 class="modal-title">พิมพ์ใบนำส่ง</h3>
   <div class="modal-body" style="height: 350px;">
-    <div class="row" style="">
+    <div class="row">
       <div class="col-md-2">
         <label>เลือกโดย</label>
       </div>
