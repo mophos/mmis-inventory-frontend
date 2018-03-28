@@ -23,12 +23,12 @@
 </div>
 <clr-tabs>
   <clr-tab>
-    <button clrTabLink id="link1" (click)="getWaiting()">
+    <button clrTabLink id="link1" (click)="getWaiting(); setTapActive('waiting')">
       <clr-icon shape="file"></clr-icon>
       รายการขอเบิก
       <span class="badge badge-info">{{orders.length | number}}</span>
     </button>
-    <clr-tab-content id="content1" *clrIfActive="true">
+    <clr-tab-content id="content1" *clrIfActive="selectedTab === 'waiting'">
       <clr-datagrid style="padding-top: 5px;">
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_date'">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_code'">เลขที่เบิก</clr-dg-column>
@@ -74,13 +74,13 @@
   </clr-tab>
 
   <clr-tab>
-    <button clrTabLink (click)="getWaitingApprove()">
+    <button clrTabLink (click)="getWaitingApprove(); setTapActive('waitingApprove')">
       <clr-icon shape="clock"></clr-icon>
       รายการรออนุมัติ
       <span class="badge badge-warning">{{waitingApproves.length | number}}</span>
     </button>
     
-    <clr-tab-content *clrIfActive>
+    <clr-tab-content *clrIfActive="selectedTab === 'waitingApprove'">
       <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_date'">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;" [clrDgField]="'requisition_code'">เลขที่เบิก</clr-dg-column>
@@ -122,12 +122,12 @@
   </clr-tab>
 
   <clr-tab>
-    <button clrTabLink (click)="getUnPaid()">
+    <button clrTabLink (click)="getUnPaid(); setTapActive('unpaid')">
       <clr-icon shape="sad-face"></clr-icon>
       รายการค้างจ่าย
       <span class="badge badge-danger">{{unpaids.length | number}}</span>
     </button>
-    <clr-tab-content *clrIfActive>
+    <clr-tab-content *clrIfActive="selectedTab === 'unpaid'">
       <button class="btn btn-sm btn-danger btn-icon" [disabled]="!selectedCancel.length" (click)="doCancelUnpaids()">
         <clr-icon shape="trash"></clr-icon> ยกเลิกค้างจ่าย ({{selectedCancel.length | number}} รายการ)
       </button>
@@ -161,12 +161,12 @@
   </clr-tab>
 
   <clr-tab>
-    <button clrTabLink (click)="getApproved()">
+    <button clrTabLink (click)="getApproved(); setTapActive('approved')">
       <clr-icon shape="happy-face"></clr-icon>
       รายการผ่านการอนุมัติ
       <span class="badge badge-success">{{approveds.length | number}}</span>
     </button>
-    <clr-tab-content *clrIfActive>
+    <clr-tab-content *clrIfActive="selectedTab === 'approved'">
       <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 150px;">วันที่อนุมัติ</clr-dg-column>
         <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>

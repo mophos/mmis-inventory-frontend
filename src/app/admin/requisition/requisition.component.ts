@@ -31,6 +31,8 @@ export class RequisitionComponent implements OnInit {
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
 
+  selectedTab: any = 'waiting';
+
   filesToUpload: Array<File> = [];
   token: any;
   orders: any = [];
@@ -62,6 +64,12 @@ export class RequisitionComponent implements OnInit {
 
   async ngOnInit() {
     this.loadData();
+    this.selectedTab = sessionStorage.getItem('reqTab');
+  }
+
+  setTapActive(tab: any) {
+    this.selectedTab = tab;
+    sessionStorage.setItem('reqTab', tab);
   }
 
   async loadData() {
