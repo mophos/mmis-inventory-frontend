@@ -206,8 +206,6 @@ export class RequisitionConfirmEditComponent implements OnInit {
 
   async savePay() {
     let isError = false;
-    let totalQty = 0;
-
     let items = [];
 
     let generics = [];
@@ -222,12 +220,10 @@ export class RequisitionConfirmEditComponent implements OnInit {
       let totalConfirmQty = 0;
 
       v.confirmItems.forEach((x: any) => {
-        totalQty += x.confirm_qty;
-        let _totalConfirmQty = x.confirm_qty * x.conversion_qty;
-        totalConfirmQty += _totalConfirmQty;
+        totalConfirmQty += x.confirm_qty * x.conversion_qty; // base
 
         let obj: any = {
-          confirm_qty: _totalConfirmQty,
+          confirm_qty: x.confirm_qty * x.conversion_qty, // base
           wm_product_id: x.wm_product_id,
           generic_id: v.generic_id
         }
@@ -249,6 +245,8 @@ export class RequisitionConfirmEditComponent implements OnInit {
     let data: any = {};
     data.items = items;
     data.generics = generics;
+
+    console.log(data);
 
     this.alertService.confirm('ต้องการบันทึกข้อมูลการจ่ายเวชภัณฑ์ ใช่หรือไม่?')
       .then(() => {
@@ -272,7 +270,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async saveWithOutUnPaid(data: any) {
     this.modalLoading.show();
     try {
-      let rs = await this.requisitionService.saveOrderConfirmItemsWithOutUnpaid(this.requisitionId, data.items);
+      let rs = await this.requisitionService.updateOrderConfirmItemsWithOutUnpaid(this.requisitionId, this.confirmId, data.items);
       this.modalLoading.hide();
       if (rs.ok) {
         this.alertService.success();
@@ -289,7 +287,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async saveWithUnPaid(data: any) {
     this.modalLoading.show();
     try {
-      let rs = await this.requisitionService.saveOrderConfirmItemsWithUnpaid(this.requisitionId, data.items, data.generics);
+      let rs = await this.requisitionService.updateOrderConfirmItemsWithUnpaid(this.requisitionId, this.confirmId, data.items, data.generics);
       this.modalLoading.hide();
       if (rs.ok) {
         this.alertService.success();
