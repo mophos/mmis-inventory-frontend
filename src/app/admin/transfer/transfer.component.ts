@@ -163,6 +163,7 @@ export class TransferComponent implements OnInit {
         this.alertService.success();
         this.selectedApprove = [];
         this.getTransferList();
+        this.getRequestTransfer();
       } else {
         this.alertService.error(rs.error);
       }
