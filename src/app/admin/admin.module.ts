@@ -1,3 +1,4 @@
+import { MinMaxService } from './min-max.service';
 import { TransectionTypeService } from './transection-type.service';
 import { ReceiveotherTypeService } from './receiveother-type.service';
 import { YearThaiPipe } from 'app/helper/year-thai.pipe';
@@ -136,7 +137,7 @@ import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
 import { BorrowNoteService } from './borrow-note.service';
 import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
-
+import { CalculateMinMaxComponent } from 'app/admin/calculate-min-max/calculate-min-max.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -228,7 +229,8 @@ Highcharts.setOptions({
     StockCardComponent,
     BorrowNoteComponent,
     BorrowNoteNewComponent,
-    RequisitionConfirmEditComponent
+    RequisitionConfirmEditComponent,
+    CalculateMinMaxComponent
   ],
   providers: [
     MainService,
@@ -276,6 +278,7 @@ Highcharts.setOptions({
     TransferDashboardService,
     AccessCheck,
     BorrowNoteService,
+    MinMaxService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })

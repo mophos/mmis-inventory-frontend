@@ -1,3 +1,4 @@
+import { CalculateMinMaxComponent } from './calculate-min-max/calculate-min-max.component';
 import { TransectionTypeComponent } from './transection-type/transection-type.component';
 import { ReceiveotherTypeComponent } from './receiveother-type/receiveother-type.component';
 import { PeriodComponent } from './period/period.component';
@@ -153,6 +154,7 @@ const routes: Routes = [
       { path: 'borrow-notes', component: BorrowNoteComponent },
       { path: 'borrow-notes/new', component: BorrowNoteNewComponent },
       { path: 'borrow-notes/:borrowNoteId/edit', component: BorrowNoteNewComponent },
+      { path: 'min-max', component: CalculateMinMaxComponent },
     ]
   }
 ];
