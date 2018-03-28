@@ -5,7 +5,7 @@
     <clr-dg-column>ชื่อ Generic</clr-dg-column>
     <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
     <clr-dg-column style="width: 100px;">จำนวนจ่าย</clr-dg-column>
-    <clr-dg-column style="width: 100px;" *ngIf="showUnpaid">ค้างจ่าย</clr-dg-column>
+    <clr-dg-column style="width: 100px;" *ngIf="showUnpaid">ค้างจ่าย/จ่ายเกิน</clr-dg-column>
     <clr-dg-row *clrDgItems="let i of items">
       <clr-dg-cell>{{ i.working_code }}</clr-dg-cell>
       <clr-dg-cell>{{ i.generic_name }}</clr-dg-cell>
