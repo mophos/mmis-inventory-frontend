@@ -36,8 +36,9 @@ export class ReceiveComponent implements OnInit {
   purchases: any = [];
   totalReceive = 0;
   totalReceiveOther = 0;
-  perPage = 15;
+  perPage = 20;
   query: string;
+  queryOther: string;
   isSearching = false;
   isSearch = false;
   openModal = false;
@@ -113,9 +114,9 @@ export class ReceiveComponent implements OnInit {
   async refresh(state: State) {
     const offset = +state.page.from;
     const limit = +state.page.size;
-    this.isSearch = false;
+
     this.modalLoading.show();
-    if (!this.isSearching) {
+    if (!this.query) {
       try {
         const rs = await this.receiveService.getWaiting(limit, offset);
         await this.getReceiveExpired();
@@ -136,31 +137,39 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-  searchWaiting(event) {
+  searchReceive(event: any) {
     this.doSearchWaiting();
+  }
+
+  searchReceiveOther(event: any) {
+    this.doSearchReceiveOther();
+  }
+
+  async doSearchReceiveOther() {
+    try {
+      this.modalLoading.show();
+      let rs: any = await this.receiveService.getWaitingSearchOther(this.perPage, 0, this.queryOther);
+      // await this.getReceiveExpiredSearch(this.query);
+      await this.getReceiveOtherExpiredSearch();
+      this.others = rs.rows;
+      this.totalReceiveOther = rs.total;
+      this.isSearching = true;
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
   }
 
   async doSearchWaiting() {
     try {
       this.modalLoading.show();
-      let rs: any;
-      if (!this.isSearch) {
-        rs = await this.receiveService.getWaitingSearch(this.perPage, 0, this.query);
-        await this.getReceiveExpiredSearch(this.query);
-        await this.getReceiveOtherExpiredSearch();
-        this.waitings = rs.rows;
-        this.totalReceive = rs.total;
-        this.isSearching = true;
-        this.modalLoading.hide();
-      } else {
-        rs = await this.receiveService.getWaitingSearchOther(this.perPage, 0, this.query);
-        await this.getReceiveExpiredSearch(this.query);
-        await this.getReceiveOtherExpiredSearch();
-        this.others = rs.rows;
-        this.totalReceive = rs.total;
-        this.isSearching = true;
-        this.modalLoading.hide();
-      }
+      let rs: any = await this.receiveService.getWaitingSearch(this.perPage, 0, this.query);
+      await this.getReceiveExpiredSearch(this.query);
+      this.waitings = rs.rows;
+      this.totalReceive = rs.total;
+      this.isSearching = true;
+      this.modalLoading.hide();
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
@@ -168,11 +177,10 @@ export class ReceiveComponent implements OnInit {
   }
 
   async refreshOther(state: State) {
-    this.isSearch = true;
     const offset = +state.page.from;
     const limit = +state.page.size;
     this.modalLoading.show();
-    if (!this.query) {
+    if (!this.queryOther) {
       try {
         const rs = await this.receiveService.getReceiveOther(limit, offset);
         await this.getReceiveOtherExpired();
@@ -184,11 +192,10 @@ export class ReceiveComponent implements OnInit {
         this.alertService.error(error.message);
       }
     } else {
-      const rs = await this.receiveService.getWaitingSearchOther(limit, offset, this.query);
+      const rs = await this.receiveService.getWaitingSearchOther(limit, offset, this.queryOther);
       await this.getReceiveOtherExpiredSearch();
       this.others = rs.rows;
       this.totalReceiveOther = rs.total;
-      this.isSearching = true;
       this.modalLoading.hide();
     }
   }

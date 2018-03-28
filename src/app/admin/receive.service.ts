@@ -273,6 +273,7 @@ export class ReceiveService {
     }).toPromise();
     return res.json();
   }
+  
   async getWaitingSearchOther(limit: number = 15, offset: number = 0, query: string) {
     const res = await this.authHttp.post(`${this.url}/receives/waiting/search/other`, {
       limit: limit,
