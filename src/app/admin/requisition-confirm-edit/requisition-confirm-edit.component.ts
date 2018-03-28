@@ -76,7 +76,6 @@ export class RequisitionConfirmEditComponent implements OnInit {
 
     if (idx > -1) {
       let _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: event.wm_product_id });
-      this.products[idx].is_minus = event.remain_qty - (event.confirm_qty * event.conversion_qty) < 0;
       this.products[idx].allowcate_qty = event.confirm_qty * event.conversion_qty;
 
       if (_idx > -1) {
@@ -110,7 +109,6 @@ export class RequisitionConfirmEditComponent implements OnInit {
             confirm_qty: v.confirm_qty,
             cost: v.cost,
             allowcate_qty: 0,
-            is_minus: false,
             from_unit_name: v.from_unit_name,
             generic_id: v.generic_id,
             generic_name: v.generic_name,
@@ -127,25 +125,10 @@ export class RequisitionConfirmEditComponent implements OnInit {
             small_book_qty: v.book_qty, // small qty
           }
 
-          if (rs.pays) {
-            rs.pays.forEach(z => {
-              if (z.generic_id === v.generic_id) {
-                let _obj: any = {
-                  confirm_qty: z.pay_qty,
-                  remain_qty: z.remain_qty,
-                  conversion_qty: z.conversion_qty,
-                  wm_product_id: z.wm_product_id,
-                  generic_id: z.generic_id
-                }
-                obj.is_minus = (z.remain_qty - (+z.pay_qty * +z.conversion_qty)) < 0;
-                obj.allowcate_qty += (+z.pay_qty * +z.conversion_qty);
-                obj.confirmItems.push(_obj);
-              }
-            });
-          }
-
           this.products.push(obj);
         });
+
+        console.log(this.products);
 
       } else {
         this.alertService.error(rs.error);
@@ -195,6 +178,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
       if (rs.ok) {
         let rows = rs.rows;
         rows.forEach(v => {
+          let _totalConfirmQty = 0;
           let idx = _.findIndex(this.products, { generic_id: v.generic_id });
           if (idx > -1) {
             let obj: any = {
@@ -203,7 +187,11 @@ export class RequisitionConfirmEditComponent implements OnInit {
               wm_product_id: v.wm_product_id,
               generic_id: this.products[idx].generic_id
             }
+
+            if (v.confirm_qty > 0) _totalConfirmQty = v.conversion_qty * v.confirm_qty;
+          
             this.products[idx].confirmItems.push(v);
+            this.products[idx].confirm_qty += _totalConfirmQty;
           }
         });
 
