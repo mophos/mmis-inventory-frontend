@@ -2,7 +2,7 @@ import { ProductsService } from './../products.service';
 import { AlertService } from './../../alert.service';
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { State } from '@clr/angular';
-
+import { JwtHelper } from 'angular2-jwt';
 @Component({
   selector: 'wm-products',
   templateUrl: './products.component.html',
@@ -17,18 +17,21 @@ export class ProductsComponent implements OnInit {
   perPage = 20;
   isSearching = false;
   token: any;
-
+  genericTypeIds = [];
   query: any;
-
+  currentPage = 1;
+  jwtHelper: JwtHelper = new JwtHelper();
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
-
+  @ViewChild('pagination') pagination: any;
   constructor(
     private alertService: AlertService,
     private productService: ProductsService,
     @Inject('API_URL') private apiUrl: string,
   ) {
-    this.token = sessionStorage.getItem('token')
+    this.token = sessionStorage.getItem('token');
+    const decoded = this.jwtHelper.decodeToken(this.token);
+    this.genericTypeIds = decoded.generic_type_id ? decoded.generic_type_id.split(',') : [];
   }
 
   ngOnInit() {
@@ -87,12 +90,19 @@ export class ProductsComponent implements OnInit {
     const offset = +state.page.from;
     const limit = +state.page.size;
 
+    if (!this.currentPage) {
+      this.currentPage = this.pagination.currentPage;
+    } else {
+      this.currentPage = this.currentPage > this.pagination.lastPage ? this.pagination.currentPage : this.pagination.currentPage;
+    }
+
     try {
       let rs: any;
+      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       if (this.query) {
-        rs = await this.productService.search(this.query, this.genericType, limit, offset);
+        rs = await this.productService.search(this.query, _genericType, limit, offset);
       } else {
-        rs = await this.productService.all(this.genericType, limit, offset);
+        rs = await this.productService.all(_genericType, limit, offset);
       }
       this.modalLoading.hide();
       if (rs.ok) {
@@ -116,19 +126,13 @@ export class ProductsComponent implements OnInit {
 
   async getGenericType() {
     try {
-      // this.modalLoading.show();
       const rs = await this.productService.getGenericType();
-
       if (rs.ok) {
         this.genericTypes = rs.rows;
-        this.genericType = rs.rows.length === 1 ? rs.rows[0].generic_type_id : "";
       } else {
         this.alertService.error(rs.error);
       }
-
-      // this.modalLoading.hide();
     } catch (error) {
-      // this.modalLoading.hide();
       console.log(error);
       this.alertService.serverError();
     }
@@ -138,15 +142,17 @@ export class ProductsComponent implements OnInit {
     try {
       this.modalLoading.show();
       let rs: any;
+      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       if (this.query) {
-        rs = await this.productService.search(this.query, this.genericType, this.perPage, 0);
+        rs = await this.productService.search(this.query, _genericType, this.perPage, 0);
       } else {
-        rs = await this.productService.all(this.genericType, this.perPage, 0);
+        rs = await this.productService.all(_genericType, this.perPage, 0);
       }
       this.modalLoading.hide();
       if (rs.ok) {
         this.products = rs.rows;
         this.totalProducts = rs.total;
+        this.currentPage = 1;
       } else {
         this.alertService.error(rs.error);
       }
