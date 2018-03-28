@@ -84,7 +84,7 @@
 
   <clr-dg-footer>
     {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
-    <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="totalProducts"></clr-dg-pagination>
+    <clr-dg-pagination #pagination [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalProducts"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
 
