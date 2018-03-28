@@ -18,7 +18,7 @@
         <div class="col-md-2">
           <div style="float:right">
               <div class="btn-group" style="float:right;margin: 0px 0px 0px 0px;" >
-                  <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="doConfirm()">
+                  <button [disabled]="!selectedApprove.length" class="btn btn-sm confirm" (click)="doConfirm()">
                     <clr-icon shape="note"></clr-icon> ยืนยันการโอน ({{selectedApprove.length | number}} รายการ)
                   </button>
                   <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
@@ -145,7 +145,7 @@
               <!-- <button class="btn btn-success wm-small-btn" (click)="approve(t)" [disabled]="isSaving">
                 รับสินค้าเข้าคลัง
               </button> -->
-              <button class="btn btn-danger wm-small-btn" (click)="removeTransfer(t)" [disabled]="isRemoving">
+              <button class="btn btn-danger wm-small-btn" (click)="removeTransfer(t)" [disabled]="t.mark_deleted === 'Y'">
                 ยกเลิก
               </button>
             </div>
