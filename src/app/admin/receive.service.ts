@@ -323,31 +323,6 @@ export class ReceiveService {
     return res.json();
   }
 
-  async getReceiveOtherApproveSearch(limit: number = 15, offset: number = 0, query: string) {
-    const res = await this.authHttp.post(`${this.url}/receives/other/approve/search`, {
-      limit: limit,
-      offset: offset,
-      query: query
-    }).toPromise();
-    return res.json();
-  }
-  async getReceiveOtherNapproveSearch(limit: number = 15, offset: number = 0, query: string) {
-    const res = await this.authHttp.post(`${this.url}/receives/other/napprove/search`, {
-      limit: limit,
-      offset: offset,
-      query: query
-    }).toPromise();
-    return res.json();
-  }
-
-  async getWaitingSearchOther(limit: number = 15, offset: number = 0, query: string) {
-    const res = await this.authHttp.post(`${this.url}/receives/waiting/search/other`, {
-      limit: limit,
-      offset: offset,
-      query: query
-    }).toPromise();
-    return res.json();
-  }
 
   async saveApprove(receiveIds: any[], approveDate: any, comment: any) {
     const res = await this.authHttp.post(`${this.url}/receives/approve`, {
@@ -461,6 +436,41 @@ export class ReceiveService {
   async getApproveOther() {
     const res = await this.authHttp.get(`${this.url}/receives/count/approve/other`)
       .toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherStatusSearch(limit: number = 15, offset: number = 0, query, status) {
+    const res = await this.authHttp.post(`${this.url}/receives/other/status/search`, {
+      limit: limit,
+      offset: offset,
+      status: status,
+      query: query
+    }).toPromise();
+    return res.json();
+  }
+  async getReceiveOtherStatus(limit: number = 15, offset: number = 0, status) {
+    const res = await this.authHttp.post(`${this.url}/receives/other/status`, {
+      limit: limit,
+      offset: offset,
+      status: status
+    }).toPromise();
+    return res.json();
+  }
+  async getReceiveStatus(limit: number = 15, offset: number = 0, status) {
+    const res = await this.authHttp.post(`${this.url}/receives/status`, {
+      limit: limit,
+      offset: offset,
+      status: status
+    }).toPromise();
+    return res.json();
+  }
+  async getReceiveStatusSearch(limit: number = 15, offset: number = 0, query, status) {
+    const res = await this.authHttp.post(`${this.url}/receives/status/search`, {
+      limit: limit,
+      offset: offset,
+      status: status,
+      query: query
+    }).toPromise();
     return res.json();
   }
 }
