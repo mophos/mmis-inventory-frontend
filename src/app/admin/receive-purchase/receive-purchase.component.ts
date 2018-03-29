@@ -663,6 +663,7 @@ export class ReceivePurchaseComponent implements OnInit {
                   this.isSaving = false;
 
                   if (rs.ok) {
+                    sessionStorage.setItem('tabReceive', 'receive');
                     this.router.navigate(['/admin/receives']);
                   } else {
                     this.alertService.error(rs.error);

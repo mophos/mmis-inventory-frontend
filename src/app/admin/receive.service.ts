@@ -24,8 +24,8 @@ export class ReceiveService {
     });
   }
   // get conversion
-  async getUnitConversion(genericId: any) {
-    const response = await this.authHttp.get(`${this.url}/units/conversion/${genericId}`)
+  async getUnitConversion(genericId: any, orderBy: string = 'ASC') {
+    const response = await this.authHttp.get(`${this.url}/units/conversion/${genericId}?orderBy=${orderBy}`)
       .toPromise();
     return response.json();
   }
@@ -273,6 +273,7 @@ export class ReceiveService {
     }).toPromise();
     return res.json();
   }
+  
   async getWaitingSearchOther(limit: number = 15, offset: number = 0, query: string) {
     const res = await this.authHttp.post(`${this.url}/receives/waiting/search/other`, {
       limit: limit,
@@ -386,5 +387,14 @@ export class ReceiveService {
     }).toPromise();
     return rs.json();
   }
-
+  async getApprove(){
+    const res = await this.authHttp.get(`${this.url}/receives/count/approve`)
+      .toPromise();
+    return res.json();
+  }
+  async getApproveOther(){
+    const res = await this.authHttp.get(`${this.url}/receives/count/approve/other`)
+      .toPromise();
+    return res.json();
+  }
 }

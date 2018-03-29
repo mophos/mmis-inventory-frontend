@@ -20,6 +20,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { IRequisitionOrderItem, IRequisitionOrder } from 'app/shared';
 import { AccessCheck } from '../../access-check';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wm-requisition',
@@ -29,6 +30,8 @@ export class RequisitionComponent implements OnInit {
   @ViewChild('viewer') private viewer: any;
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
+
+  selectedTab: any = 'waiting';
 
   filesToUpload: Array<File> = [];
   token: any;
@@ -49,14 +52,13 @@ export class RequisitionComponent implements OnInit {
   selectedCancel: any[] = [];
   tabSelect: any = 0;
 
+  perPage = 20;
+  
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
-    private uploadingService: UploadingService,
-    private ref: ChangeDetectorRef,
     private accessCheck: AccessCheck,
-    @Inject('DOC_URL') private docUrl: string,
-    @Inject('REQ_PREFIX') private documentPrefix: string,
+    private router: Router,
     @Inject('API_URL') private url: string,
   ) {
     this.token = sessionStorage.getItem('token');
@@ -64,6 +66,12 @@ export class RequisitionComponent implements OnInit {
 
   async ngOnInit() {
     this.loadData();
+    this.selectedTab = sessionStorage.getItem('tabRequisition');
+  }
+
+  setTapActive(tab: any) {
+    this.selectedTab = tab;
+    sessionStorage.setItem('tabRequisition', tab);
   }
 
   async loadData() {

@@ -300,7 +300,7 @@ export class ReceiveOtherComponent implements OnInit {
 
   addProduct() {
 
-    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost });
+    const idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost, lot_no: this.selectedLotNo });
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้วไม่สามารถเพิ่มได้ กรุณาแก้ไขรายการ');
     } else {
@@ -595,6 +595,7 @@ export class ReceiveOtherComponent implements OnInit {
               this.modalLoading.hide();
 
               if (receiveOtherId.ok) {
+                sessionStorage.setItem('tabReceive', 'receiveOther');
                 this.router.navigate(['/admin/receives']);
               } else {
                 this.alertService.error(JSON.stringify(receiveOtherId.error));
