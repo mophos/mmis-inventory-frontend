@@ -636,10 +636,10 @@ export class ReceiveEditComponent implements OnInit {
                 const _products = [];
                 let isError = false;
                 this.products.forEach((v: any) => {
-                  if (v.receive_qty > 0 && v.cost > 0 && v.warehouse_id && v.unit_generic_id) {
+                  if (v.receive_qty > 0 && v.cost >= 0 && v.warehouse_id && v.unit_generic_id) {
                     _products.push(v);
                     if (v.expired_date) {
-                      let validDate = this.dateService.isValidDateExpire(v.expired_date);
+                      const validDate = this.dateService.isValidDateExpire(v.expired_date);
                       if (!validDate) {
                         isError = true;
                       }

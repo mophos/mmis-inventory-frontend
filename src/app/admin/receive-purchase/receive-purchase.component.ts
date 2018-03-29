@@ -205,7 +205,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
   async getPurchaseProducts(purchaseOrderId: any) {
     // clear old products
-    let _products = [];
+    const _products = [];
     this.modalLoading.show();
 
     try {
@@ -323,8 +323,6 @@ export class ReceivePurchaseComponent implements OnInit {
 
   changeUnit(event: any) {
     try {
-      console.log(event);
-
       this.selectedUnitName = event.unit_name;
       this.selectedUnitId = event.unit_id;
       this.conversionQty = event.qty;
@@ -634,9 +632,9 @@ export class ReceivePurchaseComponent implements OnInit {
                 this.products.forEach((v: any) => {
                   if (v.receive_qty > 0) {
                     _products.push(v);
-                    if (v.warehouse_id && v.receive_qty && v.product_id && v.unit_generic_id) {
+                    if (v.warehouse_id && v.receive_qty > 0 && v.product_id && v.unit_generic_id && v.cost >= 0) {
                       if (v.expired_date) {
-                        let validDate = this.daetService.isValidDateExpire(v.expired_date);
+                        const validDate = this.daetService.isValidDateExpire(v.expired_date);
                         if (!validDate) {
                           isError = true;
                         }
@@ -658,7 +656,7 @@ export class ReceivePurchaseComponent implements OnInit {
                   this.alertService.error('ข้อมูลรายการสินค้าบางรายการไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot, วันหมดอายุ]');
                 } else {
                   // save product receive
-                  let rs: any = await this.receiveService.saveReceive(summary, _products);
+                  const rs: any = await this.receiveService.saveReceive(summary, _products);
                   this.modalLoading.hide();
                   this.isSaving = false;
 
@@ -700,7 +698,7 @@ export class ReceivePurchaseComponent implements OnInit {
               }
 
               // remove qty = 0
-              let _products = [];
+              const _products = [];
               // check warehouse
               let isErrorWarehouse = false;
               this.products.forEach((v: any) => {
@@ -762,7 +760,7 @@ export class ReceivePurchaseComponent implements OnInit {
   async getPurchaseInfo(purchaseOrderId: any) {
     try {
       this.modalLoading.show();
-      let rs: any = await this.receiveService.getPurchaseInfo(purchaseOrderId);
+      const rs: any = await this.receiveService.getPurchaseInfo(purchaseOrderId);
       this.modalLoading.hide();
 
       if (rs.ok) {
@@ -777,7 +775,7 @@ export class ReceivePurchaseComponent implements OnInit {
             }
           };
 
-          let rsPo: any = await this.receiveService.getCommittePO(this.purchaseOrderId);
+          const rsPo: any = await this.receiveService.getCommittePO(this.purchaseOrderId);
 
           if (rsPo.ok) {
             this.committee_id = rsPo.rows.length ? rsPo.rows[0].verify_committee_id : null;
@@ -814,7 +812,7 @@ export class ReceivePurchaseComponent implements OnInit {
     };
 
     try {
-      let rs: any = await this.receiveService.getCommittePO(this.purchaseOrderId);
+      const rs: any = await this.receiveService.getCommittePO(this.purchaseOrderId);
       if (rs.ok) {
         this.committee_id = rs.rows.length ? rs.rows[0].verify_committee_id : null;
       } else {
@@ -842,9 +840,6 @@ export class ReceivePurchaseComponent implements OnInit {
   async checkExpired() {
     this.isExpired = false;
     this.isItemExpired = false;
-    // console.log('checkExpired');
-    console.log(this.receiveExpired);
-
     if (this.receiveExpired) {
       for (const v of this.products) {
         if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
