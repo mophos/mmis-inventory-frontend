@@ -27,7 +27,7 @@ export class PlanningComponent implements OnInit {
   fromDate: any;
   toDate: any;
 
-  myDatePickerOptions: IMyOptions = {
+  pickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
     editableDateField: false,
@@ -46,6 +46,22 @@ export class PlanningComponent implements OnInit {
   async ngOnInit() {
     await this.getGenericType();
     await this.getProducts();
+    let date = new Date();
+    this.fromDate = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
+
+    this.toDate = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
   }
 
   async getProducts() {
@@ -318,9 +334,9 @@ export class PlanningComponent implements OnInit {
         if (result.from_stock_date) {
           this.fromDate = {
             date: {
-              year: moment(result.from_stock_date).get('year'),
-              month: moment(result.from_stock_date).get('month') + 1,
-              day: moment(result.from_stock_date).get('date')
+              year: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('year') : moment().get('year'),
+              month: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('month') + 1 : moment().get('month') + 1,
+              day: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('date') : moment().get('date')
             }
           }
         }
@@ -328,9 +344,9 @@ export class PlanningComponent implements OnInit {
         if (result.to_stock_date) {
           this.toDate = {
             date: {
-              year: moment(result.to_stock_date).get('year'),
-              month: moment(result.to_stock_date).get('month') + 1,
-              day: moment(result.to_stock_date).get('date')
+              year: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('year') : moment().get('year'),
+              month: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('month') + 1 : moment().get('month') + 1,
+              day: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('date') : moment().get('date')
             }
           }
         } else {
