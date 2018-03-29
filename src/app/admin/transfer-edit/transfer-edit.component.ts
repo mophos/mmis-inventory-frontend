@@ -44,6 +44,7 @@ export class TransferEditComponent implements OnInit {
   wmProductId: any;
   workingCode: any;
   isSaving: boolean = false;
+  disableSave = false;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -106,6 +107,10 @@ export class TransferEditComponent implements OnInit {
 
         this.srcWarehouseId = rs.info.src_warehouse_id;
         this.dstWarehouseId = rs.info.dst_warehouse_id;
+
+        if (rs.info.confirmed === 'Y' || rs.info.approved === 'Y' || rs.info.mark_deleted === 'Y') {
+          this.disableSave = true;
+        }
 
       } else {
         this.alertService.error(rs.error);
