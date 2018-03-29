@@ -324,7 +324,7 @@ export class ReceivePurchaseComponent implements OnInit {
   changeUnit(event: any) {
     try {
       console.log(event);
-      
+
       this.selectedUnitName = event.unit_name;
       this.selectedUnitId = event.unit_id;
       this.conversionQty = event.qty;
@@ -416,7 +416,7 @@ export class ReceivePurchaseComponent implements OnInit {
     product.is_free = this.isFree ? 'Y' : 'N';
     product.expired_date = this.selectedExpiredDate;
 
-    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate })
+    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: product.is_free })
     if (idx > -1) {
       this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ');
     } else {
@@ -844,7 +844,7 @@ export class ReceivePurchaseComponent implements OnInit {
     this.isItemExpired = false;
     // console.log('checkExpired');
     console.log(this.receiveExpired);
-    
+
     if (this.receiveExpired) {
       for (const v of this.products) {
         if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
