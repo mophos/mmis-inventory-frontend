@@ -42,6 +42,7 @@ export class TransferEditComponent implements OnInit {
   wmProductId: any;
   workingCode: any;
   isSaving: boolean = false;
+  disableSave = false;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -102,6 +103,10 @@ export class TransferEditComponent implements OnInit {
 
         this.srcWarehouseId = rs.info.src_warehouse_id;
         this.dstWarehouseId = rs.info.dst_warehouse_id;
+
+        if (rs.info.confirmed === 'Y' || rs.info.approved === 'Y' || rs.info.mark_deleted === 'Y') {
+          this.disableSave = true;
+        }
 
       } else {
         this.alertService.error(rs.error);
@@ -215,37 +220,32 @@ export class TransferEditComponent implements OnInit {
   }
 
   async addGeneric() {
-    if (this.transferQty) {
-      const idx = _.findIndex(this.generics, { generic_id: this.genericId });
+    const idx = _.findIndex(this.generics, { generic_id: this.genericId });
 
-      if (idx === -1) {
-        if (this.genericId && this.transferQty && this.unitGenericId) {
-          const obj = {
-            working_code: this.workingCode,
-            generic_name: this.genericName,
-            generic_id: this.genericId,
-            transfer_qty: +this.transferQty,
-            remain_qty: +this.remainQty,
-            unit_generic_id: this.unitGenericId,
-            conversion_qty: this.conversionQty,
-            location_id: this.locationId,
-            total_transfer_qty: +this.transferQty * this.conversionQty
-          };
+    if (idx === -1) {
+      if (this.genericId) {
+        const obj = {
+          working_code: this.workingCode,
+          generic_name: this.genericName,
+          generic_id: this.genericId,
+          transfer_qty: +this.transferQty,
+          remain_qty: +this.remainQty,
+          unit_generic_id: this.unitGenericId,
+          conversion_qty: this.conversionQty,
+          location_id: this.locationId,
+          primary_unit_id: this.primaryUnitId,
+          primary_unit_name: this.primaryUnitName
+        };
 
-          console.log(obj);
-
-          this.generics.push(obj);
-          await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
-          this.clearForm();
-        } else {
-          this.alertService.error('ข้อมูลไม่ครบถ้วน เช่น จำนวนโอน')
-        }
-
+        this.generics.push(obj);
+        await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
+        this.clearForm();
       } else {
-        this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
+        this.alertService.error('ข้อมูลไม่ครบถ้วน')
       }
+
     } else {
-      this.alertService.error('กรุณาระบุจำนวนที่ต้องการโอน')
+      this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
     }
   }
 
@@ -267,7 +267,7 @@ export class TransferEditComponent implements OnInit {
     this.lotNo = null;
     this.locationId = null;
     this.lots = [];
-    this.unitList.clearUnits();
+    // this.unitList.clearUnits();
   }
 
   editChangetransferQty(idx: any, qty: any) {
@@ -279,7 +279,7 @@ export class TransferEditComponent implements OnInit {
       this.generics[idx].transfer_qty = +qty.value;
       const genericId = this.generics[idx].generic_id;
       const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].total_transfer_qty = transferQty;
+      this.generics[idx].transfer_qty = transferQty;
       this.getProductList(genericId, transferQty);
     }
   }
@@ -287,7 +287,7 @@ export class TransferEditComponent implements OnInit {
   changeProductQty(genericId, event) {
     const idx = _.findIndex(this.generics, ['generic_id', genericId]);
     this.generics[idx].products = event;
-    this.generics[idx].total_transfer_qty = _.sumBy(event, function (e: any) {
+    this.generics[idx].transfer_qty = _.sumBy(event, function (e: any) {
       return e.product_qty * e.conversion_qty;
     });
   }
@@ -304,7 +304,7 @@ export class TransferEditComponent implements OnInit {
       } else {
         const genericId = this.generics[idx].generic_id;
         const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-        this.generics[idx].total_transfer_qty = transferQty;
+        this.generics[idx].transfer_qty = transferQty;
         this.getProductList(genericId, transferQty);
       }
     }

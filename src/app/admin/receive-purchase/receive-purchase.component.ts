@@ -414,7 +414,7 @@ export class ReceivePurchaseComponent implements OnInit {
     product.is_free = this.isFree ? 'Y' : 'N';
     product.expired_date = this.selectedExpiredDate;
 
-    const idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate })
+    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: product.is_free })
     if (idx > -1) {
       this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ');
     } else {

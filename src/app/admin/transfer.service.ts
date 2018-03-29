@@ -128,4 +128,17 @@ export class TransferService {
     return rs.json();
   }
 
+  async confirmAll(transferIds: any[]) {
+    const rs: any = await this.authHttp.post(`${this.url}/transfer/confirm`, {
+      transferIds: transferIds
+    }).toPromise();
+
+    return rs.json();
+  }
+
+  async request() {
+    const rs: any = await this.authHttp.get(`${this.url}/transfer/request`).toPromise();
+    return rs.json();
+  }
+
 }

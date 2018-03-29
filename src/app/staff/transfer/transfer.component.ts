@@ -53,6 +53,7 @@ export class TransferComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           this.transfers = result.rows;
+          this.approveStatus = 1;
           this.ref.detectChanges();
         } else {
           this.alertService.error(JSON.stringify(result.error));
@@ -212,8 +213,10 @@ export class TransferComponent implements OnInit {
         } else if (value === '2') {
           this.transfers = rs.rows.filter(g => g.approved === 'Y');
         } else if (value === '3') {
-          this.transfers = rs.rows.filter(g => g.approved === 'N');
+          this.transfers = rs.rows.filter(g => (g.confirmed === 'Y' && g.approved === 'N'));
         } else if (value === '4') {
+          this.transfers = rs.rows.filter(g => g.confirmed === 'N' && g.mark_deleted === 'N');
+        } else if (value === '5') {
           this.transfers = rs.rows.filter(g => g.mark_deleted === 'Y');
         }
       } else {
@@ -225,6 +228,42 @@ export class TransferComponent implements OnInit {
       this.alertService.error(error.message);
     }
     console.log(value);
+  }
+
+  doConfirm() {
+    const transferIds = [];
+    this.selectedApprove.forEach(v => {
+      if (v.confirmed !== 'Y' && v.approved !== 'Y' && v.mark_deleted === 'N') {
+        transferIds.push(v.transfer_id);
+      }
+    });
+
+    if (transferIds.length) {
+      this.alertService.confirm('ต้องการยืนยันการโอน ใช่หรือไม่?')
+        .then(async () => {
+          try {
+            this.modalLoading.show();
+            const rs: any = await this.transferService.confirmAll(transferIds);
+            if (rs.ok) {
+              this.alertService.success();
+              this.selectedApprove = [];
+              this.getAllTransfer();
+            } else {
+              this.alertService.error(rs.error);
+            }
+            this.modalLoading.hide();
+          } catch (error) {
+            this.modalLoading.hide();
+            console.error(error);
+            this.alertService.error(error.message);
+          }
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.selectedApprove = [];
+      this.alertService.error('ไม่พบรายการที่ต้องการยืนยัน');
+    }
   }
 
 }
