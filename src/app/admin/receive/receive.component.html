@@ -17,7 +17,11 @@
     <button type="button" routerLink="/admin/receives/other" clrDropdownItem>รับอื่นๆ (เช่นบริจาค)</button>
   </clr-dropdown-menu>
 </clr-dropdown>
-<button style="float: right;" class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption()">
+<!-- <button style="float: right;" class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption()">
+  <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
+</button> -->
+<button *ngIf="tab === 'receive' || tab === 'receiveOther'" style="float: right;" class="btn btn-primary btn-sm btn-icon"
+  (click)="printSelecOption()">
   <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง (แบบมีเงื่อนไข)
 </button>
 <clr-tabs>
@@ -83,21 +87,20 @@
           <div class="row wid99">
             <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searchReceive($event)" name="query" 
-                [(ngModel)]="query" placeholder="เลขที่ใบสั่งซื้อ, เลขที่ใบรับ, วันที่รับ เช่น 2561-01-31"
+              <input type="text" (keyup)="searchReceive($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบสั่งซื้อ, เลขที่ใบรับ, วันที่รับ เช่น 2561-01-31"
                 style="width: 400px;">
             </div>
             <div class="col-md-2 push-md-4" style="padding-top: 5px;">
               <div class="select">
-                  <select [(ngModel)]="fillterApprove" (change)="changeFillterApprove()">
+                <select [(ngModel)]="fillterApprove" (change)="changeFillterApprove()">
                   <option value="all">ทั้งหมด</option>
                   <option value="approve">อนุมัติ</option>
                   <option value="Napprove">ยังไม่ได้อนุมัติ</option>
                 </select>
-              </div> 
+              </div>
             </div>
             <div class="col-md-2" style="padding-top: 5px;">
-              
+
               <div style="float: right;">
                 <clr-dropdown>
                   <button type="button" [disabled]="!selectedApprove.length" class="btn btn-sm btn-primary" clrDropdownTrigger>
@@ -106,13 +109,18 @@
                   </button>
                   <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
                     <label class="dropdown-header">เมนูใช้งาน ({{selectedApprove.length | number}} รายการที่ถูกเลือก)</label>
-                    <button type="button" clrDropdownItem (click)="approveReceiveCheck(1)"><clr-icon class="is-success" shape="check"></clr-icon> อนุมัติใบรับ</button>  
+                    <button type="button" clrDropdownItem (click)="approveReceiveCheck(1)">
+                      <clr-icon class="is-success" shape="check"></clr-icon> อนุมัติใบรับ</button>
                     <div class="dropdown-divider"></div>
-                    <button type="button" clrDropdownItem (click)="printDeliveryNote()"><clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง</button>  
-                    <button type="button" clrDropdownItem (click)="printProductRecive()"><clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ</button>  
-                    <button type="button" clrDropdownItem (click)="printReceive()"><clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับ</button>  
-                    <button type="button" clrDropdownItem (click)="printreceiveApprovePO()"><clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ</button>  
-                  
+                    <button type="button" clrDropdownItem (click)="printDeliveryNote()">
+                      <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง</button>
+                    <button type="button" clrDropdownItem (click)="printProductRecive()">
+                      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ</button>
+                    <button type="button" clrDropdownItem (click)="printReceive()">
+                      <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับ</button>
+                    <button type="button" clrDropdownItem (click)="printreceiveApprovePO()">
+                      <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ</button>
+
                   </clr-dropdown-menu>
                 </clr-dropdown>
               </div>
@@ -172,20 +180,19 @@
           <div class="row wid99">
             <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searchReceiveOther($event)" 
-                name="queryOther" [(ngModel)]="queryOther" placeholder="ชื่อผู้บริจาค, เลขที่ใบรับ..."
+              <input type="text" (keyup)="searchReceiveOther($event)" name="queryOther" [(ngModel)]="queryOther" placeholder="ชื่อผู้บริจาค, เลขที่ใบรับ..."
                 style="width: 250px;">
               <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
             </div>
             <div class="col-md-2 push-md-4" style="padding-top: 5px;">
-                <div class="select">
-                    <select [(ngModel)]="fillterApprove" (change)="changeFillterApprove()">
-                    <option value="all">ทั้งหมด</option>
-                    <option value="approve">อนุมัติ</option>
-                    <option value="Napprove">ยังไม่ได้อนุมัติ</option>
-                  </select>
-                </div> 
+              <div class="select">
+                <select [(ngModel)]="fillterApprove" (change)="changeFillterApprove()">
+                  <option value="all">ทั้งหมด</option>
+                  <option value="approve">อนุมัติ</option>
+                  <option value="Napprove">ยังไม่ได้อนุมัติ</option>
+                </select>
               </div>
+            </div>
             <div class="col-md-2" style="padding-top: 5px;">
               <div style="float: right;">
                 <clr-dropdown>
@@ -247,7 +254,7 @@
     </clr-tab-content>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink>
+    <button clrTabLink (click)="selectTabReceiveEndDate()">
       <clr-icon shape="truck"></clr-icon> รับจากการซื้อ ใกล้วันหมดอายุ</button>
     <clr-tab-content *clrIfActive>
       <!-- <div class="card">
@@ -257,9 +264,9 @@
               <label for="">ค้นหา</label>
               <input type="text" (keyup)="searchWaiting($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบสั่งซื้อ, เลขที่ใบรับ..."
                 style="width: 250px;"> -->
-              <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
-            <!-- </div> -->
-            <!-- <div class="col-md-6" style="padding-top: 5px;">
+      <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
+      <!-- </div> -->
+      <!-- <div class="col-md-6" style="padding-top: 5px;">
                 <div class="btn-group" style="float: right;">
                   <button style="float: right;" class="btn btn-success btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="saveApprove()">
                     <clr-icon shape="note"></clr-icon> อนุมัติใบรับ
@@ -269,7 +276,7 @@
                   </button>
                 </div>
               </div> -->
-          <!-- </div>
+      <!-- </div>
         </div>
       </div> -->
 
@@ -302,31 +309,32 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pagePurchaseExpired.firstItem + 1 | number}} - {{pagePurchaseExpired.lastItem + 1 | number}} จาก {{pagePurchaseExpired.totalItems | number}} รายการ
+          {{pagePurchaseExpired.firstItem + 1 | number}} - {{pagePurchaseExpired.lastItem + 1 | number}} จาก {{pagePurchaseExpired.totalItems
+          | number}} รายการ
           <clr-dg-pagination #pagePurchaseExpired [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink>
+    <button clrTabLink (click)="selectTabReceiveOtherEndDate()">
       <clr-icon shape="truck"></clr-icon> รับอื่นๆ ใกล้วันหมดอายุ</button>
     <clr-tab-content *clrIfActive>
       <!-- <div class="card">
         <div class="card-block" style="padding: 0px 5px 5px 5px;"> -->
-          <!-- <div class="row wid99"> -->
-            <!-- <div class="col-md-6" style="padding-top: 5px;">
+      <!-- <div class="row wid99"> -->
+      <!-- <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
               <input type="text" (keyup)="searchReceiveOther($event)" name="queryOtherExpire" [(ngModel)]="queryOtherExpire" placeholder="ชื่อผู้บริจาค, เลขที่ใบรับ..."
                 style="width: 250px;"> -->
-              <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
-            <!-- </div> -->
-            <!-- <div class="col-md-6" style="padding-top: 5px;">
+      <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
+      <!-- </div> -->
+      <!-- <div class="col-md-6" style="padding-top: 5px;">
                 <button style="float: right;" class="btn btn-success btn-sm btn-icon" [disabled]="!selectedOtherApprove.length" (click)="saveApproveOther()">
                   <clr-icon shape="note"></clr-icon> อนุมัติใบรับ
                 </button>
               </div> -->
-          <!-- </div>
+      <!-- </div>
         </div>
       </div> -->
       <clr-datagrid [style.height.%]="83">
@@ -351,7 +359,8 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pageOtherCancel.firstItem + 1 | number}} - {{pageOtherCancel.lastItem + 1 | number}} จาก {{pageOtherCancel.totalItems | number}} รายการ
+          {{pageOtherCancel.firstItem + 1 | number}} - {{pageOtherCancel.lastItem + 1 | number}} จาก {{pageOtherCancel.totalItems |
+          number}} รายการ
           <clr-dg-pagination #pageOtherCancel [clrDgPageSize]="perPage"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
@@ -360,68 +369,119 @@
 </clr-tabs>
 
 <clr-modal [(clrModalOpen)]="openModal" [clrModalSize]="'lg'" [clrModalClosable]="false">
-  <h3 class="modal-title">พิมพ์ใบนำส่ง</h3>
-  <div class="modal-body" style="height: 350px;">
-    <div class="row">
-      <div class="col-md-2">
-        <label>เลือกโดย</label>
-      </div>
-      <div class="select col-md-4">
-        <select name="warehouseId" [(ngModel)]="showOption">
-          <!-- <option value="3" selected>ทั้งหมด</option> -->
-          <option value="1" selected>รับจากการซื้อ</option>
-          <option value="2">รับอื่นๆ (เช่นบริจาค)</option>
-        </select>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-block">
-        <div class="row" style="margin:.5em">
-          <div class="col-md-12">
-            <label for="">เลขที่ใบรับ</label>
-          </div>
-          <div class="col-md-12">
-            <label class="col-md-1 required" for="">ระหว่าง</label>
-            <input class="col-md-3 " type="text" name="query" [(ngModel)]="sID" placeholder="RV-61-000000">
-            <label class="col-md-1 required" for="">ถึง</label>
-            <input class="col-md-3" type="text" name="query2" [(ngModel)]="eID" placeholder="RV-61-999999">
-            <button type="button" class="btn btn-success btn-md" (click)="printDeliveryId(showOption,sID,eID)" [disabled]="!sID || !eID">พิมพ์</button>
-          </div>
-        </div>
-      </div>
-      <div class="card-block" *ngIf='showOption == 1'>
-        <div class="row" style="margin:.5em">
-          <div class="col-md-12">
-            <label for="">เลขที่ใบสั่งซื้อ</label>
-          </div>
-          <div class="col-md-12">
-            <label class="col-md-1 required" for="">ระหว่าง</label>
-            <input class="col-md-3 " type="text" name="query" [(ngModel)]="sIDpo" placeholder="PO-61-000000">
-            <label class="col-md-1 required" for="">ถึง</label>
-            <input class="col-md-3" type="text" name="query2" [(ngModel)]="eIDpo" placeholder="PO-61-999999">
-            <button type="button" class="btn btn-success btn-md" (click)="printPoId(showOption,sIDpo,eIDpo)" [disabled]="!sIDpo || !eIDpo">พิมพ์</button>
-          </div>
-        </div>
-      </div>
-      <div class="card-block">
-        <div class="form-group">
-          <div class="row" style="margin:.5em">
-            <div class="col-md-12">
-              <label for="">วันที่</label>
+  <h3 *ngIf="tab === 'receive'" class="modal-title">พิมพ์ใบนำส่ง (รับจากการซื้อ)</h3>
+  <h3 *ngIf="tab === 'receiveOther'" class="modal-title">พิมพ์ใบนำส่ง (รับอื่นๆ)</h3>
+  <div class="modal-body" style="height: 370px;">
+    <clr-tabs>
+      <clr-tab>
+        <button clrTabLink> พิมพ์ใบนำส่ง</button>
+        <clr-tab-content *clrIfActive>
+          <div class="card">
+            <div class="card-block">
+              <div class="row" style="margin:.5em">
+                <div class="col-md-12">
+                  <label for="">เลขที่ใบรับ</label>
+                </div>
+                <div class="col-md-12">
+                  <label class="col-md-1 required" for="">ระหว่าง</label>
+                  <input class="col-md-3 " type="text" name="query" [(ngModel)]="sID" placeholder="RV-61-000000">
+                  <label class="col-md-1 required" for="">ถึง</label>
+                  <input class="col-md-3" type="text" name="query2" [(ngModel)]="eID" placeholder="RV-61-999999">
+                  <button type="button" class="btn btn-success btn-md" (click)="printDeliveryId(showOption,sID,eID)" [disabled]="!sID || !eID">พิมพ์</button>
+                </div>
+              </div>
             </div>
-            <label class="required col-md-1" for="">ตั้งแต่</label>
-            <div class="col-md-4" style="display:inline-block;vertical-align: middle;">
-              <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="sDate" required></my-date-picker-th>
+            <div class="card-block" *ngIf='showOption === 1'>
+              <div class="row" style="margin:.5em">
+                <div class="col-md-12">
+                  <label for="">เลขที่ใบสั่งซื้อ</label>
+                </div>
+                <div class="col-md-12">
+                  <label class="col-md-1 required" for="">ระหว่าง</label>
+                  <input class="col-md-3 " type="text" name="query" [(ngModel)]="sIDpo" placeholder="PO-61-000000">
+                  <label class="col-md-1 required" for="">ถึง</label>
+                  <input class="col-md-3" type="text" name="query2" [(ngModel)]="eIDpo" placeholder="PO-61-999999">
+                  <button type="button" class="btn btn-success btn-md" (click)="printPoId(showOption,sIDpo,eIDpo)" [disabled]="!sIDpo || !eIDpo">พิมพ์</button>
+                </div>
+              </div>
             </div>
-            <label class=" col-md-1 required" for="">ถึง</label>
-            <div class="col-md-4" style="display:inline-block;vertical-align: middle;">
-              <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="eDate" required></my-date-picker-th>
+            <div class="card-block">
+              <div class="form-group">
+                <div class="row" style="margin:.5em">
+                  <div class="col-md-12">
+                    <label for="">วันที่</label>
+                  </div>
+                  <label class="required col-md-1" for="">ตั้งแต่</label>
+                  <div class="col-md-4" style="display:inline-block;vertical-align: middle;">
+                    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="sDate" required></my-date-picker-th>
+                  </div>
+                  <label class=" col-md-1 required" for="">ถึง</label>
+                  <div class="col-md-4" style="display:inline-block;vertical-align: middle;">
+                    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="eDate" required></my-date-picker-th>
+                  </div>
+                  <button type="button" class="col-md-1 btn btn-success btn-lg" (click)="printDeliveryDate(showOption,sDate,eDate)" [disabled]="!sDate || !eDate">พิมพ์</button>
+                </div>
+              </div>
             </div>
-            <button type="button" class="col-md-1 btn btn-success btn-lg" (click)="printDeliveryDate(showOption,sDate,eDate)" [disabled]="!sDate || !eDate">พิมพ์</button>
           </div>
-        </div>
-      </div>
-    </div>
+
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab *ngIf="tab === 'receive'">
+          <button clrTabLink> พิมพ์ใบตรวจรับ </button>
+          <clr-tab-content *clrIfActive>
+            <div class="card">
+              <div class="card-block">
+                <div class="row" style="margin:.5em">
+                  <div class="col-md-12">
+                    <label for="">ตามเลขที่ใบรับ</label>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="col-md-1 required" for="">ระหว่าง</label>
+                    <input class="col-md-3 " type="text" name="query" [(ngModel)]="sID" placeholder="RV-61-000000">
+                    <label class="col-md-1 required" for="">ถึง</label>
+                    <input class="col-md-3" type="text" name="query2" [(ngModel)]="eID" placeholder="RV-61-999999">
+                    <button type="button" class="btn btn-success btn-md" (click)="printDeliveryId(3,sID,eID)" [disabled]="!sID || !eID">พิมพ์</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-block">
+                <div class="row" style="margin:.5em">
+                  <div class="col-md-12">
+                    <label for="">ตามเลขที่ใบสั่งซื้อ</label>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="col-md-1 required" for="">ระหว่าง</label>
+                    <input class="col-md-3 " type="text" name="query" [(ngModel)]="sIDpo" placeholder="PO-61-000000">
+                    <label class="col-md-1 required" for="">ถึง</label>
+                    <input class="col-md-3" type="text" name="query2" [(ngModel)]="eIDpo" placeholder="PO-61-999999">
+                    <button type="button" class="btn btn-success btn-md" (click)="printPoId(3,sIDpo,eIDpo)" [disabled]="!sIDpo || !eIDpo">พิมพ์</button>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="card-block">
+                <div class="form-group">
+                  <div class="row" style="margin:.5em">
+                    <div class="col-md-12">
+                      <label for="">วันที่ตามเลขที่ใบรับ</label>
+                    </div>
+                    <label class="required col-md-1" for="">ตั้งแต่</label>
+                    <div class="col-md-4" style="display:inline-block;vertical-align: middle;">
+                      <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="sDate" required></my-date-picker-th>
+                    </div>
+                    <label class=" col-md-1 required" for="">ถึง</label>
+                    <div class="col-md-4" style="display:inline-block;vertical-align: middle;">
+                      <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="eDate" required></my-date-picker-th>
+                    </div>
+                    <button type="button" class="col-md-1 btn btn-success btn-lg" (click)="printDeliveryDate(3,sDate,eDate)" [disabled]="!sDate || !eDate">พิมพ์</button>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+  
+          </clr-tab-content>
+        </clr-tab>
+    </clr-tabs>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-danger btn-lg" (click)="openModal = false">ปิด</button>
