@@ -81,6 +81,7 @@ import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
+import { ValueProductsComponent } from 'app/admin/reports/value-products/value-products.component';
 import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
 import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
@@ -129,6 +130,7 @@ const routes: Routes = [
       { path: 'reports/product-remain', component: ReportProductRemain },
       { path: 'reports/product-expired', component: ProductExpiredComponent },
       { path: 'reports/product-manufacture', component: ProductManufactureComponent },
+      { path: 'reports/value-products', component: ValueProductsComponent },
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
