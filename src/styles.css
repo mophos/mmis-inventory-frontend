@@ -185,6 +185,9 @@ form .form-group label, form .form-group span, form .form-group input[type=text]
     color: rgb(0, 140, 196);
 }
 
+.confirm-status {
+    background-color: #FFFCE8;
+}
 .success-status {
     background-color: rgb(238, 234, 9);
 }
@@ -225,4 +228,10 @@ wm-loading-modal .modal-backdrop {
 .grid-order .datagrid .datagrid-cell {
     padding: 5px 10px 5px 10px;
     line-height: 25px;
+}
+
+button.confirm {
+    background: #EDB200;
+    border-color: #EDB200;
+    color: white;
 }

@@ -409,7 +409,7 @@ export class ReceiveEditComponent implements OnInit {
 
     product.expired_date = this.selectedExpiredDate;
 
-    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate })
+    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: product.is_free })
     if (idx > -1) {
       this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ');
     } else {
@@ -560,14 +560,14 @@ export class ReceiveEditComponent implements OnInit {
         console.log(rs);
         if (rs.ok) {
           this.isReceiveHoliday = false;
-            await this.checkExpired();
+          await this.checkExpired();
         } else {
           this.isReceiveHoliday = true; // วันหยุด
           console.log('err วันที่คุณเลือกเป็นวันหยุดราชการ จะรับสินค้าหรือไม่');
           this.alertService.confirm(rs.error)
             .then(async () => {
               this.isReceiveHoliday = false; // วันหยุด
-                await this.checkExpired();
+              await this.checkExpired();
             })
             .catch(() => {
               this.isReceiveHoliday = true;
@@ -636,10 +636,10 @@ export class ReceiveEditComponent implements OnInit {
                 const _products = [];
                 let isError = false;
                 this.products.forEach((v: any) => {
-                  if (v.receive_qty > 0 && v.cost > 0 && v.warehouse_id && v.unit_generic_id) {
+                  if (v.receive_qty > 0 && v.cost >= 0 && v.warehouse_id && v.unit_generic_id) {
                     _products.push(v);
                     if (v.expired_date) {
-                      let validDate = this.dateService.isValidDateExpire(v.expired_date);
+                      const validDate = this.dateService.isValidDateExpire(v.expired_date);
                       if (!validDate) {
                         isError = true;
                       }

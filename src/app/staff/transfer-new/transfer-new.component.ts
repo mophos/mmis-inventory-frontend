@@ -208,11 +208,9 @@ export class TransferNewComponent implements OnInit {
   }
 
   async addGeneric() {
-    if (this.transferQty) {
       const idx = _.findIndex(this.generics, { generic_id: this.genericId });
-
       if (idx === -1) {
-        if (this.genericId && this.transferQty && this.unitGenericId) {
+        if (this.genericId) {
           const obj = {
             working_code: this.workingCode,
             generic_name: this.genericName,
@@ -222,24 +220,18 @@ export class TransferNewComponent implements OnInit {
             unit_generic_id: this.unitGenericId,
             conversion_qty: this.conversionQty,
             location_id: this.locationId,
-            total_transfer_qty: +this.transferQty * this.conversionQty
+            primary_unit_id: this.primaryUnitId,
+            primary_unit_name: this.primaryUnitName
           };
-
-          console.log(obj);
-
           this.generics.push(obj);
-          await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
+          await this.getProductList(this.genericId, this.transferQty);
           this.clearForm();
         } else {
-          this.alertService.error('ข้อมูลไม่ครบถ้วน เช่น จำนวนโอน')
+          this.alertService.error('ข้อมูลไม่ครบถ้วน')
         }
-
       } else {
         this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
       }
-    } else {
-      this.alertService.error('กรุณาระบุจำนวนที่ต้องการโอน')
-    }
   }
 
   clearForm() {
@@ -260,7 +252,7 @@ export class TransferNewComponent implements OnInit {
     this.lotNo = null;
     this.locationId = null;
     this.lots = [];
-    this.unitList.clearUnits();
+    // this.unitList.clearUnits();
   }
 
   editChangetransferQty(idx: any, qty: any) {
@@ -272,7 +264,7 @@ export class TransferNewComponent implements OnInit {
       this.generics[idx].transfer_qty = +qty.value;
       const genericId = this.generics[idx].generic_id;
       const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].total_transfer_qty = transferQty;
+      this.generics[idx].transfer_qty = transferQty;
       this.getProductList(genericId, transferQty);
     }
   }
@@ -280,7 +272,7 @@ export class TransferNewComponent implements OnInit {
   changeProductQty(genericId, event) {
     const idx = _.findIndex(this.generics, ['generic_id', genericId]);
     this.generics[idx].products = event;
-    this.generics[idx].total_transfer_qty = _.sumBy(event, function (e: any) {
+    this.generics[idx].transfer_qty = _.sumBy(event, function (e: any) {
       return e.product_qty * e.conversion_qty;
     });
   }
@@ -294,7 +286,7 @@ export class TransferNewComponent implements OnInit {
     } else {
       const genericId = this.generics[idx].generic_id;
       const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].total_transfer_qty = transferQty;
+      this.generics[idx].transfer_qty = transferQty;
       this.getProductList(genericId, transferQty);
     }
   }
@@ -314,62 +306,56 @@ export class TransferNewComponent implements OnInit {
     } else {
       if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.transferDate) {
         const generics = [];
+        let isError = false;
+
         _.forEach(this.generics, v => {
           if (v.generic_id && v.transfer_qty) {
             generics.push({
               generic_id: v.generic_id,
               transfer_qty: +v.transfer_qty,
-              unit_generic_id: v.unit_generic_id,
-              conversion_qty: +v.conversion_qty,
+              primary_unit_id: v.primary_unit_id,
               location_id: v.location_id,
               products: v.products
             });
+          } else {
+            isError = true;
           }
         });
 
+        if (isError) {
+          this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนโอน');
+        } else {
         const summary = {
           transferDate: `${this.transferDate.date.year}-${this.transferDate.date.month}-${this.transferDate.date.day}`,
           srcWarehouseId: this.srcWarehouseId,
           dstWarehouseId: this.dstWarehouseId
         };
 
-        // check transfer qty
-        let isError = false;
-        this.generics.forEach(v => {
-          if (+v.transfer_qty * v.conversion_qty > v.remain_qty || +v.transfer_qty <= 0) {
-            isError = true;
-          }
-        });
-
-        if (isError) {
-          this.alertService.error('มีบางรายการที่ยอดโอน มากกว่ายอดคงเหลือ หรือ เท่ากับ 0');
-        } else {
-
-          if (generics.length) {
-            this.alertService.confirm('ต้องการโอนรายการสินค้า ใช่หรือไม่?')
-              .then(async () => {
-                this.modalLoading.show();
-                try {
-                  let rs: any = await this.transferService.saveTransfer(summary, generics);
-                  this.modalLoading.hide();
-                  if (rs.ok) {
-                    this.alertService.success();
-                    this.router.navigate(['/staff/transfer']);
-                  } else {
-                    this.alertService.error(JSON.stringify(rs.error));
+            if (generics.length) {
+              this.alertService.confirm('ต้องการโอนรายการสินค้า ใช่หรือไม่?')
+                .then(async () => {
+                  this.modalLoading.show();
+                  try {
+                    let rs: any = await this.transferService.saveTransfer(summary, generics);
+                    if (rs.ok) {
+                      this.alertService.success();
+                      this.router.navigate(['/staff/transfer']);
+                    } else {
+                      this.alertService.error(JSON.stringify(rs.error));
+                    }
+                    this.modalLoading.hide();
+                  } catch (error) {
+                    this.modalLoading.hide();
+                    this.alertService.error(JSON.stringify(error));
                   }
-                } catch (error) {
+                })
+                .catch(() => {
                   this.modalLoading.hide();
-                  this.alertService.error(JSON.stringify(error));
-                }
-              })
-              .catch(() => {
-                this.modalLoading.hide();
-              });
-          } else {
-            this.alertService.error('ไม่พบรายการที่ต้องการโอน');
+                });
+            } else {
+              this.alertService.error('ไม่พบรายการที่ต้องการโอน');
+            }
           }
-        }
       }
     }
   }

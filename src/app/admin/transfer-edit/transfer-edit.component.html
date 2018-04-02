@@ -98,7 +98,7 @@
   </clr-datagrid>
 
   <div>
-    <button class="btn btn-success btn-sm" (click)="saveTransfer()" [disabled]="isSaving || !generics.length || !dstWarehouseId || !srcWarehouseId">
+    <button class="btn btn-success btn-sm" (click)="saveTransfer()" [disabled]="isSaving || !generics.length || !dstWarehouseId || !srcWarehouseId || disableSave">
       <clr-icon shape="floppy"></clr-icon>
       บันทึกการโอน
     </button>

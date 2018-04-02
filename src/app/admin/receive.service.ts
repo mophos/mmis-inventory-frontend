@@ -24,8 +24,8 @@ export class ReceiveService {
     });
   }
   // get conversion
-  async getUnitConversion(genericId: any) {
-    const response = await this.authHttp.get(`${this.url}/units/conversion/${genericId}`)
+  async getUnitConversion(genericId: any, orderBy: string = 'ASC') {
+    const response = await this.authHttp.get(`${this.url}/units/conversion/${genericId}?orderBy=${orderBy}`)
       .toPromise();
     return response.json();
   }
@@ -205,7 +205,7 @@ export class ReceiveService {
   }
 
   async removeReceiveOther(receiveOtherId: any) {
-    let rs = await this.authHttp.delete(`${this.url}/receives/other/${receiveOtherId}`).toPromise();
+    const rs = await this.authHttp.delete(`${this.url}/receives/other/${receiveOtherId}`).toPromise();
     return rs.json();
   }
 
@@ -243,6 +243,38 @@ export class ReceiveService {
     return res.json();
   }
 
+  async getReceiveNapprove(limit: number = 15, offset: number = 0) {
+    const res = await this.authHttp.post(`${this.url}/receives/Napprove`, {
+      limit: limit,
+      offset: offset
+    }).toPromise();
+    return res.json();
+  }
+
+  async getReceiveApprove(limit: number = 15, offset: number = 0) {
+    const res = await this.authHttp.post(`${this.url}/receives/approve`, {
+      limit: limit,
+      offset: offset
+    }).toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherNapprove(limit: number = 15, offset: number = 0) {
+    const res = await this.authHttp.post(`${this.url}/receives/other/Napprove`, {
+      limit: limit,
+      offset: offset
+    }).toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherApprove(limit: number = 15, offset: number = 0) {
+    const res = await this.authHttp.post(`${this.url}/receives/other/approve/list`, {
+      limit: limit,
+      offset: offset
+    }).toPromise();
+    return res.json();
+  }
+
   async getProductReceives() {
     const res = await this.authHttp.get(`${this.url}/receives/product-receives`).toPromise();
     return res.json();
@@ -273,6 +305,41 @@ export class ReceiveService {
     }).toPromise();
     return res.json();
   }
+
+  async getReceiveApproveSearch(limit: number = 15, offset: number = 0, query: string) {
+    const res = await this.authHttp.post(`${this.url}/receives/approve/search`, {
+      limit: limit,
+      offset: offset,
+      query: query
+    }).toPromise();
+    return res.json();
+  }
+  async getReceiveNapproveSearch(limit: number = 15, offset: number = 0, query: string) {
+    const res = await this.authHttp.post(`${this.url}/receives/napprove/search`, {
+      limit: limit,
+      offset: offset,
+      query: query
+    }).toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherApproveSearch(limit: number = 15, offset: number = 0, query: string) {
+    const res = await this.authHttp.post(`${this.url}/receives/other/approve/search`, {
+      limit: limit,
+      offset: offset,
+      query: query
+    }).toPromise();
+    return res.json();
+  }
+  async getReceiveOtherNapproveSearch(limit: number = 15, offset: number = 0, query: string) {
+    const res = await this.authHttp.post(`${this.url}/receives/other/napprove/search`, {
+      limit: limit,
+      offset: offset,
+      query: query
+    }).toPromise();
+    return res.json();
+  }
+
   async getWaitingSearchOther(limit: number = 15, offset: number = 0, query: string) {
     const res = await this.authHttp.post(`${this.url}/receives/waiting/search/other`, {
       limit: limit,
@@ -348,7 +415,7 @@ export class ReceiveService {
       .toPromise();
     return res.json();
   }
-  
+
   async getPurchaseCheckExpire(genericId: any, expiredDate: any) {
     const res = await this.authHttp.get(`${this.url}/receives/purchases/check-expire?genericId=${genericId}&expiredDate=${expiredDate}`)
       .toPromise();
@@ -368,12 +435,12 @@ export class ReceiveService {
   }
 
   async removeFile(documentId) {
-    let rs = await this.authHttp.delete(`${this.docUrl}/uploads/${documentId}`).toPromise();
+    const rs = await this.authHttp.delete(`${this.docUrl}/uploads/${documentId}`).toPromise();
     return rs.json();
   }
 
   async checkApprove(username: any, password: any, action: any) {
-    let rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
+    const rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
       username: username,
       password: password,
       action: action
@@ -386,5 +453,14 @@ export class ReceiveService {
     }).toPromise();
     return rs.json();
   }
-
+  async getApprove() {
+    const res = await this.authHttp.get(`${this.url}/receives/count/approve`)
+      .toPromise();
+    return res.json();
+  }
+  async getApproveOther() {
+    const res = await this.authHttp.get(`${this.url}/receives/count/approve/other`)
+      .toPromise();
+    return res.json();
+  }
 }

@@ -50,8 +50,8 @@ export class ReceiveOtherComponent implements OnInit {
   warehouses = [];
   locations = [];
 
-  isUpdate: boolean = false;
-  isSaving: boolean = false;
+  isUpdate = false;
+  isSaving = false;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -300,7 +300,7 @@ export class ReceiveOtherComponent implements OnInit {
 
   addProduct() {
 
-    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost });
+    const idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost, lot_no: this.selectedLotNo });
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้วไม่สามารถเพิ่มได้ กรุณาแก้ไขรายการ');
     } else {
@@ -539,7 +539,7 @@ export class ReceiveOtherComponent implements OnInit {
       // check products
       this.products.forEach((v: any) => {
         if (v.expired_date) {
-          let valid = this.dateService.isValidDateExpire(v.expired_date);
+          const valid = this.dateService.isValidDateExpire(v.expired_date);
           if (!valid) {
             isError = true;
           }
@@ -579,7 +579,7 @@ export class ReceiveOtherComponent implements OnInit {
                 is_expired: this.is_expired
               }
 
-              let receiveOtherId: any = await this.receiveService.saveReceiveOther(summary, this.products);
+              const receiveOtherId: any = await this.receiveService.saveReceiveOther(summary, this.products);
 
 
               // ใช้ชั่วคราว
@@ -587,7 +587,7 @@ export class ReceiveOtherComponent implements OnInit {
                 await this.receiveService.saveCost(this.products);
               }
 
-              /////Save and Approve 
+              ///// Save and Approve
               if (!this.isApprove) {
                 await this.receiveService.saveApproveOther(receiveOtherId.rows, _receiveDate, '');
               }
@@ -595,6 +595,7 @@ export class ReceiveOtherComponent implements OnInit {
               this.modalLoading.hide();
 
               if (receiveOtherId.ok) {
+                sessionStorage.setItem('tabReceive', 'receiveOther');
                 this.router.navigate(['/admin/receives']);
               } else {
                 this.alertService.error(JSON.stringify(receiveOtherId.error));
