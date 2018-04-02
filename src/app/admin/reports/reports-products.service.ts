@@ -51,4 +51,20 @@ export class ReportProductsService {
         });
     });
   }
+
+  getGenericInStockcrad(warehouseId: any, startDate: any, endDate: any) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.post(`${this.url}/reports/products/genericinstockcrad`, {
+        warehouseId: warehouseId,
+        startDate: startDate,
+        endDate: endDate
+      })
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
 }
