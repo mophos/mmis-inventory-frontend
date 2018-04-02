@@ -161,14 +161,14 @@ export class ReceiveService {
     return res.json();
   }
 
-  async getReceiveOther(limit: number = 0, offset: number = 0) {
-    const res = await this.authHttp.post(`${this.url}/receives/other/list`, {
-      limit: limit,
-      offset: offset
-    }).toPromise();
+  // async getReceiveOther(limit: number = 0, offset: number = 0) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/other/list`, {
+  //     limit: limit,
+  //     offset: offset
+  //   }).toPromise();
 
-    return res.json();
-  }
+  //   return res.json();
+  // }
   async getExpired() {
     const res = await this.authHttp.get(`${this.url}/receives/expired/list`, {
     }).toPromise();
@@ -235,45 +235,45 @@ export class ReceiveService {
     return res.json();
   }
 
-  async getWaiting(limit: number = 15, offset: number = 0) {
-    const res = await this.authHttp.post(`${this.url}/receives/waiting`, {
-      limit: limit,
-      offset: offset
-    }).toPromise();
-    return res.json();
-  }
+  // async getWaiting(limit: number = 15, offset: number = 0) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/waiting`, {
+  //     limit: limit,
+  //     offset: offset
+  //   }).toPromise();
+  //   return res.json();
+  // }
 
-  async getReceiveNapprove(limit: number = 15, offset: number = 0) {
-    const res = await this.authHttp.post(`${this.url}/receives/Napprove`, {
-      limit: limit,
-      offset: offset
-    }).toPromise();
-    return res.json();
-  }
+  // async getReceiveNapprove(limit: number = 15, offset: number = 0) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/Napprove`, {
+  //     limit: limit,
+  //     offset: offset
+  //   }).toPromise();
+  //   return res.json();
+  // }
 
-  async getReceiveApprove(limit: number = 15, offset: number = 0) {
-    const res = await this.authHttp.post(`${this.url}/receives/approve`, {
-      limit: limit,
-      offset: offset
-    }).toPromise();
-    return res.json();
-  }
+  // async getReceiveApprove(limit: number = 15, offset: number = 0) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/approve`, {
+  //     limit: limit,
+  //     offset: offset
+  //   }).toPromise();
+  //   return res.json();
+  // }
 
-  async getReceiveOtherNapprove(limit: number = 15, offset: number = 0) {
-    const res = await this.authHttp.post(`${this.url}/receives/other/Napprove`, {
-      limit: limit,
-      offset: offset
-    }).toPromise();
-    return res.json();
-  }
+  // async getReceiveOtherNapprove(limit: number = 15, offset: number = 0) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/other/Napprove`, {
+  //     limit: limit,
+  //     offset: offset
+  //   }).toPromise();
+  //   return res.json();
+  // }
 
-  async getReceiveOtherApprove(limit: number = 15, offset: number = 0) {
-    const res = await this.authHttp.post(`${this.url}/receives/other/approve/list`, {
-      limit: limit,
-      offset: offset
-    }).toPromise();
-    return res.json();
-  }
+  // async getReceiveOtherApprove(limit: number = 15, offset: number = 0) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/other/approve/list`, {
+  //     limit: limit,
+  //     offset: offset
+  //   }).toPromise();
+  //   return res.json();
+  // }
 
   async getProductReceives() {
     const res = await this.authHttp.get(`${this.url}/receives/product-receives`).toPromise();
@@ -297,31 +297,31 @@ export class ReceiveService {
     return res.json();
   }
 
-  async getWaitingSearch(limit: number = 15, offset: number = 0, query: string) {
-    const res = await this.authHttp.post(`${this.url}/receives/waiting/search`, {
-      limit: limit,
-      offset: offset,
-      query: query
-    }).toPromise();
-    return res.json();
-  }
+  // async getWaitingSearch(limit: number = 15, offset: number = 0, query: string) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/waiting/search`, {
+  //     limit: limit,
+  //     offset: offset,
+  //     query: query
+  //   }).toPromise();
+  //   return res.json();
+  // }
 
-  async getReceiveApproveSearch(limit: number = 15, offset: number = 0, query: string) {
-    const res = await this.authHttp.post(`${this.url}/receives/approve/search`, {
-      limit: limit,
-      offset: offset,
-      query: query
-    }).toPromise();
-    return res.json();
-  }
-  async getReceiveNapproveSearch(limit: number = 15, offset: number = 0, query: string) {
-    const res = await this.authHttp.post(`${this.url}/receives/napprove/search`, {
-      limit: limit,
-      offset: offset,
-      query: query
-    }).toPromise();
-    return res.json();
-  }
+  // async getReceiveApproveSearch(limit: number = 15, offset: number = 0, query: string) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/approve/search`, {
+  //     limit: limit,
+  //     offset: offset,
+  //     query: query
+  //   }).toPromise();
+  //   return res.json();
+  // }
+  // async getReceiveNapproveSearch(limit: number = 15, offset: number = 0, query: string) {
+  //   const res = await this.authHttp.post(`${this.url}/receives/napprove/search`, {
+  //     limit: limit,
+  //     offset: offset,
+  //     query: query
+  //   }).toPromise();
+  //   return res.json();
+  // }
 
 
   async saveApprove(receiveIds: any[], approveDate: any, comment: any) {

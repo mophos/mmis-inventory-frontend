@@ -29,7 +29,7 @@ export class ReceiveComponent implements OnInit {
   @ViewChild('modalApproveOther') public modalApproveOther: any;
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
-
+  // @ViewChild('pageWait') pageWait: any;
   expired = [];
   otherExpired = [];
   waitings: any = [];
@@ -84,6 +84,8 @@ export class ReceiveComponent implements OnInit {
   _waitings: any;
   _others: any;
   currentPage = 1;
+  offset = 0;
+  offsetOther = 0;
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -101,6 +103,7 @@ export class ReceiveComponent implements OnInit {
     this.getPurchaseList();
     this.getApprove();
     this.tab = sessionStorage.getItem('tabReceive');
+    this.currentPage = +sessionStorage.getItem('currentPage') ? +sessionStorage.getItem('currentPage') : 1;
     console.log(this.tab);
 
   }
@@ -123,13 +126,14 @@ export class ReceiveComponent implements OnInit {
   }
 
   async refresh(state: State) {
-    const offset = +state.page.from;
+    this.offset = +state.page.from;
     const limit = +state.page.size;
+    sessionStorage.setItem('currentPage', this.currentPage.toString());
 
     this.modalLoading.show();
     if (!this.query) {
       try {
-        const rs = await this.receiveService.getReceiveStatus(limit, offset, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveStatus(limit, this.offset, this.fillterApprove);
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
         // await this.getReceiveExpired();
@@ -139,7 +143,7 @@ export class ReceiveComponent implements OnInit {
         this.alertService.error(error.message);
       }
     } else {
-      const rs = await this.receiveService.getReceiveStatusSearch(limit, offset, this.query, this.fillterApprove);
+      const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove);
       this.waitings = rs.rows;
       this.totalReceive = rs.total;
       // await this.getReceiveExpiredSearch(this.query);
@@ -149,10 +153,12 @@ export class ReceiveComponent implements OnInit {
   }
 
   searchReceive(event: any) {
+    this.offset = 0;
     this.doSearchWaiting();
   }
 
   searchReceiveOther(event: any) {
+    this.offsetOther = 0;
     this.doSearchReceiveOther();
   }
 
@@ -161,7 +167,7 @@ export class ReceiveComponent implements OnInit {
       this.modalLoading.show();
       // await this.getReceiveExpiredSearch(this.query);
       // await this.getReceiveOtherExpiredSearch();
-      const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, 0, this.queryOther, this.fillterApprove);
+      const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, this.offsetOther, this.queryOther, this.fillterApprove);
       this.others = rs.rows;
       this.totalReceiveOther = rs.total;
       this.isSearching = true;
@@ -175,7 +181,7 @@ export class ReceiveComponent implements OnInit {
   async doSearchWaiting() {
     try {
       this.modalLoading.show();
-      const rs = await this.receiveService.getReceiveStatusSearch(this.perPage, 0, this.query, this.fillterApprove);
+      const rs = await this.receiveService.getReceiveStatusSearch(this.perPage, this.offset, this.query, this.fillterApprove);
       this.waitings = rs.rows;
       this.totalReceive = rs.total;
       // await this.getReceiveExpiredSearch(this.query);
@@ -188,18 +194,21 @@ export class ReceiveComponent implements OnInit {
   }
 
   async refreshOther(state: State) {
-    const offset = +state.page.from;
+    this.offsetOther = +state.page.from;
     const limit = +state.page.size;
+
+    sessionStorage.setItem('currentPageOther', this.currentPage.toString());
+
     this.modalLoading.show();
     try {
       if (!this.queryOther) {
-        const rs = await this.receiveService.getReceiveOtherStatus(limit, offset, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveOtherStatus(limit, this.offsetOther, this.fillterApprove);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
         // await this.getReceiveOtherExpired();
         this.modalLoading.hide();
       } else {
-        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, offset, this.queryOther, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, this.offsetOther, this.queryOther, this.fillterApprove);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
       }
@@ -273,7 +282,7 @@ export class ReceiveComponent implements OnInit {
     try {
       this.loading = true;
       this.selectedApprove = [];
-      const rs = await this.receiveService.getWaiting(this.perPage, 0);
+      const rs = await this.receiveService.getReceiveStatus(this.perPage, this.offset, this.fillterApprove);
       if (rs.ok) {
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
@@ -291,7 +300,7 @@ export class ReceiveComponent implements OnInit {
     try {
       this.modalLoading.show();
       this.selectedOtherApprove = [];
-      const rs = await this.receiveService.getReceiveOther(this.perPage, 0);
+      const rs = await this.receiveService.getReceiveOtherStatus(this.perPage, this.offsetOther, this.fillterApprove);
       if (rs.ok) {
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
@@ -373,7 +382,6 @@ export class ReceiveComponent implements OnInit {
 
     let check = false
     let accessName: any;
-
     this.titel = 'รายการรับสินค้า';
 
     if (access === 1) {
@@ -656,11 +664,20 @@ export class ReceiveComponent implements OnInit {
   }
 
   approveSuccess(event: any) {
-    this.getWaitingList();
+    if (this.query) {
+      this.doSearchWaiting();
+    } else {
+      this.getWaitingList();
+    }
+    this.clearSelectedApproved();
   }
 
   approveSuccessOther(event: any) {
-    this.getOtherList();
+    if (this.queryOther) {
+      this.doSearchReceiveOther();
+    } else {
+      this.getOtherList();
+    }
   }
 
   setShowOption(event: any) {
