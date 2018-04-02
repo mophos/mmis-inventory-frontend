@@ -83,6 +83,7 @@ export class ReceiveComponent implements OnInit {
   tab: any;
   _waitings: any;
   _others: any;
+  currentPage = 1;
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -101,7 +102,7 @@ export class ReceiveComponent implements OnInit {
     this.getApprove();
     this.tab = sessionStorage.getItem('tabReceive');
     console.log(this.tab);
-    
+
   }
 
   async getPurchaseList() {
@@ -128,22 +129,20 @@ export class ReceiveComponent implements OnInit {
     this.modalLoading.show();
     if (!this.query) {
       try {
-        const rs = await this.receiveService.getWaiting(limit, offset);
-        await this.getReceiveExpired();
+        const rs = await this.receiveService.getReceiveStatus(limit, offset, this.fillterApprove);
         this.waitings = rs.rows;
-        this._waitings = _.clone(this.waitings)
         this.totalReceive = rs.total;
+        // await this.getReceiveExpired();
         this.modalLoading.hide();
       } catch (error) {
         this.modalLoading.hide();
         this.alertService.error(error.message);
       }
     } else {
-      const rs = await this.receiveService.getWaitingSearch(limit, offset, this.query);
-      await this.getReceiveExpiredSearch(this.query);
+      const rs = await this.receiveService.getReceiveStatusSearch(limit, offset, this.query, this.fillterApprove);
       this.waitings = rs.rows;
-      this._waitings = _.clone(this.waitings)
       this.totalReceive = rs.total;
+      // await this.getReceiveExpiredSearch(this.query);
       this.isSearching = true;
       this.modalLoading.hide();
     }
@@ -160,9 +159,9 @@ export class ReceiveComponent implements OnInit {
   async doSearchReceiveOther() {
     try {
       this.modalLoading.show();
-      let rs: any = await this.receiveService.getWaitingSearchOther(this.perPage, 0, this.queryOther);
       // await this.getReceiveExpiredSearch(this.query);
-      await this.getReceiveOtherExpiredSearch();
+      // await this.getReceiveOtherExpiredSearch();
+      const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, 0, this.queryOther, this.fillterApprove);
       this.others = rs.rows;
       this.totalReceiveOther = rs.total;
       this.isSearching = true;
@@ -176,10 +175,10 @@ export class ReceiveComponent implements OnInit {
   async doSearchWaiting() {
     try {
       this.modalLoading.show();
-      let rs: any = await this.receiveService.getWaitingSearch(this.perPage, 0, this.query);
-      await this.getReceiveExpiredSearch(this.query);
+      const rs = await this.receiveService.getReceiveStatusSearch(this.perPage, 0, this.query, this.fillterApprove);
       this.waitings = rs.rows;
       this.totalReceive = rs.total;
+      // await this.getReceiveExpiredSearch(this.query);
       this.isSearching = true;
       this.modalLoading.hide();
     } catch (error) {
@@ -192,26 +191,24 @@ export class ReceiveComponent implements OnInit {
     const offset = +state.page.from;
     const limit = +state.page.size;
     this.modalLoading.show();
-    if (!this.queryOther) {
-      try {
-        const rs = await this.receiveService.getReceiveOther(limit, offset);
-        await this.getReceiveOtherExpired();
+    try {
+      if (!this.queryOther) {
+        const rs = await this.receiveService.getReceiveOtherStatus(limit, offset, this.fillterApprove);
         this.others = rs.rows;
-        this._others = _.clone(this.others);
         this.totalReceiveOther = rs.total;
+        // await this.getReceiveOtherExpired();
         this.modalLoading.hide();
-      } catch (error) {
-        this.modalLoading.hide();
-        this.alertService.error(error.message);
+      } else {
+        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, offset, this.queryOther, this.fillterApprove);
+        this.others = rs.rows;
+        this.totalReceiveOther = rs.total;
       }
-    } else {
-      const rs = await this.receiveService.getWaitingSearchOther(limit, offset, this.queryOther);
-      await this.getReceiveOtherExpiredSearch();
-      this.others = rs.rows;
-      this._others = _.clone(this.others);
-      this.totalReceiveOther = rs.total;
+      // await this.getReceiveOtherExpiredSearch();
+    } catch (error) {
       this.modalLoading.hide();
+      this.alertService.error(error.message);
     }
+    this.modalLoading.hide();
   }
 
   removeReceive(w) {
@@ -279,7 +276,6 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getWaiting(this.perPage, 0);
       if (rs.ok) {
         this.waitings = rs.rows;
-        this._waitings = _.clone(this.waitings)
         this.totalReceive = rs.total;
       } else {
         this.alertService.error(rs.error);
@@ -298,7 +294,6 @@ export class ReceiveComponent implements OnInit {
       const rs = await this.receiveService.getReceiveOther(this.perPage, 0);
       if (rs.ok) {
         this.others = rs.rows;
-        this._others = _.clone(this.others);
         this.totalReceiveOther = rs.total;
       } else {
         this.alertService.error(rs.error);
@@ -361,7 +356,7 @@ export class ReceiveComponent implements OnInit {
     try {
       this.modalLoading.show();
       this.selectedOtherApprove = [];
-      const rs = await this.receiveService.getOtherExpiredSearch(this.query);
+      const rs = await this.receiveService.getOtherExpiredSearch(this.queryOther);
       if (rs.ok) {
         this.otherExpired = rs.rows;
       } else {
@@ -515,7 +510,7 @@ export class ReceiveComponent implements OnInit {
         receiveOtherIds.push(v.receive_other_id);
       }
     });
-    
+
     if (receiveOtherIds.length) {
       this.alertService.confirm('พิมพ์ใบนำส่ง ' + receiveOtherIds.length + ' รายการ ใช่หรือไม่?')
         .then(() => {
@@ -708,27 +703,29 @@ export class ReceiveComponent implements OnInit {
       this.alertService.error(JSON.stringify(error));
     }
   }
-  changeFillterApprove() {
+  async changeFillterApprove() {
     if (this.tab === 'receive') {
-      if (this.fillterApprove === 'Napprove') {
-        this.waitings = _.filter(this._waitings, { 'approve_id': null });
-      } else if (this.fillterApprove === 'approve') {
-        this.waitings = _.filter(this._waitings, function (o) { return o.approve_id != null; });
+      if (!this.query) {
+        const rs = await this.receiveService.getReceiveStatus(this.perPage, 0, this.fillterApprove);
+        this.waitings = rs.rows;
+        this.totalReceive = rs.total;
       } else {
-        this.waitings = this._waitings;
+        const rs = await this.receiveService.getReceiveStatusSearch(this.perPage, 0, this.query, this.fillterApprove);
+        this.waitings = rs.rows;
+        this.totalReceive = rs.total;
       }
-      this.totalReceive = this.waitings.length;
     } else if (this.tab === 'receiveOther') {
-      if (this.fillterApprove === 'Napprove') {
-        this.others = _.filter(this._others, { 'approve_id': null });
-      } else if (this.fillterApprove === 'approve') {
-        this.others = _.filter(this._others, function (o) { return o.approve_id != null; });
+      if (!this.queryOther) {
+        const rs = await this.receiveService.getReceiveOtherStatus(this.perPage, 0, this.fillterApprove);
+        this.others = rs.rows;
+        this.totalReceiveOther = rs.total;
       } else {
-        this.others = this._others;
+        const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, 0, this.queryOther, this.fillterApprove);
+        this.others = rs.rows;
+        this.totalReceiveOther = rs.total;
       }
-      this.totalReceiveOther = this.others.length;
     }
-
+    this.currentPage = 1;
   }
   selectTabPo() {
     this.tab = "po";

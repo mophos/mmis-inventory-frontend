@@ -208,6 +208,7 @@ export class IssuesNewComponent implements OnInit {
   }
 
   async alowcate(genericId) {
+    this.modalLoading.show();
     try {
       if (this.products) {
         let idx = _.findIndex(this.products, { generic_id: genericId })
@@ -239,7 +240,9 @@ export class IssuesNewComponent implements OnInit {
           this.alertService.error();
         }
       }
+      this.modalLoading.hide();
     } catch (error) {
+      this.modalLoading.hide();
       this.alertService.error(error.message);
     }
   }
@@ -450,6 +453,7 @@ export class IssuesNewComponent implements OnInit {
   }
 
   async getAllowcateData(data) {
+    this.modalLoading.show();
     const result: any = await this.issueService.getIssuesProduct(data);
     if (result.ok) {
       const list = result.rows;
@@ -459,7 +463,9 @@ export class IssuesNewComponent implements OnInit {
           this.products[i].items.push(list[idx]);
         }
       });
+      this.modalLoading.hide();
     } else {
+      this.modalLoading.hide();
       console.log(result.error);
       this.alertService.error();
     }

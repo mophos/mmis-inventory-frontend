@@ -50,8 +50,8 @@ export class ReceiveOtherComponent implements OnInit {
   warehouses = [];
   locations = [];
 
-  isUpdate: boolean = false;
-  isSaving: boolean = false;
+  isUpdate = false;
+  isSaving = false;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -539,7 +539,7 @@ export class ReceiveOtherComponent implements OnInit {
       // check products
       this.products.forEach((v: any) => {
         if (v.expired_date) {
-          let valid = this.dateService.isValidDateExpire(v.expired_date);
+          const valid = this.dateService.isValidDateExpire(v.expired_date);
           if (!valid) {
             isError = true;
           }
@@ -579,7 +579,7 @@ export class ReceiveOtherComponent implements OnInit {
                 is_expired: this.is_expired
               }
 
-              let receiveOtherId: any = await this.receiveService.saveReceiveOther(summary, this.products);
+              const receiveOtherId: any = await this.receiveService.saveReceiveOther(summary, this.products);
 
 
               // ใช้ชั่วคราว
@@ -587,7 +587,7 @@ export class ReceiveOtherComponent implements OnInit {
                 await this.receiveService.saveCost(this.products);
               }
 
-              /////Save and Approve 
+              ///// Save and Approve
               if (!this.isApprove) {
                 await this.receiveService.saveApproveOther(receiveOtherId.rows, _receiveDate, '');
               }
