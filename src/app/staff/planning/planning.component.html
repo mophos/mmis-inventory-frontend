@@ -84,17 +84,17 @@
       <form style="padding: 0px 5px 5px 5px;">
         <section class="form-block" style="margin-bottom: 0px;">
           <div class="form-group row wid99">
-            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-              <label for="fromDate" class="required">ตั้งแต่วันที่</label>
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <label for="fromDate" class="required">ยอดใช้ตั้งแต่วันที่</label>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-              <my-date-picker-th name="fromDate" [options]="myDatePickerOptions" [(ngModel)]="fromDate" required></my-date-picker-th>
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <my-date-picker-th name="fromDate" [options]="pickerOptions" [(ngModel)]="fromDate" required></my-date-picker-th>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
               <label class="required" for="toDate">ถึงวันที่</label>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-              <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <my-date-picker-th name="toDate" [options]="pickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
               <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate" style="margin-top: 0px;">

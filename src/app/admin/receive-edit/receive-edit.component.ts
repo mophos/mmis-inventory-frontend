@@ -50,13 +50,13 @@ export class ReceiveEditComponent implements OnInit {
   warehouses = [];
   locations = [];
   isFree = false;
-  isApprove: boolean = false;;
+  isApprove = false;
   isUpdate = false;
   isSaving = false;
   isCompleted = false;
   isSuccess = false;
 
-  selectedDiscount: number = 0;
+  selectedDiscount = 0;
 
   deleting = false;
 
@@ -659,7 +659,7 @@ export class ReceiveEditComponent implements OnInit {
                   this.isSaving = false;
                   this.alertService.error('ข้อมูลรายการสินค้าบางรายการไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot, วันหมดอายุ]');
                 } else {
-                  let rs: any = await this.receiveService.updateReceive(this.receiveId, summary, _products);
+                  const rs: any = await this.receiveService.updateReceive(this.receiveId, summary, _products);
                   if (rs.ok) {
                     this.modalLoading.hide();
                     this.router.navigate(['/admin/receives']);
@@ -695,7 +695,7 @@ export class ReceiveEditComponent implements OnInit {
                 if (v.receive_qty > 0 && v.warehouse_id && v.unit_generic_id) {
                   _products.push(v);
                   if (v.expired_date) {
-                    let valid = this.dateService.isValidDateExpire(v.expired_date);
+                    const valid = this.dateService.isValidDateExpire(v.expired_date);
                     if (!valid) {
                       isError = true;
                     }
@@ -717,7 +717,7 @@ export class ReceiveEditComponent implements OnInit {
                 this.alertService.error('ข้อมูลรายการสินค้าบางรายการไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot, วันหมดอายุ]');
               } else {
 
-                let rs: any = await this.receiveService.updateReceive(this.receiveId, summary, _products);
+                const rs: any = await this.receiveService.updateReceive(this.receiveId, summary, _products);
                 this.modalLoading.hide();
                 this.isSaving = false;
                 if (rs.ok) {
@@ -809,7 +809,7 @@ export class ReceiveEditComponent implements OnInit {
           obj.primary_unit_id = +v.base_unit_id;
           obj.primary_unit_name = v.base_unit_name;
           obj.expire_num_days = +v.expire_num_days;
-          //obj.lot_id = v.lot_id;
+          // obj.lot_id = v.lot_id;
           obj.lot_no = v.lot_no ? v.lot_no.toUpperCase() : null;
           obj.generic_id = v.generic_id;
           obj.generic_name = v.generic_name;
@@ -855,7 +855,7 @@ export class ReceiveEditComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let rs: any = await this.receiveService.removeReceive(this.receiveId);
+          const rs: any = await this.receiveService.removeReceive(this.receiveId);
           if (rs.ok) {
             this.alertService.success();
             this.router.navigate(['/admin/receives']);

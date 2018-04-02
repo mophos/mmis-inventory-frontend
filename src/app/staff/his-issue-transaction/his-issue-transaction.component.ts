@@ -11,18 +11,19 @@ import { error } from 'util';
 export class HisIssueTransactionComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading;
 
-  products = [];
+  products: any = [];
   openUpload = false;
   filePath: string;
   fileName: any = null;
   file: any;
-  perPage = 20;
+  perPage = 100;
   selected = [];
 
   genericTypes = [];
   genericType: any;
   _genericTypes: any = [];
   _genericType: any;
+  
   constructor(
     private alertService: AlertService,
     private hisTransactionService: HisTransactionService
