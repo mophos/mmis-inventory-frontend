@@ -49,7 +49,8 @@ export class ReceiveComponent implements OnInit {
   eID: any;
   sIDpo: any;
   eIDpo: any;
-  showOption = 1
+  showOption:any = 1;
+  printCondition:any;
   token: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -455,9 +456,11 @@ export class ReceiveComponent implements OnInit {
     } else if (showOption === 2) {
       const urls = await `${this.apiUrl}/report/list/receiveDateOther/${sDate}/${eDate}?token=${this.token}`;
       url = urls
-    } else {
-      // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
-      // url = urls
+    } else if (showOption === 3) {
+      console.log('333333+++++');
+      
+      const urls = await `${this.apiUrl}/report/list/receiveDateCheck/${sDate}/${eDate}?token=${this.token}`;
+      url = urls
     }
     this.htmlPreview.showReport(url, 'landscape')
 
@@ -471,9 +474,11 @@ export class ReceiveComponent implements OnInit {
     } else if (showOption === 2) {
       const urls = await `${this.apiUrl}/report/list/receiveCodeOther/${sID}/${eID}?token=${this.token}`;
       url = urls
-    } else {
-      // const urls = await `${this.apiUrl}/report/list/receive/${sDate}/${eDate}`;
-      // url = urls
+    } else if (showOption === 3) {
+      console.log('333333-----');
+      
+      const urls = await `${this.apiUrl}/report/list/receiveCodeCheck/${sID}/${eID}?token=${this.token}`;
+      url = urls
     }
     this.htmlPreview.showReport(url, 'landscape');
     this.sID = ''
@@ -485,6 +490,11 @@ export class ReceiveComponent implements OnInit {
     let url: any
     if (showOption === 1) {
       const urls = await `${this.apiUrl}/report/list/receivePo/${sID}/${eID}?token=${this.token}`;
+      url = urls
+    } else if (showOption === 3) {
+      console.log('333333++++----');
+      
+      const urls = await `${this.apiUrl}/report/list/receivePoCheck/${sID}/${eID}?token=${this.token}`;
       url = urls
     }
     this.htmlPreview.showReport(url, 'landscape')
@@ -680,10 +690,6 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-  setShowOption(event: any) {
-    this.showOption = event
-  }
-
   closePurchase(purchaseId: any) {
     this.alertService.confirm('ต้องการเปลี่ยนสถานะใบสั่งซื้อนี้เป็น เสร็จสมบูรณ์ (ปิดรับ) ใช่หรือไม่? กรุณาตรวจสอบรายการรับที่ยังไม่อนุมัติรับเข้าคลังเพื่อความถูกต้อง')
       .then(() => {
@@ -748,13 +754,26 @@ export class ReceiveComponent implements OnInit {
     this.tab = "po";
   }
   selectTabReceive() {
+    this.showOption = 1
     this.tab = "receive";
     this.fillterApprove = 'all';
     sessionStorage.setItem('tabReceive', this.tab);
   }
   selectTabReceiveOther() {
+    this.showOption = 2
     this.tab = "receiveOther";
     this.fillterApprove = 'all';
+    sessionStorage.setItem('tabReceive', this.tab);
+  }
+
+  selectTabReceiveEndDate() {
+    this.tab = "receiveEndDate";
+    // this.fillterApprove = 'all';
+    sessionStorage.setItem('tabReceive', this.tab);
+  }
+  selectTabReceiveOtherEndDate() {
+    this.tab = "receiveOtherEndDate";
+    // this.fillterApprove = 'all';
     sessionStorage.setItem('tabReceive', this.tab);
   }
 }
