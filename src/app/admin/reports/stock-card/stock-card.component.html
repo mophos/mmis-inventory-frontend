@@ -4,7 +4,7 @@
 </nav>
 <clr-tabs>
   <clr-tab>
-    <button clrTabLink id="link1">
+    <button clrTabLink id="link1" (click)="changeTab()">
       <clr-icon shape="file"></clr-icon>
       รายงานคุมคลังเวชภัณฑ์
     </button>
@@ -79,7 +79,7 @@
     </clr-tab-content>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink id="link2">
+    <button clrTabLink id="link2" (click)="changeTab()">
       <clr-icon shape="file"></clr-icon>
       รายงานการเคลื่อนไหวของเวชภัณฑ์
     </button>
@@ -93,12 +93,12 @@
           </wm-select-warehouses>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 btn-group">
-          <button class="btn btn-sm btn-primary" (click)="showReport()">
+          <!-- <button class="btn btn-sm btn-primary" (click)="printReport()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่มีการเคลื่อนไหว
-          </button>
-          <button class="btn btn-sm btn-primary" (click)="showReport()">
+          </button> -->
+          <!-- <button class="btn btn-sm btn-primary" (click)="showReport()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่ไม่มีการเคลื่อนไหว
-          </button>
+          </button> -->
         </div>
       </div>
 
