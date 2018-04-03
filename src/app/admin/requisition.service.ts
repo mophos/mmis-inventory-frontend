@@ -16,14 +16,14 @@ export class RequisitionService {
 
   /***************** siteslave ****************/
 
-  async getWating() {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting`)
+  async getWating(limit: number, offset: number) {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting?limit=${limit}&offset=${offset}`)
       .toPromise();
     return rs.json();
   }
 
-  async getWaitingApprove() {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting-approve`)
+  async getWaitingApprove(limit: number, offset: number) {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting-approve?limit=${limit}&offset=${offset}`)
       .toPromise();
     return rs.json();
   }
@@ -34,8 +34,8 @@ export class RequisitionService {
     return rs.json();
   }
 
-  async getUnPaid() {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/unpaid`)
+  async getUnPaid(limit: number, offset: number) {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/unpaid?limit=${limit}&offset=${offset}`)
       .toPromise();
     return rs.json();
   }
