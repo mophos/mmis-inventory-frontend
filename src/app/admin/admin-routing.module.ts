@@ -81,10 +81,12 @@ import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
+import { ValueProductsComponent } from 'app/admin/reports/value-products/value-products.component';
 import { PurchasingNotgiveawayComponent} from 'app/admin/reports/purchasing-notgiveaway/purchasing-notgiveaway.component'
 import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
 import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
+import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
 
 const routes: Routes = [
   {
@@ -130,6 +132,8 @@ const routes: Routes = [
       { path: 'reports/product-remain', component: ReportProductRemain },
       { path: 'reports/product-expired', component: ProductExpiredComponent },
       { path: 'reports/product-manufacture', component: ProductManufactureComponent },
+      { path: 'reports/value-products', component: ValueProductsComponent },
+      { path: 'reports/product-summary', component: ProductSummaryComponent },
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'reports/purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
