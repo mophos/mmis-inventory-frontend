@@ -32,6 +32,8 @@ export class TransferComponent implements OnInit {
   perPage = 15;
   loading = false;
   token: any;
+  currentPage = 1;
+  offset = 0;
 
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('htmlPreview') public htmlPreview: any;
@@ -43,18 +45,19 @@ export class TransferComponent implements OnInit {
     private ref: ChangeDetectorRef,
     @Inject('API_URL') private apiUrl: string
   ) {
-    this.token = sessionStorage.getItem('token')
+    this.token = sessionStorage.getItem('token');
+    this.currentPage = +sessionStorage.getItem('currentPageTransfer') ? +sessionStorage.getItem('currentPageTransfer') : 1;
   }
 
   ngOnInit() {
-    this.getTransferList();
-    this.getRequestTransfer();
+    // this.getTransferList();
+    // this.getRequestTransfer();
   }
 
   async getTransferList() {
     this.modalLoading.show();
     try {
-      const rs = await this.transferService.list(this.approveStatus, this.perPage, 0);
+      const rs = await this.transferService.list(this.approveStatus, this.perPage, this.offset);
       if (rs.ok) {
         this.transfers = rs.rows;
         this.total = rs.total;
@@ -68,12 +71,15 @@ export class TransferComponent implements OnInit {
     }
   }
 
-  async refresh(state: State) {
-    const offset = +state.page.from;
+  async refreshTransfer(state: State) {
+    this.offset = +state.page.from;
     const limit = +state.page.size;
+
+    sessionStorage.setItem('currentPageTransfer', this.currentPage.toString());
+
     this.modalLoading.show();
     try {
-      const rs = await this.transferService.list(this.approveStatus, limit, offset);
+      const rs = await this.transferService.list(this.approveStatus, limit, this.offset);
       if (rs.ok) {
         this.transfers = rs.rows;
         this.total = rs.total;
@@ -85,10 +91,6 @@ export class TransferComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
-  }
-
-  printDetail(t: any) {
-
   }
 
   removeTransfer(t: any) {
@@ -271,7 +273,7 @@ export class TransferComponent implements OnInit {
   async getRequestTransfer() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.transferService.request();
+      const rs: any = await this.transferService.request(this.perPage, this.offset);
       if (rs.ok) {
         this.transfersRequest = rs.rows;
         this.notApproveReceiveItems = _.filter(this.transfersRequest, { approved: 'N', mark_deleted: 'N' });
@@ -282,6 +284,30 @@ export class TransferComponent implements OnInit {
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(JSON.stringify(error.message));
+    }
+  }
+
+  async refreshRequest(state: State) {
+    this.offset = +state.page.from;
+    const limit = +state.page.size;
+
+    sessionStorage.setItem('currentPageTransfer', this.currentPage.toString());
+    sessionStorage.setItem('offsetTransfer', this.offset.toString());
+
+    this.modalLoading.show();
+    try {
+      const rs = await this.transferService.request(limit, this.offset);
+      if (rs.ok) {
+        this.transfersRequest = rs.rows;
+        this.total = rs.total;
+        this.notApproveReceiveItems = _.filter(this.transfersRequest, { approved: 'N', mark_deleted: 'N' });
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
     }
   }
 }
