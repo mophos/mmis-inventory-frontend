@@ -27,12 +27,12 @@
 <clr-tabs>
 
   <clr-tab>
-    <button clrTabLink (click)="getPurchaseList();selectTabPo()">
+    <button clrTabLink (click)="selectTabPo()">
       <clr-icon shape="alarm-clock" class="has-badge is-solid"></clr-icon> ใบสั่งซื้อที่รอรับเข้าคลัง
       <span class="badge badge-danger">{{ purchases.length | number }}</span>
     </button>
     <clr-tab-content *clrIfActive="tab === 'po'">
-      <clr-datagrid class="grid-order" [style.height.%]="85">
+      <clr-datagrid (clrDgRefresh)="refreshPo($event)" class="grid-order" [style.height.%]="85">
         <clr-dg-column style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
         <clr-dg-column style="width: 150px;">วันที่จัดซื้อ</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่สัญญา</clr-dg-column>
@@ -42,7 +42,7 @@
         <clr-dg-column style="width: 100px;">มูลค่ารับแล้ว (บาท)</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลือก</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
-        <clr-dg-row *clrDgItems="let purchase of purchases; let idx = index">
+        <clr-dg-row *ngFor="let purchase of purchases; let idx = index">
           <clr-dg-cell *ngIf="!purchase.purchase_order_book_number">{{purchase.purchase_order_number}}</clr-dg-cell>
           <clr-dg-cell *ngIf="purchase.purchase_order_book_number">{{purchase.purchase_order_book_number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{purchase.order_date | toThaiDate }}</clr-dg-cell>
@@ -69,8 +69,9 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
-          <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination>
+          {{pagePo.firstItem + 1}} - {{pagePo.lastItem + 1}} จาก {{pagePo.totalItems}} รายการ
+          <!-- <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination> -->
+          <clr-dg-pagination #pagePo [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalPurchases"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>

@@ -49,8 +49,8 @@ export class ReceiveComponent implements OnInit {
   eID: any;
   sIDpo: any;
   eIDpo: any;
-  showOption:any = 1;
-  printCondition:any;
+  showOption: any = 1;
+  printCondition: any;
   token: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -87,6 +87,7 @@ export class ReceiveComponent implements OnInit {
   currentPage = 1;
   offset = 0;
   offsetOther = 0;
+  totalPurchases = 0;
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -101,35 +102,58 @@ export class ReceiveComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getPurchaseList();
+    // this.getPurchaseList();
     this.getApprove();
     this.tab = sessionStorage.getItem('tabReceive');
-    this.currentPage = +sessionStorage.getItem('currentPage') ? +sessionStorage.getItem('currentPage') : 1;
-    console.log(this.tab);
-
+    this.currentPage = +sessionStorage.getItem('currentPageReceive') ? +sessionStorage.getItem('currentPageReceive') : 1;
+    this.offset = +sessionStorage.getItem('offsetReceive') ? +sessionStorage.getItem('offsetReceive') : 0;
   }
 
-  async getPurchaseList() {
+  async refreshPo(state: State){
+    this.offset = +state.page.from;
+    const limit = +state.page.size;
+    sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
+    sessionStorage.setItem('offsetReceive', this.offset.toString());
+
     this.modalLoading.show();
     try {
-      const res: any = await this.receiveService.getPurchasesList();
+      const rs: any = await this.receiveService.getPurchasesList(limit, this.offset);
       this.modalLoading.hide();
-      if (res.ok) {
-        this.purchases = res.rows;
-
+      if (rs.ok) {
+        this.purchases = rs.rows;
+        this.totalPurchases = rs.total;
+        console.log(this.totalPurchases);
+        
       } else {
-        this.alertService.error(res.error);
+        this.alertService.error(rs.error);
       }
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(JSON.stringify(error));
     }
   }
+  // async getPurchaseList() {
+  //   this.modalLoading.show();
+  //   try {
+  //     const res: any = await this.receiveService.getPurchasesList();
+  //     this.modalLoading.hide();
+  //     if (res.ok) {
+  //       this.purchases = res.rows;
+
+  //     } else {
+  //       this.alertService.error(res.error);
+  //     }
+  //   } catch (error) {
+  //     this.modalLoading.hide();
+  //     this.alertService.error(JSON.stringify(error));
+  //   }
+  // }
 
   async refresh(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
-    sessionStorage.setItem('currentPage', this.currentPage.toString());
+    sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
+    sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     if (!this.query) {
@@ -159,7 +183,7 @@ export class ReceiveComponent implements OnInit {
   }
 
   searchReceiveOther(event: any) {
-    this.offsetOther = 0;
+    this.offset = 0;
     this.doSearchReceiveOther();
   }
 
@@ -168,7 +192,7 @@ export class ReceiveComponent implements OnInit {
       this.modalLoading.show();
       // await this.getReceiveExpiredSearch(this.query);
       // await this.getReceiveOtherExpiredSearch();
-      const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, this.offsetOther, this.queryOther, this.fillterApprove);
+      const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, this.offset, this.queryOther, this.fillterApprove);
       this.others = rs.rows;
       this.totalReceiveOther = rs.total;
       this.isSearching = true;
@@ -195,21 +219,22 @@ export class ReceiveComponent implements OnInit {
   }
 
   async refreshOther(state: State) {
-    this.offsetOther = +state.page.from;
+    this.offset = +state.page.from;
     const limit = +state.page.size;
 
-    sessionStorage.setItem('currentPageOther', this.currentPage.toString());
+    sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
+    sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
       if (!this.queryOther) {
-        const rs = await this.receiveService.getReceiveOtherStatus(limit, this.offsetOther, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveOtherStatus(limit, this.offset, this.fillterApprove);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
         // await this.getReceiveOtherExpired();
         this.modalLoading.hide();
       } else {
-        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, this.offsetOther, this.queryOther, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, this.offset, this.queryOther, this.fillterApprove);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
       }
@@ -301,7 +326,7 @@ export class ReceiveComponent implements OnInit {
     try {
       this.modalLoading.show();
       this.selectedOtherApprove = [];
-      const rs = await this.receiveService.getReceiveOtherStatus(this.perPage, this.offsetOther, this.fillterApprove);
+      const rs = await this.receiveService.getReceiveOtherStatus(this.perPage, this.offset, this.fillterApprove);
       if (rs.ok) {
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
@@ -458,7 +483,7 @@ export class ReceiveComponent implements OnInit {
       url = urls
     } else if (showOption === 3) {
       console.log('333333+++++');
-      
+
       const urls = await `${this.apiUrl}/report/list/receiveDateCheck/${sDate}/${eDate}?token=${this.token}`;
       url = urls
     }
@@ -476,7 +501,7 @@ export class ReceiveComponent implements OnInit {
       url = urls
     } else if (showOption === 3) {
       console.log('333333-----');
-      
+
       const urls = await `${this.apiUrl}/report/list/receiveCodeCheck/${sID}/${eID}?token=${this.token}`;
       url = urls
     }
@@ -493,7 +518,7 @@ export class ReceiveComponent implements OnInit {
       url = urls
     } else if (showOption === 3) {
       console.log('333333++++----');
-      
+
       const urls = await `${this.apiUrl}/report/list/receivePoCheck/${sID}/${eID}?token=${this.token}`;
       url = urls
     }
@@ -698,7 +723,7 @@ export class ReceiveComponent implements OnInit {
           .then((res: any) => {
             if (res.ok) {
               this.alertService.success();
-              this.getPurchaseList();
+              // this.getPurchaseList();
             } else {
               this.alertService.error(res.error);
             }
@@ -752,6 +777,7 @@ export class ReceiveComponent implements OnInit {
   }
   selectTabPo() {
     this.tab = "po";
+    sessionStorage.setItem('tabReceive', this.tab);
   }
   selectTabReceive() {
     this.showOption = 1

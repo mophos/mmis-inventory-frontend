@@ -372,8 +372,8 @@ export class ReceiveService {
   }
 
   // =================== receive with purchases =================
-  async getPurchasesList() {
-    const res = await this.authHttp.get(`${this.url}/receives/purchases/list`)
+  async getPurchasesList(limit: number = 15, offset: number = 0) {
+    const res = await this.authHttp.get(`${this.url}/receives/purchases/list?limit=${limit}&offset=${offset}`)
       .toPromise();
 
     return res.json();
