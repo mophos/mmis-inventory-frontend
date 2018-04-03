@@ -139,6 +139,7 @@ import { BorrowNoteService } from './borrow-note.service';
 import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
 import { CalculateMinMaxComponent } from 'app/admin/calculate-min-max/calculate-min-max.component';
 import { ValueProductsComponent } from './reports/value-products/value-products.component';
+import { ProductSummaryComponent } from './reports/product-summary/product-summary.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -232,7 +233,8 @@ Highcharts.setOptions({
     BorrowNoteNewComponent,
     RequisitionConfirmEditComponent,
     CalculateMinMaxComponent,
-    ValueProductsComponent
+    ValueProductsComponent,
+    ProductSummaryComponent
   ],
   providers: [
     MainService,

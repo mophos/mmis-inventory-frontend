@@ -85,6 +85,7 @@ import { ValueProductsComponent } from 'app/admin/reports/value-products/value-p
 import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
 import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
+import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
 
 const routes: Routes = [
   {
@@ -131,6 +132,7 @@ const routes: Routes = [
       { path: 'reports/product-expired', component: ProductExpiredComponent },
       { path: 'reports/product-manufacture', component: ProductManufactureComponent },
       { path: 'reports/value-products', component: ValueProductsComponent },
+      { path: 'reports/product-summary', component: ProductSummaryComponent },
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
