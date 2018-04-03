@@ -5,7 +5,7 @@ import { WarehouseService } from './../../warehouse.service';
 import * as moment from 'moment';
 import { JwtHelper } from 'angular2-jwt';
 import { SearchGenericAutocompleteComponent } from '../../../directives/search-generic-autocomplete/search-generic-autocomplete.component';
-import _ = require('lodash');
+import * as _ from 'lodash';
 
 @Component({
   selector: 'wm-product-summary',
