@@ -15,11 +15,13 @@ import { State } from '@clr/angular';
 })
 export class TransferComponent implements OnInit {
   selectedApprove = [];
-  notApproveReceiveItems = [];
+  selectedApproveReceive = [];
+  notApproveReceiveItems = 0;
   transfersRequest = [];
 
   approveStatus = 1;
-  total = 0;
+  totalTransfer = 0;
+  totalRequest = 0;
   transfers: any = [];
   transferDetails: any = [];
   openDetail = false;
@@ -32,6 +34,8 @@ export class TransferComponent implements OnInit {
   perPage = 15;
   loading = false;
   token: any;
+  currentPage = 1;
+  offset = 0;
 
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('htmlPreview') public htmlPreview: any;
@@ -43,21 +47,23 @@ export class TransferComponent implements OnInit {
     private ref: ChangeDetectorRef,
     @Inject('API_URL') private apiUrl: string
   ) {
-    this.token = sessionStorage.getItem('token')
+    this.token = sessionStorage.getItem('token');
+    this.currentPage = +sessionStorage.getItem('currentPageTransfer') ? +sessionStorage.getItem('currentPageTransfer') : 1;
   }
 
   ngOnInit() {
-    this.getTransferList();
+    // this.getTransferList();
     this.getRequestTransfer();
   }
 
   async getTransferList() {
     this.modalLoading.show();
+    this.selectedApproveReceive = [];
     try {
-      const rs = await this.transferService.list(this.approveStatus, this.perPage, 0);
+      const rs = await this.transferService.list(this.approveStatus, this.perPage, this.offset);
       if (rs.ok) {
         this.transfers = rs.rows;
-        this.total = rs.total;
+        this.totalTransfer = rs.total;
       } else {
         this.alertService.error(JSON.stringify(rs.error));
       }
@@ -68,27 +74,10 @@ export class TransferComponent implements OnInit {
     }
   }
 
-  async refresh(state: State) {
-    const offset = +state.page.from;
-    const limit = +state.page.size;
-    this.modalLoading.show();
-    try {
-      const rs = await this.transferService.list(this.approveStatus, limit, offset);
-      if (rs.ok) {
-        this.transfers = rs.rows;
-        this.total = rs.total;
-      } else {
-        this.alertService.error(rs.error);
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error.message);
-    }
-  }
-
-  printDetail(t: any) {
-
+  async refreshTransfer(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageTransfer', this.currentPage.toString());
+    this.getTransferList();
   }
 
   removeTransfer(t: any) {
@@ -136,7 +125,7 @@ export class TransferComponent implements OnInit {
 
   doApproveReceive() {
     const transferIds = [];
-    this.selectedApprove.forEach(v => {
+    this.selectedApproveReceive.forEach(v => {
       if (v.approved !== 'Y' && v.mark_deleted === 'N') {
         transferIds.push(v.transfer_id);
       }
@@ -150,7 +139,7 @@ export class TransferComponent implements OnInit {
           // cancel
         });
     } else {
-      this.selectedApprove = [];
+      this.selectedApproveReceive = [];
       this.alertService.error('ไม่พบรายการที่ต้องการรับสินค้าเข้าคลัง');
     }
   }
@@ -162,6 +151,7 @@ export class TransferComponent implements OnInit {
       if (rs.ok) {
         this.alertService.success();
         this.selectedApprove = [];
+        this.selectedApproveReceive = [];
         this.getTransferList();
         this.getRequestTransfer();
       } else {
@@ -271,10 +261,12 @@ export class TransferComponent implements OnInit {
   async getRequestTransfer() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.transferService.request();
+      this.selectedApprove = [];
+      const rs: any = await this.transferService.request(this.perPage, this.offset);
       if (rs.ok) {
         this.transfersRequest = rs.rows;
-        this.notApproveReceiveItems = _.filter(this.transfersRequest, { approved: 'N', mark_deleted: 'N' });
+        this.totalRequest = rs.totalRequest;
+        this.notApproveReceiveItems = rs.totalNotApprove;
       } else {
         this.alertService.error(JSON.stringify(rs.error));
       }
@@ -283,5 +275,11 @@ export class TransferComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(JSON.stringify(error.message));
     }
+  }
+
+  async refreshRequest(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageTransfer', this.currentPage.toString());
+    this.getRequestTransfer();
   }
 }

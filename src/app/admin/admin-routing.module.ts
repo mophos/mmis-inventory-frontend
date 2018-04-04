@@ -87,6 +87,7 @@ import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
 import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
 import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
+import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
 
 const routes: Routes = [
   {
@@ -136,6 +137,7 @@ const routes: Routes = [
       { path: 'reports/product-summary', component: ProductSummaryComponent },
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'reports/purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
+      { path: 'reports/product-receive', component: ProductReceiveComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },

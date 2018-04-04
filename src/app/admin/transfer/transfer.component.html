@@ -5,7 +5,7 @@
 
 <clr-tabs>
   <clr-tab>
-    <button clrTabLink clrTabLinkId="link1" (click)="getTransferList()">รายการโอน
+    <button clrTabLink clrTabLinkId="link1">รายการโอน
     </button>
     <clr-tab-content clrContentId="content1" *clrIfActive>
       <div class="row wid99">
@@ -45,14 +45,14 @@
         </div>
       </div>
 
-      <clr-datagrid [style.height.%]="80" [(clrDgSelected)]="selectedApprove">
+      <clr-datagrid (clrDgRefresh)="refreshTransfer($event)" [style.height.%]="80" [(clrDgSelected)]="selectedApprove">
         <clr-dg-column>เลขที่โอน</clr-dg-column>
         <clr-dg-column>วันที่โอน</clr-dg-column>
         <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
         <clr-dg-column>Mark Deleted</clr-dg-column>
         <clr-dg-column></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
-        <clr-dg-row *clrDgItems="let t of transfers" [clrDgItem]="t" [ngClass]="{'approve-status': t.approved === 'Y', 'cancel-status': t.mark_deleted === 'Y', 'confirm-status': t.confirmed === 'Y'}">
+        <clr-dg-row *ngFor="let t of transfers" [clrDgItem]="t" [ngClass]="{'approve-status': t.approved === 'Y', 'cancel-status': t.mark_deleted === 'Y', 'confirm-status': t.confirmed === 'Y'}">
           <wm-transfer-detail *clrIfExpanded [transferId]="t.transfer_id" ngProjectAs="clr-dg-row-detail"></wm-transfer-detail>
           <clr-dg-cell>{{t.transfer_code}}</clr-dg-cell>
           <clr-dg-cell>{{t.transfer_date | toThaiDate}}</clr-dg-cell>
@@ -78,20 +78,20 @@
         </clr-dg-row>
         <clr-dg-footer>
           {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
-          <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+          <clr-dg-pagination #pagination [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalTransfer"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink (click)="getRequestTransfer()">
+    <button clrTabLink>
       รายการรับโอน
-      <span class="badge badge-danger" *ngIf="notApproveReceiveItems.length">{{notApproveReceiveItems.length | number}}</span>
+      <span class="badge badge-danger" *ngIf="notApproveReceiveItems">{{notApproveReceiveItems | number}}</span>
     </button>
     <clr-tab-content *clrIfActive>
       <div class="row">
         <div class="col-md-2" style="padding-top: 5px;">
-          <button class="btn btn-primary btn-sm" [disabled]="!selectedApprove.length" (click)="doApproveReceive()">
+          <button class="btn btn-primary btn-sm" [disabled]="!selectedApproveReceive.length" (click)="doApproveReceive()">
             รับสินค้าเข้าคลัง
           </button>
         </div>
@@ -104,13 +104,13 @@
           </div>
         </div> -->
       </div>
-      <clr-datagrid [style.height.%]="85" [(clrDgSelected)]="selectedApprove">
+      <clr-datagrid (clrDgRefresh)="refreshRequest($event)" [style.height.%]="85" [(clrDgSelected)]="selectedApproveReceive">
         <clr-dg-column>เลขที่โอน</clr-dg-column>
         <clr-dg-column>วันที่โอน</clr-dg-column>
-        <clr-dg-column [clrDgField]="'src_warehouse_name'">โอนมาจากคลัง</clr-dg-column>
+        <clr-dg-column>โอนมาจากคลัง</clr-dg-column>
         <clr-dg-column>รับเข้าคลัง</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
-        <clr-dg-row *clrDgItems="let t of transfersRequest" [clrDgItem]="t" [ngClass]="{'approve-status': t.approved === 'Y', 'cancel-status': t.mark_deleted === 'Y'}">
+        <clr-dg-row *ngFor="let t of transfersRequest" [clrDgItem]="t" [ngClass]="{'approve-status': t.approved === 'Y', 'cancel-status': t.mark_deleted === 'Y'}">
           <wm-transfer-detail *clrIfExpanded [transferId]="t.transfer_id" ngProjectAs="clr-dg-row-detail"></wm-transfer-detail>
           <clr-dg-cell>{{t.transfer_code}}</clr-dg-cell>
           <clr-dg-cell>{{t.transfer_date | toThaiDate}}</clr-dg-cell>
@@ -128,7 +128,7 @@
         </clr-dg-row>
         <clr-dg-footer>
           {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
-          <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+          <clr-dg-pagination #pagination [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalRequest"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
