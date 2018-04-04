@@ -1,3 +1,4 @@
+import { State } from '@clr/angular';
 import { UploadingService } from './../../uploading.service';
 import {
   Component,
@@ -52,6 +53,11 @@ export class RequisitionComponent implements OnInit {
   selectedCancel: any[] = [];
 
   perPage = 20;
+  currentPage = 1;
+  offset = 0;
+  totalWaiting = 0;
+  totalUnPaid = 0;
+  totalWaitingApprove = 0;
 
   constructor(
     private alertService: AlertService,
@@ -61,6 +67,7 @@ export class RequisitionComponent implements OnInit {
     @Inject('API_URL') private url: string,
   ) {
     this.token = sessionStorage.getItem('token');
+    this.currentPage = +sessionStorage.getItem('currentPageRequisition') ? +sessionStorage.getItem('currentPageRequisition') : 1;
   }
 
   async ngOnInit() {
@@ -83,10 +90,11 @@ export class RequisitionComponent implements OnInit {
   async getWaiting() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getWating();
+      const rs: any = await this.requisitionService.getWating(this.perPage, this.offset);
       this.modalLoading.hide();
       if (rs.ok) {
         this.orders = rs.rows;
+        this.totalWaiting = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -96,13 +104,20 @@ export class RequisitionComponent implements OnInit {
     }
   }
 
+  refreshWaiting(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
+    this.getWaiting();
+  }
+
   async getUnPaid() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getUnPaid();
+      const rs: any = await this.requisitionService.getUnPaid(this.perPage, this.offset);
       this.modalLoading.hide();
       if (rs.ok) {
         this.unpaids = rs.rows;
+        this.totalUnPaid = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -110,16 +125,23 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+  }
+
+  refreshUnPaid(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
+    this.getUnPaid();
   }
 
   async getWaitingApprove() {
     this.requisitionSelected = [];
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getWaitingApprove();
+      const rs: any = await this.requisitionService.getWaitingApprove(this.perPage, this.offset);
       this.modalLoading.hide();
       if (rs.ok) {
         this.waitingApproves = rs.rows;
+        this.totalWaitingApprove = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -127,6 +149,12 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+  }
+
+  refreshWaitingApprove(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
+    this.getWaitingApprove();
   }
 
   async getApproved() {
@@ -320,6 +348,7 @@ export class RequisitionComponent implements OnInit {
             this.modalLoading.hide();
             if (rs.ok) {
               this.alertService.success();
+              this.selectedCancel = [];
               this.getUnPaid();
             } else {
               this.alertService.error(rs.error);
