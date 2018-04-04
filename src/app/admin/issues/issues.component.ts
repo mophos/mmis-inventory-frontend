@@ -19,10 +19,12 @@ export class IssuesComponent implements OnInit {
   issues = [];
   loading = false;
   total = 0;
-  perPage = 20;
+  perPage = 2;
   isSaving = false;
   status: any = '';
   token: any;
+  currentPage = 0;
+  offset = 0;
 
   selectedApprove: any = [];
   jwtHelper: JwtHelper = new JwtHelper();
@@ -44,17 +46,18 @@ export class IssuesComponent implements OnInit {
     private accessCheck: AccessCheck,
     @Inject('API_URL') private apiUrl: string
   ) {
-    this.token = sessionStorage.getItem('token')
+    this.token = sessionStorage.getItem('token');
+    this.currentPage = +sessionStorage.getItem('currentPageIssue') ? +sessionStorage.getItem('currentPageIssue') : 1;
   }
 
   ngOnInit() { }
 
   async refresh(state: State) {
-    const offset = +state.page.from;
-    const limit = +state.page.size;
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageIssue', this.currentPage.toString());
     this.modalLoading.show();
     try {
-      const rs = await this.issueService.list(limit, offset, this.status);
+      const rs = await this.issueService.list(this.perPage, this.offset, this.status);
       this.issues = rs.rows;
       this.total = rs.total;
       this.modalLoading.hide();
@@ -67,7 +70,7 @@ export class IssuesComponent implements OnInit {
   async getIssues() {
     this.modalLoading.show();
     try {
-      const rs = await this.issueService.list(this.perPage, 0, this.status);
+      const rs = await this.issueService.list(this.perPage, this.offset, this.status);
       if (rs.ok) {
         this.issues = rs.rows;
         this.total = +rs.total;
