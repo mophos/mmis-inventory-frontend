@@ -42,18 +42,17 @@ export class RequisitionComponent implements OnInit {
   requisitionSelected: Array<any> = [];
   title: any;
   isConfirm: any;
-  openModalConfirm: boolean = false;
-  confirmApprove: boolean = false;
+  openModalConfirm = false;
+  confirmApprove = false;
   tmpOderApprove: any;
   username: any;
   password: any;
   action: any;
   page: any;
   selectedCancel: any[] = [];
-  tabSelect: any = 0;
 
   perPage = 20;
-  
+
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
@@ -82,10 +81,9 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getWaiting() {
-    this.tabSelect = 1
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionService.getWating();
+      const rs: any = await this.requisitionService.getWating();
       this.modalLoading.hide();
       if (rs.ok) {
         this.orders = rs.rows;
@@ -99,10 +97,9 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getUnPaid() {
-    this.tabSelect = 4
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionService.getUnPaid();
+      const rs: any = await this.requisitionService.getUnPaid();
       this.modalLoading.hide();
       if (rs.ok) {
         this.unpaids = rs.rows;
@@ -116,11 +113,10 @@ export class RequisitionComponent implements OnInit {
   }
 
   async getWaitingApprove() {
-    this.requisitionSelected = []
-    this.tabSelect = 2
+    this.requisitionSelected = [];
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionService.getWaitingApprove();
+      const rs: any = await this.requisitionService.getWaitingApprove();
       this.modalLoading.hide();
       if (rs.ok) {
         this.waitingApproves = rs.rows;
@@ -135,10 +131,9 @@ export class RequisitionComponent implements OnInit {
 
   async getApproved() {
     this.requisitionSelected = []
-    this.tabSelect = 2
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionService.getApproved();
+      const rs: any = await this.requisitionService.getApproved();
       this.modalLoading.hide();
       if (rs.ok) {
         this.approveds = rs.rows;
@@ -156,7 +151,7 @@ export class RequisitionComponent implements OnInit {
       .then(async () => {
         this.modalLoading.show();
         try {
-          let rs: any = await this.requisitionService.removeRequisitionOrder(order.requisition_order_id);
+          const rs: any = await this.requisitionService.removeRequisitionOrder(order.requisition_order_id);
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
@@ -177,7 +172,7 @@ export class RequisitionComponent implements OnInit {
       .then(async () => {
         this.modalLoading.show();
         try {
-          let rs: any = await this.requisitionService.removeOrderConfirm(order.confirm_id);
+          const rs: any = await this.requisitionService.removeOrderConfirm(order.confirm_id);
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
@@ -208,7 +203,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   async checkApprove(username: any, password: any) {
-    let rs: any = await this.requisitionService.checkApprove(username, password, this.action);
+    const rs: any = await this.requisitionService.checkApprove(username, password, this.action);
     console.log(rs);
 
     if (rs.ok) {
@@ -232,7 +227,7 @@ export class RequisitionComponent implements OnInit {
       .then(async () => {
         this.modalLoading.show();
         try {
-          let rs: any = await this.requisitionService.saveApproveOrderConfirm(order.confirm_id);
+          const rs: any = await this.requisitionService.saveApproveOrderConfirm(order.confirm_id);
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
@@ -250,7 +245,7 @@ export class RequisitionComponent implements OnInit {
       });
   }
   printApprove() {
-    let requisition_id: any = []
+    const requisition_id: any = []
     let count: any = 0
     this.requisitionSelected.forEach(e => {
       if (e.is_cancel !== 'Y') {
@@ -266,7 +261,7 @@ export class RequisitionComponent implements OnInit {
     }
   }
   printSetProduct() {
-    let requisition_id: any = []
+    const requisition_id: any = []
     let count: any = 0
     this.requisitionSelected.forEach(e => {
       if (e.is_cancel !== 'Y') {
@@ -286,11 +281,11 @@ export class RequisitionComponent implements OnInit {
     this.alertService.confirm('ต้องการเปลี่ยนสถานะเป็น ไม่ค้างจ่าย ใช่หรือไม่?')
       .then(async () => {
         this.modalLoading.show();
-        let ids: any = [];
+        const ids: any = [];
         ids.push(order.requisition_order_id);
 
         try {
-          let rs: any = await this.requisitionService.cancelUnpaid(ids);
+          const rs: any = await this.requisitionService.cancelUnpaid(ids);
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
@@ -308,9 +303,9 @@ export class RequisitionComponent implements OnInit {
       });
   }
 
-  // cancel unpaids 
+  // cancel unpaids
   doCancelUnpaids() {
-    let ids: any = [];
+    const ids: any = [];
 
     this.selectedCancel.forEach(v => {
       ids.push(v.requisition_order_id);
@@ -321,7 +316,7 @@ export class RequisitionComponent implements OnInit {
         .then(async () => {
           this.modalLoading.show();
           try {
-            let rs: any = await this.requisitionService.cancelUnpaid(ids);
+            const rs: any = await this.requisitionService.cancelUnpaid(ids);
             this.modalLoading.hide();
             if (rs.ok) {
               this.alertService.success();
