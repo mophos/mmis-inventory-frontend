@@ -18,7 +18,7 @@ export class ValueProductsComponent implements OnInit {
   startDate: any;
   endDate: any;
   warehouses: any = [];
-  warehouseId:any = 0;
+  warehouseId: any = 0;
   warehouseName: any;
   isPreview = false;
   selectedGenericId = 0;
@@ -37,7 +37,7 @@ export class ValueProductsComponent implements OnInit {
     this.token = sessionStorage.getItem('token')
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.warehouseId = decodedToken.warehouseId
-    this.warehouseName = decodedToken.warehouseName    
+    this.warehouseName = decodedToken.warehouseName
     this.options = {
       pdfOpenParams: { toolbar: '1' },
       height: "450px"
@@ -67,10 +67,10 @@ export class ValueProductsComponent implements OnInit {
 
   showReport() {
     console.log(+this.warehouseId);
-    if(+this.warehouseId !== 0){
-      this.warehouseName = _.find(this.warehouses,(v)=>{return +v.warehouse_id === +this.warehouseId})
+    if (+this.warehouseId !== 0) {
+      this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
       this.warehouseName = this.warehouseName.warehouse_name
-    } else {      
+    } else {
       this.warehouseName = 'ทุกคลังสินค้า'
     }
     console.log(this.warehouseName);

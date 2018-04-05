@@ -1,0 +1,28 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">รายงานสถานะเวชภัณฑ์คงคลัง</span>
+</nav>
+<div class="row" style="padding:1em">
+  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+    <label class="required">คลัง</label>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <wm-select-warehouses [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
+
+    </wm-select-warehouses>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <div class="select">
+      <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
+        <option value='0'>ทั้งหมด</option>
+        <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <button class="btn btn-sm btn-primary" (click)="inventoryStatus()">
+      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานการสถานะเวชภัณฑ์คงคลัง
+    </button>
+  </div>
+</div>
+<wm-html-preview #htmlPreview></wm-html-preview>

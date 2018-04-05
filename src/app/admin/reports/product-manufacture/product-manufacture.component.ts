@@ -62,7 +62,8 @@ export class ProductManufactureComponent implements OnInit {
     console.log(decodedToken);
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/product/manufacture/warehouse/?warehouseId=${warehouseId}&startDate=${startDate}&endDate=${endDate}&token=${this.token}`;
+    const url = `${this.apiUrl}/report/product/manufacture/warehouse/?warehouseId=${warehouseId}
+    &startDate=${startDate}&endDate=${endDate}&token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
   refresh() {

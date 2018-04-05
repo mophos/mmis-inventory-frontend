@@ -141,6 +141,7 @@ import { CalculateMinMaxComponent } from 'app/admin/calculate-min-max/calculate-
 import { ValueProductsComponent } from './reports/value-products/value-products.component';
 import { ProductSummaryComponent } from './reports/product-summary/product-summary.component';
 import { PurchasingNotgiveawayComponent } from './reports/purchasing-notgiveaway/purchasing-notgiveaway.component';
+import { InventoryStatusComponent } from './reports/inventory-status/inventory-status.component';
 import { ProductReceiveComponent } from './reports/product-receive/product-receive.component';
 
 export function highchartsFactory() {
@@ -238,6 +239,7 @@ Highcharts.setOptions({
     ValueProductsComponent,
     ProductSummaryComponent,
     PurchasingNotgiveawayComponent,
+    InventoryStatusComponent,
     ProductReceiveComponent
   ],
   providers: [
