@@ -19,7 +19,7 @@ export class InventoryStatusComponent implements OnInit {
   token: any;
   warehouseId: any;
   genericTypes = [];
-  genericType: any = "";
+  genericType: any = 0;
   genericTypeIds = [];
 
   jwtHelper: JwtHelper = new JwtHelper();

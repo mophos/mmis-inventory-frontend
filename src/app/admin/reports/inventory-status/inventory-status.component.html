@@ -2,7 +2,7 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">รายงานสถานะเวชภัณฑ์คงคลัง</span>
 </nav>
-<div class="row">
+<div class="row" style="padding:1em">
   <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
     <label class="required">คลัง</label>
   </div>
@@ -14,7 +14,7 @@
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <div class="select">
       <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
-        <option value="">ทั้งหมด</option>
+        <option value='0'>ทั้งหมด</option>
         <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
       </select>
     </div>
