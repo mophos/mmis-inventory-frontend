@@ -77,9 +77,10 @@ export class ProductSummaryComponent implements OnInit {
     console.log(this.warehouseName);
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/list/cost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
+    const url = `${this.apiUrl}/report/totalcost/warehouse/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
+  
   getWarehouseList() {
     this.warehouseService.all()
       .then((result: any) => {
