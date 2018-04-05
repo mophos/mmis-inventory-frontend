@@ -56,7 +56,6 @@ export class PurchasingNotgiveawayComponent implements OnInit {
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/purchasing/notgiveaway/${this.start}/${this.end}?token=${this.token}`
     this.htmlPreview.showReport(url);
-    console.log(url);
   }
 
 }
