@@ -88,6 +88,7 @@ export class ReceiveComponent implements OnInit {
   offset = 0;
   offsetOther = 0;
   totalPurchases = 0;
+  queryPo: any;
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -109,7 +110,7 @@ export class ReceiveComponent implements OnInit {
     this.offset = +sessionStorage.getItem('offsetReceive') ? +sessionStorage.getItem('offsetReceive') : 0;
   }
 
-  async refreshPo(state: State){
+  async refreshPo(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
@@ -117,37 +118,21 @@ export class ReceiveComponent implements OnInit {
 
     this.modalLoading.show();
     try {
-      const rs: any = await this.receiveService.getPurchasesList(limit, this.offset);
-      this.modalLoading.hide();
-      if (rs.ok) {
+      if (this.queryPo) {
+        const rs: any = await this.receiveService.getPurchasesListSearch(this.perPage, this.offset, this.queryPo);
         this.purchases = rs.rows;
         this.totalPurchases = rs.total;
-        console.log(this.totalPurchases);
-        
       } else {
-        this.alertService.error(rs.error);
+        const rs: any = await this.receiveService.getPurchasesList(limit, this.offset);
+        this.purchases = rs.rows;
+        this.totalPurchases = rs.total;
       }
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(JSON.stringify(error));
     }
+    this.modalLoading.hide();
   }
-  // async getPurchaseList() {
-  //   this.modalLoading.show();
-  //   try {
-  //     const res: any = await this.receiveService.getPurchasesList();
-  //     this.modalLoading.hide();
-  //     if (res.ok) {
-  //       this.purchases = res.rows;
-
-  //     } else {
-  //       this.alertService.error(res.error);
-  //     }
-  //   } catch (error) {
-  //     this.modalLoading.hide();
-  //     this.alertService.error(JSON.stringify(error));
-  //   }
-  // }
 
   async refresh(state: State) {
     this.offset = +state.page.from;
@@ -801,5 +786,20 @@ export class ReceiveComponent implements OnInit {
     this.tab = "receiveOtherEndDate";
     // this.fillterApprove = 'all';
     sessionStorage.setItem('tabReceive', this.tab);
+  }
+
+  searchPo(event) {
+    this.offset = 0;
+    this.doSearchPo();
+  }
+
+  async doSearchPo() {
+    this.modalLoading.show();
+    const rs: any = await this.receiveService.getPurchasesListSearch(this.perPage, this.offset, this.queryPo);
+    if (rs.ok) {
+      this.purchases = rs.rows;
+      this.totalPurchases = rs.total;
+    }
+    this.modalLoading.hide();
   }
 }
