@@ -379,6 +379,13 @@ export class ReceiveService {
     return res.json();
   }
 
+  async getPurchasesListSearch(limit: number = 100, offset: number = 0, query: any) {
+    const res = await this.authHttp.get(`${this.url}/receives/purchases/list/search?limit=${limit}&offset=${offset}&query=${query}`)
+      .toPromise();
+
+    return res.json();
+  }
+
   async getPurchaseProductsList(purchaseOrderId: any) {
     const res = await this.authHttp.get(`${this.url}/receives/purchases/product-list?purchaseOrderId=${purchaseOrderId}`)
       .toPromise();
