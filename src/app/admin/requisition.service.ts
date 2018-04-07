@@ -568,5 +568,15 @@ export class RequisitionService {
     }).toPromise();
     return rs.json();
   }
+  async rollbackOrder(confirmId: any, requisitionOrderId) {
+    const rs: any = await this.authHttp.delete(`${this.url}/requisition/rollbackOrder/${confirmId}/${requisitionOrderId}`)
+      .toPromise();
+    return rs.json();
+  }
+  async getRequisitionConfirmTemp(confirmId) {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/confirm/temp/${confirmId}`)
+      .toPromise();
+    return rs.json();
+  }
 
 }

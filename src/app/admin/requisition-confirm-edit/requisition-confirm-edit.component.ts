@@ -15,9 +15,9 @@ import { IRequisitionOrder } from 'app/shared';
   styles: []
 })
 export class RequisitionConfirmEditComponent implements OnInit {
-  
-  @ViewChild('modalLoading') public modalLoading: any;
 
+  @ViewChild('modalLoading') public modalLoading: any;
+  
   products: any = [];
   requisitionDate: any = null;
   requisitionId: any = null;
@@ -189,7 +189,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
             }
 
             if (v.confirm_qty > 0) _totalConfirmQty = v.conversion_qty * v.confirm_qty;
-          
+
             this.products[idx].confirmItems.push(v);
             this.products[idx].confirm_qty += _totalConfirmQty;
           }
@@ -322,5 +322,11 @@ export class RequisitionConfirmEditComponent implements OnInit {
 
       });
   }
-
+  removeGeneric(g) {
+    console.log(g);
+    const idx = _.findIndex(this.products, { "generic_id": g.generic_id });
+    if (idx > -1) {
+      this.products.splice(idx, 1);
+    }
+  }
 }
