@@ -136,7 +136,7 @@ export class RequisitionConfirmComponent implements OnInit {
           }
 
           if (rs.pays) {
-            rs.pays.forEach(z => {
+            rs.pays.forEach(async (z) => {
               if (z.generic_id === v.generic_id) {
                 let _obj: any = {
                   confirm_qty: z.pay_qty,
@@ -144,6 +144,18 @@ export class RequisitionConfirmComponent implements OnInit {
                   conversion_qty: z.conversion_qty,
                   wm_product_id: z.wm_product_id,
                   generic_id: z.generic_id
+                }
+                if (v.temp_confirm_id) {
+                  const rsT: any = await this.requisitionService.getRequisitionConfirmTemp(v.temp_confirm_id);
+                  const idx = _.findIndex(rsT.rows, { wm_product_id: z.wm_product_id });
+                  if (idx > -1) {
+                    _obj.confirm_qty = rsT.rows[idx].confirm_qty / z.conversion_qty;
+                    if (_obj.confirm_qty > z.pay_qty) {
+                      _obj.remain_qty += (_obj.confirm_qty - z.pay_qty);
+                    } else {
+                      _obj.remain_qty -= (_obj.confirm_qty - z.pay_qty);
+                    }
+                  }
                 }
                 obj.is_minus = (z.remain_qty - (+z.pay_qty * +z.conversion_qty)) < 0;
                 obj.allowcate_qty += (+z.pay_qty * +z.conversion_qty);
@@ -372,7 +384,7 @@ export class RequisitionConfirmComponent implements OnInit {
   doCalculateRequisition() {
     this.alertService.confirm('ต้องการปรับยอดการเบิกจากการยืมใหม่ ใช่หรือไม่?')
       .then(async () => {
-      
+
         let dataBorrow = [];
         let borrowItems = [];
         let data = [];
@@ -410,7 +422,7 @@ export class RequisitionConfirmComponent implements OnInit {
           // remove selected
           slData.forEach((b, ix) => {
             if (b.generic_id === x.generic_id) {
-              
+
               let _idx = _.findIndex(dataBorrow, { genericId: b.generic_id });
               if (_idx > -1) {
                 let obj: any = {};
@@ -438,7 +450,7 @@ export class RequisitionConfirmComponent implements OnInit {
             this.selectedBorrowNotes = [];
             this.borrowNotes = [];
           }
-          
+
           await this.getOrderItems();
           await this.getBorrowNotes();
 
@@ -453,6 +465,6 @@ export class RequisitionConfirmComponent implements OnInit {
           this.openBorrowNote = false;
         }
       }).catch(() => { this.openBorrowNote = false; });
-    
+
   }
 }

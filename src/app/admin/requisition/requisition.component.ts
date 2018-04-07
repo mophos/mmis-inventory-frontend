@@ -366,5 +366,24 @@ export class RequisitionComponent implements OnInit {
     }
 
   }
+
+  async rollbackOrderConfirm(order) {
+    console.log(order);
+    
+    this.modalLoading.show();
+    try {
+      const rs = await this.requisitionService.rollbackOrder(order.confirm_id, order.requisition_order_id);
+      if (rs.ok) {
+        this.alertService.success();
+        await this.loadData();
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
+    }
+    this.modalLoading.hide();
+  }
 }
 
