@@ -169,8 +169,8 @@ export class ReceiveService {
 
   //   return res.json();
   // }
-  async getExpired() {
-    const res = await this.authHttp.get(`${this.url}/receives/expired/list`, {
+  async getExpired(limit = 15, offset = 0) {
+    const res = await this.authHttp.get(`${this.url}/receives/expired/list?limit=${limit}&offset=${offset}`, {
     }).toPromise();
 
     return res.json();
@@ -181,8 +181,8 @@ export class ReceiveService {
 
     return res.json();
   }
-  async getOtherExpired() {
-    const res = await this.authHttp.get(`${this.url}/receives/other/expired/list`, {
+  async getOtherExpired(limit = 15, offset = 0) {
+    const res = await this.authHttp.get(`${this.url}/receives/other/expired/list?limit=${limit}&offset=${offset}`, {
     }).toPromise();
 
     return res.json();

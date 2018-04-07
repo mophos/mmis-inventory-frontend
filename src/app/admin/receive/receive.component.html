@@ -294,7 +294,7 @@
         </div>
       </div> -->
 
-      <clr-datagrid style="padding-top: 5px;" [style.height.%]="83">
+      <clr-datagrid (clrDgRefresh)="refreshExpired($event)" style="padding-top: 5px;" [style.height.%]="83">
         <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
@@ -302,30 +302,19 @@
         <clr-dg-column>หมายเหตุ</clr-dg-column>
         <!-- <clr-dg-column style="width: 150px;"></clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-        <clr-dg-row *clrDgItems="let w of expired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
+        <clr-dg-row *ngFor="let w of expired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
           <wm-product-detail *clrIfExpanded [receiveId]="w.receive_id" ngProjectAs="clr-dg-row-detail"></wm-product-detail>
           <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_code || w.receive_tmp_code}}</clr-dg-cell>
           <clr-dg-cell>{{w.purchase_order_number}}</clr-dg-cell>
           <clr-dg-cell>{{w.labeler_name}}</clr-dg-cell>
           <clr-dg-cell>{{w.comment}}</clr-dg-cell>
-          <!-- <clr-dg-cell style="text-align: center;">
-              <div class="btn-group btn-success">
-                <button title="แก้ไขข้อมูล/อนุมัติ" class="btn btn-primary btn-icon btn-sm wm-small-btn"  [routerLink]="['/admin/receives/edit']"
-                  [queryParams]="{receiveId: w.receive_id}">
-                  <clr-icon shape="note"></clr-icon>
-                </button>
-                <button title="ยกเลิกใบรับ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeReceive(w)" [disabled]="w.approve_id">
-                  <clr-icon shape="trash"></clr-icon>
-                </button>
-              </div>
-            </clr-dg-cell> -->
         </clr-dg-row>
 
         <clr-dg-footer>
           {{pagePurchaseExpired.firstItem + 1 | number}} - {{pagePurchaseExpired.lastItem + 1 | number}} จาก {{pagePurchaseExpired.totalItems
           | number}} รายการ
-          <clr-dg-pagination #pagePurchaseExpired [clrDgPageSize]="perPage"></clr-dg-pagination>
+          <clr-dg-pagination #pagePurchaseExpired [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalExpired"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -351,7 +340,7 @@
       <!-- </div>
         </div>
       </div> -->
-      <clr-datagrid [style.height.%]="83">
+      <clr-datagrid (clrDgRefresh)="refreshOtherExpired($event)" style="padding-top: 5px;" [style.height.%]="83">
         <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column style="width: 180px;">ประเภทการรับ</clr-dg-column>
@@ -361,7 +350,7 @@
         <clr-dg-column>หมายเหตุ</clr-dg-column>
         <!-- <clr-dg-column style="width: 150px;"></clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-        <clr-dg-row *clrDgItems="let w of otherExpired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
+        <clr-dg-row  *ngFor="let w of otherExpired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
           <wm-product-receive-other-detail [receiveOtherId]="w.receive_other_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-product-receive-other-detail>
           <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_code}}</clr-dg-cell>
@@ -373,9 +362,9 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pageOtherCancel.firstItem + 1 | number}} - {{pageOtherCancel.lastItem + 1 | number}} จาก {{pageOtherCancel.totalItems |
+          {{pageOtherExpired.firstItem + 1 | number}} - {{pageOtherExpired.lastItem + 1 | number}} จาก {{pageOtherExpired.totalItems |
           number}} รายการ
-          <clr-dg-pagination #pageOtherCancel [clrDgPageSize]="perPage"></clr-dg-pagination>
+          <clr-dg-pagination #pageOtherExpired [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalOtherExpired"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
