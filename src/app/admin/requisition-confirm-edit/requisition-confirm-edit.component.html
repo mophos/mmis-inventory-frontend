@@ -60,7 +60,7 @@
   <clr-dg-column style="width: 200px;">Package</clr-dg-column>
   <clr-dg-column style="width: 110px;">รวม (Base)</clr-dg-column>
   <clr-dg-column style="width: 110px;">ยอดจ่าย (Base)</clr-dg-column>
-  <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
+  <clr-dg-column style="width: 50px;"></clr-dg-column>
   <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="
   {'isSuccess': g.confirm_qty >= (g.conversion_qty * g.requisition_qty) && g.confirm_qty <= (g.small_remain_qty - g.small_book_qty), 
   'isWarning': g.confirm_qty < (g.conversion_qty * g.requisition_qty) && g.confirm_qty > 0, 
@@ -85,7 +85,12 @@
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ g.confirm_qty | number }} {{ g.to_unit_name }}</span>
     </clr-dg-cell>
-
+    <clr-dg-cell >
+      <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeGeneric(g)">
+        <clr-icon shape="trash"></clr-icon>
+      </button>
+    </clr-dg-cell>
+ 
   </clr-dg-row>
   <clr-dg-footer>
     จำนวนทั้งหมด {{products.length}} รายการ &nbsp;&nbsp;&nbsp;

@@ -103,6 +103,12 @@
             <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrderConfirm(order)">
               <clr-icon shape="trash" class="is-danger"></clr-icon> ยกเลิกใบจ่าย
             </button>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="rollbackOrderConfirm(order)">
+              <clr-icon shape="refresh" class="is-danger"></clr-icon> บันทึกขอเบิกใหม่
+            </button>
+            <!-- <button class="action-item" [disabled]="order.is_cancel === 'Y'" routerLink="/admin/requisition/confirm/rollback" [queryParams]="{requisitionId: order.requisition_order_id, confirmId: order.confirm_id}">
+              <clr-icon shape="refresh" class="is-danger"></clr-icon> บันทึกจ่ายเวชภัณฑ์ใหม่
+            </button> -->
           </clr-dg-action-overflow>
           <wm-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items-pay>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
