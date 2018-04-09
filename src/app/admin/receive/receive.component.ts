@@ -835,4 +835,9 @@ export class ReceiveComponent implements OnInit {
     }
     this.modalLoading.hide();
   }
+
+  async printUnReceive() {
+    const url = `${this.apiUrl}/report/un-receive?&token=${this.token}`;
+    this.htmlPreview.showReport(url);
+  }
 }
