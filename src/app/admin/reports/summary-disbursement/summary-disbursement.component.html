@@ -1,0 +1,24 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">รายงานสรุปการเบิกแยกตามหน่วยเบิก</span>
+</nav>
+<div class="row" style="padding:1em">
+  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+    <label for="startDate" class="required">ตั้งแต่</label>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+  </div>
+  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+    <label for="endDate" class="required">ถึง</label>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+  </div>
+  <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12">
+    <button class="btn btn-sm btn-primary" (click)="summaryDisbursement()">
+      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปเบิกแยกหน่วยเบิก
+    </button>
+  </div>
+</div>
+<wm-html-preview #htmlPreview></wm-html-preview>

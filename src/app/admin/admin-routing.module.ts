@@ -89,6 +89,7 @@ import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-ne
 import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
 import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
 import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
+import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
 
 const routes: Routes = [
   {
@@ -140,6 +141,7 @@ const routes: Routes = [
       { path: 'reports/purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
       { path: 'reports/inventory-status', component: InventoryStatusComponent },
       { path: 'reports/product-receive', component: ProductReceiveComponent },
+      { path: 'reports/summary-disbursement', component: SummaryDisbursementComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },
