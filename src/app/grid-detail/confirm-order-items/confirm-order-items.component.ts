@@ -99,7 +99,9 @@ export class ConfirmOrderItemsComponent implements OnInit {
             // allowcate
             obj.confirm_qty = 0;
           }
-
+          if (this._isEdit) {
+            obj.book_qty = v.book_qty - obj.confirm_qty; // pack
+          }
           obj.remain_small_qty = (obj.remain_qty - obj.book_qty) * obj.conversion_qty; // base
           obj.total_small_qty = +obj.confirm_qty * +obj.conversion_qty;
 
