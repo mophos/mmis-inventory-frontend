@@ -51,7 +51,8 @@ export class ProductsComponent implements OnInit {
   async doSearch() {
     try {
       this.modalLoading.show();
-      const rs = await this.productService.search(this.query, this.genericType, this.perPage, 0);
+      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
+      const rs = await this.productService.search(this.query, _genericType, this.perPage, 0);
       if (rs.ok) {
         this.products = rs.rows;
         this.totalProducts = rs.total;
@@ -68,7 +69,8 @@ export class ProductsComponent implements OnInit {
   async getAllProducts() {
     this.modalLoading.show();
     try {
-      const rs = await this.productService.all(this.genericType, this.perPage, 0);
+      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
+      const rs = await this.productService.all(_genericType, this.perPage, 0);
 
       if (rs.ok) {
         this.products = rs.rows;
