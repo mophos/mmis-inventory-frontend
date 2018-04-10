@@ -19,7 +19,7 @@ export class IssuesComponent implements OnInit {
   issues = [];
   loading = false;
   total = 0;
-  perPage = 2;
+  perPage = 15;
   isSaving = false;
   status: any = '';
   token: any;
