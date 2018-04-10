@@ -70,6 +70,7 @@
   <clr-dg-column>หน่วยตัดจ่าย</clr-dg-column>
   <clr-dg-column>รวม (Base Unit)</clr-dg-column>
   <clr-dg-column>คงเหลือ (Base Unit)</clr-dg-column>
+  <clr-dg-column>คงเหลือ (หักยอดจอง)</clr-dg-column>
   <clr-dg-column></clr-dg-column>
 
   <clr-dg-row *ngFor="let product of products; let idx = index;">
@@ -86,8 +87,9 @@
       <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
         [genericId]="product.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}} {{product.unit_name}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
+  <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.reserve_qty | number}} {{product.unit_name}}</clr-dg-cell>
     <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.issue_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.issue_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
@@ -109,13 +111,14 @@
     <clr-dg-cell>
       <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}">{{ issueQty*conversionQty | number }}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty | number }}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}">{{ issueQty*conversionQty | number }} {{primaryUnitName}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty | number }} {{primaryUnitName}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ reserveQty | number }} {{primaryUnitName}}</clr-dg-cell>
     <!-- <clr-dg-cell style="text-align: center; line-height: 25px;">{{ primaryUnitName }}</clr-dg-cell> -->
 
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId || !issueQty || !unitGenericId || ((issueQty * conversionQty) > remainQty)"
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId || !issueQty || !unitGenericId || ((issueQty * conversionQty) > reserveQty)"
           (click)="addProduct()">
           เพิ่ม
         </button>
