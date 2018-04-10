@@ -59,6 +59,7 @@ export class IssuesNewComponent implements OnInit {
   isImport = false;
 
   isOpenModal = false;
+  reserveQty;
   @ViewChild('unitList') public unitList: any;
   @ViewChild('lotModal') public lotModal: any;
   @ViewChild('lotList') public lotList: any;
@@ -131,6 +132,10 @@ export class IssuesNewComponent implements OnInit {
       this.genericId = event ? event.generic_id : null;
       this.unitList.setGenericId(this.genericId);
       this.remainQty = event.qty;
+      this.reserveQty = event.qty  - event.reserve_qty;
+      this.primaryUnitName = event.primary_unit_name;
+      console.log(event);
+      
     } catch (error) {
       console.log(error.message);
     }
@@ -195,9 +200,11 @@ export class IssuesNewComponent implements OnInit {
         obj.generic_id = this.genericId;
         obj.generic_name = this.genericName;
         obj.remain_qty = +this.remainQty;
+        obj.reserve_qty = +this.reserveQty;
         obj.conversion_qty = +this.conversionQty;
         obj.unit_generic_id = this.unitGenericId;
         obj.warehouse_id = this.warehouseId;
+        obj.unit_name = this.primaryUnitName;
         obj.items = [];
         this.products.push(obj);
         // console.log(this.products);
@@ -251,7 +258,7 @@ export class IssuesNewComponent implements OnInit {
     // const oldQty = +this.products[idx].issue_qty;
     console.log(this.products);
 
-    if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].remain_qty) {
+    if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].reserve_qty) {
       this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
       this.products[idx].issue_qty = '';
     } else {
@@ -294,7 +301,7 @@ export class IssuesNewComponent implements OnInit {
     this.expiredDate = null;
     this.unitGenericId = null;
     this.conversionQty = 0;
-
+    this.reserveQty = 0;
     this.unitList.clearUnits();
     this.lots = [];
     this.productSearch.clearProductSearch();

@@ -4,7 +4,6 @@
     <clr-dg-column>Lot No</clr-dg-column>
     <clr-dg-column>วันหมดอายุ</clr-dg-column>
     <clr-dg-column>จำนวนตัดจ่าย</clr-dg-column>
-    <clr-dg-column>หน่วยบรรจุ</clr-dg-column>
     <clr-dg-column>รวม(base unit)</clr-dg-column>
     <clr-dg-column>คงเหลือ(base unit)</clr-dg-column>
     <clr-dg-row *ngFor="let r of items;let idx=index">
@@ -15,13 +14,8 @@
         <input type="text" #qty (keyup)="onChangeQty(qty, idx)" style="width: 100%; text-align: right; background-color:#FFF9C4"
         placeholder="" wmNumberWithOutDot [value]="r.product_qty | number">
       </clr-dg-cell>
-      <clr-dg-cell>
-        {{r.to_unit_name}}
-        <!-- <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="r.unit_generic_id"
-        [genericId]="r.generic_id"></wm-select-receive-unit> -->
-      </clr-dg-cell>
-      <clr-dg-cell style="text-align: right">{{r.product_qty | number}}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right">{{r.small_remain_qty | number}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right">{{r.product_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right">{{r.small_remain_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
     </clr-dg-row>
     <!-- <clr-dg-footer>{{r.length}} รายการ</clr-dg-footer> -->
   </clr-datagrid>
