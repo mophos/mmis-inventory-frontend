@@ -47,6 +47,11 @@
       คงเหลือ (Base Unit)
     </ng-container>
   </clr-dg-column>
+  <clr-dg-column style="width: 150px;">
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      คงเหลือ (หักยอดจอง)
+    </ng-container>
+  </clr-dg-column>
   <clr-dg-column style="width: 100px;">
     <ng-container *clrDgHideableColumn="{hidden: false}">
       หน่วย
@@ -72,6 +77,7 @@
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.qty, 'success-message': p.min_qty < p.qty}">{{p.qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.reserve_qty, 'success-message': p.min_qty < p.qty}">{{p.qty - p.reserve_qty | number}}</clr-dg-cell>
 
     <clr-dg-cell>{{p.primary_unit_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.total_cost | number: '1.2'}}</clr-dg-cell>
