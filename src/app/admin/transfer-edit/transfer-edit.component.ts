@@ -131,7 +131,7 @@ export class TransferEditComponent implements OnInit {
         this.genericName = event ? event.generic_name : null;
         this.genericId = event ? event.generic_id : null;
         this.workingCode = event ? event.working_code : null;
-        this.remainQty = event ? event.qty : null;
+        this.remainQty = event ? event.qty - event.reserve_qty : null;
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
         // this.unitList.setGenericId(this.genericId);
