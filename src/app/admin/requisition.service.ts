@@ -16,14 +16,14 @@ export class RequisitionService {
 
   /***************** siteslave ****************/
 
-  async getWating(limit: number, offset: number, query = '') {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting?limit=${limit}&offset=${offset}&query=${query}`)
+  async getWating(limit: number, offset: number, query = '', fillterCancel = 'all') {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
       .toPromise();
     return rs.json();
   }
 
-  async getWaitingApprove(limit: number, offset: number, query = '') {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting-approve?limit=${limit}&offset=${offset}&query=${query}`)
+  async getWaitingApprove(limit: number, offset: number, query = '', fillterCancel = 'all') {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting-approve?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
       .toPromise();
     return rs.json();
   }
@@ -34,8 +34,8 @@ export class RequisitionService {
     return rs.json();
   }
 
-  async getUnPaid(limit: number, offset: number, query = '') {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/unpaid?limit=${limit}&offset=${offset}&query=${query}`)
+  async getUnPaid(limit: number, offset: number, query = '', fillterCancel = 'all') {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/unpaid?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
       .toPromise();
     return rs.json();
   }
