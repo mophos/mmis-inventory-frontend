@@ -56,6 +56,8 @@ export class BorrowNoteComponent implements OnInit {
       if (this.query) {
         this.getList(this.perPage, 0);
       }
+    } else if (this.query === '') {
+      this.getList(this.perPage, 0);
     }
   }
 
