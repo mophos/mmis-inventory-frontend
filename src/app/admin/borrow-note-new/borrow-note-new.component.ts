@@ -181,7 +181,7 @@ export class BorrowNoteNewComponent implements OnInit {
 
   save() {
     let borrowDate = `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`;
-    if (this.peopleId && this.borrowDate && this.generics.length) {
+    if (this.borrowDate && this.generics.length) {
       this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
         .then(async () => {
           try {
