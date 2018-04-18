@@ -424,7 +424,7 @@ export class RequisitionComponent implements OnInit {
           this.alertService.error(rs.error);
         }
       } else if (this.selectedTab === 'approved') {
-        const rs: any = await this.requisitionService.getApproved(this.perPage, this.offset, this.query, this.fillterCancel);
+        const rs: any = await this.requisitionService.getApproved(this.perPage, this.offset, this.query);
         if (rs.ok) {
           this.approveds = rs.rows;
           this.totalApproveds = rs.total[0].total;
