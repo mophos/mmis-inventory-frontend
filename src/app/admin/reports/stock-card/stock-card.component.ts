@@ -85,7 +85,7 @@ export class StockCardComponent implements OnInit {
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}&startDate=${this.start}
     &endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
-    this.htmlPreview.showReport(url);
+    this.htmlPreview.showReport(url, 'landscape');
   }
 
   showReport2() {
@@ -93,7 +93,15 @@ export class StockCardComponent implements OnInit {
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/generic/stock2?&warehouseId=${this.warehouseId}
     &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
-    this.htmlPreview.showReport(url);
+    this.htmlPreview.showReport(url, 'landscape');
+  }
+
+  showReport3() {
+    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/generic/stock3?&warehouseId=${this.warehouseId}
+    &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
+    this.htmlPreview.showReport(url, 'landscape');
   }
 
   refresh() {

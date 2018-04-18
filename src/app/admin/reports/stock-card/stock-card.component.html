@@ -49,6 +49,10 @@
               (click)="showReport2()">
               <clr-icon shape="printer"></clr-icon> พิมพ์รายงานแบบที่ 2
             </clr-button>
+            <clr-button [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" [clrInMenu]="true" class="btn btn-sm btn-primary"
+              (click)="showReport3()">
+              <clr-icon shape="printer"></clr-icon> พิมพ์รายงานแบบที่ 3
+            </clr-button>
           </clr-button-group>
         </div>
       </div>
