@@ -188,14 +188,18 @@ export class ReceivePlanningEditComponent implements OnInit {
 
   getByGenericTypes() {
     this.alertService.confirm('รายการเดิมจะถูกแทนที่ด้วยรายการใหม่ ท่านต้องการทำต่อใช่หรือไม่?')
-      .then(async() => {
+      .then(async () => {
         this.modalLoading.show();
         try {
-          let rs: any = await this.warehouseService.getGenericByGenericTypes(this.genericTypeId);
+          const rs: any = await this.warehouseService.getGenericByGenericTypes(this.genericTypeId);
           if (rs.ok) {
-            // set new generics
-            this.generics = [];
-            this.generics = rs.rows;
+            // add generics
+            rs.rows.forEach(element => {
+              const idx = _.findIndex(this.generics, { "generic_id": element.generic_id })
+              if (idx === -1) {
+                this.generics.push(element);
+              }
+            });
           } else {
             this.alertService.error(rs.error);
           }
@@ -203,7 +207,7 @@ export class ReceivePlanningEditComponent implements OnInit {
 
         } catch (error) {
           this.modalLoading.hide();
-          this.alertService.error(error.message); 
+          this.alertService.error(error.message);
         }
       }).catch(() => {
         this.modalLoading.hide();

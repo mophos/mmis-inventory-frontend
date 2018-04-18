@@ -37,6 +37,8 @@ export class ReceiveComponent implements OnInit {
   purchases: any = [];
   totalReceive = 0;
   totalReceiveOther = 0;
+  totalExpired = 0;
+  totalOtherExpired = 0;
   perPage = 20;
   query: string;
   queryOther: string;
@@ -134,6 +136,42 @@ export class ReceiveComponent implements OnInit {
     this.modalLoading.hide();
   }
 
+  async refreshExpired(state: State) {
+    this.offset = +state.page.from;
+    const limit = +state.page.size;
+    sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
+    sessionStorage.setItem('offsetReceive', this.offset.toString());
+
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.receiveService.getExpired(this.perPage, this.offset);
+      this.expired = rs.rows;
+      this.totalExpired = rs.total
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
+    }
+    this.modalLoading.hide();
+  }
+
+  async refreshOtherExpired(state: State) {
+    this.offset = +state.page.from;
+    const limit = +state.page.size;
+    sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
+    sessionStorage.setItem('offsetReceive', this.offset.toString());
+
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.receiveService.getOtherExpired(this.perPage, this.offset);
+      this.otherExpired = rs.rows;
+      this.totalOtherExpired = rs.total
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
+    }
+    this.modalLoading.hide();
+  }
+
   async refresh(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
@@ -141,25 +179,23 @@ export class ReceiveComponent implements OnInit {
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
-    if (!this.query) {
-      try {
+    try {
+      if (!this.query) {
         const rs = await this.receiveService.getReceiveStatus(limit, this.offset, this.fillterApprove);
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
-        // await this.getReceiveExpired();
-        this.modalLoading.hide();
-      } catch (error) {
-        this.modalLoading.hide();
-        this.alertService.error(error.message);
+
+      } else {
+        const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove);
+        this.waitings = rs.rows;
+        this.totalReceive = rs.total;
+        this.isSearching = true;
       }
-    } else {
-      const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove);
-      this.waitings = rs.rows;
-      this.totalReceive = rs.total;
-      // await this.getReceiveExpiredSearch(this.query);
-      this.isSearching = true;
+    } catch (error) {
       this.modalLoading.hide();
+      this.alertService.error(error.message);
     }
+    this.modalLoading.hide();
   }
 
   searchReceive(event: any) {
@@ -216,14 +252,11 @@ export class ReceiveComponent implements OnInit {
         const rs = await this.receiveService.getReceiveOtherStatus(limit, this.offset, this.fillterApprove);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
-        // await this.getReceiveOtherExpired();
-        this.modalLoading.hide();
       } else {
         const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, this.offset, this.queryOther, this.fillterApprove);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
       }
-      // await this.getReceiveOtherExpiredSearch();
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
@@ -801,5 +834,10 @@ export class ReceiveComponent implements OnInit {
       this.totalPurchases = rs.total;
     }
     this.modalLoading.hide();
+  }
+
+  async printUnReceive() {
+    const url = `${this.apiUrl}/report/un-receive?&token=${this.token}`;
+    this.htmlPreview.showReport(url);
   }
 }

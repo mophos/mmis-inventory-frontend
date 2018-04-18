@@ -3,9 +3,9 @@
       <clr-dg-column>คลังสินค้า</clr-dg-column>
       <clr-dg-column>Lot no.</clr-dg-column>
       <clr-dg-column>วันหมดอายุ</clr-dg-column>
-      <clr-dg-column>ราคาต่อหน่วย</clr-dg-column>
-      <clr-dg-column>คงเหลือ (Base Unit)</clr-dg-column>
-      <clr-dg-column>คงเหลือ (Pack)</clr-dg-column>
+      <clr-dg-column >ราคาต่อหน่วย</clr-dg-column>
+      <clr-dg-column>คงเหลือ</clr-dg-column>
+      <clr-dg-column>คงเหลือ (หักยอดจอง)</clr-dg-column>
       <clr-dg-column>มูลค่า</clr-dg-column>
   
       <clr-dg-row *clrDgItems="let r of products">
@@ -13,13 +13,9 @@
         <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
         <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{r.cost | number: '1.2-2'}} </clr-dg-cell>
-        <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">{{r.qty | number}} </clr-dg-cell>
-        <!-- <clr-dg-cell style="text-align: right;">
-          <span [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">
-            {{r.min_qty || 0 | number}}/{{r.max_qty || 0 | number}}
-          </span>
-        </clr-dg-cell> -->
-        <clr-dg-cell>{{r.pack_qty | number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}})</clr-dg-cell>
+        <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">{{r.pack_qty | number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty | number}} </clr-dg-cell>
+
+        <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}" >{{r.pack_qty - (r.reserve_qty/r.conversion_qty)| number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty - r.reserve_qty}}</clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{r.total_cost | number: '1.2-2'}} </clr-dg-cell>
       </clr-dg-row>
       <clr-dg-footer>

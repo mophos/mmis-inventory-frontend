@@ -156,11 +156,15 @@ export class ReceivePlanningNewComponent implements OnInit {
       .then(async () => {
         this.modalLoading.show();
         try {
-          let rs: any = await this.warehouseService.getGenericByGenericTypes(this.genericTypeId);
+          const rs: any = await this.warehouseService.getGenericByGenericTypes(this.genericTypeId);
           if (rs.ok) {
-            // set new generics
-            this.generics = [];
-            this.generics = rs.rows;
+            // add generics
+            rs.rows.forEach(element => {
+              const idx = _.findIndex(this.generics, { "generic_id": element.generic_id })
+              if (idx === -1) {
+                this.generics.push(element);
+              }
+            });
           } else {
             this.alertService.error(rs.error);
           }
