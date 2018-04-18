@@ -16,26 +16,26 @@ export class RequisitionService {
 
   /***************** siteslave ****************/
 
-  async getWating(limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting?limit=${limit}&offset=${offset}`)
+  async getWating(limit: number, offset: number, query = '') {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting?limit=${limit}&offset=${offset}&query=${query}`)
       .toPromise();
     return rs.json();
   }
 
-  async getWaitingApprove(limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting-approve?limit=${limit}&offset=${offset}`)
+  async getWaitingApprove(limit: number, offset: number, query = '') {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/waiting-approve?limit=${limit}&offset=${offset}&query=${query}`)
       .toPromise();
     return rs.json();
   }
 
-  async getApproved() {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/approved`)
+  async getApproved(limit: number, offset: number, query = '') {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/approved?limit=${limit}&offset=${offset}&query=${query}`)
       .toPromise();
     return rs.json();
   }
 
-  async getUnPaid(limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/unpaid?limit=${limit}&offset=${offset}`)
+  async getUnPaid(limit: number, offset: number, query = '') {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/unpaid?limit=${limit}&offset=${offset}&query=${query}`)
       .toPromise();
     return rs.json();
   }
@@ -47,7 +47,7 @@ export class RequisitionService {
   }
 
   async saveRequisitionOrder(order: any, products: Array<any>) {
-    let rs: any = await this.authHttp.post(`${this.url}/requisition/orders`, {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/orders`, {
       order: order,
       products: products
     }).toPromise();
@@ -55,7 +55,7 @@ export class RequisitionService {
   }
 
   async updateRequisitionOrder(requisitionId: any, order: any, products: Array<any>) {
-    let rs: any = await this.authHttp.put(`${this.url}/requisition/orders/${requisitionId}`, {
+    const rs: any = await this.authHttp.put(`${this.url}/requisition/orders/${requisitionId}`, {
       order: order,
       products: products
     }).toPromise();
@@ -63,47 +63,47 @@ export class RequisitionService {
   }
 
   async removeRequisitionOrder(requisitionId: any) {
-    let rs: any = await this.authHttp.delete(`${this.url}/requisition/orders/${requisitionId}`).toPromise();
+    const rs: any = await this.authHttp.delete(`${this.url}/requisition/orders/${requisitionId}`).toPromise();
     return rs.json();
   }
 
   async getEditRequisitionOrderItems(requisitionId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/for-edit/${requisitionId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/for-edit/${requisitionId}`).toPromise();
     return rs.json();
   }
 
   async getRequisitionOrderItems(requisitionId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/${requisitionId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/${requisitionId}`).toPromise();
     return rs.json();
   }
 
   async getRequisitionOrderUnpaidItems(unpaidId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/unpaid/${unpaidId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/unpaid/${unpaidId}`).toPromise();
     return rs.json();
   }
 
   async getRequisitionOrderItemsPay(requisitionId: any, confirmId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/pay/${requisitionId}/${confirmId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/pay/${requisitionId}/${confirmId}`).toPromise();
     return rs.json();
   }
 
   async getRequisitionOrderProductItems(genericId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/products-requisition/${genericId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/products-requisition/${genericId}`).toPromise();
     return rs.json();
   }
 
   async getEditRequisitionOrderProductItems(confirmId: any, genericId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/products-requisition/edit/${confirmId}/${genericId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/products-requisition/edit/${confirmId}/${genericId}`).toPromise();
     return rs.json();
   }
 
   async getOrderConfirmItems(confirmId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/orders/confirm/${confirmId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/confirm/${confirmId}`).toPromise();
     return rs.json();
   }
 
   async saveOrderConfirmItemsWithOutUnpaid(requisitionId: any, items: any) {
-    let rs: any = await this.authHttp.post(`${this.url}/requisition/orders/confirm-without-unpaid`, {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/orders/confirm-without-unpaid`, {
       requisitionId: requisitionId,
       items: items
     }).toPromise();
@@ -111,7 +111,7 @@ export class RequisitionService {
   }
 
   async saveOrderConfirmItemsWithUnpaid(requisitionId: any, items: any, generics: any) {
-    let rs: any = await this.authHttp.post(`${this.url}/requisition/orders/confirm-with-unpaid`, {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/orders/confirm-with-unpaid`, {
       requisitionId: requisitionId,
       items: items,
       generics: generics
@@ -121,7 +121,7 @@ export class RequisitionService {
 
   // update
   async updateOrderConfirmItemsWithOutUnpaid(requisitionId: any, confirmId: any, items: any) {
-    let rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm-without-unpaid/${confirmId}`, {
+    const rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm-without-unpaid/${confirmId}`, {
       requisitionId: requisitionId,
       items: items
     }).toPromise();
@@ -129,7 +129,7 @@ export class RequisitionService {
   }
 
   async updateOrderConfirmItemsWithUnpaid(requisitionId: any, confirmId: any, items: any, generics: any) {
-    let rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm-with-unpaid/${confirmId}`, {
+    const rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm-with-unpaid/${confirmId}`, {
       requisitionId: requisitionId,
       items: items,
       generics: generics
@@ -138,38 +138,38 @@ export class RequisitionService {
   }
 
   async updateOrderConfirmItems(confirmId: any, items: any) {
-    let rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm/${confirmId}`, {
+    const rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm/${confirmId}`, {
       items: items
     }).toPromise();
     return rs.json();
   }
 
   async removeOrderConfirm(confirmId: any) {
-    let rs: any = await this.authHttp.delete(`${this.url}/requisition/orders/confirm/${confirmId}`).toPromise();
+    const rs: any = await this.authHttp.delete(`${this.url}/requisition/orders/confirm/${confirmId}`).toPromise();
     return rs.json();
   }
 
   async saveApproveOrderConfirm(confirmId: any) {
-    let rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm/approve/${confirmId}`, {}).toPromise();
+    const rs: any = await this.authHttp.put(`${this.url}/requisition/orders/confirm/approve/${confirmId}`, {}).toPromise();
     return rs.json();
   }
 
   async changeToPaid(requisitionId: any) {
-    let rs: any = await this.authHttp.post(`${this.url}/requisition/unpaid/change-unpaid`, {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/unpaid/change-unpaid`, {
       requisitionOrderId: requisitionId
     }).toPromise();
     return rs.json();
   }
 
   async cancelUnpaid(requisitionIds: any[]) {
-    let rs: any = await this.authHttp.post(`${this.url}/requisition/unpaid/cancel-unpaid`, {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/unpaid/cancel-unpaid`, {
       requisitionOrderIds: requisitionIds
     }).toPromise();
     return rs.json();
   }
 
   async saveUnpaidConfirm(unpaidId: any, requisitionId: any, items: any[]) {
-    let rs: any = await this.authHttp.post(`${this.url}/requisition/unpaid/confirm`, {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/unpaid/confirm`, {
       unpaidId: unpaidId,
       requisitionId: requisitionId,
       items: items
@@ -178,17 +178,17 @@ export class RequisitionService {
   }
 
   async getTemplates(srcWarehouseId: any, dstWarehouseId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/templates/${srcWarehouseId}/${dstWarehouseId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/templates/${srcWarehouseId}/${dstWarehouseId}`).toPromise();
     return rs.json();
   }
 
   async getTemplateItems(templateId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/requisition/templates-items/${templateId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/templates-items/${templateId}`).toPromise();
     return rs.json();
   }
 
   async getBorrowNotes(warehouseId: any, genericIds: any[]) {
-    let rs: any = await this.authHttp.post(`${this.url}/requisition/borrow-notes`, {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/borrow-notes`, {
       genericIds: genericIds,
       warehouseId: warehouseId
     }).toPromise();
@@ -561,7 +561,7 @@ export class RequisitionService {
   }
 
   async checkApprove(username: any, password: any, action: any) {
-    let rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
+    const rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
       username: username,
       password: password,
       action: action
