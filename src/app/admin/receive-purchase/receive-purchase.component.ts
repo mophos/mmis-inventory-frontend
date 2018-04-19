@@ -414,7 +414,7 @@ export class ReceivePurchaseComponent implements OnInit {
     product.is_free = this.isFree ? 'Y' : 'N';
     product.expired_date = this.selectedExpiredDate;
 
-    let idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: product.is_free })
+    const idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: product.is_free })
     if (idx > -1) {
       this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ');
     } else {
@@ -642,7 +642,10 @@ export class ReceivePurchaseComponent implements OnInit {
 
                       // check lot control
                       if (v.is_lot_control === 'Y') {
-                        isError = v.lot_no ? false : true;
+                        if (!v.lot_no || v.lot_no === '') {
+                          isError = true;
+                        }
+                        // isError = v.lot_no ? false : true;
                       }
                     } else {
                       isError = true;
@@ -709,12 +712,17 @@ export class ReceivePurchaseComponent implements OnInit {
                     isErrorWarehouse = true;
                   }
                 }
-              });
+                if (v.is_lot_control === 'Y') {
+                  if (!v.lot_no || v.lot_no === '') {
+                    isErrorWarehouse = true;
+                  }
+                }
+                });
 
               if (isErrorWarehouse) {
                 this.isSaving = false;
                 this.modalLoading.hide();
-                this.alertService.error('ข้อมูลรายการสินค้าไม่ครบถ้วน [คลังสินค้า, หน่วยรับ]');
+                this.alertService.error('ข้อมูลรายการสินค้าไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot]');
               } else {
                 // save product receive
                 this.receiveService.saveReceive(summary, _products)
@@ -879,7 +887,7 @@ export class ReceivePurchaseComponent implements OnInit {
           const d: any = v.expired_date.split('/');
           const expired_date = moment(new Date(d[2], d[1] - 1, d[0])).format('YYYY-MM-DD');
           checkDiffExpired = await this.receiveService.getPurchaseCheckExpire(v.generic_id, expired_date);
-          // console.log(checkDiffExpired);
+          console.log(checkDiffExpired);
           if (!checkDiffExpired.ok) {
             count++;
           }
