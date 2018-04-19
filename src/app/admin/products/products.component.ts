@@ -45,6 +45,8 @@ export class ProductsComponent implements OnInit {
       } else {
         this.getAllProducts();
       }
+    } else if (this.query === '') {
+      this.getAllProducts();
     }
   }
 

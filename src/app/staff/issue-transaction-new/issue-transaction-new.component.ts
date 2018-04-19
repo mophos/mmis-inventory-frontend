@@ -363,22 +363,24 @@ export class IssueTransactionNewComponent implements OnInit {
       if (rs.ok) {
         const data = [];
         rs.rows.forEach(v => {
-          const obj: any = {};
-          obj.issue_qty = v.issue_qty;
-          obj.generic_id = v.generic_id;
-          obj.generic_name = v.generic_name;
-          obj.remain_qty = +v.remain_qty;
-          obj.conversion_qty = 1;
-          obj.unit_generic_id = null;
-          obj.warehouse_id = this.warehouseId;
-          obj.unit_name = v.unit_name;
-          obj.items = [];
-          this.products.push(obj);
+          if (v.issue_qty > 0) {
+            const obj: any = {};
+            obj.issue_qty = v.issue_qty;
+            obj.generic_id = v.generic_id;
+            obj.generic_name = v.generic_name;
+            obj.remain_qty = +v.remain_qty;
+            obj.conversion_qty = 1;
+            obj.unit_generic_id = null;
+            obj.warehouse_id = this.warehouseId;
+            obj.unit_name = v.unit_name;
+            obj.items = [];
+            this.products.push(obj);
 
-          data.push({
-            genericId: v.generic_id,
-            genericQty: v.issue_qty
-          });
+            data.push({
+              genericId: v.generic_id,
+              genericQty: v.issue_qty
+            });
+          }
         });
 
         this.getAllowcateData(data);

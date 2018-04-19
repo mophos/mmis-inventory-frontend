@@ -132,10 +132,10 @@ export class IssuesNewComponent implements OnInit {
       this.genericId = event ? event.generic_id : null;
       this.unitList.setGenericId(this.genericId);
       this.remainQty = event.qty;
-      this.reserveQty = event.qty  - event.reserve_qty;
+      this.reserveQty = event.qty - event.reserve_qty;
       this.primaryUnitName = event.primary_unit_name;
       console.log(event);
-      
+
     } catch (error) {
       console.log(error.message);
     }
@@ -332,7 +332,7 @@ export class IssuesNewComponent implements OnInit {
           });
 
           if (isError) {
-            this.alertService.error('มีจำนวนที่มียอดจ่ายมากกว่ายอดคงเหลือ');
+            this.alertService.error('มีจำนวนที่มียอดจ่ายมากกว่ายอดคงเหลือ หรือ ไม่ได้ระบุจำนวนจ่าย');
             this.modalLoading.hide();
           } else {
             this.issueService.saveIssue(summary, this.products)
@@ -428,22 +428,24 @@ export class IssuesNewComponent implements OnInit {
       if (rs.ok) {
         const data = [];
         rs.rows.forEach(v => {
-          const obj: any = {};
-          obj.issue_qty = v.issue_qty;
-          obj.generic_id = v.generic_id;
-          obj.generic_name = v.generic_name;
-          obj.remain_qty = +v.remain_qty;
-          obj.conversion_qty = 1;
-          obj.unit_generic_id = null;
-          obj.warehouse_id = this.warehouseId;
-          obj.unit_name = v.unit_name;
-          obj.items = [];
-          this.products.push(obj);
+          if (v.issue_qty > 0) {
+            const obj: any = {};
+            obj.issue_qty = v.issue_qty;
+            obj.generic_id = v.generic_id;
+            obj.generic_name = v.generic_name;
+            obj.remain_qty = +v.remain_qty;
+            obj.conversion_qty = 1;
+            obj.unit_generic_id = null;
+            obj.warehouse_id = this.warehouseId;
+            obj.unit_name = v.unit_name;
+            obj.items = [];
+            this.products.push(obj);
 
-          data.push({
-            genericId: v.generic_id,
-            genericQty: v.issue_qty
-          });
+            data.push({
+              genericId: v.generic_id,
+              genericQty: v.issue_qty
+            });
+          }
         });
 
         this.getAllowcateData(data);

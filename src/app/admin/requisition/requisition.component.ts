@@ -58,6 +58,14 @@ export class RequisitionComponent implements OnInit {
   totalWaiting = 0;
   totalUnPaid = 0;
   totalWaitingApprove = 0;
+  totalApproveds = 0;
+  tabTotalWaiting = 0;
+  tabTotalWaitingApprove = 0;
+  tabTotalUnPaid = 0;
+  tabApprove = 0;
+  query: any;
+
+  fillterCancel = 'nCancel';
 
   constructor(
     private alertService: AlertService,
@@ -71,26 +79,20 @@ export class RequisitionComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.loadData();
+    this.totalTab();
     this.selectedTab = sessionStorage.getItem('tabRequisition');
   }
 
   setTapActive(tab: any) {
     this.selectedTab = tab;
     sessionStorage.setItem('tabRequisition', tab);
-  }
-
-  async loadData() {
-    await this.getWaiting();
-    await this.getWaitingApprove();
-    await this.getApproved();
-    await this.getUnPaid();
+    this.totalTab();
   }
 
   async getWaiting() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getWating(this.perPage, this.offset);
+      const rs: any = await this.requisitionService.getWating(this.perPage, this.offset, this.query, this.fillterCancel);
       this.modalLoading.hide();
       if (rs.ok) {
         this.orders = rs.rows;
@@ -113,7 +115,7 @@ export class RequisitionComponent implements OnInit {
   async getUnPaid() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getUnPaid(this.perPage, this.offset);
+      const rs: any = await this.requisitionService.getUnPaid(this.perPage, this.offset, this.query, this.fillterCancel);
       this.modalLoading.hide();
       if (rs.ok) {
         this.unpaids = rs.rows;
@@ -137,7 +139,7 @@ export class RequisitionComponent implements OnInit {
     this.requisitionSelected = [];
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getWaitingApprove(this.perPage, this.offset);
+      const rs: any = await this.requisitionService.getWaitingApprove(this.perPage, this.offset, this.query, this.fillterCancel);
       this.modalLoading.hide();
       if (rs.ok) {
         this.waitingApproves = rs.rows;
@@ -157,14 +159,21 @@ export class RequisitionComponent implements OnInit {
     this.getWaitingApprove();
   }
 
+  refreshApprove(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
+    this.getApproved();
+  }
+
   async getApproved() {
     this.requisitionSelected = []
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getApproved();
+      const rs: any = await this.requisitionService.getApproved(this.perPage, this.offset, this.query);
       this.modalLoading.hide();
       if (rs.ok) {
         this.approveds = rs.rows;
+        this.totalApproveds = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -183,7 +192,7 @@ export class RequisitionComponent implements OnInit {
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
-            this.loadData();
+            this.getWaiting();
           } else {
             this.alertService.error(rs.error);
           }
@@ -204,7 +213,7 @@ export class RequisitionComponent implements OnInit {
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
-            this.loadData();
+            this.getWaitingApprove();
           } else {
             this.alertService.error(rs.error);
           }
@@ -259,7 +268,7 @@ export class RequisitionComponent implements OnInit {
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
-            this.loadData();
+            this.getApproved();
           } else {
             this.alertService.error(rs.error);
           }
@@ -369,13 +378,13 @@ export class RequisitionComponent implements OnInit {
 
   async rollbackOrderConfirm(order) {
     console.log(order);
-    
+
     this.modalLoading.show();
     try {
       const rs = await this.requisitionService.rollbackOrder(order.confirm_id, order.requisition_order_id);
       if (rs.ok) {
         this.alertService.success();
-        await this.loadData();
+        await this.getWaitingApprove();
       } else {
         this.alertService.error(rs.error);
       }
@@ -384,6 +393,93 @@ export class RequisitionComponent implements OnInit {
       this.alertService.error(JSON.stringify(error));
     }
     this.modalLoading.hide();
+  }
+
+  async search() {
+    try {
+      this.modalLoading.show();
+      this.currentPage = 1;
+      if (this.selectedTab === 'waiting') {
+        const rs: any = await this.requisitionService.getWating(this.perPage, 0, this.query, this.fillterCancel);
+        if (rs.ok) {
+          this.orders = rs.rows;
+          this.totalWaiting = rs.total[0].total;
+        } else {
+          this.alertService.error(rs.error);
+        }
+      } else if (this.selectedTab === 'waitingApprove') {
+        const rs: any = await this.requisitionService.getWaitingApprove(this.perPage, 0, this.query, this.fillterCancel);
+        if (rs.ok) {
+          this.waitingApproves = rs.rows;
+          this.totalWaitingApprove = rs.total[0].total;
+        } else {
+          this.alertService.error(rs.error);
+        }
+      } else if (this.selectedTab === 'unpaid') {
+        const rs: any = await this.requisitionService.getUnPaid(this.perPage, this.offset, this.query, this.fillterCancel);
+        if (rs.ok) {
+          this.unpaids = rs.rows;
+          this.totalUnPaid = rs.total[0].total;
+        } else {
+          this.alertService.error(rs.error);
+        }
+      } else if (this.selectedTab === 'approved') {
+        const rs: any = await this.requisitionService.getApproved(this.perPage, this.offset, this.query);
+        if (rs.ok) {
+          this.approveds = rs.rows;
+          this.totalApproveds = rs.total[0].total;
+        } else {
+          this.alertService.error(rs.error);
+        }
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+    this.modalLoading.hide();
+  }
+
+  keyUpSearch(e) {
+    if (e.keyCode === 13) {
+      this.search();
+    } else if (this.query === '') {
+      this.search();
+    }
+  }
+  async totalTab() {
+    try {
+      if (this.selectedTab === 'waiting' || this.tabTotalWaiting === 0) {
+        const rsW: any = await this.requisitionService.getWating(this.perPage, 0, '', this.fillterCancel);
+        this.tabTotalWaiting = rsW.total[0].total;
+      }
+      if (this.selectedTab === 'waitingApprove' || this.tabTotalWaitingApprove === 0) {
+        const rsWA: any = await this.requisitionService.getWaitingApprove(this.perPage, 0, '', this.fillterCancel);
+        this.tabTotalWaitingApprove = rsWA.total[0].total;
+      }
+      if (this.selectedTab === 'unpaid' || this.tabTotalUnPaid === 0) {
+        const rs: any = await this.requisitionService.getUnPaid(this.perPage, 0, '', this.fillterCancel);
+        this.tabTotalUnPaid = rs.total[0].total;
+      }
+      if (this.selectedTab === 'approved' || this.tabApprove === 0) {
+        const rsA: any = await this.requisitionService.getApproved(this.perPage, 0);
+        this.tabApprove = rsA.total[0].total;
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
+  clearQuery() {
+    this.query = '';
+    this.search();
+  }
+  changeFillter() {
+    if (this.selectedTab === 'waiting') {
+      this.getWaiting();
+    } else if (this.selectedTab === 'waitingApprove') {
+      this.getWaitingApprove();
+    } else if (this.selectedTab === 'unpaid') {
+      this.getUnPaid();
+    }
   }
 }
 
