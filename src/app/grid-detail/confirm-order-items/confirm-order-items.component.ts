@@ -91,13 +91,19 @@ export class ConfirmOrderItemsComponent implements OnInit {
           obj.to_unit_name = v.to_unit_name;
           obj.unit_generic_id = v.unit_generic_id;
 
-          obj.book_qty = v.book_qty / v.conversion_qty; // pack
+          
 
           if (_idx > -1) {
             obj.confirm_qty = +this._confirmItems[_idx].confirm_qty; // pack
           } else {
             // allowcate
             obj.confirm_qty = 0;
+          }
+
+          if (this._isEdit) {
+            obj.book_qty = (v.book_qty / v.conversion_qty) - (+obj.confirm_qty * +obj.conversion_qty); // pack
+          } else {
+            obj.book_qty = v.book_qty / v.conversion_qty; // pack
           }
           obj.remain_small_qty = (obj.remain_qty - obj.book_qty) * obj.conversion_qty; // base
           obj.total_small_qty = +obj.confirm_qty * +obj.conversion_qty;
