@@ -17,7 +17,7 @@ import { IRequisitionOrder } from 'app/shared';
 export class RequisitionConfirmEditComponent implements OnInit {
 
   @ViewChild('modalLoading') public modalLoading: any;
-  
+
   products: any = [];
   requisitionDate: any = null;
   requisitionId: any = null;
@@ -98,13 +98,16 @@ export class RequisitionConfirmEditComponent implements OnInit {
     this.products = [];
     try {
       let rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
+      // console.log(rs);
+      // console.log(rs.ok);
+      // console.log(rs.rows);
+
       this.modalLoading.hide();
       if (rs.ok) {
         rs.rows.forEach((v: any) => {
-
           this.genericIds.push(v.generic_id);
 
-          let obj: any = {
+          const obj: any = {
             conversion_qty: v.conversion_qty,
             confirm_qty: v.confirm_qty,
             cost: v.cost,
@@ -124,11 +127,8 @@ export class RequisitionConfirmEditComponent implements OnInit {
             small_remain_qty: v.remain_qty, // small qty
             small_book_qty: v.book_qty, // small qty
           }
-
           this.products.push(obj);
         });
-
-        console.log(this.products);
 
       } else {
         this.alertService.error(rs.error);
@@ -192,6 +192,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
 
             this.products[idx].confirmItems.push(v);
             this.products[idx].confirm_qty += _totalConfirmQty;
+            this.products[idx].small_book_qty -= v.confirm_qty;
           }
         });
 
