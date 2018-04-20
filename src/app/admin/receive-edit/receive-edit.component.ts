@@ -647,7 +647,9 @@ export class ReceiveEditComponent implements OnInit {
 
                     // check lot control
                     if (v.is_lot_control === 'Y') {
-                      isError = v.lot_no ? false : true;
+                      if (!v.lot_no || v.lot_no === '') {
+                        isError = true;
+                      }
                     }
                   } else {
                     isError = true;
@@ -686,7 +688,8 @@ export class ReceiveEditComponent implements OnInit {
                 purchaseOrderId: this.purchaseOrderId,
                 isSuccess: this.isSuccess ? 'Y' : 'N',
                 isCompleted: this.isCompleted ? 'Y' : 'N',
-                comment: this.comment
+                comment: this.comment,
+                is_expired: this.is_expired
               }
               // remove qty = 0
               let isError = false;
@@ -703,7 +706,9 @@ export class ReceiveEditComponent implements OnInit {
 
                   // check lot control
                   if (v.is_lot_control === 'Y') {
-                    isError = v.lot_no ? false : true;
+                    if (!v.lot_no || v.lot_no === '') {
+                      isError = true;
+                    }
                   }
 
                 } else {

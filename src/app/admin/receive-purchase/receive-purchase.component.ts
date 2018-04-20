@@ -697,7 +697,9 @@ export class ReceivePurchaseComponent implements OnInit {
                 receiveStatusId: this.receiveStatusId,
                 supplierId: this.selectedSupplierId,
                 purchaseOrderId: this.purchaseOrderId,
-                comment: this.comment
+                comment: this.comment,
+                committee_id: this.committee_id,
+                is_expired: this.is_expired
               }
 
               // remove qty = 0
@@ -717,7 +719,7 @@ export class ReceivePurchaseComponent implements OnInit {
                     isErrorWarehouse = true;
                   }
                 }
-                });
+              });
 
               if (isErrorWarehouse) {
                 this.isSaving = false;
