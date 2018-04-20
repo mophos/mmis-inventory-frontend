@@ -717,7 +717,7 @@ export class ReceivePurchaseComponent implements OnInit {
                     isErrorWarehouse = true;
                   }
                 }
-                });
+              });
 
               if (isErrorWarehouse) {
                 this.isSaving = false;

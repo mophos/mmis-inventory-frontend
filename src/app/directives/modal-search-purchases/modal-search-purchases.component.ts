@@ -91,7 +91,7 @@ export class ModalSearchPurchasesComponent implements OnInit {
             obj.generic_id = v.generic_id;
             obj.generic_name = v.generic_name;
             obj.working_code = v.working_code;
-
+            obj.is_lot_control = v.is_lot_control;
             // vendor
             obj.manufacture_id = v.m_labeler_id;
             obj.manufacture_name = v.m_labeler_name;
@@ -144,6 +144,7 @@ export class ModalSearchPurchasesComponent implements OnInit {
       product.generic_id = v.generic_id;
       product.canReceive = v.canReceive;
       product.discount = 0;
+      product.is_lot_control = v.is_lot_control;
       // vendor
       product.manufacture_id = v.manufacture_id;
       product.manufacture_name = v.manufacture_name;
