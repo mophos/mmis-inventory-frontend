@@ -633,7 +633,7 @@ export class ReceiveComponent implements OnInit {
           receiveIds.forEach((v: any) => {
             strIds += `receiveID=${v}&`;
           });
-          const url = `${this.apiUrl}/report/check/receive?${strIds}&token=${this.token}`;
+          const url = `${this.apiUrl}/report/check/receive?${strIds}token=${this.token}`;
           this.htmlPreview.showReport(url);
         }).catch(() => {
           // cancel
