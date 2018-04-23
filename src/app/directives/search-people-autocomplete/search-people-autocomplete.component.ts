@@ -13,6 +13,10 @@ export class SearchPeopleAutoCompleteComponent implements OnInit {
   @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() public peopleId: any;
   @Input() public disabled: boolean;
+  @Input('peopleName') set setPeopleName(value: any) {
+    console.log(value);
+    this.setDefault(value)
+  }
 
   token: any;
   query: any = null;
@@ -22,6 +26,7 @@ export class SearchPeopleAutoCompleteComponent implements OnInit {
     @Inject('API_URL') private apiUrl: string) {
     this.token = sessionStorage.getItem('token');
     this.url = `${this.apiUrl}/basic/search-people-autocomplete?token=${this.token}`;
+
   }
 
   ngOnInit() {
@@ -30,6 +35,7 @@ export class SearchPeopleAutoCompleteComponent implements OnInit {
 
   setDefault(value: string) {
     this.query = value;
+    
   }
 
 

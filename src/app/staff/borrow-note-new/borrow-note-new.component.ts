@@ -19,8 +19,6 @@ import { JwtHelper } from 'angular2-jwt';
 })
 export class BorrowNoteNewComponent implements OnInit {
 
-  jwtHelper: JwtHelper = new JwtHelper();
-  token: any;
   @ViewChild('elUnitList') elUnitList: SelectReceiveUnitComponent;
   @ViewChild('elSearchGeneric') elSearchGeneric: SearchGenericAutocompleteComponent;
   @ViewChild('elSearchPeople') elSearchPeople: SearchPeopleAutoCompleteComponent;
@@ -48,7 +46,9 @@ export class BorrowNoteNewComponent implements OnInit {
 
   borrowNoteId: any;
   warehouseId: any;
-  peopleName: any;
+  token:any
+  jwtHelper: JwtHelper = new JwtHelper();
+  peopleName:any
   warehouseShipId: any;
   constructor(
     private alertService: AlertService,
@@ -63,6 +63,7 @@ export class BorrowNoteNewComponent implements OnInit {
     this.peopleId = decoded.people_id;
     console.log(decoded);
     this.warehouseShipId = decoded.warehouseId
+    
   }
 
   async ngOnInit() {
@@ -107,7 +108,7 @@ export class BorrowNoteNewComponent implements OnInit {
         let fullname = detail ? detail.fullname : '';
         this.elSearchPeople.setDefault(fullname);
         this.peopleId = detail ? detail.people_id : '';
-        this.warehouseId = detail ? detail.wm_borrow : '';
+        this.warehouseId = detail ? detail.wm_withdarw : '';
       }
     } catch (error) {
       this.alertService.error(JSON.stringify(error));
@@ -200,8 +201,9 @@ export class BorrowNoteNewComponent implements OnInit {
             notes.borrow_date = borrowDate;
             notes.people_id = this.peopleId;
             notes.remark = this.remark;
-            notes.wm_withdarw = this.warehouseShipId;
-            notes.wm_borrow = this.warehouseId;
+            notes.wm_withdarw = this.warehouseId;
+            notes.wm_borrow = this.warehouseShipId;
+
             let detail: any = [];
             this.generics.forEach(v => {
               let obj: any = {};
@@ -219,7 +221,7 @@ export class BorrowNoteNewComponent implements OnInit {
             }
             
             if (rs.ok) {
-              this.router.navigate(['/admin/borrow-notes'])
+              this.router.navigate(['/staff/borrow-notes'])
             } else {
               this.alertService.error(rs.error);
             }
