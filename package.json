@@ -6,9 +6,7 @@
     "ng": "ng",
     "start": "npx ng serve",
     "build": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --target production --environment prod --build-optimizer --base-href=./",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "pack:dist": "npx cpx 'dist/**/*' ../mmis-frontend-dist/inventory"
   },
   "private": true,
   "dependencies": {
@@ -52,6 +50,7 @@
     "@types/pdfobject": "^2.0.6",
     "@types/uuid": "^3.4.3",
     "codelyzer": "4.0.2",
+    "cpx": "^1.5.0",
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
     "jasmine-core": "~2.5.2",

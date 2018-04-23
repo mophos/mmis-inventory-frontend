@@ -53,9 +53,9 @@
           <clr-dg-cell style="text-align: center;">{{t.transaction_code}}</clr-dg-cell>
           <clr-dg-cell>{{t.dst_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">
-            <div class="btn-group btn-success">
-              <button title="ดูข้อมูล/อนุมัติ" class="btn btn-primary btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/transfer-dashboard/edit', t.transaction_id]">
-                <clr-icon shape="note"></clr-icon>
+            <div class="btn-group">
+              <button title="ดูข้อมูล/อนุมัติ" class="btn btn-outline btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/transfer-dashboard/edit', t.transaction_id]">
+                <clr-icon shape="view-list"></clr-icon>
               </button>
               <button title="ยกเลิก" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="cancel(t)" [disabled]="t.status!=='OPEN'">
                 <clr-icon shape="trash"></clr-icon>
@@ -90,8 +90,8 @@
             <button title="พิมพ์รายงานการเติม" style="float: left;" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="printRefill(h)">
               <clr-icon shape="printer"></clr-icon>
             </button>
-            <button title="ดูข้อมูล" style="float: left;" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/transfer-dashboard/edit', h.transaction_id]">
-              <clr-icon shape="note"></clr-icon>
+            <button title="ดูข้อมูล" style="float: left;" class="btn btn-outline btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/transfer-dashboard/edit', h.transaction_id]">
+              <clr-icon shape="view-list"></clr-icon>
             </button>
           </clr-dg-cell>
         </clr-dg-row>
