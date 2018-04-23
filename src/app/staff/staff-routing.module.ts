@@ -24,6 +24,8 @@ import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { ProductsComponent } from 'app/staff/products/products.component';
+import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
+import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
 
 const routes: Routes = [
   {
@@ -50,6 +52,9 @@ const routes: Routes = [
       { path: 'issue-transaction/edit', component: IssueTransactionEditComponent},
       { path: 'products', component: ProductsComponent},
       { path: 'his-issue-transaction', canActivate: [AuthHISTransaction], component: HisIssueTransactionComponent},
+      { path: 'borrow-notes', canActivate: [AuthHISTransaction], component: BorrowNoteComponent },
+      { path: 'borrow-notes/new', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
+      { path: 'borrow-notes/:borrowNoteId/edit', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
     ]
   }
 ];

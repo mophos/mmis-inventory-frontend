@@ -53,6 +53,11 @@ export class BasicService {
     return res.json();
   }
 
+  async getWarehousesShipping(val){
+    const res: any = await this.authHttp.get(`${this.url}/warehouses/get-shippingnetwork-list/${val}/REQ`).toPromise();
+    return res.json();
+  }
+
   async getNetworkTypes() {
     const res: any = await this.authHttp.get(`${this.url}/basic/network-types`).toPromise();
     return res.json();

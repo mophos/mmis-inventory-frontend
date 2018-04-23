@@ -186,6 +186,7 @@ export class RequisitionConfirmComponent implements OnInit {
       let rs: any = await this.requisitionService.getBorrowNotes(this.wmRequisitionId, this.genericIds);
       this.modalLoading.hide();
       if (rs.ok) {
+        console.log(rs.rows);
         this.borrowNotes = rs.rows;
       } else {
         this.alertService.error(rs.error);
@@ -382,6 +383,7 @@ export class RequisitionConfirmComponent implements OnInit {
   }
 
   doCalculateRequisition() {
+    console.log(this.selectedBorrowNotes);
     this.alertService.confirm('ต้องการปรับยอดการเบิกจากการยืมใหม่ ใช่หรือไม่?')
       .then(async () => {
 
@@ -389,6 +391,8 @@ export class RequisitionConfirmComponent implements OnInit {
         let borrowItems = [];
         let data = [];
         let slData: any = _.clone(this.selectedBorrowNotes);
+        
+        
 
         slData.forEach((v, i) => {
           let idx = _.findIndex(data, { generic_id: v.generic_id });

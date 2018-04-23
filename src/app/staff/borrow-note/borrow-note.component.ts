@@ -30,11 +30,10 @@ export class BorrowNoteComponent implements OnInit {
   async getList(limit: number, offset: number) {
     try {
       this.modalLoading.show();
-      let rs: any = await this.borrowNoteService.getListAdmin(this.query, limit, offset);
+      let rs: any = await this.borrowNoteService.getList(this.query, limit, offset);
       if (rs.ok) {
         this.notes = rs.rows;
         this.total = rs.total;
-        console.log(this.notes);
       } else {
         this.alertService.error(rs.error);
       }

@@ -1,9 +1,9 @@
 <nav class="breadcrumb">
-  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
   <span class="breadcrumb-item active">บันทึกช่วยจำการยืมยา/เวชภัณฑ์</span>
 </nav>
 
-<button class="btn btn-sm btn-success btn-icon" routerLink="/admin/borrow-notes/new">
+<button class="btn btn-sm btn-success btn-icon" routerLink="/staff/borrow-notes/new">
   <clr-icon shape="plus"></clr-icon> บันทึกยืมยา
 </button>
 
@@ -18,17 +18,17 @@
   <clr-dg-column style="width: 100px;"></clr-dg-column>
   <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
   <clr-dg-row *ngFor="let note of notes" [ngClass]="{'cancel-status': note.is_cancel==='Y'}">
-    <wm-borrow-notes-detail *clrIfExpanded [borrowNoteId]="note.borrow_note_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-notes-detail>
+    <wm-staff-borrow-notes-detail *clrIfExpanded [borrowNoteId]="note.borrow_note_id" ngProjectAs="clr-dg-row-detail"></wm-staff-borrow-notes-detail>
     <clr-dg-cell>{{note.borrow_date | toThaiDate}}</clr-dg-cell>
     <clr-dg-cell>{{note.title_name}}{{note.fname}} {{note.lname}}</clr-dg-cell>
     <clr-dg-cell>{{note.warehouse_name}}</clr-dg-cell>
     <clr-dg-cell>{{note.remark}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group">
-        <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelNote(note.borrow_note_id)" title="ยกเลิกรายการ" [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelNote(note.borrow_note_id)" title="ยกเลิกรายการ" [disabled]="note.is_cancel==='Y'||note.is_approve==='Y'">
           <clr-icon shape="trash"></clr-icon>
         </button>
-        <button class="btn btn-sm btn-success wm-small-btn" routerLink="/admin/borrow-notes/{{note.borrow_note_id}}/edit" title="แก้ไข"
+        <button class="btn btn-sm btn-success wm-small-btn" routerLink="/staff/borrow-notes/{{note.borrow_note_id}}/edit" title="แก้ไข"
           [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
           <clr-icon shape="note"></clr-icon>
         </button>

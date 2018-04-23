@@ -62,7 +62,9 @@ import { HisTransactionService } from 'app/staff/his-transaction.service';
 import { AccessCheck } from '../access-check';
 import { PeriodService } from 'app/staff/period.service';
 import { ProductsComponent } from './products/products.component';
-
+import { BorrowNoteService } from './borrow-note.service';
+import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
+import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -96,7 +98,8 @@ import { ProductsComponent } from './products/products.component';
     PlanningComponent,
     HisIssueTransactionComponent,
     ProductsComponent,
-    
+    BorrowNoteComponent,
+    BorrowNoteNewComponent
   ],
   providers: [
     ToThaiDatePipe,
@@ -124,7 +127,8 @@ import { ProductsComponent } from './products/products.component';
     IssueTransactionService,
     HisTransactionService,
     PeriodService,
-    AccessCheck
+    AccessCheck,
+    BorrowNoteService
   ]
 })
 export class StaffModule { }

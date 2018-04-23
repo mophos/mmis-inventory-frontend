@@ -39,6 +39,7 @@ import { TransferItemsComponent } from './transfer-items/transfer-items.componen
 import { IssueProductComponent } from './issue-product/issue-product.component';
 import { PurchaseDetailComponent } from './purchase-detail/purchase-detail.component';
 import { BorrowNotesDetailComponent } from './borrow-notes-detail/borrow-notes-detail.component';
+import { StaffBorrowNotesDetailComponent } from './staff-borrow-notes-detail/staff-borrow-notes-detail.component';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import { BorrowNotesDetailComponent } from './borrow-notes-detail/borrow-notes-d
     TransferItemsComponent,
     IssueProductComponent,
     PurchaseDetailComponent,
-    BorrowNotesDetailComponent
+    BorrowNotesDetailComponent,
+    StaffBorrowNotesDetailComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -115,7 +117,8 @@ import { BorrowNotesDetailComponent } from './borrow-notes-detail/borrow-notes-d
     TransferItemsComponent,
     IssueProductComponent,
     PurchaseDetailComponent,
-    BorrowNotesDetailComponent
+    BorrowNotesDetailComponent,
+    StaffBorrowNotesDetailComponent
   ]
 })
 export class GridDetailModule { }

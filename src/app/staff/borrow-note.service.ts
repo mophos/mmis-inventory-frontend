@@ -10,7 +10,7 @@ export class BorrowNoteService {
   ) { }
 
   async save(notes: any, detail: any[]) {
-    const resp = await this.authHttp.post(`${this.url}/borrow-notes`, {
+    const resp = await this.authHttp.post(`${this.url}/staff/borrow-notes`, {
       notes: notes,
       detail: detail
     }).toPromise();
@@ -18,12 +18,12 @@ export class BorrowNoteService {
   }
 
   async cancelNote(borrowNoteId: any) {
-    const resp = await this.authHttp.delete(`${this.url}/borrow-notes/${borrowNoteId}`).toPromise();
+    const resp = await this.authHttp.delete(`${this.url}/staff/borrow-notes/${borrowNoteId}`).toPromise();
     return resp.json();
   }
 
   async update(borrowNoteId: any, notes: any, detail: any[]) {
-    const resp = await this.authHttp.put(`${this.url}/borrow-notes/${borrowNoteId}/edit`, {
+    const resp = await this.authHttp.put(`${this.url}/staff/borrow-notes/${borrowNoteId}/edit`, {
       notes: notes,
       detail: detail
     }).toPromise();
@@ -31,7 +31,7 @@ export class BorrowNoteService {
   }
 
   async updateRequisitionBorrow(requisitionOrderId: any, data: any[], borrowItems: any[]) {
-    const resp = await this.authHttp.put(`${this.url}/borrow-notes/update-requisition/${requisitionOrderId}`, {
+    const resp = await this.authHttp.put(`${this.url}/staff/borrow-notes/update-requisition/${requisitionOrderId}`, {
       data: data,
       borrowItems: borrowItems
     }).toPromise();
@@ -39,23 +39,17 @@ export class BorrowNoteService {
   }
 
   async getDetailList(borrowNoteId: any) {
-    const resp = await this.authHttp.get(`${this.url}/borrow-notes/${borrowNoteId}/detail-list`).toPromise();
+    const resp = await this.authHttp.get(`${this.url}/staff/borrow-notes/${borrowNoteId}/detail-list`).toPromise();
     return resp.json();
   }
 
   async getList(query: any, limit: number = 20, offset: number = 0) {
-    const resp = await this.authHttp.get(`${this.url}/borrow-notes?query=${query}&limit=${limit}&offset=${offset}`).toPromise();
+    const resp = await this.authHttp.get(`${this.url}/staff/borrow-notes?query=${query}&limit=${limit}&offset=${offset}`).toPromise();
     return resp.json();
   }
-
-  async getListAdmin(query: any, limit: number = 20, offset: number = 0) {
-    const resp = await this.authHttp.get(`${this.url}/borrow-notes/admin?query=${query}&limit=${limit}&offset=${offset}`).toPromise();
-    return resp.json();
-  }
-
 
   async getDetailWithItems(borrowNoteId: any) {
-    const resp = await this.authHttp.get(`${this.url}/borrow-notes/${borrowNoteId}/detail-edit`).toPromise();
+    const resp = await this.authHttp.get(`${this.url}/staff/borrow-notes/${borrowNoteId}/detail-edit`).toPromise();
     return resp.json();
   }
 
