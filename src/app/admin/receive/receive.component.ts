@@ -738,10 +738,12 @@ export class ReceiveComponent implements OnInit {
       .then(() => {
         this.modalLoading.show();
         this.receiveService.updatePurchaseCompleted(purchaseId)
-          .then((res: any) => {
+          .then(async (res: any) => {
             if (res.ok) {
               this.alertService.success();
-              // this.getPurchaseList();
+              const rs: any = await this.receiveService.getPurchasesList(this.perPage, this.offset);
+              this.purchases = rs.rows;
+              this.totalPurchases = rs.total;
             } else {
               this.alertService.error(res.error);
             }
