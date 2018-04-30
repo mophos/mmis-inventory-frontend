@@ -29,7 +29,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
   requisitionType: any = null;
   confirmId: any;
 
-  isEdit: boolean = false;
+  isEdit = false;
   actionMsg: string = null;
 
   genericIds: any = [];
@@ -72,10 +72,10 @@ export class RequisitionConfirmEditComponent implements OnInit {
   }
 
   onSuccessConfirm(event: any) {
-    let idx = _.findIndex(this.products, { generic_id: event.generic_id });
+    const idx = _.findIndex(this.products, { generic_id: event.generic_id });
 
     if (idx > -1) {
-      let _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: event.wm_product_id });
+      const _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: event.wm_product_id });
       this.products[idx].confirm_qty = event.confirm_qty * event.conversion_qty;
 
       if (_idx > -1) {
@@ -97,7 +97,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
     this.modalLoading.show();
     this.products = [];
     try {
-      let rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
+      const rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
       // console.log(rs);
       // console.log(rs.ok);
       // console.log(rs.rows);
@@ -143,10 +143,10 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async getOrderDetail() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionService.getOrderDetail(this.requisitionId);
+      const rs: any = await this.requisitionService.getOrderDetail(this.requisitionId);
       this.modalLoading.hide();
       if (rs.ok) {
-        let detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
+        const detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
         this.requisitionCode = detail ? detail.requisition_code : null;
         this.requisitionWarehouseName = detail ? detail.requisition_warehouse_name : null;
         this.withdrawWarehouseName = detail ? detail.withdraw_warehouse_name : null;
@@ -174,21 +174,23 @@ export class RequisitionConfirmEditComponent implements OnInit {
 
   async getConfirmItems() {
     try {
-      let rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
+      const rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
       if (rs.ok) {
-        let rows = rs.rows;
+        const rows = rs.rows;
         rows.forEach(v => {
           let _totalConfirmQty = 0;
-          let idx = _.findIndex(this.products, { generic_id: v.generic_id });
+          const idx = _.findIndex(this.products, { generic_id: v.generic_id });
           if (idx > -1) {
-            let obj: any = {
+            const obj: any = {
               confirm_qty: v.confirm_qty,
               conversion_qty: v.conversion_qty,
               wm_product_id: v.wm_product_id,
               generic_id: this.products[idx].generic_id
             }
 
-            if (v.confirm_qty > 0) _totalConfirmQty = v.conversion_qty * v.confirm_qty;
+            if (v.confirm_qty > 0) {
+              _totalConfirmQty = v.conversion_qty * v.confirm_qty;
+            }
 
             this.products[idx].confirmItems.push(v);
             this.products[idx].confirm_qty += _totalConfirmQty;
@@ -206,14 +208,14 @@ export class RequisitionConfirmEditComponent implements OnInit {
   }
 
   async savePay() {
-    let isError = false;
-    let items = [];
+    const isError = false;
+    const items = [];
 
-    let generics = [];
-    let _productTotalItems = 0;
+    const generics = [];
+    const _productTotalItems = 0;
 
     this.products.forEach((v: any) => {
-      let objx: any = {};
+      const objx: any = {};
       objx.requisition_qty = v.requisition_qty * v.conversion_qty;
       objx.generic_id = v.generic_id;
       objx.requisition_order_id = v.requisition_order_id;
@@ -223,7 +225,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
       v.confirmItems.forEach((x: any) => {
         totalConfirmQty += x.confirm_qty * x.conversion_qty; // base
 
-        let obj: any = {
+        const obj: any = {
           confirm_qty: x.confirm_qty * x.conversion_qty, // base
           wm_product_id: x.wm_product_id,
           generic_id: v.generic_id
@@ -238,12 +240,14 @@ export class RequisitionConfirmEditComponent implements OnInit {
 
     let isErrorTotalConfirm = false;
     generics.forEach(v => {
-      if (v.total_confirm_qty < v.requisition_qty) isErrorTotalConfirm = true;
+      if (v.total_confirm_qty < v.requisition_qty) {
+        isErrorTotalConfirm = true;
+      }
     })
 
-    let isErrorItems = _.uniqBy(items, 'generic_id').length < generics.length;
+    const isErrorItems = _.uniqBy(items, 'generic_id').length < generics.length;
 
-    let data: any = {};
+    const data: any = {};
     data.items = items;
     data.generics = generics;
 
@@ -271,7 +275,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async saveWithOutUnPaid(data: any) {
     this.modalLoading.show();
     try {
-      let rs = await this.requisitionService.updateOrderConfirmItemsWithOutUnpaid(this.requisitionId, this.confirmId, data.items);
+      const rs = await this.requisitionService.updateOrderConfirmItemsWithOutUnpaid(this.requisitionId, this.confirmId, data.items);
       this.modalLoading.hide();
       if (rs.ok) {
         this.alertService.success();
@@ -288,7 +292,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async saveWithUnPaid(data: any) {
     this.modalLoading.show();
     try {
-      let rs = await this.requisitionService.updateOrderConfirmItemsWithUnpaid(this.requisitionId, this.confirmId, data.items, data.generics);
+      const rs = await this.requisitionService.updateOrderConfirmItemsWithUnpaid(this.requisitionId, this.confirmId, data.items, data.generics);
       this.modalLoading.hide();
       if (rs.ok) {
         this.alertService.success();
@@ -307,7 +311,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let rs: any = await this.requisitionService.removeOrderConfirm(this.confirmId);
+          const rs: any = await this.requisitionService.removeOrderConfirm(this.confirmId);
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
