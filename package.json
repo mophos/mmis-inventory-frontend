@@ -44,7 +44,6 @@
     "@angular/cli": "^1.7.2",
     "@angular/compiler-cli": "^5.2.7",
     "@types/jasmine": "2.8.4",
-    "@types/lodash": "^4.14.100",
     "@types/node": "9.3.0",
     "@types/numeral": "0.0.22",
     "@types/pdfobject": "^2.0.6",
