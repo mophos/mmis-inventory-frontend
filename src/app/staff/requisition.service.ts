@@ -13,29 +13,53 @@ export class RequisitionService {
     private authHttp: AuthHttp
   ) { }
 
-  async getWating() {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/waiting`)
+  async getWating(limit: number, offset: number, query = '', fillterCancel = 'all') {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/waiting?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
       .toPromise();
     return rs.json();
   }
 
-  async getWaitingApprove() {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/waiting-approve`)
+  async getWaitingApprove(limit: number, offset: number, query = '', fillterCancel = 'all') {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/waiting-approve?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
       .toPromise();
     return rs.json();
   }
 
-  async getApproved() {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/approved`)
+  async getApproved(limit: number, offset: number, query = '') {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/approved?limit=${limit}&offset=${offset}&query=${query}`)
       .toPromise();
     return rs.json();
   }
 
-  async getUnPaid() {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/unpaid`)
+  async getUnPaid(limit: number, offset: number, query = '', fillterCancel = 'all') {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/unpaid?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
       .toPromise();
     return rs.json();
   }
+  
+  // async getWating() {
+  //   const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/waiting`)
+  //     .toPromise();
+  //   return rs.json();
+  // }
+
+  // async getWaitingApprove() {
+  //   const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/waiting-approve`)
+  //     .toPromise();
+  //   return rs.json();
+  // }
+
+  // async getApproved(limit: number, offset: number, query = '') {
+  //   const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/approved?limit=${limit}&offset=${offset}&query=${query}`)
+  //     .toPromise();
+  //   return rs.json();
+  // }
+
+  // async getUnPaid() {
+  //   const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/unpaid`)
+  //     .toPromise();
+  //   return rs.json();
+  // }
 
   async getOrderDetail(requisitionId: any) {
     const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/detail/${requisitionId}`)
