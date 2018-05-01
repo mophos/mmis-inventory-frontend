@@ -224,7 +224,7 @@
 
 <div class="row wid99">
   <div class="col-md-12">
-    <button (click)="saveReceive()" class="btn btn-success btn-sm" [disabled]=" !selectedSupplierId || !deliveryCode || !deliveryDate || !receiveDate || !products.length">
+    <button (click)="checkProduct()" class="btn btn-success btn-sm" [disabled]=" !selectedSupplierId || !deliveryCode || !deliveryDate || !receiveDate || !products.length">
       <clr-icon shape="floppy"></clr-icon>
       บันทึกรับสินค้า
     </button>
