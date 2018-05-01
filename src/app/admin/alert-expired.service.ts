@@ -61,6 +61,21 @@ export class AlertExpiredService {
     });
   }
 
+  saveExpiredCountAll(ids: any[], numDays: number) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.post(`${this.url}/alert-expired/all`, {
+        ids: ids,
+        numDays: +numDays
+      })
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
   saveStatus(status: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/alert-expired/save-status`, {
