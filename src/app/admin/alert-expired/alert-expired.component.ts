@@ -17,6 +17,7 @@ export class AlertExpiredComponent implements OnInit {
   isAll = true;
   isAlert = false;
   openSetSingleExpire = false;
+  openSetAllExpired = false;
   submitLoading = false;
   genericTypes = [];
   genericType: any = "";
@@ -170,6 +171,10 @@ export class AlertExpiredComponent implements OnInit {
     }
   }
 
+  setExpireCountAll() {
+      this.openSetAllExpired = true;
+  }
+
   setSingleExpire(product: any) {
     // clear old data
     this.selectedGenericIds = [];
@@ -199,7 +204,28 @@ export class AlertExpiredComponent implements OnInit {
       this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
     }
   }
-
+  saveExpireCountAll() {
+    if (this.numDays >= 10) {
+      this.submitLoading = true;
+      this.alertExpiredService.saveExpiredCountAll(this.selectedGenericIds, this.numDays)
+        .then((result: any) => {
+          if (result.ok) {
+            this.openSetAllExpired = false;
+            this.getAllProducts();
+          } else {
+            this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+          }
+          this.submitLoading = false;
+        })
+        .catch(() => {
+          this.submitLoading = false;
+          this.alertService.serverError();
+        });
+    } else {
+      this.submitLoading = false;
+      this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
+    }
+  }
   getUnsetProducts() {
     this.isAll = false;
     this.modalLoading.show();
