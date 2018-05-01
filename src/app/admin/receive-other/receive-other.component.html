@@ -193,7 +193,7 @@
 </clr-datagrid>
 
 <div>
-  <button class="btn btn-success btn-sm" (click)="saveReceive()" [disabled]="isSaving || !donatorId || !receiveDate || !deliveryCode || !products.length">
+  <button class="btn btn-success btn-sm" (click)="checkProduct()" [disabled]="isSaving || !donatorId || !receiveDate || !deliveryCode || !products.length">
     <clr-icon shape="floppy"></clr-icon>
     บันทึกรับสินค้า
   </button>
