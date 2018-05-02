@@ -49,6 +49,7 @@
           <clr-icon shape="caret down"></clr-icon>
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <a href="javascript://" (click)="showManual()" clrDropdownItem>คู่มือเจ้าหน้าที่คลังใหญ่</a>
           <a href="javascript://" (click)="showManualStaff()" clrDropdownItem>คู่มือเจ้าหน้าที่หน่วยเบิก/รพ.สต.</a>
           <a href="javascript://" (click)="openChangePasswordModal()" clrDropdownItem>เปลี่ยนรหัสผ่าน</a>
           <a href="javascript://" (click)="logout()" clrDropdownItem>ออกจากระบบ</a>

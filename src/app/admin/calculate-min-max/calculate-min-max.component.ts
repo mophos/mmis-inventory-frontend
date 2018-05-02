@@ -69,9 +69,9 @@ export class CalculateMinMaxComponent implements OnInit {
         if (result.from_stock_date) {
           this.fromDate = {
             date: {
-              year: moment(result.from_stock_date).get('year'),
-              month: moment(result.from_stock_date).get('month') + 1,
-              day: moment(result.from_stock_date).get('date')
+              year: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('year') : moment().get('year'),
+              month: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('month') + 1 : moment().get('month') + 1,
+              day: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('date') : moment().get('date')
             }
           }
         }
@@ -79,9 +79,9 @@ export class CalculateMinMaxComponent implements OnInit {
         if (result.to_stock_date) {
           this.toDate = {
             date: {
-              year: moment(result.to_stock_date).get('year'),
-              month: moment(result.to_stock_date).get('month') + 1,
-              day: moment(result.to_stock_date).get('date')
+              year: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('year') : moment().get('year'),
+              month: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('month') + 1 : moment().get('month') + 1,
+              day: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('date') : moment().get('date')
             }
           }
         } else {
@@ -189,6 +189,83 @@ export class CalculateMinMaxComponent implements OnInit {
     const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
     if (_idx > -1) {
       this._generics[_idx].max_qty = +value;
+    }
+  }
+
+  onChangeLeadTmie(value: any, generic: any) {
+    const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.generics[idx].lead_time_day = +value;
+      this.generics[idx].rop_qty = +value * generic.use_per_day;
+    }
+    const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
+    if (_idx > -1) {
+      this.generics[_idx].lead_time_day = +value;
+      this.generics[_idx].rop_qty = +value * generic.use_per_day;
+    }
+  }
+
+  onChangeReorderPoint(value: any, generic: any) {
+    const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.generics[idx].rop_qty = +value;
+    }
+    const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
+    if (_idx > -1) {
+      this._generics[_idx].rop_qty = +value;
+    }
+  }
+
+  onChangeOrderingCost(value: any, generic: any) {
+    const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.generics[idx].ordering_cost = +value;
+      if (generic.carrying_cost) {
+        this.generics[idx].eoq_qty = Math.round(Math.sqrt((2 * generic.use_total * +value) / generic.carrying_cost));
+      } else {
+        this.generics[idx].eoq_qty = 0;
+      }
+    }
+    const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
+    if (_idx > -1) {
+      this.generics[_idx].ordering_cost = +value;
+      if (generic.carrying_cost) {
+        this.generics[_idx].eoq_qty = Math.round(Math.sqrt((2 * generic.use_total * +value) / generic.carrying_cost));
+      } else {
+        this.generics[_idx].eoq_qty = 0;
+      }
+    }
+  }
+
+  onChangeCarryingCost(value: any, generic: any) {
+    const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.generics[idx].carrying_cost = +value;
+      if (value) {
+        this.generics[idx].eoq_qty = Math.round(Math.sqrt((2 * generic.use_total * generic.ordering_cost) / +value));
+      } else {
+        this.generics[idx].eoq_qty = 0;
+      }
+    }
+    const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
+    if (_idx > -1) {
+      this.generics[_idx].carrying_cost = +value;
+      if (value) {
+        this.generics[_idx].eoq_qty = Math.round(Math.sqrt((2 * generic.use_total * generic.ordering_cost) / +value));
+      } else {
+        this.generics[_idx].eoq_qty = 0;
+      }
+    }
+  }
+
+  onChangeEoqQty(value: any, generic: any) {
+    const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.generics[idx].eoq_qty = +value;
+    }
+    const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
+    if (_idx > -1) {
+      this._generics[_idx].eoq_qty = +value;
     }
   }
 

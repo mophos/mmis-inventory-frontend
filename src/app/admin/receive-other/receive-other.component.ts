@@ -684,4 +684,17 @@ export class ReceiveOtherComponent implements OnInit {
     this.isCheckUpdateCost = !this.isCheckUpdateCost;
     console.log(this.isCheckUpdateCost);
   }
+
+  checkProduct() {
+    if (this.selectedProductId === null) {
+      this.saveReceive();
+    } else {
+      this.alertService.confirm(`คุณมีรายการเวชภัณฑ์ที่ยังไม่ได้กดเพิ่ม ต้องการทำต่อใช่หรือไม่ ?`)
+        .then(() => {
+          this.saveReceive();
+        }).catch((err) => {
+
+        });
+    }
+  }
 }

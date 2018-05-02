@@ -74,12 +74,12 @@ export class ConfirmOrderItemsComponent implements OnInit {
       this.loading = false;
       this.items = [];
       if (rs.ok) {
-        let _items = rs.rows;
+        const _items = rs.rows;
 
         _items.forEach((v: any) => {
-          let _idx = _.findIndex(this._confirmItems, { wm_product_id: v.wm_product_id });
+          const _idx = _.findIndex(this._confirmItems, { wm_product_id: v.wm_product_id });
 
-          let obj: any = {};
+          const obj: any = {};
           obj.wm_product_id = v.wm_product_id;
           obj.conversion_qty = +v.conversion_qty;
           obj.expired_date = v.expired_date;
@@ -90,8 +90,6 @@ export class ConfirmOrderItemsComponent implements OnInit {
           obj.remain_qty = +v.remain_qty; // pack
           obj.to_unit_name = v.to_unit_name;
           obj.unit_generic_id = v.unit_generic_id;
-
-          
 
           if (_idx > -1) {
             obj.confirm_qty = +this._confirmItems[_idx].confirm_qty; // pack

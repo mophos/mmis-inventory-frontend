@@ -84,11 +84,11 @@ export class LayoutComponent implements OnInit {
   }
 
   downloadManual() {
-    const url = `${this.apiUrl}/pdf/manual.pdf`;
+    const url = `${this.apiUrl}/pdf/ManualAdmin.pdf`;
     window.open(url, '_blank');
   }
   showManualStaff() {
-    const url = `${this.apiPortal}/pdf/manual.pdf`;
+    const url = `${this.apiPortal}/pdf/ManualStaff.pdf`;
     window.open(url, '_blank');
   }
 }

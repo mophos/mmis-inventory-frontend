@@ -269,6 +269,7 @@ export class RequisitionComponent implements OnInit {
           if (rs.ok) {
             this.alertService.success();
             this.getApproved();
+            this.getWaitingApprove();
           } else {
             this.alertService.error(rs.error);
           }
