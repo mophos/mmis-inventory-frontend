@@ -47,7 +47,7 @@ export class LayoutComponent implements OnInit {
     this.modalChangePassword.openModal();
   }
   showManualStaff() {
-    const url = `${this.apiPortal}/pdf/manual.pdf`;
+    const url = `${this.apiPortal}/pdf/ManualStaff.pdf`;
     window.open(url, '_blank');
   }
 }
