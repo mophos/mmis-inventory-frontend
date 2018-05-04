@@ -38,7 +38,7 @@ export class ShowUnitsComponent implements OnInit {
     }
   }
 
-    getUnits() {
+  getUnits() {
     this.receiveService.getUnitConversion(this.genericId)
       .then((result: any) => {
         // this.loading = false;
