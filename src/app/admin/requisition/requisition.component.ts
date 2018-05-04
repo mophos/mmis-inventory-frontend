@@ -447,6 +447,7 @@ export class RequisitionComponent implements OnInit {
       this.search();
     }
   }
+
   async totalTab() {
     try {
       if (this.selectedTab === 'waiting' || this.tabTotalWaiting === 0) {
@@ -469,10 +470,12 @@ export class RequisitionComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
+
   clearQuery() {
     this.query = '';
     this.search();
   }
+
   changeFillter() {
     if (this.selectedTab === 'waiting') {
       this.getWaiting();
@@ -481,6 +484,31 @@ export class RequisitionComponent implements OnInit {
     } else if (this.selectedTab === 'unpaid') {
       this.getUnPaid();
     }
+  }
+
+  recreateRequisitionOrder(order: any) {
+    let requisitionOrderId = order.requisition_order_id;
+    let requisitionOrderUnpaidId = order.requisition_order_unpaid_id;
+
+    this.alertService.confirm('ต้องการสร้างใบเบิกใหม่ ใช่หรือไม่?')
+      .then(async () => {
+        try {
+          let rs: any = await this.requisitionService.saveRequisitionReOrder(requisitionOrderUnpaidId, requisitionOrderId);
+          if (rs.ok) {
+            this.alertService.success('สร้างรายการใบเบิกเสร็จเรียบร้อย');
+            this.getUnPaid();
+            this.selectedTab = 'waiting';
+            this.totalTab();
+          } else {
+            this.alertService.error('ไม่สามารถสร้างใบเบิกใหม่ได้ : ' + rs.error);
+          }
+        } catch (error) {
+          this.alertService.error(JSON.stringify(error));
+        }
+      }).catch(() => {
+        // no action
+      });
+
   }
 }
 

@@ -54,6 +54,14 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async saveRequisitionReOrder(requisitionOrderUnpaidId: any, requisitionOrderId: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/orders/unpaid/reorder`, {
+      requisitionOrderUnpaidId: requisitionOrderUnpaidId,
+      requisitionOrderId: requisitionOrderId
+    }).toPromise();
+    return rs.json();
+  }
+
   async updateRequisitionOrder(requisitionId: any, order: any, products: Array<any>) {
     const rs: any = await this.authHttp.put(`${this.url}/requisition/orders/${requisitionId}`, {
       order: order,
