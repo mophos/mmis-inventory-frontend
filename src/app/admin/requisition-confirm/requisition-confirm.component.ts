@@ -131,9 +131,9 @@ export class RequisitionConfirmComponent implements OnInit {
             unit_generic_id: v.unit_generic_id,
             working_code: v.working_code,
             confirmItems: [],
-            small_remain_qty: v.remain_qty, // small qty
-            small_book_qty: v.book_qty - (v.conversion_qty * v.requisition_qty), // small qty
-            small_remain_afterpay_qty: v.remain_qty - v.book_qty - (v.conversion_qty * v.requisition_qty), // small qty
+            remain_qty: v.remain_qty, // small qty
+            // small_book_qty: v.book_qty - (v.conversion_qty * v.requisition_qty), // small qty
+            // small_remain_afterpay_qty: v.remain_qty - v.allowcate_qty, // small qty
           }
 
           if (rs.pays) {
