@@ -52,7 +52,7 @@
 </div>
 
 <button class="btn btn-sm btn-icon btn-primary" *ngIf="borrowNotes.length" (click)="showBorrowNotes()">
-  รายการบันทึกยืม ({{borrowNotes.length | number}} รายการ)
+  รายการบันทึกยืม ({{selectedBorrowNotes.length | number}} จาก {{borrowNotes.length | number}} รายการ)
 </button>
 
 <clr-datagrid style="padding-top: 5px;">
@@ -134,7 +134,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="openBorrowNote = false">ปิดหน้าต่าง</button>
-    <button type="button" class="btn btn-primary" [disabled]="!selectedBorrowNotes.length" (click)="doCalculateRequisition()">ปรับยอดการเบิกใหม่</button>
+    <!-- <button type="button" class="btn btn-primary" [disabled]="!selectedBorrowNotes.length" (click)="doCalculateRequisition()">ปรับยอดการเบิกใหม่</button> -->
   </div>
 </clr-modal>
 
