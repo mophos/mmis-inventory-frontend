@@ -96,7 +96,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.orders = rs.rows;
-        this.totalWaiting = rs.total[0].total;
+        this.tabTotalWaiting = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -119,7 +119,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.unpaids = rs.rows;
-        this.totalUnPaid = rs.total[0].total;
+        this.tabTotalUnPaid = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -143,7 +143,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.waitingApproves = rs.rows;
-        this.totalWaitingApprove = rs.total[0].total;
+        this.tabTotalWaitingApprove = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -173,7 +173,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.approveds = rs.rows;
-        this.totalApproveds = rs.total[0].total;
+        this.tabApprove = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -496,9 +496,8 @@ export class RequisitionComponent implements OnInit {
           let rs: any = await this.requisitionService.saveRequisitionReOrder(requisitionOrderUnpaidId, requisitionOrderId);
           if (rs.ok) {
             this.alertService.success('สร้างรายการใบเบิกเสร็จเรียบร้อย');
-            this.getUnPaid();
-            this.selectedTab = 'waiting';
-            this.totalTab();
+            await this.getUnPaid();
+            await this.getWaiting();
           } else {
             this.alertService.error('ไม่สามารถสร้างใบเบิกใหม่ได้ : ' + rs.error);
           }
