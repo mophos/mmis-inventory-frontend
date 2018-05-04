@@ -27,8 +27,8 @@
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let g of filterGenericsIsSuccess('Y');"
           [ngClass]="{
-          'isSuccess': g.dst_max_qty - g.dst_remain_qty === g.total_transfer_qty
-          , 'isWarning': g.dst_max_qty - g.dst_remain_qty !== g.total_transfer_qty
+          'isSuccess': g.total_transfer_qty !== 0 && g.dst_max_qty - g.dst_remain_qty === g.total_transfer_qty
+          , 'isWarning': g.total_transfer_qty === 0 || g.dst_max_qty - g.dst_remain_qty !== g.total_transfer_qty
         }">
           <clr-dg-cell>{{g.working_code}}</clr-dg-cell>
           <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
