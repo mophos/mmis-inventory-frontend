@@ -62,7 +62,8 @@
   <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
   <!-- <clr-dg-column style="width: 100px;">ค้างจ่าย</clr-dg-column> -->
   <clr-dg-column style="width: 200px;">Package</clr-dg-column>
-  <clr-dg-column style="width: 110px;">รวม (Base)</clr-dg-column>
+  <clr-dg-column style="width: 110px;">รวมขอเบิก (Base)</clr-dg-column>
+  <clr-dg-column style="width: 110px;">คงเหลือหลังจ่าย (Base)</clr-dg-column>
   <clr-dg-column style="width: 110px;">ยอดจ่าย (Base)</clr-dg-column>
   <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
   <clr-dg-row *ngFor="let g of products; let idx=index;" 
@@ -92,6 +93,9 @@
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ g.conversion_qty * g.requisition_qty | number }} {{ g.to_unit_name }}</span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <span class="p4">{{ g.small_remain_afterpay_qty | number }} {{ g.to_unit_name }}</span>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ g.allowcate_qty | number }} {{ g.to_unit_name }}</span>

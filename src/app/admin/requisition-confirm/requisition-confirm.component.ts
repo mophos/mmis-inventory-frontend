@@ -132,7 +132,8 @@ export class RequisitionConfirmComponent implements OnInit {
             working_code: v.working_code,
             confirmItems: [],
             small_remain_qty: v.remain_qty, // small qty
-            small_book_qty: v.book_qty, // small qty
+            small_book_qty: v.book_qty - (v.conversion_qty * v.requisition_qty), // small qty
+            small_remain_afterpay_qty: v.remain_qty - v.book_qty - (v.conversion_qty * v.requisition_qty), // small qty
           }
 
           if (rs.pays) {
@@ -164,6 +165,7 @@ export class RequisitionConfirmComponent implements OnInit {
             });
           }
 
+          console.log(obj);
           this.products.push(obj);
         });
 
