@@ -1,12 +1,7 @@
 import { ReportProductsService } from './../reports-products.service';
 import { AlertService } from './../../../alert.service';
 import { WarehouseService } from './../../warehouse.service';
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  Inject
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Inject, ViewChild } from '@angular/core';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { ProductsService } from '../../products.service';
 
@@ -20,6 +15,9 @@ import * as _ from 'lodash';
   styleUrls: ['./product-remain.component.css']
 })
 export class ProductRemainComponent implements OnInit {
+
+  @ViewChild('htmlPreview') public htmlPreview: any;
+
   products: any = [];
   allWarehouseProducts = [];
   warehouses: any = [];
@@ -44,7 +42,7 @@ export class ProductRemainComponent implements OnInit {
     private productService: ProductsService,
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
-    @Inject('API_URL') private url: string
+    @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
@@ -76,5 +74,10 @@ export class ProductRemainComponent implements OnInit {
 
   setSelectedWarehouse(event) {
     this.warehouseId = event.warehouse_id;
+  }
+
+  getreport() {
+    const url = `${this.apiUrl}/report/product-remain/${this.warehouseId}/${this.genericType}?token=${this.token}`
+    this.htmlPreview.showReport(url);
   }
 }

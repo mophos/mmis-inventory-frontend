@@ -26,11 +26,13 @@
       <div class="btn-group btn-sm">
         <!-- <button class="btn btn-outline-success" [disabled]="!products.length || loading" (click)="pdfExport()">ส่งออก PDF</button>
         <button class="btn btn-success" [disabled]="!products.length || loading" (click)="excelExport()">ส่งออก Excel</button> -->
-        <button class="btn btn-sm btn-primary">พิมพ์รายงาน</button>
+        <button class="btn btn-sm btn-primary" (click)="getreport()">พิมพ์รายงานสินค้าคงเหลือ</button>
       </div>
     </div>
   </div>
 </section>
+
+<wm-html-preview #htmlPreview></wm-html-preview>
 
 <!-- <clr-datagrid [clrDgLoading]="loading">
   <clr-dg-column [style.width.%]="20">รหัสสินค้า</clr-dg-column>
