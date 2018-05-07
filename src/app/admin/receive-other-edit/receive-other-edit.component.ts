@@ -467,13 +467,13 @@ export class ReceiveOtherEditComponent implements OnInit {
         const rs = await this.receiveService.getPurchaseCheckHoliday(_receiveDate);
         if (rs.ok) {
           this.isReceiveHoliday = false;
-            await this.checkExpired();
+          await this.checkExpired();
         } else {
           this.isReceiveHoliday = true; // วันหยุด
           this.alertService.confirm(rs.error)
             .then(async () => {
               this.isReceiveHoliday = false; // วันหยุด
-                await this.checkExpired();
+              await this.checkExpired();
             })
             .catch(() => {
               this.isReceiveHoliday = true;
@@ -673,8 +673,7 @@ export class ReceiveOtherEditComponent implements OnInit {
         if (moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
           const d: any = v.expired_date.split('/');
           const expired_date: any = moment(new Date(d[2], d[1] - 1, d[0])).format('YYYY-MM-DD');
-          console.log(v.generic_id,expired_date);
-          
+          console.log(v.generic_id, expired_date);
           checkDiffExpired = await this.receiveService.getPurchaseCheckExpire(v.generic_id, expired_date);
           console.log(checkDiffExpired);
           if (!checkDiffExpired.ok) {
