@@ -68,9 +68,9 @@
   <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
   <clr-dg-row *ngFor="let g of products; let idx=index;" 
   [ngClass]="
-  {'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty) && g.allowcate_qty <= (g.small_remain_qty - g.small_book_qty), 
+  {'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty) && (+g.remain_qty - +g.allowcate_qty) >= 0, 
   'isWarning': g.allowcate_qty < (g.conversion_qty * g.requisition_qty) && g.allowcate_qty > 0, 
-  'isError': g.allowcate_qty === 0 || g.allowcate_qty > ( g.small_remain_qty - g.small_book_qty)}
+  'isError': g.allowcate_qty === 0 || (+g.remain_qty - +g.allowcate_qty) < 0}
   ">
     <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
       [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="g.requisition_qty"
@@ -95,7 +95,7 @@
       <span class="p4">{{ g.conversion_qty * g.requisition_qty | number }} {{ g.to_unit_name }}</span>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
-      <span class="p4">{{ g.small_remain_afterpay_qty | number }} {{ g.to_unit_name }}</span>
+      <span class="p4">{{ +g.remain_qty - +g.allowcate_qty | number }} {{ g.to_unit_name }}</span>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ g.allowcate_qty | number }} {{ g.to_unit_name }}</span>
