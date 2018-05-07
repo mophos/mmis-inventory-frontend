@@ -3,7 +3,7 @@
   <span class="breadcrumb-item active">รายงานสรุปการเบิกแยกตามหน่วยเบิก</span>
 </nav>
 <div class="row" style="padding:1em">
-  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+  <!-- <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
     <label for="startDate" class="required">ตั้งแต่</label>
   </div>
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -14,6 +14,33 @@
   </div>
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+  </div> -->
+  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+    <div class="select">
+      <select name="month" id="month" [(ngModel)]="month">
+        <option value='1'>มกราคม</option>
+        <option value='2'>กุมภาพันธ์</option>
+        <option value='3'>มีนาคม</option>
+        <option value='4'>เมษายน</option>
+        <option value='5'>พฤษภาคม</option>
+        <option value='6'>มิถุนายน</option>
+        <option value='7'>กรกฎาคม</option>
+        <option value='8'>สิงหาคม</option>
+        <option value='9'>กันยายน</option>
+        <option value='10'>ตุลาคม</option>
+        <option value='11'>พฤศจิกายน</option>
+        <option value='12'>ธันวาคม</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+    <div class="select">
+      <select name="year" id="year" [(ngModel)]="year">
+        <option *ngFor="let w of dataYear" [value]="w">
+          {{w+(543)}}
+        </option>
+      </select>
+    </div>
   </div>
   <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12">
     <button class="btn btn-sm btn-primary" (click)="summaryDisbursement()">
