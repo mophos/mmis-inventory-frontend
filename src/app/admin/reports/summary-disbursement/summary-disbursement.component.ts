@@ -16,6 +16,11 @@ export class SummaryDisbursementComponent implements OnInit {
   endDate: any;
   start: any;
   end: any;
+  date = new Date();
+  month = this.date.getMonth() + 1;
+  year = this.date.getFullYear();
+  lastday = moment()
+  dataYear = [];
   token: any;
   isPreview = false;
   myDatePickerOptions: IMyOptions = {
@@ -33,29 +38,20 @@ export class SummaryDisbursementComponent implements OnInit {
   }
 
   ngOnInit() {
-    const date = new Date();
-
-    this.startDate = {
-      date: {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        day: 1
-      }
-    };
-    this.endDate = {
-      date: {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        day: date.getDate()
-      }
-    };
+    this.getdate();
   }
 
   summaryDisbursement() {
-    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
-    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    this.start = this.year + '-' + this.month + '-' + 1;
+    this.end = this.year + '-' + this.month + '-' + moment(this.year, 'YYYY-MM').daysInMonth();
     const url = `${this.apiUrl}/report/summary/disbursement/${this.start}/${this.end}?token=${this.token}`
     this.htmlPreview.showReport(url);
+  }
+
+  getdate() {
+    for (let i = 0; i < 10; i++) {
+      this.dataYear.push(this.date.getFullYear() + i)
+    }
   }
 
 }
