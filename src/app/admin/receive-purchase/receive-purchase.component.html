@@ -224,8 +224,9 @@
 
 <div class="row wid99">
   <div class="col-md-12">
-    <clr-checkbox [(ngModel)]="isClosePurchase" [clrInline]="true">
-      ปิดการรับจาก PO นี้ หลังจากบันทึก
+    <clr-checkbox [clrDisabled]="isApprove || !purchaseOrderNumber" [(ngModel)]="isClosePurchase" [clrInline]="true">
+      ปิดการรับจากใบสั่งซื้อเลขที่
+      <strong>{{purchaseOrderNumber}}</strong>
     </clr-checkbox>
     <button (click)="checkProduct()" class="btn btn-success btn-sm" [disabled]=" !selectedSupplierId || !deliveryCode || !deliveryDate || !receiveDate || !products.length">
       <clr-icon shape="floppy"></clr-icon>
