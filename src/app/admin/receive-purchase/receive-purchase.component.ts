@@ -36,7 +36,7 @@ export class ReceivePurchaseComponent implements OnInit {
   totalProduct = 0;
   totalCost = 0;
   loading = false;
-
+  isClosePurchase: boolean = false;
   openConflict = false;
 
   lots = [];
@@ -659,7 +659,8 @@ export class ReceivePurchaseComponent implements OnInit {
                   this.alertService.error('ข้อมูลรายการสินค้าบางรายการไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot, วันหมดอายุ]');
                 } else {
                   // save product receive
-                  const rs: any = await this.receiveService.saveReceive(summary, _products);
+                  let _closePurchase = this.isClosePurchase ? 'Y' : 'N';
+                  const rs: any = await this.receiveService.saveReceive(summary, _products, _closePurchase);
                   this.modalLoading.hide();
                   this.isSaving = false;
 
@@ -727,7 +728,8 @@ export class ReceivePurchaseComponent implements OnInit {
                 this.alertService.error('ข้อมูลรายการสินค้าไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot]');
               } else {
                 // save product receive
-                this.receiveService.saveReceive(summary, _products)
+                let _closePurchase = this.isClosePurchase ? 'Y' : 'N';
+                this.receiveService.saveReceive(summary, _products, _closePurchase)
                   .then((res: any) => {
                     this.modalLoading.hide();
                     this.isSaving = false;
