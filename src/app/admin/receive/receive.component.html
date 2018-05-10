@@ -149,10 +149,10 @@
       </div>
 
       <clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px; height: 83%;" [(clrDgSelected)]="selectedApprove">
-        <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
-        <clr-dg-column>ผู้จัดจำหน่าย</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
+        <clr-dg-column style="width: 180px;" [clrDgField]="'purchase_order_number'">เลขที่ใบสั่งซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จัดจำหน่าย</clr-dg-column>
         <clr-dg-column style="width: 150px;"></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let w of waitings" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id, 'isError': w.is_cancel === 'Y'}">
@@ -236,10 +236,10 @@
         </div>
       </div>
       <clr-datagrid (clrDgRefresh)="refreshOther($event)" [(clrDgSelected)]="selectedOtherApprove" [style.height.%]="83">
-        <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
-        <clr-dg-column style="width: 180px;">ประเภทการรับ</clr-dg-column>
-        <clr-dg-column>ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_type_name'" style="width: 180px;">ประเภทการรับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'donator_name'">ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
         <!-- <clr-dg-column>จำนวนรายการ</clr-dg-column> -->
         <clr-dg-column style="width: 150px;">มูลค่า (บาท)</clr-dg-column>
         <clr-dg-column style="width: 150px;"></clr-dg-column>
@@ -300,10 +300,10 @@
       </div> -->
 
       <clr-datagrid (clrDgRefresh)="refreshExpired($event)" style="padding-top: 5px;" [style.height.%]="83">
-        <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
-        <clr-dg-column>ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
         <clr-dg-column>หมายเหตุ</clr-dg-column>
         <!-- <clr-dg-column style="width: 150px;"></clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
@@ -346,10 +346,10 @@
         </div>
       </div> -->
       <clr-datagrid (clrDgRefresh)="refreshOtherExpired($event)" style="padding-top: 5px;" [style.height.%]="83">
-        <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
-        <clr-dg-column style="width: 180px;">ประเภทการรับ</clr-dg-column>
-        <clr-dg-column>ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
+        <clr-dg-column style="width: 150px;" [clrDgField]="'receive_date'">วันที่</clr-dg-column>
+        <clr-dg-column style="width: 180px;" [clrDgField]="'receive_code'">เลขที่รับ</clr-dg-column>
+        <clr-dg-column style="width: 180px;" [clrDgField]="'receive_type_name'">ประเภทการรับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'donator_name'">ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
         <clr-dg-column>จำนวนรายการ</clr-dg-column>
         <clr-dg-column>มูลค่า (บาท)</clr-dg-column>
         <clr-dg-column>หมายเหตุ</clr-dg-column>

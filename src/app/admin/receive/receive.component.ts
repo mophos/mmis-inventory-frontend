@@ -141,12 +141,15 @@ export class ReceiveComponent implements OnInit {
   async refreshExpired(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
+
+    console.log(sort);
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
-      const rs: any = await this.receiveService.getExpired(this.perPage, this.offset);
+      const rs: any = await this.receiveService.getExpired(this.perPage, this.offset, sort);
       this.expired = rs.rows;
       this.totalExpired = rs.total
     } catch (error) {
@@ -159,12 +162,14 @@ export class ReceiveComponent implements OnInit {
   async refreshOtherExpired(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
+
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
-      const rs: any = await this.receiveService.getOtherExpired(this.perPage, this.offset);
+      const rs: any = await this.receiveService.getOtherExpired(this.perPage, this.offset, sort);
       this.otherExpired = rs.rows;
       this.totalOtherExpired = rs.total
     } catch (error) {
@@ -177,18 +182,20 @@ export class ReceiveComponent implements OnInit {
   async refresh(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
+
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
       if (!this.query) {
-        const rs = await this.receiveService.getReceiveStatus(limit, this.offset, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveStatus(limit, this.offset, this.fillterApprove, sort);
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
 
       } else {
-        const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove, sort);
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
         this.isSearching = true;
@@ -213,8 +220,6 @@ export class ReceiveComponent implements OnInit {
   async doSearchReceiveOther() {
     try {
       this.modalLoading.show();
-      // await this.getReceiveExpiredSearch(this.query);
-      // await this.getReceiveOtherExpiredSearch();
       const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, this.offset, this.queryOther, this.fillterApprove);
       this.others = rs.rows;
       this.totalReceiveOther = rs.total;
@@ -244,6 +249,7 @@ export class ReceiveComponent implements OnInit {
   async refreshOther(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
 
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
@@ -251,11 +257,11 @@ export class ReceiveComponent implements OnInit {
     this.modalLoading.show();
     try {
       if (!this.queryOther) {
-        const rs = await this.receiveService.getReceiveOtherStatus(limit, this.offset, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveOtherStatus(limit, this.offset, this.fillterApprove, sort);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
       } else {
-        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, this.offset, this.queryOther, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, this.offset, this.queryOther, this.fillterApprove, sort);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
       }
