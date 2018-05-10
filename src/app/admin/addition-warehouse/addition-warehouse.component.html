@@ -1,6 +1,6 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
-  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/transfer-dashboard">เวชภัณฑ์ถึงจุดเบิก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/addition">เวชภัณฑ์ถึงจุดเติม</a>
   <span class="breadcrumb-item active">เติมเวชภัณฑ์</span>
 </nav>
 
@@ -22,13 +22,14 @@
         <clr-dg-column [style.width.px]="100">Max Qty.</clr-dg-column>
         <clr-dg-column [style.width.px]="100">คงเหลือ</clr-dg-column>
         <clr-dg-column [style.width.px]="100">ยอดแนะนำ</clr-dg-column>
-        <clr-dg-column [clrDgField]="'total_transfer_qty'" [style.width.px]="100">จำนวนเติม</clr-dg-column>
+        <clr-dg-column [clrDgField]="'addition_qty'" [style.width.px]="100">จำนวนเติม</clr-dg-column>
         <clr-dg-column [style.width.px]="100">หน่วย</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let g of filterGenericsIsSuccess('Y');"
           [ngClass]="{
-          'isSuccess': g.dst_max_qty - g.dst_remain_qty === g.total_transfer_qty
-          , 'isWarning': g.dst_max_qty - g.dst_remain_qty !== g.total_transfer_qty
+          'isSuccess': g.addition_qty !== 0 && g.addition_qty >= g.dst_max_qty - g.dst_remain_qty
+          , 'isWarning': g.addition_qty < g.dst_max_qty - g.dst_remain_qty
+          , 'isProblem': g.dst_max_qty - g.dst_remain_qty === 0
         }">
           <clr-dg-cell>{{g.working_code}}</clr-dg-cell>
           <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
@@ -36,9 +37,9 @@
           <clr-dg-cell style="text-align: right;">{{g.dst_max_qty | number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{g.dst_remain_qty | number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{g.dst_max_qty - g.dst_remain_qty | number}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: right;">{{g.total_transfer_qty | number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{g.addition_qty | number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
-          <wm-transfer-product-detail [generic]="g" (onChangeQty)="changeQty(g.generic_id, $event)" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-transfer-product-detail>
+          <wm-addition-product [generic]="g" (onChangeQty)="changeQty(g.generic_id, $event)" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-product>
         </clr-dg-row>
         <clr-dg-footer>
           {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
@@ -58,9 +59,8 @@
         <clr-dg-column [style.width.px]="100">Max Qty.</clr-dg-column>
         <clr-dg-column [style.width.px]="100">คงเหลือ</clr-dg-column>
         <clr-dg-column [style.width.px]="100">ยอดแนะนำ</clr-dg-column>
-        <clr-dg-column [clrDgField]="'total_transfer_qty'" [style.width.px]="100">จำนวนเติม</clr-dg-column>
+        <clr-dg-column [clrDgField]="'addition_qty'" [style.width.px]="100">จำนวนเติม</clr-dg-column>
         <clr-dg-column [style.width.px]="100">หน่วย</clr-dg-column>
-        <!-- <clr-dg-column [style.width.px]="100">#</clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let g of filterGenericsIsSuccess('N');" [ngClass]="{'isError': !g.detail.length}">
           <clr-dg-cell>{{g.working_code}}</clr-dg-cell>
@@ -69,16 +69,9 @@
           <clr-dg-cell style="text-align: right;">{{g.dst_max_qty | number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{g.dst_remain_qty | number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{g.dst_max_qty - g.dst_remain_qty | number}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: right;">{{g.total_transfer_qty | number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{g.addition_qty | number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
-          <!-- <clr-dg-cell style="text-align: center;">
-            <div class="btn-group">
-              <button class="btn btn-success btn-sm wm-small-btn" (click)="valid(g.generic_id)">
-                <clr-icon shape="check"></clr-icon>
-              </button>
-            </div>
-          </clr-dg-cell> -->
-          <wm-transfer-product-detail [generic]="g" (onChangeQty)="changeQty(g.generic_id, $event)" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-transfer-product-detail>
+          <wm-addition-product [generic]="g" (onChangeQty)="changeQty(g.generic_id, $event)" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-product>
         </clr-dg-row>
         <clr-dg-footer>
           {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
@@ -90,10 +83,10 @@
 </clr-tabs>
 
 <button class="btn btn-sm btn-success" (click)="save()">
-  บันทึกข้อมูล
+  เตรียมสร้างใบเติม
 </button>
 
-<button class="btn btn-sm btn-danger" routerLink="/admin/transfer-dashboard">
+<button class="btn btn-sm btn-danger" routerLink="/admin/addition">
   กลับหน้าหลัก
 </button>
 

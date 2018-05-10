@@ -52,7 +52,7 @@
 </div>
 
 <button class="btn btn-sm btn-icon btn-primary" *ngIf="borrowNotes.length" (click)="showBorrowNotes()">
-  รายการบันทึกยืม ({{borrowNotes.length | number}} รายการ)
+  รายการบันทึกยืม ({{selectedBorrowNotes.length | number}} จาก {{borrowNotes.length | number}} รายการ)
 </button>
 
 <clr-datagrid style="padding-top: 5px;">
@@ -62,14 +62,14 @@
   <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
   <!-- <clr-dg-column style="width: 100px;">ค้างจ่าย</clr-dg-column> -->
   <clr-dg-column style="width: 200px;">Package</clr-dg-column>
-  <clr-dg-column style="width: 110px;">รวม (Base)</clr-dg-column>
+  <clr-dg-column style="width: 110px;">รวมขอเบิก (Base)</clr-dg-column>
+  <clr-dg-column style="width: 110px;">คงเหลือหลังจ่าย (Base)</clr-dg-column>
   <clr-dg-column style="width: 110px;">ยอดจ่าย (Base)</clr-dg-column>
   <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
-  <clr-dg-row *ngFor="let g of products; let idx=index;" 
-  [ngClass]="
-  {'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty) && g.allowcate_qty <= (g.small_remain_qty - g.small_book_qty), 
+  <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="
+  {'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty) && (+g.remain_qty - +g.allowcate_qty) >= 0, 
   'isWarning': g.allowcate_qty < (g.conversion_qty * g.requisition_qty) && g.allowcate_qty > 0, 
-  'isError': g.allowcate_qty === 0 || g.allowcate_qty > ( g.small_remain_qty - g.small_book_qty)}
+  'isError': g.allowcate_qty === 0 || (+g.remain_qty - +g.allowcate_qty) < 0}
   ">
     <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
       [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="g.requisition_qty"
@@ -92,6 +92,9 @@
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ g.conversion_qty * g.requisition_qty | number }} {{ g.to_unit_name }}</span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <span class="p4">{{ +g.remain_qty - +g.allowcate_qty | number }} {{ g.to_unit_name }}</span>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ g.allowcate_qty | number }} {{ g.to_unit_name }}</span>
