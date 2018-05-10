@@ -85,4 +85,9 @@ export class ProductsService {
     return resp.json();
   }
 
+  async getAllProduct() {
+    const resp = await this.authHttp.get(`${this.url}/products/getallproduct`).toPromise();
+    return resp.json();
+  }
+
 }

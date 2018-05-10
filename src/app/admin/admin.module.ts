@@ -144,6 +144,7 @@ import { PurchasingNotgiveawayComponent } from './reports/purchasing-notgiveaway
 import { InventoryStatusComponent } from './reports/inventory-status/inventory-status.component';
 import { ProductReceiveComponent } from './reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
+import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -242,7 +243,8 @@ Highcharts.setOptions({
     PurchasingNotgiveawayComponent,
     InventoryStatusComponent,
     ProductReceiveComponent,
-    SummaryDisbursementComponent
+    SummaryDisbursementComponent,
+    CodeMappingComponent
   ],
   providers: [
     MainService,

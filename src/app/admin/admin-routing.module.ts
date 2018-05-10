@@ -82,7 +82,7 @@ import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
 import { ValueProductsComponent } from 'app/admin/reports/value-products/value-products.component';
-import { PurchasingNotgiveawayComponent} from 'app/admin/reports/purchasing-notgiveaway/purchasing-notgiveaway.component'
+import { PurchasingNotgiveawayComponent } from 'app/admin/reports/purchasing-notgiveaway/purchasing-notgiveaway.component'
 import { InventoryStatusComponent } from 'app/admin/reports/inventory-status/inventory-status.component';
 import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
@@ -90,6 +90,7 @@ import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requ
 import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
 import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
+import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 
 const routes: Routes = [
   {
@@ -119,9 +120,9 @@ const routes: Routes = [
       { path: 'requisition', canActivate: [AuthRequisition], component: RequisitionComponent },
       { path: 'requisition-type', component: RequisitionTypeComponent },
       { path: 'transection-type', component: TransectionTypeComponent },
-      { path: 'receiveother-type', component: ReceiveotherTypeComponent  },
+      { path: 'receiveother-type', component: ReceiveotherTypeComponent },
       { path: 'requisition/new', canActivate: [AuthRequisition], component: RequisitionNewComponent },
-      { path: 'requisition/edit/:requisitionId', canActivate: [AuthRequisition], component: RequisitionNewComponent},
+      { path: 'requisition/edit/:requisitionId', canActivate: [AuthRequisition], component: RequisitionNewComponent },
       { path: 'requisition/confirm', canActivate: [AuthRequisition], component: RequisitionConfirmComponent },
       { path: 'requisition/confirm/edit', canActivate: [AuthRequisition], component: RequisitionConfirmEditComponent },
       { path: 'requisition/confirm-unpaid', canActivate: [AuthRequisition], component: RequisitionConfirmUnpaidComponent },
@@ -145,8 +146,9 @@ const routes: Routes = [
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },
-      { path: 'warehouse-products', component: WarehouseProductsComponent},
-      { path: 'warehouse-products/details/:warehouseId', component: WarehouseProductsDetailComponent},
+      { path: 'warehouse-products', component: WarehouseProductsComponent },
+      { path: 'warehouse-products/details/:warehouseId', component: WarehouseProductsDetailComponent },
+      { path: 'code-mapping', component: CodeMappingComponent },
       // { path: 'lots', component: LotsComponent },
       { path: 'donators', component: DonatorsComponent },
       { path: 'products', component: ProductsComponent },
