@@ -32,8 +32,10 @@
   <clr-dg-column [style.width.px]="100">หน่วย</clr-dg-column>
   <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let w of warehouses;" [ngClass]="{
-          'isSuccess': w.addition_qty !== 0 && w.dst_max_qty - w.dst_remain_qty === w.addition_qty
-          , 'isWarning': w.addition_qty === 0 || w.dst_max_qty - w.dst_remain_qty !== w.addition_qty
+    'isSuccess': w.addition_qty !== 0 && w.addition_qty >= w.dst_max_qty - w.dst_remain_qty
+    , 'isWarning': w.detail.length && w.addition_qty < w.dst_max_qty - w.dst_remain_qty
+    , 'isProblem': w.dst_max_qty - w.dst_remain_qty === 0
+    , 'isError': !w.detail.length
         }">
     <clr-dg-cell>{{w.dst_short_code}}</clr-dg-cell>
     <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell>

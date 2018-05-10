@@ -66,7 +66,7 @@ export class AdditionWarehouseComponent implements OnInit {
     const idx = _.findIndex(this.generics, ['generic_id', genericId]);
     this.generics[idx].detail = event;
     this.generics[idx].addition_qty = _.sumBy(event, function (e: any) {
-      return e.transfer_qty * e.conversion_qty;
+      return e.addition_qty * e.conversion_qty;
     });
   }
 

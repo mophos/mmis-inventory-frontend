@@ -20,6 +20,7 @@ export class AdditionComponent implements OnInit {
   warehouses: any = [];
   additions: any = [];
   perPage = 10;
+  currentTab = 'warehouse';
 
   constructor(
     private additionService: AdditionService,
@@ -73,6 +74,7 @@ export class AdditionComponent implements OnInit {
         this.alertService.error(rs.error);
       }
       this.modalLoading.hide();
+      this.currentTab = 'new';
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
@@ -176,14 +178,18 @@ export class AdditionComponent implements OnInit {
   }
 
   cancel(transaction: any) {
-    this.alertService.confirm(`คุณต้องการลบรายการนี้ [${transaction.transaction_code}] ใช่หรือไม่?`)
+    this.alertService.confirm(`คุณต้องการลบรายการนี้ [${transaction.addition_code || transaction.dst_warehouse_name}] ใช่หรือไม่?`)
       .then(() => {
         this.modalLoading.show();
         this.additionService.cancelTransactions(transaction.addition_id)
           .then((rs: any) => {
             if (rs.ok) {
               this.alertService.success();
-              this.getTransaction();
+              if (this.currentTab === 'new') {
+                this.getAddition();
+              } else {
+                this.getTransaction();
+              }
             } else {
               this.alertService.error(JSON.stringify(rs.error));
             }

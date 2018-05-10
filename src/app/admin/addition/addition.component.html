@@ -78,7 +78,7 @@
               <button title="ดูข้อมูล/อนุมัติ" class="btn btn-outline btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/addition/edit', a.addition_id]">
                 <clr-icon shape="view-list"></clr-icon>
               </button>
-              <button title="ยกเลิก" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="cancel(t)" [disabled]="a.status!=='NEW'">
+              <button title="ยกเลิก" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="cancel(a)" [disabled]="a.status!=='NEW'">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>

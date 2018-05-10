@@ -55,7 +55,7 @@ export class AdditionEditComponent implements OnInit {
     this.alertService.confirm(`คุณต้องการสร้างใบเติม ใช่หรือไม่?`)
       .then(() => {
         this.modalLoading.show();
-        this.additionService.openTransactions(this.transactionId)
+        this.additionService.openTransactions([this.transactionId])
           .then((rs: any) => {
             if (rs.ok) {
               this.alertService.success();
@@ -77,7 +77,7 @@ export class AdditionEditComponent implements OnInit {
     this.alertService.confirm(`คุณต้องการอนุมัติ ใช่หรือไม่?`)
       .then(() => {
         this.modalLoading.show();
-        this.additionService.approveTransactions(this.transactionId)
+        this.additionService.approveTransactions([this.transactionId])
           .then((rs: any) => {
             if (rs.ok) {
               this.alertService.success();
