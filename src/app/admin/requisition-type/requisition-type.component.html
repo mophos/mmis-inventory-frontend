@@ -5,17 +5,28 @@
 <button type="button" class="btn btn-success btn-sm" (click)="addNew()">+ เพิ่มรายการ</button>
 <clr-datagrid>
   <!--<clr-dg-column [clrDgField]="'warehouse_id'">รหัส</clr-dg-column>-->
-  <clr-dg-column [clrDgField]="'type_name'">ประเภทการเบิก</clr-dg-column>
-  <clr-dg-column>รายละเอียด</clr-dg-column>
+  <clr-dg-column [style.width.%]="40" [clrDgField]="'type_name'">ประเภทการเบิก</clr-dg-column>
+  <clr-dg-column [style.width.%]="50">รายละเอียด</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let r of requisitiontype" [clrDgItem]="r">
-    <clr-dg-action-overflow>
+    <!-- <clr-dg-action-overflow>
       <button class="action-item" (click)="showEdit(r)">แก้ไขข้อมูล</button>
       <button class="action-item" (click)="remove(r)">ลบข้อมูล</button>
-    </clr-dg-action-overflow>
+    </clr-dg-action-overflow> -->
     <!--<clr-dg-cell>{{h.warehouse_id}}</clr-dg-cell>-->
     <clr-dg-cell>{{r.requisition_type}}</clr-dg-cell>
     <clr-dg-cell>{{r.requisition_type_desc}}</clr-dg-cell>
+    <clr-dg-cell>
+        <div class="btn-group btn-primary">
+          <button title="แก้ไข" class="btn btn-sm btn-success wm-small-btn"  (click)="showEdit(r)">
+            <clr-icon shape="note"></clr-icon>
+          </button>
+          <button title="ลบ" class="btn btn-sm btn-danger wm-small-btn" (click)="remove(r)">
+            <clr-icon shape="trash"></clr-icon>
+          </button>
+        </div>
+      </clr-dg-cell>
   </clr-dg-row>
 
   <clr-dg-footer>

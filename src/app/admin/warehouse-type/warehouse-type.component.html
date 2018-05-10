@@ -5,15 +5,16 @@
 <button type="button" class="btn btn-success btn-sm" (click)="addNew()">+ เพิ่มรายการ</button>
 <clr-datagrid [style.height.%]="80">
   <!--<clr-dg-column [clrDgField]="'warehouse_id'">รหัส</clr-dg-column>-->
-  <clr-dg-column [clrDgField]="'type_name'">ชื่อประเภทคลังสินค้า</clr-dg-column>
-  <clr-dg-column>รายละเอียด</clr-dg-column>
+  <clr-dg-column [style.width.%]="40" [clrDgField]="'type_name'">ชื่อประเภทคลังสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.%]="40">รายละเอียด</clr-dg-column>
   <clr-dg-column [style.width.%]="10">เป็นคลังหลัก</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let t of types" [clrDgItem]="t">
-    <clr-dg-action-overflow>
+    <!-- <clr-dg-action-overflow>
       <button class="action-item" (click)="showEdit(t)">แก้ไขข้อมูล</button>
-      <!-- <button class="action-item" (click)="remove(t)">ลบข้อมูล</button> -->
-    </clr-dg-action-overflow>
+      <button class="action-item" (click)="remove(t)">ลบข้อมูล</button>
+    </clr-dg-action-overflow> -->
     <!--<clr-dg-cell>{{h.warehouse_id}}</clr-dg-cell>-->
     <clr-dg-cell>{{t.type_name}}</clr-dg-cell>
     <clr-dg-cell>{{t.type_desc}}</clr-dg-cell>
@@ -21,6 +22,16 @@
       <clr-icon shape="check" class="is-success" *ngIf="t.is_main === 'Y'"></clr-icon>
       <clr-icon shape="close" class="is-danger" *ngIf="t.is_main === 'N'"></clr-icon>
     </clr-dg-cell>
+    <clr-dg-cell>
+        <div class="btn-group btn-primary">
+          <button title="แก้ไข" class="btn btn-sm btn-success wm-small-btn"  (click)="showEdit(t)">
+            <clr-icon shape="note"></clr-icon>
+          </button>
+          <!-- <button title="ลบ" class="btn btn-sm btn-danger wm-small-btn" (click)="remove(t)">
+            <clr-icon shape="trash"></clr-icon>
+          </button> -->
+        </div>
+      </clr-dg-cell>
   </clr-dg-row>
 
   <clr-dg-footer>

@@ -33,18 +33,18 @@
       </button>
     </clr-dg-action-overflow>
     <clr-dg-cell>{{h.warehouse_name}}</clr-dg-cell>
-    <clr-dg-cell>{{h.short_code}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center">{{h.short_code}}</clr-dg-cell>
     <clr-dg-cell>{{h.type_name}}</clr-dg-cell>
-    <clr-dg-cell>{{h.location}}</clr-dg-cell>
-    <clr-dg-cell>
-      <clr-icon shape="close" class="is-error" *ngIf="h.is_enable === 'N'"></clr-icon>
-      <clr-icon shape="check" class="is-success" *ngIf="h.is_enable === 'Y'"></clr-icon>
+    <clr-dg-cell style="text-align: center">{{h.location}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center">
+      <clr-icon title="ไม่ใช้งาน" shape="close" class="is-error" *ngIf="h.is_enable === 'N'"></clr-icon>
+      <clr-icon title="ใช้งาน" shape="check" class="is-success" *ngIf="h.is_enable === 'Y'"></clr-icon>
     </clr-dg-cell>
-    <clr-dg-cell>
-      <clr-icon shape="close" class="is-error" *ngIf="h.is_receive === 'N'"></clr-icon>
-      <clr-icon shape="check" class="is-success" *ngIf="h.is_receive === 'Y'"></clr-icon>
+    <clr-dg-cell style="text-align: center">
+      <clr-icon title="ไท้รับสินค้าเข้าคลัง" shape="close" class="is-error" *ngIf="h.is_receive === 'N'"></clr-icon>
+      <clr-icon title="รับเข้าคลัง" shape="check" class="is-success" *ngIf="h.is_receive === 'Y'"></clr-icon>
     </clr-dg-cell>
-    <clr-dg-cell>{{h.created_at | toThaiDate}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center">{{h.created_at | toThaiDate}}</clr-dg-cell>
   </clr-dg-row>
 
   <clr-dg-footer>
