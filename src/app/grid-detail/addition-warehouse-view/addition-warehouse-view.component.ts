@@ -40,13 +40,4 @@ export class AdditionWarehouseViewComponent implements OnInit {
     }
   }
 
-  linkToDashboardGeneric(_genericId) {
-    this.router.navigateByUrl(`/admin/transfer-dashboard/generic?genericId=${_genericId}`);
-  }
-
-  linkToDashboardWarehouse(_warehouseId) {
-    this.router.navigateByUrl(`/admin/transfer-dashboard/warehouse?warehouseId=${_warehouseId}`);
-  }
-
-
 }

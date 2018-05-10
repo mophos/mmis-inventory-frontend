@@ -69,11 +69,7 @@ import { TransferEditComponent } from 'app/admin/transfer-edit/transfer-edit.com
 import { HisIssueTransactionComponent } from 'app/admin/his-issue-transaction/his-issue-transaction.component';
 import { WarehouseProductPlanningComponent } from 'app/admin/warehouse-product-planning/warehouse-product-planning.component';
 
-import { TransferDashboardComponent } from 'app/admin/transfer-dashboard/transfer-dashboard.component';
 import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
-import { TransferDashboardGenericComponent } from './transfer-dashboard-generic/transfer-dashboard-generic.component';
-import { TransferDashboardWarehouseComponent } from './transfer-dashboard-warehouse/transfer-dashboard-warehouse.component';
-import { TransferDashboardEditComponent } from './transfer-dashboard-edit/transfer-dashboard-edit.component';
 import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
@@ -102,10 +98,6 @@ const routes: Routes = [
     canActivate: [AdminGuard],
     children: [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
-      { path: 'transfer-dashboard', component: TransferDashboardComponent },
-      { path: 'transfer-dashboard/generic', component: TransferDashboardGenericComponent },
-      { path: 'transfer-dashboard/warehouse', component: TransferDashboardWarehouseComponent },
-      { path: 'transfer-dashboard/edit/:transactionId', component: TransferDashboardEditComponent },
       { path: 'main', component: MainPageComponent },
       { path: 'warehouse', canActivate: [AuthWarehouseManagement], component: WarehouseComponent },
       { path: 'warehouse/detail', canActivate: [AuthWarehouseManagement], component: WarehouseDetailComponent },

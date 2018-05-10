@@ -20,11 +20,6 @@ export class AdditionService {
     return resp.json();
   }
 
-  async getGenericDetail(genericId: any) {
-    const resp = await this.authHttp.get(`${this.url}/transfer-dashboard/generic/detail/${genericId}`).toPromise();
-    return resp.json();
-  }
-
   async getGeneric() {
     const resp = await this.authHttp.get(`${this.url}/addition/generic`).toPromise();
     return resp.json();
@@ -42,11 +37,6 @@ export class AdditionService {
 
   async getDashboardWarehouse(warehouseId: any) {
     const resp = await this.authHttp.get(`${this.url}/addition/dashboard/warehouse/${warehouseId}`).toPromise();
-    return resp.json();
-  }
-
-  async getDashboardProduct(genericId: any) {
-    const resp = await this.authHttp.get(`${this.url}/transfer-dashboard/dashboard/product/${genericId}`).toPromise();
     return resp.json();
   }
 
@@ -93,14 +83,6 @@ export class AdditionService {
     return resp.json();
   }
 
-  async updateTransaction(header: any, detail: any[]) {
-    const res = await this.authHttp.put(`${this.url}/transfer-dashboard`, {
-      header: header,
-      data: detail
-    }).toPromise();
-    return res.json();
-  }
-
   async openTransactions(transactionIds: any[]) {
     const res = await this.authHttp.post(`${this.url}/addition/open`, {
       transactionIds: transactionIds
@@ -121,15 +103,6 @@ export class AdditionService {
       transactionId: transactionId
     }).toPromise();
     return res.json();
-  }
-
-  async getProductBookingQty(productId: any, lotNo: any, expiredDate: any) {
-    const resp = await this.authHttp.post(`${this.url}/transfer-dashboard`, {
-      productId: productId,
-      lotNo: lotNo,
-      expiredDate: expiredDate
-    }).toPromise();
-    return resp.json();
   }
 
 }

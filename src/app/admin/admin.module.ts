@@ -116,11 +116,6 @@ import { TransectionTypeComponent } from './transection-type/transection-type.co
 import { ReceiveotherTypeComponent } from './receiveother-type/receiveother-type.component';
 import { WarehouseProductPlanningComponent } from './warehouse-product-planning/warehouse-product-planning.component';
 
-import { TransferDashboardComponent } from './transfer-dashboard/transfer-dashboard.component';
-import { TransferDashboardService } from 'app/admin/transfer-dashboard.service';
-import { TransferDashboardEditComponent } from './transfer-dashboard-edit/transfer-dashboard-edit.component';
-import { TransferDashboardGenericComponent } from './transfer-dashboard-generic/transfer-dashboard-generic.component';
-import { TransferDashboardWarehouseComponent } from './transfer-dashboard-warehouse/transfer-dashboard-warehouse.component';
 import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
 import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
 import { AuthReceive } from 'app/auth-receive.service';
@@ -230,10 +225,6 @@ Highcharts.setOptions({
     TransectionTypeComponent,
     ReceiveotherTypeComponent,
     WarehouseProductPlanningComponent,
-    TransferDashboardComponent,
-    TransferDashboardGenericComponent,
-    TransferDashboardWarehouseComponent,
-    TransferDashboardEditComponent,
     RequisitionConfirmComponent,
     RequisitionConfirmUnpaidComponent,
     ProductManufactureComponent,
@@ -296,7 +287,6 @@ Highcharts.setOptions({
     HisTransactionService,
     TransectionTypeService,
     ReceiveotherTypeService,
-    TransferDashboardService,
     AccessCheck,
     BorrowNoteService,
     MinMaxService,
