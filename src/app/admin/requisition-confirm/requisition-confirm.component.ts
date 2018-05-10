@@ -329,9 +329,8 @@ export class RequisitionConfirmComponent implements OnInit {
       let rs = await this.requisitionService.saveOrderConfirmItemsWithOutUnpaid(this.requisitionId, data.items);
       this.modalLoading.hide();
       if (rs.ok) {
-        this.doCalculateRequisition()
-        // this.alertService.success();
-        // this.router.navigate(['/admin/requisition']);
+        this.alertService.success();
+        this.router.navigate(['/admin/requisition']);
       } else {
         this.alertService.error(rs.error);
       }
@@ -347,9 +346,8 @@ export class RequisitionConfirmComponent implements OnInit {
       let rs = await this.requisitionService.saveOrderConfirmItemsWithUnpaid(this.requisitionId, data.items, data.generics);
       this.modalLoading.hide();
       if (rs.ok) {
-        this.doCalculateRequisition()
-        // this.alertService.success();
-        // this.router.navigate(['/admin/requisition']);
+        this.alertService.success();
+        this.router.navigate(['/admin/requisition']);
       } else {
         this.alertService.error(rs.error);
       }
@@ -452,17 +450,17 @@ export class RequisitionConfirmComponent implements OnInit {
 
             if (rs.ok) {
               this.alertService.success();
-              this.router.navigate(['/admin/requisition']);
+              await this.getOrderItems();
+              await this.getBorrowNotes();
+              // this.router.navigate(['/admin/requisition']);
             } else {
               this.alertService.error(rs.error);
               this.selectedBorrowNotes = [];
               this.borrowNotes = [];
             }
 
-            await this.getOrderItems();
-            await this.getBorrowNotes();
+            this.openBorrowNote = false;
 
-            // this.openBorrowNote = false;
           } catch (error) {
             console.log(error);
             this.alertService.error();
