@@ -8,15 +8,26 @@
   <clr-dg-column [clrDgField]="'donator_name'">ชื่อผู้บริจาค</clr-dg-column>
   <clr-dg-column [clrDgField]="'donator_address'">ที่อยู่</clr-dg-column>
   <clr-dg-column [clrDgField]="'donator_telephone'">โทรศัพท์</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
   <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let d of donators" [clrDgItem]="d">
-    <clr-dg-action-overflow>
+    <!-- <clr-dg-action-overflow>
       <button class="action-item" (click)="showEdit(d)">แก้ไขข้อมูล</button>
       <button class="action-item" (click)="remove(d)">ลบข้อมูล</button>
-    </clr-dg-action-overflow>
+    </clr-dg-action-overflow> -->
     <clr-dg-cell>{{d.donator_name}}</clr-dg-cell>
     <clr-dg-cell>{{d.donator_address}}</clr-dg-cell>
     <clr-dg-cell>{{d.donator_telephone}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+        <div class="btn-group">
+          <button title="แก้ไข" class="btn btn-sm btn-success wm-small-btn" (click)="showEdit(d)">
+            <clr-icon shape="note"></clr-icon>
+          </button>
+          <button title="ลบ" class="btn btn-sm btn-danger wm-small-btn" (click)="remove(d)">
+            <clr-icon shape="trash"></clr-icon>
+          </button>
+        </div>
+      </clr-dg-cell>
   </clr-dg-row>
 
   <clr-dg-footer>

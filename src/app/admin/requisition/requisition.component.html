@@ -76,10 +76,10 @@
           <!-- <clr-dg-cell>{{order.withdraw_warehouse_name}}</clr-dg-cell> -->
           <clr-dg-cell>{{order.requisition_type}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">
-            <clr-icon shape="check" class="is-danger" *ngIf="!order.total_remain || order.total_remain <=0"></clr-icon>
+            <clr-icon title="สินค้าไม่พอจ่าย" shape="check" class="is-danger" *ngIf="!order.total_remain || order.total_remain <=0"></clr-icon>
           </clr-dg-cell>
           <clr-dg-cell style="text-align: center;">
-            <clr-icon shape="check" *ngIf="order.is_cancel === 'Y'" class="is-danger"></clr-icon>
+            <clr-icon title="ยกเลิก" shape="check" *ngIf="order.is_cancel === 'Y'" class="is-danger"></clr-icon>
           </clr-dg-cell>
           <!-- <clr-dg-cell style="text-align: center;">
             <button [disabled]="order.is_cancel === 'Y'" title="จ่ายเวชภัณฑ์" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/requisition/confirm']" [queryParams]="{requisitionId: order.requisition_order_id}">
