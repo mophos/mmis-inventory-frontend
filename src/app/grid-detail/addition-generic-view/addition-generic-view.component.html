@@ -1,0 +1,23 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column [style.width.px]="100" [clrDgField]="'working_code'">Working Code</clr-dg-column>
+    <clr-dg-column [clrDgField]="'generic_name'">ชื่อเวชภัณฑ์</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">Min Qty.</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">Max Qty.</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">คงเหลือ</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">หน่วย</clr-dg-column>
+    <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+    <clr-dg-row *clrDgItems="let g of generics">
+      <clr-dg-cell>{{g.working_code}}</clr-dg-cell>
+      <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{g.dst_min_qty | number}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{g.dst_max_qty | number}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{g.dst_remain_qty | number}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+      <clr-dg-pagination #pagination [clrDgPageSize]="5"></clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>

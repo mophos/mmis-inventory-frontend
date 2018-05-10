@@ -1,0 +1,170 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">เวชภัณฑ์ถึงจุดเติม</span>
+</nav>
+
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink (click)="getWarehouse()">รายการคลังถึงจุดเติม</button>
+    <clr-tab-content *clrIfActive>
+      <clr-datagrid [style.height.%]="85">
+        <clr-dg-column [clrDgField]="'dst_warehouse_name'">คลัง/หน่วยเบิก</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">#</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let w of warehouses; let idx = index">
+          <wm-addition-generic-view [dstWarehouseId]="w.dst_warehouse_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-generic-view>
+          <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <button title="เติมเวชภัณฑ์" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/addition/warehouse']"
+              [queryParams]="{warehouseId: w.dst_warehouse_id}">
+              <clr-icon shape="note"></clr-icon>
+            </button>
+          </clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="warehouses.length"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+  <clr-tab>
+    <button clrTabLink (click)="getGeneric()">รายการเวชภัณฑ์ถึงจุดเติม</button>
+    <clr-tab-content *clrIfActive>
+      <clr-datagrid [style.height.%]="85">
+        <clr-dg-column [clrDgField]="'generic_name'">ชื่อเวชภัณฑ์</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">#</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let g of generics; let idx = index">
+          <wm-addition-warehouse-view [genericId]="g.generic_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-warehouse-view>
+          <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <button title="เติมเวชภัณฑ์" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/addition/generic']"
+              [queryParams]="{genericId: g.generic_id}">
+              <clr-icon shape="note"></clr-icon>
+            </button>
+          </clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="generics.length"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+  <clr-tab>
+    <button clrTabLink (click)="getAddition()">รายการรอสร้างใบเติม</button>
+    <clr-tab-content *clrIfActive>
+      <div class="row">
+        <div class="col-md-12" style="text-align: right;">
+          <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedOpen.length" (click)="clickOpen()">
+            สร้างใบเติม
+          </button>
+        </div>
+      </div>
+      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="selectedOpen" [style.height.%]="80">
+        <clr-dg-column [style.width.px]="150" [clrDgField]="'addition_date'">วันที่สร้าง</clr-dg-column>
+        <clr-dg-column [clrDgField]="'dst_warehouse_name'">คลัง/หน่วยเบิก</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">#</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let a of additions" [clrDgItem]="a">
+          <wm-addition-warehouse-generic [transactionId]="a.addition_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-warehouse-generic>
+          <clr-dg-cell style="text-align: center;">{{a.addition_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{a.dst_warehouse_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <div class="btn-group">
+              <button title="ดูข้อมูล/อนุมัติ" class="btn btn-outline btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/addition/edit', a.addition_id]">
+                <clr-icon shape="view-list"></clr-icon>
+              </button>
+              <button title="ยกเลิก" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="cancel(a)" [disabled]="a.status!=='NEW'">
+                <clr-icon shape="trash"></clr-icon>
+              </button>
+            </div>
+          </clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="transactions.length"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+  <clr-tab>
+    <button clrTabLink (click)="getTransaction()">รายการรออนุมัติ</button>
+    <clr-tab-content *clrIfActive>
+      <div class="row">
+        <div class="col-md-12" style="text-align: right;">
+          <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="clickApprove()">
+            อนุมัติการเติม
+          </button>
+        </div>
+      </div>
+      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="selectedApprove" [style.height.%]="80">
+        <clr-dg-column [style.width.px]="150" [clrDgField]="'addition_date'">วันที่สร้าง</clr-dg-column>
+        <clr-dg-column [style.width.px]="150" [clrDgField]="'addition_code'">เลขที่ใบเติม</clr-dg-column>
+        <clr-dg-column [clrDgField]="'dst_warehouse_name'">คลัง/หน่วยเบิก</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">#</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let t of transactions" [clrDgItem]="t">
+          <wm-addition-warehouse-generic [transactionId]="t.addition_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-warehouse-generic>
+          <clr-dg-cell style="text-align: center;">{{t.addition_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{t.addition_code}}</clr-dg-cell>
+          <clr-dg-cell>{{t.dst_warehouse_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <div class="btn-group">
+              <button title="ดูข้อมูล/อนุมัติ" class="btn btn-outline btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/addition/edit', t.addition_id]">
+                <clr-icon shape="view-list"></clr-icon>
+              </button>
+              <button title="ยกเลิก" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="cancel(t)" [disabled]="t.status!=='OPEN'">
+                <clr-icon shape="trash"></clr-icon>
+              </button>
+            </div>
+          </clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="transactions.length"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+  <clr-tab>
+    <button clrTabLink (click)="getTransactionHistory()">ประวัติการเติม</button>
+    <clr-tab-content *clrIfActive>
+      <clr-datagrid style="padding-top: 5px;" [style.height.%]="85">
+        <clr-dg-column [style.width.px]="150" [clrDgField]="'addition_date'">วันที่สร้าง</clr-dg-column>
+        <clr-dg-column [style.width.px]="150" [clrDgField]="'addition_code'">เลขที่ใบเติม</clr-dg-column>
+        <clr-dg-column [clrDgField]="'dst_warehouse_name'">คลัง/หน่วยเบิก</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">#</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let h of histories" [clrDgItem]="h">
+          <wm-addition-warehouse-generic [transactionId]="h.addition_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-warehouse-generic>
+          <clr-dg-cell style="text-align: center;">{{h.addition_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{h.addition_code}}</clr-dg-cell>
+          <clr-dg-cell>{{h.dst_warehouse_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <div class="btn-group">
+              <button title="ดูข้อมูล/อนุมัติ" class="btn btn-outline btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/addition/edit', h.addition_id]">
+                <clr-icon shape="view-list"></clr-icon>
+              </button>
+              <button title="พิมพ์รายงานการเติม" style="float: left;" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="printRefill(h)">
+                <clr-icon shape="printer"></clr-icon>
+              </button>
+            </div>
+          </clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="histories.length"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>
+<wm-html-preview #htmlPreview></wm-html-preview>
