@@ -115,17 +115,19 @@ export class ReceiveComponent implements OnInit {
   async refreshPo(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
+
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
       if (this.queryPo) {
-        const rs: any = await this.receiveService.getPurchasesListSearch(this.perPage, this.offset, this.queryPo);
+        const rs: any = await this.receiveService.getPurchasesListSearch(this.perPage, this.offset, this.queryPo, sort);
         this.purchases = rs.rows;
         this.totalPurchases = rs.total;
       } else {
-        const rs: any = await this.receiveService.getPurchasesList(limit, this.offset);
+        const rs: any = await this.receiveService.getPurchasesList(limit, this.offset, sort);
         this.purchases = rs.rows;
         this.totalPurchases = rs.total;
       }

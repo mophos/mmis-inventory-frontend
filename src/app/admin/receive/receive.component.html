@@ -51,11 +51,11 @@
       </div>
 
       <clr-datagrid (clrDgRefresh)="refreshPo($event)" class="grid-order" style="padding-top: 5px; height: 83%;">
-        <clr-dg-column style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
-        <clr-dg-column style="width: 150px;">วันที่จัดซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
+        <clr-dg-column style="width: 150px;" [clrDgField]="'order_date'">วันที่จัดซื้อ</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่สัญญา</clr-dg-column>
-        <clr-dg-column>ผู้จำหน่าย</clr-dg-column>
-        <clr-dg-column>วิธีการจัดซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จำหน่าย</clr-dg-column>
+        <clr-dg-column [clrDgField]="'purchase_method_name'">วิธีการจัดซื้อ</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่าจัดซื้อ (บาท)</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่ารับแล้ว (บาท)</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลือก</clr-dg-column>
@@ -64,7 +64,7 @@
           <clr-dg-cell *ngIf="!purchase.purchase_order_book_number">{{purchase.purchase_order_number}}</clr-dg-cell>
           <clr-dg-cell *ngIf="purchase.purchase_order_book_number">{{purchase.purchase_order_book_number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{purchase.order_date | toThaiDate }}</clr-dg-cell>
-          <clr-dg-cell>{{purchase.contract_id}}</clr-dg-cell>
+          <clr-dg-cell>{{purchase.contract_no}}</clr-dg-cell>
           <clr-dg-cell>{{purchase.labeler_name}}</clr-dg-cell>
           <clr-dg-cell>{{purchase.purchase_method_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{purchase.purchase_price | number: '1.2-2'}}</clr-dg-cell>

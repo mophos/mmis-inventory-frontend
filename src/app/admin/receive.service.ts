@@ -372,15 +372,25 @@ export class ReceiveService {
   }
 
   // =================== receive with purchases =================
-  async getPurchasesList(limit: number = 100, offset: number = 0) {
-    const res = await this.authHttp.get(`${this.url}/receives/purchases/list?limit=${limit}&offset=${offset}`)
+  async getPurchasesList(limit: number = 100, offset: number = 0, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/receives/purchases/list`, {
+      limit: limit,
+      offset: offset,
+      sort: sort
+    })
       .toPromise();
 
     return res.json();
   }
 
-  async getPurchasesListSearch(limit: number = 100, offset: number = 0, query: any) {
-    const res = await this.authHttp.get(`${this.url}/receives/purchases/list/search?limit=${limit}&offset=${offset}&query=${query}`)
+  async getPurchasesListSearch(limit: number = 100, offset: number = 0, query: any, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/receives/purchases/list/search`, {
+      // ?limit=${limit}&offset=${offset}&query=${query}
+      limit: limit,
+      offset: offset,
+      query: query,
+      sort: sort
+    })
       .toPromise();
 
     return res.json();
