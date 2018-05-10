@@ -1,3 +1,5 @@
+import { AdditionEditComponent } from './addition-edit/addition-edit.component';
+import { AdditionComponent } from './addition/addition.component';
 import { CalculateMinMaxComponent } from './calculate-min-max/calculate-min-max.component';
 import { TransectionTypeComponent } from './transection-type/transection-type.component';
 import { ReceiveotherTypeComponent } from './receiveother-type/receiveother-type.component';
@@ -90,6 +92,8 @@ import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requ
 import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
 import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
+import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
+import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 
 const routes: Routes = [
   {
@@ -167,6 +171,10 @@ const routes: Routes = [
       { path: 'borrow-notes/new', component: BorrowNoteNewComponent },
       { path: 'borrow-notes/:borrowNoteId/edit', component: BorrowNoteNewComponent },
       { path: 'min-max', component: CalculateMinMaxComponent },
+      { path: 'addition', component: AdditionComponent },
+      { path: 'addition/warehouse', component: AdditionWarehouseComponent },
+      { path: 'addition/generic', component: AdditionGenericComponent },
+      { path: 'addition/edit/:additionId', component: AdditionEditComponent },
     ]
   }
 ];

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TransferDashboardService } from 'app/admin/transfer-dashboard.service';
+import { AdditionService } from 'app/admin/addition.service';
 import { AlertService } from 'app/alert.service';
 
 @Component({
@@ -10,47 +10,26 @@ import { AlertService } from 'app/alert.service';
 })
 export class AdditionWarehouseViewComponent implements OnInit {
 
-  @Input('dstWarehouseId') dstWarehouseId;
-  @Input('transactionId') transactionId;
+  @Input('genericId') genericId;
   loading = false;
-  generics: any = [];
+  warehouses: any = [];
 
   constructor(
     private router: Router,
-    private dashboardService: TransferDashboardService,
+    private additionService: AdditionService,
     private alertService: AlertService
   ) { }
 
   ngOnInit() {
-    if (this.transactionId) {
-      this.getTransactionInfo();
-    } else {
-      this.getWarehouseGeneric();
-    }
+    this.getGenericWarehouse();
   }
 
-  async getWarehouseGeneric() {
+  async getGenericWarehouse() {
     try {
       this.loading = true;
-      const rs: any = await this.dashboardService.getWarehouseGeneric(this.dstWarehouseId);
+      const rs: any = await this.additionService.getGenericWarehouse(this.genericId);
       if (rs.ok) {
-        this.generics = rs.rows;
-      } else {
-        this.alertService.error(rs.error);
-      }
-      this.loading = false;
-    } catch (error) {
-      this.loading = false;
-      this.alertService.error(error.message);
-    }
-  }
-
-  async getTransactionInfo() {
-    try {
-      this.loading = true;
-      const rs: any = await this.dashboardService.getTransactionInfo(this.transactionId);
-      if (rs.ok) {
-        this.generics = rs.rows;
+        this.warehouses = rs.rows;
       } else {
         this.alertService.error(rs.error);
       }

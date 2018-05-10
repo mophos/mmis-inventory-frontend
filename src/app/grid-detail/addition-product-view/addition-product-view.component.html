@@ -1,0 +1,33 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column [clrDgField]="'product_name'">ชื่อทางการค้า</clr-dg-column>
+    <clr-dg-column [clrDgField]="'lot_no'">Lot no.</clr-dg-column>
+    <clr-dg-column [clrDgField]="'expired_date'">วันหมดอายุ</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">คงเหลือก่อนเติม <br> (Package)</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">คงเหลือก่อนเติม <br> (Base Unit)</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">จำนวนเติม <br> (Package)</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">จำนวนเติมรวม <br> (Base Unit)</clr-dg-column>
+    <clr-dg-column [style.width.px]="100">คงเหลือหลังเติม <br> (Base Unit)</clr-dg-column>
+    <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+    <clr-dg-row *clrDgItems="let p of products; let idx = index;">
+      <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+      <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+      <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        {{p.pack_remain_qty | number}} {{p.from_unit_name}} ({{p.conversion_qty | number}} {{p.to_unit_name}})
+      </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        {{p.src_remain_qty}} {{ p.to_unit_name }}
+      </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        {{ p.addition_qty | number}}
+      </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">
+        {{p.addition_qty*p.conversion_qty | number}} {{p.to_unit_name}}
+      </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color': (p.addition_qty * p.conversion_qty) > p.src_remain_qty ? 'red' : 'green'}">
+        {{(p.src_remain_qty - (p.addition_qty*p.conversion_qty)) | number}} {{p.to_unit_name}}
+      </clr-dg-cell>
+    </clr-dg-row>
+  </clr-datagrid>
+</div>

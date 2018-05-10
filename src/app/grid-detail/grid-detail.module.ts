@@ -40,6 +40,10 @@ import { IssueProductComponent } from './issue-product/issue-product.component';
 import { PurchaseDetailComponent } from './purchase-detail/purchase-detail.component';
 import { BorrowNotesDetailComponent } from './borrow-notes-detail/borrow-notes-detail.component';
 import { StaffBorrowNotesDetailComponent } from './staff-borrow-notes-detail/staff-borrow-notes-detail.component';
+import { AdditionProductComponent } from './addition-product/addition-product.component';
+import { AdditionWarehouseGenericComponent } from './addition-warehouse-generic/addition-warehouse-generic.component';
+import { AdditionGenericViewComponent } from './addition-generic-view/addition-generic-view.component';
+import { AdditionProductViewComponent } from './addition-product-view/addition-product-view.component';
 
 @NgModule({
   imports: [
@@ -83,7 +87,11 @@ import { StaffBorrowNotesDetailComponent } from './staff-borrow-notes-detail/sta
     IssueProductComponent,
     PurchaseDetailComponent,
     BorrowNotesDetailComponent,
-    StaffBorrowNotesDetailComponent
+    StaffBorrowNotesDetailComponent,
+    AdditionProductComponent,
+    AdditionWarehouseGenericComponent,
+    AdditionGenericViewComponent,
+    AdditionProductViewComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -118,7 +126,11 @@ import { StaffBorrowNotesDetailComponent } from './staff-borrow-notes-detail/sta
     IssueProductComponent,
     PurchaseDetailComponent,
     BorrowNotesDetailComponent,
-    StaffBorrowNotesDetailComponent
+    StaffBorrowNotesDetailComponent,
+    AdditionProductComponent,
+    AdditionWarehouseGenericComponent,
+    AdditionGenericViewComponent,
+    AdditionProductViewComponent
   ]
 })
 export class GridDetailModule { }

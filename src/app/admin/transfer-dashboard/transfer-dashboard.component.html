@@ -13,7 +13,7 @@
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let w of warehouses; let idx = index">
           <!-- <wm-transfer-warehouse-new [dstWarehouseId]="w.dst_warehouse_id" (refresh)="getWarehouse()" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-transfer-warehouse-new> -->
-          <wm-addition-warehouse-view [dstWarehouseId]="w.dst_warehouse_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-warehouse-view>
+          <!-- <wm-addition-warehouse-view [dstWarehouseId]="w.dst_warehouse_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-warehouse-view> -->
           <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">
             <button title="เติมเวชภัณฑ์" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/transfer-dashboard/warehouse']"

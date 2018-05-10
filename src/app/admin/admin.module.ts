@@ -55,6 +55,7 @@ import { ReportProductsService } from './reports/reports-products.service';
 import { WarehouseProductsService } from './warehouse-products.service';
 import { ShippingNetworkService } from './shipping-network.service';
 import { IssueService } from './issue.service';
+import { AdditionService } from 'app/admin/addition.service';
 
 import { LayoutComponent } from './layout/layout.component';
 import { WarehouseTypeComponent } from './warehouse-type/warehouse-type.component';
@@ -144,6 +145,10 @@ import { PurchasingNotgiveawayComponent } from './reports/purchasing-notgiveaway
 import { InventoryStatusComponent } from './reports/inventory-status/inventory-status.component';
 import { ProductReceiveComponent } from './reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
+import { AdditionComponent } from './addition/addition.component';
+import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
+import { AdditionEditComponent } from './addition-edit/addition-edit.component';
+import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -242,7 +247,11 @@ Highcharts.setOptions({
     PurchasingNotgiveawayComponent,
     InventoryStatusComponent,
     ProductReceiveComponent,
-    SummaryDisbursementComponent
+    SummaryDisbursementComponent,
+    AdditionComponent,
+    AdditionWarehouseComponent,
+    AdditionEditComponent,
+    AdditionGenericComponent
   ],
   providers: [
     MainService,
@@ -291,6 +300,7 @@ Highcharts.setOptions({
     AccessCheck,
     BorrowNoteService,
     MinMaxService,
+    AdditionService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })
