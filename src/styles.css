@@ -126,6 +126,10 @@ input[type=number] {
   background-color: #FFFCE8;
 }
 
+.isProblem{
+  background-color: #FFE5C9;
+}
+
 .editLine {
   border-bottom: 2px solid #E62700;
   background-color: #FFF0EE;

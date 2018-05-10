@@ -55,6 +55,7 @@ import { ReportProductsService } from './reports/reports-products.service';
 import { WarehouseProductsService } from './warehouse-products.service';
 import { ShippingNetworkService } from './shipping-network.service';
 import { IssueService } from './issue.service';
+import { AdditionService } from 'app/admin/addition.service';
 
 import { LayoutComponent } from './layout/layout.component';
 import { WarehouseTypeComponent } from './warehouse-type/warehouse-type.component';
@@ -115,11 +116,6 @@ import { TransectionTypeComponent } from './transection-type/transection-type.co
 import { ReceiveotherTypeComponent } from './receiveother-type/receiveother-type.component';
 import { WarehouseProductPlanningComponent } from './warehouse-product-planning/warehouse-product-planning.component';
 
-import { TransferDashboardComponent } from './transfer-dashboard/transfer-dashboard.component';
-import { TransferDashboardService } from 'app/admin/transfer-dashboard.service';
-import { TransferDashboardEditComponent } from './transfer-dashboard-edit/transfer-dashboard-edit.component';
-import { TransferDashboardGenericComponent } from './transfer-dashboard-generic/transfer-dashboard-generic.component';
-import { TransferDashboardWarehouseComponent } from './transfer-dashboard-warehouse/transfer-dashboard-warehouse.component';
 import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
 import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
 import { AuthReceive } from 'app/auth-receive.service';
@@ -145,6 +141,10 @@ import { InventoryStatusComponent } from './reports/inventory-status/inventory-s
 import { ProductReceiveComponent } from './reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
 import { CodeMappingComponent } from './code-mapping/code-mapping.component';
+import { AdditionComponent } from './addition/addition.component';
+import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
+import { AdditionEditComponent } from './addition-edit/addition-edit.component';
+import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -226,10 +226,6 @@ Highcharts.setOptions({
     TransectionTypeComponent,
     ReceiveotherTypeComponent,
     WarehouseProductPlanningComponent,
-    TransferDashboardComponent,
-    TransferDashboardGenericComponent,
-    TransferDashboardWarehouseComponent,
-    TransferDashboardEditComponent,
     RequisitionConfirmComponent,
     RequisitionConfirmUnpaidComponent,
     ProductManufactureComponent,
@@ -244,7 +240,14 @@ Highcharts.setOptions({
     InventoryStatusComponent,
     ProductReceiveComponent,
     SummaryDisbursementComponent,
+<<<<<<< HEAD
     CodeMappingComponent
+=======
+    AdditionComponent,
+    AdditionWarehouseComponent,
+    AdditionEditComponent,
+    AdditionGenericComponent
+>>>>>>> 7e8b54d29e992c57affb19325ff23a726aabf822
   ],
   providers: [
     MainService,
@@ -289,10 +292,10 @@ Highcharts.setOptions({
     HisTransactionService,
     TransectionTypeService,
     ReceiveotherTypeService,
-    TransferDashboardService,
     AccessCheck,
     BorrowNoteService,
     MinMaxService,
+    AdditionService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })
