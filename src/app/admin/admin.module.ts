@@ -240,14 +240,11 @@ Highcharts.setOptions({
     InventoryStatusComponent,
     ProductReceiveComponent,
     SummaryDisbursementComponent,
-<<<<<<< HEAD
-    CodeMappingComponent
-=======
+    CodeMappingComponent,
     AdditionComponent,
     AdditionWarehouseComponent,
     AdditionEditComponent,
     AdditionGenericComponent
->>>>>>> 7e8b54d29e992c57affb19325ff23a726aabf822
   ],
   providers: [
     MainService,
