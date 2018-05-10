@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { WarehouseService } from './../warehouse.service';
 import { AlertService } from '../../alert.service';
 
-import * as _ from 'lodash';  
+import * as _ from 'lodash';
 
 @Component({
   selector: 'wm-his-mappings',
@@ -13,7 +13,7 @@ export class HisMappingsComponent implements OnInit {
   mappings = [];
 
   constructor(
-    private warehouseService: WarehouseService, 
+    private warehouseService: WarehouseService,
     private alertService: AlertService) { }
 
   ngOnInit() {
@@ -23,7 +23,7 @@ export class HisMappingsComponent implements OnInit {
   async getMappings() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.warehouseService.getMappingsGenerics();
+      const rs: any = await this.warehouseService.getMappingsGenerics();
       this.mappings = rs.rows;
       this.modalLoading.hide();
     } catch (error) {
@@ -33,7 +33,7 @@ export class HisMappingsComponent implements OnInit {
   }
 
   onChangeCode(his: any, generic: any) {
-    let idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
+    const idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
     if (idx > -1) {
       this.mappings[idx].mmis = generic.generic_id;
       this.mappings[idx].his = his;
@@ -41,7 +41,7 @@ export class HisMappingsComponent implements OnInit {
   }
 
   onChangeConversion(conversion: any, generic: any) {
-    let idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
+    const idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
     if (idx > -1) {
       this.mappings[idx].mmis = generic.generic_id;
       this.mappings[idx].conversion = +conversion;
@@ -51,8 +51,8 @@ export class HisMappingsComponent implements OnInit {
   async save(generic: any) {
     if (generic.mmis && generic.his) {
       try {
-        let conversion = generic.conversion || 1;
-        let rs: any = await this.warehouseService.saveMapping(generic.mmis, generic.his, conversion);
+        const conversion = generic.conversion || 1;
+        const rs: any = await this.warehouseService.saveMapping(generic.mmis, generic.his, conversion);
         if (rs.ok) {
           this.alertService.success();
         } else {
@@ -73,10 +73,10 @@ export class HisMappingsComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let rs: any = await this.warehouseService.removeMapping(generic.generic_id);
+          const rs: any = await this.warehouseService.removeMapping(generic.generic_id);
           this.modalLoading.hide();
           if (rs.ok) {
-            let idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
+            const idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
             if (idx > -1) {
               this.mappings[idx].conversion = 1;
               this.mappings[idx].his = null;

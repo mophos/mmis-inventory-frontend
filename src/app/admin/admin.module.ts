@@ -140,6 +140,7 @@ import { PurchasingNotgiveawayComponent } from './reports/purchasing-notgiveaway
 import { InventoryStatusComponent } from './reports/inventory-status/inventory-status.component';
 import { ProductReceiveComponent } from './reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
+import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 import { AdditionComponent } from './addition/addition.component';
 import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
 import { AdditionEditComponent } from './addition-edit/addition-edit.component';
@@ -239,6 +240,7 @@ Highcharts.setOptions({
     InventoryStatusComponent,
     ProductReceiveComponent,
     SummaryDisbursementComponent,
+    CodeMappingComponent,
     AdditionComponent,
     AdditionWarehouseComponent,
     AdditionEditComponent,
