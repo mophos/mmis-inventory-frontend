@@ -90,4 +90,9 @@ export class ProductsService {
     return resp.json();
   }
 
+  async updateTMT(productUpdate: any) {
+    const resp = await this.authHttp.put(`${this.url}/products/update/tmt`, { productUpdate: productUpdate }).toPromise();
+    return resp.json();
+  }
+
 }

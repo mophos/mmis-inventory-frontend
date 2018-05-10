@@ -2,27 +2,37 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">Map รหัสยา TMT(TPU)</span>
 </nav>
-
+<div class="row">
+  <div class="col-sm-4">
+    &nbsp;
+  </div>
+  <div class="col-sm-4">
+    &nbsp;
+  </div>
+  <div class="col-sm-4">
+    <button type="button" class="btn btn-sm btn-success" style="float: right;" (click)="save()">
+      บันทึกรายการ +
+    </button>
+  </div>
+</div>
 <clr-datagrid class="order-form">
   <clr-dg-column style="width: 200px;">Working Code</clr-dg-column>
-  <clr-dg-column style="width: 500px;">ชื่อยา</clr-dg-column>
-  <clr-dg-column style="width: 200px; text-align: center;">TMT ID</clr-dg-column>
-  <clr-dg-column></clr-dg-column>
+  <clr-dg-column style="width: 300px;">ชื่อยา</clr-dg-column>
+  <clr-dg-column style="width: 180px;">TMT ID</clr-dg-column>
+  <clr-dg-column style="width: 500px;"></clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems='let m of product'>
-    <clr-dg-cell>{{m.product_id}}</clr-dg-cell>
+    <clr-dg-cell>{{m.working_code}}</clr-dg-cell>
     <clr-dg-cell>{{m.product_name}}</clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4">
+      <wm-search-product-tmt #searchTMT [tmtId]='m.TMTID' (onSelect)="setSelectedProduct($event,m)" (onChange)="changeSearchProduct($event,m)"
+        style="display: inline-block;"></wm-search-product-tmt>
     </clr-dg-cell>
-    <clr-dg-cell>
-      <button class="btn btn-sm btn-success wm-small-btn" >
-        <clr-icon shape="floppy"></clr-icon>
-      </button>
-    </clr-dg-cell>
+    <clr-dg-cell>{{m.FSN}}</clr-dg-cell>
   </clr-dg-row>
   <clr-dg-footer>
     {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
     <clr-dg-pagination #pagination [clrDgPageSize]="100"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
+<wm-loading-modal #modalLoading></wm-loading-modal>
