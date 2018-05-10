@@ -6,18 +6,17 @@
     <clr-dg-column [style.width.px]="100">Max Qty.</clr-dg-column>
     <clr-dg-column [style.width.px]="100">คงเหลือ</clr-dg-column>
     <clr-dg-column [style.width.px]="100">ยอดแนะนำ</clr-dg-column>
-    <clr-dg-column [clrDgField]="'total_transfer_qty'" [style.width.px]="100">จำนวนเติม</clr-dg-column>
+    <clr-dg-column [clrDgField]="'addition_qty'" [style.width.px]="100">จำนวนเติม</clr-dg-column>
     <clr-dg-column [style.width.px]="100">หน่วย</clr-dg-column>
     <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
     <clr-dg-row *clrDgItems="let t of transactions">
-      <!-- <wm-transfer-product-view [transaction]="t" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-transfer-product-view> -->
       <clr-dg-cell>{{t.working_code}}</clr-dg-cell>
       <clr-dg-cell>{{t.generic_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{t.dst_min_qty | number}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{t.dst_max_qty | number}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{t.dst_remain_qty | number}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{t.dst_max_qty - t.dst_remain_qty | number}}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right;">{{t.total_transfer_qty | number}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{t.addition_qty | number}}</clr-dg-cell>
       <clr-dg-cell style="text-align: center;">{{t.unit_name}}</clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
