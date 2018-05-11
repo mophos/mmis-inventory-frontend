@@ -91,7 +91,7 @@
     <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.issue_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.issue_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
+        <button title="ลบ" class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
           <clr-icon shape="trash"></clr-icon>
         </button>
       </div>

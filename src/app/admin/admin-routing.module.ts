@@ -1,3 +1,5 @@
+import { AdditionEditComponent } from './addition-edit/addition-edit.component';
+import { AdditionComponent } from './addition/addition.component';
 import { CalculateMinMaxComponent } from './calculate-min-max/calculate-min-max.component';
 import { TransectionTypeComponent } from './transection-type/transection-type.component';
 import { ReceiveotherTypeComponent } from './receiveother-type/receiveother-type.component';
@@ -67,11 +69,7 @@ import { TransferEditComponent } from 'app/admin/transfer-edit/transfer-edit.com
 import { HisIssueTransactionComponent } from 'app/admin/his-issue-transaction/his-issue-transaction.component';
 import { WarehouseProductPlanningComponent } from 'app/admin/warehouse-product-planning/warehouse-product-planning.component';
 
-import { TransferDashboardComponent } from 'app/admin/transfer-dashboard/transfer-dashboard.component';
 import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
-import { TransferDashboardGenericComponent } from './transfer-dashboard-generic/transfer-dashboard-generic.component';
-import { TransferDashboardWarehouseComponent } from './transfer-dashboard-warehouse/transfer-dashboard-warehouse.component';
-import { TransferDashboardEditComponent } from './transfer-dashboard-edit/transfer-dashboard-edit.component';
 import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
@@ -82,7 +80,7 @@ import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
 import { ValueProductsComponent } from 'app/admin/reports/value-products/value-products.component';
-import { PurchasingNotgiveawayComponent} from 'app/admin/reports/purchasing-notgiveaway/purchasing-notgiveaway.component'
+import { PurchasingNotgiveawayComponent } from 'app/admin/reports/purchasing-notgiveaway/purchasing-notgiveaway.component'
 import { InventoryStatusComponent } from 'app/admin/reports/inventory-status/inventory-status.component';
 import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
@@ -90,6 +88,9 @@ import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requ
 import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
 import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
+import { CodeMappingComponent } from './code-mapping/code-mapping.component';
+import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
+import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 
 const routes: Routes = [
   {
@@ -98,10 +99,6 @@ const routes: Routes = [
     canActivate: [AdminGuard],
     children: [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
-      { path: 'transfer-dashboard', component: TransferDashboardComponent },
-      { path: 'transfer-dashboard/generic', component: TransferDashboardGenericComponent },
-      { path: 'transfer-dashboard/warehouse', component: TransferDashboardWarehouseComponent },
-      { path: 'transfer-dashboard/edit/:transactionId', component: TransferDashboardEditComponent },
       { path: 'main', component: MainPageComponent },
       { path: 'warehouse', canActivate: [AuthWarehouseManagement], component: WarehouseComponent },
       { path: 'warehouse/detail', canActivate: [AuthWarehouseManagement], component: WarehouseDetailComponent },
@@ -119,9 +116,9 @@ const routes: Routes = [
       { path: 'requisition', canActivate: [AuthRequisition], component: RequisitionComponent },
       { path: 'requisition-type', component: RequisitionTypeComponent },
       { path: 'transection-type', component: TransectionTypeComponent },
-      { path: 'receiveother-type', component: ReceiveotherTypeComponent  },
+      { path: 'receiveother-type', component: ReceiveotherTypeComponent },
       { path: 'requisition/new', canActivate: [AuthRequisition], component: RequisitionNewComponent },
-      { path: 'requisition/edit/:requisitionId', canActivate: [AuthRequisition], component: RequisitionNewComponent},
+      { path: 'requisition/edit/:requisitionId', canActivate: [AuthRequisition], component: RequisitionNewComponent },
       { path: 'requisition/confirm', canActivate: [AuthRequisition], component: RequisitionConfirmComponent },
       { path: 'requisition/confirm/edit', canActivate: [AuthRequisition], component: RequisitionConfirmEditComponent },
       { path: 'requisition/confirm-unpaid', canActivate: [AuthRequisition], component: RequisitionConfirmUnpaidComponent },
@@ -145,8 +142,9 @@ const routes: Routes = [
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },
-      { path: 'warehouse-products', component: WarehouseProductsComponent},
-      { path: 'warehouse-products/details/:warehouseId', component: WarehouseProductsDetailComponent},
+      { path: 'warehouse-products', component: WarehouseProductsComponent },
+      { path: 'warehouse-products/details/:warehouseId', component: WarehouseProductsDetailComponent },
+      { path: 'code-mapping', component: CodeMappingComponent },
       // { path: 'lots', component: LotsComponent },
       { path: 'donators', component: DonatorsComponent },
       { path: 'products', component: ProductsComponent },
@@ -167,6 +165,10 @@ const routes: Routes = [
       { path: 'borrow-notes/new', component: BorrowNoteNewComponent },
       { path: 'borrow-notes/:borrowNoteId/edit', component: BorrowNoteNewComponent },
       { path: 'min-max', component: CalculateMinMaxComponent },
+      { path: 'addition', component: AdditionComponent },
+      { path: 'addition/warehouse', component: AdditionWarehouseComponent },
+      { path: 'addition/generic', component: AdditionGenericComponent },
+      { path: 'addition/edit/:additionId', component: AdditionEditComponent },
     ]
   }
 ];

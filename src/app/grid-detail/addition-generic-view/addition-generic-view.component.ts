@@ -4,15 +4,15 @@ import { AdditionService } from 'app/admin/addition.service';
 import { AlertService } from 'app/alert.service';
 
 @Component({
-  selector: 'wm-addition-warehouse-view',
-  templateUrl: './addition-warehouse-view.component.html',
+  selector: 'wm-addition-generic-view',
+  templateUrl: './addition-generic-view.component.html',
   styles: []
 })
-export class AdditionWarehouseViewComponent implements OnInit {
+export class AdditionGenericViewComponent implements OnInit {
 
-  @Input('genericId') genericId;
+  @Input('dstWarehouseId') dstWarehouseId;
   loading = false;
-  warehouses: any = [];
+  generics: any = [];
 
   constructor(
     private router: Router,
@@ -21,15 +21,15 @@ export class AdditionWarehouseViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getGenericWarehouse();
+    this.getWarehouseGeneric();
   }
 
-  async getGenericWarehouse() {
+  async getWarehouseGeneric() {
     try {
       this.loading = true;
-      const rs: any = await this.additionService.getGenericWarehouse(this.genericId);
+      const rs: any = await this.additionService.getWarehouseGeneric(this.dstWarehouseId);
       if (rs.ok) {
-        this.warehouses = rs.rows;
+        this.generics = rs.rows;
       } else {
         this.alertService.error(rs.error);
       }

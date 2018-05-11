@@ -1,0 +1,43 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">Map รหัสยา TMT(TPU)</span>
+</nav>
+<div class="row">
+  <div class="col-sm-4">
+    &nbsp;
+  </div>
+  <div class="col-sm-4">
+    &nbsp;
+  </div>
+  <div class="col-sm-4">
+  </div>
+</div>
+<clr-datagrid class="order-form">
+  <clr-dg-column [clrDgField]="'working_code'" style="width: 200px;">Working Code</clr-dg-column>
+  <clr-dg-column [clrDgField]="'product_name'" style="width: 300px;">ชื่อยา</clr-dg-column>
+  <clr-dg-column style="width: 180px;">TMT ID</clr-dg-column>
+  <clr-dg-column style="width: 500px;"></clr-dg-column>
+  <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+  <clr-dg-row *clrDgItems='let m of product'>
+    <clr-dg-cell>{{m.working_code}}</clr-dg-cell>
+    <clr-dg-cell>{{m.product_name}}</clr-dg-cell>
+    <clr-dg-cell>
+      <wm-search-product-tmt #searchTMT [tmtId]='m.TMTID' (onSelect)="setSelectedProduct($event,m)" (onChange)="changeSearchProduct($event,m)"
+        style="display: inline-block;"></wm-search-product-tmt>
+    </clr-dg-cell>
+    <clr-dg-cell>{{m.FSN}}</clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>
+    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+<div class="row">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-sm btn-success" (click)="save()">
+      <clr-icon shape="floppy"></clr-icon>
+      บันทึกข้อมูล
+    </button>
+  </div>
+</div>
+<wm-loading-modal #modalLoading></wm-loading-modal>
