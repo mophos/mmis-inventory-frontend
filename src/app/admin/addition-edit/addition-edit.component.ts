@@ -1,38 +1,31 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TransferDashboardService } from 'app/admin/transfer-dashboard.service';
+import { AdditionService } from 'app/admin/addition.service';
 import { AlertService } from 'app/alert.service';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'wm-transfer-dashboard-edit',
-  templateUrl: './transfer-dashboard-edit.component.html',
+  selector: 'wm-addition-edit',
+  templateUrl: './addition-edit.component.html',
   styles: []
 })
-export class TransferDashboardEditComponent implements OnInit {
+export class AdditionEditComponent implements OnInit {
+
   @ViewChild('modalLoading') private modalLoading;
   transactionId: any;
-  srcWarehouseId: any;
-  dstWarehouseId: any;
-  dstMinQty: any;
-  dstRemainQty: any;
-  dstMaxQty: any;
   status: any;
-  transactionDate: any;
-  srcRemainQty: any;
-  srcMinQty = 0;
   dstWarehouseName: any;
+  dstWarehouseCode: any;
   generics: any = [];
-  unitName: any;
   perPage = 20;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private dashboardService: TransferDashboardService,
+    private additionService: AdditionService,
     private alertService: AlertService
   ) {
-    this.transactionId = this.route.snapshot.params['transactionId'];
+    this.transactionId = this.route.snapshot.params['additionId'];
   }
 
   async ngOnInit() {
@@ -42,11 +35,11 @@ export class TransferDashboardEditComponent implements OnInit {
   async getTransactionInfo() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.dashboardService.getTransactionInfo(this.transactionId);
+      const rs: any = await this.additionService.getTransactionInfo(this.transactionId);
       if (rs.ok) {
         this.status = rs.rows[0].status;
-        this.dstWarehouseId = rs.rows[0].dst_warehouse_id;
         this.dstWarehouseName = rs.rows[0].dst_warehouse_name;
+        this.dstWarehouseCode = rs.rows[0].dst_short_code;
         this.generics = rs.rows;
       } else {
         this.alertService.error(rs.error);
@@ -58,15 +51,15 @@ export class TransferDashboardEditComponent implements OnInit {
     }
   }
 
-  approve() {
-    this.alertService.confirm(`คุณต้องการอนุมัติ ใช่หรือไม่?`)
+  clickOpen() {
+    this.alertService.confirm(`คุณต้องการสร้างใบเติม ใช่หรือไม่?`)
       .then(() => {
         this.modalLoading.show();
-        this.dashboardService.approveTransactions(this.transactionId)
+        this.additionService.openTransactions([this.transactionId])
           .then((rs: any) => {
             if (rs.ok) {
               this.alertService.success();
-              this.router.navigate(['/admin/transfer-dashboard']);
+              this.router.navigate(['/admin/addition']);
             } else {
               this.alertService.error(rs.error);
             }
@@ -80,15 +73,37 @@ export class TransferDashboardEditComponent implements OnInit {
       .catch(() => { });
   }
 
-  cancel(transaction: any) {
-    this.alertService.confirm(`คุณต้องการยกเลิก ใช่หรือไม่?`)
+  clickApprove() {
+    this.alertService.confirm(`คุณต้องการอนุมัติ ใช่หรือไม่?`)
       .then(() => {
         this.modalLoading.show();
-        this.dashboardService.cancelTransactions(this.transactionId)
+        this.additionService.approveTransactions([this.transactionId])
           .then((rs: any) => {
             if (rs.ok) {
               this.alertService.success();
-              this.router.navigate(['/admin/transfer-dashboard']);
+              this.router.navigate(['/admin/addition']);
+            } else {
+              this.alertService.error(rs.error);
+            }
+            this.modalLoading.hide();
+          })
+          .catch((error: any) => {
+            this.modalLoading.hide();
+            this.alertService.serverError();
+          });
+      })
+      .catch(() => { });
+  }
+
+  clickCancel(transaction: any) {
+    this.alertService.confirm(`คุณต้องการยกเลิก ใช่หรือไม่?`)
+      .then(() => {
+        this.modalLoading.show();
+        this.additionService.cancelTransactions(this.transactionId)
+          .then((rs: any) => {
+            if (rs.ok) {
+              this.alertService.success();
+              this.router.navigate(['/admin/addition']);
             } else {
               this.alertService.error(JSON.stringify(rs.error));
             }

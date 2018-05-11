@@ -1,17 +1,18 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
-import { TransferDashboardService } from 'app/admin/transfer-dashboard.service';
+import { AdditionService } from 'app/admin/addition.service';
 import { AlertService } from 'app/alert.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'wm-transfer-warehouse-view',
-  templateUrl: './transfer-warehouse-view.component.html',
+  selector: 'wm-addition-warehouse-generic',
+  templateUrl: './addition-warehouse-generic.component.html',
   styles: []
 })
-export class TransferWarehouseViewComponent implements OnInit {
+export class AdditionWarehouseGenericComponent implements OnInit {
+
   @Input('transactionId') transactionId;
   public jwtHelper: JwtHelper = new JwtHelper();
   token: any;
@@ -22,7 +23,7 @@ export class TransferWarehouseViewComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private dashboardService: TransferDashboardService,
+    private additionService: AdditionService,
     private alertService: AlertService
   ) { }
 
@@ -33,7 +34,7 @@ export class TransferWarehouseViewComponent implements OnInit {
   async getTransactionInfo() {
     try {
       this.loading = true;
-      const rs: any = await this.dashboardService.getTransactionInfo(this.transactionId);
+      const rs: any = await this.additionService.getTransactionInfo(this.transactionId);
       if (rs.ok) {
         this.transactions = rs.rows;
       } else {

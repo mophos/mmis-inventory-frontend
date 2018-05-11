@@ -129,10 +129,11 @@ export class ReceiveService {
     return res.json();
   }
 
-  async saveReceive(summary: any, products: Array<any>) {
+  async saveReceive(summary: any, products: Array<any>, closePurchase: any) {
     const res = await this.authHttp.post(`${this.url}/receives`, {
       summary: summary,
-      products: products
+      products: products,
+      closePurchase: closePurchase
     }).toPromise();
 
     return res.json();
@@ -224,10 +225,11 @@ export class ReceiveService {
     return res.json();
   }
 
-  async updateReceive(receiveId: any, summary: any, products: Array<any>) {
+  async updateReceive(receiveId: any, summary: any, products: Array<any>, closePurchase: any) {
     const res = await this.authHttp.put(`${this.url}/receives/${receiveId}`, {
       summary: summary,
-      products: products
+      products: products,
+      closePurchase: closePurchase
     }).toPromise();
 
     return res.json();

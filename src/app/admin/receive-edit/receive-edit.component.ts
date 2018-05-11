@@ -40,7 +40,7 @@ export class ReceiveEditComponent implements OnInit {
   totalProduct = 0;
   totalCost = 0;
   loading = false;
-
+  isClosePurchase: boolean = false;
   lots = [];
 
   products = [];
@@ -661,7 +661,8 @@ export class ReceiveEditComponent implements OnInit {
                   this.isSaving = false;
                   this.alertService.error('ข้อมูลรายการสินค้าบางรายการไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot, วันหมดอายุ]');
                 } else {
-                  const rs: any = await this.receiveService.updateReceive(this.receiveId, summary, _products);
+                  let _closePurchase = this.isClosePurchase ? 'Y' : 'N';
+                  const rs: any = await this.receiveService.updateReceive(this.receiveId, summary, _products, _closePurchase);
                   if (rs.ok) {
                     this.modalLoading.hide();
                     this.router.navigate(['/admin/receives']);
@@ -721,8 +722,8 @@ export class ReceiveEditComponent implements OnInit {
                 this.modalLoading.hide();
                 this.alertService.error('ข้อมูลรายการสินค้าบางรายการไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot, วันหมดอายุ]');
               } else {
-
-                const rs: any = await this.receiveService.updateReceive(this.receiveId, summary, _products);
+                let _closePurchase = this.isClosePurchase ? 'Y' : 'N';
+                const rs: any = await this.receiveService.updateReceive(this.receiveId, summary, _products, _closePurchase);
                 this.modalLoading.hide();
                 this.isSaving = false;
                 if (rs.ok) {
