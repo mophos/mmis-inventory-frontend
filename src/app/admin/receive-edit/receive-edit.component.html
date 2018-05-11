@@ -171,7 +171,7 @@
     <clr-dg-cell>
       <wm-select-product-location #editLocationList (onSelect)="changeEditLocation(idx, $event)" [warehouseId]="product.warehouse_id"
         [selectedId]="product.location_id"></wm-select-product-location>
-    </clr-dg-cell> 
+    </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-sm btn-danger wm-small-btn" [disabled]="isApprove" (click)="removeSelectedProduct(idx)">
@@ -246,6 +246,11 @@
 
 <div class="row wid99">
   <div class="col-md-6">
+    <clr-checkbox [clrDisabled]="isApprove || !purchaseOrderNumber" [(ngModel)]="isClosePurchase" [clrInline]="true">
+      ปิดการรับจากใบสั่งซื้อเลขที่
+      <strong>{{purchaseOrderNumber}}</strong>
+    </clr-checkbox>
+    &nbsp; &nbsp;
     <button class="btn btn-success btn-sm" (click)="updateReceive()" [disabled]="isSaving || isApprove || !this.receiveDate || !this.deliveryCode || !this.deliveryDate || !this.receiveId || !this.selectedSupplierId || !products.length">
       <clr-icon shape="floppy"></clr-icon>
       บันทึกข้อมูล
@@ -304,7 +309,7 @@
   <div class="modal-body">
     <form class="compact" style="padding-top: 0px;">
       <section class="form-block">
-        <div class="form-group row"> 
+        <div class="form-group row">
         </div>
         <div class="form-group row">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -320,10 +325,10 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" [disabled]="!comment" (click)="saveComment()">
-          ยืนยัน
-      </button>
+      ยืนยัน
+    </button>
     <button type="button" class="btn btn-danger" (click)="closeExpireModal()">
-          ยกเลิก
-      </button>
+      ยกเลิก
+    </button>
   </div>
 </clr-modal>
