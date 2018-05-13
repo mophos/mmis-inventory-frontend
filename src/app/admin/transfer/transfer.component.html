@@ -63,14 +63,14 @@
           </clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
-              <button *ngIf="t.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/transfer/edit']" [queryParams]="{transferId: t.transfer_id}"
+              <button title="แก้ไข" *ngIf="t.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/transfer/edit']" [queryParams]="{transferId: t.transfer_id}"
                 [disabled]="t.mark_deleted === 'Y' || t.approved === 'Y' || t.confirmed === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
               <button *ngIf="t.mark_deleted === 'Y'" class="btn btn-primary wm-small-btn" (click)="activeTransfer(t)" [disabled]="t.mark_deleted === 'N' || t.approved === 'Y'">
                 เปลี่ยน
               </button>
-              <button *ngIf="t.mark_deleted === 'N'" class="btn btn-danger wm-small-btn" (click)="removeTransfer(t)" [disabled]="t.mark_deleted === 'Y' || t.confirmed === 'Y' || t.approved === 'Y'">
+              <button title="ลบ" *ngIf="t.mark_deleted === 'N'" class="btn btn-danger wm-small-btn" (click)="removeTransfer(t)" [disabled]="t.mark_deleted === 'Y' || t.confirmed === 'Y' || t.approved === 'Y'">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>

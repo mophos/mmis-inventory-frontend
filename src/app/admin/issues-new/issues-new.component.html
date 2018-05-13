@@ -64,20 +64,18 @@
 </div>
 
 <clr-datagrid>
-  <clr-dg-column>#</clr-dg-column>
-  <clr-dg-column [style.width.px]="300">ชื่อสินค้า</clr-dg-column>
-  <clr-dg-column>จำนวนตัดจ่าย</clr-dg-column>
-  <clr-dg-column>หน่วยตัดจ่าย</clr-dg-column>
-  <clr-dg-column>รวม (Base Unit)</clr-dg-column>
-  <clr-dg-column>คงเหลือ (Base Unit)</clr-dg-column>
-  <clr-dg-column>คงเหลือ (หักยอดจอง)</clr-dg-column>
-  <clr-dg-column></clr-dg-column>
+  <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">จำนวนตัดจ่าย</clr-dg-column>
+  <clr-dg-column [style.width.px]="200">หน่วยตัดจ่าย</clr-dg-column>
+  <clr-dg-column [style.width.px]="130">รวม (Base)</clr-dg-column>
+  <clr-dg-column [style.width.px]="130">คงเหลือ (Base)</clr-dg-column>
+  <clr-dg-column [style.width.px]="130">คงเหลือ (หักยอดจอง)</clr-dg-column>
+  <clr-dg-column [style.width.px]="140"></clr-dg-column>
 
   <clr-dg-row *ngFor="let product of products; let idx = index;">
     <wm-issue-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="product.items" ngProjectAs="clr-dg-row-detail"></wm-issue-product>
 
-    <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px;">{{product.generic_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{idx + 1}}. {{product.generic_name}}</clr-dg-cell>
     <!-- <clr-dg-cell style="line-height: 25px;">{{product.expired_date | toEngDate}}</clr-dg-cell> -->
     <clr-dg-cell>
       <input type="text" #issueQty (keyup)="editChangeIssueQty(idx, issueQty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
@@ -87,20 +85,19 @@
       <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
         [genericId]="product.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}} {{product.unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty || 0 | number}} {{product.unit_name}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
-  <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.reserve_qty | number}} {{product.unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.reserve_qty | number}} {{product.unit_name}}</clr-dg-cell>
     <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.issue_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.issue_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
+        <button title="ลบ" class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
           <clr-icon shape="trash"></clr-icon>
         </button>
       </div>
     </clr-dg-cell>
   </clr-dg-row>
   <clr-dg-row class="newLine">
-    <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell>
       <wm-search-generic-warehouse-zero [warehouseId]="warehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
     </clr-dg-cell>

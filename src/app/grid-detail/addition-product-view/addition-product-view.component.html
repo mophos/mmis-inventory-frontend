@@ -17,23 +17,17 @@
         {{p.pack_remain_qty | number}} {{p.from_unit_name}} ({{p.conversion_qty | number}} {{p.to_unit_name}})
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
-        {{p.product_remain_qty}} {{ p.to_unit_name }}
+        {{p.src_remain_qty}} {{ p.to_unit_name }}
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
-        {{ p.transfer_qty | number}}
+        {{ p.addition_qty | number}}
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
-        {{p.transfer_qty*p.conversion_qty | number}} {{p.to_unit_name}}
+        {{p.addition_qty*p.conversion_qty | number}} {{p.to_unit_name}}
       </clr-dg-cell>
-      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color': (p.transfer_qty * p.conversion_qty) > p.product_remain_qty ? 'red' : 'green'}">
-        {{(p.product_remain_qty - (p.transfer_qty*p.conversion_qty)) | number}} {{p.to_unit_name}}
+      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color': (p.addition_qty * p.conversion_qty) > p.src_remain_qty ? 'red' : 'green'}">
+        {{(p.src_remain_qty - (p.addition_qty*p.conversion_qty)) | number}} {{p.to_unit_name}}
       </clr-dg-cell>
     </clr-dg-row>
-    <!-- <clr-dg-footer>
-        <span class="p4">
-          เวชภัณฑ์คงเหลือ : {{srcRemainQty}} {{srcUnitName}} 
-          | Min Qty : {{srcMinQty}}
-        </span>
-      </clr-dg-footer> -->
   </clr-datagrid>
 </div>

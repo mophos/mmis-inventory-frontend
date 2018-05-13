@@ -25,12 +25,12 @@
     <clr-dg-cell>{{note.remark}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group">
-        <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelNote(note.borrow_note_id)" title="ยกเลิกรายการ" [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
-          <clr-icon shape="trash"></clr-icon>
-        </button>
         <button class="btn btn-sm btn-success wm-small-btn" routerLink="/admin/borrow-notes/{{note.borrow_note_id}}/edit" title="แก้ไข"
           [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
           <clr-icon shape="note"></clr-icon>
+        </button>
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelNote(note.borrow_note_id)" title="ลบ" [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
+          <clr-icon shape="trash"></clr-icon>
         </button>
       </div>
     </clr-dg-cell>

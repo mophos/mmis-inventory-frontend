@@ -54,14 +54,14 @@
         <!-- <button [disabled]="isSaving" class="btn btn-sm btn-icon btn-primary" (click)="showReport(s.issue_id)">
           <clr-icon shape="printer"></clr-icon>
         </button> -->
-        <button [disabled]="s.approved === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/admin/issues/edit"
+        <button title="แก้ไข" [disabled]="s.approved === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/admin/issues/edit"
           [queryParams]="{issueId: s.issue_id}">
           <clr-icon shape="note"></clr-icon>
         </button>
-        <button [disabled]="s.approved === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="removeIssue(s)">
+        <button title="ลบ" [disabled]="s.approved === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="removeIssue(s)">
           <clr-icon shape="trash"></clr-icon>
         </button>
-        <button [disabled]="s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-primary tooltip tooltip-sm tooltip-left" role="tooltip" aria-haspopup="true" (click)="showReport(s.issue_id)">
+        <button title="พิมพ์" [disabled]="s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-primary tooltip tooltip-sm tooltip-left" role="tooltip" aria-haspopup="true" (click)="showReport(s.issue_id)">
           <clr-icon shape="printer"></clr-icon>
           <span class="tooltip-content">พิมพ์ใบตัดจ่าย</span>
         </button>

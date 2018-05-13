@@ -66,8 +66,7 @@
   <clr-dg-column style="width: 110px;">คงเหลือหลังจ่าย (Base)</clr-dg-column>
   <clr-dg-column style="width: 110px;">ยอดจ่าย (Base)</clr-dg-column>
   <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
-  <clr-dg-row *ngFor="let g of products; let idx=index;" 
-  [ngClass]="
+  <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="
   {'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty) && (+g.remain_qty - +g.allowcate_qty) >= 0, 
   'isWarning': g.allowcate_qty < (g.conversion_qty * g.requisition_qty) && g.allowcate_qty > 0, 
   'isError': g.allowcate_qty === 0 || (+g.remain_qty - +g.allowcate_qty) < 0}

@@ -22,7 +22,7 @@ export class ProductlotsService {
     });
   }
 
-  getpackageLotsInfo(productID: any,warehouseID: any) {
+  getpackageLotsInfo(productID: any, warehouseID: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/productlots/detail/${productID}/${warehouseID}`)
         .map(res => res.json())

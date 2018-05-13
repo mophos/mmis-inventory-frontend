@@ -441,7 +441,6 @@ export class RequisitionConfirmComponent implements OnInit {
             }
           });
         });
-
         try {
           this.modalLoading.show();
           let rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow, borrowItems);
@@ -449,24 +448,24 @@ export class RequisitionConfirmComponent implements OnInit {
 
           if (rs.ok) {
             this.alertService.success();
+            await this.getOrderItems();
+            await this.getBorrowNotes();
             // this.router.navigate(['/admin/requisition']);
           } else {
             this.alertService.error(rs.error);
             this.selectedBorrowNotes = [];
             this.borrowNotes = [];
+
           }
-
-          await this.getOrderItems();
-          await this.getBorrowNotes();
-
           this.openBorrowNote = false;
+
         } catch (error) {
           console.log(error);
           this.alertService.error();
           this.selectedBorrowNotes = [];
           this.borrowNotes = [];
-          await this.getBorrowNotes();
           await this.getOrderItems();
+          await this.getBorrowNotes();
           this.openBorrowNote = false;
         }
       }).catch(() => {

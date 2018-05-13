@@ -1,0 +1,64 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/addition">เวชภัณฑ์ถึงจุดเติม</a>
+  <span class="breadcrumb-item active">เติมเวชภัณฑ์</span>
+</nav>
+
+<div class="row">
+  <div class="col-md-12">
+    <h4 class="h4">เวชภัณฑ์: {{workingCode}} - {{genericName}}</h4>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <h4 style="margin: 10px 0px;" class="h6">คงเหลือก่อนเติม: {{srcRemainQty | number}} {{srcUnitName}}</h4>
+  </div>
+  <div class="col-md-4">
+    <h4 style="margin: 10px 0px;" class="h6">จำนวนเติม: {{srcAdditionQty | number}} {{srcUnitName}}</h4>
+  </div>
+  <div class="col-md-4">
+    <h4 style="margin: 10px 0px;" class="h6">คงเหลือหลังเติม: {{srcRemainQty - srcAdditionQty | number}} {{srcUnitName}}</h4>
+  </div>
+</div>
+
+<clr-datagrid [style.height.%]="70">
+  <clr-dg-column [style.width.px]="100" [clrDgField]="'working_code'">Short Code</clr-dg-column>
+  <clr-dg-column [clrDgField]="'generic_name'">ชื่อคลังสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">Min Qty.</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">Max Qty.</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">คงเหลือ</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">ยอดแนะนำ</clr-dg-column>
+  <clr-dg-column [clrDgField]="'addition_qty'" [style.width.px]="100">จำนวนเติม</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">หน่วย</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+  <clr-dg-row *clrDgItems="let w of warehouses;" [ngClass]="{
+    'isSuccess': w.addition_qty !== 0 && w.addition_qty >= w.dst_max_qty - w.dst_remain_qty
+    , 'isWarning': w.detail.length && w.addition_qty < w.dst_max_qty - w.dst_remain_qty
+    , 'isProblem': w.detail.length && w.dst_max_qty - w.dst_remain_qty === 0
+    , 'isError': !w.detail.length
+        }">
+    <clr-dg-cell>{{w.dst_short_code}}</clr-dg-cell>
+    <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{w.dst_min_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{w.dst_max_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{w.dst_remain_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{w.dst_max_qty - w.dst_remain_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{w.addition_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">{{w.unit_name}}</clr-dg-cell>
+    <wm-addition-product [generic]="w" (onChangeQty)="changeQty(w.dst_warehouse_id, $event)" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-addition-product>
+  </clr-dg-row>
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="warehouses.length"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<button class="btn btn-sm btn-success" (click)="save()">
+  เตรียมสร้างใบเติม
+</button>
+
+<button class="btn btn-sm btn-danger" routerLink="/admin/addition">
+  กลับหน้าหลัก
+</button>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>
