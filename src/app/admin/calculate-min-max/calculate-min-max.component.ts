@@ -106,7 +106,7 @@ export class CalculateMinMaxComponent implements OnInit {
   async getMinMax() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.minMaxService.getMinMax();
+      const rs: any = await this.minMaxService.getMinMax(this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
@@ -290,36 +290,9 @@ export class CalculateMinMaxComponent implements OnInit {
       .catch(() => { });
   }
 
-  async searchGenericPlanning() {
-    this.modalLoading.show();
-    try {
-      const rs: any = await this.minMaxService.searchGenericPlanning(this.genericType, this.query);
-      if (rs.ok) {
-        this.generics = rs.rows;
-        for (let g of this.generics) {
-          const idx = _.findIndex(this._generics, { generic_id: g.generic_id });
-          if (idx > -1) {
-            g.use_total = this._generics[idx].use_total;
-            g.use_per_day = this._generics[idx].use_per_day;
-            g.safty_stock_day = this._generics[idx].safty_stock_day;
-            g.qty = this._generics[idx].qty;
-            g.min_qty = this._generics[idx].min_qty;
-            g.max_qty = this._generics[idx].max_qty;
-          }
-        }
-      } else {
-        this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error.message);
-    }
-  }
-
   enterSearch(e) {
     if (e.keyCode === 13) {
-      this.searchGenericPlanning();
+      this.getMinMax();
     }
   }
 

@@ -14,8 +14,8 @@ export class MinMaxService {
     return resp.json();
   }
 
-  async getMinMax() {
-    const resp = await this.authHttp.get(`${this.url}/min-max/detail`).toPromise();
+  async getMinMax(genericType: any, query: any) {
+    const resp = await this.authHttp.get(`${this.url}/min-max/detail?genericType=${genericType}&query=${query}`).toPromise();
     return resp.json();
   }
 
@@ -32,14 +32,6 @@ export class MinMaxService {
       fromDate: fromDate,
       toDate: toDate,
       generics: generics
-    }).toPromise();
-    return resp.json();
-  }
-
-  async searchGenericPlanning(genericType: string, query: string) {
-    const resp = await this.authHttp.post(`${this.url}/min-max/search`, {
-      query: query,
-      genericType: genericType
     }).toPromise();
     return resp.json();
   }
