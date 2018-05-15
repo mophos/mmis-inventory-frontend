@@ -11,11 +11,11 @@ export const environment = {
   requisitionPrefix: 'REQ',
   issuePrefix: 'INS',
 
-  purchasingUrl: '/purchasing',
-  planningUrl: '/planning',
+  purchasingUrl: '/purchasing/#/',
+  planningUrl: '/planning/#/',
   inventoryUrl: '/',
-  materialsUrl: '/material',
-  umUrl: '/um',
-  contractsUrl: '/contracts',
-  reportUrl: '/reports',
+  materialsUrl: '/material/#/',
+  umUrl: '/um/#/',
+  contractsUrl: '/contracts/#/',
+  reportUrl: '/reports/#/',
 };
