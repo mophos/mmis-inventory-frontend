@@ -3,7 +3,7 @@ export const environment = {
   apiUrl: '/api/inventory',
   docUrl: '/api/document',
   loginUrl: '/api/um',
-  homeUrl: '/',
+  homeUrl: '/#/',
   portalUrl: '/api/portal',
   receivePrefix: 'REV',
   borrowPrefix: 'BOR',
@@ -13,7 +13,7 @@ export const environment = {
 
   purchasingUrl: '/purchasing/#/',
   planningUrl: '/planning/#/',
-  inventoryUrl: '/',
+  inventoryUrl: '/#/',
   materialsUrl: '/material/#/',
   umUrl: '/um/#/',
   contractsUrl: '/contracts/#/',
