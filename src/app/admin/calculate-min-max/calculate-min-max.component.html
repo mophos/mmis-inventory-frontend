@@ -31,7 +31,7 @@
       </div>
       <div class="col-md-3" style="text-align: right;">
         <div class="select">
-          <select [(ngModel)]="genericType" name="genericType" (change)="getMinMax()">
+          <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
             <option value="">ทั้งหมด</option>
             <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
           </select>
@@ -59,11 +59,14 @@
   <clr-dg-column [style.width.px]="120" [clrDgField]="'use_per_day'">
     อัตราการใช้ ต่อวัน
   </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_stock_day'">
-    Safety Stock <br> (วัน)
+  <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_min_day'">
+    Safety Stock <br> MIN (วัน)
   </clr-dg-column>
   <clr-dg-column [style.width.px]="120" [clrDgField]="'min_qty'">
     MIN <br> (Base Unit)
+  </clr-dg-column>
+  <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_max_day'">
+    Safety Stock <br> MAX (วัน)
   </clr-dg-column>
   <clr-dg-column [style.width.px]="120" [clrDgField]="'max_qty'">
     MAX <br> (Base Unit)
@@ -96,12 +99,16 @@
     <clr-dg-cell style="text-align: right;">{{g.use_total | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{g.use_per_day | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #safty (keyup)="onChangeSaftyStock(safty.value, g)" style="background-color: #FFF9C4"
-        [value]="g.safty_stock_day" wmNumberWithOutDot>
+      <input type="text" class="wm-edit-box-number" #saftyMin (keyup)="onChangeSaftyStockMin(saftyMin.value, g)" style="background-color: #FFF9C4"
+        [value]="g.safety_min_day" wmNumberWithOutDot>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <input type="text" class="wm-edit-box-number" #min (keyup)="onChangeMinQty(min.value, g)" style="background-color: #FFF9C4"
         [value]="g.min_qty" wmNumberWithOutDot>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <input type="text" class="wm-edit-box-number" #saftyMax (keyup)="onChangeSaftyStockMax(saftyMax.value, g)" style="background-color: #FFF9C4"
+        [value]="g.safety_max_day" wmNumberWithOutDot>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)" style="background-color: #FFF9C4"
