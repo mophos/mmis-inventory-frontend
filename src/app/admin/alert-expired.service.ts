@@ -76,31 +76,31 @@ export class AlertExpiredService {
     });
   }
 
-  saveStatus(status: string) {
-    return new Promise((resolve, reject) => {
-      this.authHttp.post(`${this.url}/alert-expired/save-status`, {
-        status: status
-      })
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
-  }
+  // saveStatus(status: string) {
+  //   return new Promise((resolve, reject) => {
+  //     this.authHttp.post(`${this.url}/alert-expired/save-status`, {
+  //       status: status
+  //     })
+  //       .map(res => res.json())
+  //       .subscribe(data => {
+  //         resolve(data);
+  //       }, error => {
+  //         reject(error);
+  //       });
+  //   });
+  // }
 
-  getStatus() {
-    return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/alert-expired/get-status`)
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
-  }
+  // getStatus() {
+  //   return new Promise((resolve, reject) => {
+  //     this.authHttp.get(`${this.url}/alert-expired/get-status`)
+  //       .map(res => res.json())
+  //       .subscribe(data => {
+  //         resolve(data);
+  //       }, error => {
+  //         reject(error);
+  //       });
+  //   });
+  // }
 
   validate(productId: string, lotId: string) {
     return new Promise((resolve, reject) => {
