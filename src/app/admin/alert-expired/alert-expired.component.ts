@@ -32,31 +32,31 @@ export class AlertExpiredComponent implements OnInit {
 
   ngOnInit() {
     this.getAllProducts();
-    this.getStatus();
+    // this.getStatus();
     this.getGenericType();
     this.getProductExpired();
   }
 
-  getStatus() {
-    this.modalLoading.show();
-    this.alertExpiredService.getStatus()
-      .then((result: any) => {
-        if (result.ok) {
-          if (result.status === 'Y') {
-            this.isAlert = true;
-          } else {
-            this.isAlert = false;
-          }
-        } else {
-          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-        }
-        this.modalLoading.hide();
-      })
-      .catch(() => {
-        this.modalLoading.hide();
-        this.alertService.serverError();
-      });
-  }
+  // getStatus() {
+  //   this.modalLoading.show();
+  //   this.alertExpiredService.getStatus()
+  //     .then((result: any) => {
+  //       if (result.ok) {
+  //         if (result.status === 'Y') {
+  //           this.isAlert = true;
+  //         } else {
+  //           this.isAlert = false;
+  //         }
+  //       } else {
+  //         this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+  //       }
+  //       this.modalLoading.hide();
+  //     })
+  //     .catch(() => {
+  //       this.modalLoading.hide();
+  //       this.alertService.serverError();
+  //     });
+  // }
 
   async getProductExpired() {
     this.modalLoading.show();
@@ -73,29 +73,29 @@ export class AlertExpiredComponent implements OnInit {
       this.alertService.serverError();
     }
   }
-  setAlertStatus() {
-    if (this.isAlert) {
-      this.isAlert = false;
-    } else {
-      this.isAlert = true;
-    }
+  // setAlertStatus() {
+  //   if (this.isAlert) {
+  //     this.isAlert = false;
+  //   } else {
+  //     this.isAlert = true;
+  //   }
 
-    const status = this.isAlert ? 'Y' : 'N';
-    this.modalLoading.show();
-    this.alertExpiredService.saveStatus(status)
-      .then((result: any) => {
-        if (result.ok) {
-          this.alertService.success();
-        } else {
-          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-        }
-        this.modalLoading.hide();
-      })
-      .catch(() => {
-        this.modalLoading.hide();
-        this.alertService.serverError();
-      });
-  }
+  //   const status = this.isAlert ? 'Y' : 'N';
+  //   this.modalLoading.show();
+  //   this.alertExpiredService.saveStatus(status)
+  //     .then((result: any) => {
+  //       if (result.ok) {
+  //         this.alertService.success();
+  //       } else {
+  //         this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+  //       }
+  //       this.modalLoading.hide();
+  //     })
+  //     .catch(() => {
+  //       this.modalLoading.hide();
+  //       this.alertService.serverError();
+  //     });
+  // }
 
   async getAllProducts() {
     this.isAll = true;
