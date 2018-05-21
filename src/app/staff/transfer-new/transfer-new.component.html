@@ -28,14 +28,14 @@
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <!-- <wm-select-warehouses [selectedId]="dstWarehouseId" #dstWarehouse (onSelect)="setDstWarehouse($event)"></wm-select-warehouses> -->
-          <div class="select">
-            <select name="slWarehouse" #cmp id="slWarehouse" [(ngModel)]="dstWarehouseId" (change)="setDstWarehouse($event, cmp)">
-              <option value="">
-                กรุณาเลือกคลัง
-              </option>
-              <option *ngFor="let w of dstWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{ w.warehouse_name }}</option>
-            </select>
-          </div>
+            <div class="select">
+              <select name="slWarehouse" #cmp id="slWarehouse" [(ngModel)]="dstWarehouseId" (change)="setDstWarehouse($event, cmp)">
+                <option value="">
+                  กรุณาเลือกคลัง
+                </option>
+                <option *ngFor="let w of dstWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{ w.warehouse_name }}</option>
+              </select>
+            </div>
           </div>
         </div>
       </section>
@@ -58,22 +58,33 @@
 <clr-datagrid class="grid-order" [style.height.%]="70">
   <clr-dg-column>#</clr-dg-column>
   <clr-dg-column>Working Code</clr-dg-column>
-  <clr-dg-column style="width: 300px;">ชื่อ Generic</clr-dg-column>
-  <clr-dg-column style="width: 50px;">จำนวนโอน <br> (Base Unit)</clr-dg-column>
-  <!-- <clr-dg-column>รวม <br> (Base Unit)</clr-dg-column> -->
-  <!-- <clr-dg-column>ยอดโอนจริง <br> (Base Unit)</clr-dg-column> -->
-  <clr-dg-column>คงเหลือหลังโอน <br> (Base Unit)</clr-dg-column>
+  <clr-dg-column style="width: 250px;">ชื่อ Generic</clr-dg-column>
+  <clr-dg-column>จำนวนโอน</clr-dg-column>
+  <clr-dg-column style="width: 150px;">Package</clr-dg-column>
+  <clr-dg-column>รวม
+    <br> (Base Unit)</clr-dg-column>
+  <clr-dg-column>คงเหลือหลังโอน
+    <br> (Base Unit)</clr-dg-column>
   <clr-dg-column>Location</clr-dg-column>
   <clr-dg-column></clr-dg-column>
 
   <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
-    <wm-transfer-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)" ngProjectAs="clr-dg-row-detail"></wm-transfer-items>
+    <wm-transfer-items-staff *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)"
+      ngProjectAs="clr-dg-row-detail"></wm-transfer-items-staff>
     <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.transfer_qty | number}} {{generic.primary_unit_name}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': generic.transfer_qty > generic.remain_qty ? 'red' : 'green'}">
-      {{generic.remain_qty - generic.transfer_qty | number}} {{generic.primary_unit_name}}
+    <clr-dg-cell>
+      <input type="text" #qty (keyup)="editChangetransferQty(idx, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberWithOutDot [value]="generic.transfer_qty" />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="generic.unit_generic_id"
+        [genericId]="generic.generic_id"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.transfer_qty*generic.conversion_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (generic.transfer_qty * generic.conversion_qty) > generic.remain_qty ? 'red' : 'green'}">
+      {{generic.remain_qty - (generic.transfer_qty*generic.conversion_qty) | number}}
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-product-location [warehouseId]="dstWarehouseId" [selectedId]="generic.location_id" (onSelect)="editChangeLocation($event, idx)"></wm-select-product-location>
@@ -92,16 +103,22 @@
     <clr-dg-cell style="line-height: 25px;">{{workingCode}}</clr-dg-cell>
     <clr-dg-cell>
       <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
-      <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': transferQty > remainQty ? 'red' : 'green'}">{{ transferQty | number }} {{primaryUnitName}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - transferQty | number }} {{primaryUnitName}}</clr-dg-cell>
     <clr-dg-cell>
-        <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
+      <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4" [disabled]="!genericId" [(ngModel)]="transferQty"
+        wmNumberWithOutDot placeholder="0">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (transferQty * conversionQty) > remainQty ? 'red' : 'green'}">{{ transferQty*conversionQty | number }}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - (transferQty * conversionQty) | number }}</clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId"
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId || !transferQty || ((transferQty * conversionQty) > remainQty)"
           (click)="addGeneric()">
           เพิ่ม
         </button>
