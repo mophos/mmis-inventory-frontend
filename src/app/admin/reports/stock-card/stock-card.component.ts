@@ -148,5 +148,12 @@ export class StockCardComponent implements OnInit {
     this.htmlPreview.showReport(url);
   }
 
+  async printReportNomovement() {
+    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/generics-no-movement/${this.warehouseId}/${this.start}/${this.end}?token=${this.token}`
+    this.htmlPreview.showReport(url);
+  }
+
 
 }

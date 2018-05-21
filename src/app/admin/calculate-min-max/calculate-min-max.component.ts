@@ -106,7 +106,7 @@ export class CalculateMinMaxComponent implements OnInit {
   async getMinMax() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.minMaxService.getMinMax();
+      const rs: any = await this.minMaxService.getMinMax(this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
@@ -147,26 +147,29 @@ export class CalculateMinMaxComponent implements OnInit {
     }
   }
 
-  onChangeSaftyStock(value: any, generic: any) {
+  onChangeSaftyStockMin(value: any, generic: any) {
     const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
     if (idx > -1) {
-      this.generics[idx].safty_stock_day = +value;
-      this.generics[idx].min_qty = this.generics[idx].qty + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
-      if (this.generics[idx].use_total > this.generics[idx].qty) {
-        this.generics[idx].max_qty = this.generics[idx].use_total + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
-      } else {
-        this.generics[idx].max_qty = this.generics[idx].min_qty + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
-      }
+      this.generics[idx].safety_min_day = +value;
+      this.generics[idx].min_qty = this.generics[idx].use_per_day * this.generics[idx].safety_min_day;
     }
     const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
     if (_idx > -1) {
-      this._generics[idx].safty_stock_day = +value;
-      this._generics[idx].min_qty = this._generics[idx].qty + (this._generics[idx].use_per_day * this._generics[idx].safty_stock_day);
-      if (this._generics[idx].use_total > this._generics[idx].qty) {
-        this._generics[idx].max_qty = this._generics[idx].use_total + (this._generics[idx].use_per_day * this._generics[idx].safty_stock_day);
-      } else {
-        this._generics[idx].max_qty = this._generics[idx].min_qty + (this._generics[idx].use_per_day * this._generics[idx].safty_stock_day);
-      }
+      this._generics[_idx].safety_min_day = +value;
+      this._generics[_idx].min_qty = this._generics[_idx].use_per_day * this._generics[_idx].safety_min_day;
+    }
+  }
+
+  onChangeSaftyStockMax(value: any, generic: any) {
+    const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.generics[idx].safety_max_day = +value;
+      this.generics[idx].max_qty = this.generics[idx].use_per_day * this.generics[idx].safety_max_day;
+    }
+    const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
+    if (_idx > -1) {
+      this._generics[_idx].safety_max_day = +value;
+      this._generics[_idx].max_qty = this._generics[_idx].use_per_day * this._generics[_idx].safety_max_day;
     }
   }
 
@@ -290,21 +293,33 @@ export class CalculateMinMaxComponent implements OnInit {
       .catch(() => { });
   }
 
-  async searchGenericPlanning() {
+  enterSearch(e) {
+    if (e.keyCode === 13) {
+      this.searchGenerics();
+    }
+  }
+
+  async searchGenerics() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.minMaxService.searchGenericPlanning(this.genericType, this.query);
+      let rs: any = await this.minMaxService.searchGenericsWarehosue(this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
-        for (let g of this.generics) {
+        for (const g of this.generics) {
           const idx = _.findIndex(this._generics, { generic_id: g.generic_id });
           if (idx > -1) {
             g.use_total = this._generics[idx].use_total;
             g.use_per_day = this._generics[idx].use_per_day;
-            g.safty_stock_day = this._generics[idx].safty_stock_day;
+            g.safety_min_day = this._generics[idx].safety_min_day;
+            g.safety_max_day = this._generics[idx].safety_max_day;
             g.qty = this._generics[idx].qty;
             g.min_qty = this._generics[idx].min_qty;
             g.max_qty = this._generics[idx].max_qty;
+            g.lead_time_day = this._generics[idx].lead_time_day;
+            g.rop_qty = this._generics[idx].rop_qty;
+            g.ordering_cost = this._generics[idx].ordering_cost;
+            g.carrying_cost = this._generics[idx].carrying_cost;
+            g.eoq_qty = this._generics[idx].eoq_qty;
           }
         }
       } else {
@@ -314,12 +329,6 @@ export class CalculateMinMaxComponent implements OnInit {
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
-    }
-  }
-
-  enterSearch(e) {
-    if (e.keyCode === 13) {
-      this.searchGenericPlanning();
     }
   }
 
