@@ -60,7 +60,7 @@ export class BorrowNoteNewComponent implements OnInit {
     this.token = sessionStorage.getItem('token')
     const decoded = this.jwtHelper.decodeToken(this.token);
     this.peopleName = decoded.fullname;
-    this.peopleId = decoded.people_id;
+    // this.peopleId = decoded.people_id;
     console.log(decoded);
     this.warehouseShipId = decoded.warehouseId
   }

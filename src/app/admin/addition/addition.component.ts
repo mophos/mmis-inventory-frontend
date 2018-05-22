@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { AdditionService } from 'app/admin/addition.service';
 import { AlertService } from 'app/alert.service';
 import * as _ from 'lodash';
+import { asElementData } from '@angular/core/src/view';
 
 @Component({
   selector: 'wm-addition',
@@ -79,6 +80,8 @@ export class AdditionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+    
+    this.selectedApprove = []
   }
 
   async getTransaction() {
@@ -111,6 +114,7 @@ export class AdditionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+    this.selectedApprove = []
   }
 
   clickOpen() {
@@ -202,10 +206,27 @@ export class AdditionComponent implements OnInit {
       .catch(() => { });
   }
 
+  async printRefills() {
+    let addition_id =_.join( _.map(this.selectedApprove,(v)=>{return 'addition_id='+v.addition_id}),'&')
+    const token = sessionStorage.getItem('token');
+    const url = `${this.apiUrl}/addition/print/transactions?token=${token}&`+addition_id;
+    this.htmlPreview.showReport(url);
+  }
+
   async printRefill(h: any) {
     const token = sessionStorage.getItem('token');
     const url = `${this.apiUrl}/addition/print/transaction/${h.addition_id}?token=${token}`;
     this.htmlPreview.showReport(url);
+  }
+
+  async clickPrintApprove() {
+    if (this.selectedApprove.length) {
+      const addition_id = await _.join( _.map(this.selectedApprove, (v)=>{return 'addition_id='+v.addition_id}),'&')
+      const token = sessionStorage.getItem('token');
+      const url = `${this.apiUrl}/addition/print/approve?token=${token}&` + addition_id;
+      console.log(url);
+      this.htmlPreview.showReport(url);
+    }
   }
 
 }
