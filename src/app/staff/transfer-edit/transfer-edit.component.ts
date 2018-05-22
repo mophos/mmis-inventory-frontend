@@ -235,8 +235,8 @@ export class TransferEditComponent implements OnInit {
             remain_qty: +this.remainQty,
             unit_generic_id: this.unitGenericId,
             conversion_qty: this.conversionQty,
-            location_id: this.locationId,
-            total_transfer_qty: +this.transferQty * this.conversionQty
+            primary_unit_id: this.primaryUnitId,
+            location_id: this.locationId
           };
 
           console.log(obj);
@@ -287,17 +287,16 @@ export class TransferEditComponent implements OnInit {
       this.generics[idx].transfer_qty = +qty.value;
       const genericId = this.generics[idx].generic_id;
       const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].total_transfer_qty = transferQty;
       this.getProductList(genericId, transferQty);
     }
   }
 
   changeProductQty(genericId, event) {
+    const totalBaseUnit = _.sumBy(event, 'product_qty');
+
     const idx = _.findIndex(this.generics, ['generic_id', genericId]);
     this.generics[idx].products = event;
-    this.generics[idx].total_transfer_qty = _.sumBy(event, function (e: any) {
-      return e.product_qty * e.conversion_qty;
-    });
+    this.generics[idx].transfer_qty = Math.floor(totalBaseUnit / this.generics[idx].conversion_qty);
   }
 
   editChangeUnit(idx: any, event: any, unitCmp: any) {
@@ -312,7 +311,6 @@ export class TransferEditComponent implements OnInit {
       } else {
         const genericId = this.generics[idx].generic_id;
         const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-        this.generics[idx].total_transfer_qty = transferQty;
         this.getProductList(genericId, transferQty);
       }
     }
@@ -337,6 +335,7 @@ export class TransferEditComponent implements OnInit {
             unit_generic_id: v.unit_generic_id,
             conversion_qty: +v.conversion_qty,
             location_id: v.location_id,
+            primary_unit_id: v.primary_unit_id,
             products: v.products
           });
         } else {
@@ -394,9 +393,6 @@ export class TransferEditComponent implements OnInit {
         const idx = _.findIndex(this.generics, { generic_id: genericId });
         if (idx > -1) {
           this.generics[idx].products = rs.rows;
-          this.generics[idx].total_transfer_qty = _.sumBy(rs.rows, function (e: any) {
-            return e.product_qty * e.conversion_qty;
-          });
         }
       } else {
         this.alertService.error(rs.error);

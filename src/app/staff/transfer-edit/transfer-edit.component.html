@@ -43,12 +43,10 @@
 <clr-datagrid [style.padding-top.px]="10" [style.height.%]="75">
   <clr-dg-column>#</clr-dg-column>
   <clr-dg-column>Working Code</clr-dg-column>
-  <clr-dg-column style="width: 300px;">ชื่อ Generic</clr-dg-column>
+  <clr-dg-column style="width: 220px;">ชื่อ Generic</clr-dg-column>
   <clr-dg-column>จำนวนโอน</clr-dg-column>
-  <clr-dg-column>Package</clr-dg-column>
+  <clr-dg-column style="width: 130px;">Package</clr-dg-column>
   <clr-dg-column>รวม
-    <br> (Base Unit)</clr-dg-column>
-  <clr-dg-column>ยอดโอนจริง
     <br> (Base Unit)</clr-dg-column>
   <clr-dg-column>คงเหลือหลังโอน
     <br> (Base Unit)</clr-dg-column>
@@ -56,8 +54,8 @@
   <clr-dg-column></clr-dg-column>
 
   <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
-    <wm-transfer-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)"
-      ngProjectAs="clr-dg-row-detail"></wm-transfer-items>
+    <wm-transfer-items-staff *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)"
+      ngProjectAs="clr-dg-row-detail"></wm-transfer-items-staff>
     <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
@@ -70,7 +68,6 @@
         [genericId]="generic.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.transfer_qty*generic.conversion_qty | number}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.total_transfer_qty | number}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (generic.transfer_qty * generic.conversion_qty) > generic.remain_qty ? 'red' : 'green'}">
       {{generic.remain_qty - (generic.transfer_qty*generic.conversion_qty) | number}}
     </clr-dg-cell>
@@ -91,7 +88,6 @@
     <clr-dg-cell style="line-height: 25px;">{{workingCode}}</clr-dg-cell>
     <clr-dg-cell>
       <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
-      <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4" [disabled]="!genericId" [(ngModel)]="transferQty"
@@ -101,15 +97,9 @@
       <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (transferQty * conversionQty) > remainQty ? 'red' : 'green'}">{{ transferQty*conversionQty | number }}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (transferQty * conversionQty) > remainQty ? 'red' : 'green'}">{{ transferQty*conversionQty | number }}</clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - (transferQty * conversionQty) | number }}</clr-dg-cell>
     <clr-dg-cell>
       <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
-      <!-- <div class="select">
-              <select name="slLocations" [(ngModel)]="locationId">
-                <option [value]="l.location_id" *ngFor="let l of locations">{{l.location_name}} - {{l.location_desc }}</option>
-              </select>
-            </div> -->
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
