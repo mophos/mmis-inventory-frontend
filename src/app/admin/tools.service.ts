@@ -10,9 +10,14 @@ export class ToolsService {
   ) { }
 
   async searchReceives(query: any) {
-    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/search/receives`, {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/receives/search`, {
       query: query
     }).toPromise();
+    return resp.json();
+  }
+
+  async getReceivesItems(receiveId: any) {
+    const resp = await this.authHttp.get(`${this.url}/tools/stockcard/receives/items/${receiveId}`).toPromise();
     return resp.json();
   }
 
