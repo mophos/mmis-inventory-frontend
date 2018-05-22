@@ -36,14 +36,31 @@
 </clr-datagrid>
 
 <!-- search receive -->
-<clr-modal [(clrModalOpen)]="isOpenSearchReceive" [clrModalSize]="'lg'">
+<clr-modal [(clrModalOpen)]="isOpenSearchReceive" [clrModalSize]="'lg'" [clrModalClosable]="false">
   <h3 class="modal-title">ค้นหาใบรับ</h3>
   <div class="modal-body">
-    <p>But not much to say...</p>
+    <label for="">เลขที่ใบรับ</label>
+    <input type="text" style="width: 300px;" #queryReceive (keyup)="doSearchReceives($event, queryReceive.value)" placeholder="พิมพ์เลขที่ใบรับ แล้วกด ENTER">
+    <clr-datagrid>
+      <clr-dg-column>วันที่รับ</clr-dg-column>
+      <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+      <clr-dg-column>เลขที่ใบสั่งซื้อ</clr-dg-column>
+      <clr-dg-column style="width: 60px;">#</clr-dg-column>
+
+      <clr-dg-row *ngFor="let r of receives">
+        <clr-dg-cell>{{r.receive_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{r.receive_code}}</clr-dg-cell>
+        <clr-dg-cell>{{r.purchase_order_number}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">
+          <button class="btn btn-sm btn-success wm-small-btn">แก้ไข</button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{receives.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline" (click)="isOpenSearchReceive = false">Cancel</button>
-    <button type="button" class="btn btn-primary" (click)="isOpenSearchReceive = false">Ok</button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenSearchReceive = false">ยกเลิก</button>
   </div>
 </clr-modal>
 <!-- /search receive -->
