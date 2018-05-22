@@ -3,9 +3,7 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/staff/transfer">โอนเวชภัณฑ์ระหว่างคลัง</a>
   <span class="breadcrumb-item active">แก้ไขการโอน</span>
 </nav>
-<div class="progress loop" *ngIf="isLoading">
-  <progress></progress>
-</div>
+
 <div class="card" style="padding-top: 0px;">
   <div class="card-block" style="padding: 0px 5px 5px 5px;">
     <form style="padding-top: 0px; padding-bottom: 0px;">
@@ -117,7 +115,7 @@
 </clr-datagrid>
 
 <div>
-  <button class="btn btn-success btn-sm" (click)="saveTransfer()" [disabled]="isSaving || !generics.length || !dstWarehouseId || !srcWarehouseId || disableSave">
+  <button class="btn btn-success btn-sm" (click)="saveTransfer()" [disabled]="!generics.length || !dstWarehouseId || !srcWarehouseId || disableSave">
     <clr-icon shape="floppy"></clr-icon>
     บันทึกการโอน
   </button>

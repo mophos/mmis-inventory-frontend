@@ -21,8 +21,6 @@ export class TransferEditComponent implements OnInit {
 
   lots = [];
   generics = [];
-  loading: boolean = false;
-  isLoading: boolean = false;
   locations: any = [];
   locationId: any;
 
@@ -41,7 +39,6 @@ export class TransferEditComponent implements OnInit {
   transferQty = 0;
   wmProductId: any;
   workingCode: any;
-  isSaving: boolean = false;
   disableSave = false;
 
   myDatePickerOptions: IMyOptions = {
@@ -88,7 +85,7 @@ export class TransferEditComponent implements OnInit {
 
   async getSummaryInfo() {
     try {
-      this.isLoading = true;
+      this.modalLoading.show();
       const rs: any = await this.transferService.getSummaryInfo(this.transferId);
       if (rs.ok) {
         if (rs.info.transfer_date) {
@@ -111,9 +108,9 @@ export class TransferEditComponent implements OnInit {
       } else {
         this.alertService.error(rs.error);
       }
-      this.isLoading = false;
+      this.modalLoading.hide();
     } catch (error) {
-      this.isLoading = false;
+      this.modalLoading.hide();
       console.error(error);
     }
   }
@@ -352,7 +349,7 @@ export class TransferEditComponent implements OnInit {
         };
 
         if (generics.length) {
-          this.isSaving = true;
+          this.modalLoading.show();
           this.alertService.confirm('ต้องการโอนรายการสินค้า ใช่หรือไม่?')
             .then(() => {
               this.transferService.updateTransfer(this.transferId, summary, generics)
@@ -363,15 +360,15 @@ export class TransferEditComponent implements OnInit {
                   } else {
                     this.alertService.error(JSON.stringify(result.error));
                   }
-                  this.isSaving = false;
+                  this.modalLoading.hide();
                 })
                 .catch(error => {
-                  this.isSaving = false;
+                  this.modalLoading.hide();
                   this.alertService.error(error.message);
                 });
             })
             .catch(() => {
-              this.isSaving = false;
+              this.modalLoading.hide();
             });
         } else {
           this.alertService.error('ไม่พบรายการที่ต้องการโอน');
