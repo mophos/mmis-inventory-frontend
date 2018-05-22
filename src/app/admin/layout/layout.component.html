@@ -233,10 +233,18 @@
           </a> -->
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>
-      <!-- <a clrVerticalNavLink routerLinkActive="active" routerLink="./credit">
-        <clr-icon shape="certificate" clrVerticalNavIcon></clr-icon>
-        Credit
-      </a> -->
+      <clr-vertical-nav-group routerLinkActive="active">
+        <a clrVerticalNavLink href="javascript://">
+          <clr-icon shape="tools" clrVerticalNavIcon></clr-icon>
+          เครื่องมือ (Tools)
+        </a>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <a clrVerticalNavLink routerLink="/admin/tools/stockcard" routerLinkActive="active">
+            <clr-icon shape="scroll"></clr-icon>
+            แก้ไข Stock Card
+          </a>
+        </clr-vertical-nav-group-children>
+      </clr-vertical-nav-group>
     </clr-vertical-nav>
 
   </div>

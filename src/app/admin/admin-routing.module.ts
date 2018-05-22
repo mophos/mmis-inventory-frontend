@@ -26,7 +26,7 @@ import { WarehouseTypeComponent } from './warehouse-type/warehouse-type.componen
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { ReceivePurchaseComponent } from './receive-purchase/receive-purchase.component';
-// import { ReceiveCheckComponent } from './receive-check/receive-check.component';
+
 import { WarehouseDetailComponent } from './warehouse-detail/warehouse-detail.component';
 import { AbcSettingComponent } from './abc-setting/abc-setting.component';
 import { VenSettingComponent } from './ven-setting/ven-setting.component';
@@ -91,6 +91,7 @@ import { SummaryDisbursementComponent } from './reports/summary-disbursement/sum
 import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
+import { StockcardComponent } from './tools/stockcard/stockcard.component';
 
 const routes: Routes = [
   {
@@ -169,6 +170,8 @@ const routes: Routes = [
       { path: 'addition/warehouse', component: AdditionWarehouseComponent },
       { path: 'addition/generic', component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', component: AdditionEditComponent },
+
+      { path: 'tools/stockcard', component: StockcardComponent },
     ]
   }
 ];

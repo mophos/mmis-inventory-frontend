@@ -1,0 +1,49 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">เครื่องมือ (Tools)</span>
+  <span class="breadcrumb-item active">จัดการ Stock Card</span>
+</nav>
+
+<clr-dropdown style="padding-top: 5px; padding-bottom: 5px;">
+  <button type="button" class="btn btn-sm btn-danger" clrDropdownTrigger>
+    แก้ไข Stock Card
+    <clr-icon shape="caret down"></clr-icon>
+  </button>
+  <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+    <label class="dropdown-header">ประเภท</label>
+    <button type="button" clrDropdownItem (click)="showSearchReceive()">จากการรับผิด</button>
+    <button type="button" clrDropdownItem>จากการจ่ายผิด</button>
+  </clr-dropdown-menu>
+</clr-dropdown>
+
+<clr-datagrid [style.height.%]="80">
+  <clr-dg-column>วันที่</clr-dg-column>
+  <clr-dg-column>ประเภท</clr-dg-column>
+  <clr-dg-column>เจ้าหน้าที่</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+  <clr-dg-row *ngFor="let t of items" [clrDgItem]="t">
+    <!-- <wm-transfer-detail *clrIfExpanded [transferId]="t.transfer_id" ngProjectAs="clr-dg-row-detail"></wm-transfer-detail> -->
+
+    <clr-dg-cell>
+
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>
+
+<!-- search receive -->
+<clr-modal [(clrModalOpen)]="isOpenSearchReceive" [clrModalSize]="'lg'">
+  <h3 class="modal-title">ค้นหาใบรับ</h3>
+  <div class="modal-body">
+    <p>But not much to say...</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="isOpenSearchReceive = false">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="isOpenSearchReceive = false">Ok</button>
+  </div>
+</clr-modal>
+<!-- /search receive -->
