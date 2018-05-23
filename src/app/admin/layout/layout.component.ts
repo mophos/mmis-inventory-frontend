@@ -24,7 +24,7 @@ export class LayoutComponent implements OnInit {
   Materials = false;
   Contracts = false;
   Administrator = false;
-  peroid = false;
+  period = false;
   jwtHelper: JwtHelper = new JwtHelper();
 
   @ViewChild('modalChangePassword') public modalChangePassword;
