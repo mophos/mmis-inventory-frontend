@@ -21,8 +21,6 @@ export class TransferEditComponent implements OnInit {
 
   lots = [];
   generics = [];
-  loading: boolean = false;
-  isLoading: boolean = false;
   locations: any = [];
   locationId: any;
 
@@ -41,7 +39,6 @@ export class TransferEditComponent implements OnInit {
   transferQty = 0;
   wmProductId: any;
   workingCode: any;
-  isSaving: boolean = false;
   disableSave = false;
 
   myDatePickerOptions: IMyOptions = {
@@ -88,7 +85,7 @@ export class TransferEditComponent implements OnInit {
 
   async getSummaryInfo() {
     try {
-      this.isLoading = true;
+      this.modalLoading.show();
       const rs: any = await this.transferService.getSummaryInfo(this.transferId);
       if (rs.ok) {
         if (rs.info.transfer_date) {
@@ -111,9 +108,9 @@ export class TransferEditComponent implements OnInit {
       } else {
         this.alertService.error(rs.error);
       }
-      this.isLoading = false;
+      this.modalLoading.hide();
     } catch (error) {
-      this.isLoading = false;
+      this.modalLoading.hide();
       console.error(error);
     }
   }
@@ -126,7 +123,9 @@ export class TransferEditComponent implements OnInit {
         this.genericName = event ? event.generic_name : null;
         this.genericId = event ? event.generic_id : null;
         this.workingCode = event ? event.working_code : null;
-        this.remainQty = event ? event.qty : null;
+        this.remainQty = event ? event.qty - event.reserve_qty : null;
+        this.primaryUnitId = event ? event.primary_unit_id : null;
+        this.primaryUnitName = event ? event.primary_unit_name : null;
         this.unitList.setGenericId(this.genericId);
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
@@ -220,32 +219,38 @@ export class TransferEditComponent implements OnInit {
   }
 
   async addGeneric() {
-    const idx = _.findIndex(this.generics, { generic_id: this.genericId });
+    if (this.transferQty) {
+      const idx = _.findIndex(this.generics, { generic_id: this.genericId });
 
-    if (idx === -1) {
-      if (this.genericId) {
-        const obj = {
-          working_code: this.workingCode,
-          generic_name: this.genericName,
-          generic_id: this.genericId,
-          transfer_qty: +this.transferQty,
-          remain_qty: +this.remainQty,
-          unit_generic_id: this.unitGenericId,
-          conversion_qty: this.conversionQty,
-          location_id: this.locationId,
-          primary_unit_id: this.primaryUnitId,
-          primary_unit_name: this.primaryUnitName
-        };
+      if (idx === -1) {
+        if (this.genericId && this.transferQty && this.unitGenericId) {
+          const obj = {
+            working_code: this.workingCode,
+            generic_name: this.genericName,
+            generic_id: this.genericId,
+            transfer_qty: +this.transferQty,
+            remain_qty: +this.remainQty,
+            unit_generic_id: this.unitGenericId,
+            conversion_qty: this.conversionQty,
+            primary_unit_id: this.primaryUnitId,
+            location_id: this.locationId
+          };
 
-        this.generics.push(obj);
-        await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
-        this.clearForm();
+          console.log(obj);
+
+          this.generics.push(obj);
+          await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
+          this.clearForm();
+        } else {
+          this.alertService.error('ข้อมูลไม่ครบถ้วน เช่น จำนวนโอน');
+        }
+
       } else {
-        this.alertService.error('ข้อมูลไม่ครบถ้วน')
+        this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
       }
 
     } else {
-      this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
+      this.alertService.error('กรุณาระบุจำนวนที่ต้องการโอน')
     }
   }
 
@@ -267,7 +272,7 @@ export class TransferEditComponent implements OnInit {
     this.lotNo = null;
     this.locationId = null;
     this.lots = [];
-    // this.unitList.clearUnits();
+    this.unitList.clearUnits();
   }
 
   editChangetransferQty(idx: any, qty: any) {
@@ -279,17 +284,16 @@ export class TransferEditComponent implements OnInit {
       this.generics[idx].transfer_qty = +qty.value;
       const genericId = this.generics[idx].generic_id;
       const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].transfer_qty = transferQty;
       this.getProductList(genericId, transferQty);
     }
   }
 
   changeProductQty(genericId, event) {
+    const totalBaseUnit = _.sumBy(event, 'product_qty');
+
     const idx = _.findIndex(this.generics, ['generic_id', genericId]);
     this.generics[idx].products = event;
-    this.generics[idx].transfer_qty = _.sumBy(event, function (e: any) {
-      return e.product_qty * e.conversion_qty;
-    });
+    this.generics[idx].transfer_qty = Math.floor(totalBaseUnit / this.generics[idx].conversion_qty);
   }
 
   editChangeUnit(idx: any, event: any, unitCmp: any) {
@@ -304,7 +308,6 @@ export class TransferEditComponent implements OnInit {
       } else {
         const genericId = this.generics[idx].generic_id;
         const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-        this.generics[idx].transfer_qty = transferQty;
         this.getProductList(genericId, transferQty);
       }
     }
@@ -329,6 +332,7 @@ export class TransferEditComponent implements OnInit {
             unit_generic_id: v.unit_generic_id,
             conversion_qty: +v.conversion_qty,
             location_id: v.location_id,
+            primary_unit_id: v.primary_unit_id,
             products: v.products
           });
         } else {
@@ -345,7 +349,7 @@ export class TransferEditComponent implements OnInit {
         };
 
         if (generics.length) {
-          this.isSaving = true;
+          this.modalLoading.show();
           this.alertService.confirm('ต้องการโอนรายการสินค้า ใช่หรือไม่?')
             .then(() => {
               this.transferService.updateTransfer(this.transferId, summary, generics)
@@ -356,15 +360,15 @@ export class TransferEditComponent implements OnInit {
                   } else {
                     this.alertService.error(JSON.stringify(result.error));
                   }
-                  this.isSaving = false;
+                  this.modalLoading.hide();
                 })
                 .catch(error => {
-                  this.isSaving = false;
+                  this.modalLoading.hide();
                   this.alertService.error(error.message);
                 });
             })
             .catch(() => {
-              this.isSaving = false;
+              this.modalLoading.hide();
             });
         } else {
           this.alertService.error('ไม่พบรายการที่ต้องการโอน');
