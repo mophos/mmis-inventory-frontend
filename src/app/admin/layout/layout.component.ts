@@ -24,7 +24,7 @@ export class LayoutComponent implements OnInit {
   Materials = false;
   Contracts = false;
   Administrator = false;
-
+  peroid = false;
   jwtHelper: JwtHelper = new JwtHelper();
 
   @ViewChild('modalChangePassword') public modalChangePassword;
@@ -77,6 +77,7 @@ export class LayoutComponent implements OnInit {
     this.Materials = _.indexOf(this.rights, 'MM_ADMIN') === -1 ? false : true;
     this.Contracts = _.indexOf(this.rights, 'CM_ADMIN') === -1 ? false : true;
     this.Administrator = _.indexOf(this.rights, 'UM_ADMIN') === -1 ? false : true;
+    this.period = _.indexOf(this.rights, 'wm_PERIOD') === -1 ? false : true;
   }
 
   openChangePasswordModal() {
