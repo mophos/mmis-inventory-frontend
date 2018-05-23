@@ -269,6 +269,7 @@ export class ReceiveComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
+          await this.receiveService.updatePurchaseApproved(w.receive_id);
           const rs: any = await this.receiveService.removeReceive(w.receive_id);
           if (rs.ok) {
             this.alertService.success();
