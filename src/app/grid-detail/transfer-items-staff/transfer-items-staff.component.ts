@@ -4,11 +4,12 @@ import { AlertService } from 'app/alert.service';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'wm-transfer-items',
-  templateUrl: './transfer-items.component.html',
+  selector: 'wm-transfer-items-staff',
+  templateUrl: './transfer-items-staff.component.html',
   styles: []
 })
-export class TransferItemsComponent implements OnInit {
+export class TransferItemsStaffComponent implements OnInit {
+
   products: any = [];
 
   @Output('onChangeQty') onChangeQty: EventEmitter<any> = new EventEmitter<any>();
@@ -27,11 +28,10 @@ export class TransferItemsComponent implements OnInit {
 
   ngOnInit() { }
 
-  changeQty(qty: any, idx: any, ) {
-    const oldQty = +this.products[idx].product_qty;
-    if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].small_remain_qty) {
+  changeQty(qty: any, idx: any) {
+    if (+qty.value > +this.products[idx].small_remain_qty) {
       this.alertService.error('จำนวนโอน มากว่าจำนวนคงเหลือ');
-      qty.value = oldQty;
+      this.products[idx].product_qty = '';
     } else {
       this.products[idx].product_qty = +qty.value;
       this.onChangeQty.emit(this.products);
