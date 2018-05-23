@@ -26,7 +26,7 @@ export class SearchProductTmtComponent implements OnInit {
     @Inject('API_URL') private apiUrl: string) {
 
     this.token = sessionStorage.getItem('token');
-    this.searchProductTMTUrl = `${this.apiUrl}/products/search-product-tmt?token=${this.token}`;
+    this.searchProductTMTUrl = `${this.apiUrl}/products/mapping/search-product-tmt?token=${this.token}`;
   }
 
   ngOnInit() {

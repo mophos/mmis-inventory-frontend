@@ -1,5 +1,3 @@
-import { async } from '@angular/core/testing';
-import { log } from 'util';
 import { ProductDetailComponent } from './../../grid-detail/product-detail/product-detail.component';
 import { Component, OnInit, Inject, Output, Input, EventEmitter, ViewChild, Directive } from '@angular/core';
 import { ProductsService } from './../products.service'
@@ -20,7 +18,8 @@ export class CodeMappingComponent implements OnInit {
 
   constructor(
     private productsService: ProductsService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    @Inject('API_URL') private apiUrl: string,
   ) { }
 
   ngOnInit() {
@@ -79,5 +78,15 @@ export class CodeMappingComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+  }
+
+  async exportExcel() {
+    let token = sessionStorage.getItem('token');
+    let url = `${this.apiUrl}/products/mapping/tmt/export?token=${token}`;
+    window.open(url, '_blank');
+  }
+
+  importExcel() {
+
   }
 }

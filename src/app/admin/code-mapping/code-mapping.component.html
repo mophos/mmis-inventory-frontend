@@ -2,21 +2,34 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">Map รหัสยา TMT(TPU)</span>
 </nav>
-<div class="row">
-  <div class="col-sm-4">
-    &nbsp;
-  </div>
-  <div class="col-sm-4">
-    &nbsp;
-  </div>
-  <div class="col-sm-4">
+<div class="row" style="padding: 5px;">
+  <div class="col-md-12">
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm btn-success" (click)="save()">
+        <clr-icon shape="floppy"></clr-icon>
+        บันทึกข้อมูล
+      </button>
+      <button type="button" class="btn btn-sm btn-success" (click)="uploadExcel()">
+        <clr-icon shape="upload"></clr-icon>
+        นำเข้าไฟล์ Excel
+      </button>
+      <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
+        <clr-icon shape="download"></clr-icon>
+        ส่งออก Excel
+      </button>
+    </div>
+
+    <button type="button" class="btn btn-sm btn-primary" (click)="exportExcel()">
+      <clr-icon shape="window-max"></clr-icon>
+      นำเข้าข้อมูล TMT...
+    </button>
   </div>
 </div>
-<clr-datagrid class="order-form">
-  <clr-dg-column [clrDgField]="'working_code'" style="width: 200px;">Working Code</clr-dg-column>
-  <clr-dg-column [clrDgField]="'product_name'" style="width: 300px;">ชื่อยา</clr-dg-column>
+<clr-datagrid style="height: 80%;">
+  <clr-dg-column [clrDgField]="'working_code'" style="width: 110px;">Trade Code</clr-dg-column>
+  <clr-dg-column [clrDgField]="'product_name'">ชื่อยา (Trade name)</clr-dg-column>
   <clr-dg-column style="width: 180px;">TMT ID</clr-dg-column>
-  <clr-dg-column style="width: 500px;"></clr-dg-column>
+  <clr-dg-column>ชื่อยา/เวชภัณฑ์</clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems='let m of product'>
     <clr-dg-cell>{{m.working_code}}</clr-dg-cell>
@@ -32,12 +45,5 @@
     <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
-<div class="row">
-  <div class="col-md-12">
-    <button type="button" class="btn btn-sm btn-success" (click)="save()">
-      <clr-icon shape="floppy"></clr-icon>
-      บันทึกข้อมูล
-    </button>
-  </div>
-</div>
+
 <wm-loading-modal #modalLoading></wm-loading-modal>
