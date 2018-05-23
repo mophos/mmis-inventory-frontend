@@ -54,6 +54,7 @@
     </ng-container>
   </clr-dg-column> -->
   <clr-dg-column [clrDgField]="'generic_name'">ชื่อยาเวชภัณฑ์</clr-dg-column>
+  <clr-dg-column > min-max(base unit)</clr-dg-column>
   <clr-dg-column [style.width.px]="100">
     <ng-container *clrDgHideableColumn="{hidden: true}">
       คงเหลือ(pack)
@@ -62,7 +63,7 @@
   
   <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
   <!-- <clr-dg-column [style.width.%]="10">มูลค่า (บาท)</clr-dg-column> -->
-  <clr-dg-column [clrDgField]="'lot_no'" [style.width.%]="10">
+  <!-- <clr-dg-column [clrDgField]="'lot_no'" [style.width.%]="10">
     <ng-container *clrDgHideableColumn="{hidden: false}">
       Lot no.
     </ng-container>
@@ -71,34 +72,36 @@
     <ng-container *clrDgHideableColumn="{hidden: false}">
       วันหมดอายุ
     </ng-container>
-  </clr-dg-column>
+  </clr-dg-column> -->
   <!-- <clr-dg-column [clrDgField]="'location_name'" [style.width.px]="150">
     <ng-container *clrDgHideableColumn="{hidden: false}">
       สถานที่เก็บ
     </ng-container>
   </clr-dg-column> -->
   <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
+      <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-stock-remain>
     <clr-dg-action-overflow>
       <button class="action-item" (click)="changeQty(p)">
         <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-      <button disabled class="action-item" (click)="getStockCard(p)">
-        <clr-icon shape="search"></clr-icon> Stock Card</button>
+      <!-- <button disabled class="action-item" (click)="getStockCard(p)">
+        <clr-icon shape="search"></clr-icon> Stock Card</button> -->
     </clr-dg-action-overflow>
     <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
     <clr-dg-cell>
       <span class="p4">{{p.generic_name}}</span> <br>
       <span class="p7">{{p.product_name}}</span>
   </clr-dg-cell>
+  <clr-dg-cell>{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.base_unit_name}})</clr-dg-cell>
-    <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.base_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.primary_unit_name}}</clr-dg-cell>
     <!-- <clr-dg-cell>{{p.cost*p.qty | number: '1.2-2'}}</clr-dg-cell> -->
-    <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
-    <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
+    <!-- <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+    <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell> -->
   </clr-dg-row>
 
   <clr-dg-footer>
     {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
-    <clr-dg-pagination #paginationA [clrDgPageSize]="50"></clr-dg-pagination>
+    <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
 

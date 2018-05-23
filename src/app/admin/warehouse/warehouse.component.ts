@@ -23,7 +23,6 @@ export class WarehouseComponent implements OnInit {
   warehouseName: string;
   shortCode: string;
 
-  typeId: any;
   location: string;
   warehouses: any = [];
   types: any = [];
@@ -73,7 +72,6 @@ export class WarehouseComponent implements OnInit {
     this.isReceiveWarehouse = false;
     this.isUnitIssue = false;
 
-    this.typeId = null;
     this.location = null;
     this.hospcode = null;
     this.depCode = null;
@@ -84,7 +82,7 @@ export class WarehouseComponent implements OnInit {
   save() {
     this.modalLoading.show();
     let promise;
-    const isEnable = this.isEnableWarehouse ? 'Y' : 'N';
+    const isActived = this.isEnableWarehouse ? 'Y' : 'N';
     const isReceive = this.isReceiveWarehouse ? 'Y' : 'N';
     const isUnitIssue = this.isUnitIssue ? 'Y' : 'N';
     let wid;
@@ -95,10 +93,12 @@ export class WarehouseComponent implements OnInit {
     if (this.warehouseName && this.depCode && this.hospcode) {
 
       if (this.isUpdate) {
-        promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.typeId, this.location, isEnable, isReceive, isUnitIssue, this.hospcode, this.depCode);
+        promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode);
       } else {
-        if (this.shortCode == null) this.shortCode = wid + 1;
-        promise = this.warehouseService.save(this.warehouseName, this.shortCode, this.typeId, this.location, isEnable, isReceive, isUnitIssue, this.hospcode, this.depCode);
+        if (this.shortCode == null) {
+          this.shortCode = wid + 1;
+        }
+        promise = this.warehouseService.save(this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode);
       }
 
       promise
@@ -117,7 +117,7 @@ export class WarehouseComponent implements OnInit {
           this.modalLoading.hide();
           this.alertService.serverError();
         });
-      
+
     } else {
       this.alertService.error('กรุณาระบุข้อมูลให้ครบ');
     }
@@ -147,11 +147,10 @@ export class WarehouseComponent implements OnInit {
     this.warehouseId = w.warehouse_id;
     this.warehouseName = w.warehouse_name;
     this.shortCode = w.short_code;
-    this.isEnableWarehouse = w.is_enable === 'Y' ? true : false;
+    this.isEnableWarehouse = w.is_actived === 'Y' ? true : false;
     this.isReceiveWarehouse = w.is_receive === 'Y' ? true : false;
     this.isUnitIssue = w.is_unit_issue === 'Y' ? true : false;
     this.location = w.location;
-    this.typeId = +w.type_id;
     this.hospcode = w.his_hospcode;
     this.depCode = w.his_warehouse;
     this.isUpdate = true;

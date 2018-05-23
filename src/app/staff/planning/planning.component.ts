@@ -97,7 +97,7 @@ export class PlanningComponent implements OnInit {
   async getGenerics() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.getGenericsWarehosue(this.genericType);
+      let rs: any = await this.staffService.getGenericsWarehosueMinMax(this.genericType);
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
