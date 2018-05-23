@@ -97,9 +97,19 @@
     <clr-tab-content *clrIfActive>
       <div class="row">
         <div class="col-md-12" style="text-align: right;">
-          <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="clickApprove()">
-            อนุมัติการเติม
-          </button>
+          <div class="btn-group">
+            <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="clickApprove()">
+              อนุมัติการเติม
+            </button>
+            <button class="btn btn-success btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="clickPrintApprove()">
+              พิมพ์ใบอนุมัติเติม
+            </button>
+            <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="printRefills()">
+                พิมพ์ใบจัดเวชภัณฑ์
+            </button>
+
+          </div>
+
         </div>
       </div>
       <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="selectedApprove" [style.height.%]="80">
@@ -135,7 +145,20 @@
   <clr-tab>
     <button clrTabLink (click)="getTransactionHistory()">ประวัติการเติม</button>
     <clr-tab-content *clrIfActive>
-      <clr-datagrid style="padding-top: 5px;" [style.height.%]="85">
+      <div class="row">
+        <div class="col-md-12" style="text-align: right;">
+          <div class="btn-group">
+            <button class="btn btn-success btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="clickPrintApprove()">
+              พิมพ์ใบอนุมัติเติม
+            </button>
+            <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="printRefills()">
+              พิมพ์ใบจัดเวชภัณฑ์
+            </button>
+          </div>
+
+        </div>
+      </div>
+      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="selectedApprove" [style.height.%]="85">
         <clr-dg-column [style.width.px]="150" [clrDgField]="'addition_date'">วันที่สร้าง</clr-dg-column>
         <clr-dg-column [style.width.px]="150" [clrDgField]="'addition_code'">เลขที่ใบเติม</clr-dg-column>
         <clr-dg-column [clrDgField]="'dst_warehouse_name'">คลัง/หน่วยเบิก</clr-dg-column>
@@ -151,9 +174,9 @@
               <button title="ดูข้อมูล/อนุมัติ" class="btn btn-outline btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/addition/edit', h.addition_id]">
                 <clr-icon shape="view-list"></clr-icon>
               </button>
-              <button title="พิมพ์รายงานการเติม" style="float: left;" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="printRefill(h)">
+              <!-- <button title="พิมพ์รายงานการเติม" style="float: left;" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="printRefill(h)">
                 <clr-icon shape="printer"></clr-icon>
-              </button>
+              </button> -->
             </div>
           </clr-dg-cell>
         </clr-dg-row>
