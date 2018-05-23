@@ -24,21 +24,21 @@ export class WarehouseService {
   }
 
   async getMappingsGenerics() {
-    let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics`).toPromise();
     return rs.json();
   }
 
   async getMappingsProducts(genericId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-products/${genericId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-products/${genericId}`).toPromise();
     return rs.json();
   }
 
   async getStaffMappings() {
-    let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings`).toPromise();
     return rs.json();
   }
   async getShipingNetwork(warehouseId: any, type: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-shippingnetwork-list/${warehouseId}/${type}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-shippingnetwork-list/${warehouseId}/${type}`).toPromise();
     return rs.json();
   }
 
@@ -107,19 +107,18 @@ export class WarehouseService {
   }
 
   async getReqShipingNetwork(warehouseId: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/warehouses/reqshipingnetwork/${warehouseId}`)
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/reqshipingnetwork/${warehouseId}`)
       .toPromise();
     return rs.json();
   }
 
-  save(warehouseName: string, shortCode: string, typeId: any, location: string, isEnable: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any) {
+  save(warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/warehouses`, {
         warehouseName: warehouseName,
         shortCode: shortCode,
-        typeId: typeId,
         location: location,
-        isEnable: isEnable,
+        isActived: isActived,
         isReceive: isReceive,
         isUnitIssue: isUnitIssue,
         hospcode: hospcode,
@@ -134,14 +133,13 @@ export class WarehouseService {
     });
   }
 
-  update(warehouseId: any, warehouseName: string, shortCode: string, typeId: any, location: string, isEnable: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any) {
+  update(warehouseId: any, warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.put(`${this.url}/warehouses/${warehouseId}`, {
         warehouseName: warehouseName,
         shortCode: shortCode,
-        typeId: typeId,
         location: location,
-        isEnable: isEnable,
+        isActived: isActived,
         isReceive: isReceive,
         isUnitIssue: isUnitIssue,
         hospcode: hospcode,
@@ -196,7 +194,7 @@ export class WarehouseService {
   }
 
   async changeCost(productId: any, cost: number) {
-    let rs: any = await this.authHttp.post(`${this.url}/warehouses/products/change-cost`, {
+    const rs: any = await this.authHttp.post(`${this.url}/warehouses/products/change-cost`, {
       productId: productId,
       cost: cost
     }).toPromise();
@@ -245,7 +243,7 @@ export class WarehouseService {
   }
 
   async saveReceivePlanning(warehouseId: any, generics: any[]) {
-    let rs = await this.authHttp.post(`${this.url}/warehouses/receive-planning`, {
+    const rs = await this.authHttp.post(`${this.url}/warehouses/receive-planning`, {
       warehouseId: warehouseId,
       generics: generics
     }).toPromise();
@@ -254,22 +252,22 @@ export class WarehouseService {
   }
 
   async getReceivePlanning() {
-    let rs = await this.authHttp.get(`${this.url}/warehouses/receive-planning`).toPromise();
+    const rs = await this.authHttp.get(`${this.url}/warehouses/receive-planning`).toPromise();
     return rs.json();
   }
 
   async getReceivePlanningGenericList(warehouseId: any) {
-    let rs = await this.authHttp.get(`${this.url}/warehouses/receive-planning/generics/${warehouseId}`).toPromise();
+    const rs = await this.authHttp.get(`${this.url}/warehouses/receive-planning/generics/${warehouseId}`).toPromise();
     return rs.json();
   }
 
   async getGenericByGenericTypes(genericTypeId: any) {
-    let rs = await this.authHttp.get(`${this.url}/warehouses/receive-planning/generics-by-types/${genericTypeId}`).toPromise();
+    const rs = await this.authHttp.get(`${this.url}/warehouses/receive-planning/generics-by-types/${genericTypeId}`).toPromise();
     return rs.json();
   }
 
   async getGenericAll() {
-    let rs = await this.authHttp.get(`${this.url}/warehouses/receive-planning/generics-all`).toPromise();
+    const rs = await this.authHttp.get(`${this.url}/warehouses/receive-planning/generics-all`).toPromise();
     return rs.json();
   }
 
