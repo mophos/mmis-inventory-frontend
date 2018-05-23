@@ -74,6 +74,7 @@ import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
 import { AuthRequisition } from 'app/auth-requisition.service';
+import { AuthPeriod } from 'app/auth-period.service';
 import { AuthShippingNetwork } from 'app/auth-shipping-network.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
@@ -107,7 +108,7 @@ const routes: Routes = [
       { path: 'abc-setting', component: AbcSettingComponent },
       { path: 'ven-setting', component: VenSettingComponent },
       { path: 'abc-ven', component: AbcVenComponent },
-      { path: 'period', component: PeriodComponent },
+      { path: 'period', canActivate: [AuthPeriod], component: PeriodComponent },
       { path: 'receives', canActivate: [AuthReceive], component: ReceiveComponent },
       { path: 'receives/purchase', canActivate: [AuthReceive], component: ReceivePurchaseComponent },
       { path: 'receives/other', canActivate: [AuthReceive], component: ReceiveOtherComponent },
