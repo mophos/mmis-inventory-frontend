@@ -1,10 +1,6 @@
 export const environment = {
   production: false,
-<<<<<<< HEAD
-  apiUrl: 'http://localhost:3015',
-=======
   apiUrl: 'http://localhost:4001',
->>>>>>> 599322286ebf35bfdb02622d223fdda05742e333
   docUrl: 'http://203.157.156.69/api/document',
   loginUrl: 'http://203.157.156.69/api/um',
   homeUrl: '/',
