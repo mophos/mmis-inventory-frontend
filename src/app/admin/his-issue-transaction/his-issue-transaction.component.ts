@@ -27,7 +27,6 @@ export class HisIssueTransactionComponent implements OnInit {
   _genericType: any;
 
   constructor(
-
     private uploadingService: UploadingService,
     private alertService: AlertService,
     private hisTransactionService: HisTransactionService
@@ -50,7 +49,7 @@ export class HisIssueTransactionComponent implements OnInit {
           this._genericTypes.push(e.generic_type_id)
         });
         this.genericType = '';
-        this.getTransactionList() ;
+        this.getTransactionList();
       } else {
         this.alertService.error(rs.error);
       }
@@ -69,7 +68,7 @@ export class HisIssueTransactionComponent implements OnInit {
         this._genericType = [];
         this._genericType.push(this.genericType)
       }
-      
+
       this.modalLoading.show();
       const rs: any = await this.hisTransactionService.getTransactionList(this._genericType);
       if (rs.ok) {

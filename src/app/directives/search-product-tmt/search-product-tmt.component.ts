@@ -47,9 +47,10 @@ export class SearchProductTmtComponent implements OnInit {
       this.onChange.emit(false);
     }
   }
+
   handleResultSelected(event: any) {
     this.onSelect.emit(event);
-    this.query = event.TMTID;
+    this.query = event.tmtid;
     this.onChange.emit(event);
   }
 
