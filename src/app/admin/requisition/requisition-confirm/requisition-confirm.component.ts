@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { AlertService } from 'app/alert.service';
 import * as uuid from 'uuid/v4';
 import * as _ from 'lodash';
-import { BorrowNoteService } from '../borrow-note.service';
+import { BorrowNoteService } from 'app/staff/borrow-note.service';
 
 @Component({
   selector: 'wm-requisition-confirm',

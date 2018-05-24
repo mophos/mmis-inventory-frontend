@@ -1,13 +1,12 @@
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
-import { WarehouseProductsService } from './../warehouse-products.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IMyOptions } from 'mydatepicker-th';
-import { AlertService } from "../../alert.service";
-import { WarehouseService } from "../warehouse.service";
-import { ProductsService } from "../products.service";
 import * as _ from 'lodash';
 import { SelectUnitsComponent } from 'app/directives/select-units/select-units.component';
+import { AlertService } from 'app/alert.service';
+import { ProductsService } from 'app/admin/products.service';
+import { WarehouseProductsService } from 'app/admin/warehouse-products.service';
 
 @Component({
   selector: 'wm-requisition-template-edit',
@@ -31,8 +30,6 @@ export class RequisitionTemplateEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private alertService: AlertService,
-    // private ref: ChangeDetectorRef,
-    // private warehouseService: WarehouseService,
     private productService: ProductsService,
     private warehouseProductService: WarehouseProductsService,
     private router: Router
@@ -44,6 +41,7 @@ export class RequisitionTemplateEditComponent implements OnInit {
     this.getTemplate();
     this.getProducts();
   }
+
   async getTemplate() {
     try {
       const rs: any = await this.warehouseProductService.getTemplate(this.templateId);

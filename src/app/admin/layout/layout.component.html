@@ -88,10 +88,26 @@
         <clr-icon clrVerticalNavIcon shape="two-way-arrows"></clr-icon>
         โอนสินค้า
       </a>
-      <a clrVerticalNavLink routerLink="/admin/requisition" title="เบิกสินค้า" routerLinkActive="active">
+      <!-- <a clrVerticalNavLink routerLink="/admin/requisition" title="เบิกสินค้า" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="tools"></clr-icon>
         เบิกสินค้า
-      </a>
+      </a> -->
+      <clr-vertical-nav-group routerLinkActive="active">
+        <a clrVerticalNavLink href="javascript://" title="เบิกสินค้า">
+          <clr-icon shape="tools" clrVerticalNavIcon></clr-icon>
+          เบิกสินค้า
+        </a>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <a clrVerticalNavLink routerLink="/admin/requisition" routerLinkActive="active">
+            <clr-icon shape="library"></clr-icon>
+            เบิก/จ่ายสินค้า
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/fast-requisition" routerLinkActive="active">
+            <clr-icon shape="library"></clr-icon>
+            จ่ายด่วน
+          </a>
+        </clr-vertical-nav-group-children>
+      </clr-vertical-nav-group>
       <a clrVerticalNavLink routerLink="/admin/alert-expired" title="แจ้งเตือนยาหมดอายุ" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="alarm-clock"></clr-icon>
         แจ้งเตือนยาหมดอายุ
