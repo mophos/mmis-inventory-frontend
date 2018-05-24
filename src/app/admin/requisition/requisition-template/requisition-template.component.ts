@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
-
-import { WarehouseProductsService } from './../warehouse-products.service';
-import { AlertService } from "../../alert.service";
+import { AlertService } from 'app/alert.service';
+import { WarehouseProductsService } from 'app/admin/warehouse-products.service';
 
 @Component({
   selector: 'wm-requisition-template',

@@ -1,8 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { RequisitionTypeService } from '../requisition-type.service';
-
-import { IRequisitionType, IRequisitionTypeStructure } from '../../models';
-import { AlertService } from '../../alert.service';
+import { RequisitionTypeService } from 'app/admin/requisition-type.service';
+import { AlertService } from 'app/alert.service';
 
 @Component({
   selector: 'wm-requisition-type',
@@ -21,7 +19,6 @@ export class RequisitionTypeComponent implements OnInit {
   requisitionTypeName: string;
   requisitionTypeDesc: string;
 
-
   constructor(
     private requisiotionTypeService: RequisitionTypeService,
     private alertService: AlertService,
@@ -29,10 +26,10 @@ export class RequisitionTypeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-        this.all();
+    this.all();
   }
 
-addNew() {
+  addNew() {
     this.isUpdate = false;
     this.requisitionTypeId = null;
     this.requisitionTypeName = null;
@@ -89,7 +86,7 @@ addNew() {
       });
   }
 
-  showEdit(w: IRequisitionTypeStructure) {
+  showEdit(w: any) {
     this.requisitionTypeId = w.requisition_type_id;
     this.requisitionTypeName = w.requisition_type;
     this.requisitionTypeDesc = w.requisition_type_desc;
@@ -101,7 +98,7 @@ addNew() {
     this.opened = true;
   }
 
-  remove(w: IRequisitionTypeStructure) {
+  remove(w: any) {
     this.alertService.confirm(`คุณต้องการลบรายการนี้ [${w.requisition_type}] ใช่หรือไม่?`)
       .then(() => {
         this.modalLoading.show();

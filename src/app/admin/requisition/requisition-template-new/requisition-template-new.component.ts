@@ -1,13 +1,13 @@
 import { SelectUnitsComponent } from 'app/directives/select-units/select-units.component';
-import { WarehouseProductsService } from './../warehouse-products.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMyOptions } from 'mydatepicker-th';
-import { AlertService } from "../../alert.service";
-import { WarehouseService } from "../warehouse.service";
-import { ProductsService } from "../products.service";
 import * as _ from 'lodash';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
+import { AlertService } from 'app/alert.service';
+import { WarehouseService } from 'app/admin/warehouse.service';
+import { ProductsService } from 'app/admin/products.service';
+import { WarehouseProductsService } from 'app/admin/warehouse-products.service';
 
 @Component({
   selector: 'wm-requisition-template-new',
@@ -28,7 +28,6 @@ export class RequisitionTemplateNewComponent implements OnInit {
   products2 = [];
   templateSubject: any;
 
-
   constructor(
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
@@ -37,6 +36,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
     private warehouseProductService: WarehouseProductsService,
     private router: Router
   ) { }
+
   ngOnInit() {
     this.getWarehouses();
   }

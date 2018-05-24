@@ -31,18 +31,13 @@ import { WarehouseDetailComponent } from './warehouse-detail/warehouse-detail.co
 import { AbcSettingComponent } from './abc-setting/abc-setting.component';
 import { VenSettingComponent } from './ven-setting/ven-setting.component';
 import { AbcVenComponent } from './abc-ven/abc-ven.component';
-import { RequisitionTemplateComponent } from './requisition-template/requisition-template.component';
-import { RequisitionTemplateNewComponent } from './requisition-template-new/requisition-template-new.component';
-import { RequisitionTemplateEditComponent } from './requisition-template-edit/requisition-template-edit.component';
 import { WarehouseProductsComponent } from './warehouse-products/warehouse-products.component';
 import { WarehouseProductsDetailComponent } from './warehouse-products-detail/warehouse-products-detail.component';
 
 // common page
 import { AlertExpiredComponent } from './alert-expired/alert-expired.component';
 import { RequisitionComponent } from './requisition/requisition.component';
-import { RequisitionNewComponent } from './requisition-new/requisition-new.component';
 import { UnitissueComponent } from './unitissue/unitissue.component';
-import { RequisitionTypeComponent } from './requisition-type/requisition-type.component';
 import { ReturningComponent } from './returning/returning.component';
 
 // reports
@@ -69,8 +64,6 @@ import { TransferEditComponent } from 'app/admin/transfer-edit/transfer-edit.com
 import { HisIssueTransactionComponent } from 'app/admin/his-issue-transaction/his-issue-transaction.component';
 import { WarehouseProductPlanningComponent } from 'app/admin/warehouse-product-planning/warehouse-product-planning.component';
 
-import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
-import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
 import { AuthRequisition } from 'app/auth-requisition.service';
@@ -85,13 +78,20 @@ import { PurchasingNotgiveawayComponent } from 'app/admin/reports/purchasing-not
 import { InventoryStatusComponent } from 'app/admin/reports/inventory-status/inventory-status.component';
 import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
-import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
 import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
 import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
 import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
+import { RequisitionTypeComponent } from 'app/admin/requisition/requisition-type/requisition-type.component';
+import { RequisitionNewComponent } from 'app/admin/requisition/requisition-new/requisition-new.component';
+import { RequisitionConfirmComponent } from 'app/admin/requisition/requisition-confirm/requisition-confirm.component';
+import { RequisitionConfirmEditComponent } from 'app/admin/requisition/requisition-confirm-edit/requisition-confirm-edit.component';
+import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
+import { RequisitionTemplateComponent } from 'app/admin/requisition/requisition-template/requisition-template.component';
+import { RequisitionTemplateNewComponent } from 'app/admin/requisition/requisition-template-new/requisition-template-new.component';
+import { RequisitionTemplateEditComponent } from 'app/admin/requisition/requisition-template-edit/requisition-template-edit.component';
 
 const routes: Routes = [
   {

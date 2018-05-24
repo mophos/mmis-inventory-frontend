@@ -66,13 +66,9 @@ import { WarehouseDetailComponent } from './warehouse-detail/warehouse-detail.co
 
 // import common component
 import { AlertExpiredComponent } from './alert-expired/alert-expired.component';
-import { RequisitionComponent } from './requisition/requisition.component';
-import { RequisitionNewComponent } from './requisition-new/requisition-new.component';
-
 import { UnitissueComponent } from './unitissue/unitissue.component';
 
 // import { ReceiveCheckComponent } from './receive-check/receive-check.component';
-import { RequisitionTypeComponent } from './requisition-type/requisition-type.component';
 import { ToThaiDatePipe } from '../helper/to-thai-date.pipe';
 import { AbcVenComponent } from './abc-ven/abc-ven.component';
 import { AbcSettingComponent } from './abc-setting/abc-setting.component';
@@ -91,9 +87,6 @@ import { ProductExpiredComponent } from './reports/product-expired/product-expir
 import { CountingNewComponent } from './counting-new/counting-new.component';
 import { CountingVerifyComponent } from './counting-verify/counting-verify.component';
 import { CountingAdjustComponent } from './counting-adjust/counting-adjust.component';
-import { RequisitionTemplateComponent } from './requisition-template/requisition-template.component';
-import { RequisitionTemplateNewComponent } from './requisition-template-new/requisition-template-new.component';
-import { RequisitionTemplateEditComponent } from './requisition-template-edit/requisition-template-edit.component';
 import { WarehouseProductsComponent } from './warehouse-products/warehouse-products.component';
 import { WarehouseProductsDetailComponent } from './warehouse-products-detail/warehouse-products-detail.component';
 import { ShippingNetworkComponent } from './shipping-network/shipping-network.component';
@@ -116,8 +109,6 @@ import { TransectionTypeComponent } from './transection-type/transection-type.co
 import { ReceiveotherTypeComponent } from './receiveother-type/receiveother-type.component';
 import { WarehouseProductPlanningComponent } from './warehouse-product-planning/warehouse-product-planning.component';
 
-import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
-import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
 import { AuthRequisition } from 'app/auth-requisition.service';
@@ -133,7 +124,6 @@ import { StockCardComponent } from './reports/stock-card/stock-card.component';
 import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
 import { BorrowNoteService } from './borrow-note.service';
-import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
 import { CalculateMinMaxComponent } from 'app/admin/calculate-min-max/calculate-min-max.component';
 import { ValueProductsComponent } from './reports/value-products/value-products.component';
 import { ProductSummaryComponent } from './reports/product-summary/product-summary.component';
@@ -146,6 +136,7 @@ import { AdditionComponent } from './addition/addition.component';
 import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
 import { AdditionEditComponent } from './addition-edit/addition-edit.component';
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
+import { RequisitionModule } from './requisition/requisition.module';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -172,6 +163,7 @@ Highcharts.setOptions({
     AgxTypeaheadModule,
     DirectivesModule,
     AdminRoutingModule,
+    RequisitionModule
   ],
   declarations: [
     MainPageComponent,
@@ -182,11 +174,8 @@ Highcharts.setOptions({
     ReceiveComponent,
     ReceivePurchaseComponent,
     AlertExpiredComponent,
-    RequisitionComponent,
-    RequisitionNewComponent,
     UnitissueComponent,
     // ReceiveCheckComponent,
-    RequisitionTypeComponent,
     AbcVenComponent,
     AbcSettingComponent,
     VenSettingComponent,
@@ -205,9 +194,6 @@ Highcharts.setOptions({
     CountingNewComponent,
     CountingVerifyComponent,
     CountingAdjustComponent,
-    RequisitionTemplateComponent,
-    RequisitionTemplateNewComponent,
-    RequisitionTemplateEditComponent,
     WarehouseProductsComponent,
     WarehouseProductsDetailComponent,
     ShippingNetworkComponent,
@@ -227,13 +213,10 @@ Highcharts.setOptions({
     TransectionTypeComponent,
     ReceiveotherTypeComponent,
     WarehouseProductPlanningComponent,
-    RequisitionConfirmComponent,
-    RequisitionConfirmUnpaidComponent,
     ProductManufactureComponent,
     StockCardComponent,
     BorrowNoteComponent,
     BorrowNoteNewComponent,
-    RequisitionConfirmEditComponent,
     CalculateMinMaxComponent,
     ValueProductsComponent,
     ProductSummaryComponent,

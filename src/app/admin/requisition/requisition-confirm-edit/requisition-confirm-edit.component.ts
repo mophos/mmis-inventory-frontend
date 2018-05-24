@@ -4,10 +4,10 @@ import { IMyOptions } from 'mydatepicker-th';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-import { LoadingModalComponent } from '../../modals/loading-modal/loading-modal.component';
 import { RequisitionService } from 'app/admin/requisition.service';
 import { AlertService } from 'app/alert.service';
 import { IRequisitionOrder } from 'app/shared';
+import { LoadingModalComponent } from 'app/modals/loading-modal/loading-modal.component';
 
 @Component({
   selector: 'wm-requisition-confirm-edit',
@@ -16,7 +16,7 @@ import { IRequisitionOrder } from 'app/shared';
 })
 export class RequisitionConfirmEditComponent implements OnInit {
 
-  @ViewChild('modalLoading') public modalLoading: any;
+  @ViewChild('modalLoading') public modalLoading: LoadingModalComponent;
 
   products: any = [];
   requisitionDate: any = null;

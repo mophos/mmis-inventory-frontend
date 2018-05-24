@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { AlertService } from 'app/alert.service';
 import * as uuid from 'uuid/v4';
 import * as _ from 'lodash';
-import { AccessCheck } from '../../access-check';
+import { AccessCheck } from 'app/access-check';
 
 @Component({
   selector: 'wm-requisition-confirm-unpaid',
@@ -28,7 +28,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   unpaidId: any = null;
 
   confirmId: any = null;
-  
+
   isEdit: boolean = false;
   actionMsg: string = null;
 
@@ -63,7 +63,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
         this.unpaidId = params.unpaidId;
         // this.isEdit = params.edit === '1' ? true : false;
       });
-   }
+  }
 
   async ngOnInit() {
     await this.getOrderDetail();
@@ -113,7 +113,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
             working_code: v.working_code,
             confirmItems: []
           }
-          
+
           this.products.push(obj);
         })
       } else {
@@ -205,8 +205,8 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   async checkApprove(username: any, password: any) {
     const rs: any = await this.requisitionService.checkApprove(username, password, 'WM_REQUSITTION');
     if (rs.ok) {
-        this.savePay();
-        this.openModalConfirm = false
+      this.savePay();
+      this.openModalConfirm = false
     } else {
       this.alertService.error('ไม่มีสิทธิ์อนุมัติ รายการเบิกสินค้า');
     }
@@ -237,6 +237,6 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
         }
       }).catch(() => {
 
-       });
+      });
   }
 }
