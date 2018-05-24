@@ -237,6 +237,14 @@ export class ReceiveService {
     return res.json();
   }
 
+  async updatePurchaseApproved(receiveId: any) {
+    const res = await this.authHttp.put(`${this.url}/receives/purchase/approved`, {
+      receiveId: receiveId
+    }).toPromise();
+
+    return res.json();
+  }
+
   // async getWaiting(limit: number = 15, offset: number = 0) {
   //   const res = await this.authHttp.post(`${this.url}/receives/waiting`, {
   //     limit: limit,

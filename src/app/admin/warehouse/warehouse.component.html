@@ -6,13 +6,12 @@
 คลิกที่
 <clr-icon shape="ellipsis-vertical" size="14"></clr-icon> ในช่องรายการ เพื่อดูเมนูใช้งาน
 <clr-datagrid [style.height.%]="85">
-  <clr-dg-column [style.width.%]="25" [clrDgField]="'warehouse_name'">ชื่อคลังสินค้า</clr-dg-column>
-  <clr-dg-column [style.width.%]="10" [clrDgField]="'short_code'">short code</clr-dg-column>
-  <clr-dg-column [style.width.%]="15" [clrDgField]="'type_name'">ประเภท</clr-dg-column>
-  <clr-dg-column [style.width.%]="15" [clrDgField]="'location'">สถานที่</clr-dg-column>
-  <clr-dg-column [style.width.%]="10">สถานะ</clr-dg-column>
-  <clr-dg-column [style.width.%]="10">รับเข้าคลัง</clr-dg-column>
-  <clr-dg-column [style.width.%]="15">วันที่สร้าง</clr-dg-column>
+  <clr-dg-column [style.width.%]="15" [clrDgField]="'short_code'">รหัสคลังสินค้า</clr-dg-column>
+  <clr-dg-column [clrDgField]="'warehouse_name'">ชื่อคลังสินค้า</clr-dg-column>
+  <clr-dg-column [clrDgField]="'location'">สถานที่</clr-dg-column>
+  <clr-dg-column>สถานะ</clr-dg-column>
+  <!-- <clr-dg-column [style.width.%]="10">รับเข้าคลัง</clr-dg-column> -->
+  <!-- <clr-dg-column [style.width.%]="15">วันที่สร้าง</clr-dg-column> -->
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let h of warehouses" [clrDgItem]="h">
     <clr-dg-action-overflow>
@@ -32,19 +31,18 @@
         <clr-icon shape="folder"></clr-icon> กำหนดรายการสินค้าในคลัง
       </button>
     </clr-dg-action-overflow>
-    <clr-dg-cell>{{h.warehouse_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center">{{h.short_code}}</clr-dg-cell>
-    <clr-dg-cell>{{h.type_name}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: center">{{h.location}}</clr-dg-cell>
+    <clr-dg-cell>{{h.warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell>{{h.location}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center">
-      <clr-icon title="ไม่ใช้งาน" shape="close" class="is-error" *ngIf="h.is_enable === 'N'"></clr-icon>
-      <clr-icon title="ใช้งาน" shape="check" class="is-success" *ngIf="h.is_enable === 'Y'"></clr-icon>
+      <clr-icon title="ไม่ใช้งาน" shape="close" class="is-error" *ngIf="h.is_actived === 'N'"></clr-icon>
+      <clr-icon title="ใช้งาน" shape="check" class="is-success" *ngIf="h.is_actived === 'Y'"></clr-icon>
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: center">
+    <!-- <clr-dg-cell style="text-align: center">
       <clr-icon title="ไท้รับสินค้าเข้าคลัง" shape="close" class="is-error" *ngIf="h.is_receive === 'N'"></clr-icon>
       <clr-icon title="รับเข้าคลัง" shape="check" class="is-success" *ngIf="h.is_receive === 'Y'"></clr-icon>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: center">{{h.created_at | toThaiDate}}</clr-dg-cell>
+    </clr-dg-cell> -->
+    <!-- <clr-dg-cell style="text-align: center">{{h.created_at | toThaiDate}}</clr-dg-cell> -->
   </clr-dg-row>
 
   <clr-dg-footer>
@@ -63,18 +61,18 @@
         <label>ข้อมูล คลังสินค้า</label>
         <div class="form-group row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <label class="required" for="warehouseName">ชื่อคลังสินค้า</label>
+            <label for="shortCode" class="required">รหัสคลังสินค้า</label>
           </div>
           <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-            <input class="form-control" type="text" name="warehouseName" [(ngModel)]="warehouseName" placeholder="">
+            <input class="form-control" [disabled]="isUpdate" type="text" name="shortCode" [(ngModel)]="shortCode" placeholder="">
           </div>
         </div>
         <div class="form-group row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <label for="shortCode">keywords</label>
+            <label class="required" for="warehouseName">ชื่อคลังสินค้า</label>
           </div>
           <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-            <input class="form-control" type="text" name="shortCode" [(ngModel)]="shortCode" placeholder="">
+            <input class="form-control" type="text" name="warehouseName" [(ngModel)]="warehouseName" placeholder="">
           </div>
         </div>
         <div class="form-group row">
@@ -85,7 +83,7 @@
             <input class="form-control" type="text" name="location" [(ngModel)]="location" placeholder="ชั้น...ตึก....,....">
           </div>
         </div>
-        <div class="form-group row">
+        <!-- <div class="form-group row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <label for="slType">ประเภทคลัง</label>
           </div>
@@ -96,7 +94,7 @@
               </select>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="form-group row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -125,14 +123,14 @@
           </div>
         </div>
 
-        <div class="form-group row">
+        <!-- <div class="form-group row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <label for="isEnableWarehouse">รับสินค้าเข้าคลัง</label>
           </div>
           <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
             <clr-checkbox name="isReceiveWarehouse" [(ngModel)]="isReceiveWarehouse">สามารถรับเข้าคลังได้</clr-checkbox>
           </div>
-        </div>
+        </div> -->
 
         <div class="form-group row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -150,10 +148,10 @@
   <div class="modal-footer">
 
     <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!warehouseName || !hospcode || !depCode">
-        บันทึก
+      บันทึก
     </button>
     <button type="button" class="btn btn-danger-outline" (click)="opened = false">
-        ปิด
+      ปิด
     </button>
   </div>
 </clr-modal>

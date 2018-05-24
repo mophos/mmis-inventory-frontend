@@ -40,6 +40,7 @@ import { AdditionWarehouseGenericComponent } from './addition-warehouse-generic/
 import { AdditionGenericViewComponent } from './addition-generic-view/addition-generic-view.component';
 import { AdditionProductViewComponent } from './addition-product-view/addition-product-view.component';
 import { TransferItemsStaffComponent } from './transfer-items-staff/transfer-items-staff.component';
+import { StaffProductStockRemainComponent } from './staff-product-stock-remain/staff-product-stock-remain.component';
 
 @NgModule({
   imports: [
@@ -83,7 +84,8 @@ import { TransferItemsStaffComponent } from './transfer-items-staff/transfer-ite
     AdditionWarehouseGenericComponent,
     AdditionGenericViewComponent,
     AdditionProductViewComponent,
-    TransferItemsStaffComponent
+    TransferItemsStaffComponent,
+    StaffProductStockRemainComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -118,7 +120,8 @@ import { TransferItemsStaffComponent } from './transfer-items-staff/transfer-ite
     AdditionWarehouseGenericComponent,
     AdditionGenericViewComponent,
     AdditionProductViewComponent,
-    TransferItemsStaffComponent
+    TransferItemsStaffComponent,
+    StaffProductStockRemainComponent
   ]
 })
 export class GridDetailModule { }
