@@ -688,7 +688,6 @@ export class ReceiveComponent implements OnInit {
         receiveIds.push(v.receive_id);
       }
     });
-
     if (receiveIds.length) {
       this.alertService.confirm('พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
         .then(() => {
@@ -696,15 +695,38 @@ export class ReceiveComponent implements OnInit {
           receiveIds.forEach((v: any) => {
             strIds += `receiveID=${v}&`;
           });
-
           const url = `${this.apiUrl}/report/product/receive?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
 
         });
-
     } else {
       this.alertService.error('ไม่พบรายการที่ต้องการพิมพ์ (เลือกรายการที่มีใบสั่งซื้อเท่านั้น)');
+    }
+  }
+
+  printProductReciveOther() {
+    const receiveIds = [];
+    _.forEach(this.selectedOtherApprove, (v) => {
+      if (v.approve_id) {
+        receiveIds.push(v.receive_other_id);
+      }
+    });
+    if (receiveIds.length) {
+      this.alertService.confirm('พิมพ์รายงานเวชภัณฑ์ที่รับจากการบริจาค ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
+        .then(() => {
+          let strIds = '';
+          receiveIds.forEach((v: any) => {
+            strIds += `receiveOtherID=${v}&`;
+          });
+          console.log(strIds)
+          const url = `${this.apiUrl}/report/product/receive/other?${strIds}&token=${this.token}`;
+          this.htmlPreview.showReport(url, 'landscape');
+        }).catch(() => {
+
+        });
+    } else {
+      this.alertService.error('ไม่พบรายการที่ต้องการพิมพ์');
     }
   }
 
