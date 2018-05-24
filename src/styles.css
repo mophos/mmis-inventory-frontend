@@ -239,3 +239,7 @@ button.confirm {
     border-color: #EDB200;
     color: white;
 }
+
+.datagrid .datagrid-column .datagrid-filter-toggle, .datagrid .datagrid-head .datagrid-row-actions .datagrid-filter-toggle {
+    display: none;
+}
