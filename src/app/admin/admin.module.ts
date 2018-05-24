@@ -121,6 +121,7 @@ import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
 import { AuthRequisition } from 'app/auth-requisition.service';
+import { AuthPeriod } from '../auth-period.service';
 import { AuthShippingNetwork } from 'app/auth-shipping-network.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
@@ -261,6 +262,7 @@ Highcharts.setOptions({
     AuthReceive,
     AuthTransfer,
     AuthRequisition,
+    AuthPeriod,
     AuthShippingNetwork,
     AuthHISTransaction,
     AuthWarehouseManagement,

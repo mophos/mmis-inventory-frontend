@@ -128,17 +128,32 @@ export class StaffService {
   }
 
   async getProductsWarehouse(genericType: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/products/${genericType}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/products/${genericType}`).toPromise();
     return rs.json();
   }
 
-  async getGenericsWarehosue(genericType: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/min-max?genericType=${genericType}`).toPromise();
+  async getProductStockDetail(productId: any) {
+    const resp = await this.authHttp.get(`${this.url}/staff/products/stock/remain/${productId}`).toPromise();
+    return resp.json();
+  }
+
+  async getGenericsWarehouse(genericType: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics?genericType=${genericType}`).toPromise();
+    return rs.json();
+  }
+
+  async getGenericsWarehouseSearch(genericType: any, query: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/search?genericType=${genericType}&query=${query}`).toPromise();
+    return rs.json();
+  }
+
+  async getGenericsWarehosueMinMax(genericType: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/min-max?genericType=${genericType}`).toPromise();
     return rs.json();
   }
 
   async saveGenericMinMax(items: any[], fromDate, toDate) {
-    let rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-minmax`, {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-minmax`, {
       items: items,
       fromDate: fromDate,
       toDate: toDate
@@ -200,7 +215,7 @@ export class StaffService {
   }
 
   async saveAdjQty(id: string, newQty: number, oldQty: number, reason: string) {
-    let rs: any = await this.authHttp.post(`${this.url}/warehouses/products/adjust-qty`, {
+    const rs: any = await this.authHttp.post(`${this.url}/warehouses/products/adjust-qty`, {
       id: id,
       newQty: newQty,
       oldQty: oldQty,
