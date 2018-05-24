@@ -170,8 +170,11 @@ export class ReceiveService {
 
   //   return res.json();
   // }
-  async getExpired(limit = 15, offset = 0) {
-    const res = await this.authHttp.get(`${this.url}/receives/expired/list?limit=${limit}&offset=${offset}`, {
+  async getExpired(limit = 15, offset = 0, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/receives/expired/list`, {
+      limit: limit,
+      offset: offset,
+      sort: sort
     }).toPromise();
 
     return res.json();
@@ -182,8 +185,11 @@ export class ReceiveService {
 
     return res.json();
   }
-  async getOtherExpired(limit = 15, offset = 0) {
-    const res = await this.authHttp.get(`${this.url}/receives/other/expired/list?limit=${limit}&offset=${offset}`, {
+  async getOtherExpired(limit = 15, offset = 0, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/receives/other/expired/list`, {
+      limit: limit,
+      offset: offset,
+      sort: sort
     }).toPromise();
 
     return res.json();
@@ -382,15 +388,25 @@ export class ReceiveService {
   }
 
   // =================== receive with purchases =================
-  async getPurchasesList(limit: number = 100, offset: number = 0) {
-    const res = await this.authHttp.get(`${this.url}/receives/purchases/list?limit=${limit}&offset=${offset}`)
+  async getPurchasesList(limit: number = 100, offset: number = 0, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/receives/purchases/list`, {
+      limit: limit,
+      offset: offset,
+      sort: sort
+    })
       .toPromise();
 
     return res.json();
   }
 
-  async getPurchasesListSearch(limit: number = 100, offset: number = 0, query: any) {
-    const res = await this.authHttp.get(`${this.url}/receives/purchases/list/search?limit=${limit}&offset=${offset}&query=${query}`)
+  async getPurchasesListSearch(limit: number = 100, offset: number = 0, query: any, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/receives/purchases/list/search`, {
+      // ?limit=${limit}&offset=${offset}&query=${query}
+      limit: limit,
+      offset: offset,
+      query: query,
+      sort: sort
+    })
       .toPromise();
 
     return res.json();
@@ -456,37 +472,41 @@ export class ReceiveService {
     return res.json();
   }
 
-  async getReceiveOtherStatusSearch(limit: number = 15, offset: number = 0, query, status) {
+  async getReceiveOtherStatusSearch(limit: number = 15, offset: number = 0, query, status, sort: any = {}) {
     const res = await this.authHttp.post(`${this.url}/receives/other/status/search`, {
       limit: limit,
       offset: offset,
       status: status,
-      query: query
+      query: query,
+      sort: sort
     }).toPromise();
     return res.json();
   }
-  async getReceiveOtherStatus(limit: number = 15, offset: number = 0, status) {
+  async getReceiveOtherStatus(limit: number = 15, offset: number = 0, status, sort: any = {}) {
     const res = await this.authHttp.post(`${this.url}/receives/other/status`, {
       limit: limit,
       offset: offset,
-      status: status
+      status: status,
+      sort: sort
     }).toPromise();
     return res.json();
   }
-  async getReceiveStatus(limit: number = 15, offset: number = 0, status) {
+  async getReceiveStatus(limit: number = 15, offset: number = 0, status, sort: any = {}) {
     const res = await this.authHttp.post(`${this.url}/receives/status`, {
       limit: limit,
       offset: offset,
-      status: status
+      status: status,
+      sort: sort
     }).toPromise();
     return res.json();
   }
-  async getReceiveStatusSearch(limit: number = 15, offset: number = 0, query, status) {
+  async getReceiveStatusSearch(limit: number = 15, offset: number = 0, query, status, sort: any = {}) {
     const res = await this.authHttp.post(`${this.url}/receives/status/search`, {
       limit: limit,
       offset: offset,
       status: status,
-      query: query
+      query: query,
+      sort: sort
     }).toPromise();
     return res.json();
   }

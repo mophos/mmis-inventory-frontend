@@ -115,17 +115,19 @@ export class ReceiveComponent implements OnInit {
   async refreshPo(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
+
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
       if (this.queryPo) {
-        const rs: any = await this.receiveService.getPurchasesListSearch(this.perPage, this.offset, this.queryPo);
+        const rs: any = await this.receiveService.getPurchasesListSearch(this.perPage, this.offset, this.queryPo, sort);
         this.purchases = rs.rows;
         this.totalPurchases = rs.total;
       } else {
-        const rs: any = await this.receiveService.getPurchasesList(limit, this.offset);
+        const rs: any = await this.receiveService.getPurchasesList(limit, this.offset, sort);
         this.purchases = rs.rows;
         this.totalPurchases = rs.total;
       }
@@ -139,12 +141,15 @@ export class ReceiveComponent implements OnInit {
   async refreshExpired(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
+
+    console.log(sort);
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
-      const rs: any = await this.receiveService.getExpired(this.perPage, this.offset);
+      const rs: any = await this.receiveService.getExpired(this.perPage, this.offset, sort);
       this.expired = rs.rows;
       this.totalExpired = rs.total
     } catch (error) {
@@ -157,12 +162,14 @@ export class ReceiveComponent implements OnInit {
   async refreshOtherExpired(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
+
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
-      const rs: any = await this.receiveService.getOtherExpired(this.perPage, this.offset);
+      const rs: any = await this.receiveService.getOtherExpired(this.perPage, this.offset, sort);
       this.otherExpired = rs.rows;
       this.totalOtherExpired = rs.total
     } catch (error) {
@@ -175,18 +182,20 @@ export class ReceiveComponent implements OnInit {
   async refresh(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
+
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
     this.modalLoading.show();
     try {
       if (!this.query) {
-        const rs = await this.receiveService.getReceiveStatus(limit, this.offset, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveStatus(limit, this.offset, this.fillterApprove, sort);
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
 
       } else {
-        const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove, sort);
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
         this.isSearching = true;
@@ -211,8 +220,6 @@ export class ReceiveComponent implements OnInit {
   async doSearchReceiveOther() {
     try {
       this.modalLoading.show();
-      // await this.getReceiveExpiredSearch(this.query);
-      // await this.getReceiveOtherExpiredSearch();
       const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, this.offset, this.queryOther, this.fillterApprove);
       this.others = rs.rows;
       this.totalReceiveOther = rs.total;
@@ -242,6 +249,7 @@ export class ReceiveComponent implements OnInit {
   async refreshOther(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
+    const sort = state.sort;
 
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
@@ -249,11 +257,11 @@ export class ReceiveComponent implements OnInit {
     this.modalLoading.show();
     try {
       if (!this.queryOther) {
-        const rs = await this.receiveService.getReceiveOtherStatus(limit, this.offset, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveOtherStatus(limit, this.offset, this.fillterApprove, sort);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
       } else {
-        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, this.offset, this.queryOther, this.fillterApprove);
+        const rs = await this.receiveService.getReceiveOtherStatusSearch(limit, this.offset, this.queryOther, this.fillterApprove, sort);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
       }
@@ -680,7 +688,6 @@ export class ReceiveComponent implements OnInit {
         receiveIds.push(v.receive_id);
       }
     });
-
     if (receiveIds.length) {
       this.alertService.confirm('พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
         .then(() => {
@@ -688,15 +695,38 @@ export class ReceiveComponent implements OnInit {
           receiveIds.forEach((v: any) => {
             strIds += `receiveID=${v}&`;
           });
-
           const url = `${this.apiUrl}/report/product/receive?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
 
         });
-
     } else {
       this.alertService.error('ไม่พบรายการที่ต้องการพิมพ์ (เลือกรายการที่มีใบสั่งซื้อเท่านั้น)');
+    }
+  }
+
+  printProductReciveOther() {
+    const receiveIds = [];
+    _.forEach(this.selectedOtherApprove, (v) => {
+      if (v.approve_id) {
+        receiveIds.push(v.receive_other_id);
+      }
+    });
+    if (receiveIds.length) {
+      this.alertService.confirm('พิมพ์รายงานเวชภัณฑ์ที่รับจากการบริจาค ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
+        .then(() => {
+          let strIds = '';
+          receiveIds.forEach((v: any) => {
+            strIds += `receiveOtherID=${v}&`;
+          });
+          console.log(strIds)
+          const url = `${this.apiUrl}/report/product/receive/other?${strIds}&token=${this.token}`;
+          this.htmlPreview.showReport(url, 'landscape');
+        }).catch(() => {
+
+        });
+    } else {
+      this.alertService.error('ไม่พบรายการที่ต้องการพิมพ์');
     }
   }
 

@@ -9,21 +9,23 @@ export class ProductsService {
     private authHttp: AuthHttp
   ) { }
 
-  async all(genericType: any, limit: number = 10, offset: number = 0) {
+  async all(genericType: any, limit: number = 10, offset: number = 0, sort: any = {}) {
     const resp = await this.authHttp.post(`${this.url}/products/stock/products/all`, {
       genericType: genericType,
       limit: limit,
-      offset: offset
+      offset: offset,
+      sort: sort
     }).toPromise();
     return resp.json();
   }
 
-  async search(query: any, genericType: any, limit: number = 10, offset: number = 0) {
+  async search(query: any, genericType: any, limit: number = 10, offset: number = 0, sort: any = {}) {
     const resp = await this.authHttp.post(`${this.url}/products/stock/products/search`, {
       genericType: genericType,
       limit: limit,
       offset: offset,
-      query: query
+      query: query,
+      sort: sort
     }).toPromise();
     return resp.json();
   }
@@ -86,12 +88,17 @@ export class ProductsService {
   }
 
   async getAllProduct() {
-    const resp = await this.authHttp.get(`${this.url}/products/getallproduct`).toPromise();
+    const resp = await this.authHttp.get(`${this.url}/products/mapping/all-product`).toPromise();
     return resp.json();
   }
 
   async updateTMT(productUpdate: any) {
-    const resp = await this.authHttp.put(`${this.url}/products/update/tmt`, { productUpdate: productUpdate }).toPromise();
+    const resp = await this.authHttp.put(`${this.url}/products/mapping/update/tmt`, { productUpdate: productUpdate }).toPromise();
+    return resp.json();
+  }
+
+  async tmtExportExcel() {
+    const resp = await this.authHttp.get(`${this.url}/products/mapping/tmt/export`).toPromise();
     return resp.json();
   }
 
