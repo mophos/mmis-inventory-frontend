@@ -51,11 +51,11 @@
       </div>
 
       <clr-datagrid (clrDgRefresh)="refreshPo($event)" class="grid-order" style="padding-top: 5px; height: 83%;">
-        <clr-dg-column style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
-        <clr-dg-column style="width: 150px;">วันที่จัดซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
+        <clr-dg-column style="width: 150px;" [clrDgField]="'order_date'">วันที่จัดซื้อ</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่สัญญา</clr-dg-column>
-        <clr-dg-column>ผู้จำหน่าย</clr-dg-column>
-        <clr-dg-column>วิธีการจัดซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จำหน่าย</clr-dg-column>
+        <clr-dg-column [clrDgField]="'purchase_method_name'">วิธีการจัดซื้อ</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่าจัดซื้อ (บาท)</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่ารับแล้ว (บาท)</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลือก</clr-dg-column>
@@ -64,7 +64,7 @@
           <clr-dg-cell *ngIf="!purchase.purchase_order_book_number">{{purchase.purchase_order_number}}</clr-dg-cell>
           <clr-dg-cell *ngIf="purchase.purchase_order_book_number">{{purchase.purchase_order_book_number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{purchase.order_date | toThaiDate }}</clr-dg-cell>
-          <clr-dg-cell>{{purchase.contract_id}}</clr-dg-cell>
+          <clr-dg-cell>{{purchase.contract_no}}</clr-dg-cell>
           <clr-dg-cell>{{purchase.labeler_name}}</clr-dg-cell>
           <clr-dg-cell>{{purchase.purchase_method_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{purchase.purchase_price | number: '1.2-2'}}</clr-dg-cell>
@@ -149,10 +149,10 @@
       </div>
 
       <clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px; height: 83%;" [(clrDgSelected)]="selectedApprove">
-        <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
-        <clr-dg-column>ผู้จัดจำหน่าย</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
+        <clr-dg-column style="width: 180px;" [clrDgField]="'purchase_order_number'">เลขที่ใบสั่งซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จัดจำหน่าย</clr-dg-column>
         <clr-dg-column style="width: 150px;"></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let w of waitings" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id, 'isError': w.is_cancel === 'Y'}">
@@ -239,10 +239,10 @@
         </div>
       </div>
       <clr-datagrid (clrDgRefresh)="refreshOther($event)" [(clrDgSelected)]="selectedOtherApprove" [style.height.%]="83">
-        <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
-        <clr-dg-column style="width: 180px;">ประเภทการรับ</clr-dg-column>
-        <clr-dg-column>ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_type_name'" style="width: 180px;">ประเภทการรับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'donator_name'">ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
         <!-- <clr-dg-column>จำนวนรายการ</clr-dg-column> -->
         <clr-dg-column style="width: 150px;">มูลค่า (บาท)</clr-dg-column>
         <clr-dg-column style="width: 150px;"></clr-dg-column>
@@ -303,10 +303,10 @@
       </div> -->
 
       <clr-datagrid (clrDgRefresh)="refreshExpired($event)" style="padding-top: 5px;" [style.height.%]="83">
-        <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
-        <clr-dg-column>ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 180px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
         <clr-dg-column>หมายเหตุ</clr-dg-column>
         <!-- <clr-dg-column style="width: 150px;"></clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
@@ -349,10 +349,10 @@
         </div>
       </div> -->
       <clr-datagrid (clrDgRefresh)="refreshOtherExpired($event)" style="padding-top: 5px;" [style.height.%]="83">
-        <clr-dg-column style="width: 150px;">วันที่</clr-dg-column>
-        <clr-dg-column style="width: 180px;">เลขที่รับ</clr-dg-column>
-        <clr-dg-column style="width: 180px;">ประเภทการรับ</clr-dg-column>
-        <clr-dg-column>ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
+        <clr-dg-column style="width: 150px;" [clrDgField]="'receive_date'">วันที่</clr-dg-column>
+        <clr-dg-column style="width: 180px;" [clrDgField]="'receive_code'">เลขที่รับ</clr-dg-column>
+        <clr-dg-column style="width: 180px;" [clrDgField]="'receive_type_name'">ประเภทการรับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'donator_name'">ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
         <clr-dg-column>จำนวนรายการ</clr-dg-column>
         <clr-dg-column>มูลค่า (บาท)</clr-dg-column>
         <clr-dg-column>หมายเหตุ</clr-dg-column>

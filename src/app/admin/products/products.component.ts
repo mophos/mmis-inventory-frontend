@@ -9,6 +9,8 @@ import { JwtHelper } from 'angular2-jwt';
   styleUrls: []
 })
 export class ProductsComponent implements OnInit {
+  sort: any = {};
+
   products = [];
   genericTypes = [];
   genericType: any = "";
@@ -93,6 +95,7 @@ export class ProductsComponent implements OnInit {
     this.modalLoading.show();
     const offset = +state.page.from;
     const limit = +state.page.size;
+    this.sort = state.sort;
 
     if (!this.currentPage) {
       this.currentPage = this.pagination.currentPage;
@@ -104,9 +107,9 @@ export class ProductsComponent implements OnInit {
       let rs: any;
       const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       if (this.query) {
-        rs = await this.productService.search(this.query, _genericType, limit, offset);
+        rs = await this.productService.search(this.query, _genericType, limit, offset, this.sort);
       } else {
-        rs = await this.productService.all(_genericType, limit, offset);
+        rs = await this.productService.all(_genericType, limit, offset, this.sort);
       }
       this.modalLoading.hide();
       if (rs.ok) {
