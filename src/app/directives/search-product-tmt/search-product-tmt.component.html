@@ -1,15 +1,8 @@
-<input type="text" [(ngModel)]="query"
- (keyup)="clearSelected($event)"
-  style="width: 100%; background-color: #FFF9C4"
-agxTypeahead 
-[taUrl]="searchProductTMTUrl"
-taApi="http"
-[taItemTpl]="itemTpl"
-(taSelected)="handleResultSelected($event)"
->
+<input type="text" [(ngModel)]="query" (keyup)="clearSelected($event)" style="width: 100%; background-color: #FFF9C4" agxTypeahead
+  [taUrl]="searchProductTMTUrl" taApi="http" [taItemTpl]="itemTpl" (taSelected)="handleResultSelected($event)">
 
 <ng-template #itemTpl let-result style="width: 100%">
-  <strong>{{ result.result.TMTID }}</strong>
+  <strong>{{ result.result.tmtid }}</strong>
   <br>
-  <span>{{ result.result.FSN }}</span>
+  <span>{{ result.result.fsn }}</span>
 </ng-template>

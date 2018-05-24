@@ -89,7 +89,7 @@ export class MainComponent implements OnInit {
 
   getProducts() {
     this.modalLoading.show();
-    this.staffService.getProductsWarehouse(this.genericType)
+    this.staffService.getGenericsWarehouse(this.genericType)
       .then((result: any) => {
         if (result.ok) {
           result.rows.forEach(v => {
@@ -117,7 +117,7 @@ export class MainComponent implements OnInit {
       this.modalLoading.show();
       // clear old product list
       this.products = [];
-      this.staffService.searchProductsWarehouse(this.warehouseId, this.query)
+      this.staffService.getGenericsWarehouseSearch(this.genericType, this.query)
         .then((result: any) => {
           if (result.ok) {
             this.products = result.rows;

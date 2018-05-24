@@ -50,7 +50,7 @@ export class SummaryDisbursementComponent implements OnInit {
 
   getdate() {
     for (let i = 0; i < 10; i++) {
-      this.dataYear.push(this.date.getFullYear() + i)
+      this.dataYear.push(this.date.getFullYear() - i)
     }
   }
 

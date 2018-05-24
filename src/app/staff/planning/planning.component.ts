@@ -97,7 +97,7 @@ export class PlanningComponent implements OnInit {
   async getGenerics() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.getGenericsWarehosue(this.genericType);
+      let rs: any = await this.staffService.getGenericsWarehosueMinMax(this.genericType);
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
@@ -118,26 +118,29 @@ export class PlanningComponent implements OnInit {
     }
   }
 
-  onChangeSaftyStock(value: any, generic: any) {
+  onChangeSaftyStockMin(value: any, generic: any) {
     const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
     if (idx > -1) {
-      this.generics[idx].safty_stock_day = +value;
-      this.generics[idx].min_qty = this.generics[idx].qty + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
-      if (this.generics[idx].use_total > this.generics[idx].qty) {
-        this.generics[idx].max_qty = this.generics[idx].use_total + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
-      } else {
-        this.generics[idx].max_qty = this.generics[idx].min_qty + (this.generics[idx].use_per_day * this.generics[idx].safty_stock_day);
-      }
+      this.generics[idx].safety_min_day = +value;
+      this.generics[idx].min_qty = this.generics[idx].use_per_day * this.generics[idx].safety_min_day;
     }
     const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
     if (_idx > -1) {
-      this._generics[idx].safty_stock_day = +value;
-      this._generics[idx].min_qty = this._generics[idx].qty + (this._generics[idx].use_per_day * this._generics[idx].safty_stock_day);
-      if (this._generics[idx].use_total > this._generics[idx].qty) {
-        this._generics[idx].max_qty = this._generics[idx].use_total + (this._generics[idx].use_per_day * this._generics[idx].safty_stock_day);
-      } else {
-        this._generics[idx].max_qty = this._generics[idx].min_qty + (this._generics[idx].use_per_day * this._generics[idx].safty_stock_day);
-      }
+      this._generics[_idx].safety_min_day = +value;
+      this._generics[_idx].min_qty = this._generics[_idx].use_per_day * this._generics[_idx].safety_min_day;
+    }
+  }
+
+  onChangeSaftyStockMax(value: any, generic: any) {
+    const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
+    if (idx > -1) {
+      this.generics[idx].safety_max_day = +value;
+      this.generics[idx].max_qty = this.generics[idx].use_per_day * this.generics[idx].safety_max_day;
+    }
+    const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
+    if (_idx > -1) {
+      this._generics[_idx].safety_max_day = +value;
+      this._generics[_idx].max_qty = this._generics[_idx].use_per_day * this._generics[_idx].safety_max_day;
     }
   }
 
@@ -291,14 +294,13 @@ export class PlanningComponent implements OnInit {
       let rs: any = await this.staffService.searchGenericsWarehosue(this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
-        for (let g of this.generics) {
-          console.log(g);
-
+        for (const g of this.generics) {
           const idx = _.findIndex(this._generics, { generic_id: g.generic_id });
           if (idx > -1) {
             g.use_total = this._generics[idx].use_total;
             g.use_per_day = this._generics[idx].use_per_day;
-            g.safty_stock_day = this._generics[idx].safty_stock_day;
+            g.safety_min_day = this._generics[idx].safety_min_day;
+            g.safety_max_day = this._generics[idx].safety_max_day;
             g.qty = this._generics[idx].qty;
             g.min_qty = this._generics[idx].min_qty;
             g.max_qty = this._generics[idx].max_qty;
