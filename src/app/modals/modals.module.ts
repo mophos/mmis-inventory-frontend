@@ -11,6 +11,7 @@ import { AddLotsModalComponent } from 'app/modals/add-lots-modal/add-lots-modal.
 import { LocationModalComponent } from 'app/modals/location-modal/location-modal.component';
 import { LocationService } from 'app/admin/location.service';
 import { LoadingModalComponent } from './loading-modal/loading-modal.component';
+import { EditLotExpiredComponent } from './edit-lot-expired/edit-lot-expired.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { LoadingModalComponent } from './loading-modal/loading-modal.component';
     ChangePasswordModalComponent,
     AddLotsModalComponent,
     LoadingModalComponent,
+    EditLotExpiredComponent,
   ],
   exports: [
     LocationModalComponent,
@@ -34,7 +36,8 @@ import { LoadingModalComponent } from './loading-modal/loading-modal.component';
     PackageModalComponent,
     ChangePasswordModalComponent,
     AddLotsModalComponent,
-    LoadingModalComponent
+    LoadingModalComponent,
+    EditLotExpiredComponent
   ],
   providers: [LocationService]
 })
