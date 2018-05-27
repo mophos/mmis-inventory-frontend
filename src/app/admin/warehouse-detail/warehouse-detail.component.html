@@ -53,6 +53,9 @@
       <button class="action-item" (click)="changeCost(p)">
         <clr-icon shape="note"></clr-icon> ปรับราคาต่อหน่วย
       </button>
+      <button class="action-item" (click)="editLotExpired(p)">
+        <clr-icon shape="note"></clr-icon> แก้ไข LOT/วันหมดอายุ
+      </button>
     </clr-dg-action-overflow>
     <!-- <clr-dg-cell>{{p.product_id}}</clr-dg-cell> -->
     <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
@@ -91,5 +94,6 @@
 </clr-modal>
 
 <wm-adjust-product-modal [isCounting]="false" #modalAdjust [openModalAdjust]="openModalQty" (onSuccess)="successAdjust($event)"></wm-adjust-product-modal>
+<wm-edit-lot-expired #modalEditLotExpired (save)="onSaveLotExpired($event)" (past)="getProductHistory()"></wm-edit-lot-expired>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>

@@ -308,4 +308,21 @@ export class WarehouseService {
     });
   }
 
+  async getProductHistory(productId: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/products/history/${productId}`).toPromise();
+    return rs.json();
+  }
+
+  async updateProductLotExpired(data: any) {
+    const rs: any = await this.authHttp.put(`${this.url}/warehouses/products/lot-expired`, {
+      data: data
+    }).toPromise();
+    return rs.json();
+  }
+
+  async getExpiredSetting() {
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/expired/setting`).toPromise();
+    return rs.json();
+  }
+
 }

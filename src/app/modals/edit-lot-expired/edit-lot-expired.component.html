@@ -1,0 +1,71 @@
+<clr-modal [(clrModalOpen)]="opened" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">แก้ไข LOT/วันหมดอายุ</h3>
+  <div class="modal-body">
+    <clr-tabs>
+      <clr-tab>
+        <button clrTabLink (click)="setSelectedTab('edit')">แก้ไข LOT/วันหมดอายุ</button>
+        <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'edit'">
+          <form>
+            <section class="form-block">
+              <div class="form-group">
+                <label for="workingCode">Working Code</label>
+                <input type="text" name="workingCode" value={{product.working_code}} size="45" disabled>
+              </div>
+              <div class="form-group">
+                <label for="productName">ชื่อทางการค้า</label>
+                <input type="text" name="productName" value={{product.product_name}} size="45" disabled>
+              </div>
+              <div class="form-group">
+                <label class="required" for="lotNo">Lot no.</label>
+                <input type="text" name="lotNo" [(ngModel)]="lotNo" placeholder="Lot Number" size="45">
+              </div>
+              <div class="form-group">
+                <label class="required" for="expiredDate">วันหมดอายุ</label>
+                <input [textMask]="{mask: maskDate}" type="text" name="expiredDate" [(ngModel)]="expiredDate" placeholder="DD/MM/YYYY" size="45">
+              </div>
+              <div class="form-group">
+                <label class="required" for="reason">เหตุผลการแก้ไข</label>
+                <textarea name="reason" [(ngModel)]="reason" rows="3"></textarea>
+              </div>
+              <button type="button" class="btn btn-primary" (click)="onSave()" [disabled]="!product.product_id || (product.is_lot_control==='Y' && !lotNo) || (product.expired_setting==='Y' && !expiredDate) || !reason">บันทึก</button>
+            </section>
+          </form>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab>
+        <button clrTabLink (click)="getHistory()">ประวัติการแก้ไข</button>
+        <clr-tab-content *clrIfActive="selectedTab === 'history'">
+          <h5>{{product.working_code}} - {{product.product_name}}</h5>
+          <clr-datagrid>
+            <clr-dg-column>วันที่แก้ไข</clr-dg-column>
+            <clr-dg-column>Lot no.เดิม</clr-dg-column>
+            <clr-dg-column>วันหมดอายุเดิม</clr-dg-column>
+            <clr-dg-column>Lot no.ใหม่</clr-dg-column>
+            <clr-dg-column>วันหมดอายุใหม่</clr-dg-column>
+            <clr-dg-column>เจ้าหน้าที่</clr-dg-column>
+            <clr-dg-column>เหตุผลการแก้ไข</clr-dg-column>
+
+            <clr-dg-row *clrDgItems="let h of history">
+              <clr-dg-cell>{{h.history_date | toThaiDate}} {{h.history_time}}</clr-dg-cell>
+              <clr-dg-cell>{{h.old_lot_no}}</clr-dg-cell>
+              <clr-dg-cell>{{h.old_expired_date}}</clr-dg-cell>
+              <clr-dg-cell>{{h.new_lot_no}}</clr-dg-cell>
+              <clr-dg-cell>{{h.new_expired_date}}</clr-dg-cell>
+              <clr-dg-cell>{{h.create_name}}</clr-dg-cell>
+              <clr-dg-cell>{{h.reason}}</clr-dg-cell>
+            </clr-dg-row>
+
+            <clr-dg-footer>
+              {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} รายการ
+              <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+            </clr-dg-footer>
+          </clr-datagrid>
+        </clr-tab-content>
+      </clr-tab>
+    </clr-tabs>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="opened = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
