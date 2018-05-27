@@ -228,7 +228,7 @@ export class RequisitionComponent implements OnInit {
   async approveRequisitionCheck(order: any) {
     const accessName = 'WM_REQUISITION_APPROVE'
     this.page = 1
-    this.action = 'WM_REQUISITION'
+    this.action = 'WM_REQUISITION_APPROVE'
     this.title = 'รายการเบิกสินค้า'
     console.log(accessName);
     this.tmpOderApprove = order
