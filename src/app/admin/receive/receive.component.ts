@@ -439,13 +439,13 @@ export class ReceiveComponent implements OnInit {
 
     if (access === 1) {
       accessName = 'WM_RECEIVE_APPROVE'
-      this.action = 'WM_RECEIVES'
+      this.action = 'WM_RECEIVE_APPROVE'
       this.page = 1;
 
       this.selectedApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     } else if (access = 2) {
       accessName = 'WM_RECEIVE_OTHER_APPROVE'
-      this.action = 'WM_RECEIVES_OTHER'
+      this.action = 'WM_RECEIVE_OTHER_APPROVE'
       this.page = 2;
 
       this.selectedOtherApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');

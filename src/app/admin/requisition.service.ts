@@ -569,7 +569,7 @@ export class RequisitionService {
   }
 
   async checkApprove(username: any, password: any, action: any) {
-    const rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
+    const rs: any = await this.authHttp.post(`${this.url}/basic/checkApprove`, {
       username: username,
       password: password,
       action: action

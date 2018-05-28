@@ -92,6 +92,7 @@ import { SummaryDisbursementComponent } from './reports/summary-disbursement/sum
 import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
+import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 
 const routes: Routes = [
   {
@@ -139,6 +140,7 @@ const routes: Routes = [
       { path: 'reports/purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
       { path: 'reports/inventory-status', component: InventoryStatusComponent },
       { path: 'reports/product-receive', component: ProductReceiveComponent },
+      { path: 'reports/receive-not-match-po',component:ReceiveNotMatchPoComponent },
       { path: 'reports/summary-disbursement', component: SummaryDisbursementComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
