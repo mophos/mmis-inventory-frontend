@@ -203,7 +203,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   }
 
   async checkApprove(username: any, password: any) {
-    const rs: any = await this.requisitionService.checkApprove(username, password, 'WM_REQUSITTION');
+    const rs: any = await this.requisitionService.checkApprove(username, password, 'WM_REQUISITION_APPROVE');
     if (rs.ok) {
         this.savePay();
         this.openModalConfirm = false
