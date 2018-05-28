@@ -104,7 +104,7 @@ export class IssueTransactionComponent implements OnInit {
   async approveIssueCheck() {
     const accessName = 'WM_ISSUE_APPROVE';
     this.page = 1;
-    this.action = 'WM_ISSUES';
+    this.action = 'WM_ISSUE_APPROVE';
     this.titel = 'รายการใบตัดจ่าย';
 
     if (this.accessCheck.can(accessName)) {

@@ -92,7 +92,7 @@ export class IssueService {
   }
 
   async checkApprove(username: any, password: any, action: any) {
-    let rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
+    let rs: any = await this.authHttp.post(`${this.url}/basic/checkApprove`, {
       username: username,
       password: password,
       action: action
