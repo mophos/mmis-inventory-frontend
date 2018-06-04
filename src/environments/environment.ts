@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:4001',
   docUrl: 'http://203.157.156.69/api/document',
-  loginUrl: 'http://localhost:4013',
+  loginUrl: 'http://localhost:3020',
   homeUrl: '/',
   portalUrl: 'http://203.157.156.69/api/portal',
 
