@@ -46,7 +46,7 @@ export class PlanningComponent implements OnInit {
   async ngOnInit() {
     await this.getGenericType();
     await this.getProducts();
-    let date = new Date();
+    const date = new Date();
     this.fromDate = {
       date: {
         year: date.getFullYear(),
@@ -67,7 +67,7 @@ export class PlanningComponent implements OnInit {
   async getProducts() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.getProductsWarehouse(this.genericType);
+      const rs: any = await this.staffService.getProductsWarehouse(this.genericType);
       if (rs.ok) {
         rs.rows.forEach(v => {
           try {
@@ -97,7 +97,7 @@ export class PlanningComponent implements OnInit {
   async getGenerics() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.getGenericsWarehosueMinMax(this.genericType);
+      const rs: any = await this.staffService.getGenericsWarehosueMinMax(this.genericType);
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
@@ -112,7 +112,7 @@ export class PlanningComponent implements OnInit {
   }
 
   onChangeQty(product: any, qty: any) {
-    let idx = _.findIndex(this.products, { wm_product_id: product.wm_product_id });
+    const idx = _.findIndex(this.products, { wm_product_id: product.wm_product_id });
     if (idx > -1) {
       this.products[idx].qty = +qty;
     }
@@ -266,7 +266,7 @@ export class PlanningComponent implements OnInit {
   async searchProduct() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.searchProductsWarehouse(this.genericType, this.query);
+      const rs: any = await this.staffService.searchProductsWarehouse(this.genericType, this.query);
       if (rs.ok) {
         rs.rows.forEach(v => {
           try {
@@ -291,7 +291,7 @@ export class PlanningComponent implements OnInit {
   async searchGenerics() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.searchGenericsWarehosue(this.genericType, this.query);
+      const rs: any = await this.staffService.searchGenericsWarehosue(this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
         for (const g of this.generics) {
