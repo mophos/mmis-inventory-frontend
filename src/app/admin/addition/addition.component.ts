@@ -22,7 +22,7 @@ export class AdditionComponent implements OnInit {
   additions: any = [];
   perPage = 10;
   currentTab = 'warehouse';
-
+  selectedPrint:any =[]
   constructor(
     private additionService: AdditionService,
     private alertService: AlertService,
