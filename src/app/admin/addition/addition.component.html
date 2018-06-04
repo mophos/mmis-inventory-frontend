@@ -7,7 +7,15 @@
   <clr-tab>
     <button clrTabLink (click)="getWarehouse()">รายการคลังถึงจุดเติม</button>
     <clr-tab-content *clrIfActive>
-      <clr-datagrid [style.height.%]="85">
+      <div class="row" style="padding-top: 5px;">
+        <div class="col-md-1">
+          <label for="queryWH">ค้นหา</label>
+        </div>
+        <div class="col-md-3">
+          <input type="text" (keyup)="searchWarehouse($event)" placeholder="พิมพ์แล้วกด Enter" name="queryWH" style="width: 90%;" [(ngModel)]="queryWarehouse">
+        </div>
+      </div>
+      <clr-datagrid [style.height.%]="85" style="padding-top: 4px;">
         <clr-dg-column [clrDgField]="'dst_warehouse_name'">คลัง/หน่วยเบิก</clr-dg-column>
         <clr-dg-column [style.width.px]="100">#</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
@@ -32,7 +40,15 @@
   <clr-tab>
     <button clrTabLink (click)="getGeneric()">รายการเวชภัณฑ์ถึงจุดเติม</button>
     <clr-tab-content *clrIfActive>
-      <clr-datagrid [style.height.%]="85">
+      <div class="row" style="padding-top: 5px;">
+        <div class="col-md-1">
+          <label for="queryGnr">ค้นหา</label>
+        </div>
+        <div class="col-md-3">
+          <input type="text" (keyup)="searchGeneric($event)" placeholder="พิมพ์แล้วกด Enter" name="queryGnr" style="width: 90%;" [(ngModel)]="queryGeneric">
+        </div>
+      </div>
+      <clr-datagrid [style.height.%]="85" style="padding-top: 4px;">
         <clr-dg-column [clrDgField]="'generic_name'">ชื่อเวชภัณฑ์</clr-dg-column>
         <clr-dg-column [style.width.px]="100">#</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
@@ -57,14 +73,22 @@
   <clr-tab>
     <button clrTabLink (click)="getAddition()">รายการรอสร้างใบเติม</button>
     <clr-tab-content *clrIfActive>
-      <div class="row">
-        <div class="col-md-12" style="text-align: right;">
-          <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedOpen.length" (click)="clickOpen()">
-            สร้างใบเติม
-          </button>
+      <div class="row" style="margin-top: 5px;">
+        <div class="col-md-1">
+          <label for="queryHistory">ค้นหา</label>
+        </div>
+        <div class="col-md-3">
+          <input type="text" (keyup)="searchNew($event)" placeholder="พิมพ์แล้วกด Enter" name="queryNew" style="width: 90%;" [(ngModel)]="queryNew">
+        </div>
+        <div class="col-md-8" style="text-align: right;">
+          <div class="btn-group">
+            <button class="btn btn-primary btn-sm btn-icon" [disabled]="!selectedOpen.length" (click)="clickOpen()">
+              สร้างใบเติม
+            </button>
+          </div>
         </div>
       </div>
-      <clr-datagrid style="padding-top: 5px;" [(clrDgSelected)]="selectedOpen" [style.height.%]="80">
+      <clr-datagrid [(clrDgSelected)]="selectedOpen" [style.height.%]="80" style="padding-top: 5px;">
         <clr-dg-column [style.width.px]="150" [clrDgField]="'addition_date'">วันที่สร้าง</clr-dg-column>
         <clr-dg-column [clrDgField]="'dst_warehouse_name'">คลัง/หน่วยเบิก</clr-dg-column>
         <clr-dg-column [style.width.px]="100">#</clr-dg-column>
@@ -95,17 +119,23 @@
   <clr-tab>
     <button clrTabLink (click)="getTransaction()">รายการรออนุมัติ</button>
     <clr-tab-content *clrIfActive>
-      <div class="row">
-        <div class="col-md-12" style="text-align: right;">
+      <div class="row" style="padding-top: 5px;">
+        <div class="col-md-1">
+          <label for="queryOpen">ค้นหา</label>
+        </div>
+        <div class="col-md-3">
+          <input type="text" (keyup)="searchOpen($event)" placeholder="พิมพ์แล้วกด Enter" name="queryOpen" style="width: 90%;" [(ngModel)]="queryOpen">
+        </div>
+        <div class="col-md-8" style="text-align: right;">
           <div class="btn-group">
-            <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="clickApprove()">
+            <button class="btn btn-primary btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="clickApprove()">
               อนุมัติการเติม
             </button>
-            <button class="btn btn-success btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="clickPrintApprove()">
+            <button class="btn btn-success btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="clickPrintApprove()">
               พิมพ์ใบอนุมัติเติม
             </button>
-            <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="printRefills()">
-                พิมพ์ใบจัดเวชภัณฑ์
+            <button class="btn btn-primary btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="printRefills()">
+              พิมพ์ใบจัดเวชภัณฑ์
             </button>
 
           </div>
@@ -145,13 +175,20 @@
   <clr-tab>
     <button clrTabLink (click)="getTransactionHistory()">ประวัติการเติม</button>
     <clr-tab-content *clrIfActive>
-      <div class="row">
-        <div class="col-md-12" style="text-align: right;">
+      <div class="row" style="margin-top: 5px;">
+        <div class="col-md-1">
+          <label for="queryHistory">ค้นหา</label>
+        </div>
+        <div class="col-md-3">
+          <input type="text" (keyup)="searchHistory($event)" placeholder="พิมพ์แล้วกด Enter" name="queryHistory" style="width: 90%;"
+            [(ngModel)]="queryHistory">
+        </div>
+        <div class="col-md-8" style="text-align: right;">
           <div class="btn-group">
-            <button class="btn btn-success btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="clickPrintApprove()">
+            <button class="btn btn-success btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="clickPrintApprove()">
               พิมพ์ใบอนุมัติเติม
             </button>
-            <button class="btn btn-primary btn-sm btn-icon" style="margin-top: 10px;" [disabled]="!selectedApprove.length" (click)="printRefills()">
+            <button class="btn btn-primary btn-sm btn-icon" [disabled]="!selectedApprove.length" (click)="printRefills()">
               พิมพ์ใบจัดเวชภัณฑ์
             </button>
           </div>
