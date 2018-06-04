@@ -273,12 +273,13 @@ export class ReceiveComponent implements OnInit {
   }
 
   removeReceive(w) {
+    console.log(w);
     this.alertService.confirm('คุณต้องการลบรายการรับสินค้านี้ [' + w.receive_code + '] ใช่หรือไม่?')
       .then(async () => {
         try {
           this.modalLoading.show();
-          await this.receiveService.updatePurchaseApproved(w.receive_id);
-          const rs: any = await this.receiveService.removeReceive(w.receive_id);
+          // await this.receiveService.updatePurchaseApproved(w.receive_id);
+          const rs: any = await this.receiveService.removeReceive(w.receive_id, w.purchase_order_id);
           if (rs.ok) {
             this.alertService.success();
             const idx = _.findIndex(this.waitings, { receive_id: w.receive_id });
