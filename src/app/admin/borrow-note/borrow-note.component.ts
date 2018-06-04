@@ -12,10 +12,10 @@ import * as _ from "lodash"
 export class BorrowNoteComponent implements OnInit {
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') modalLoading: LoadingModalComponent;
-  selectedPrint:any =[]
+  selectedPrint: any = []
   notes: any = [];
-  total: number = 0;
-  perPage: number = 20;
+  total = 0;
+  perPage = 20;
   query: any = '';
 
   constructor(
@@ -27,17 +27,17 @@ export class BorrowNoteComponent implements OnInit {
   ngOnInit() {
     // this.getList(this.perPage, 0);
   }
- async printReport(){
-   console.log(this.selectedPrint);
-   let borrow_note_id =_.join( _.map(this.selectedPrint,(v)=>{return 'id='+v.borrow_note_id}),'&')
+  async printReport() {
+    console.log(this.selectedPrint);
+    const borrow_note_id = _.join(_.map(this.selectedPrint, (v: any) => { return 'id=' + v.borrow_note_id }), '&')
     const token = sessionStorage.getItem('token');
-    const url = `${this.apiUrl}/borrow-notes/report?token=${token}&`+borrow_note_id;
+    const url = `${this.apiUrl}/borrow-notes/report?token=${token}&` + borrow_note_id;
     this.htmlPreview.showReport(url);
- }
+  }
   async getList(limit: number, offset: number) {
     try {
       this.modalLoading.show();
-      let rs: any = await this.borrowNoteService.getListAdmin(this.query, limit, offset);
+      const rs: any = await this.borrowNoteService.getListAdmin(this.query, limit, offset);
       if (rs.ok) {
         this.notes = rs.rows;
         this.total = rs.total;
@@ -73,7 +73,7 @@ export class BorrowNoteComponent implements OnInit {
     this.alertService.confirm('ต้องการยกเลิกรายการนี้ ใช่หรือไม่?')
       .then(async () => {
         this.modalLoading.show();
-        let rs: any = await this.borrowNoteService.cancelNote(borrowNoteId);
+        const rs: any = await this.borrowNoteService.cancelNote(borrowNoteId);
         this.modalLoading.hide();
         if (rs.ok) {
           this.alertService.success();
