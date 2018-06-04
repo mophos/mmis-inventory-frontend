@@ -382,8 +382,8 @@ export class ReceiveService {
     return res.json();
   }
 
-  async removeReceive(receiveId) {
-    const res = await this.authHttp.delete(`${this.url}/receives/remove?receiveId=${receiveId}`).toPromise();
+  async removeReceive(receiveId: any, purchaseOrderId: any = '') {
+    const res = await this.authHttp.delete(`${this.url}/receives/remove?receiveId=${receiveId}&purchaseOrderId=${purchaseOrderId}`).toPromise();
     return res.json();
   }
 

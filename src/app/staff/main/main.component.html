@@ -80,12 +80,12 @@
   </clr-dg-column> -->
   <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
       <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-stock-remain>
-    <clr-dg-action-overflow>
+    <!-- <clr-dg-action-overflow>
       <button class="action-item" (click)="changeQty(p)">
         <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-      <!-- <button disabled class="action-item" (click)="getStockCard(p)">
-        <clr-icon shape="search"></clr-icon> Stock Card</button> -->
-    </clr-dg-action-overflow>
+      <button disabled class="action-item" (click)="getStockCard(p)">
+        <clr-icon shape="search"></clr-icon> Stock Card</button>
+    </clr-dg-action-overflow> -->
     <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
     <clr-dg-cell>
       <span class="p4">{{p.generic_name}}</span> <br>

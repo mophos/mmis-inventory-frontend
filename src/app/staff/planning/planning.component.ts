@@ -171,13 +171,13 @@ export class PlanningComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let reason = 'ปรับยอดจาก Planning';
-          let idx = _.findIndex(this.products, { wm_product_id: product.wm_product_id });
-          let oldQty = +this.products[idx].old_qty;
-          let newQty = +this.products[idx].qty;
-          let wmProductId = this.products[idx].wm_product_id;
+          const reason = 'ปรับยอดจาก Planning';
+          const idx = _.findIndex(this.products, { wm_product_id: product.wm_product_id });
+          const oldQty = +this.products[idx].old_qty;
+          const newQty = +this.products[idx].qty;
+          const wmProductId = this.products[idx].wm_product_id;
 
-          let rs: any = await this.staffService.saveAdjQty(wmProductId, newQty, oldQty, reason);
+          const rs: any = await this.staffService.saveAdjQty(wmProductId, newQty, oldQty, reason);
           if (rs.ok) {
             this.alertService.success();
             this.products[idx].old_qty = +this.products[idx].qty;
