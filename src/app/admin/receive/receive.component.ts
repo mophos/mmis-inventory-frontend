@@ -709,9 +709,7 @@ export class ReceiveComponent implements OnInit {
   printProductReciveOther() {
     const receiveIds = [];
     _.forEach(this.selectedOtherApprove, (v) => {
-      if (v.approve_id) {
-        receiveIds.push(v.receive_other_id);
-      }
+      receiveIds.push(v.receive_other_id);
     });
     if (receiveIds.length) {
       this.alertService.confirm('พิมพ์รายงานเวชภัณฑ์ที่รับจากการบริจาค ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
