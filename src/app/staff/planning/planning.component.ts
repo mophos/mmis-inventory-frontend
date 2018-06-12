@@ -333,7 +333,7 @@ export class PlanningComponent implements OnInit {
       const rs: any = await this.staffService.getMinMaxHeader();
       if (rs.ok) {
         const result = rs.rows[0];
-        if (result.from_stock_date) {
+        if (result && result.from_stock_date) {
           this.fromDate = {
             date: {
               year: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('year') : moment().get('year'),
@@ -343,7 +343,7 @@ export class PlanningComponent implements OnInit {
           }
         }
 
-        if (result.to_stock_date) {
+        if (result && result.to_stock_date) {
           this.toDate = {
             date: {
               year: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('year') : moment().get('year'),
