@@ -219,11 +219,11 @@ export class RequisitionComponent implements OnInit {
       });
   }
   printApprove(order: any) {
-    const url = this.url + '/report/approve/requis/' + order.requisition_order_id + `?token=${this.token}`;
+    const url = this.url + `/report/approve/requis?token=${this.token}&requisId=` + order.requisition_order_id;
     this.htmlPreview.showReport(url);
   }
   printSetProduct(order: any) {
-    const url = this.url + '/report/list/requis/' + order.requisition_order_id + `?token=${this.token}`;
+    const url = this.url + `/report/list/requis?token=${this.token}&requisId=` + order.requisition_order_id;
     this.htmlPreview.showReport(url);
   }
 

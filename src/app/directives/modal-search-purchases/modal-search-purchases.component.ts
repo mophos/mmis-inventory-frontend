@@ -28,10 +28,15 @@ export class ModalSearchPurchasesComponent implements OnInit {
   open = false;
   openConflict = false;
 
+  perPage = 20;
+  offset = 0;
+  query: string = '';
+  sort: any;
+
   constructor(private receiveService: ReceiveService, private alertService: AlertService) { }
 
   ngOnInit() {
-    
+
   }
 
   async getPurchaseList() {
@@ -50,14 +55,30 @@ export class ModalSearchPurchasesComponent implements OnInit {
     }
   }
 
+  async enterSearch(event: any) {
+    if (event.keyCode === 13) {
+      this.query = event.target.value;
+      if (this.query) {
+        const rs = await this.receiveService.searchPurchasesList(this.query, this.perPage, this.offset, {});
+        console.log(rs)
+        this.purchases = rs.rows;
+      }
+    } else if (this.query === '') {
+      const rs = await this.receiveService.getPurchasesList();
+      this.purchases = rs.rows;
+    }
+  }
+
   openModal() {
     this.getPurchaseList();
     this.open = true;
+    this.query = '';
   }
 
   closeModal() {
     this.open = false;
     this.onClose.emit();
+    this.query = '';
   }
 
   setSelected(purchase: any) {
@@ -118,7 +139,7 @@ export class ModalSearchPurchasesComponent implements OnInit {
 
             // ของแถม
             obj.is_free = v.giveaway === 'Y' ? 'Y' : 'N';
-            
+
             this.productPurchases.push(obj);
           }
         });
@@ -201,7 +222,7 @@ export class ModalSearchPurchasesComponent implements OnInit {
           })
       })
       .catch(() => {
-      
+
       });
   }
 

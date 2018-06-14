@@ -273,12 +273,13 @@ export class ReceiveComponent implements OnInit {
   }
 
   removeReceive(w) {
+    console.log(w);
     this.alertService.confirm('คุณต้องการลบรายการรับสินค้านี้ [' + w.receive_code + '] ใช่หรือไม่?')
       .then(async () => {
         try {
           this.modalLoading.show();
-          await this.receiveService.updatePurchaseApproved(w.receive_id);
-          const rs: any = await this.receiveService.removeReceive(w.receive_id);
+          // await this.receiveService.updatePurchaseApproved(w.receive_id);
+          const rs: any = await this.receiveService.removeReceive(w.receive_id, w.purchase_order_id);
           if (rs.ok) {
             this.alertService.success();
             const idx = _.findIndex(this.waitings, { receive_id: w.receive_id });
@@ -439,13 +440,13 @@ export class ReceiveComponent implements OnInit {
 
     if (access === 1) {
       accessName = 'WM_RECEIVE_APPROVE'
-      this.action = 'WM_RECEIVES'
+      this.action = 'WM_RECEIVE_APPROVE'
       this.page = 1;
 
       this.selectedApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     } else if (access = 2) {
       accessName = 'WM_RECEIVE_OTHER_APPROVE'
-      this.action = 'WM_RECEIVES_OTHER'
+      this.action = 'WM_RECEIVE_OTHER_APPROVE'
       this.page = 2;
 
       this.selectedOtherApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
@@ -708,9 +709,7 @@ export class ReceiveComponent implements OnInit {
   printProductReciveOther() {
     const receiveIds = [];
     _.forEach(this.selectedOtherApprove, (v) => {
-      if (v.approve_id) {
-        receiveIds.push(v.receive_other_id);
-      }
+      receiveIds.push(v.receive_other_id);
     });
     if (receiveIds.length) {
       this.alertService.confirm('พิมพ์รายงานเวชภัณฑ์ที่รับจากการบริจาค ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
