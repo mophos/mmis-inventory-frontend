@@ -65,6 +65,7 @@ import { ProductsComponent } from './products/products.component';
 import { BorrowNoteService } from './borrow-note.service';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
 import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
+import { ProductRequisitionComponent } from './product-requisition/product-requisition.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -99,7 +100,8 @@ import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
     HisIssueTransactionComponent,
     ProductsComponent,
     BorrowNoteComponent,
-    BorrowNoteNewComponent
+    BorrowNoteNewComponent,
+    ProductRequisitionComponent
   ],
   providers: [
     ToThaiDatePipe,
