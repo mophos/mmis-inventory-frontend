@@ -148,7 +148,7 @@ export class StaffService {
   }
 
   async getGenericsRequisitionWarehouseSearch(genericType: any, query: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/requisition/search?genericType=${genericType}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/requisition/search?genericType=${genericType}&query=${query}`).toPromise();
     return rs.json();
   }
 

@@ -428,5 +428,17 @@ export class RequisitionNewComponent implements OnInit {
       this.getTemplateItems(this.templateId);
     }
   }
+  changeWarehouse() {
+    console.log(this.wmRequisition, this.wmWithdraw);
 
+    if (this.products.length) {
+      this.alertService.confirm('หากเปลี่ยนคลังข้อมูลเวชภัณฑ์จะถูกลบ')
+        .then((result) => {
+          this.products = [];
+        }).catch((err) => {
+
+        });
+    }
+    this.clearItem();
+  }
 }
