@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { State } from '@clr/angular';
 import { BorrowNoteService } from '../borrow-note.service';
 import { AlertService } from 'app/alert.service';
 import { LoadingModalComponent } from '../../modals/loading-modal/loading-modal.component';
-
+import * as _ from "lodash"
 @Component({
   selector: 'wm-borrow-note',
   templateUrl: './borrow-note.component.html',
@@ -12,25 +12,33 @@ import { LoadingModalComponent } from '../../modals/loading-modal/loading-modal.
 export class BorrowNoteComponent implements OnInit {
 
   @ViewChild('modalLoading') modalLoading: LoadingModalComponent;
-  
+  @ViewChild('htmlPreview') public htmlPreview: any;
+  selectedPrint: any = []
   notes: any = [];
-  total: number = 0;
-  perPage: number = 20;
+  total = 0;
+  perPage = 20;
   query: any = '';
 
   constructor(
     private alertService: AlertService,
-    private borrowNoteService: BorrowNoteService
+    private borrowNoteService: BorrowNoteService,
+    @Inject('API_URL') private apiUrl: string
   ) { }
 
   ngOnInit() {
     // this.getList(this.perPage, 0);
   }
-
+  async printReport() {
+    console.log(this.selectedPrint);
+    const borrow_note_id = _.join(_.map(this.selectedPrint, (v: any) => { return 'id=' + v.borrow_note_id }), '&')
+    const token = sessionStorage.getItem('token');
+    const url = `${this.apiUrl}/staff/borrow-notes/report?token=${token}&` + borrow_note_id;
+    this.htmlPreview.showReport(url);
+  }
   async getList(limit: number, offset: number) {
     try {
       this.modalLoading.show();
-      let rs: any = await this.borrowNoteService.getList(this.query, limit, offset);
+      const rs: any = await this.borrowNoteService.getList(this.query, limit, offset);
       if (rs.ok) {
         this.notes = rs.rows;
         this.total = rs.total;
@@ -65,7 +73,7 @@ export class BorrowNoteComponent implements OnInit {
     this.alertService.confirm('ต้องการยกเลิกรายการนี้ ใช่หรือไม่?')
       .then(async () => {
         this.modalLoading.show();
-        let rs: any = await this.borrowNoteService.cancelNote(borrowNoteId);
+        const rs: any = await this.borrowNoteService.cancelNote(borrowNoteId);
         this.modalLoading.hide();
         if (rs.ok) {
           this.alertService.success();

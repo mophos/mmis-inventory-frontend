@@ -28,6 +28,7 @@ export class AdditionComponent implements OnInit {
   queryOpen: any;
   queryHistory: any;
 
+  selectedPrint: any = [];
   constructor(
     private additionService: AdditionService,
     private alertService: AlertService,
@@ -85,7 +86,6 @@ export class AdditionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
-    
     this.selectedApprove = []
   }
 
@@ -212,9 +212,9 @@ export class AdditionComponent implements OnInit {
   }
 
   async printRefills() {
-    let addition_id =_.join( _.map(this.selectedApprove,(v)=>{return 'addition_id='+v.addition_id}),'&')
+    let addition_id = _.join(_.map(this.selectedApprove, (v) => { return 'addition_id=' + v.addition_id }), '&');
     const token = sessionStorage.getItem('token');
-    const url = `${this.apiUrl}/addition/print/transactions?token=${token}&`+addition_id;
+    const url = `${this.apiUrl}/addition/print/transactions?token=${token}&` + addition_id;
     this.htmlPreview.showReport(url);
   }
 

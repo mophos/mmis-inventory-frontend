@@ -2,22 +2,24 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">บันทึกช่วยจำการยืมยา/เวชภัณฑ์</span>
 </nav>
-
-<button class="btn btn-sm btn-success btn-icon" routerLink="/admin/borrow-notes/new">
-  <clr-icon shape="plus"></clr-icon> บันทึกยืมยา
-</button>
-
-<label for="query">ค้นหา</label>
-<input type="text" placeholder="ระบุคำค้นหา" id="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;">
-
-<clr-datagrid (clrDgRefresh)="refresh($event)">
+<div width="100%">
+  <button class="btn btn-sm btn-success btn-icon" routerLink="/admin/borrow-notes/new">
+    <clr-icon shape="plus"></clr-icon> บันทึกยืมยา
+  </button>
+  <label for="query">ค้นหา</label>
+  <input type="text" placeholder="ระบุคำค้นหา" id="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;">
+  <button style="float: right" [disabled]="!selectedPrint.length" class="btn btn-sm btn-success btn-icon" (click)="printReport()">
+    <clr-icon shape="printer"></clr-icon> พิมพ์รายการยืมยา
+  </button>
+</div>
+<clr-datagrid [(clrDgSelected)]="selectedPrint" (clrDgRefresh)="refresh($event)">
   <clr-dg-column style="width: 120px;">วันที่</clr-dg-column>
   <clr-dg-column>ชื่อ-สกุล</clr-dg-column>
   <clr-dg-column>หน่วยเบิก/คลัง</clr-dg-column>
   <clr-dg-column>หมายเหตุ</clr-dg-column>
   <clr-dg-column style="width: 100px;"></clr-dg-column>
   <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-  <clr-dg-row *ngFor="let note of notes" [ngClass]="{'cancel-status': note.is_cancel==='Y'}">
+  <clr-dg-row *ngFor="let note of notes" [clrDgItem]="note" [ngClass]="{'cancel-status': note.is_cancel==='Y'}">
     <wm-borrow-notes-detail *clrIfExpanded [borrowNoteId]="note.borrow_note_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-notes-detail>
     <clr-dg-cell>{{note.borrow_date | toThaiDate}}</clr-dg-cell>
     <clr-dg-cell>{{note.title_name}}{{note.fname}} {{note.lname}}</clr-dg-cell>
@@ -42,3 +44,4 @@
 </clr-datagrid>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
+<wm-html-preview #htmlPreview></wm-html-preview>

@@ -382,14 +382,26 @@ export class ReceiveService {
     return res.json();
   }
 
-  async removeReceive(receiveId) {
-    const res = await this.authHttp.delete(`${this.url}/receives/remove?receiveId=${receiveId}`).toPromise();
+  async removeReceive(receiveId: any, purchaseOrderId: any = '') {
+    const res = await this.authHttp.delete(`${this.url}/receives/remove?receiveId=${receiveId}&purchaseOrderId=${purchaseOrderId}`).toPromise();
     return res.json();
   }
 
   // =================== receive with purchases =================
   async getPurchasesList(limit: number = 100, offset: number = 0, sort: any = {}) {
     const res = await this.authHttp.post(`${this.url}/receives/purchases/list`, {
+      limit: limit,
+      offset: offset,
+      sort: sort
+    })
+      .toPromise();
+
+    return res.json();
+  }
+
+  async searchPurchasesList(query: string, limit: number = 100, offset: number = 0, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/receives/s-purchases/list`, {
+      query: query,
       limit: limit,
       offset: offset,
       sort: sort
@@ -448,7 +460,7 @@ export class ReceiveService {
   }
 
   async checkApprove(username: any, password: any, action: any) {
-    const rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
+    const rs: any = await this.authHttp.post(`${this.url}/basic/checkApprove`, {
       username: username,
       password: password,
       action: action
