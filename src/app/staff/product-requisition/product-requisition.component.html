@@ -3,10 +3,10 @@
   <span class="breadcrumb-item active">รายการยาที่ถึงจุดเบิก</span>
 </nav>
 
-<clr-tabs>
+<!-- <clr-tabs>
   <clr-tab>
     <button clrTabLink>Generic Group</button>
-    <clr-tab-content *clrIfActive>
+    <clr-tab-content *clrIfActive> -->
       <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
         <div class="col-md-6">
           ค้นหา :
@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-3 push-md-3" style="text-align: right;">
           <div class="select">
-            <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
+            <select [(ngModel)]="genericType" name="genericType" (change)="getGenerics()">
               <option value="all">ทั้งหมด</option>
               <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
             </select>
@@ -29,10 +29,10 @@
         <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
         <clr-dg-row *clrDgItems="let p of generics" [clrDgItem]="p">
           <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-stock-remain>
-          <clr-dg-action-overflow>
+          <!-- <clr-dg-action-overflow>
             <button class="action-item" (click)="changeQty(p)">
               <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-          </clr-dg-action-overflow>
+          </clr-dg-action-overflow> -->
           <clr-dg-cell>{{p.generic_working_code}}</clr-dg-cell>
           <clr-dg-cell>
             {{p.generic_name}}
@@ -46,10 +46,10 @@
           <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
-    </clr-tab-content>
+    <!-- </clr-tab-content>
   </clr-tab>
-  <clr-tab>
-    <button clrTabLink>Trade Group</button>
+  <clr-tab> -->
+    <!-- <button clrTabLink>Trade Group</button>
     <clr-tab-content *clrIfActive>
       <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
         <div class="col-md-6">
@@ -91,6 +91,6 @@
       </clr-datagrid>
     </clr-tab-content>
   </clr-tab>
-</clr-tabs>
+</clr-tabs> -->
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
