@@ -10,8 +10,8 @@ export class AdditionService {
     private authHttp: AuthHttp
   ) { }
 
-  async getWarehouse() {
-    const resp = await this.authHttp.get(`${this.url}/addition/warehouse`).toPromise();
+  async getWarehouse(query: any) {
+    const resp = await this.authHttp.get(`${this.url}/addition/warehouse?query=${query}`).toPromise();
     return resp.json();
   }
 
@@ -20,8 +20,8 @@ export class AdditionService {
     return resp.json();
   }
 
-  async getGeneric() {
-    const resp = await this.authHttp.get(`${this.url}/addition/generic`).toPromise();
+  async getGeneric(query: any) {
+    const resp = await this.authHttp.get(`${this.url}/addition/generic?query=${query}`).toPromise();
     return resp.json();
   }
 
@@ -48,13 +48,13 @@ export class AdditionService {
     return resp.json();
   }
 
-  async getTransaction(status: any) {
-    const resp = await this.authHttp.get(`${this.url}/addition/list/${status}`).toPromise();
+  async getTransaction(status: any, query: any) {
+    const resp = await this.authHttp.get(`${this.url}/addition/list/${status}?query=${query}`).toPromise();
     return resp.json();
   }
 
-  async getTransactionHistory() {
-    const resp = await this.authHttp.get(`${this.url}/addition/history`).toPromise();
+  async getTransactionHistory(query: any) {
+    const resp = await this.authHttp.get(`${this.url}/addition/history?query=${query}`).toPromise();
     return resp.json();
   }
 
