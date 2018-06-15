@@ -19,7 +19,7 @@
       </div>
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
         <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate" style="margin-top: 0px;">
-          <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX
+          <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
         </button>
       </div>
     </div>
@@ -56,9 +56,9 @@
   <clr-dg-column [style.width.px]="120" [clrDgField]="'use_total'">
     ยอดการใช้
   </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'use_per_day'">
+  <!-- <clr-dg-column [style.width.px]="120" [clrDgField]="'use_per_day'">
     อัตราการใช้ ต่อวัน
-  </clr-dg-column>
+  </clr-dg-column> -->
   <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_min_day'">
     Safety Stock <br> MIN (วัน)
   </clr-dg-column>
@@ -71,21 +71,21 @@
   <clr-dg-column [style.width.px]="120" [clrDgField]="'max_qty'">
     MAX <br> (Base Unit)
   </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'lead_time_day'">
+  <!-- <clr-dg-column [style.width.px]="120" [clrDgField]="'lead_time_day'">
     Lead Time <br> (วัน)
   </clr-dg-column>
   <clr-dg-column [style.width.px]="120" [clrDgField]="'rop_qty'">
     ROP <br> (Base Unit)
   </clr-dg-column>
   <clr-dg-column [style.width.px]="120" [clrDgField]="'carrying_cost'">
-    ต้นทุนเก็บรักษา
+    ต้นทุนเก็บรักษา <br> (ช่วงเวลาต่อหน่วย)
   </clr-dg-column>
   <clr-dg-column [style.width.px]="120" [clrDgField]="'ordering_cost'">
-    ต้นทุนการสั่งซื้อ
+    ต้นทุนการสั่งซื้อ <br> (ต่อครั้ง)
   </clr-dg-column>
   <clr-dg-column [style.width.px]="120" [clrDgField]="'eoq_qty'">
     EOQ <br> (Base Unit)
-  </clr-dg-column>
+  </clr-dg-column> -->
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let g of generics">
     <clr-dg-cell>
@@ -97,7 +97,7 @@
     <clr-dg-cell style="text-align: right;">{{g.qty | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{g.use_total | number}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{g.use_per_day | number}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="text-align: right;">{{g.use_per_day | number}}</clr-dg-cell> -->
     <clr-dg-cell style="text-align: right;">
       <input type="text" class="wm-edit-box-number" #saftyMin (keyup)="onChangeSaftyStockMin(saftyMin.value, g)" style="background-color: #FFF9C4"
         [value]="g.safety_min_day" wmNumberWithOutDot>
@@ -114,7 +114,7 @@
       <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)" style="background-color: #FFF9C4"
         [value]="g.max_qty" wmNumberWithOutDot>
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
+    <!-- <clr-dg-cell style="text-align: right;">
       <input type="text" class="wm-edit-box-number" #leadTime (keyup)="onChangeLeadTmie(leadTime.value, g)" style="background-color: #FFF9C4"
         [value]="g.lead_time_day" wmNumberWithOutDot>
     </clr-dg-cell>
@@ -133,7 +133,7 @@
     <clr-dg-cell style="text-align: right;">
       <input type="text" class="wm-edit-box-number" #eoq (keyup)="onChangeEoqQty(eoq.value, g)" style="background-color: #FFF9C4"
         [value]="g.eoq_qty" wmNumberWithOutDot>
-    </clr-dg-cell>
+    </clr-dg-cell> -->
   </clr-dg-row>
 
   <clr-dg-footer>
