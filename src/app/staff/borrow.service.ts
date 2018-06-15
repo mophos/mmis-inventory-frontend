@@ -239,7 +239,7 @@ export class BorrowService {
     });
   }
 
-  
+
   // =============== document service =============== //
   getFiles(documentCode) {
     return new Promise((resolve, reject) => {

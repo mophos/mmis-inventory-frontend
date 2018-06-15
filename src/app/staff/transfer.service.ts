@@ -39,7 +39,7 @@ export class TransferService {
   }
 
   async saveTransfer(summary: Object, generics: any[]) {
-    let rs = await this.authHttp.post(`${this.url}/staff/transfer/save`, {
+    const rs = await this.authHttp.post(`${this.url}/staff/transfer/save`, {
       summary: summary,
       generics: generics
     }).toPromise();

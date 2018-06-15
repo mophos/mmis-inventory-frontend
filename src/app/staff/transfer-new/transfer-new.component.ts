@@ -112,7 +112,7 @@ export class TransferNewComponent implements OnInit {
   async getShipingNetwork() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.wareHouseService.getShipingNetwork(this.srcWarehouseId, 'TRN');
+      const rs: any = await this.wareHouseService.getShipingNetwork(this.srcWarehouseId, 'TRN');
       this.modalLoading.hide();
       if (rs.ok) {
         this.dstWarehouses = rs.rows;
@@ -350,13 +350,13 @@ export class TransferNewComponent implements OnInit {
               .then(async () => {
                 this.modalLoading.show();
                 try {
-                  let rs: any = await this.transferService.saveTransfer(summary, generics);
+                  const result: any = await this.transferService.saveTransfer(summary, generics);
                   this.modalLoading.hide();
-                  if (rs.ok) {
+                  if (result.ok) {
                     this.alertService.success();
                     this.router.navigate(['/staff/transfer']);
                   } else {
-                    this.alertService.error(JSON.stringify(rs.error));
+                    this.alertService.error(JSON.stringify(result.error));
                   }
                 } catch (error) {
                   this.modalLoading.hide();
@@ -486,7 +486,7 @@ export class TransferNewComponent implements OnInit {
 
         rs.rows.forEach(v => {
           console.log(v);
-          
+
           const generic: any = {};
           generic.generic_id = v.generic_id;
           generic.transfer_qty = 0;

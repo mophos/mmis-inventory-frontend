@@ -21,8 +21,8 @@ export class IssueTransactionComponent implements OnInit {
   selectedApprove: any = [];
   titel: any;
   isConfirm: any;
-  openModalConfirm: boolean = false
-  confirmApprove: boolean = false
+  openModalConfirm = false
+  confirmApprove = false
   tmpOderApprove: any
   username: any
   password: any
@@ -116,8 +116,7 @@ export class IssueTransactionComponent implements OnInit {
   }
 
   async checkApprove(username: any, password: any) {
-    let rs: any = await this.issueService.checkApprove(username, password, this.action);
-
+    const rs: any = await this.issueService.checkApprove(username, password, this.action);
     if (rs.ok) {
       if (this.page === 1) {
         this.approveIssue()

@@ -22,7 +22,7 @@ export class ProductlotsService {
     });
   }
 
-  getpackageLotsInfo(productID: any,warehouseID: any) {
+  getpackageLotsInfo(productID: any, warehouseID: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/staffproductlots/detail/${productID}/${warehouseID}`)
         .map(res => res.json())
@@ -34,7 +34,7 @@ export class ProductlotsService {
     });
   }
 
-    getstaffpackageLotsInfo(productID: any,warehouseID: any) {
+  getstaffpackageLotsInfo(productID: any, warehouseID: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/staffproductlots/detail/${productID}/${warehouseID}`)
         .map(res => res.json())
