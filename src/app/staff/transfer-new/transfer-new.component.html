@@ -29,13 +29,24 @@
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <!-- <wm-select-warehouses [selectedId]="dstWarehouseId" #dstWarehouse (onSelect)="setDstWarehouse($event)"></wm-select-warehouses> -->
             <div class="select">
-              <select name="slWarehouse" #cmp id="slWarehouse" [(ngModel)]="dstWarehouseId" (change)="setDstWarehouse($event, cmp)">
+              <select name="slWarehouse" #cmp id="slWarehouse" [(ngModel)]="dstWarehouseId" (change)="setDstWarehouse($event, cmp);getTemplates()">
                 <option value="">
                   กรุณาเลือกคลัง
                 </option>
                 <option *ngFor="let w of dstWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{ w.warehouse_name }}</option>
               </select>
             </div>
+          </div>
+          <div class="col-md-1 col-lg-1">
+            Template
+          </div>
+          <div class="col-md-3 col-lg-3">
+              <div class="select">
+                  <select id="slTemplate" name="slTemplateId" [(ngModel)]="templateId" (change)="getGenericItems($event)">
+                    <option value="">เลือกเทมเพลต (Template)</option>
+                    <option *ngFor="let item of templates" [value]="item.template_id">{{item.template_subject}}</option>
+                  </select>
+                </div>
           </div>
         </div>
       </section>

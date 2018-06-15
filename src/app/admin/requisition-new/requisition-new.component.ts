@@ -83,7 +83,7 @@ export class RequisitionNewComponent implements OnInit {
   selectedRequisitionQty: any;
   selectedTotalSmallQty: any = 0;
   requisitionCode: any;
-  selectedRemainQty: number = 0;
+  selectedRemainQty = 0;
 
   isUpdate = false;
   isSave = false;

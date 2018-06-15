@@ -69,7 +69,8 @@ export class TransferNewComponent implements OnInit {
   unitGenericId: any;
   lotNo: any;
   dstWarehouses = [];
-
+  templates = [];
+  templateId: any;
   constructor(
     private alertService: AlertService,
     private transferService: TransferService,
@@ -111,10 +112,11 @@ export class TransferNewComponent implements OnInit {
   async getShipingNetwork() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.wareHouseService.getShipingNetwork(this.srcWarehouseId, 'TRN');
+      const rs: any = await this.wareHouseService.getShipingNetwork(this.srcWarehouseId, 'TRN');
       this.modalLoading.hide();
       if (rs.ok) {
         this.dstWarehouses = rs.rows;
+        this.getTemplates();
       } else {
         this.alertService.error(rs.error);
       }
@@ -348,13 +350,13 @@ export class TransferNewComponent implements OnInit {
               .then(async () => {
                 this.modalLoading.show();
                 try {
-                  let rs: any = await this.transferService.saveTransfer(summary, generics);
+                  const result: any = await this.transferService.saveTransfer(summary, generics);
                   this.modalLoading.hide();
-                  if (rs.ok) {
+                  if (result.ok) {
                     this.alertService.success();
                     this.router.navigate(['/staff/transfer']);
                   } else {
-                    this.alertService.error(JSON.stringify(rs.error));
+                    this.alertService.error(JSON.stringify(result.error));
                   }
                 } catch (error) {
                   this.modalLoading.hide();
@@ -443,6 +445,66 @@ export class TransferNewComponent implements OnInit {
     } catch (error) {
       console.log(error);
       this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
+
+  async getTemplates() {
+    try {
+      const dstWarehouseId = this.dstWarehouseId;
+      const srcWarehouseId = this.srcWarehouseId;
+      console.log(dstWarehouseId);
+      console.log(srcWarehouseId);
+
+      if (dstWarehouseId && srcWarehouseId) {
+        const rs: any = await this.transferService.getTemplates(srcWarehouseId, dstWarehouseId);
+        console.log(rs);
+
+        if (rs.ok) {
+          this.templates = rs.rows;
+        } else {
+          this.alertService.error(rs.error);
+        }
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
+
+  async getGenericItems(event: any) {
+    if (this.templateId) {
+      this.getTemplateItems(this.templateId);
+    }
+  }
+
+  async getTemplateItems(templateId: any) {
+    try {
+      console.log(templateId)
+      const rs: any = await this.transferService.getTemplateItems(templateId);
+      if (rs.ok) {
+        this.generics = [];
+
+        rs.rows.forEach(v => {
+          console.log(v);
+
+          const generic: any = {};
+          generic.generic_id = v.generic_id;
+          generic.transfer_qty = 0;
+          generic.generic_name = v.generic_name;
+          generic.to_unit_qty = 0;
+          generic.unit_generic_id = v.unit_generic_id;
+          generic.from_unit_name = v.from_unit_name;
+          generic.to_unit_name = v.to_unit_name;
+          generic.product_qty = v.product_qty;
+          generic.working_code = v.working_code;
+          generic.remain_qty = v.remain_qty;
+          generic.small_remain_qty = v.small_remain_qty
+
+          this.generics.push(generic);
+        });
+        console.log(this.generics)
+      }
+    } catch (error) {
       this.alertService.error(error.message);
     }
   }

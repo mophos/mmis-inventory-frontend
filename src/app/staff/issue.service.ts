@@ -13,7 +13,7 @@ export class IssueService {
     private authHttp: AuthHttp
   ) { }
 
-  
+
   searchProduct(query: string, warehouseid: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/internalissue/search`, {
@@ -30,9 +30,9 @@ export class IssueService {
     });
   }
 
-    searchProductall(warehouseid: string) {
+  searchProductall(warehouseid: string) {
     return new Promise((resolve, reject) => {
-      this.authHttp.post(`${this.url}/internalissue/searchall`, {        
+      this.authHttp.post(`${this.url}/internalissue/searchall`, {
         warehouseid: warehouseid
       })
         .map(res => res.json())
@@ -75,12 +75,12 @@ export class IssueService {
   getInternalIssueDetail(InternalIssueId: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/internalissue//issuedetail/${InternalIssueId}`)
-      .map(res => res.json())
-      .subscribe(data => {
-        resolve(data);        
-      },error => {
-        reject(error);
-      });
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
     });
   }
 
@@ -125,7 +125,7 @@ export class IssueService {
   }
 
 
-  // =============== document service =============== //  
+  // =============== document service ===============
   getFiles(documentCode) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.docUrl}/uploads/info/${documentCode}`)
@@ -165,5 +165,5 @@ export class IssueService {
         });
     });
   }
-  
+
 }

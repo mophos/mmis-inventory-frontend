@@ -21,7 +21,7 @@ export class StaffRequisitionOrderItemsComponent implements OnInit {
   async getGenericList() {
 
     try {
-      let rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
+      const rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
       this.loading = false;
       if (rs.ok) {
         this.items = rs.rows;
@@ -30,7 +30,7 @@ export class StaffRequisitionOrderItemsComponent implements OnInit {
       }
     } catch (error) {
       this.loading = false;
-      this.alertService.error(error.message); 
+      this.alertService.error(error.message);
     }
   }
 
