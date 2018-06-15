@@ -1,3 +1,4 @@
+import { StaffService } from './../staff.service';
 import { SelectUnitsComponent } from 'app/directives/select-units/select-units.component';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -29,7 +30,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
 
   dstWarehouseId: any;
   srcWarehouseId: any;
-
+  srcWarehouseName: any;
   products2 = [];
   templateSubject: any;
 
@@ -40,6 +41,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
     private warehouseService: WarehouseService,
     private warehouseProductService: WarehouseProductsService,
     private router: Router,
+    private staffService: StaffService
   ) { }
 
   // ngOnInit() {
@@ -53,38 +55,23 @@ export class RequisitionTemplateNewComponent implements OnInit {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     this.srcWarehouseId = decodedToken.warehouseId;
-
-
-
-    this.getWarehouses(this.srcWarehouseId);
+    this.getWarehouses();
+    this.getDstShipingNetwork();
   }
-  // async getWarehouses() {
-  //   try {
-  //     const resp: any = await this.warehouseService.getWarehouse();
-  //     if (resp.ok) {
-  //       this.srcWarehouses = _.sortBy(resp.rows, 'warehouse_id');
-  //     } else {
-  //       this.alertService.error(resp.error);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     this.alertService.error(error.message);
-  //   }
-  // }
-  async getWarehouses(srcWarehouseId) {
-    await this.warehouseService.getReqShipingNetwork(srcWarehouseId)
-      .then((result: any) => {
-        if (result.ok) {
-          this.srcWarehouses = result.rows;
-          this.getReqShipingNetwork();
-        } else {
-          this.alertService.error(result.error)
-        }
-      })
-      .catch(() => {
-        this.alertService.serverError();
-      });
+  async getWarehouses() {
+    try {
+      const resp: any = await this.warehouseService.getWarehouse();
+      if (resp.ok) {
+        this.srcWarehouses = resp.rows;
+      } else {
+        this.alertService.error(resp.error);
+      }
+    } catch (error) {
+      console.error(error);
+      this.alertService.error(error.message);
+    }
   }
+
   showProducts() {
     this.isRequest = true;
   }
@@ -175,17 +162,14 @@ export class RequisitionTemplateNewComponent implements OnInit {
       this.alertService.error('ข้อมูลไม่ครบถ้วน')
     }
   }
-  onSelectWarehouses() {
-    this.getReqShipingNetwork();
-  }
 
-  async getReqShipingNetwork() {
+  async getDstShipingNetwork() {
     this.dstWarehouses = [];
-    await this.warehouseService.getShipingNetwork(this.srcWarehouseId, 'REQ')
+    await this.staffService.getWarehouseDst(this.srcWarehouseId)
       .then((result: any) => {
         if (result.ok) {
           this.dstWarehouses = result.rows;
-          this.dstWarehouseId = result.rows[0].warehouse_id; 
+          this.dstWarehouseId = result.rows[0].warehouse_id;
           console.log(result.rows);
 
         } else {
@@ -197,7 +181,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
       });
   }
   editChangeUnit(g, e) {
-    const idx = _.findIndex(this.products2,{'generic_id':g.generic_id})   
+    const idx = _.findIndex(this.products2, { 'generic_id': g.generic_id })
     this.products2[idx].unit_generic_id = e.unit_generic_id
   }
   sort() {

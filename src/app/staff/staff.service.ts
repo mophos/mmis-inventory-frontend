@@ -400,6 +400,11 @@ export class StaffService {
   async getMinMaxHeader() {
     const resp = await this.authHttp.get(`${this.url}/min-max/header`).toPromise();
     return resp.json();
+
+  }
+  async getWarehouseDst(warehouseId) {
+    const resp = await this.authHttp.get(`${this.url}/staff/warehouse/tranfer/dst?warehouseId=${warehouseId}`).toPromise();
+    return resp.json();
   }
 
   async calculateMinMax(fromDate: any, toDate: any) {
@@ -409,5 +414,6 @@ export class StaffService {
     }).toPromise();
     return resp.json();
   }
+
 
 }
