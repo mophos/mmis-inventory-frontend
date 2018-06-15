@@ -27,10 +27,9 @@ export class MinMaxService {
     return resp.json();
   }
 
-  async saveGenericPlanning(fromDate: any, toDate: any, generics: any[]) {
+  async saveGenericPlanning(processDate: any, generics: any[]) {
     const resp = await this.authHttp.post(`${this.url}/min-max/save`, {
-      fromDate: fromDate,
-      toDate: toDate,
+      processDate: processDate,
       generics: generics
     }).toPromise();
     return resp.json();

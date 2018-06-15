@@ -167,11 +167,10 @@ export class StaffService {
     return rs.json();
   }
 
-  async saveGenericMinMax(items: any[], fromDate, toDate) {
+  async saveGenericMinMax(items: any[], processDate: any) {
     const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-minmax`, {
       items: items,
-      fromDate: fromDate,
-      toDate: toDate
+      processDate: processDate
     }).toPromise();
     return rs.json();
   }
