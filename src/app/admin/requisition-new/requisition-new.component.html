@@ -43,7 +43,7 @@
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="select">
-              <select [disabled]="isUpdate" name="wmRequisition" [(ngModel)]="wmRequisition" (change)="onSelectWarehouses($event)">
+              <select [disabled]="isUpdate" name="wmRequisition" [(ngModel)]="wmRequisition" (change)="onSelectWarehouses($event);changeWarehouse()">
                 <option value="">
                   <หน่วยเบิก>
                 </option>
@@ -56,7 +56,7 @@
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="select">
-              <select [disabled]="isUpdate" name="slWarehouse" id="slWarehouse" [(ngModel)]="wmWithdraw" (change)="getTemplates()">
+              <select [disabled]="isUpdate" name="slWarehouse" id="slWarehouse" [(ngModel)]="wmWithdraw" (change)="getTemplates();changeWarehouse()">
                 <option value="">
                   <กรุณาเลือกคลัง>
                 </option>
@@ -141,8 +141,8 @@
           (click)="addProduct()">
           <clr-icon shape="floppy"></clr-icon>
         </button>
-        <button class="btn btn-danger btn-sm wm-small-btn">
-          <clr-icon shape="trash"></clr-icon>
+        <button (click)="clearItem()" class="btn btn-danger btn-sm wm-small-btn">
+          <clr-icon shape="trash" ></clr-icon>
         </button>
       </div>
     </clr-dg-cell>

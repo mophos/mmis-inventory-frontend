@@ -98,6 +98,7 @@ export class ProductRequisitionComponent implements OnInit {
       } else {
         type = this.genericType
       }
+      console.log(type);
       if (!this.query) {
         result = await this.staffService.getGenericsRequisitionWarehouse(type);
       } else {
