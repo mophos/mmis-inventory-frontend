@@ -9,10 +9,15 @@
       <clr-icon shape="plus"></clr-icon> เบิกสินค้าและเวชภัณฑ์
     </button>
   </div>
-  <div *ngIf="selectedTab === 'unpaid'" class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
-    <clr-button-group style="float:right;">
+  <div class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+    <clr-button-group *ngIf="selectedTab === 'unpaid'" style="float:right;">
       <clr-button [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printUnPaid()">
         <clr-icon shape="printer"></clr-icon> พิมพ์รายการค้างจ่าย
+      </clr-button>
+    </clr-button-group>
+    <clr-button-group style="float:right;">
+      <clr-button class="btn btn-sm btn-primary" (click)="openModal()">
+        <clr-icon shape="printer"></clr-icon> พิมพ์รายงานการเบิกย้อนหลัง
       </clr-button>
     </clr-button-group>
   </div>
@@ -258,7 +263,6 @@
   </clr-tab>
 
 </clr-tabs>
-
 <wm-html-preview #htmlPreview></wm-html-preview>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
