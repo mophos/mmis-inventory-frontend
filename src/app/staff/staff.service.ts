@@ -128,13 +128,28 @@ export class StaffService {
   }
 
   async getProductsWarehouse(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/products/${genericType}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/products?genericType=${genericType}`).toPromise();
+    return rs.json();
+  }
+
+  async getProductsWarehouseSearch(genericType: any, query: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/products/search?genericType=${genericType}&query=${query}`).toPromise();
     return rs.json();
   }
 
   async getProductStockDetail(productId: any) {
     const resp = await this.authHttp.get(`${this.url}/staff/products/stock/remain/${productId}`).toPromise();
     return resp.json();
+  }
+
+  async getGenericsRequisitionWarehouse(genericType: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/requisition?genericType=${genericType}`).toPromise();
+    return rs.json();
+  }
+
+  async getGenericsRequisitionWarehouseSearch(genericType: any, query: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/requisition/search?genericType=${genericType}&query=${query}`).toPromise();
+    return rs.json();
   }
 
   async getGenericsWarehouse(genericType: any) {
@@ -152,11 +167,10 @@ export class StaffService {
     return rs.json();
   }
 
-  async saveGenericMinMax(items: any[], fromDate, toDate) {
+  async saveGenericMinMax(items: any[], processDate: any) {
     const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-minmax`, {
       items: items,
-      fromDate: fromDate,
-      toDate: toDate
+      processDate: processDate
     }).toPromise();
     return rs.json();
   }
@@ -385,6 +399,11 @@ export class StaffService {
   async getMinMaxHeader() {
     const resp = await this.authHttp.get(`${this.url}/min-max/header`).toPromise();
     return resp.json();
+
+  }
+  async getWarehouseDst(warehouseId) {
+    const resp = await this.authHttp.get(`${this.url}/staff/warehouse/tranfer/dst?warehouseId=${warehouseId}`).toPromise();
+    return resp.json();
   }
 
   async calculateMinMax(fromDate: any, toDate: any) {
@@ -394,5 +413,6 @@ export class StaffService {
     }).toPromise();
     return resp.json();
   }
+
 
 }

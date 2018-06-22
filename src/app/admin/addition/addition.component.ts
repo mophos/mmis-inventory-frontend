@@ -22,7 +22,13 @@ export class AdditionComponent implements OnInit {
   additions: any = [];
   perPage = 10;
   currentTab = 'warehouse';
-  selectedPrint:any =[]
+  queryWarehouse: any;
+  queryGeneric: any;
+  queryNew: any;
+  queryOpen: any;
+  queryHistory: any;
+
+  selectedPrint: any = [];
   constructor(
     private additionService: AdditionService,
     private alertService: AlertService,
@@ -36,7 +42,7 @@ export class AdditionComponent implements OnInit {
   async getWarehouse() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.additionService.getWarehouse();
+      const rs: any = await this.additionService.getWarehouse(this.queryWarehouse);
       if (rs.ok) {
         this.warehouses = rs.rows;
       } else {
@@ -52,7 +58,7 @@ export class AdditionComponent implements OnInit {
   async getGeneric() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.additionService.getGeneric();
+      const rs: any = await this.additionService.getGeneric(this.queryGeneric);
       if (rs.ok) {
         this.generics = rs.rows;
       } else {
@@ -68,7 +74,7 @@ export class AdditionComponent implements OnInit {
   async getAddition() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.additionService.getTransaction('NEW');
+      const rs: any = await this.additionService.getTransaction('NEW', this.queryNew);
       if (rs.ok) {
         this.additions = rs.rows;
       } else {
@@ -80,14 +86,13 @@ export class AdditionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
-    
     this.selectedApprove = []
   }
 
   async getTransaction() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.additionService.getTransaction('OPEN');
+      const rs: any = await this.additionService.getTransaction('OPEN', this.queryOpen);
       if (rs.ok) {
         this.transactions = rs.rows;
       } else {
@@ -103,7 +108,7 @@ export class AdditionComponent implements OnInit {
   async getTransactionHistory() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.additionService.getTransactionHistory();
+      const rs: any = await this.additionService.getTransactionHistory(this.queryHistory);
       if (rs.ok) {
         this.histories = rs.rows;
       } else {
@@ -207,9 +212,9 @@ export class AdditionComponent implements OnInit {
   }
 
   async printRefills() {
-    let addition_id =_.join( _.map(this.selectedApprove,(v)=>{return 'addition_id='+v.addition_id}),'&')
+    let addition_id = _.join(_.map(this.selectedApprove, (v) => { return 'addition_id=' + v.addition_id }), '&');
     const token = sessionStorage.getItem('token');
-    const url = `${this.apiUrl}/addition/print/transactions?token=${token}&`+addition_id;
+    const url = `${this.apiUrl}/addition/print/transactions?token=${token}&` + addition_id;
     this.htmlPreview.showReport(url);
   }
 
@@ -226,6 +231,36 @@ export class AdditionComponent implements OnInit {
       const url = `${this.apiUrl}/addition/print/approve?token=${token}&` + addition_id;
       console.log(url);
       this.htmlPreview.showReport(url);
+    }
+  }
+
+  searchWarehouse(event) {
+    if (event.keyCode === 13) {
+        this.getWarehouse();
+    }
+  }
+
+  searchGeneric(event) {
+    if (event.keyCode === 13) {
+      this.getGeneric();
+    }
+  }
+
+  searchNew(event) {
+    if (event.keyCode === 13) {
+      this.getAddition();
+    }
+  }
+
+  searchOpen(event) {
+    if (event.keyCode === 13) {
+      this.getTransaction();
+    }
+  }
+
+  searchHistory(event) {
+    if (event.keyCode === 13) {
+      this.getTransactionHistory();
     }
   }
 

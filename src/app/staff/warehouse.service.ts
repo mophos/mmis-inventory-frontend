@@ -126,8 +126,8 @@ export class WarehouseService {
     });
   }
 
-  async getShipingNetwork(warehouseId: any,  type: any) {
-    let rs: any = await this.authHttp.get(`${this.url}/warehouses/get-shippingnetwork-list/${warehouseId}/${type}`).toPromise();
+  async getShipingNetwork(warehouseId: any, type: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-shippingnetwork-list/${warehouseId}/${type}`).toPromise();
     return rs.json();
   }
 

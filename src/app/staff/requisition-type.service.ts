@@ -11,7 +11,7 @@ export class RequisitionTypeService {
   ) { }
 
   async all() {
-    let rs: any = await this.authHttp.get(`${this.url}/staff/requisition-type`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition-type`).toPromise();
     return rs.json();
   }
 

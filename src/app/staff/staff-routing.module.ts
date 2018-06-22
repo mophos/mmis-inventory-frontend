@@ -1,3 +1,4 @@
+import { ProductRequisitionComponent } from './product-requisition/product-requisition.component';
 import { TransferNewComponent } from './transfer-new/transfer-new.component';
 import { TransferComponent } from './transfer/transfer.component';
 import { CountingComponent } from './counting/counting.component';
@@ -30,31 +31,32 @@ import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.compon
 const routes: Routes = [
   {
     path: 'staff',
-    component: LayoutComponent, 
+    component: LayoutComponent,
     canActivate: [StaffGuard],
     children: [
       { path: '', redirectTo: 'main', pathMatch: 'full' },
       { path: 'main', component: MainComponent },
       { path: 'planning', canActivate: [AuthMinMaxPlanning], component: PlanningComponent },
-      { path: 'requisition', component: RequisitionComponent},
+      { path: 'requisition', component: RequisitionComponent },
       { path: 'requisition/new', component: RequisitionNewComponent },
       { path: 'requisition/edit/:requisitionId', component: RequisitionNewComponent },
       { path: 'counting', component: CountingComponent },
       { path: 'transfer', component: TransferComponent },
       { path: 'transfer/new', component: TransferNewComponent },
       { path: 'transfer/edit', component: TransferEditComponent },
-      { path: 'requisition-templates', component: RequisitionTemplateComponent},
-      { path: 'requisition-templates/new', component: RequisitionTemplateNewComponent},
-      { path: 'requisition-templates/edit/:templateId', component: RequisitionTemplateEditComponent},
-      { path: 'his-mappings', canActivate: [AuthHISMapping], component: HisMappingsComponent},
-      { path: 'issue-transaction', component: IssueTransactionComponent},
-      { path: 'issue-transaction/new', component: IssueTransactionNewComponent},
-      { path: 'issue-transaction/edit', component: IssueTransactionEditComponent},
-      { path: 'products', component: ProductsComponent},
-      { path: 'his-issue-transaction', canActivate: [AuthHISTransaction], component: HisIssueTransactionComponent},
+      { path: 'requisition-templates', component: RequisitionTemplateComponent },
+      { path: 'requisition-templates/new', component: RequisitionTemplateNewComponent },
+      { path: 'requisition-templates/edit/:templateId', component: RequisitionTemplateEditComponent },
+      { path: 'his-mappings', canActivate: [AuthHISMapping], component: HisMappingsComponent },
+      { path: 'issue-transaction', component: IssueTransactionComponent },
+      { path: 'issue-transaction/new', component: IssueTransactionNewComponent },
+      { path: 'issue-transaction/edit', component: IssueTransactionEditComponent },
+      { path: 'products', component: ProductsComponent },
+      { path: 'his-issue-transaction', canActivate: [AuthHISTransaction], component: HisIssueTransactionComponent },
       { path: 'borrow-notes', canActivate: [AuthHISTransaction], component: BorrowNoteComponent },
       { path: 'borrow-notes/new', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
       { path: 'borrow-notes/:borrowNoteId/edit', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
+      { path: 'product/requisition', component: ProductRequisitionComponent },
     ]
   }
 ];

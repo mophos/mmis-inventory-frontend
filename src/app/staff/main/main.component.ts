@@ -29,7 +29,7 @@ export class MainComponent implements OnInit {
   warehouseLocation: string;
   warehouseType: string;
   warehouseId: string;
-  query: string;
+  query = '';
   openModalQty = false;
 
   adjProductName: string;
@@ -43,6 +43,7 @@ export class MainComponent implements OnInit {
   adjLargeUnit: string;
   adjSmallUnit: string;
 
+  generics: any = [];
   products: any = [];
   genericTypes = [];
   genericType: any = "";
@@ -65,8 +66,8 @@ export class MainComponent implements OnInit {
       this.alertService.error('ไม่พบรหัสคลังสินค้า');
     } else {
       await this.getGenericType();
-      // this.getWarehouseDetail();
       this.getProducts();
+      this.getGenerics();
     }
   }
 
@@ -89,17 +90,32 @@ export class MainComponent implements OnInit {
 
   getProducts() {
     this.modalLoading.show();
+    this.staffService.getProductsWarehouse(this.genericType)
+      .then((result: any) => {
+        if (result.ok) {
+          this.products = result.rows;
+          // console.log(this.products);
+
+          this.ref.detectChanges();
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
+        }
+        this.modalLoading.hide();
+      })
+      .catch((e) => {
+        this.modalLoading.hide();
+        this.alertService.error(e.message);
+      });
+  }
+
+  getGenerics() {
+    this.modalLoading.show();
     this.staffService.getGenericsWarehouse(this.genericType)
       .then((result: any) => {
         if (result.ok) {
-          result.rows.forEach(v => {
-            try {
-              v.large_qty = (v.qty / v.conversion);
-            } catch (error) {
-              v.large_qty = 0;
-            }
-          });
-          this.products = result.rows;
+          this.generics = result.rows;
+          // console.log(this.generics);
+
           this.ref.detectChanges();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
@@ -113,33 +129,55 @@ export class MainComponent implements OnInit {
   }
 
   searchProduct() {
-    // if (this.query) {
-      this.modalLoading.show();
-      // clear old product list
-      this.products = [];
-      this.staffService.getGenericsWarehouseSearch(this.genericType, this.query)
-        .then((result: any) => {
-          if (result.ok) {
-            this.products = result.rows;
-            this.ref.detectChanges();
-          } else {
-            this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
-          }
-          this.modalLoading.hide();
-        })
-        .catch((e) => {
-          this.modalLoading.hide();
-          this.alertService.error(e.message);
-        });
-    // } else {
-    //   this.alertService.error('กรุณาระบุคำค้นหา');
-    // }
+    this.modalLoading.show();
+    // clear old product list
+    this.products = [];
+    this.staffService.getProductsWarehouseSearch(this.genericType, this.query)
+      .then((result: any) => {
+        if (result.ok) {
+          this.products = result.rows;
+          this.ref.detectChanges();
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
+        }
+        this.modalLoading.hide();
+      })
+      .catch((e) => {
+        this.modalLoading.hide();
+        this.alertService.error(e.message);
+      });
+  }
+
+  searchGenerics() {
+    this.modalLoading.show();
+    // clear old product list
+    this.generics = [];
+    this.staffService.getGenericsWarehouseSearch(this.genericType, this.query)
+      .then((result: any) => {
+        if (result.ok) {
+          this.generics = result.rows;
+          this.ref.detectChanges();
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
+        }
+        this.modalLoading.hide();
+      })
+      .catch((e) => {
+        this.modalLoading.hide();
+        this.alertService.error(e.message);
+      });
   }
 
   // search when press ENTER
   enterSearch(e) {
     if (e.keyCode === 13) {
       this.searchProduct();
+    }
+  }
+
+  enterSearchGeneric(e) {
+    if (e.keyCode === 13) {
+      this.searchGenerics();
     }
   }
 
@@ -184,7 +222,6 @@ export class MainComponent implements OnInit {
     try {
       this.modalLoading.show();
       const rs = await this.staffService.getGenericType();
-
       if (rs.ok) {
         this.genericTypes = rs.rows;
         this.genericType = rs.rows.length === 1 ? rs.rows[0].generic_type_id : "";

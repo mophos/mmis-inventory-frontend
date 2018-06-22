@@ -22,6 +22,7 @@ export class CalculateMinMaxComponent implements OnInit {
   toDate: any;
   genericType: any;
   query: any = "";
+  processDate: any;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -66,7 +67,8 @@ export class CalculateMinMaxComponent implements OnInit {
       const rs: any = await this.minMaxService.getHeader();
       if (rs.ok) {
         const result = rs.rows[0];
-        if (result.from_stock_date) {
+        this.processDate = result.process_date;
+        if (result && result.from_stock_date) {
           this.fromDate = {
             date: {
               year: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('year') : moment().get('year'),
@@ -76,7 +78,7 @@ export class CalculateMinMaxComponent implements OnInit {
           }
         }
 
-        if (result.to_stock_date) {
+        if (result && result.to_stock_date) {
           this.toDate = {
             date: {
               year: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('year') : moment().get('year'),
@@ -137,6 +139,7 @@ export class CalculateMinMaxComponent implements OnInit {
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
+        this.processDate = rs.process_date;
       } else {
         this.alertService.error(rs.error);
       }
@@ -151,12 +154,12 @@ export class CalculateMinMaxComponent implements OnInit {
     const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
     if (idx > -1) {
       this.generics[idx].safety_min_day = +value;
-      this.generics[idx].min_qty = this.generics[idx].use_per_day * this.generics[idx].safety_min_day;
+      this.generics[idx].min_qty = Math.round(this.generics[idx].use_per_day * this.generics[idx].safety_min_day);
     }
     const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
     if (_idx > -1) {
       this._generics[_idx].safety_min_day = +value;
-      this._generics[_idx].min_qty = this._generics[_idx].use_per_day * this._generics[_idx].safety_min_day;
+      this._generics[_idx].min_qty = Math.round(this._generics[_idx].use_per_day * this._generics[_idx].safety_min_day);
     }
   }
 
@@ -164,12 +167,12 @@ export class CalculateMinMaxComponent implements OnInit {
     const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
     if (idx > -1) {
       this.generics[idx].safety_max_day = +value;
-      this.generics[idx].max_qty = this.generics[idx].use_per_day * this.generics[idx].safety_max_day;
+      this.generics[idx].max_qty = Math.round(this.generics[idx].use_per_day * this.generics[idx].safety_max_day);
     }
     const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
     if (_idx > -1) {
       this._generics[_idx].safety_max_day = +value;
-      this._generics[_idx].max_qty = this._generics[_idx].use_per_day * this._generics[_idx].safety_max_day;
+      this._generics[_idx].max_qty = Math.round(this._generics[_idx].use_per_day * this._generics[_idx].safety_max_day);
     }
   }
 
@@ -277,9 +280,7 @@ export class CalculateMinMaxComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          const _fromDate = `${this.fromDate.date.year}-${this.fromDate.date.month}-${this.fromDate.date.day}`;
-          const _toDate = `${this.toDate.date.year}-${this.toDate.date.month}-${this.toDate.date.day}`;
-          const rs: any = await this.minMaxService.saveGenericPlanning(_fromDate, _toDate, this._generics);
+          const rs: any = await this.minMaxService.saveGenericPlanning(this.processDate, this._generics);
           if (rs.ok) {
             this.alertService.success();
           } else {

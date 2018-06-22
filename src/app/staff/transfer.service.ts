@@ -39,7 +39,7 @@ export class TransferService {
   }
 
   async saveTransfer(summary: Object, generics: any[]) {
-    let rs = await this.authHttp.post(`${this.url}/staff/transfer/save`, {
+    const rs = await this.authHttp.post(`${this.url}/staff/transfer/save`, {
       summary: summary,
       generics: generics
     }).toPromise();
@@ -168,4 +168,15 @@ export class TransferService {
 
     return rs.json();
   }
+
+  async getTemplates(srcWarehouseId: any, dstWarehouseId: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/templates/${srcWarehouseId}/${dstWarehouseId}`).toPromise();
+    return rs.json();
+  }
+
+  async getTemplateItems(templateId: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/tranfer/templates-items/${templateId}`).toPromise();
+    return rs.json();
+  }
+
 }
