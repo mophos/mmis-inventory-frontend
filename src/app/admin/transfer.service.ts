@@ -97,19 +97,19 @@ export class TransferService {
   }
 
   async remove(transferId: string) {
-    let rs = await this.authHttp.delete(`${this.url}/transfer/${transferId}`).toPromise();
+    const rs = await this.authHttp.delete(`${this.url}/transfer/${transferId}`).toPromise();
     return rs.json();
   }
 
   async approve(transferId: string) {
-    let rs = await this.authHttp.post(`${this.url}/transfer/approve`, {
+    const rs = await this.authHttp.post(`${this.url}/transfer/approve`, {
       transferId: transferId
     }).toPromise();
     return rs.json();
   }
 
   async active(transferId: string) {
-    let rs = await this.authHttp.post(`${this.url}/transfer/active`, {
+    const rs = await this.authHttp.post(`${this.url}/transfer/active`, {
       transferId: transferId
     }).toPromise();
     return rs.json();
