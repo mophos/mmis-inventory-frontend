@@ -80,8 +80,13 @@ export class RequisitionService {
     return rs.json();
   }
 
+  // async getRequisitionOrderItems(requisitionId: any) {
+  //   const rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/${requisitionId}`).toPromise();
+  //   return rs.json();
+  // }
+
   async getRequisitionOrderItems(requisitionId: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/requisition/generics-requisition/${requisitionId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/generic-requisition/${requisitionId}`).toPromise();
     return rs.json();
   }
 
@@ -587,4 +592,8 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async getAllocate(data: any) {
+    const rs = await this.authHttp.post(`${this.url}/generics/allocate`, { data: data }).toPromise();
+    return rs.json();
+  }
 }
