@@ -58,65 +58,15 @@ export class ConfirmOrderItemsComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.getProductList();
-    this.currentTotalSmallQty = 0;
   }
 
   async getProductList() {
-
     try {
-      let rs: any;
-      if (this._isEdit) {
-        rs = await this.requisitionService.getEditRequisitionOrderProductItems(this._confirmId, this.genericId);
-      } else {
-        rs = await this.requisitionService.getRequisitionOrderProductItems(this.genericId);
+      this.items = _.clone(this._confirmItems);
+      if (this.items.length) {
+        this.onSuccessConfirm.emit(this.items[0]);
       }
-
-      this.loading = false;
-      this.items = [];
-      if (rs.ok) {
-        const _items = rs.rows;
-
-        _items.forEach((v: any) => {
-          const _idx = _.findIndex(this._confirmItems, { wm_product_id: v.wm_product_id });
-
-          const obj: any = {};
-          obj.wm_product_id = v.wm_product_id;
-          obj.conversion_qty = +v.conversion_qty;
-          obj.expired_date = v.expired_date;
-          obj.from_unit_name = v.from_unit_name;
-          obj.generic_id = v.generic_id;
-          obj.lot_no = v.lot_no;
-          obj.product_name = v.product_name;
-          obj.remain_qty = +v.remain_qty; // pack
-          obj.to_unit_name = v.to_unit_name;
-          obj.unit_generic_id = v.unit_generic_id;
-
-          if (_idx > -1) {
-            obj.confirm_qty = +this._confirmItems[_idx].confirm_qty; // pack
-          } else {
-            // allowcate
-            obj.confirm_qty = 0;
-          }
-
-          if (this._isEdit) {
-            obj.book_qty = (v.book_qty / v.conversion_qty) - (+obj.confirm_qty * +obj.conversion_qty); // pack
-          } else {
-            obj.book_qty = v.book_qty / v.conversion_qty; // pack
-          }
-          obj.remain_small_qty = (obj.remain_qty - obj.book_qty) * obj.conversion_qty; // base
-          obj.total_small_qty = +obj.confirm_qty * +obj.conversion_qty;
-
-          this.items.push(obj);
-        });
-
-        if (this.items.length) {
-          this.onSuccessConfirm.emit(this.items[0]);
-        }
-
-        this.calTotal();
-      } else {
-        this.alertService.error(rs.error);
-      }
+      this.calTotal();
     } catch (error) {
       console.log(error);
       this.loading = false;
@@ -148,6 +98,7 @@ export class ConfirmOrderItemsComponent implements OnInit {
     this.items.forEach((v: any) => {
       this.currentTotalSmallQty += (+v.confirm_qty * +v.conversion_qty);
     });
+    this.loading = false;
   }
 
 }

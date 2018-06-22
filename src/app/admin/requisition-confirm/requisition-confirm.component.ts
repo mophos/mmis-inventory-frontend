@@ -26,16 +26,16 @@ export class RequisitionConfirmComponent implements OnInit {
 
   requisitionType: any = null;
   confirmId: any;
-  isVerify: boolean = false;
+  isVerify = false;
 
-  isEdit: boolean = false;
+  isEdit = false;
   actionMsg: string = null;
 
   genericIds: any = [];
   borrowNotes: any = [];
   borrowRequisitions: any = [];
   selectedBorrowNotes: any = [];
-  openBorrowNote: boolean = false;
+  openBorrowNote = false;
 
   @ViewChild('modalLoading') public modalLoading: any;
 
@@ -80,12 +80,15 @@ export class RequisitionConfirmComponent implements OnInit {
   }
 
   onSuccessConfirm(event: any) {
+    console.log(event);
+
     let idx = _.findIndex(this.products, { generic_id: event.generic_id });
 
     if (idx > -1) {
       let _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: event.wm_product_id });
-      this.products[idx].is_minus = event.remain_qty - (event.confirm_qty * event.conversion_qty) < 0;
-      this.products[idx].allowcate_qty = event.confirm_qty * event.conversion_qty;
+      this.products[idx].is_minus = event.small_remain_qty - (event.confirm_qty * event.conversion_qty) < 0;
+      // this.products[idx].allowcate_qty = event.confirm_qty * event.conversion_qty;
+      this.products[idx].confirm_qty = event.confirm_qty;
 
       if (_idx > -1) {
         this.products[idx].confirmItems[_idx].confirm_qty = event.confirm_qty;
@@ -96,7 +99,8 @@ export class RequisitionConfirmComponent implements OnInit {
       // calculate new allowcate_qty
       this.products[idx].allowcate_qty = 0;
       this.products[idx].confirmItems.forEach(v => {
-        // this.products[idx].small_remain_qty += v.remain_small_qty;
+        console.log(v.confirm_qty, v.conversion_qty);
+
         this.products[idx].allowcate_qty += (v.confirm_qty * v.conversion_qty);
       });
     }
@@ -106,14 +110,10 @@ export class RequisitionConfirmComponent implements OnInit {
     this.modalLoading.show();
     this.products = [];
     try {
-      let rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
-      this.modalLoading.hide();
+      const rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
       if (rs.ok) {
-        rs.rows.forEach((v: any) => {
-
-          this.genericIds.push(v.generic_id);
-
-          let obj: any = {
+        for (const v of rs.rows) {
+          const obj: any = {
             conversion_qty: v.conversion_qty,
             confirm_qty: v.confirm_qty,
             cost: v.cost,
@@ -125,54 +125,60 @@ export class RequisitionConfirmComponent implements OnInit {
             primary_unit_name: v.priamry_unit_name,
             requisition_item_id: v.requisition_item_id,
             requisition_order_id: v.requisition_order_id,
-            requisition_qty: v.requisition_qty, // pack
+            requisition_qty: v.requisition_qty,
             borrow_qty: 0, // pack
             to_unit_name: v.to_unit_name,
             unit_generic_id: v.unit_generic_id,
             working_code: v.working_code,
             confirmItems: [],
-            remain_qty: v.remain_qty, // small qty
-            // small_book_qty: v.book_qty - (v.conversion_qty * v.requisition_qty), // small qty
-            // small_remain_afterpay_qty: v.remain_qty - v.allowcate_qty, // small qty
+            remain_qty: v.small_remain_qty, // small qty
           }
-
-          if (rs.pays) {
-            rs.pays.forEach(async (z) => {
+          const allocate = await this.requisitionService.getAllocate([{ 'genericId': v.generic_id, 'genericQty': v.requisition_qty * v.conversion_qty }])
+          if (allocate.ok) {
+            for (const z of allocate.rows) {
+              let _obj: any;
               if (z.generic_id === v.generic_id) {
-                let _obj: any = {
-                  confirm_qty: z.pay_qty,
-                  remain_qty: z.remain_qty,
-                  conversion_qty: z.conversion_qty,
-                  wm_product_id: z.wm_product_id,
-                  generic_id: z.generic_id
-                }
-                if (v.temp_confirm_id) {
-                  const rsT: any = await this.requisitionService.getRequisitionConfirmTemp(v.temp_confirm_id);
-                  const idx = _.findIndex(rsT.rows, { wm_product_id: z.wm_product_id });
-                  if (idx > -1) {
-                    _obj.confirm_qty = rsT.rows[idx].confirm_qty / z.conversion_qty;
-                    if (_obj.confirm_qty > z.pay_qty) {
-                      _obj.remain_qty += (_obj.confirm_qty - z.pay_qty);
-                    } else {
-                      _obj.remain_qty -= (_obj.confirm_qty - z.pay_qty);
+                if (z.small_remain_qty > 0) {
+                  _obj = {
+                    conversion_qty: z.conversion_qty,
+                    wm_product_id: z.wm_product_id,
+                    generic_id: z.generic_id,
+                    expired_date: z.expired_date,
+                    from_unit_name: z.from_unit_name,
+                    lot_no: z.lot_no,
+                    product_name: z.product_name,
+                    small_remain_qty: +z.small_remain_qty,
+                    pack_remain_qty: +z.pack_remain_qty,
+                    to_unit_name: z.to_unit_name,
+                    unit_generic_id: z.unit_generic_id,
+                    confirm_qty: Math.floor(z.product_qty / z.conversion_qty)
+                  }
+                  if (v.temp_confirm_id) {
+                    const rsT: any = await this.requisitionService.getRequisitionConfirmTemp(v.temp_confirm_id);
+                    const idx = _.findIndex(rsT.rows, { wm_product_id: z.wm_product_id });
+                    if (idx > -1) {
+                      _obj.confirm_qty = rsT.rows[idx].confirm_qty / z.conversion_qty;
+
+                      // if (_obj.confirm_qty > z.pay_qty) {
+                      //   _obj.remain_qty += (_obj.confirm_qty - z.pay_qty);
+                      // } else {
+                      //   _obj.remain_qty -= (_obj.confirm_qty - z.pay_qty);
                     }
                   }
+                  obj.is_minus = (z.small_remain_qty - +z.product_qty) < 0;
+                  obj.allowcate_qty += z.product_qty;
+                  obj.confirmItems.push(_obj);
                 }
-                obj.is_minus = (z.remain_qty - (+z.pay_qty * +z.conversion_qty)) < 0;
-                obj.allowcate_qty += (+z.pay_qty * +z.conversion_qty);
-                obj.confirmItems.push(_obj);
               }
-            });
+            }
           }
-
-          console.log(obj);
           this.products.push(obj);
-        });
-
+        }
         // get borrow note
         await this.getBorrowNotes();
-
+        this.modalLoading.hide();
       } else {
+        this.modalLoading.hide();
         this.alertService.error(rs.error);
       }
     } catch (error) {

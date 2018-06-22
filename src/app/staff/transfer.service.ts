@@ -154,7 +154,7 @@ export class TransferService {
   }
 
   async allocate(data: any, srcWarehouseId: any) {
-    const rs = await this.authHttp.post(`${this.url}/generics/allocate/baseunit`, {
+    const rs = await this.authHttp.post(`${this.url}/generics/allocate`, {
       data: data,
       srcWarehouseId: srcWarehouseId
     }).toPromise();
