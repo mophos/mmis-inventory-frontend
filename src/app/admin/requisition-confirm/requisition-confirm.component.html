@@ -56,15 +56,14 @@
 </button>
 
 <clr-datagrid style="padding-top: 5px;">
-  <clr-dg-column style="width: 15px;">ลำดับ</clr-dg-column>
+  <clr-dg-column style="width: 5px;">ลำดับ</clr-dg-column>
   <clr-dg-column style="width: 110px;">Working Code</clr-dg-column>
   <clr-dg-column>ชื่อ Generic</clr-dg-column>
-  <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
+  <clr-dg-column style="width: 250px;">จำนวนเบิก</clr-dg-column>
   <!-- <clr-dg-column style="width: 100px;">ค้างจ่าย</clr-dg-column> -->
-  <clr-dg-column style="width: 200px;">Package</clr-dg-column>
-  <clr-dg-column style="width: 110px;">รวมขอเบิก (Base)</clr-dg-column>
-  <clr-dg-column style="width: 110px;">คงเหลือหลังจ่าย (Base)</clr-dg-column>
   <clr-dg-column style="width: 110px;">ยอดจ่าย (Base)</clr-dg-column>
+  <clr-dg-column style="width: 110px;">คงเหลือ (Base)</clr-dg-column>
+  <clr-dg-column style="width: 110px;">คงเหลือหักยอดจ่าย (Base)</clr-dg-column>
   <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
   <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="
   {'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty) && (+g.remain_qty - +g.allowcate_qty) >= 0, 
@@ -72,7 +71,7 @@
   'isError': g.allowcate_qty === 0 || (+g.remain_qty - +g.allowcate_qty) < 0}
   ">
     <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
-      [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="g.requisition_qty"
+      [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="(g.conversion_qty * g.requisition_qty)"
       [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ idx +1}}</span>
@@ -84,20 +83,18 @@
       <span class="p4">{{ g.generic_name }}</span>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
-      <span class="p4">{{ g.requisition_qty }}</span>
+      <span class="p4">{{ g.requisition_qty }} {{ g.from_unit_name }} ({{g.conversion_qty | number}} {{g.to_unit_name}}) = {{ g.conversion_qty
+        * g.requisition_qty | number }} {{ g.to_unit_name }}</span>
     </clr-dg-cell>
     <!-- <clr-dg-cell style="text-align: right;"><span *ngIf="isEdit" class="p4" style="color: red;">{{ g.requisition_qty - g.confirm_qty | number}}</span></clr-dg-cell> -->
-    <clr-dg-cell>
-      <span class="p4">{{ g.from_unit_name }} ({{g.conversion_qty | number}} {{g.to_unit_name}})</span>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <span class="p4">{{ g.conversion_qty * g.requisition_qty | number }} {{ g.to_unit_name }}</span>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <span class="p4">{{ +g.remain_qty - +g.allowcate_qty | number }} {{ g.to_unit_name }}</span>
-    </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ g.allowcate_qty | number }} {{ g.to_unit_name }}</span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <span class="p4">{{ +g.remain_qty | number }} {{ g.to_unit_name }}</span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <span class="p4">{{ (g.remain_qty - g.allowcate_qty) | number }} {{ g.to_unit_name }}</span>
     </clr-dg-cell>
 
   </clr-dg-row>
