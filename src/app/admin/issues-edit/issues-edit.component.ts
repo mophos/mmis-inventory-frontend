@@ -201,6 +201,7 @@ export class IssuesEditComponent implements OnInit {
       this.productName = event ? `${event.product_name} (${event.generic_name})` : null;
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.primaryUnitName = event ? event.primary_unit_name : null;
+      this.remainQty = event ? event.qty - event.reserve_qty : 0;
 
       this.genericId = event ? event.generic_id : null;
       this.getLots();
@@ -375,6 +376,19 @@ export class IssuesEditComponent implements OnInit {
   setSelectedGeneric(e) {
     e.issue_qty = 0;
     this.products.push(e);
+  }
+
+  changeQtyGrid(e) {
+    let total_base = 0;
+    e.forEach(v => {
+      total_base += (+v.product_qty);
+    });
+
+    const idx = _.findIndex(this.products, { generic_id: e[0].generic_id });
+    if (idx > -1) {
+      const qty = Math.floor(total_base / +this.products[idx].conversion_qty);
+      this.products[idx].issue_qty = qty;
+    }
   }
 
 }

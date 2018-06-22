@@ -63,7 +63,8 @@
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let order of orders" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y'}">
           <clr-dg-action-overflow>
-            <button class="action-item" [routerLink]="['/admin/requisition/confirm']" [queryParams]="{requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'" [routerLink]="['/admin/requisition/confirm']"
+              [queryParams]="{requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button>
             <button class="action-item" [disabled]="order.is_cancel === 'Y'" [routerLink]="['/admin/requisition/edit/', order.requisition_order_id]">แก้ไขใบเบิก</button>
             <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrder(order)">ยกเลิกใบเบิก</button>
             <!-- <button class="action-item" (click)="onDelete(user)">พิมพ์ใบเบิก</button> -->
