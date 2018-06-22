@@ -20,7 +20,7 @@ import { DateService } from 'app/date.service';
 export class TransferNewComponent implements OnInit {
   lots = [];
   generics = [];
-  loading: boolean = false;
+  loading = false;
   locations: any = [];
   locationId: any;
 
@@ -39,7 +39,7 @@ export class TransferNewComponent implements OnInit {
   transferQty = 0;
   wmProductId: any;
   workingCode: any;
-  isSaving: boolean = false;
+  isSaving = false;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -97,6 +97,7 @@ export class TransferNewComponent implements OnInit {
         this.genericId = event ? event.generic_id : null;
         this.workingCode = event ? event.working_code : null;
         this.remainQty = event ? event.qty - event.reserve_qty : null;
+        this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
         // this.wmProductId = event ? event.wm_product_id : null;
@@ -196,6 +197,7 @@ export class TransferNewComponent implements OnInit {
             primary_unit_id: this.primaryUnitId,
             primary_unit_name: this.primaryUnitName
           };
+          console.log();
 
           console.log(obj);
 
@@ -294,7 +296,7 @@ export class TransferNewComponent implements OnInit {
             generics.push({
               generic_id: v.generic_id,
               transfer_qty: +v.transfer_qty,
-              // unit_generic_id: v.unit_generic_id,
+              unit_generic_id: v.unit_generic_id,
               primary_unit_id: v.primary_unit_id,
               // conversion_qty: +v.conversion_qty,
               location_id: v.location_id,
