@@ -245,7 +245,6 @@ export class IssuesEditComponent implements OnInit {
   }
 
   async addProduct() {
-
     const idx = _.findIndex(this.products, { generic_id: this.genericId });
     if (idx > -1) {
       const newQty = +this.products[idx].issue_qty + +this.issueQty;
