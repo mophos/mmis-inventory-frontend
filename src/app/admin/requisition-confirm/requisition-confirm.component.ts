@@ -138,7 +138,7 @@ export class RequisitionConfirmComponent implements OnInit {
             for (const z of allocate.rows) {
               let _obj: any;
               if (z.generic_id === v.generic_id) {
-                if (z.small_remain_qty > 0) {
+                if (z.pack_remain_qty > 0) {
                   _obj = {
                     conversion_qty: z.conversion_qty,
                     wm_product_id: z.wm_product_id,

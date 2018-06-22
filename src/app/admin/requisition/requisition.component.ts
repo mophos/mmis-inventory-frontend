@@ -96,7 +96,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.orders = rs.rows;
-        this.tabTotalWaiting = rs.total[0].total;
+        this.totalWaiting = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -119,7 +119,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.unpaids = rs.rows;
-        this.tabTotalUnPaid = rs.total[0].total;
+        this.totalUnPaid = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -143,7 +143,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.waitingApproves = rs.rows;
-        this.tabTotalWaitingApprove = rs.total[0].total;
+        this.totalWaitingApprove = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }

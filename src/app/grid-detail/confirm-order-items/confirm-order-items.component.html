@@ -7,7 +7,7 @@
     <clr-dg-column>คงเหลือ</clr-dg-column>
     <clr-dg-column>จำนวนจ่าย (Pack)</clr-dg-column>
     <clr-dg-column>รวม (Base)</clr-dg-column>
-    <clr-dg-column>รวมหลังจ่าย (Base)</clr-dg-column>
+    <clr-dg-column>คงเหลือหลังจ่าย (Base)</clr-dg-column>
     <clr-dg-placeholder>ไม่พบรายการเวชภัณฑ์สำหรับจ่าย</clr-dg-placeholder>
     <clr-dg-row *ngFor="let i of items; let idx = index;">
       <clr-dg-cell>{{ i.product_name }}</clr-dg-cell>
@@ -23,7 +23,7 @@
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{i.confirm_qty *i.conversion_qty || 0 | number}} {{i.to_unit_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
-        <span style="color: red; font-weight: bold;" *ngIf="(i.small_remain_qty   - (i.confirm_qty*i.conversion_qty))  < 0">{{(i.small_remain_qty - (i.confirm_qty*i.conversion_qty) )| number}}</span>
+        <span style="color: red; font-weight: bold;" *ngIf="(i.small_remain_qty   - (i.confirm_qty*i.conversion_qty))  < 0">{{(i.small_remain_qty - (i.confirm_qty*i.conversion_qty))| number}}</span>
         <span style="color: green; font-weight: bold;" *ngIf="(i.small_remain_qty - (i.confirm_qty*i.conversion_qty))  >= 0">{{ (i.small_remain_qty - (i.confirm_qty*i.conversion_qty)) | number}}</span>
         {{ i.to_unit_name }}
       </clr-dg-cell>
