@@ -393,7 +393,7 @@ export class ReceivePurchaseComponent implements OnInit {
     product.manufacture_name = this.selectedManufactureName;
 
     // warehouses
-    product.warehouse_id = this.selectedWarehouseId;
+    product.warehouse_id = this.userWarehouseId;
     product.warehouse_name = this.selectedWarehouseName;
 
     // location
@@ -461,7 +461,7 @@ export class ReceivePurchaseComponent implements OnInit {
     this.selectedManufactureName = null;
 
     this.manufactureList.clearVendor();
-    this.warehouseList.clearWarehousList();
+    // this.warehouseList.clearWarehousList();
     this.locationList.clearLocation();
     // this.lotList.clearLots();
     this.productSearch.clearProductSearch();
