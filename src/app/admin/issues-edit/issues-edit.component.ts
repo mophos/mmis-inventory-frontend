@@ -108,7 +108,7 @@ export class IssuesEditComponent implements OnInit {
       const productList = await this.issueService.getEditProductList(this.issueId);
       const genericList = await this.issueService.getEditGenericList(this.issueId);
       console.log(productList);
-      
+
       // console.log(rs);
       let items = [];
       let objP: any = {};
@@ -202,7 +202,7 @@ export class IssuesEditComponent implements OnInit {
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.primaryUnitName = event ? event.primary_unit_name : null;
       this.remainQty = event ? event.qty - event.reserve_qty : 0;
-
+      this.genericName = event ? event.generic_name : null;
       this.genericId = event ? event.generic_id : null;
       this.getLots();
       this.unitList.setGenericId(this.genericId);
