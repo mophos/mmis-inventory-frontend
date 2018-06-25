@@ -58,6 +58,8 @@ export class ConfirmOrderItemsComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.getProductList();
+    console.log(this._confirmItems);
+    
 
   }
 
@@ -78,10 +80,9 @@ export class ConfirmOrderItemsComponent implements OnInit {
   onChangeQty(cmp: any, idx: any) {
     try {
       // ถ้าจำนวนที่คีย์เข้ามามากว่าจำนวนคงเหลือ ให้ใช้จำนวนคงเหลือเป็นยอดยืนยัน
-      // if (this.items[idx].remain_qty < cmp.value) {
-      //   cmp.value = this.items[idx].remain_qty;
-      // }
-
+      if (this.items[idx].pack_remain_qty < cmp.value) {
+        cmp.value = this.items[idx].pack_remain_qty;
+      }
       this.items[idx].confirm_qty = +cmp.value;
       this.items[idx].total_small_qty = (+cmp.value * +this.items[idx].conversion_qty);
 
