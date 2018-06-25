@@ -1,3 +1,4 @@
+import { log } from 'util';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IMyOptions } from 'mydatepicker-th';
@@ -175,6 +176,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async getConfirmItems() {
     try {
       const rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
+
       if (rs.ok) {
         const rows = rs.rows;
         rows.forEach(v => {
@@ -185,14 +187,22 @@ export class RequisitionConfirmEditComponent implements OnInit {
               confirm_qty: v.confirm_qty,
               conversion_qty: v.conversion_qty,
               wm_product_id: v.wm_product_id,
-              generic_id: this.products[idx].generic_id
+              generic_id: this.products[idx].generic_id,
+              product_name: v.product_name,
+              working_code: v.working_code,
+              lot_no: v.lot_no,
+              small_remain_qty: v.remain_qty,
+              pack_remain_qty: v.remain_qty / v.conversion_qty,
+              expired_date: v.expired_date,
+              from_unit_name: v.from_unit_name,
+              to_unit_name: v.to_unit_name
             }
 
             if (v.confirm_qty > 0) {
               _totalConfirmQty = v.conversion_qty * v.confirm_qty;
             }
 
-            this.products[idx].confirmItems.push(v);
+            this.products[idx].confirmItems.push(obj);
             this.products[idx].confirm_qty += _totalConfirmQty;
             this.products[idx].small_book_qty -= v.confirm_qty;
           }
