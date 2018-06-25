@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "npx ng serve",
-    "build": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --target production --environment prod --build-optimizer --base-href=./",
+    "build": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --prod --environment prod --build-optimizer --base-href=./",
     "pack:dist": "npx cpx 'dist/**/*' ../mmis-frontend-dist/inventory"
   },
   "private": true,
