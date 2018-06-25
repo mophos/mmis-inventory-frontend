@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import * as moment from 'moment';
+import { IMyOptions } from 'mydatepicker-th';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { ReportProductsService } from './../reports-products.service';
 import { AlertService } from './../../../alert.service';
@@ -21,6 +22,13 @@ export class InventoryStatusComponent implements OnInit {
   genericTypes = [];
   genericType: any = 0;
   genericTypeIds = [];
+  myDatePickerOptions: IMyOptions = {
+    inline: false,
+    dateFormat: 'dd mmm yyyy',
+    editableDateField: false,
+    showClearDateBtn: false
+  };
+  statusDate: any;
 
   jwtHelper: JwtHelper = new JwtHelper();
 
@@ -37,6 +45,14 @@ export class InventoryStatusComponent implements OnInit {
 
 
   ngOnInit() {
+    const date = new Date();
+    this.statusDate = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
     this.getGenericType();
   }
 
@@ -63,7 +79,9 @@ export class InventoryStatusComponent implements OnInit {
   }
 
   inventoryStatus() {
-    const url = `${this.apiUrl}/report/inventorystatus/${this.warehouseId}/${this.genericType}?token=${this.token}`
+    this.statusDate = this.statusDate ? moment(this.statusDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/inventorystatus/${this.warehouseId}/${this.genericType}/${this.statusDate}?token=${this.token}`
     this.htmlPreview.showReport(url);
+    console.log(this.statusDate);
   }
 }
