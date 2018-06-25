@@ -58,6 +58,7 @@ export class ConfirmOrderItemsComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.getProductList();
+
   }
 
   async getProductList() {
