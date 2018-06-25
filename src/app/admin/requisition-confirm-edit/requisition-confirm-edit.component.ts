@@ -175,7 +175,8 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async getConfirmItems() {
     try {
       const rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
-
+      console.log(rs.rows);
+      
       if (rs.ok) {
         const rows = rs.rows;
         rows.forEach(v => {
@@ -201,7 +202,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
               _totalConfirmQty = v.conversion_qty * v.confirm_qty;
             }
 
-            this.products[idx].confirmItems.push(obj);
+            this.products[idx].confirmItems.push(v);
             this.products[idx].confirm_qty += _totalConfirmQty;
             this.products[idx].small_book_qty -= v.confirm_qty;
           }
