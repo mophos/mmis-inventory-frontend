@@ -83,7 +83,7 @@
   <clr-dg-column [style.width.px]="180">ผู้ผลิต</clr-dg-column>
   <clr-dg-column [style.width.px]="120">Lot no.</clr-dg-column>
   <clr-dg-column [style.width.px]="150">หมดอายุ</clr-dg-column>
-  <clr-dg-column [style.width.px]="150">คลังสินค้า</clr-dg-column>
+  <!-- <clr-dg-column [style.width.px]="150">คลังสินค้า</clr-dg-column> -->
   <clr-dg-column [style.width.px]="150">สถานที่เก็บ</clr-dg-column>
   <clr-dg-column [style.width.px]="150"></clr-dg-column>
 
@@ -171,15 +171,15 @@
       <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate" type="text"
         [(ngModel)]="selectedExpiredDate" />
     </clr-dg-cell>
-    <clr-dg-cell>
+    <!-- <clr-dg-cell>
       <wm-select-generic-warehouse #warehouseList (onSelect)="changeWarehouse($event)"></wm-select-generic-warehouse>
-    </clr-dg-cell>
+    </clr-dg-cell> -->
     <clr-dg-cell>
       <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedWarehouseId || !selectedProductId || !selectedReceiveQty || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!userWarehouseId || !selectedProductId || !selectedReceiveQty || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId
         || (isLotControl==='Y' && !selectedLotNo)"
           (click)="addProduct()">
           เพิ่ม
