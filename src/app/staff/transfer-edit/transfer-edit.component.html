@@ -65,9 +65,9 @@
       <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="generic.unit_generic_id"
         [genericId]="generic.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.transfer_qty*generic.conversion_qty | number}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (generic.transfer_qty * generic.conversion_qty) > generic.remain_qty ? 'red' : 'green'}">
-      {{generic.remain_qty - (generic.transfer_qty*generic.conversion_qty) | number}}
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.generic_pack_qty*generic.conversion_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (generic_pack_qty * generic.conversion_qty) > generic.remain_qty ? 'red' : 'green'}">
+      {{generic.remain_qty - (generic.generic_pack_qty*generic.conversion_qty) | number}}
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-product-location [warehouseId]="dstWarehouseId" [selectedId]="generic.location_id" (onSelect)="editChangeLocation($event, idx)"></wm-select-product-location>
