@@ -21,4 +21,15 @@ export class ToolsService {
     return resp.json();
   }
 
+  async getStockForEditCardList(receiveId: any, productId: any, lotNo: any) {
+    let params = {
+      receiveId: receiveId,
+      productId: productId,
+      lotNo: lotNo
+    };
+
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/receives/list`, params).toPromise();
+    return resp.json();
+  }
+
 }
