@@ -122,10 +122,10 @@
       <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate" type="text"
         [value]="product.expired_date" #expired (keyup)="editChangeExpired(idx, expired.value)" />
     </clr-dg-cell>
-    <clr-dg-cell>
+    <!-- <clr-dg-cell>
       <wm-select-generic-warehouse (onSelect)="editChangeWarehouse(idx, $event, editLocationList)" [genericId]="product.generic_id"
         [selectedId]="product.warehouse_id"></wm-select-generic-warehouse>
-    </clr-dg-cell>
+    </clr-dg-cell> -->
     <clr-dg-cell>
       <wm-select-product-location #editLocationList [warehouseId]="product.warehouse_id" [selectedId]="product.location_id"></wm-select-product-location>
     </clr-dg-cell>
