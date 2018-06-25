@@ -276,16 +276,18 @@ export class IssuesEditComponent implements OnInit {
   }
   async alowcate(genericId) {
     try {
-      const _data = {
-        genericId: this.products[0].generic_id,
-        genericQty: this.products[0].issue_qty * this.products[0].conversion_qty
-      };
       const data_ = [];
-      data_.push(_data);
+      const idx = _.findIndex(this.products, { generic_id: genericId });
+      if (idx > -1) {
+        const _data = {
+          genericId: this.products[idx].generic_id,
+          genericQty: this.products[idx].issue_qty * this.products[idx].conversion_qty
+        };
+        data_.push(_data);
+      }
       const result: any = await this.issueService.getIssuesProduct(data_);
       if (result.ok) {
         const list = result.rows;
-        let idx = _.findIndex(this.products, { generic_id: genericId })
         if (idx > -1) {
           this.products[idx].items = list;
         }
