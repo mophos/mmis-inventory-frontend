@@ -26,7 +26,7 @@ export class ProductStockRemainComponent implements OnInit {
   async getProductStockRemain() {
     this.loading = true;
     try {
-      let rs = await this.productService.getProductStockDetail(this.productId)
+      const rs = await this.productService.getProductStockDetail(this.productId)
       if (rs.ok) {
         this.products = rs.rows;
       } else {

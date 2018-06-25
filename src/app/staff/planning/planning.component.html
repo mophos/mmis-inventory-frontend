@@ -50,18 +50,18 @@
         <clr-dg-column [style.width.px]="50"></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการสินค้าในคลัง</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let p of products; let idx = index;" [clrDgItem]="p">
-          <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
+          <clr-dg-cell>{{p.trade_code}}</clr-dg-cell>
           <clr-dg-cell>
             <span class="p4">{{p.generic_name}}</span>
             <br>
             <span class="p7">{{p.product_name}}</span>
           </clr-dg-cell>
-          <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.base_unit_name}})</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.small_unit}})</clr-dg-cell>
           <clr-dg-cell>
             <input type="text" #qty (keyup)="onChangeQty(p, qty.value)" [value]="p.qty" style="width: 100%; text-align: right; background-color:#FFF9C4"
               placeholder="0" wmNumberWithOutDot>
           </clr-dg-cell>
-          <clr-dg-cell style="text-align: center;">{{p.base_unit_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.small_unit}}</clr-dg-cell>
           <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
           <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center">
@@ -98,7 +98,7 @@
             </div>
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
               <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate" style="margin-top: 0px;">
-                <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX
+                <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
               </button>
             </div>
           </div>
@@ -136,9 +136,9 @@
         <clr-dg-column [style.width.px]="120" [clrDgField]="'use_total'">
           ยอดการใช้
         </clr-dg-column>
-        <clr-dg-column [style.width.px]="120" [clrDgField]="'use_per_day'">
+        <!-- <clr-dg-column [style.width.px]="120" [clrDgField]="'use_per_day'">
           อัตราการใช้ ต่อวัน
-        </clr-dg-column>
+        </clr-dg-column> -->
         <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_min_day'">
           Safety Stock <br> MIN (วัน)
         </clr-dg-column>
@@ -162,7 +162,7 @@
           <clr-dg-cell style="text-align: right;">{{g.qty | number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{g.use_total | number}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: right;">{{g.use_per_day | number}}</clr-dg-cell>
+          <!-- <clr-dg-cell style="text-align: right;">{{g.use_per_day | number}}</clr-dg-cell> -->
           <clr-dg-cell style="text-align: right;">
             <input type="text" class="wm-edit-box-number" #saftyMin (keyup)="onChangeSaftyStockMin(saftyMin.value, g)" style="background-color: #FFF9C4"
               [value]="g.safety_min_day" wmNumberWithOutDot>

@@ -361,7 +361,7 @@ export class ReceivePurchaseComponent implements OnInit {
       this.selectedExpireNumDays = event ? event.expire_num_days : 0;
 
       this.manufactureList.getManufacture(this.selectedGenericId);
-      this.warehouseList.getWarehouses(this.selectedGenericId);
+      // this.warehouseList.getWarehouses(this.selectedGenericId);
 
       this.primaryUnitId = event ? event.primary_unit_id : null;
       // this.primaryUnitName = event ? event.primary_unit_name : null;

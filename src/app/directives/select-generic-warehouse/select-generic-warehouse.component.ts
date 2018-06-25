@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Inject, EventEmitter, Output } from '@angular/core';
 import * as _ from 'lodash';
+import { JwtHelper } from 'angular2-jwt';
 import { AlertService } from './../../alert.service';
 import { BasicService } from '../../basic.service';
 
@@ -13,27 +14,32 @@ export class SelectGenericWarehouseComponent implements OnInit {
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
   warehouses: any = [];
   warehouseId: any;
+  token: any;
+
+  jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
     @Inject('API_URL') private url: string,
     private alertService: AlertService,
     private basicService: BasicService
-  ) { }
+  ) {
+    this.token = sessionStorage.getItem('token');
+  }
 
   ngOnInit() {
     // console.log('warehouseid: ', this.selectedId);
-    if (this.genericId) this.getWarehouses(this.genericId);
+    this.getWarehouse();
   }
 
-  async getWarehouses(genericId: any) {
+  async getWarehouse() {
+    const decodedToken: any = this.jwtHelper.decodeToken(this.token);
+
     try {
-      let res = await this.basicService.getGenericWarehouses(genericId);
+      let res = await this.basicService.getWarehouses();
       if (res.ok) {
-        console.log(res.rows)
         this.warehouses = res.rows;
         if (this.warehouses.length) {
-          if (this.selectedId) this.warehouseId = this.selectedId;
-          else this.warehouseId = this.warehouses[0].warehouse_id;
+          this.warehouseId = decodedToken.warehouseId;
           this.onSelect.emit(this.warehouses[0]);
         }
       } else {

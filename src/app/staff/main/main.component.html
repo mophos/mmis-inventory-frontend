@@ -3,104 +3,127 @@
   <span class="breadcrumb-item active">รายการสินค้าคงเหลือ</span>
 </nav>
 
-<!-- <clr-stack-view style="padding-top: 10px">
-  <clr-stack-block [clrSbExpanded]="false">
-    <clr-stack-label>รหัส: <strong>{{warehouseId}}</strong></clr-stack-label>
-    <clr-stack-content>ชื่อคลัง: <strong>{{warehouseName}}</strong></clr-stack-content>
 
-    <clr-stack-block>
-      <clr-stack-label>ประเภทคลัง</clr-stack-label>
-      <clr-stack-content>{{warehouseType}}</clr-stack-content>
-    </clr-stack-block>
-    <clr-stack-block>
-      <clr-stack-label>สถานที่ตั้ง</clr-stack-label>
-      <clr-stack-content>{{warehouseLocation}}</clr-stack-content>
-    </clr-stack-block>
-    <clr-stack-block>
-      <clr-stack-label>วันที่สร้าง</clr-stack-label>
-      <clr-stack-content>{{warehouseCreateDate | toThaiDate }}</clr-stack-content>
-    </clr-stack-block>
-  </clr-stack-block>
-</clr-stack-view> -->
-<!-- <label>ระบุเงื่อนไข</label>
-<input (keyup)="enterSearch($event)" type="text" name="query" placeholder="ระบุคำค้นหา..." [(ngModel)]="query" size="45">
-<button class="btn btn-primary btn-sm" (click)="searchProduct()">ค้นหา</button>
-<small>เงื่อนไข: ชื่อยา, รหัสยา</small> -->
-<!-- <br> คลิกที่
-<clr-icon shape="ellipsis-vertical" size="14"></clr-icon> ในช่องรายการ เพื่อดูเมนูใช้งาน -->
-<div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
-  <div class="col-md-6">
-    ค้นหา : <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
-    <!-- <input type="text" class="form-control"> -->
-  </div>
-  <div class="col-md-3 push-md-3" style="text-align: right;">
-    <div class="select">
-      <select [(ngModel)]="genericType" name="genericType" (change)="getProducts()">
-        <option value="">ทั้งหมด</option>
-        <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-      </select>
-    </div>
-  </div>
-</div>
-<clr-datagrid [style.height.%]="90">
-  <clr-dg-column [clrDgField]="'working_code'" [style.width.px]="150">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      Working Code
-    </ng-container>
-  </clr-dg-column>
-  <!-- <clr-dg-column [clrDgField]="'generic_name'" [style.width.%]="20">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      Generic Name
-    </ng-container>
-  </clr-dg-column> -->
-  <clr-dg-column [clrDgField]="'generic_name'">ชื่อยาเวชภัณฑ์</clr-dg-column>
-  <clr-dg-column [style.width.px]="100">
-    <ng-container *clrDgHideableColumn="{hidden: true}">
-      คงเหลือ(pack)
-    </ng-container>
-  </clr-dg-column>
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink>Generic Group</button>
+    <clr-tab-content *clrIfActive>
+        <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+          <div class="col-md-6">
+            ค้นหา :
+            <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;" type="text"
+              placeholder="ค้นหาสินค้า...">
+            <!-- <input type="text" class="form-control"> -->
+          </div>
+          <div class="col-md-3 push-md-3" style="text-align: right;">
+            <div class="select">
+              <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
+                <option value="">ทั้งหมด</option>
+                <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <clr-datagrid [style.height.%]="85">
+          <clr-dg-column [clrDgField]="'generic_working_code'">Generic Code</clr-dg-column>
+          <clr-dg-column [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
+          <clr-dg-column> min-max(base unit)</clr-dg-column>
+          <!-- <clr-dg-column [style.width.px]="100">
+            <ng-container *clrDgHideableColumn="{hidden: true}">
+              คงเหลือ(pack)
+            </ng-container>
+          </clr-dg-column> -->
   
-  <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
-  <!-- <clr-dg-column [style.width.%]="10">มูลค่า (บาท)</clr-dg-column> -->
-  <clr-dg-column [clrDgField]="'lot_no'" [style.width.%]="10">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      Lot no.
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="150">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      วันหมดอายุ
-    </ng-container>
-  </clr-dg-column>
-  <!-- <clr-dg-column [clrDgField]="'location_name'" [style.width.px]="150">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      สถานที่เก็บ
-    </ng-container>
-  </clr-dg-column> -->
-  <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
-    <clr-dg-action-overflow>
-      <button class="action-item" (click)="changeQty(p)">
-        <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-      <button disabled class="action-item" (click)="getStockCard(p)">
-        <clr-icon shape="search"></clr-icon> Stock Card</button>
-    </clr-dg-action-overflow>
-    <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
-    <clr-dg-cell>
-      <span class="p4">{{p.generic_name}}</span> <br>
-      <span class="p7">{{p.product_name}}</span>
-  </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.base_unit_name}})</clr-dg-cell>
-    <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.base_unit_name}}</clr-dg-cell>
-    <!-- <clr-dg-cell>{{p.cost*p.qty | number: '1.2-2'}}</clr-dg-cell> -->
-    <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
-    <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
-  </clr-dg-row>
+          <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
+          <clr-dg-row *clrDgItems="let p of generics" [clrDgItem]="p">
+            <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-stock-remain>
+            <clr-dg-action-overflow>
+              <button class="action-item" (click)="changeQty(p)">
+                <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
+            </clr-dg-action-overflow>
+            <clr-dg-cell>{{p.generic_working_code}}</clr-dg-cell>
+            <clr-dg-cell>
+              {{p.generic_name}}
+            </clr-dg-cell>
+            <clr-dg-cell>{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
+            <!-- <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.small_unit}})</clr-dg-cell> -->
+            <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.small_unit}}</clr-dg-cell>
+          </clr-dg-row>
+  
+          <clr-dg-footer>
+            {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
+            <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
+          </clr-dg-footer>
+        </clr-datagrid>
+      </clr-tab-content>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink>Trade Group</button>
+    <clr-tab-content *clrIfActive>
+      <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+        <div class="col-md-6">
+          ค้นหา :
+          <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;" type="text"
+            placeholder="ค้นหาสินค้า...">
+          <!-- <input type="text" class="form-control"> -->
+        </div>
+        <div class="col-md-3 push-md-3" style="text-align: right;">
+          <div class="select">
+            <select [(ngModel)]="genericType" name="genericType" (change)="searchProducts()">
+              <option value="">ทั้งหมด</option>
+              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <clr-datagrid [style.height.%]="85">
+        <!-- <clr-dg-column [clrDgField]="'working_code'" [style.width.px]="150">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            Trade Code
+          </ng-container>
+        </clr-dg-column> -->
+        <clr-dg-column [clrDgField]="'trade_code'">Trade Code</clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">Trade Name</clr-dg-column>
+        <clr-dg-column> min-max(base unit)</clr-dg-column>
+        <!-- <clr-dg-column [style.width.px]="100">
+          <ng-container *clrDgHideableColumn="{hidden: true}">
+            คงเหลือ(pack)
+          </ng-container>
+        </clr-dg-column> -->
 
-  <clr-dg-footer>
-    {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
-    <clr-dg-pagination #paginationA [clrDgPageSize]="50"></clr-dg-pagination>
-  </clr-dg-footer>
-</clr-datagrid>
+        <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
+        <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
+          <wm-staff-product-detail-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-detail-stock-remain>
+          <clr-dg-action-overflow>
+            <button class="action-item" (click)="changeQty(p)">
+              <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
+            <!-- <button disabled class="action-item" (click)="getStockCard(p)">
+                  <clr-icon shape="search"></clr-icon> Stock Card</button> -->
+          </clr-dg-action-overflow>
+          <clr-dg-cell>{{p.trade_code}}</clr-dg-cell>
+          <clr-dg-cell>
+            <!-- <span class="p4">{{p.product_name}}</span> -->
+            <!-- <br> -->
+            <!-- <span class="p7">{{p.generic_name}}</span> -->
+            {{p.product_name}}
+          </clr-dg-cell>
+          <clr-dg-cell>{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
+          <!-- <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.small_unit}})</clr-dg-cell> -->
+          <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.small_unit}}</clr-dg-cell>
+          <!-- <clr-dg-cell>{{p.cost*p.qty | number: '1.2-2'}}</clr-dg-cell> -->
+          <!-- <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+              <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell> -->
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
+          <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
+
 
 <wm-adjust-product-modal [isCounting]="false" #modalAdjust [openModalAdjust]="openModalAdjust" (onSuccess)="successAdjust($event)"></wm-adjust-product-modal>
 

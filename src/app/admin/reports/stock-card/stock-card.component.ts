@@ -67,6 +67,7 @@ export class StockCardComponent implements OnInit {
     this.datageneric.push({
       generic_id: generic.generic_id,
       generic_name: generic.generic_name,
+      generic_code : generic.working_code
     });
     this.generic_id.push('genericId=' + generic.generic_id)
     // console.log(this.generic_id);

@@ -76,7 +76,7 @@ export class WarehouseProductsService {
     });
   }
 
-  //แสดง template ทั้งหมด
+  // แสดง template ทั้งหมด
   getallTemplate() {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/warehouses/warehouseproducttemplate`)
@@ -89,7 +89,7 @@ export class WarehouseProductsService {
     });
   }
 
-  //แสดงรายการ template ทั้งหมดใน warehouse
+  // แสดงรายการ template ทั้งหมดใน warehouse
   getAllTemplateInWarehouse(warehouseId: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/warehouses/alltemplateinwarehouse/${warehouseId}`)
@@ -104,7 +104,7 @@ export class WarehouseProductsService {
 
 
 
-  getTemplateInWarehouse(warehouseId: any,sourceWarehouseId: any) {
+  getTemplateInWarehouse(warehouseId: any, sourceWarehouseId: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/warehouses/templateinwarehouse/${warehouseId}/${sourceWarehouseId}`)
         .map(res => res.json())
@@ -117,16 +117,16 @@ export class WarehouseProductsService {
   }
 
 
-  //แสดงรายการสินค้าใน template
+  // แสดงรายการสินค้าใน template
   getTemplate(templateId: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/warehouses/warehousetemplate/${templateId}`)
-      .map(res => res.json())
-      .subscribe(data => {
-        resolve(data);
-      }, error => {
-        reject(error);
-      });
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
     });
   }
 

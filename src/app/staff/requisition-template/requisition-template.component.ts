@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 
@@ -15,18 +15,17 @@ export class RequisitionTemplateComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   templates = [];
   jwtHelper: JwtHelper = new JwtHelper();
-  WarehouseId: any;
+  warehouseId: any;
 
   constructor(
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
     private warehouseProductService: WarehouseProductsService,
     @Inject('API_URL') private url: string
-  ) { 
+  ) {
     const token = sessionStorage.getItem('token');
     const decoded = this.jwtHelper.decodeToken(token);
-    // console.log(decoded);    
-    this.WarehouseId = decoded.warehouseId;
+    this.warehouseId = decoded.warehouseId;
   }
 
   ngOnInit() {
@@ -36,7 +35,7 @@ export class RequisitionTemplateComponent implements OnInit {
   showAllTemplate() {
     this.templates = [];
     this.modalLoading.show();
-    this.warehouseProductService.getAllTemplateInWarehouse(this.WarehouseId)
+    this.warehouseProductService.getAllTemplateInWarehouse(this.warehouseId)
       .then((result: any) => {
         if (result.ok) {
           this.templates = result.rows;
@@ -75,8 +74,8 @@ export class RequisitionTemplateComponent implements OnInit {
         // no action
       });
   }
-  print(templateId){
-    let token = sessionStorage.getItem('token');
+  print(templateId) {
+    const token = sessionStorage.getItem('token');
     const exportUrl = `${this.url}/warehouses/export/excel?templateId=${templateId}&token=${token}`;
     window.open(exportUrl);
 

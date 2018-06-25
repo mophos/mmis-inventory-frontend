@@ -26,6 +26,7 @@ export class PlanningComponent implements OnInit {
 
   fromDate: any;
   toDate: any;
+  processDate: any;
 
   pickerOptions: IMyOptions = {
     inline: false,
@@ -46,7 +47,7 @@ export class PlanningComponent implements OnInit {
   async ngOnInit() {
     await this.getGenericType();
     await this.getProducts();
-    let date = new Date();
+    const date = new Date();
     this.fromDate = {
       date: {
         year: date.getFullYear(),
@@ -67,7 +68,7 @@ export class PlanningComponent implements OnInit {
   async getProducts() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.getProductsWarehouse(this.genericType);
+      const rs: any = await this.staffService.getProductsWarehouse(this.genericType);
       if (rs.ok) {
         rs.rows.forEach(v => {
           try {
@@ -97,7 +98,7 @@ export class PlanningComponent implements OnInit {
   async getGenerics() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.getGenericsWarehosue(this.genericType);
+      const rs: any = await this.staffService.getGenericsWarehosueMinMax(this.genericType);
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
@@ -112,7 +113,7 @@ export class PlanningComponent implements OnInit {
   }
 
   onChangeQty(product: any, qty: any) {
-    let idx = _.findIndex(this.products, { wm_product_id: product.wm_product_id });
+    const idx = _.findIndex(this.products, { wm_product_id: product.wm_product_id });
     if (idx > -1) {
       this.products[idx].qty = +qty;
     }
@@ -122,12 +123,12 @@ export class PlanningComponent implements OnInit {
     const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
     if (idx > -1) {
       this.generics[idx].safety_min_day = +value;
-      this.generics[idx].min_qty = this.generics[idx].use_per_day * this.generics[idx].safety_min_day;
+      this.generics[idx].min_qty = Math.round(this.generics[idx].use_per_day * this.generics[idx].safety_min_day);
     }
     const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
     if (_idx > -1) {
       this._generics[_idx].safety_min_day = +value;
-      this._generics[_idx].min_qty = this._generics[_idx].use_per_day * this._generics[_idx].safety_min_day;
+      this._generics[_idx].min_qty = Math.round(this._generics[_idx].use_per_day * this._generics[_idx].safety_min_day);
     }
   }
 
@@ -135,12 +136,12 @@ export class PlanningComponent implements OnInit {
     const idx = _.findIndex(this.generics, { generic_id: generic.generic_id });
     if (idx > -1) {
       this.generics[idx].safety_max_day = +value;
-      this.generics[idx].max_qty = this.generics[idx].use_per_day * this.generics[idx].safety_max_day;
+      this.generics[idx].max_qty = Math.round(this.generics[idx].use_per_day * this.generics[idx].safety_max_day);
     }
     const _idx = _.findIndex(this._generics, { generic_id: generic.generic_id });
     if (_idx > -1) {
       this._generics[_idx].safety_max_day = +value;
-      this._generics[_idx].max_qty = this._generics[_idx].use_per_day * this._generics[_idx].safety_max_day;
+      this._generics[_idx].max_qty = Math.round(this._generics[_idx].use_per_day * this._generics[_idx].safety_max_day);
     }
   }
 
@@ -171,13 +172,13 @@ export class PlanningComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let reason = 'ปรับยอดจาก Planning';
-          let idx = _.findIndex(this.products, { wm_product_id: product.wm_product_id });
-          let oldQty = +this.products[idx].old_qty;
-          let newQty = +this.products[idx].qty;
-          let wmProductId = this.products[idx].wm_product_id;
+          const reason = 'ปรับยอดจาก Planning';
+          const idx = _.findIndex(this.products, { wm_product_id: product.wm_product_id });
+          const oldQty = +this.products[idx].old_qty;
+          const newQty = +this.products[idx].qty;
+          const wmProductId = this.products[idx].wm_product_id;
 
-          let rs: any = await this.staffService.saveAdjQty(wmProductId, newQty, oldQty, reason);
+          const rs: any = await this.staffService.saveAdjQty(wmProductId, newQty, oldQty, reason);
           if (rs.ok) {
             this.alertService.success();
             this.products[idx].old_qty = +this.products[idx].qty;
@@ -202,9 +203,7 @@ export class PlanningComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          const _fromDate = `${this.fromDate.date.year}-${this.fromDate.date.month}-${this.fromDate.date.day}`;
-          const _toDate = `${this.toDate.date.year}-${this.toDate.date.month}-${this.toDate.date.day}`;
-          const rs: any = await this.staffService.saveGenericMinMax(this._generics, _fromDate, _toDate);
+          const rs: any = await this.staffService.saveGenericMinMax(this._generics, this.processDate);
           if (rs.ok) {
             this.alertService.success();
           } else {
@@ -266,7 +265,7 @@ export class PlanningComponent implements OnInit {
   async searchProduct() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.searchProductsWarehouse(this.genericType, this.query);
+      const rs: any = await this.staffService.searchProductsWarehouse(this.genericType, this.query);
       if (rs.ok) {
         rs.rows.forEach(v => {
           try {
@@ -291,7 +290,7 @@ export class PlanningComponent implements OnInit {
   async searchGenerics() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.staffService.searchGenericsWarehosue(this.genericType, this.query);
+      const rs: any = await this.staffService.searchGenericsWarehosue(this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
         for (const g of this.generics) {
@@ -333,7 +332,8 @@ export class PlanningComponent implements OnInit {
       const rs: any = await this.staffService.getMinMaxHeader();
       if (rs.ok) {
         const result = rs.rows[0];
-        if (result.from_stock_date) {
+        this.processDate = result.process_date;
+        if (result && result.from_stock_date) {
           this.fromDate = {
             date: {
               year: moment(result.from_stock_date).isValid() ? moment(result.from_stock_date).get('year') : moment().get('year'),
@@ -343,7 +343,7 @@ export class PlanningComponent implements OnInit {
           }
         }
 
-        if (result.to_stock_date) {
+        if (result && result.to_stock_date) {
           this.toDate = {
             date: {
               year: moment(result.to_stock_date).isValid() ? moment(result.to_stock_date).get('year') : moment().get('year'),
@@ -387,6 +387,7 @@ export class PlanningComponent implements OnInit {
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
+        this.processDate = rs.process_date;
       } else {
         this.alertService.error(rs.error);
       }

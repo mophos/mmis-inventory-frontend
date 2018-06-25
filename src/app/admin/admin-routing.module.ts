@@ -74,6 +74,7 @@ import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
 import { AuthRequisition } from 'app/auth-requisition.service';
+import { AuthPeriod } from 'app/auth-period.service';
 import { AuthShippingNetwork } from 'app/auth-shipping-network.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
@@ -92,6 +93,7 @@ import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 import { StockcardComponent } from './tools/stockcard/stockcard.component';
+import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 
 const routes: Routes = [
   {
@@ -108,7 +110,7 @@ const routes: Routes = [
       { path: 'abc-setting', component: AbcSettingComponent },
       { path: 'ven-setting', component: VenSettingComponent },
       { path: 'abc-ven', component: AbcVenComponent },
-      { path: 'period', component: PeriodComponent },
+      { path: 'period', canActivate: [AuthPeriod], component: PeriodComponent },
       { path: 'receives', canActivate: [AuthReceive], component: ReceiveComponent },
       { path: 'receives/purchase', canActivate: [AuthReceive], component: ReceivePurchaseComponent },
       { path: 'receives/other', canActivate: [AuthReceive], component: ReceiveOtherComponent },
@@ -139,6 +141,7 @@ const routes: Routes = [
       { path: 'reports/purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
       { path: 'reports/inventory-status', component: InventoryStatusComponent },
       { path: 'reports/product-receive', component: ProductReceiveComponent },
+      { path: 'reports/receive-not-match-po', component: ReceiveNotMatchPoComponent },
       { path: 'reports/summary-disbursement', component: SummaryDisbursementComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },

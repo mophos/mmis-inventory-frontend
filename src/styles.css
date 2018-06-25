@@ -203,7 +203,7 @@ form .form-group label, form .form-group span, form .form-group input[type=text]
 }
 .expired-date-status {
     background-color: red;
-    color: white;
+    color: orange
 }
 .main-container:not([class*="open-overflow-menu"]):not([class*="open-hamburger-menu"]) .clr-vertical-nav.is-collapsed {
     border-right-style: solid;
@@ -238,4 +238,8 @@ button.confirm {
     background: #EDB200;
     border-color: #EDB200;
     color: white;
+}
+
+.datagrid .datagrid-column .datagrid-filter-toggle, .datagrid .datagrid-head .datagrid-row-actions .datagrid-filter-toggle {
+    display: none;
 }

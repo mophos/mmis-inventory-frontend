@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { WarehouseService } from '../warehouse.service';
 import { AlertService } from '../../alert.service';
 import { ToThaiDatePipe } from '../../helper/to-thai-date.pipe';
+import { EditLotExpiredComponent } from '../../modals/edit-lot-expired/edit-lot-expired.component';
 
 import * as _ from 'lodash';
 
@@ -14,6 +15,7 @@ export class WarehouseDetailComponent implements OnInit {
 
   @ViewChild('modalAdjust') modalAdjust: any;
   @ViewChild('modalLoading') public modalLoading: any;
+  @ViewChild('modalEditLotExpired') private modalEditLotExpired: EditLotExpiredComponent;
 
   openCost: boolean = false;
 
@@ -87,7 +89,6 @@ export class WarehouseDetailComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           this.products = result.rows;
-          console.log(this.products)
           this.ref.detectChanges();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
@@ -132,7 +133,6 @@ export class WarehouseDetailComponent implements OnInit {
   }
 
   changeQty(product: any) {
-    console.log(product);
     this.modalAdjust.getProductDetail(product.wm_product_id, product.qty);
     this.openModalQty = true;
   }
@@ -165,6 +165,61 @@ export class WarehouseDetailComponent implements OnInit {
       }
     } else {
       this.alertService.error('กรุณาระบุรายการสินค้า/ราคา');
+    }
+  }
+
+  async editLotExpired(product: any) {
+    try {
+      this.modalLoading.show();
+      const rs = await this.warehouseService.getExpiredSetting();
+      if (rs.ok) {
+        this.productId = product.product_id;
+        product.expired_setting = rs.value;
+        this.modalEditLotExpired.show(product);
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      console.log(error)
+      this.modalLoading.hide();
+      this.alertService.serverError();
+    }
+  }
+
+  async onSaveLotExpired(event) {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.warehouseService.updateProductLotExpired(event);
+      if (rs.ok) {
+        this.getProductHistory();
+        this.getProducts();
+        this.alertService.success();
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      console.log(error)
+      this.modalLoading.hide();
+      this.alertService.serverError();
+    }
+  }
+
+  async getProductHistory() {
+    try {
+      this.modalLoading.show();
+      const rs = await this.warehouseService.getProductHistory(this.productId);
+      if (rs.ok) {
+        this.modalEditLotExpired.setHistory(rs.rows);
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      console.log(error)
+      this.modalLoading.hide();
+      this.alertService.serverError();
     }
   }
 

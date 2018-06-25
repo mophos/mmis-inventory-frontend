@@ -121,6 +121,7 @@ import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
 import { AuthRequisition } from 'app/auth-requisition.service';
+import { AuthPeriod } from '../auth-period.service';
 import { AuthShippingNetwork } from 'app/auth-shipping-network.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
@@ -147,6 +148,7 @@ import { AdditionEditComponent } from './addition-edit/addition-edit.component';
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 import { ToolsModule } from './tools/tools.module';
 import { ToolsService } from './tools.service';
+import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -247,7 +249,8 @@ Highcharts.setOptions({
     AdditionComponent,
     AdditionWarehouseComponent,
     AdditionEditComponent,
-    AdditionGenericComponent
+    AdditionGenericComponent,
+    ReceiveNotMatchPoComponent
   ],
   providers: [
     MainService,
@@ -264,6 +267,7 @@ Highcharts.setOptions({
     AuthReceive,
     AuthTransfer,
     AuthRequisition,
+    AuthPeriod,
     AuthShippingNetwork,
     AuthHISTransaction,
     AuthWarehouseManagement,

@@ -79,7 +79,7 @@ export class IssueService {
     return rs.json();
   }
   async getIssuesProduct(data: any) {
-    const rs = await this.authHttp.post(`${this.url}/generics/allocate/baseunit`, {data: data}).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/generics/allocate`, {data: data}).toPromise();
     return rs.json();
   }
   async getEditProductList(issueId: any) {
@@ -92,7 +92,7 @@ export class IssueService {
   }
 
   async checkApprove(username: any, password: any, action: any) {
-    let rs: any = await this.authHttp.post(`${this.url}/issues/checkApprove`, {
+    let rs: any = await this.authHttp.post(`${this.url}/basic/checkApprove`, {
       username: username,
       password: password,
       action: action

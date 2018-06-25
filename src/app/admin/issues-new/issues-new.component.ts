@@ -179,7 +179,6 @@ export class IssuesNewComponent implements OnInit {
   }
 
   async addProduct() {
-
     const idx = _.findIndex(this.products, { generic_id: this.genericId });
     if (idx > -1) {
       this.alertService.success('รายการซ้ำ', 'จำนวนจะไปเพิ่มในรายการเดิม');
@@ -255,9 +254,6 @@ export class IssuesNewComponent implements OnInit {
   }
 
   editChangeIssueQty(idx: any, qty: any) {
-    // const oldQty = +this.products[idx].issue_qty;
-    console.log(this.products);
-
     if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].reserve_qty) {
       this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
       this.products[idx].issue_qty = '';

@@ -58,12 +58,12 @@
       </div>
       <div>
         <clr-datagrid [style.height.%]="85">
-          <clr-dg-column [style.width.%]="15" [clrDgField]="'generic_id'">Generic ID</clr-dg-column>
+          <clr-dg-column [style.width.%]="15" [clrDgField]="'generic_id'">Generic Code</clr-dg-column>
           <clr-dg-column [style.width.%]="50" [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
           <clr-dg-column [style.width.%]="25"></clr-dg-column>
           <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
           <clr-dg-row *clrDgItems="let product of datageneric" [clrDgItem]="product">
-            <clr-dg-cell>{{product.generic_id}}</clr-dg-cell>
+            <clr-dg-cell>{{product.generic_code}}</clr-dg-cell>
             <clr-dg-cell>{{product.generic_name}}</clr-dg-cell>
             <clr-dg-cell>
               <div class="btn-group">

@@ -49,8 +49,8 @@
           <clr-icon shape="caret down"></clr-icon>
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-          <a href="javascript://" (click)="showManual()" clrDropdownItem>คู่มือเจ้าหน้าที่คลังใหญ่</a>
-          <a href="javascript://" (click)="showManualStaff()" clrDropdownItem>คู่มือเจ้าหน้าที่หน่วยเบิก/รพ.สต.</a>
+          <!-- <a href="javascript://" (click)="showManual()" clrDropdownItem>คู่มือเจ้าหน้าที่คลังใหญ่</a>
+          <a href="javascript://" (click)="showManualStaff()" clrDropdownItem>คู่มือเจ้าหน้าที่หน่วยเบิก/รพ.สต.</a> -->
           <a href="javascript://" (click)="openChangePasswordModal()" clrDropdownItem>เปลี่ยนรหัสผ่าน</a>
           <a href="javascript://" (click)="logout()" clrDropdownItem>ออกจากระบบ</a>
         </clr-dropdown-menu>
@@ -96,7 +96,7 @@
         <clr-icon clrVerticalNavIcon shape="alarm-clock"></clr-icon>
         แจ้งเตือนยาหมดอายุ
       </a>
-      <a clrVerticalNavLink routerLink="/admin/period" title="ปิดรอบบัญชี" routerLinkActive="active">
+      <a clrVerticalNavLink routerLink="/admin/period" title="ปิดรอบบัญชี" routerLinkActive="active" *ngIf="period">
         <clr-icon clrVerticalNavIcon shape="shield-check"></clr-icon>
         ปิดรอบบัญชี
       </a>
@@ -226,6 +226,10 @@
           <a clrVerticalNavLink routerLink="/admin/reports/summary-disbursement" routerLinkActive="active">
             <clr-icon shape="printer"></clr-icon>
             รายงานสรุปการเบิกแยกตามหน่วยเบิก
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/reports/receive-not-match-po" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            รายงานรายการยาที่รับแบบยังไม่ได้ผูกกับใบสั่งซื้อ
           </a>
           <!-- <a clrVerticalNavLink routerLink="/admin/reports/product-summary" routerLinkActive="active">
             <clr-icon shape="printer"></clr-icon>

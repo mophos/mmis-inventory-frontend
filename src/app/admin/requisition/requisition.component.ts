@@ -96,7 +96,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.orders = rs.rows;
-        this.tabTotalWaiting = rs.total[0].total;
+        this.totalWaiting = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -119,7 +119,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.unpaids = rs.rows;
-        this.tabTotalUnPaid = rs.total[0].total;
+        this.totalUnPaid = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -143,7 +143,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.waitingApproves = rs.rows;
-        this.tabTotalWaitingApprove = rs.total[0].total;
+        this.totalWaitingApprove = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -173,7 +173,7 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       if (rs.ok) {
         this.approveds = rs.rows;
-        this.tabApprove = rs.total[0].total;
+        this.totalApproveds = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -228,7 +228,7 @@ export class RequisitionComponent implements OnInit {
   async approveRequisitionCheck(order: any) {
     const accessName = 'WM_REQUISITION_APPROVE'
     this.page = 1
-    this.action = 'WM_REQUISITION'
+    this.action = 'WM_REQUISITION_APPROVE'
     this.title = 'รายการเบิกสินค้า'
     console.log(accessName);
     this.tmpOderApprove = order
@@ -487,13 +487,13 @@ export class RequisitionComponent implements OnInit {
   }
 
   recreateRequisitionOrder(order: any) {
-    let requisitionOrderId = order.requisition_order_id;
-    let requisitionOrderUnpaidId = order.requisition_order_unpaid_id;
+    const requisitionOrderId = order.requisition_order_id;
+    const requisitionOrderUnpaidId = order.requisition_order_unpaid_id;
 
     this.alertService.confirm('ต้องการสร้างใบเบิกใหม่ ใช่หรือไม่?')
       .then(async () => {
         try {
-          let rs: any = await this.requisitionService.saveRequisitionReOrder(requisitionOrderUnpaidId, requisitionOrderId);
+          const rs: any = await this.requisitionService.saveRequisitionReOrder(requisitionOrderUnpaidId, requisitionOrderId);
           if (rs.ok) {
             this.alertService.success('สร้างรายการใบเบิกเสร็จเรียบร้อย');
             await this.getUnPaid();

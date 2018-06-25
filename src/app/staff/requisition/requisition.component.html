@@ -9,8 +9,8 @@
       <clr-icon shape="plus"></clr-icon> เบิกสินค้าและเวชภัณฑ์
     </button>
   </div>
-  <div *ngIf="selectedTab === 'unpaid'" class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
-    <clr-button-group style="float:right;">
+  <div class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+    <clr-button-group *ngIf="selectedTab === 'unpaid'" style="float:right;">
       <clr-button [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printUnPaid()">
         <clr-icon shape="printer"></clr-icon> พิมพ์รายการค้างจ่าย
       </clr-button>
@@ -92,7 +92,7 @@
       รายการรออนุมัติ
       <span class="badge badge-warning">{{waitingApproves.length | number}}</span>
     </button>
-    <clr-tab-content (clrDgRefresh)="refreshWaitingApprove($event)" *clrIfActive="selectedTab === 'waitingApprove'">
+    <clr-tab-content *clrIfActive="selectedTab === 'waitingApprove'">
       <div class="card">
         <div class="card-block" style="padding: 5px 0px 5px 10px;">
           <div class="form-group row wid99">
@@ -116,7 +116,7 @@
           </div>
         </div>
       </div>
-      <clr-datagrid style="height: 90%;" style="padding-top: 5px;">
+      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" (clrDgRefresh)="refreshWaitingApprove($event)">
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
         <!-- <clr-dg-column>หน่วยเบิก</clr-dg-column> -->
@@ -148,7 +148,7 @@
       รายการค้างจ่าย
       <span class="badge badge-danger">{{unpaids.length | number}}</span>
     </button>
-    <clr-tab-content (clrDgRefresh)="refreshUnPaid($event)" *clrIfActive="selectedTab === 'unpaid'">
+    <clr-tab-content *clrIfActive="selectedTab === 'unpaid'">
       <div class="card">
         <div class="card-block" style="padding: 5px 0px 5px 10px;">
           <div class="form-group row wid99">
@@ -177,7 +177,7 @@
           </div>
         </div>
       </div>
-      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
+      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected" (clrDgRefresh)="refreshUnPaid($event)">
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
         <!-- <clr-dg-column>หน่วยเบิก</clr-dg-column> -->
@@ -258,7 +258,6 @@
   </clr-tab>
 
 </clr-tabs>
-
 <wm-html-preview #htmlPreview></wm-html-preview>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>

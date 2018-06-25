@@ -12,7 +12,7 @@
       <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
       <clr-dg-cell>
         <input type="text" #qty (keyup)="onChangeQty(qty, idx)" style="width: 100%; text-align: right; background-color:#FFF9C4"
-        placeholder="" wmNumberWithOutDot [value]="r.product_qty | number">
+        placeholder="" wmNumberWithOutDot [value]="r.product_qty">
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right">{{r.product_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right">{{r.small_remain_qty | number}} {{r.to_unit_name}}</clr-dg-cell>

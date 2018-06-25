@@ -16,7 +16,6 @@ export class TransferItemsComponent implements OnInit {
   @Input('products')
   set setProducts(value: any) {
     this.products = value;
-    console.log('products', this.products)
   }
 
   loading = false;

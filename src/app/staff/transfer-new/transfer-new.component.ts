@@ -69,7 +69,8 @@ export class TransferNewComponent implements OnInit {
   unitGenericId: any;
   lotNo: any;
   dstWarehouses = [];
-
+  templates = [];
+  templateId: any;
   constructor(
     private alertService: AlertService,
     private transferService: TransferService,
@@ -111,10 +112,11 @@ export class TransferNewComponent implements OnInit {
   async getShipingNetwork() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.wareHouseService.getShipingNetwork(this.srcWarehouseId, 'TRN');
+      const rs: any = await this.wareHouseService.getShipingNetwork(this.srcWarehouseId, 'TRN');
       this.modalLoading.hide();
       if (rs.ok) {
         this.dstWarehouses = rs.rows;
+        this.getTemplates();
       } else {
         this.alertService.error(rs.error);
       }
@@ -132,7 +134,9 @@ export class TransferNewComponent implements OnInit {
         this.genericName = event ? event.generic_name : null;
         this.genericId = event ? event.generic_id : null;
         this.workingCode = event ? event.working_code : null;
-        this.remainQty = event ? event.qty : null;
+        this.remainQty = event ? event.qty - event.reserve_qty : null;
+        this.primaryUnitId = event ? event.primary_unit_id : null;
+        this.primaryUnitName = event ? event.primary_unit_name : null;
         // this.wmProductId = event ? event.wm_product_id : null;
         this.unitList.setGenericId(this.genericId);
         // this.getLots();
@@ -208,9 +212,10 @@ export class TransferNewComponent implements OnInit {
   }
 
   async addGeneric() {
+    if (this.transferQty) {
       const idx = _.findIndex(this.generics, { generic_id: this.genericId });
       if (idx === -1) {
-        if (this.genericId) {
+        if (this.genericId && this.transferQty && this.unitGenericId) {
           const obj = {
             working_code: this.workingCode,
             generic_name: this.genericName,
@@ -219,12 +224,11 @@ export class TransferNewComponent implements OnInit {
             remain_qty: +this.remainQty,
             unit_generic_id: this.unitGenericId,
             conversion_qty: this.conversionQty,
-            location_id: this.locationId,
             primary_unit_id: this.primaryUnitId,
-            primary_unit_name: this.primaryUnitName
+            location_id: this.locationId
           };
           this.generics.push(obj);
-          await this.getProductList(this.genericId, this.transferQty);
+          await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
           this.clearForm();
         } else {
           this.alertService.error('ข้อมูลไม่ครบถ้วน')
@@ -232,6 +236,9 @@ export class TransferNewComponent implements OnInit {
       } else {
         this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
       }
+    } else {
+      this.alertService.error('กรุณาระบุจำนวนที่ต้องการโอน')
+    }
   }
 
   clearForm() {
@@ -252,7 +259,7 @@ export class TransferNewComponent implements OnInit {
     this.lotNo = null;
     this.locationId = null;
     this.lots = [];
-    // this.unitList.clearUnits();
+    this.unitList.clearUnits();
   }
 
   editChangetransferQty(idx: any, qty: any) {
@@ -264,17 +271,16 @@ export class TransferNewComponent implements OnInit {
       this.generics[idx].transfer_qty = +qty.value;
       const genericId = this.generics[idx].generic_id;
       const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].transfer_qty = transferQty;
       this.getProductList(genericId, transferQty);
     }
   }
 
   changeProductQty(genericId, event) {
+    const totalBaseUnit = _.sumBy(event, 'product_qty');
+
     const idx = _.findIndex(this.generics, ['generic_id', genericId]);
     this.generics[idx].products = event;
-    this.generics[idx].transfer_qty = _.sumBy(event, function (e: any) {
-      return e.product_qty * e.conversion_qty;
-    });
+    this.generics[idx].transfer_qty = Math.floor(totalBaseUnit / this.generics[idx].conversion_qty);
   }
 
   editChangeUnit(idx: any, event: any, unitCmp: any) {
@@ -286,7 +292,6 @@ export class TransferNewComponent implements OnInit {
     } else {
       const genericId = this.generics[idx].generic_id;
       const transferQty = this.generics[idx].transfer_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].transfer_qty = transferQty;
       this.getProductList(genericId, transferQty);
     }
   }
@@ -306,56 +311,65 @@ export class TransferNewComponent implements OnInit {
     } else {
       if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.transferDate) {
         const generics = [];
-        let isError = false;
 
         _.forEach(this.generics, v => {
           if (v.generic_id && v.transfer_qty) {
             generics.push({
               generic_id: v.generic_id,
               transfer_qty: +v.transfer_qty,
+              unit_generic_id: v.unit_generic_id,
+              conversion_qty: +v.conversion_qty,
               primary_unit_id: v.primary_unit_id,
               location_id: v.location_id,
               products: v.products
             });
-          } else {
-            isError = true;
+
           }
         });
 
-        if (isError) {
-          this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนโอน');
-        } else {
         const summary = {
           transferDate: `${this.transferDate.date.year}-${this.transferDate.date.month}-${this.transferDate.date.day}`,
           srcWarehouseId: this.srcWarehouseId,
           dstWarehouseId: this.dstWarehouseId
         };
 
-            if (generics.length) {
-              this.alertService.confirm('ต้องการโอนรายการสินค้า ใช่หรือไม่?')
-                .then(async () => {
-                  this.modalLoading.show();
-                  try {
-                    let rs: any = await this.transferService.saveTransfer(summary, generics);
-                    if (rs.ok) {
-                      this.alertService.success();
-                      this.router.navigate(['/staff/transfer']);
-                    } else {
-                      this.alertService.error(JSON.stringify(rs.error));
-                    }
-                    this.modalLoading.hide();
-                  } catch (error) {
-                    this.modalLoading.hide();
-                    this.alertService.error(JSON.stringify(error));
-                  }
-                })
-                .catch(() => {
-                  this.modalLoading.hide();
-                });
-            } else {
-              this.alertService.error('ไม่พบรายการที่ต้องการโอน');
-            }
+        // check transfer qty
+        let isError = false;
+        this.generics.forEach(v => {
+          if (+v.transfer_qty * v.conversion_qty > v.remain_qty || +v.transfer_qty <= 0) {
+            isError = true;
           }
+        });
+
+        if (isError) {
+          this.alertService.error('มีบางรายการที่ยอดโอน มากกว่ายอดคงเหลือ หรือ เท่ากับ 0');
+        } else {
+
+          if (generics.length) {
+            this.alertService.confirm('ต้องการโอนรายการสินค้า ใช่หรือไม่?')
+              .then(async () => {
+                this.modalLoading.show();
+                try {
+                  const result: any = await this.transferService.saveTransfer(summary, generics);
+                  this.modalLoading.hide();
+                  if (result.ok) {
+                    this.alertService.success();
+                    this.router.navigate(['/staff/transfer']);
+                  } else {
+                    this.alertService.error(JSON.stringify(result.error));
+                  }
+                } catch (error) {
+                  this.modalLoading.hide();
+                  this.alertService.error(JSON.stringify(error));
+                }
+              })
+              .catch(() => {
+                this.modalLoading.hide();
+              });
+          } else {
+            this.alertService.error('ไม่พบรายการที่ต้องการโอน');
+          }
+        }
       }
     }
   }
@@ -431,6 +445,66 @@ export class TransferNewComponent implements OnInit {
     } catch (error) {
       console.log(error);
       this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
+
+  async getTemplates() {
+    try {
+      const dstWarehouseId = this.dstWarehouseId;
+      const srcWarehouseId = this.srcWarehouseId;
+      console.log(dstWarehouseId);
+      console.log(srcWarehouseId);
+
+      if (dstWarehouseId && srcWarehouseId) {
+        const rs: any = await this.transferService.getTemplates(srcWarehouseId, dstWarehouseId);
+        console.log(rs);
+
+        if (rs.ok) {
+          this.templates = rs.rows;
+        } else {
+          this.alertService.error(rs.error);
+        }
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
+
+  async getGenericItems(event: any) {
+    if (this.templateId) {
+      this.getTemplateItems(this.templateId);
+    }
+  }
+
+  async getTemplateItems(templateId: any) {
+    try {
+      console.log(templateId)
+      const rs: any = await this.transferService.getTemplateItems(templateId);
+      if (rs.ok) {
+        this.generics = [];
+
+        rs.rows.forEach(v => {
+          console.log(v);
+
+          const generic: any = {};
+          generic.generic_id = v.generic_id;
+          generic.transfer_qty = 0;
+          generic.generic_name = v.generic_name;
+          generic.to_unit_qty = 0;
+          generic.unit_generic_id = v.unit_generic_id;
+          generic.from_unit_name = v.from_unit_name;
+          generic.to_unit_name = v.to_unit_name;
+          generic.product_qty = v.product_qty;
+          generic.working_code = v.working_code;
+          generic.remain_qty = v.remain_qty;
+          generic.small_remain_qty = v.small_remain_qty
+
+          this.generics.push(generic);
+        });
+        console.log(this.generics)
+      }
+    } catch (error) {
       this.alertService.error(error.message);
     }
   }

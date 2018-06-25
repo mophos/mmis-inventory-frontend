@@ -9,7 +9,7 @@ export class HisTransactionService {
   constructor(
     @Inject('API_URL') private url: string,
     private authHttp: AuthHttp
-  ) { 
+  ) {
     this.token = sessionStorage.getItem('token');
   }
 
@@ -28,7 +28,7 @@ export class HisTransactionService {
     const resp = await this.authHttp.delete(`${this.url}/staff/his-transaction/remove`).toPromise();
     return resp.json();
   }
-  
+
   async importTransaction(transactionIds: any[]) {
     const resp = await this.authHttp.post(`${this.url}/staff/his-transaction/import`, {
       transactionIds: transactionIds
