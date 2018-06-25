@@ -138,7 +138,7 @@ export class RequisitionConfirmComponent implements OnInit {
             for (const z of allocate.rows) {
               let _obj: any;
               if (z.generic_id === v.generic_id) {
-                if (z.small_remain_qty > 0) {
+                if (z.pack_remain_qty > 0) {
                   _obj = {
                     conversion_qty: z.conversion_qty,
                     wm_product_id: z.wm_product_id,
@@ -265,16 +265,13 @@ export class RequisitionConfirmComponent implements OnInit {
   }
 
   async savePay() {
-    let isError = false;
     let totalQty = 0;
+    let minus = false;
+    const items = [];
 
-    let items = [];
-
-    let generics = [];
-    let _productTotalItems = 0;
-
+    const generics = [];
     this.products.forEach((v: any) => {
-      let objx: any = {};
+      const objx: any = {};
       objx.requisition_qty = v.requisition_qty * v.conversion_qty;
       objx.generic_id = v.generic_id;
       objx.requisition_order_id = v.requisition_order_id;
@@ -282,11 +279,14 @@ export class RequisitionConfirmComponent implements OnInit {
       let totalConfirmQty = 0;
 
       v.confirmItems.forEach((x: any) => {
+        if (x.confirm_qty < 0) {
+          minus = true;
+        }
         totalQty += x.confirm_qty;
-        let _totalConfirmQty = x.confirm_qty * x.conversion_qty;
+        const _totalConfirmQty = x.confirm_qty * x.conversion_qty;
         totalConfirmQty += _totalConfirmQty;
 
-        let obj: any = {
+        const obj: any = {
           confirm_qty: _totalConfirmQty,
           wm_product_id: x.wm_product_id,
           generic_id: v.generic_id
@@ -301,15 +301,19 @@ export class RequisitionConfirmComponent implements OnInit {
 
     let isErrorTotalConfirm = false;
     generics.forEach(v => {
-      if (v.total_confirm_qty < v.requisition_qty) isErrorTotalConfirm = true;
+      if (v.total_confirm_qty < v.requisition_qty) {
+        isErrorTotalConfirm = true;
+      }
     })
 
-    let isErrorItems = _.uniqBy(items, 'generic_id').length < generics.length;
+    const isErrorItems = _.uniqBy(items, 'generic_id').length < generics.length;
 
-    let data: any = {};
+    const data: any = {};
     data.items = items;
     data.generics = generics;
-
+    if (minus) {
+      this.alertService.error('มีรายการจ่ายติดลบ กรุณาตรวจสอบอย่างละเอียด');
+    }
     this.alertService.confirm('ต้องการบันทึกข้อมูลการจ่ายเวชภัณฑ์ ใช่หรือไม่?')
       .then(() => {
         if (isErrorItems || isErrorTotalConfirm) {

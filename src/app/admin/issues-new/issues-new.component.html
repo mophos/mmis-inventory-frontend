@@ -78,8 +78,7 @@
     <clr-dg-cell style="line-height: 25px;">{{idx + 1}}. {{product.generic_name}}</clr-dg-cell>
     <!-- <clr-dg-cell style="line-height: 25px;">{{product.expired_date | toEngDate}}</clr-dg-cell> -->
     <clr-dg-cell>
-      <input type="text" #issueQty (keyup)="editChangeIssueQty(idx, issueQty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
-        wmNumberOnly [value]="product.issue_qty" />
+      <input type="text" #issueQty (keyup)="editChangeIssueQty(idx, issueQty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4" wmNumberWithOutDot [value]="product.issue_qty" />
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
