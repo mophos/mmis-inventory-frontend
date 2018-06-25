@@ -1,4 +1,3 @@
-import { log } from 'util';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IMyOptions } from 'mydatepicker-th';
