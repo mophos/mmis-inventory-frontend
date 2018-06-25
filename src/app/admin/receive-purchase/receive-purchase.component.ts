@@ -632,7 +632,7 @@ export class ReceivePurchaseComponent implements OnInit {
                 this.products.forEach((v: any) => {
                   if (v.receive_qty > 0) {
                     _products.push(v);
-                    if (v.warehouse_id && v.receive_qty > 0 && v.product_id && v.unit_generic_id && v.cost >= 0) {
+                    if (v.receive_qty > 0 && v.product_id && v.unit_generic_id && v.cost >= 0) {
                       if (v.expired_date) {
                         const validDate = this.daetService.isValidDateExpire(v.expired_date);
                         if (!validDate) {
