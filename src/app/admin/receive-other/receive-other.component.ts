@@ -438,9 +438,10 @@ export class ReceiveOtherComponent implements OnInit {
     }
   }
 
-  editChangeManufacture(idx: any, event: any) {
+  editChangeManufacture(productId: any, event: any) {
     try {
-      if (event) {
+      const idx = _.findIndex(this.products, { product_id: productId })
+      if (idx > -1) {
         this.products[idx].manufacture_id = event.manufacture_id;
         this.products[idx].manufacture_name = event.manufacture_name;
       } else {
