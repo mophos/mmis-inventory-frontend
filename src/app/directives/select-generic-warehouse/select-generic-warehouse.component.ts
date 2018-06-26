@@ -40,7 +40,8 @@ export class SelectGenericWarehouseComponent implements OnInit {
         this.warehouses = res.rows;
         if (this.warehouses.length) {
           this.warehouseId = decodedToken.warehouseId;
-          this.onSelect.emit(this.warehouses[0]);
+          let idx = _.findIndex(this.warehouses, { "warehouse_id": +this.warehouseId });
+          this.onSelect.emit(this.warehouses[idx]);
         }
       } else {
         this.alertService.error(res.error);
@@ -52,7 +53,7 @@ export class SelectGenericWarehouseComponent implements OnInit {
 
   setSelect(event) {
     let warehouseId = event.target.value;
-    let idx = _.findIndex(this.warehouses, { warehouse_id: +warehouseId });
+    let idx = _.findIndex(this.warehouses, { "warehouse_id": +warehouseId });
     this.onSelect.emit(this.warehouses[idx]);
   }
 

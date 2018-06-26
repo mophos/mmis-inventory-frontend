@@ -578,7 +578,6 @@ export class ReceiveOtherComponent implements OnInit {
                 comment_expired: this.ExpiredComment,
                 is_expired: this.is_expired
               }
-
               const receiveOtherId: any = await this.receiveService.saveReceiveOther(summary, this.products);
 
 
