@@ -69,7 +69,7 @@
   <clr-dg-column [style.width.px]="200">หน่วยตัดจ่าย</clr-dg-column>
   <clr-dg-column [style.width.px]="130">รวม (Base)</clr-dg-column>
   <clr-dg-column [style.width.px]="130">คงเหลือ (Base)</clr-dg-column>
-  <clr-dg-column [style.width.px]="130">คงเหลือ (หักยอดจอง)</clr-dg-column>
+  <clr-dg-column [style.width.px]="130">หักคงเหลือ (Base)</clr-dg-column>
   <clr-dg-column [style.width.px]="140"></clr-dg-column>
 
   <clr-dg-row *ngFor="let product of products; let idx = index;">
@@ -85,8 +85,8 @@
         [genericId]="product.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty || 0 | number}} {{product.unit_name}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.reserve_qty | number}} {{product.unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;text-align: right;">{{product.reserve_qty - (product.issue_qty*product.conversion_qty) | number}} {{product.unit_name}}</clr-dg-cell>
     <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.issue_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.issue_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
