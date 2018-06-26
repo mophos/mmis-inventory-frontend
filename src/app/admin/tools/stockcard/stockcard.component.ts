@@ -23,7 +23,11 @@ export class StockcardComponent implements OnInit {
   isOpenReceiveItem = false;
   isOpenStockCardItem = false;
 
+  receiveType: any;
+  receiveItemId: any;
+
   receiveId: any;
+  receiveDetailId: any;
 
   constructor(
     private toolService: ToolsService,
@@ -59,9 +63,10 @@ export class StockcardComponent implements OnInit {
   async getReceiveItems(item: any) {
     try {
       this.modalLoading.show();
+      this.receiveType = item.receive_type;
       this.receiveId = item.receive_id;
       // get items list
-      let rs: any = await this.toolService.getReceivesItems(item.receive_id);
+      let rs: any = await this.toolService.getReceivesItems(item.receive_id, item.receive_type);
       if (rs.ok) {
         this.receiveItems = rs.rows;
         this.isOpenReceiveItem = true;
@@ -75,11 +80,12 @@ export class StockcardComponent implements OnInit {
     }
   }
 
-  async getStockCardForEdit(productId: any, lotNo: any) {
+  async getStockCardForEdit(item: any) {
     try {
       this.modalLoading.show();
+      this.receiveDetailId = this.receiveType === 'PO' ? item.receive_detail_id : item.receive_other_detail_id;
       // get items list
-      let rs: any = await this.toolService.getStockForEditCardList(this.receiveId, productId, lotNo);
+      let rs: any = await this.toolService.getStockForEditCardList(this.receiveId, item.product_id, item.lot_no);
       if (rs.ok) {
         this.stockCardItems = rs.rows;
         this.stockCardId = rs.stockCardId;
@@ -97,21 +103,46 @@ export class StockcardComponent implements OnInit {
 
   editChangeUnit(idx: number, event: any) {
     console.log(event);
+    this.stockCardItems[idx].conversion_qty = event.qty;
+    this.stockCardItems[idx].unit_generic_id = event.unit_generic_id;
   }
 
   changeQty(idx: number, qty: number) {
     let _newQty = (+qty * this.stockCardItems[idx].conversion_qty) - +this.stockCardItems[idx].in_qty;
     this.newBalanceQty = _newQty;
-    console.log(+this.stockCardItems[idx].in_qty, this.newBalanceQty);
-
-    // this.calNewRemain();
+    this.stockCardItems[idx].in_qty += _newQty;
+    this.calRemain();
   }
 
-  // calNewRemain() {
-  //   this.stockCardItems.forEach(v => {
-  //     v.balance_qty += this.newBalanceQty;
-  //   });
-  // }
+  calRemain() {
+    this.stockCardItems.forEach((v: any, i: any) => {
+      this.stockCardItems[i].balance_qty += this.newBalanceQty;
+      this.stockCardItems[i].balance_generic_qty += this.newBalanceQty;
+    });
+  }
 
+  async saveStockCard() {
+    // console.log(this.stockCardItems);
+    // console.log(this.receiveId);
+    // console.log(this.receiveDetailId);
+    // console.log(this.receiveType);
+    try {
+      this.modalLoading.show();
+      // get items list
+      let rs: any = await this.toolService.updateStockCard(this.stockCardItems, this.receiveType, this.receiveDetailId);
+      if (rs.ok) {
+        this.isOpenStockCardItem = false;
+        this.isOpenReceiveItem = false;
+        this.isOpenSearchReceive = false;
+        console.log(rs);
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
+    }
+  }
 
 }

@@ -16,8 +16,20 @@ export class ToolsService {
     return resp.json();
   }
 
-  async getReceivesItems(receiveId: any) {
-    const resp = await this.authHttp.get(`${this.url}/tools/stockcard/receives/items/${receiveId}`).toPromise();
+  async updateStockCard(data: any[], receiveType: any, receiveDetailId: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/update`, {
+      data: data,
+      receiveType: receiveType,
+      receiveDetailId: receiveDetailId
+    }).toPromise();
+    return resp.json();
+  }
+
+  async getReceivesItems(receiveId: any, type: any) {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/receives/items`, {
+      receiveId: receiveId,
+      type: type
+    }).toPromise();
     return resp.json();
   }
 

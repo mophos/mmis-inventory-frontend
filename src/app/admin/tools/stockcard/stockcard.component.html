@@ -4,7 +4,10 @@
   <span class="breadcrumb-item active">จัดการ Stock Card</span>
 </nav>
 
-<clr-dropdown style="padding-top: 5px; padding-bottom: 5px;">
+<button class="btn btn-large btn-danger" (click)="showSearchReceive()">
+  แก้ไข Stock Card จากการรับ
+</button>
+<!-- <clr-dropdown style="padding-top: 5px; padding-bottom: 5px;">
   <button type="button" class="btn btn-sm btn-danger" clrDropdownTrigger>
     แก้ไข Stock Card
     <clr-icon shape="caret down"></clr-icon>
@@ -14,8 +17,8 @@
     <button type="button" clrDropdownItem (click)="showSearchReceive()">จากการรับผิด</button>
     <button type="button" clrDropdownItem>จากการจ่ายผิด</button>
   </clr-dropdown-menu>
-</clr-dropdown>
-
+</clr-dropdown> -->
+<!-- 
 <clr-datagrid [style.height.%]="80">
   <clr-dg-column>วันที่</clr-dg-column>
   <clr-dg-column>ประเภท</clr-dg-column>
@@ -23,7 +26,6 @@
   <clr-dg-column></clr-dg-column>
   <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
   <clr-dg-row *ngFor="let t of items" [clrDgItem]="t">
-    <!-- <wm-transfer-detail *clrIfExpanded [transferId]="t.transfer_id" ngProjectAs="clr-dg-row-detail"></wm-transfer-detail> -->
 
     <clr-dg-cell>
 
@@ -33,7 +35,7 @@
     {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
     <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination>
   </clr-dg-footer>
-</clr-datagrid>
+</clr-datagrid> -->
 
 <!-- search receive -->
 <clr-modal [(clrModalOpen)]="isOpenSearchReceive" [clrModalSize]="'lg'" [clrModalClosable]="false">
@@ -84,7 +86,7 @@
         <clr-dg-cell>{{i.lot_no || '-'}}</clr-dg-cell>
         <clr-dg-cell style="text-align: right; font-weight: bold;">{{i.conversion_qty * i.receive_qty | number}} {{i.to_unit_name}}</clr-dg-cell>
         <clr-dg-cell style="text-align: center;">
-          <button class="btn btn-sm btn-success wm-small-btn" (click)="getStockCardForEdit(i.product_id, i.lot_no)">แก้ไข</button>
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="getStockCardForEdit(i)">แก้ไข</button>
         </clr-dg-cell>
       </clr-dg-row>
 
@@ -116,8 +118,9 @@
             [selectedUnitGenericId]="i.unit_generic_id" [genericId]="i.generic_id"></wm-select-receive-unit>
         </clr-dg-cell>
         <clr-dg-cell style="text-align: right;">
-          <input type="text" [disabled]="i.stock_card_id !== stockCardId" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+          <input type="text" *ngIf="i.stock_card_id === stockCardId" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
             wmNumberOnly [value]="i.in_qty/i.conversion_qty" #qty (keyup)="changeQty(idx, qty.value)">
+          <span *ngIf="i.stock_card_id !== stockCardId">{{i.in_qty/i.conversion_qty | number}}</span>
         </clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{i.out_qty/i.conversion_qty | number}}</clr-dg-cell>
         <clr-dg-cell style="text-align: right; font-weight: bold;">{{i.conversion_qty * (i.in_qty || i.out_qty)/i.conversion_qty | number}} {{i.to_unit_name}}</clr-dg-cell>
@@ -128,6 +131,7 @@
     </clr-datagrid>
   </div>
   <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" (click)="saveStockCard()">ปรับปรุง Stock Card</button>
     <button type="button" class="btn btn-sm btn-danger" (click)="isOpenStockCardItem = false">ยกเลิก</button>
   </div>
 </clr-modal>
