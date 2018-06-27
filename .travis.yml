@@ -9,4 +9,5 @@ branches:
 before_script:
 
 script:
-  - npx ng build --build-optimizer --prod
+  # - npm i -g @angular/cli@1.7.4
+  - npx ng build --prod
