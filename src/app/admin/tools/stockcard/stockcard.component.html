@@ -1,0 +1,158 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">เครื่องมือ (Tools)</span>
+  <span class="breadcrumb-item active">จัดการ Stock Card</span>
+</nav>
+
+<div class="alert alert-danger">
+  <div class="alert-items">
+    <div class="alert-item static">
+      <div class="alert-icon-wrapper">
+        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+      </div>
+      <span class="alert-text">
+        การแก้ไขรายการ Stock Card จะเป็นการแก้ไข Transaction ของ Stock Card ตัวเวชภัณฑ์นั้นๆ รวมเป็นถึงเป็นการแก้ไขรายการในใบรับที่อนุมัติไปแล้วด้วย
+        ควรตรวจสอบข้อมูลให้ถูกต้องก่อนทำการแก้ไขรายการ
+      </span>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-large btn-danger" (click)="showSearchReceive()">
+  แก้ไข Stock Card จากการรับ
+</button>
+
+<button class="btn btn-large btn-danger" disabled (click)="showSearchReceive()">
+  แก้ไข Stock Card จากการจ่าย
+</button>
+<!-- <clr-dropdown style="padding-top: 5px; padding-bottom: 5px;">
+  <button type="button" class="btn btn-sm btn-danger" clrDropdownTrigger>
+    แก้ไข Stock Card
+    <clr-icon shape="caret down"></clr-icon>
+  </button>
+  <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+    <label class="dropdown-header">ประเภท</label>
+    <button type="button" clrDropdownItem (click)="showSearchReceive()">จากการรับผิด</button>
+    <button type="button" clrDropdownItem>จากการจ่ายผิด</button>
+  </clr-dropdown-menu>
+</clr-dropdown> -->
+<!-- 
+<clr-datagrid [style.height.%]="80">
+  <clr-dg-column>วันที่</clr-dg-column>
+  <clr-dg-column>ประเภท</clr-dg-column>
+  <clr-dg-column>เจ้าหน้าที่</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+  <clr-dg-row *ngFor="let t of items" [clrDgItem]="t">
+
+    <clr-dg-cell>
+
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid> -->
+
+<!-- search receive -->
+<clr-modal [(clrModalOpen)]="isOpenSearchReceive" [clrModalSize]="'lg'" [clrModalClosable]="false">
+  <h3 class="modal-title">ค้นหาใบรับ</h3>
+  <div class="modal-body">
+    <label for="">เลขที่ใบรับ</label>
+    <input type="text" style="width: 300px;" #queryReceive (keyup)="doSearchReceives($event, queryReceive.value)" placeholder="พิมพ์เลขที่ใบรับ แล้วกด ENTER">
+    <clr-datagrid>
+      <clr-dg-column>วันที่รับ</clr-dg-column>
+      <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+      <clr-dg-column>เลขที่ใบสั่งซื้อ</clr-dg-column>
+      <clr-dg-column style="width: 60px;">#</clr-dg-column>
+
+      <clr-dg-row *ngFor="let r of receives">
+        <clr-dg-cell>{{r.receive_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{r.receive_code}}</clr-dg-cell>
+        <clr-dg-cell>{{r.purchase_order_number}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="getReceiveItems(r)">แก้ไข</button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{receives.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenSearchReceive = false">ยกเลิก</button>
+  </div>
+</clr-modal>
+<!-- /search receive -->
+
+<!-- receive items -->
+<clr-modal [(clrModalOpen)]="isOpenReceiveItem" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">รายการสินค้าในใบรับ</h3>
+  <div class="modal-body">
+    <clr-datagrid>
+      <clr-dg-column style="width: 100px;">รหัสสินค้า</clr-dg-column>
+      <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+      <clr-dg-column style="width: 180px;">จำนวนรับ</clr-dg-column>
+      <clr-dg-column style="width: 180px;">Lot No</clr-dg-column>
+      <clr-dg-column style="width: 150px;">รวม Base</clr-dg-column>
+      <clr-dg-column style="width: 100px;">#</clr-dg-column>
+
+      <clr-dg-row *ngFor="let i of receiveItems">
+        <clr-dg-cell>{{i.working_code}}</clr-dg-cell>
+        <clr-dg-cell>{{i.product_name}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{i.receive_qty | number}} {{i.from_unit_name}} ({{i.conversion_qty | number}} {{i.to_unit_name}})</clr-dg-cell>
+        <clr-dg-cell>{{i.lot_no || '-'}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right; font-weight: bold;">{{i.conversion_qty * i.receive_qty | number}} {{i.to_unit_name}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="getStockCardForEdit(i)">แก้ไข</button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{receiveItems.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenReceiveItem = false">ยกเลิก</button>
+  </div>
+</clr-modal>
+<!-- /receive items -->
+
+<!-- list stockcard items -->
+<clr-modal [(clrModalOpen)]="isOpenStockCardItem" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">รายการสินค้าในใบรับ</h3>
+  <div class="modal-body">
+    <clr-datagrid>
+      <clr-dg-column>Transaction</clr-dg-column>
+      <clr-dg-column>หน่วยรับ/จ่าย</clr-dg-column>
+      <clr-dg-column style="width: 100px;">จำนวนรับ</clr-dg-column>
+      <clr-dg-column style="width: 100px;">จำนวนจ่าย</clr-dg-column>
+      <clr-dg-column style="width: 100px;">รวม Base Unit</clr-dg-column>
+      <clr-dg-column style="width: 100px;">คงเหลือ Base Unit</clr-dg-column>
+
+      <clr-dg-row *ngFor="let i of stockCardItems; let idx = index" [ngClass]="{'isSuccess': i.stock_card_id == stockCardId}">
+        <clr-dg-cell>{{i.transaction_type}} - {{i.comment}}</clr-dg-cell>
+        <clr-dg-cell>
+          <wm-select-receive-unit orderBy="DESC" [disabled]="i.stock_card_id !== stockCardId" (onSelect)="editChangeUnit(idx, $event)"
+            [selectedUnitGenericId]="i.unit_generic_id" [genericId]="i.generic_id"></wm-select-receive-unit>
+        </clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">
+          <input type="text" *ngIf="i.stock_card_id === stockCardId" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+            wmNumberOnly [value]="i.in_qty/i.conversion_qty" #qty (keyup)="changeQty(idx, qty.value)">
+          <span *ngIf="i.stock_card_id !== stockCardId">{{i.in_qty/i.conversion_qty | number}}</span>
+        </clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{i.out_qty/i.conversion_qty | number}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right; font-weight: bold;">{{i.conversion_qty * (i.in_qty || i.out_qty)/i.conversion_qty | number}} {{i.to_unit_name}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right; font-weight: bold;">{{i.balance_qty + newBalanceQty | number}} {{i.to_unit_name}}</clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{stockCardItems.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" (click)="saveStockCard()">ปรับปรุง Stock Card</button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenStockCardItem = false">ยกเลิก</button>
+  </div>
+</clr-modal>
+<!-- /list stockcard items -->
+
+<wm-loading-modal #modalLoading></wm-loading-modal>
