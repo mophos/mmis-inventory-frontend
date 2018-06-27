@@ -87,7 +87,7 @@
   <clr-dg-column [style.width.px]="150">สถานที่เก็บ</clr-dg-column>
   <clr-dg-column [style.width.px]="150"></clr-dg-column>
 
-  <clr-dg-row  *ngFor="let product of products; let idx = index;" [class.editLine]="product.is_update === 'Y'">
+  <clr-dg-row *ngFor="let product of products; let idx = index;" [class.editLine]="product.is_update === 'Y'">
     <clr-dg-cell style="line-height: 25px;">{{ idx+1 }}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">
       <span class="p4">{{product.generic_name}}</span>
@@ -112,7 +112,8 @@
       {{ product.receive_qty * product.cost | number: '1.2-2'}}
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-manufacture (onSelect)="editChangeManufacture(idx, $event)" [selectedId]="product.manufacture_id" [genericId]="product.generic_id"></wm-select-manufacture>
+      <wm-select-manufacture (onSelect)="editChangeManufacture(product.product_id, $event)" [selectedId]="product.manufacture_id"
+        [genericId]="product.generic_id"></wm-select-manufacture>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" #lot (keyup)="editChangeLot(idx, lot.value)" style="width: 100%; background-color: #FFF9C4" name="lotNo"
@@ -215,7 +216,7 @@
   <div class="modal-body">
     <form class="compact" style="padding-top: 0px;">
       <section class="form-block">
-        <div class="form-group row"> 
+        <div class="form-group row">
         </div>
         <div class="form-group row">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -231,10 +232,10 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" [disabled]="!ExpiredComment" (click)="saveComment()">
-          ยืนยัน
-      </button>
+      ยืนยัน
+    </button>
     <button type="button" class="btn btn-danger" (click)="closeExpireModal()">
-          ยกเลิก
-      </button>
+      ยกเลิก
+    </button>
   </div>
 </clr-modal>
