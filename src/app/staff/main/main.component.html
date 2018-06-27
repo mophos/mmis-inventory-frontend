@@ -37,10 +37,10 @@
           <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
           <clr-dg-row *clrDgItems="let p of generics" [clrDgItem]="p">
             <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-stock-remain>
-            <clr-dg-action-overflow>
+            <!-- <clr-dg-action-overflow>
               <button class="action-item" (click)="changeQty(p)">
                 <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-            </clr-dg-action-overflow>
+            </clr-dg-action-overflow> -->
             <clr-dg-cell>{{p.generic_working_code}}</clr-dg-cell>
             <clr-dg-cell>
               {{p.generic_name}}
@@ -94,12 +94,12 @@
         <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
         <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
           <wm-staff-product-detail-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-detail-stock-remain>
-          <clr-dg-action-overflow>
+          <!-- <clr-dg-action-overflow>
             <button class="action-item" (click)="changeQty(p)">
               <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-            <!-- <button disabled class="action-item" (click)="getStockCard(p)">
-                  <clr-icon shape="search"></clr-icon> Stock Card</button> -->
-          </clr-dg-action-overflow>
+            <button disabled class="action-item" (click)="getStockCard(p)">
+                  <clr-icon shape="search"></clr-icon> Stock Card</button>
+          </clr-dg-action-overflow> -->
           <clr-dg-cell>{{p.trade_code}}</clr-dg-cell>
           <clr-dg-cell>
             <!-- <span class="p4">{{p.product_name}}</span> -->
