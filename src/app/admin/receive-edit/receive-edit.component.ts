@@ -326,6 +326,7 @@ export class ReceiveEditComponent implements OnInit {
   changeUnit(event: any) {
     try {
       // this.selectedUnitName = event.unit_name;
+      this.selectedCost = event.cost;
       this.selectedUnitGenericId = event.unit_generic_id;
       this.conversionQty = event.qty;
     } catch (error) {

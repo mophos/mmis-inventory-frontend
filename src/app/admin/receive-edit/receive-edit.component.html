@@ -211,7 +211,7 @@
         [disabled]="!selectedProductId" />
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">
-      {{ ((+selectedReceiveQty * +conversionQty) * +selectedCost) - selectedDiscount | number: '1.2-2'}}
+      {{ (+selectedReceiveQty  * +selectedCost) - selectedDiscount | number: '1.2-2'}}
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-manufacture #manufactureList (onSelect)="changeManufacture($event)"></wm-select-manufacture>
