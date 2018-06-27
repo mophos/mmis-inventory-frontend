@@ -8,7 +8,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm install
-  - npm install -g @angular/cli
+  - npm install -g @angular/cli@1.7.4
 
 # Post-install test scripts.
 test_script:
