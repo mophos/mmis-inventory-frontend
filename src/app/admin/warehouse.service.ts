@@ -37,6 +37,10 @@ export class WarehouseService {
     const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings`).toPromise();
     return rs.json();
   }
+  async getSearchStaffMappings(query: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings/search?query=${query}`).toPromise();
+    return rs.json();
+  }
   async getShipingNetwork(warehouseId: any, type: any) {
     const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-shippingnetwork-list/${warehouseId}/${type}`).toPromise();
     return rs.json();
