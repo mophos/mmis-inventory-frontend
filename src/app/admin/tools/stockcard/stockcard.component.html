@@ -4,8 +4,26 @@
   <span class="breadcrumb-item active">จัดการ Stock Card</span>
 </nav>
 
+<div class="alert alert-danger">
+  <div class="alert-items">
+    <div class="alert-item static">
+      <div class="alert-icon-wrapper">
+        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+      </div>
+      <span class="alert-text">
+        การแก้ไขรายการ Stock Card จะเป็นการแก้ไข Transaction ของ Stock Card ตัวเวชภัณฑ์นั้นๆ รวมเป็นถึงเป็นการแก้ไขรายการในใบรับที่อนุมัติไปแล้วด้วย
+        ควรตรวจสอบข้อมูลให้ถูกต้องก่อนทำการแก้ไขรายการ
+      </span>
+    </div>
+  </div>
+</div>
+
 <button class="btn btn-large btn-danger" (click)="showSearchReceive()">
   แก้ไข Stock Card จากการรับ
+</button>
+
+<button class="btn btn-large btn-danger" disabled (click)="showSearchReceive()">
+  แก้ไข Stock Card จากการจ่าย
 </button>
 <!-- <clr-dropdown style="padding-top: 5px; padding-bottom: 5px;">
   <button type="button" class="btn btn-sm btn-danger" clrDropdownTrigger>

@@ -16,11 +16,13 @@ export class ToolsService {
     return resp.json();
   }
 
-  async updateStockCard(data: any[], receiveType: any, receiveDetailId: any) {
+  async updateStockCard(data: any[], receiveType: any, receiveDetailId: any, newQty: number, unitGenericId: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/update`, {
       data: data,
       receiveType: receiveType,
-      receiveDetailId: receiveDetailId
+      receiveDetailId: receiveDetailId,
+      newQty: newQty,
+      unitGenericId: unitGenericId
     }).toPromise();
     return resp.json();
   }

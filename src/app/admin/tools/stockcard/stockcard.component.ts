@@ -28,6 +28,8 @@ export class StockcardComponent implements OnInit {
 
   receiveId: any;
   receiveDetailId: any;
+  unitGenericId: any;
+  newQty: number;
 
   constructor(
     private toolService: ToolsService,
@@ -105,9 +107,11 @@ export class StockcardComponent implements OnInit {
     console.log(event);
     this.stockCardItems[idx].conversion_qty = event.qty;
     this.stockCardItems[idx].unit_generic_id = event.unit_generic_id;
+    this.unitGenericId = event.unit_generic_id;
   }
 
   changeQty(idx: number, qty: number) {
+    this.newQty = qty;
     let _newQty = (+qty * this.stockCardItems[idx].conversion_qty) - +this.stockCardItems[idx].in_qty;
     this.newBalanceQty = _newQty;
     this.stockCardItems[idx].in_qty += _newQty;
@@ -122,14 +126,16 @@ export class StockcardComponent implements OnInit {
   }
 
   async saveStockCard() {
-    // console.log(this.stockCardItems);
-    // console.log(this.receiveId);
-    // console.log(this.receiveDetailId);
-    // console.log(this.receiveType);
     try {
+      this.stockCardItems.forEach(v => {
+        if (v.stock_card_id === this.stockCardId) {
+          this.newQty = v.in_qty / v.conversion_qty;
+        }
+      });
+
       this.modalLoading.show();
       // get items list
-      let rs: any = await this.toolService.updateStockCard(this.stockCardItems, this.receiveType, this.receiveDetailId);
+      let rs: any = await this.toolService.updateStockCard(this.stockCardItems, this.receiveType, this.receiveDetailId, this.newQty, this.unitGenericId);
       if (rs.ok) {
         this.isOpenStockCardItem = false;
         this.isOpenReceiveItem = false;
