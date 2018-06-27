@@ -5,7 +5,6 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class BasicService {
   constructor(private authHttp: AuthHttp, @Inject('API_URL') private url: string) {
-  
   }
 
   async getProductVendors(genericId: any) {
