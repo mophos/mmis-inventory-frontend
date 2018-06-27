@@ -2,6 +2,14 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
   <span class="breadcrumb-item active">Map รหัสยากับ HIS</span>
 </nav>
+<div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+  <div class="col-md-9">
+    ค้นหา :
+    <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;" type="text"
+      placeholder="ค้นหาเวชภัณฑ์...">
+    <!-- <input type="text" class="form-control"> -->
+  </div>
+</div>
 <clr-datagrid class="order-form">
   <clr-dg-column style="width: 150px;" [clrDgField]="'working_code'">Working Code</clr-dg-column>
   <clr-dg-column [clrDgField]="'generic_name'">รายละเอียด</clr-dg-column>
