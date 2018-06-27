@@ -94,10 +94,19 @@ export class HisMappingsComponent implements OnInit {
       }).catch(() => { });
   }
 
-  enterSearchGeneric(e) {
+  async enterSearchGeneric(e) {
     if (e.keyCode === 13) {
-      // this.searchGenerics();
-      console.log(this.query, 'asd');
+      if (this.query.length) {
+        this.modalLoading.show();
+        try {
+          const rs: any = await this.warehouseService.getMappingsGenericsSearch(this.query);
+          this.mappings = rs.rows;
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(error.message);
+        }
+      } else { this.getMappings() };
     }
   }
 }
