@@ -91,7 +91,7 @@
   <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
   <clr-dg-column style="width: 200px;">Package</clr-dg-column>
   <clr-dg-column style="width: 100px;">รวม (Base Unit)</clr-dg-column>
-  <clr-dg-column style="width: 200px;">คงเหลือ</clr-dg-column>
+  <!-- <clr-dg-column style="width: 200px;">คงเหลือ</clr-dg-column> -->
   <clr-dg-column style="width: 30px;"></clr-dg-column>
 
   <clr-dg-row *ngFor="let g of products;let idx=index;">
@@ -110,7 +110,7 @@
     <clr-dg-cell style="text-align: right;">
       <span [ngClass]="{'error-message': (g.to_unit_qty * g.requisition_qty) > g.remain_qty}">{{g.to_unit_qty * g.requisition_qty | number}}</span>
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{(g.remain_qty - (g.to_unit_qty * g.requisition_qty))/g.to_unit_qty | number}} {{g.from_unit_name}} ({{g.to_unit_qty}} {{g.to_unit_name}})</clr-dg-cell>
+    <!-- <clr-dg-cell style="text-align: right;">{{(g.remain_qty - (g.to_unit_qty * g.requisition_qty))/g.to_unit_qty | number}} {{g.from_unit_name}} ({{g.to_unit_qty}} {{g.to_unit_name}})</clr-dg-cell> -->
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="removeItem(idx)">
@@ -137,7 +137,7 @@
     <clr-dg-cell style="text-align: right;">
       <span [ngClass]="{'error-message': (selectedRequisitionQty * selectedSmallQty) > selectedRemainQty}">{{ selectedRequisitionQty * selectedSmallQty | number }}</span>
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{ selectedRemainQty | number}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="text-align: right;">{{ selectedRemainQty | number}}</clr-dg-cell> -->
 
     <clr-dg-cell>
       <div class="btn-group btn-primary">
@@ -145,7 +145,7 @@
           (click)="addProduct()">
           <clr-icon shape="floppy"></clr-icon>
         </button>
-        <button class="btn btn-danger btn-sm wm-small-btn">
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearItem()">
           <clr-icon shape="trash"></clr-icon>
         </button>
       </div>

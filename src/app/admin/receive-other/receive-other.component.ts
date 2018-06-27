@@ -289,7 +289,7 @@ export class ReceiveOtherComponent implements OnInit {
 
       this.manufactureList.getManufacture(this.selectedGenericId);
       // this.lotList.setProductId(this.selectedProductId);
-      this.warehouseList.getWarehouses(this.selectedGenericId);
+      this.warehouseList.getWarehouse(this.selectedGenericId);
       this.getUnitConversion(this.selectedGenericId);
       this.unitList.setGenericId(this.selectedGenericId);
 
@@ -438,9 +438,10 @@ export class ReceiveOtherComponent implements OnInit {
     }
   }
 
-  editChangeManufacture(idx: any, event: any) {
+  editChangeManufacture(productId: any, event: any) {
     try {
-      if (event) {
+      const idx = _.findIndex(this.products, { product_id: productId })
+      if (idx > -1) {
         this.products[idx].manufacture_id = event.manufacture_id;
         this.products[idx].manufacture_name = event.manufacture_name;
       } else {
@@ -456,7 +457,7 @@ export class ReceiveOtherComponent implements OnInit {
       // this.editListLocation[idx].getLocations(event.warehouse_id);
       this.products[idx].warehouse_id = event.warehouse_id;
       this.products[idx].warehouse_name = event.warehouse_name;
-      cmp.getLocations(event.warehouse_id);
+      // cmp.getLocations(event.warehouse_id);
       // console.log(event.warehouse_id);
     } catch (error) {
       //
@@ -578,7 +579,6 @@ export class ReceiveOtherComponent implements OnInit {
                 comment_expired: this.ExpiredComment,
                 is_expired: this.is_expired
               }
-
               const receiveOtherId: any = await this.receiveService.saveReceiveOther(summary, this.products);
 
 

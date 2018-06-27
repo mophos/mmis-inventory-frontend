@@ -29,9 +29,11 @@ export class TransferItemsStaffComponent implements OnInit {
   ngOnInit() { }
 
   changeQty(qty: any, idx: any) {
+    const oldQty = +this.products[idx].product_qty;
     if (+qty.value > +this.products[idx].small_remain_qty) {
       this.alertService.error('จำนวนโอน มากว่าจำนวนคงเหลือ');
       this.products[idx].product_qty = '';
+      qty.value = oldQty;
     } else {
       this.products[idx].product_qty = +qty.value;
       this.onChangeQty.emit(this.products);

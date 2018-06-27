@@ -92,7 +92,7 @@ export class ReceiveComponent implements OnInit {
   totalPurchases = 0;
   queryPo: any;
   jwtHelper: JwtHelper = new JwtHelper();
-
+  sort;
   constructor(
     private receiveService: ReceiveService,
     private alertService: AlertService,
@@ -182,7 +182,7 @@ export class ReceiveComponent implements OnInit {
   async refresh(state: State) {
     this.offset = +state.page.from;
     const limit = +state.page.size;
-    const sort = state.sort;
+    this.sort = state.sort;
 
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
@@ -190,12 +190,12 @@ export class ReceiveComponent implements OnInit {
     this.modalLoading.show();
     try {
       if (!this.query) {
-        const rs = await this.receiveService.getReceiveStatus(limit, this.offset, this.fillterApprove, sort);
+        const rs = await this.receiveService.getReceiveStatus(limit, this.offset, this.fillterApprove, this.sort);
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
 
       } else {
-        const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove, sort);
+        const rs = await this.receiveService.getReceiveStatusSearch(limit, this.offset, this.query, this.fillterApprove, this.sort);
         this.waitings = rs.rows;
         this.totalReceive = rs.total;
         this.isSearching = true;
@@ -234,7 +234,7 @@ export class ReceiveComponent implements OnInit {
   async doSearchWaiting() {
     try {
       this.modalLoading.show();
-      const rs = await this.receiveService.getReceiveStatusSearch(this.perPage, this.offset, this.query, this.fillterApprove);
+      const rs = await this.receiveService.getReceiveStatusSearch(this.perPage, this.offset, this.query, this.fillterApprove, this.sort);
       this.waitings = rs.rows;
       this.totalReceive = rs.total;
       // await this.getReceiveExpiredSearch(this.query);

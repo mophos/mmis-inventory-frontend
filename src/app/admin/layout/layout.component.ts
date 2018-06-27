@@ -9,8 +9,8 @@ import * as _ from 'lodash';
   templateUrl: './layout.component.html'
 })
 export class LayoutComponent implements OnInit {
-  collapsible: boolean = true;
-  collapse: boolean = true;
+  collapsible = true;
+  collapse = true;
   fullname: string;
   warehouseName: string;
   warehouseId: string;
@@ -46,8 +46,7 @@ export class LayoutComponent implements OnInit {
 
   logout() {
     sessionStorage.removeItem('token');
-    // this.router.navigate(['/']);
-    this.router.navigateByUrl('/');
+    location.href = this.homeUrl;
   }
 
   goHome() {

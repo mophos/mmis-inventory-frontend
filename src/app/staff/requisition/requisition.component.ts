@@ -12,6 +12,7 @@ import {
 
 import { RequisitionTypeService } from "../requisition-type.service";
 import { RequisitionService } from "../requisition.service";
+import { WarehouseService } from "../warehouse.service";
 import { AlertService } from "../../alert.service";
 
 import { IMyOptions } from 'mydatepicker-th';
@@ -47,12 +48,14 @@ export class RequisitionComponent implements OnInit {
   totalWaiting = 0;
   totalWaitingApprove = 0;
   totalApproveds
+  jwtHelper: JwtHelper = new JwtHelper();
 
   query: any;
   fillterCancel = 'nCancel';
   constructor(
     private alertService: AlertService,
     private requisitionService: RequisitionService,
+    private warehouseService: WarehouseService,
     private uploadingService: UploadingService,
     private ref: ChangeDetectorRef,
     @Inject('DOC_URL') private docUrl: string,
@@ -67,7 +70,6 @@ export class RequisitionComponent implements OnInit {
   async ngOnInit() {
     this.loadData();
     this.selectedTab = sessionStorage.getItem('tabRequisitionStaff');
-
   }
 
   setTapActive(tab: any) {
@@ -222,6 +224,7 @@ export class RequisitionComponent implements OnInit {
     const url = this.url + `/report/approve/requis?token=${this.token}&requisId=` + order.requisition_order_id;
     this.htmlPreview.showReport(url);
   }
+
   printSetProduct(order: any) {
     const url = this.url + `/report/list/requis?token=${this.token}&requisId=` + order.requisition_order_id;
     this.htmlPreview.showReport(url);

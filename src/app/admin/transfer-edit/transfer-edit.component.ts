@@ -23,8 +23,8 @@ export class TransferEditComponent implements OnInit {
 
   lots = [];
   generics = [];
-  loading: boolean = false;
-  isLoading: boolean = false;
+  loading = false;
+  isLoading = false;
   locations: any = [];
   locationId: any;
 
@@ -43,7 +43,7 @@ export class TransferEditComponent implements OnInit {
   transferQty = 0;
   wmProductId: any;
   workingCode: any;
-  isSaving: boolean = false;
+  isSaving = false;
   disableSave = false;
 
   myDatePickerOptions: IMyOptions = {
@@ -85,6 +85,7 @@ export class TransferEditComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log('transferId', this.transferId);
     const date = new Date();
     await this.getSummaryInfo();
     await this.getDetailInfo();
@@ -227,33 +228,33 @@ export class TransferEditComponent implements OnInit {
 
   async addGeneric() {
     // if (this.transferQty) {
-      const idx = _.findIndex(this.generics, { generic_id: this.genericId });
+    const idx = _.findIndex(this.generics, { generic_id: this.genericId });
 
-      if (idx === -1) {
-        if (this.genericId) {
-          const obj = {
-            working_code: this.workingCode,
-            generic_name: this.genericName,
-            generic_id: this.genericId,
-            transfer_qty: +this.transferQty,
-            remain_qty: +this.remainQty,
-            unit_generic_id: this.unitGenericId,
-            conversion_qty: this.conversionQty,
-            location_id: this.locationId,
-            primary_unit_id: this.primaryUnitId,
-            primary_unit_name: this.primaryUnitName
-          };
+    if (idx === -1) {
+      if (this.genericId) {
+        const obj = {
+          working_code: this.workingCode,
+          generic_name: this.genericName,
+          generic_id: this.genericId,
+          transfer_qty: +this.transferQty,
+          remain_qty: +this.remainQty,
+          unit_generic_id: this.unitGenericId,
+          conversion_qty: this.conversionQty,
+          location_id: this.locationId,
+          primary_unit_id: this.primaryUnitId,
+          primary_unit_name: this.primaryUnitName
+        };
 
-          this.generics.push(obj);
-          await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
-          this.clearForm();
-        } else {
-          this.alertService.error('ข้อมูลไม่ครบถ้วน')
-        }
-
+        this.generics.push(obj);
+        await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
+        this.clearForm();
       } else {
-        this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
+        this.alertService.error('ข้อมูลไม่ครบถ้วน')
       }
+
+    } else {
+      this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
+    }
     // } else {
     //   this.alertService.error('กรุณาระบุจำนวนที่ต้องการโอน')
     // }
@@ -337,7 +338,7 @@ export class TransferEditComponent implements OnInit {
           generics.push({
             generic_id: v.generic_id,
             transfer_qty: +v.transfer_qty,
-            // unit_generic_id: v.unit_generic_id,
+            unit_generic_id: v.unit_generic_id,
             // conversion_qty: +v.conversion_qty,
             primary_unit_id: v.primary_unit_id,
             location_id: v.location_id,
@@ -361,7 +362,7 @@ export class TransferEditComponent implements OnInit {
             .then(async () => {
               this.modalLoading.show();
               try {
-                let rs: any = await this.transferService.updateTransfer(this.transferId, summary, generics);
+                const rs: any = await this.transferService.updateTransfer(this.transferId, summary, generics);
                 if (rs.ok) {
                   this.alertService.success();
                   this.router.navigate(['/admin/transfer']);
