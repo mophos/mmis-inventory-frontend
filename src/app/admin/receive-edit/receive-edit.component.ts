@@ -300,7 +300,7 @@ export class ReceiveEditComponent implements OnInit {
       // this.editListLocation[idx].getLocations(event.warehouse_id);
       this.products[idx].warehouse_id = event.warehouse_id;
       this.products[idx].warehouse_name = event.warehouse_name;
-      cmp.getLocations(event.warehouse_id);
+      // cmp.getLocations(event.warehouse_id);
       // console.log(event.warehouse_id);
     } catch (error) {
       //
@@ -354,7 +354,7 @@ export class ReceiveEditComponent implements OnInit {
       this.selectedExpireNumDays = event ? event.expire_num_days : 0;
       this.selectedGenericId = event ? event.generic_id : null;
       this.manufactureList.getManufacture(this.selectedGenericId);
-      this.warehouseList.getWarehouses(this.selectedGenericId);
+      this.warehouseList.getWarehouse(this.selectedGenericId);
 
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.primaryUnitName = event ? event.primary_unit_name : null;
