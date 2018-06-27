@@ -10,7 +10,9 @@ import * as _ from 'lodash';
 })
 export class HisMappingsComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
+
   mappings = [];
+  query = '';
 
   constructor(
     private warehouseService: WarehouseService,
@@ -90,5 +92,12 @@ export class HisMappingsComponent implements OnInit {
           this.alertService.error(JSON.stringify(error));
         }
       }).catch(() => { });
+  }
+
+  enterSearchGeneric(e) {
+    if (e.keyCode === 13) {
+      // this.searchGenerics();
+      console.log(this.query, 'asd');
+    }
   }
 }
