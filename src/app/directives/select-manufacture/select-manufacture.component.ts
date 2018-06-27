@@ -18,8 +18,8 @@ export class SelectManufactureComponent implements OnInit {
   loading: boolean = false;
 
   constructor(private basicService: BasicService, private alertService: AlertService) { }
-  
-  ngOnInit() { 
+
+  ngOnInit() {
     if (this.genericId) this.getManufacture(this.genericId);
   }
 
@@ -32,8 +32,11 @@ export class SelectManufactureComponent implements OnInit {
       if (res.ok) {
         this.manufactures = res.rows;
         if (this.manufactures.length) {
-          if (this.selectedId) this.manufactureId = this.selectedId;
-          else this.manufactureId = this.manufactures[0].labeler_id;
+          if (this.selectedId) {
+            this.manufactureId = this.selectedId;
+          } else {
+            this.manufactureId = this.manufactures[0].labeler_id;
+          }
           this.onSelect.emit(this.manufactures[0]);
         }
 
@@ -48,7 +51,7 @@ export class SelectManufactureComponent implements OnInit {
   }
 
   setSelect(event) {
-    let idx = _.findIndex(this.manufactures, { labeler_id: this.manufactureId });
+    const idx = _.findIndex(this.manufactures, { labeler_id: this.manufactureId });
     this.onSelect.emit(this.manufactures[idx]);
   }
 

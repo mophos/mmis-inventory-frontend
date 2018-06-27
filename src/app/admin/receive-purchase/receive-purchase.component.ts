@@ -305,7 +305,7 @@ export class ReceivePurchaseComponent implements OnInit {
       // this.editListLocation[idx].getLocations(event.warehouse_id);
       this.products[idx].warehouse_id = event.warehouse_id;
       this.products[idx].warehouse_name = event.warehouse_name;
-      cmp.getLocations(event.warehouse_id);
+      // cmp.getLocations(event.warehouse_id);
       // console.log(event.warehouse_id);
     } catch (error) {
       //
@@ -359,7 +359,7 @@ export class ReceivePurchaseComponent implements OnInit {
       this.selectedExpireNumDays = event ? event.expire_num_days : 0;
 
       this.manufactureList.getManufacture(this.selectedGenericId);
-      // this.warehouseList.getWarehouses(this.selectedGenericId);
+      this.warehouseList.getWarehouse(this.selectedGenericId);
 
       this.primaryUnitId = event ? event.primary_unit_id : null;
       // this.primaryUnitName = event ? event.primary_unit_name : null;
@@ -418,7 +418,8 @@ export class ReceivePurchaseComponent implements OnInit {
       this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ');
     } else {
       this.products.push(product);
-
+      console.log(this.products);
+      
       // cal total price
       this.countTotalCost();
       this.clearForm();
