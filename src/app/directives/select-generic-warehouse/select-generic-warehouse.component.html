@@ -1,5 +1,5 @@
 <div class="select">
-  <select name="warehouseId" style="border-bottom: 0px; width: 100%;" (change)="setSelect($event)" [(ngModel)]="warehouseId" disabled>
+  <select name="warehouseId" style="border-bottom: 0px; width: 100%;" (change)="setSelect($event)" [(ngModel)]="warehouseId">
     <!-- <option>เลือกคลังสินค้า</option> -->
     <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
       {{ w.short_code }} - {{ w.warehouse_name }}

@@ -80,7 +80,6 @@ export class ReceivePurchaseComponent implements OnInit {
   receiveTypeId: any;
   committee_id: any;
 
-  userWarehouseId: any;
   jwtHelper: JwtHelper = new JwtHelper();
   dataServiceM: any;
   dataServiceV: any;
@@ -152,7 +151,6 @@ export class ReceivePurchaseComponent implements OnInit {
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken: any = this.jwtHelper.decodeToken(this.token);
-    this.userWarehouseId = +decodedToken.warehouseId;
     // this.numDayExpired = +decodedToken.WM_CHECK_EXPIRE_ALERT_DAY || 60;
     // this.nullExpired = decodedToken.WM_RECEIVE_EXPIRED === 'N' ? true : false; // เก่า
     this.receiveExpired = decodedToken.WM_RECEIVE_EXPIRED === 'Y' ? true : false;
@@ -307,7 +305,7 @@ export class ReceivePurchaseComponent implements OnInit {
       // this.editListLocation[idx].getLocations(event.warehouse_id);
       this.products[idx].warehouse_id = event.warehouse_id;
       this.products[idx].warehouse_name = event.warehouse_name;
-      cmp.getLocations(event.warehouse_id);
+      // cmp.getLocations(event.warehouse_id);
       // console.log(event.warehouse_id);
     } catch (error) {
       //
@@ -361,7 +359,7 @@ export class ReceivePurchaseComponent implements OnInit {
       this.selectedExpireNumDays = event ? event.expire_num_days : 0;
 
       this.manufactureList.getManufacture(this.selectedGenericId);
-      // this.warehouseList.getWarehouses(this.selectedGenericId);
+      this.warehouseList.getWarehouse(this.selectedGenericId);
 
       this.primaryUnitId = event ? event.primary_unit_id : null;
       // this.primaryUnitName = event ? event.primary_unit_name : null;
@@ -393,7 +391,7 @@ export class ReceivePurchaseComponent implements OnInit {
     product.manufacture_name = this.selectedManufactureName;
 
     // warehouses
-    product.warehouse_id = this.userWarehouseId;
+    product.warehouse_id = this.selectedWarehouseId;
     product.warehouse_name = this.selectedWarehouseName;
 
     // location
@@ -415,10 +413,13 @@ export class ReceivePurchaseComponent implements OnInit {
     product.expired_date = this.selectedExpiredDate;
 
     const idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: product.is_free })
+
     if (idx > -1) {
       this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ');
     } else {
       this.products.push(product);
+      console.log(this.products);
+      
       // cal total price
       this.countTotalCost();
       this.clearForm();
@@ -461,7 +462,7 @@ export class ReceivePurchaseComponent implements OnInit {
     this.selectedManufactureName = null;
 
     this.manufactureList.clearVendor();
-    // this.warehouseList.clearWarehousList();
+    this.warehouseList.clearWarehousList();
     this.locationList.clearLocation();
     // this.lotList.clearLots();
     this.productSearch.clearProductSearch();
@@ -632,7 +633,7 @@ export class ReceivePurchaseComponent implements OnInit {
                 this.products.forEach((v: any) => {
                   if (v.receive_qty > 0) {
                     _products.push(v);
-                    if (v.receive_qty > 0 && v.product_id && v.unit_generic_id && v.cost >= 0) {
+                    if (v.warehouse_id && v.receive_qty > 0 && v.product_id && v.unit_generic_id && v.cost >= 0) {
                       if (v.expired_date) {
                         const validDate = this.daetService.isValidDateExpire(v.expired_date);
                         if (!validDate) {
@@ -660,6 +661,7 @@ export class ReceivePurchaseComponent implements OnInit {
                 } else {
                   // save product receive
                   let _closePurchase = this.isClosePurchase ? 'Y' : 'N';
+                  console.log(_products)
                   const rs: any = await this.receiveService.saveReceive(summary, _products, _closePurchase);
                   this.modalLoading.hide();
                   this.isSaving = false;

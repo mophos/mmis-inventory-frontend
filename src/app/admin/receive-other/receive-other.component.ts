@@ -289,7 +289,7 @@ export class ReceiveOtherComponent implements OnInit {
 
       this.manufactureList.getManufacture(this.selectedGenericId);
       // this.lotList.setProductId(this.selectedProductId);
-      // this.warehouseList.getWarehouses();
+      this.warehouseList.getWarehouse(this.selectedGenericId);
       this.getUnitConversion(this.selectedGenericId);
       this.unitList.setGenericId(this.selectedGenericId);
 
@@ -320,7 +320,7 @@ export class ReceiveOtherComponent implements OnInit {
       product.manufacture_name = this.selectedManufactureName;
 
       // warehouses
-      product.warehouse_id = this.userWarehouseId;
+      product.warehouse_id = this.selectedWarehouseId;
       product.warehouse_name = this.selectedWarehouseName;
 
       // location
@@ -393,7 +393,7 @@ export class ReceiveOtherComponent implements OnInit {
     this.isLotControl = null;
 
     this.manufactureList.clearVendor();
-    // this.warehouseList.clearWarehousList();
+    this.warehouseList.clearWarehousList();
     this.locationList.clearLocation();
     // this.lotList.clearLots();
     this.productSearch.clearProductSearch();
@@ -457,7 +457,7 @@ export class ReceiveOtherComponent implements OnInit {
       // this.editListLocation[idx].getLocations(event.warehouse_id);
       this.products[idx].warehouse_id = event.warehouse_id;
       this.products[idx].warehouse_name = event.warehouse_name;
-      cmp.getLocations(event.warehouse_id);
+      // cmp.getLocations(event.warehouse_id);
       // console.log(event.warehouse_id);
     } catch (error) {
       //
