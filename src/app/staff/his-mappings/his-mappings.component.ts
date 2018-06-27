@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 export class HisMappingsComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   mappings = [];
-
+  query: any;
   constructor(
     private warehouseService: WarehouseService,
     private alertService: AlertService) { }
@@ -18,7 +18,23 @@ export class HisMappingsComponent implements OnInit {
   ngOnInit() {
     this.getMappings();
   }
+  enterSearch(e) {
+    if (e.keyCode === 13) {
+      this.searchMappings();
+    }
+  }
 
+  async searchMappings() {
+    this.modalLoading.show();
+    try {
+      let rs: any = await this.warehouseService.getSearchStaffMappings(this.query);
+      this.mappings = rs.rows;
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
   async getMappings() {
     this.modalLoading.show();
     try {
