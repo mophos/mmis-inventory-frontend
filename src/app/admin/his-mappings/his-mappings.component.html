@@ -2,11 +2,16 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">Map รหัสยา (Generic) กับ HIS</span>
 </nav>
+<!-- <div class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;">
+  ค้นหา :
+  <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;" type="text"
+    placeholder="ค้นหาสินค้า...">
+</div> -->
 
 <clr-datagrid class="order-form">
   <clr-dg-column style="width: 150px;" [clrDgField]="'working_code'">Working Code</clr-dg-column>
   <clr-dg-column [clrDgField]="'generic_name'">รายละเอียด</clr-dg-column>
-  <clr-dg-column style="width: 120px;"[clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
+  <clr-dg-column style="width: 120px;" [clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
   <clr-dg-column style="width: 200px;" [clrDgField]="'his'">รหัสยา (HIS)</clr-dg-column>
   <clr-dg-column style="width: 120px;" [clrDgField]="'conversion'">Conversion</clr-dg-column>
   <clr-dg-column style="width: 120px; text-align: center;">#</clr-dg-column>
@@ -17,10 +22,12 @@
     <clr-dg-cell>{{m.generic_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">{{m.base_unit_name}}</clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" #his (keyup)="onChangeCode(his.value, m)" style="background-color: #FFF9C4" #his [value]="m.his">
+      <input type="text" class="wm-edit-box-number" #his (keyup)="onChangeCode(his.value, m)" style="background-color: #FFF9C4"
+        #his [value]="m.his">
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" wmNumberWithOutDot class="wm-edit-box-number" #conversion (keyup)="onChangeConversion(conversion.value, m)" style="background-color: #FFF9C4" #conversion [value]="m.conversion || 1">
+      <input type="text" wmNumberWithOutDot class="wm-edit-box-number" #conversion (keyup)="onChangeConversion(conversion.value, m)"
+        style="background-color: #FFF9C4" #conversion [value]="m.conversion || 1">
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group">
