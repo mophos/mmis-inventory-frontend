@@ -253,6 +253,7 @@ export class ReceiveOtherEditComponent implements OnInit {
 
   changeUnit(event: any) {
     try {
+      this.selectedCost = event.cost;
       this.selectedUnitName = event.unit_name;
       this.selectedUnitGenericId = event.unit_generic_id;
       this.conversionQty = event.qty;
@@ -275,6 +276,8 @@ export class ReceiveOtherEditComponent implements OnInit {
 
   setSelectedProduct(event: any) {
     try {
+      console.log(event);
+      
       this.selectedProductId = event ? event.product_id : null;
       this.selectedProductName = event ? `${event.product_name}` : null;
       this.selectedGenericName = event ? `${event.generic_name}` : null;
