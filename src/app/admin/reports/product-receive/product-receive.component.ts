@@ -50,12 +50,19 @@ export class ProductReceiveComponent implements OnInit {
     };
   }
 
-  notGiveaway() {
+  ptintReport() {
     this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/product/receive/${this.start}/${this.end}?token=${this.token}`
     this.htmlPreview.showReport(url);
     console.log(url);
+  }
+
+  exportExcel() {
+    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/products/receive/export/${this.start}/${this.end}?token=${this.token}`
+    window.open(url, '_blank');
   }
 
 }
