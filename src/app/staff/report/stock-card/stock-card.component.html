@@ -1,5 +1,5 @@
 <nav class="breadcrumb">
-  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
   <!-- <span class="breadcrumb-item active">รายงานคุมคลังเวชภัณฑ์</span> -->
 </nav>
 <clr-tabs>
@@ -15,18 +15,15 @@
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
           <wm-search-generic-warehouse-zero #productSearch [warehouseId]="warehouseId" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-zero>
-          <!-- <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="true" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete> -->
         </div>
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
           <label class="required">คลัง</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <wm-select-warehouses [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
-
+          <wm-select-warehouses [disabled]="true" [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
           </wm-select-warehouses>
         </div>
       </div>
-
       <div class="row" style="padding:1em">
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
           <label for="startDate" class="required">ตั้งแต่</label>
@@ -82,11 +79,11 @@
           <label class="required">คลัง</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <wm-select-warehouses [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
+          <wm-select-warehouses [disabled]="true" [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
           </wm-select-warehouses>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 btn-group">
-          <button class="btn btn-sm btn-primary" (click)="printReport()">
+          <button class="btn btn-sm btn-primary" (click)="printReportMovement()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่มีการเคลื่อนไหว
           </button>
           <button class="btn btn-sm btn-primary" (click)="printReportNomovement()">
@@ -94,7 +91,6 @@
           </button>
         </div>
       </div>
-
       <div class="row" style="padding:1em">
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
           <label for="startDate" class="required">ตั้งแต่</label>
