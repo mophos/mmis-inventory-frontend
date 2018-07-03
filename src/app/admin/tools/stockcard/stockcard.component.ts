@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToolsService } from '../../tools.service';
 import { AlertService } from '../../../alert.service';
 import { LoadingModalComponent } from '../../../modals/loading-modal/loading-modal.component';
+import { constants } from 'os';
 
 @Component({
   selector: 'wm-stockcard',
@@ -18,7 +19,7 @@ export class StockcardComponent implements OnInit {
   receiveItems: any = [];
   stockCardItems: any = [];
   stockCardId: any;
-  newBalanceQty: number = 0;
+  newBalanceQty = 0;
   isOpenSearchReceive = false;
   isOpenReceiveItem = false;
   isOpenStockCardItem = false;
@@ -47,7 +48,7 @@ export class StockcardComponent implements OnInit {
     if (event.keyCode === 13) {
       try {
         this.modalLoading.show();
-        let rs: any = await this.toolService.searchReceives(query);
+        const rs: any = await this.toolService.searchReceives(query);
         if (rs.ok) {
           this.receives = rs.rows;
         } else {
@@ -68,7 +69,7 @@ export class StockcardComponent implements OnInit {
       this.receiveType = item.receive_type;
       this.receiveId = item.receive_id;
       // get items list
-      let rs: any = await this.toolService.getReceivesItems(item.receive_id, item.receive_type);
+      const rs: any = await this.toolService.getReceivesItems(item.receive_id, item.receive_type);
       if (rs.ok) {
         this.receiveItems = rs.rows;
         this.isOpenReceiveItem = true;
@@ -87,12 +88,11 @@ export class StockcardComponent implements OnInit {
       this.modalLoading.show();
       this.receiveDetailId = this.receiveType === 'PO' ? item.receive_detail_id : item.receive_other_detail_id;
       // get items list
-      let rs: any = await this.toolService.getStockForEditCardList(this.receiveId, item.product_id, item.lot_no);
+      const rs: any = await this.toolService.getStockForEditCardList(this.receiveId, item.product_id, item.lot_no);
       if (rs.ok) {
         this.stockCardItems = rs.rows;
         this.stockCardId = rs.stockCardId;
         this.isOpenStockCardItem = true;
-        console.log(rs);
       } else {
         this.alertService.error(rs.error);
       }
@@ -104,7 +104,6 @@ export class StockcardComponent implements OnInit {
   }
 
   editChangeUnit(idx: number, event: any) {
-    console.log(event);
     this.stockCardItems[idx].conversion_qty = event.qty;
     this.stockCardItems[idx].unit_generic_id = event.unit_generic_id;
     this.unitGenericId = event.unit_generic_id;
@@ -112,7 +111,7 @@ export class StockcardComponent implements OnInit {
 
   changeQty(idx: number, qty: number) {
     this.newQty = qty;
-    let _newQty = (+qty * this.stockCardItems[idx].conversion_qty) - +this.stockCardItems[idx].in_qty;
+    const _newQty = (+qty * this.stockCardItems[idx].conversion_qty) - +this.stockCardItems[idx].in_qty;
     this.newBalanceQty = _newQty;
     this.stockCardItems[idx].in_qty += _newQty;
     this.calRemain();
@@ -135,12 +134,11 @@ export class StockcardComponent implements OnInit {
 
       this.modalLoading.show();
       // get items list
-      let rs: any = await this.toolService.updateStockCard(this.stockCardItems, this.receiveType, this.receiveDetailId, this.newQty, this.unitGenericId);
+      const rs: any = await this.toolService.updateStockCard(this.stockCardItems, this.receiveType, this.receiveDetailId, this.newQty, this.unitGenericId);
       if (rs.ok) {
         this.isOpenStockCardItem = false;
         this.isOpenReceiveItem = false;
         this.isOpenSearchReceive = false;
-        console.log(rs);
       } else {
         this.alertService.error(rs.error);
       }

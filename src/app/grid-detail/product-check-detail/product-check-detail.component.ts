@@ -21,20 +21,6 @@ export class ProductCheckDetailComponent implements OnInit {
 
   getProductList(receiveId) {
     this.loading = true;
-    // this.receiveService.getReceiveProductsCheckList(receiveId)
-    // .then((result: any) => {
-    //   this.loading = false;
-    //   if (result.ok) {
-    //     this.products = result.rows;
-    //   } else {
-    //     console.log(result.error);
-    //     this.alertService.error(JSON.stringify(result.error));
-    //   }
-    // })
-    // .catch(error => {
-    //   this.loading = false;
-    //   this.alertService.error(error.message);
-    // });
   }
 
 }

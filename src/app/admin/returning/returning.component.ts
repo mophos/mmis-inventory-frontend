@@ -106,18 +106,6 @@ export class ReturningComponent implements OnInit {
       });
   }
 
-  // getWarehouseList() {
-  //   this.borrowService.getWherehouseList()
-  //     .then((result: any) => {
-  //       this.warehouses = result.rows;
-  //       // this.warehouseId = this.ownerWarehouseId;
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //       this.alertService.error(JSON.stringify(e));
-  //     });
-  // }
-
   showConfirmReturn(p) {
     this.openBorrowQty = true;
     this.borrowService.getProductForReturn(p.product_id, this.borrowWarehouseId)

@@ -1,4 +1,3 @@
-import { ProductDetailComponent } from './../../grid-detail/product-detail/product-detail.component';
 import { Component, OnInit, Inject, Output, Input, EventEmitter, ViewChild, Directive } from '@angular/core';
 import { ProductsService } from './../products.service'
 import { AlertService } from '../../alert.service';
@@ -45,27 +44,23 @@ export class CodeMappingComponent implements OnInit {
   }
 
   changeSearchProduct(event, tmt) {
-    // console.log(event, 'event');
-    // console.log(tmt, 'tmt');
   }
 
   setSelectedProduct(event, m) {
-    console.log(event);
     const idx = _.findIndex(this.products, { 'product_id': m.product_id });
     if (idx > -1) {
       this.products[idx].tmtid = event.tmtid;
     }
-    console.log(this.products[idx]);
   }
 
   async save() {
     this.modalLoading.show();
     try {
 
-      let items: any = [];
+      const items: any = [];
       this.products.forEach(v => {
         if (v.tmtid) {
-          let obj: any = {};
+          const obj: any = {};
           obj.working_code = v.working_code;
           obj.product_id = v.product_id;
           obj.tmt_id = v.tmtid;
@@ -92,8 +87,8 @@ export class CodeMappingComponent implements OnInit {
   }
 
   async exportExcel() {
-    let token = sessionStorage.getItem('token');
-    let url = `${this.apiUrl}/products/mapping/tmt/export?token=${token}`;
+    const token = sessionStorage.getItem('token');
+    const url = `${this.apiUrl}/products/mapping/tmt/export?token=${token}`;
     window.open(url, '_blank');
   }
 

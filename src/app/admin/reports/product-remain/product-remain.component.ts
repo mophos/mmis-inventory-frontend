@@ -69,7 +69,6 @@ export class ProductRemainComponent implements OnInit {
   }
 
   changeGenericType() {
-    console.log(this.genericType, 'genericType');
   }
 
   setSelectedWarehouse(event) {

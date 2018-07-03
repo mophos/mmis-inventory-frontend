@@ -75,13 +75,11 @@ export class InventoryStatusComponent implements OnInit {
   }
 
   changeGenericType() {
-    console.log(this.genericType);
   }
 
   inventoryStatus() {
     this.statusDate = this.statusDate ? moment(this.statusDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/inventorystatus/${this.warehouseId}/${this.genericType}/${this.statusDate}?token=${this.token}`
     this.htmlPreview.showReport(url);
-    console.log(this.statusDate);
   }
 }

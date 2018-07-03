@@ -22,30 +22,27 @@ export class ViewRequsitionAllComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if(this.productId && this.srcWarehouseId)
-    {
-     this.getAllRequisitionQty();
+    if (this.productId && this.srcWarehouseId) {
+      this.getAllRequisitionQty();
     }
   }
 
-  getAllRequisitionQty(){
+  getAllRequisitionQty() {
     this.requisitionService.getAllRequisitionQty(this.productId, this.srcWarehouseId)
-    .then((result: any) => {
-      this.loading = false;
-      console.log(result);
-      if (result.ok) {
-        if (result.rows[0]) {
-          this.requisition_all_qty = result.rows[0].allqty || 0;
+      .then((result: any) => {
+        this.loading = false;
+        if (result.ok) {
+          if (result.rows[0]) {
+            this.requisition_all_qty = result.rows[0].allqty || 0;
+          }
+        } else {
+          console.log(result.error);
+          this.alertService.error(JSON.stringify(result.error));
         }
-      } else {
-        console.log("ตรงนี้ Error");
-        console.log(result.error);
-        this.alertService.error(JSON.stringify(result.error));
-      }
-    })
-    .catch(error => {
-      this.alertService.error(error.message);
-    });
+      })
+      .catch(error => {
+        this.alertService.error(error.message);
+      });
   }
 
 }

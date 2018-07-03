@@ -56,8 +56,7 @@ export class CalculateMinMaxComponent implements OnInit {
       this.modalLoading.hide();
     } catch (error) {
       this.modalLoading.hide();
-      console.log(error);
-      this.alertService.serverError();
+      this.alertService.error(error);
     }
   }
 
@@ -303,7 +302,7 @@ export class CalculateMinMaxComponent implements OnInit {
   async searchGenerics() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.minMaxService.searchGenericsWarehosue(this.genericType, this.query);
+      const rs: any = await this.minMaxService.searchGenericsWarehosue(this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
         for (const g of this.generics) {
@@ -332,5 +331,4 @@ export class CalculateMinMaxComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-
 }

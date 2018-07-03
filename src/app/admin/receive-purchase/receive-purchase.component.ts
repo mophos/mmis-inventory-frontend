@@ -36,7 +36,7 @@ export class ReceivePurchaseComponent implements OnInit {
   totalProduct = 0;
   totalCost = 0;
   loading = false;
-  isClosePurchase: boolean = false;
+  isClosePurchase = false;
   openConflict = false;
 
   lots = [];
@@ -294,22 +294,17 @@ export class ReceivePurchaseComponent implements OnInit {
         this.locationList.getLocations(event.warehouse_id);
       }
     } catch (error) {
-      //
-      console.log(error);
+      this.alertService.error(error);
 
     }
   }
 
   editChangeWarehouse(idx, event: any, cmp: any) {
     try {
-      // this.editListLocation[idx].getLocations(event.warehouse_id);
       this.products[idx].warehouse_id = event.warehouse_id;
       this.products[idx].warehouse_name = event.warehouse_name;
-      // cmp.getLocations(event.warehouse_id);
-      // console.log(event.warehouse_id);
     } catch (error) {
-      //
-      console.log(error);
+      this.alertService.error(error);
     }
   }
 
@@ -327,7 +322,7 @@ export class ReceivePurchaseComponent implements OnInit {
       this.selectedUnitGenericId = event.unit_generic_id;
       this.selectedCost = event.cost
     } catch (error) {
-      //
+      this.alertService.error(error);
     }
   }
 
@@ -335,10 +330,8 @@ export class ReceivePurchaseComponent implements OnInit {
     try {
       this.selectedSupplierId = event.labeler_id;
       this.selectedSupplierName = event.labeler_name;
-      console.log(this.selectedSupplierId);
-
     } catch (error) {
-      //
+      this.alertService.error(error);
     }
   }
 
@@ -351,7 +344,6 @@ export class ReceivePurchaseComponent implements OnInit {
 
   setSelectedProduct(event: any) {
     try {
-      console.log(event);
       this.selectedProductId = event ? event.product_id : null;
       this.selectedGenericId = event ? event.generic_id : null;
       this.selectedProductName = event ? `${event.product_name}` : null;
@@ -362,14 +354,13 @@ export class ReceivePurchaseComponent implements OnInit {
       this.warehouseList.getWarehouse(this.selectedGenericId);
 
       this.primaryUnitId = event ? event.primary_unit_id : null;
-      // this.primaryUnitName = event ? event.primary_unit_name : null;
       this.unitList.setGenericId(this.selectedGenericId);
 
       // lot control
       this.isLotControl = event ? event.is_lot_control : null;
 
     } catch (error) {
-      console.log(error.message);
+      this.alertService.error(error);
     }
   }
 
@@ -380,8 +371,6 @@ export class ReceivePurchaseComponent implements OnInit {
     product.generic_name = this.selectedGenericName;
     product.receive_qty = this.selectedReceiveQty;
     product.canReceive = this.selectedReceiveQty;
-    // product.primary_unit_id = this.primaryUnitId;
-    // product.primary_unit_name = this.primaryUnitName;
     product.lot_no = this.selectedLotNo ? this.selectedLotNo.toUpperCase() : null;
     product.generic_id = this.selectedGenericId;
     product.discount = +this.selectedDiscount;
@@ -418,8 +407,6 @@ export class ReceivePurchaseComponent implements OnInit {
       this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ');
     } else {
       this.products.push(product);
-      console.log(this.products);
-      
       // cal total price
       this.countTotalCost();
       this.clearForm();
@@ -442,7 +429,6 @@ export class ReceivePurchaseComponent implements OnInit {
     this.selectedGenericName = null;
     this.selectedExpiredDate = null;
     this.selectedExpireNumDays = 0;
-    // this.selectedLotId = null;
     this.selectedLotNo = null;
     this.selectedCost = 0;
     this.selectedReceiveQty = '';
@@ -464,7 +450,6 @@ export class ReceivePurchaseComponent implements OnInit {
     this.manufactureList.clearVendor();
     this.warehouseList.clearWarehousList();
     this.locationList.clearLocation();
-    // this.lotList.clearLots();
     this.productSearch.clearProductSearch();
     this.unitList.clearUnits();
   }
@@ -475,8 +460,8 @@ export class ReceivePurchaseComponent implements OnInit {
         this.products.splice(idx, 1);
         this.countTotalCost();
       })
-      .catch(() => {
-        //
+      .catch((error) => {
+        this.alertService.error(error);
       });
   }
 
@@ -493,8 +478,6 @@ export class ReceivePurchaseComponent implements OnInit {
   editChangeUnit(idx: any, event: any) {
     try {
       if (event) {
-        // this.products[idx].unit_name = event.unit_name;
-        // this.products[idx].unit_id = event.unit_id;
         this.products[idx].unit_generic_id = event.unit_generic_id;
         this.products[idx].conversion_qty = +event.qty;
         this.countTotalCost();
@@ -502,7 +485,7 @@ export class ReceivePurchaseComponent implements OnInit {
         this.alertService.error('กรุณาเลือกหน่วยสินค้า')
       }
     } catch (error) {
-      //
+      this.alertService.error(error);
     }
   }
 
@@ -515,7 +498,7 @@ export class ReceivePurchaseComponent implements OnInit {
         this.alertService.error('กรุณาเลือกผู้ผลิต')
       }
     } catch (error) {
-      //
+      this.alertService.error(error);
     }
   }
 
@@ -523,7 +506,7 @@ export class ReceivePurchaseComponent implements OnInit {
     try {
       this.products[idx].lot_no = lot;
     } catch (error) {
-      //
+      this.alertService.error(error);
     }
   }
 
@@ -536,7 +519,7 @@ export class ReceivePurchaseComponent implements OnInit {
       this.products[idx].is_free = this.products[idx].is_free === 'Y' ? 'N' : 'Y';
       this.countTotalCost();
     } catch (error) {
-      //
+      this.alertService.error(error);
     }
   }
   async saveReceive() {
@@ -546,17 +529,14 @@ export class ReceivePurchaseComponent implements OnInit {
       const rsP = await this.periodService.getStatus(_receiveDate)
       if (rsP.rows[0].status_close === 'Y') {
         this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถรับได้');
-        console.log('err ปิดรอบบัญชี');
         this.isReceivePeriod = true;
       } else {
         const rs = await this.receiveService.getPurchaseCheckHoliday(_receiveDate);
-        console.log(rs);
         if (rs.ok) {
           this.isReceiveHoliday = false;
           await this.checkExpired();
         } else {
           this.isReceiveHoliday = true; // วันหยุด
-          console.log('err วันที่คุณเลือกเป็นวันหยุดราชการ จะรับสินค้าหรือไม่');
           this.alertService.confirm(rs.error)
             .then(async () => {
               this.isReceiveHoliday = false; // วันหยุด
@@ -646,7 +626,6 @@ export class ReceivePurchaseComponent implements OnInit {
                         if (!v.lot_no || v.lot_no === '') {
                           isError = true;
                         }
-                        // isError = v.lot_no ? false : true;
                       }
                     } else {
                       isError = true;
@@ -660,12 +639,10 @@ export class ReceivePurchaseComponent implements OnInit {
                   this.alertService.error('ข้อมูลรายการสินค้าบางรายการไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot, วันหมดอายุ]');
                 } else {
                   // save product receive
-                  let _closePurchase = this.isClosePurchase ? 'Y' : 'N';
-                  console.log(_products)
+                  const _closePurchase = this.isClosePurchase ? 'Y' : 'N';
                   const rs: any = await this.receiveService.saveReceive(summary, _products, _closePurchase);
                   this.modalLoading.hide();
                   this.isSaving = false;
-
                   if (rs.ok) {
                     sessionStorage.setItem('tabReceive', 'receive');
                     this.router.navigate(['/admin/receives']);
@@ -730,7 +707,7 @@ export class ReceivePurchaseComponent implements OnInit {
                 this.alertService.error('ข้อมูลรายการสินค้าไม่ครบถ้วน [คลังสินค้า, หน่วยรับ, lot]');
               } else {
                 // save product receive
-                let _closePurchase = this.isClosePurchase ? 'Y' : 'N';
+                const _closePurchase = this.isClosePurchase ? 'Y' : 'N';
                 this.receiveService.saveReceive(summary, _products, _closePurchase)
                   .then((res: any) => {
                     this.modalLoading.hide();
@@ -841,7 +818,6 @@ export class ReceivePurchaseComponent implements OnInit {
     this.selectedSupplierName = event.purchase.labeler_name;
     // set products
     this.products = event.products;
-    // this.openConflictModal(this.purchaseOrderId);
   }
 
   closePurchaseModal(event) {
@@ -858,12 +834,10 @@ export class ReceivePurchaseComponent implements OnInit {
       for (const v of this.products) {
         if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
-          console.log('err กรุณาระบุวันหมดอายุ');
           this.isExpired = true;
         }
       }
     }
-    // console.log(this.isExpired);
     if (!this.isExpired) {
       let count = 0;
       for (const v of this.products) {
@@ -871,8 +845,6 @@ export class ReceivePurchaseComponent implements OnInit {
           const d: any = v.expired_date.split('/');
           const expired_date: any = new Date(d[2], d[1] - 1, d[0]);
           const diffday = moment(expired_date).diff(moment(), 'days');
-          // console.log(diffday, expired_date);
-
           if (diffday < 0) {
             count++;
           }
@@ -880,11 +852,9 @@ export class ReceivePurchaseComponent implements OnInit {
       }
       if (count > 0) {
         this.alertService.error('มีเวชภัณฑ์หมดอายุ ไม่อนุญาตให้รับสินค้า');
-        console.log('เวชภัณฑ์หมดอายุ');
         this.isItemExpired = true;
       }
     }
-    // console.log(this.isItemExpired);
     if (!this.isItemExpired) {
       let checkDiffExpired;
       let count = 0;
@@ -893,14 +863,12 @@ export class ReceivePurchaseComponent implements OnInit {
           const d: any = v.expired_date.split('/');
           const expired_date = moment(new Date(d[2], d[1] - 1, d[0])).format('YYYY-MM-DD');
           checkDiffExpired = await this.receiveService.getPurchaseCheckExpire(v.generic_id, expired_date);
-          console.log(checkDiffExpired);
           if (!checkDiffExpired.ok) {
             count++;
           }
         }
       }
       if (count > 0) {
-        console.log('err ใกล้หมดอายุ');
         this.alertService.confirm(checkDiffExpired.error)
           .then(() => {
             this.isItemExpired = false; // ใช่ ดำเนินการ
@@ -912,7 +880,6 @@ export class ReceivePurchaseComponent implements OnInit {
           })
       } else {
         if (!this.isExpired && !this.isItemExpired && !this.isReceiveHoliday && !this.isReceivePeriod) {
-          // console.log('all false');
           this.saveReceiveTo();
         }
       }
@@ -927,7 +894,7 @@ export class ReceivePurchaseComponent implements OnInit {
         .then(() => {
           this.saveReceive();
         }).catch((err) => {
-
+          this.alertService.error(err);
         });
     }
   }

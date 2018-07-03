@@ -143,7 +143,6 @@ export class ReceiveComponent implements OnInit {
     const limit = +state.page.size;
     const sort = state.sort;
 
-    console.log(sort);
     sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
     sessionStorage.setItem('offsetReceive', this.offset.toString());
 
@@ -273,12 +272,10 @@ export class ReceiveComponent implements OnInit {
   }
 
   removeReceive(w) {
-    console.log(w);
     this.alertService.confirm('คุณต้องการลบรายการรับสินค้านี้ [' + w.receive_code + '] ใช่หรือไม่?')
       .then(async () => {
         try {
           this.modalLoading.show();
-          // await this.receiveService.updatePurchaseApproved(w.receive_id);
           const rs: any = await this.receiveService.removeReceive(w.receive_id, w.purchase_order_id);
           if (rs.ok) {
             this.alertService.success();
@@ -510,8 +507,6 @@ export class ReceiveComponent implements OnInit {
       const urls = await `${this.apiUrl}/report/list/receiveDateOther/${sDate}/${eDate}?token=${this.token}`;
       url = urls
     } else if (showOption === 3) {
-      console.log('333333+++++');
-
       const urls = await `${this.apiUrl}/report/list/receiveDateCheck/${sDate}/${eDate}?token=${this.token}`;
       url = urls
     }
@@ -528,8 +523,6 @@ export class ReceiveComponent implements OnInit {
       const urls = await `${this.apiUrl}/report/list/receiveCodeOther/${sID}/${eID}?token=${this.token}`;
       url = urls
     } else if (showOption === 3) {
-      console.log('333333-----');
-
       const urls = await `${this.apiUrl}/report/list/receiveCodeCheck/${sID}/${eID}?token=${this.token}`;
       url = urls
     }
@@ -545,8 +538,6 @@ export class ReceiveComponent implements OnInit {
       const urls = await `${this.apiUrl}/report/list/receivePo/${sID}/${eID}?token=${this.token}`;
       url = urls
     } else if (showOption === 3) {
-      console.log('333333++++----');
-
       const urls = await `${this.apiUrl}/report/list/receivePoCheck/${sID}/${eID}?token=${this.token}`;
       url = urls
     }
@@ -589,7 +580,6 @@ export class ReceiveComponent implements OnInit {
           receiveOtherIds.forEach((v: any) => {
             strIds += `receiveOtherID=${v}&`;
           });
-          //       console.log(strIds);
           const url = `${this.apiUrl}/report/list/receiveOther?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {
@@ -603,7 +593,6 @@ export class ReceiveComponent implements OnInit {
 
   printDeliveryNote() {
     const receiveIds = [];
-    //  console.log(this.selectedApprove);
     _.forEach(this.selectedApprove, (v) => {
       if (v.purchase_order_number) {
         receiveIds.push(v.receive_id);
@@ -630,7 +619,6 @@ export class ReceiveComponent implements OnInit {
 
   printReceive() {
     const receiveIds = [];
-    //  console.log(this.selectedApprove);
     _.forEach(this.selectedApprove, (v) => {
       if (v.purchase_order_number) {
         receiveIds.push(v.receive_id);
@@ -718,7 +706,6 @@ export class ReceiveComponent implements OnInit {
           receiveIds.forEach((v: any) => {
             strIds += `receiveOtherID=${v}&`;
           });
-          console.log(strIds)
           const url = `${this.apiUrl}/report/product/receive/other?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url, 'landscape');
         }).catch(() => {

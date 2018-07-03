@@ -17,18 +17,16 @@ export class RequisitionSuccessDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.requisitionId);
     this.loading = true;
     this.showSuccessDetail(this.requisitionId);
   }
 
-    showSuccessDetail(requisitionId) {
+  showSuccessDetail(requisitionId) {
     this.requisitionService.getSuccessDetail(requisitionId)
       .then((result: any) => {
         this.loading = false;
         if (result.ok) {
           this.requisitionSuccessDetail = result.rows;
-          console.log(this.requisitionSuccessDetail);
         } else {
           console.log(result.error);
           this.alertService.error();

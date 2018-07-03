@@ -17,7 +17,7 @@ export class AdjustProductModalComponent implements OnInit {
   @Output("onCancel") onCancel = new EventEmitter<number>();
   // @Input('adjQty') adjQty: number;
   @Input('isCounting') isCounting: boolean;
-  adjQty: number = 0;
+  adjQty = 0;
   isBaseCount = true;
   checkBase = true;
   checkPackage = false;
@@ -163,25 +163,18 @@ export class AdjustProductModalComponent implements OnInit {
     this.onSuccess.emit(null);
   }
   chageCheck(e) {
-    console.log(e.target.id, e.target.checked);
     if (e.target.id === 'checkBase') {
       this.adjQtyBase = Math.floor(this.adjQtyPackage * this.conversion);
       this.adjQtyPackage = '';
       this.checkBase = true;
       this.checkPackage = false;
     } else {
-      console.log(this.adjQtyBase, this.conversion);
       this.adjQtyPackage = Math.floor(this.adjQtyBase / this.conversion);
       this.adjQtyBase = '';
       this.checkBase = false;
       this.checkPackage = true;
     }
     this.totalSmallQty = Math.floor(this.adjQtyPackage * this.conversion);
-    // if (this.checkBase) {
-    //   this.checkBase = !this.checkBase;
-    // } else if (this.checkPackage) {
-    //   this.checkPackage = !this.checkPackage;
-    // }
   }
 
 }

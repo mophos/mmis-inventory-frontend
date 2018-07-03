@@ -355,8 +355,6 @@ export class RequisitionService {
   }
 
   getRequisitionInfo(requisitionId: any) {
-    // console.log('getRequisitionInfo :');
-    // console.log(requisitionId);
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/requisition/info/${requisitionId}`)
         .map(res => res.json())

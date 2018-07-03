@@ -22,16 +22,10 @@ export class ShowUnitsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("OnInit Select Unit x");
-    console.log("this selected unit id");
-    console.log(this.selectedUnitGenericId);
-    console.log("In This Event On Staff");
     this.getUnits();
-
-  }  
+  }
 
   setSelect(event: any) {
-
     const idx = _.findIndex(this.units, { unit_generic_id: +this.selectedUnitGenericId });
     if (idx > -1) {
       this.onSelect.emit(this.units[idx]);
@@ -41,12 +35,10 @@ export class ShowUnitsComponent implements OnInit {
   getUnits() {
     this.receiveService.getUnitConversion(this.genericId)
       .then((result: any) => {
-        // this.loading = false;
         if (result.ok) {
           this.units = result.rows;
           this.unitId = this.selectedUnitId;
           this.unitGenericId = this.selectedUnitGenericId;
-          // console.log(this.requisitionDetail);
           this.selectedUnitGenericId = this.units[0].unit_generic_id;
         } else {
           console.log(result.error);
@@ -57,5 +49,4 @@ export class ShowUnitsComponent implements OnInit {
         this.alertService.error(error.message)
       });
   }
-
 }

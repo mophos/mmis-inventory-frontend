@@ -26,9 +26,7 @@ export class TransactionIssueDetailStaffComponent implements OnInit {
   async getProductList() {
     this.loading = true;
     try {
-      let rs = await this.issueService.getGenericList(this.issueId)
-      console.log(rs);
-      
+      const rs = await this.issueService.getGenericList(this.issueId)
       if (rs.ok) {
         this.products = rs.rows;
       } else {
@@ -37,9 +35,7 @@ export class TransactionIssueDetailStaffComponent implements OnInit {
       this.loading = false;
     } catch (error) {
       this.loading = false;
-      this.alertService.error(error.message); 
+      this.alertService.error(error.message);
     }
   }
-
-
 }

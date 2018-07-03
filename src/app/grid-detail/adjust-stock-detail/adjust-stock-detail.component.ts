@@ -18,7 +18,6 @@ export class AdjustStockDetailComponent implements OnInit {
   constructor(private alertService: AlertService) { }
 
   ngOnInit() {
-    console.log(this.details);
   }
 
 }

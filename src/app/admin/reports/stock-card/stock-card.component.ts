@@ -70,7 +70,6 @@ export class StockCardComponent implements OnInit {
       generic_code: generic.working_code
     });
     this.generic_id.push('genericId=' + generic.generic_id)
-    // console.log(this.generic_id);
   }
 
   changeSearchGeneric(generic) {

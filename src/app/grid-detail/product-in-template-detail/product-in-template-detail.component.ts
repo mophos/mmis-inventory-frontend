@@ -30,7 +30,6 @@ export class ProductInTemplateDetailComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           this.productsdetail = result.rows;
-          console.log(this.productsdetail);
           this.ref.detectChanges();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));

@@ -39,7 +39,7 @@ export class WarehouseProductPlanningComponent implements OnInit {
 
   async getWarehouseDetail() {
     try {
-      let rs: any = await this.warehouseService.detail(this.warehouseId);
+      const rs: any = await this.warehouseService.detail(this.warehouseId);
       if (rs.ok) {
         this.warehouseId = rs.detail.warehouse_id;
         this.warehouseName = rs.detail.warehouse_name;
@@ -54,7 +54,7 @@ export class WarehouseProductPlanningComponent implements OnInit {
 
   async getGroups() {
     try {
-      let rs: any = await this.basicService.getGenericGroupsList();
+      const rs: any = await this.basicService.getGenericGroupsList();
       if (rs.ok) {
         this.groups = rs.rows;
       } else {
@@ -68,7 +68,7 @@ export class WarehouseProductPlanningComponent implements OnInit {
   async getPlanning() {
     try {
       this.modalLoading.show();
-      let rs: any = await this.warehouseService.getProductPlannings(this.warehouseId);
+      const rs: any = await this.warehouseService.getProductPlannings(this.warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
       } else {
@@ -92,7 +92,7 @@ export class WarehouseProductPlanningComponent implements OnInit {
                 if (rs.ok) {
                   // this.products = rs.rows;
                   rs.rows.forEach(v => {
-                    let idx = _.findIndex(this.products, { generic_id: v.generic_id });
+                    const idx = _.findIndex(this.products, { generic_id: v.generic_id });
                     if (idx === -1) {
                       this.products.push(v);
                     }
@@ -121,7 +121,7 @@ export class WarehouseProductPlanningComponent implements OnInit {
   remove(genericId: any) {
     this.alertService.confirm('ต้องการลบรายการ ใช่หรือไม่?')
       .then(() => {
-        let idx = _.findIndex(this.products, { generic_id: genericId });
+        const idx = _.findIndex(this.products, { generic_id: genericId });
         if (idx > -1) {
           this.products.splice(idx, 1);
         }
@@ -129,37 +129,35 @@ export class WarehouseProductPlanningComponent implements OnInit {
   }
 
   changeMax(genericId: any, qty: any) {
-    console.log(qty);
-
-    let idx = _.findIndex(this.products, { generic_id: genericId });
+    const idx = _.findIndex(this.products, { generic_id: genericId });
     if (idx > -1) {
       this.products[idx].max_qty = qty;
     }
   }
 
   changeMin(genericId: any, qty: number) {
-    let idx = _.findIndex(this.products, { generic_id: genericId });
+    const idx = _.findIndex(this.products, { generic_id: genericId });
     if (idx > -1) {
       this.products[idx].min_qty = qty;
     }
   }
 
   changeModifier(genericId: any, qty: number) {
-    let idx = _.findIndex(this.products, { generic_id: genericId });
+    const idx = _.findIndex(this.products, { generic_id: genericId });
     if (idx > -1) {
       this.products[idx].min_modifier_qty = qty;
     }
   }
 
   changeQuota(genericId: any, qty: number) {
-    let idx = _.findIndex(this.products, { generic_id: genericId });
+    const idx = _.findIndex(this.products, { generic_id: genericId });
     if (idx > -1) {
       this.products[idx].requisition_quota_qty = qty;
     }
   }
 
   setSelectedProduct(event) {
-    let obj = {
+    const obj = {
       generic_name: event.generic_name,
       max_qty: 0,
       min_modifier_qty: 0,
@@ -171,7 +169,7 @@ export class WarehouseProductPlanningComponent implements OnInit {
       working_code: event.working_code
     }
 
-    let idx = _.findIndex(this.products, { generic_id: event.generic_id });
+    const idx = _.findIndex(this.products, { generic_id: event.generic_id });
 
     if (idx > -1) {
       this.alertService.error('รายการนี้มีอยู่แล้วไม่สามารถเพิ่มได้');
@@ -180,18 +178,6 @@ export class WarehouseProductPlanningComponent implements OnInit {
       this.alertService.success();
     }
   }
-
-  // doAddProduct() {
-  //   let idx = _.findIndex(this.products, { product_id: this.selected.product_id });
-  //   if (idx > -1) {
-  //     this.alertService.error('รายการนี้มีอยู่แล้วไม่สามารถเพิ่มได้');
-  //   } else {
-  //     this.products.push(this.selected);
-  //     this.alertService.success();
-  //     this.wmProductSeach.clearProductSearch();
-  //     this.selected = null;
-  //   }
-  // }
 
   save() {
     if (this.products.length) {

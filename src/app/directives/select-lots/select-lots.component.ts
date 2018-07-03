@@ -23,20 +23,11 @@ export class SelectLotsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("OnInit");
-    console.log(this.productId);
-    console.log("Selected Lot No");
-    console.log(this.SelectedlotNo);
-    console.log("warehouseId");
-    console.log(this.warehouseId);
     this.getLots();
   }
 
   setSelect(event: any) {
-    // console.log(this.lotId);
-    // console.log(this.lots);
     const idx = _.findIndex(this.lots, { lot_no: this.SelectedlotNo });
-    console.log(idx);
     if (idx > -1) {
       this.onSelect.emit(this.lots[idx]);
     }
@@ -45,14 +36,12 @@ export class SelectLotsComponent implements OnInit {
   getLots() {
     this.lotService.getLotsWarehouse(this.productId, this.warehouseId)
       .then((result: any) => {
-        // this.loading = false;
         if (result.ok) {
           this.lots = result.rows;
           this.lotNo = this.SelectedlotNo;
-          // console.log(this.requisitionDetail);
         } else {
           console.log(result.error);
-          this.alertService.error();
+          this.alertService.error(result.error);
         }
       })
       .catch(error => {

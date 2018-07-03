@@ -19,7 +19,7 @@ export class ProductSummaryComponent implements OnInit {
   startDate: any;
   endDate: any;
   warehouses: any = [];
-  warehouseId:any = 0;
+  warehouseId: any = 0;
   warehouseName: any;
   isPreview = false;
   selectedGenericId = 0;
@@ -38,7 +38,7 @@ export class ProductSummaryComponent implements OnInit {
     this.token = sessionStorage.getItem('token')
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.warehouseId = decodedToken.warehouseId
-    this.warehouseName = decodedToken.warehouseName    
+    this.warehouseName = decodedToken.warehouseName
     this.options = {
       pdfOpenParams: { toolbar: '1' },
       height: "450px"
@@ -67,20 +67,18 @@ export class ProductSummaryComponent implements OnInit {
   }
 
   showReport() {
-    console.log(+this.warehouseId);
-    if(+this.warehouseId !== 0){
-      this.warehouseName = _.find(this.warehouses,(v)=>{return +v.warehouse_id === +this.warehouseId})
+    if (+this.warehouseId !== 0) {
+      this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
       this.warehouseName = this.warehouseName.warehouse_name
-    } else {      
+    } else {
       this.warehouseName = 'ทุกคลังสินค้า'
     }
-    console.log(this.warehouseName);
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/totalcost/warehouse/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
-  
+
   getWarehouseList() {
     this.warehouseService.all()
       .then((result: any) => {

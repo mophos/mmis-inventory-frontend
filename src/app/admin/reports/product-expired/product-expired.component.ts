@@ -61,7 +61,6 @@ export class ProductExpiredComponent implements OnInit {
   }
 
   showReport() {
-    console.log(this.warehouseId);
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/
