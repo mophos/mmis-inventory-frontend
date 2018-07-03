@@ -50,12 +50,19 @@ export class ProductReceiveComponent implements OnInit {
     };
   }
 
-  notGiveaway() {
-    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
-    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+  ptintReport() {
+    this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
+    this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
     const url = `${this.apiUrl}/report/product/receive/${this.start}/${this.end}?token=${this.token}`
     this.htmlPreview.showReport(url);
-    console.log(url);
+    console.log(this.start, this.end);
+  }
+
+  exportExcel() {
+    this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
+    this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
+    const url = `${this.apiUrl}/report/receive/export/${this.start}/${this.end}?token=${this.token}`
+    window.open(url, '_blank');
   }
 
 }
