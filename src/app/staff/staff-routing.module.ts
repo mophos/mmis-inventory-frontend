@@ -27,6 +27,7 @@ import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { ProductsComponent } from 'app/staff/products/products.component';
 import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
+import { StockCardComponent } from 'app/staff/report/stock-card/stock-card.component'
 
 const routes: Routes = [
   {
@@ -57,6 +58,7 @@ const routes: Routes = [
       { path: 'borrow-notes/new', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
       { path: 'borrow-notes/:borrowNoteId/edit', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
       { path: 'product/requisition', component: ProductRequisitionComponent },
+      { path: 'reports/stock-card', component: StockCardComponent},
     ]
   }
 ];
