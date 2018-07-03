@@ -35,7 +35,7 @@ export class AdjustStockNewComponent implements OnInit {
   reason: any;
   password: any;
   passwordModal = false;
-
+  checkEnterPass = true;
   isSave = false;
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('productSearch') public productSearch: any;
@@ -88,7 +88,10 @@ export class AdjustStockNewComponent implements OnInit {
 
   enterSave(e) {
     if (e.keyCode === 13 && this.password) {
-      this.save();
+      if (this.checkEnterPass) {
+        this.save();
+      }
+      this.checkEnterPass = !this.checkEnterPass;
     }
   }
 
@@ -111,7 +114,7 @@ export class AdjustStockNewComponent implements OnInit {
     this.modalLoading.show();
     try {
       const rs: any = await this.productService.productInWarehouse(genericId);
-      if (rs) {
+      if (rs.ok) {
         const idx = _.findIndex(this.generics, { 'generic_id': genericId })
         if (idx > -1) {
           this.generics[idx].products = rs.rows;
@@ -199,7 +202,7 @@ export class AdjustStockNewComponent implements OnInit {
       this.modalLoading.show();
       if (this.password) {
         const rs = await this.staffService.checkPassword(this.password);
-        if (rs) {
+        if (rs.ok) {
           if (this.generics.length && this.reason) {
             const head = {
               reason: this.reason
@@ -214,7 +217,7 @@ export class AdjustStockNewComponent implements OnInit {
         } else {
           this.isSave = false;
           this.modalLoading.hide();
-          this.passwordModal = false;
+          // this.passwordModal = false;
           this.alertService.error('รหัสผ่านผิดพลาด');
         }
       } else {

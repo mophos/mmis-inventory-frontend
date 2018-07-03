@@ -68,6 +68,7 @@ import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { ProductRequisitionComponent } from './product-requisition/product-requisition.component';
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
+import { StockCardComponent } from './report/stock-card/stock-card.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -105,7 +106,8 @@ import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.com
     BorrowNoteNewComponent,
     ProductRequisitionComponent,
     AdjustStockComponent,
-    AdjustStockNewComponent
+    AdjustStockNewComponent,
+    StockCardComponent
   ],
   providers: [
     ToThaiDatePipe,

@@ -31,6 +31,7 @@ import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
+import { StockCardComponent } from 'app/staff/report/stock-card/stock-card.component'
 
 const routes: Routes = [
   {
@@ -63,6 +64,7 @@ const routes: Routes = [
       { path: 'product/requisition', component: ProductRequisitionComponent },
       { path: 'adjust-stock', canActivate: [AuthAdjustService], component: AdjustStockComponent },
       { path: 'adjust-stock/new', canActivate: [AuthAdjustService], component: AdjustStockNewComponent },
+      { path: 'reports/stock-card', component: StockCardComponent},
     ]
   }
 ];
