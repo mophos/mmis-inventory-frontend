@@ -11,8 +11,8 @@ export class AdjustStockService {
 
   }
 
-  async getList() {
-    const rs = await this.authHttp.get(`${this.url}/adjust-stock/list`).toPromise();
+  async getList(limit, offset) {
+    const rs = await this.authHttp.get(`${this.url}/adjust-stock/list?limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 

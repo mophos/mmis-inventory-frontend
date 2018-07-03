@@ -17,59 +17,26 @@
   </div>
 </div>
 
-<!-- <h4>รายการสินค้า</h4> -->
 <button class="btn btn-sm btn-success wm-small-btn" routerLink="/admin/adjust-stock/new">
-    <clr-icon shape="plus"></clr-icon>บันทึกปรับยอด
-  </button>
-<clr-datagrid [style.height.%]="75">
-    <clr-dg-column>รหัสการปรับยอด</clr-dg-column>
-    <clr-dg-column>วันที่ปรับยอด</clr-dg-column>
-    <clr-dg-column>เหตุผล</clr-dg-column>
-    <clr-dg-column>ปรับโดย</clr-dg-column>
-  
-    <clr-dg-row *clrDgItems="let l of lists" [clrDgItem]="g" [ngClass]="{'isSuccess': l.is_approved === 'Y', 'isError': l.is_cancel === 'Y'}">
-      <wm-adjust-stock-detail *clrIfExpanded [data]="l.generics" ngProjectAs="clr-dg-row-detail"></wm-adjust-stock-detail>
-      <clr-dg-cell>{{l.adjust_code}}</clr-dg-cell>
-      <clr-dg-cell>{{l.adjust_date | toThaiDate}}</clr-dg-cell>
-      <!-- <clr-dg-cell>
-        <input type="text" #qty (keyup)="editChangeAdjust(g.generic_id, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
-          wmNumberOnly [value]="g.qty" />
-      </clr-dg-cell> -->
-      <clr-dg-cell>{{l.reason}}</clr-dg-cell>
-      <clr-dg-cell>{{l.people_name}}</clr-dg-cell>
-    </clr-dg-row>
-  
-    <clr-dg-footer>
-      {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} of {{paginationA.totalItems}} รายการ
-      <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
-    </clr-dg-footer>
-  </clr-datagrid>
-  
-<!-- <clr-datagrid [style.height.%]="75">
-  <clr-dg-column>Generic Code</clr-dg-column>
-  <clr-dg-column>Generic Name</clr-dg-column>
-  <clr-dg-column></clr-dg-column>
-  <clr-dg-column></clr-dg-column>
+  <clr-icon shape="plus"></clr-icon>บันทึกปรับยอด
+</button>
+<clr-datagrid (clrDgRefresh)="refresh($event)" [style.height.%]="75">
+  <clr-dg-column>รหัสการปรับยอด</clr-dg-column>
+  <clr-dg-column>วันที่ปรับยอด</clr-dg-column>
+  <clr-dg-column>เหตุผล</clr-dg-column>
+  <clr-dg-column>ปรับโดย</clr-dg-column>
 
-  <clr-dg-row *clrDgItems="let g of generics" [clrDgItem]="g">
-    <wm-adjust-stock-detail (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="g.products" ngProjectAs="clr-dg-row-detail"></wm-adjust-stock-detail>
-    <clr-dg-cell>{{g.generic_code}}</clr-dg-cell>
-    <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
-    <clr-dg-cell>
-      <input type="text" #qty (keyup)="editChangeAdjust(g.generic_id, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
-        wmNumberOnly [value]="g.qty" />
-    </clr-dg-cell>
-    <clr-dg-cell>
-      <button class="btn btn-sm btn-success wm-small-btn" (click)="save(g.generic_id)">
-        <clr-icon shape="floppy"></clr-icon>
-      </button>
-    </clr-dg-cell>
+  <clr-dg-row *ngFor="let l of lists" [clrDgItem]="g" [ngClass]="{'isSuccess': l.is_approved === 'Y', 'isError': l.is_cancel === 'Y'}">
+    <wm-adjust-stock-detail *clrIfExpanded [data]="l.generics" ngProjectAs="clr-dg-row-detail"></wm-adjust-stock-detail>
+    <clr-dg-cell>{{l.adjust_code}}</clr-dg-cell>
+    <clr-dg-cell>{{l.adjust_date | toThaiDate}}</clr-dg-cell>
+    <clr-dg-cell>{{l.reason}}</clr-dg-cell>
+    <clr-dg-cell>{{l.people_name}}</clr-dg-cell>
   </clr-dg-row>
-
   <clr-dg-footer>
-    {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} of {{paginationA.totalItems}} รายการ
-    <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
+    {{pageWait.firstItem + 1 | number}} - {{pageWait.lastItem + 1 | number}} จาก {{pageWait.totalItems | number}} รายการ
+    <clr-dg-pagination #pageWait [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalList"></clr-dg-pagination>
   </clr-dg-footer>
-</clr-datagrid> -->
+</clr-datagrid>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
