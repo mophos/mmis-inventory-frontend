@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
+import { ReportProductsService } from 'app/admin/reports/reports-products.service';
 import * as moment from 'moment';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
-import { ReportProductsService } from './../reports-products.service';
 import { AlertService } from './../../../alert.service';
 import * as _ from 'lodash';
+
 @Component({
   selector: 'wm-stock-card',
   templateUrl: './stock-card.component.html',
@@ -13,27 +14,8 @@ import * as _ from 'lodash';
 })
 export class StockCardComponent implements OnInit {
 
-  @ViewChild('searchGenericCmp') public searchGenericCmp: SearchGenericAutocompleteComponent;
   @ViewChild('htmlPreview') public htmlPreview: any;
 
-  startDate: any;
-  endDate: any;
-  isPreview = false;
-  start: any;
-  end: any;
-  token: any;
-  warehouseId: any;
-  datageneric = [];
-  generic_id = [];
-  genericInStockcard = [];
-  productId: any;
-  myDatePickerOptions: IMyOptions = {
-    inline: false,
-    dateFormat: 'dd mmm yyyy',
-    editableDateField: false,
-    showClearDateBtn: false
-  };
-  jwtHelper: JwtHelper = new JwtHelper();
   constructor(
     private reportProductService: ReportProductsService,
     private alertService: AlertService,
@@ -44,6 +26,23 @@ export class StockCardComponent implements OnInit {
     this.warehouseId = decodedToken.warehouseId;
   }
 
+  startDate: any;
+  endDate: any;
+  start: any;
+  end: any;
+  datageneric = [];
+  generic_id = [];
+  warehouseId: any;
+  token: any;
+  genericInStockcard = [];
+
+  myDatePickerOptions: IMyOptions = {
+    inline: false,
+    dateFormat: 'dd mmm yyyy',
+    editableDateField: false,
+    showClearDateBtn: false
+  };
+  jwtHelper: JwtHelper = new JwtHelper();
 
   ngOnInit() {
     const date = new Date();
@@ -63,6 +62,11 @@ export class StockCardComponent implements OnInit {
     };
   }
 
+  changeTab() {
+    this.generic_id = [];
+    this.datageneric = [];
+  }
+
   setSelectedGeneric(generic) {
     this.datageneric.push({
       generic_id: generic.generic_id,
@@ -70,17 +74,16 @@ export class StockCardComponent implements OnInit {
       generic_code: generic.working_code
     });
     this.generic_id.push('genericId=' + generic.generic_id)
-    // console.log(this.generic_id);
   }
 
   changeSearchGeneric(generic) {
   }
 
-  changeTab() {
-    this.generic_id = [];
-    this.datageneric = [];
+  setSelectedWarehouse(event) {
+    this.warehouseId = event.warehouse_id;
   }
 
+  //รายงานคุมคลังเวชภัณฑ์
   showReport() {
     this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
@@ -89,30 +92,12 @@ export class StockCardComponent implements OnInit {
     this.htmlPreview.showReport(url, 'landscape');
   }
 
-  refresh() {
-    this.startDate = '';
-    this.endDate = '';
-    this.datageneric = [];
+  //พิมพ์รายการเฉพาะที่มีการเคลื่อนไหว
+  async printReportMovement() {
     this.generic_id = [];
-  }
-
-  setSelectedWarehouse(event) {
-    this.warehouseId = event.warehouse_id;
-  }
-
-  removeSelected(g) {
-    const idx = _.findIndex(this.datageneric, { generic_id: g.generic_id });
-    if (idx > -1) {
-      this.datageneric.splice(idx, 1);
-      this.generic_id.splice(idx, 1)
-    }
-  }
-
-  async printReport() {
-    this.generic_id = [];
-    const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
-    const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
-    await this.reportProductService.getGenericInStockcrad(this.warehouseId, startDate, endDate)
+    const start = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
+    const end = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
+    await this.reportProductService.getGenericInStockcrad(this.warehouseId, start, end)
       .then((result: any) => {
         if (result.ok) {
           this.genericInStockcard = result.rows;
@@ -140,9 +125,12 @@ export class StockCardComponent implements OnInit {
     this.htmlPreview.showReport(url);
   }
 
-  clearProductSearch() {
-    this.productId = null;
+  removeSelected(g) {
+    const idx = _.findIndex(this.datageneric, { generic_id: g.generic_id });
+    if (idx > -1) {
+      this.datageneric.splice(idx, 1);
+      this.generic_id.splice(idx, 1)
+    }
   }
-
 
 }
