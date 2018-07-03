@@ -42,6 +42,8 @@ import { AdditionProductViewComponent } from './addition-product-view/addition-p
 import { TransferItemsStaffComponent } from './transfer-items-staff/transfer-items-staff.component';
 import { StaffProductStockRemainComponent } from './staff-product-stock-remain/staff-product-stock-remain.component';
 import { StaffProductDetailStockRemainComponent } from './staff-product-detail-stock-remain/staff-product-detail-stock-remain.component';
+import { AdjustStockDetailComponent } from './adjust-stock-detail/adjust-stock-detail.component';
+import { AdjustStockProductComponent } from './adjust-stock-product/adjust-stock-product.component';
 
 @NgModule({
   imports: [
@@ -87,7 +89,9 @@ import { StaffProductDetailStockRemainComponent } from './staff-product-detail-s
     AdditionProductViewComponent,
     TransferItemsStaffComponent,
     StaffProductStockRemainComponent,
-    StaffProductDetailStockRemainComponent
+    StaffProductDetailStockRemainComponent,
+    AdjustStockDetailComponent,
+    AdjustStockProductComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -124,7 +128,9 @@ import { StaffProductDetailStockRemainComponent } from './staff-product-detail-s
     AdditionProductViewComponent,
     TransferItemsStaffComponent,
     StaffProductStockRemainComponent,
-    StaffProductDetailStockRemainComponent
+    StaffProductDetailStockRemainComponent,
+    AdjustStockDetailComponent,
+    AdjustStockProductComponent
   ]
 })
 export class GridDetailModule { }

@@ -1,3 +1,5 @@
+import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
+import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdditionEditComponent } from './addition-edit/addition-edit.component';
 import { AdditionComponent } from './addition/addition.component';
 import { CalculateMinMaxComponent } from './calculate-min-max/calculate-min-max.component';
@@ -79,6 +81,7 @@ import { AuthShippingNetwork } from 'app/auth-shipping-network.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
+import { AuthAdjustService } from 'app/auth-adjust.service';
 import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
 import { ValueProductsComponent } from 'app/admin/reports/value-products/value-products.component';
 import { PurchasingNotgiveawayComponent } from 'app/admin/reports/purchasing-notgiveaway/purchasing-notgiveaway.component'
@@ -104,6 +107,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
       { path: 'main', component: MainPageComponent },
       { path: 'warehouse', canActivate: [AuthWarehouseManagement], component: WarehouseComponent },
+      { path: 'adjust-stock', canActivate: [AuthAdjustService], component: AdjustStockComponent },
+      { path: 'adjust-stock/new', canActivate: [AuthAdjustService], component: AdjustStockNewComponent },
       { path: 'warehouse/detail', canActivate: [AuthWarehouseManagement], component: WarehouseDetailComponent },
       { path: 'warehouse/planning', canActivate: [AuthWarehouseManagement], component: WarehouseProductPlanningComponent },
       { path: 'warehouse-type', component: WarehouseTypeComponent },

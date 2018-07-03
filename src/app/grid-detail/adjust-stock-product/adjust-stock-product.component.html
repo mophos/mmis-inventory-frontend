@@ -1,0 +1,22 @@
+<clr-datagrid>
+    <clr-dg-column>ชื่อยา (ชื่อทางการค้า)</clr-dg-column>
+    <clr-dg-column>LOT</clr-dg-column>
+    <clr-dg-column>วันหมดอายุ</clr-dg-column>
+    <clr-dg-column>คงเหลือ</clr-dg-column>
+    <clr-dg-column>คงเหลือที่ปรับยอด</clr-dg-column>
+    <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
+      <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+      <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+      <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
+      <clr-dg-cell>{{p.old_qty | number}} {{p.base_unit_name}}</clr-dg-cell>
+      <clr-dg-cell>
+        <input type="text" #qty (keyup)="onChangeQty(p.wm_product_id, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+          wmNumberOnly [value]="p.qty" />
+      </clr-dg-cell>
+    </clr-dg-row>
+  
+    <clr-dg-footer>
+      {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} of {{paginationA.totalItems}} รายการ
+      <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
