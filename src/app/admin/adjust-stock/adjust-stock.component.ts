@@ -1,5 +1,5 @@
 import { AdjustStockService } from './../adjust-stock.service';
-import { Component, OnInit, ViewChild } from '@angular/core';;
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertService } from '../../alert.service';
 import { JwtHelper } from 'angular2-jwt';
 import { State } from "@clr/angular";
@@ -18,7 +18,7 @@ export class AdjustStockComponent implements OnInit {
   lists: any;
   totalList: any;
   perPage = 5;
-
+  currentPage = 1;
   constructor(
     private adjustStockService: AdjustStockService,
     private alertService: AlertService,
