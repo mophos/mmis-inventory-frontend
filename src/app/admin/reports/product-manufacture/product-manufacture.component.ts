@@ -59,7 +59,6 @@ export class ProductManufactureComponent implements OnInit {
     const token = sessionStorage.getItem('token');
     const decodedToken: any = this.jwtHelper.decodeToken(token);
     const warehouseId = decodedToken.warehouseId;
-    console.log(decodedToken);
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/product/manufacture/warehouse/?warehouseId=${warehouseId}
@@ -67,6 +66,5 @@ export class ProductManufactureComponent implements OnInit {
     this.htmlPreview.showReport(url);
   }
   refresh() {
-    console.log('test');
   }
 }

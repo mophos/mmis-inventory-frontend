@@ -72,8 +72,6 @@ export class ReceiveotherTypeComponent implements OnInit {
   showEdit(w: IReceiveotherTypeStructure) {
     this.receiveotherTypeId = w.receive_type_id;
     this.receiveotherTypeName = w.receive_type_name;
-    // console.log("this is unitissue id: " + this.unitIssueId);
-    // console.log("this is unitissue name: " + this.unitIssueName);
     // set update flag
     this.isUpdate = true;
     // open modal

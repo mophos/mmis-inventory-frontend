@@ -230,7 +230,6 @@ export class RequisitionComponent implements OnInit {
     this.page = 1
     this.action = 'WM_REQUISITION_APPROVE'
     this.title = 'รายการเบิกสินค้า'
-    console.log(accessName);
     this.tmpOderApprove = order
     if (this.accessCheck.can(accessName)) {
       this.doApprove(this.tmpOderApprove)
@@ -241,8 +240,6 @@ export class RequisitionComponent implements OnInit {
 
   async checkApprove(username: any, password: any) {
     const rs: any = await this.requisitionService.checkApprove(username, password, this.action);
-    console.log(rs);
-
     if (rs.ok) {
       if (this.page === 1) {
         this.doApprove(this.tmpOderApprove)
@@ -378,8 +375,6 @@ export class RequisitionComponent implements OnInit {
   }
 
   async rollbackOrderConfirm(order) {
-    console.log(order);
-
     this.modalLoading.show();
     try {
       const rs = await this.requisitionService.rollbackOrder(order.confirm_id, order.requisition_order_id);

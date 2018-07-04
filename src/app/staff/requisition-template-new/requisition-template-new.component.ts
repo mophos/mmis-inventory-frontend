@@ -170,8 +170,6 @@ export class RequisitionTemplateNewComponent implements OnInit {
         if (result.ok) {
           this.dstWarehouses = result.rows;
           this.dstWarehouseId = result.rows[0].warehouse_id;
-          console.log(result.rows);
-
         } else {
           this.alertService.error(result.error)
         }

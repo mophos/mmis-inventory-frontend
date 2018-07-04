@@ -14,27 +14,25 @@ export class LayoutComponent implements OnInit {
   warehouseName: any;
   fullname: string;
   jwtHelper: JwtHelper = new JwtHelper();
-  
 
-  collapsible: boolean = true;
-  collapse: boolean = true;
+
+  collapsible = true;
+  collapse = true;
   token: any = null;
 
   @ViewChild('modalChangePassword') public modalChangePassword;
 
-  constructor(private router: Router, private staffService: StaffService,@Inject('API_PORTAL_URL') private apiPortal: string) {
+  constructor(private router: Router, private staffService: StaffService, @Inject('API_PORTAL_URL') private apiPortal: string) {
     this.token = sessionStorage.getItem('token');
-    
+
   }
 
   ngOnInit() {
-    // console.log(decoded);
     const decoded = this.jwtHelper.decodeToken(this.token);
     this.fullname = decoded.fullname;
     this.warehouseId = decoded.warehouseId;
     this.warehouseName = decoded.warehouseName;
     this.warehouseCode = decoded.warehouseCode;
-    // this.getWarehouseDetail();
   }
 
   logout() {

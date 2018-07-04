@@ -19,8 +19,6 @@ export class InternalissueDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("in_ng_onInit");
-    console.log(this.internalissueID);
     this.loading = true;
     this.getProductList(this.internalissueID);
   }
@@ -31,8 +29,6 @@ export class InternalissueDetailComponent implements OnInit {
         this.loading = false;
         if (result.ok) {
           this.internalissueDetail = result.rows;
-          // console.log(result.rows);
-          console.log(this.internalissueDetail);
         } else {
           console.log(result.error);
           this.alertService.error();

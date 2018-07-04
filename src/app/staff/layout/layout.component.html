@@ -89,6 +89,23 @@
 
       <clr-vertical-nav-group routerLinkActive="active">
         <a clrVerticalNavLink href="javascript://">
+          <clr-icon shape="tools" clrVerticalNavIcon></clr-icon>
+          เครื่องมือ (Tools)
+        </a>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <!-- <a clrVerticalNavLink routerLink="/admin/tools/stockcard" routerLinkActive="active">
+              <clr-icon shape="scroll"></clr-icon>
+              แก้ไข Stock Card
+            </a> -->
+          <a clrVerticalNavLink routerLink="/staff/adjust-stock" routerLinkActive="active">
+            <clr-icon shape="scissors"></clr-icon>
+            ปรับยอดสินค้า
+          </a>
+        </clr-vertical-nav-group-children>
+      </clr-vertical-nav-group>
+
+      <clr-vertical-nav-group routerLinkActive="active">
+        <a clrVerticalNavLink href="javascript://">
           <clr-icon shape="printer" clrVerticalNavIcon></clr-icon>
           ระบบรายงาน
         </a>
@@ -99,6 +116,7 @@
           </a>
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>
+
     </clr-vertical-nav>
 
   </div>

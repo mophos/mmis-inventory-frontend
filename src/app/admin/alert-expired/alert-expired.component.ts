@@ -73,35 +73,12 @@ export class AlertExpiredComponent implements OnInit {
       this.alertService.serverError();
     }
   }
-  // setAlertStatus() {
-  //   if (this.isAlert) {
-  //     this.isAlert = false;
-  //   } else {
-  //     this.isAlert = true;
-  //   }
-
-  //   const status = this.isAlert ? 'Y' : 'N';
-  //   this.modalLoading.show();
-  //   this.alertExpiredService.saveStatus(status)
-  //     .then((result: any) => {
-  //       if (result.ok) {
-  //         this.alertService.success();
-  //       } else {
-  //         this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-  //       }
-  //       this.modalLoading.hide();
-  //     })
-  //     .catch(() => {
-  //       this.modalLoading.hide();
-  //       this.alertService.serverError();
-  //     });
-  // }
 
   async getAllProducts() {
     this.isAll = true;
     this.modalLoading.show();
     try {
-      let rs: any = await this.alertExpiredService.getAllGenerics();
+      const rs: any = await this.alertExpiredService.getAllGenerics();
       if (rs.ok) {
         this.allGenerics = rs.rows;
       } else {
@@ -117,10 +94,11 @@ export class AlertExpiredComponent implements OnInit {
   async changeGenericType() {
     this.isAll = true;
     this.modalLoading.show();
-    if (this.genericType == 'all') this.getAllProducts()
-    else {
+    if (this.genericType === 'all') {
+      this.getAllProducts()
+    } else {
       try {
-        let rs: any = await this.alertExpiredService.getSelectGenerics(this.genericType);
+        const rs: any = await this.alertExpiredService.getSelectGenerics(this.genericType);
         if (rs.ok) {
           this.allGenerics = rs.rows;
         } else {
@@ -150,11 +128,8 @@ export class AlertExpiredComponent implements OnInit {
       this.modalLoading.hide();
     } catch (error) {
       this.modalLoading.hide();
-      console.log(error);
-      this.alertService.serverError();
+      this.alertService.error(error);
     }
-    console.log(this.genericTypes);
-
   }
 
   setExpireCount() {
@@ -166,13 +141,12 @@ export class AlertExpiredComponent implements OnInit {
       });
       this.openSetSingleExpire = true;
     } catch (error) {
-      console.log(error);
-      this.alertService.error();
+      this.alertService.error(error);
     }
   }
 
   setExpireCountAll() {
-      this.openSetAllExpired = true;
+    this.openSetAllExpired = true;
   }
 
   setSingleExpire(product: any) {
@@ -204,6 +178,7 @@ export class AlertExpiredComponent implements OnInit {
       this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
     }
   }
+
   saveExpireCountAll() {
     if (this.numDays >= 10) {
       this.submitLoading = true;
@@ -226,6 +201,7 @@ export class AlertExpiredComponent implements OnInit {
       this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
     }
   }
+
   getUnsetProducts() {
     this.isAll = false;
     this.modalLoading.show();

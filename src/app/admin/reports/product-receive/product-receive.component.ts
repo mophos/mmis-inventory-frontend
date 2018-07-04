@@ -55,7 +55,6 @@ export class ProductReceiveComponent implements OnInit {
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
     const url = `${this.apiUrl}/report/product/receive/${this.start}/${this.end}?token=${this.token}`
     this.htmlPreview.showReport(url);
-    console.log(this.start, this.end);
   }
 
   exportExcel() {

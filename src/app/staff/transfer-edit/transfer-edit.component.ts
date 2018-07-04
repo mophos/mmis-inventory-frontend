@@ -148,13 +148,10 @@ export class TransferEditComponent implements OnInit {
     try {
       const idx = _.findIndex(this.lots, { lot_no: this.lotNo });
       if (idx > -1) {
-        console.log(this.lots[idx]);
-
         this.expiredDate = this.lots[idx].expired_date;
         this.remainQty = this.lots[idx].qty;
         this.wmProductId = this.lots[idx].wm_product_id;
         this.lotNo = this.lots[idx].lot_no;
-        // this.getProductRemain();
       }
     } catch (error) {
       //
@@ -235,9 +232,6 @@ export class TransferEditComponent implements OnInit {
             primary_unit_id: this.primaryUnitId,
             location_id: this.locationId
           };
-
-          console.log(obj);
-
           this.generics.push(obj);
           await this.getProductList(this.genericId, (this.transferQty * this.conversionQty));
           this.clearForm();

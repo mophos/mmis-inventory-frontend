@@ -24,11 +24,6 @@ export class ViewProductRemainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("view product remain");
-    console.log("warehouseId");
-    console.log(this.warehouseId);
-    console.log("productId");
-    console.log(this.productId);
     if (this.warehouseId && this.productId) {
       this.getProductList();
     }
@@ -38,13 +33,11 @@ export class ViewProductRemainComponent implements OnInit {
     this.productsService.getWarehouseProductRemain(this.warehouseId, this.productId)
       .then((result: any) => {
         this.loading = false;
-        console.log(result);
         if (result.ok) {
           if (result.rows[0]) {
             this.product_remain_qty = result.rows[0].remain_qty || 0;
           }
         } else {
-          console.log("ตรงนี้ Error");
           console.log(result.error);
           this.alertService.error(JSON.stringify(result.error));
         }

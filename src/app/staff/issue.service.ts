@@ -22,7 +22,6 @@ export class IssueService {
       })
         .map(res => res.json())
         .subscribe(data => {
-          console.log(data);
           resolve(data);
         }, error => {
           reject(error);
@@ -37,7 +36,6 @@ export class IssueService {
       })
         .map(res => res.json())
         .subscribe(data => {
-          console.log(data);
           resolve(data);
         }, error => {
           reject(error);

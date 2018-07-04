@@ -1,3 +1,4 @@
+
 import { ProductRequisitionComponent } from './product-requisition/product-requisition.component';
 import { TransferNewComponent } from './transfer-new/transfer-new.component';
 import { TransferComponent } from './transfer/transfer.component';
@@ -24,9 +25,12 @@ import { HisIssueTransactionComponent } from 'app/staff/his-issue-transaction/hi
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
+import { AuthAdjustService } from 'app/auth-adjust.service';
 import { ProductsComponent } from 'app/staff/products/products.component';
 import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
+import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
+import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 import { StockCardComponent } from 'app/staff/report/stock-card/stock-card.component'
 
 const routes: Routes = [
@@ -58,6 +62,8 @@ const routes: Routes = [
       { path: 'borrow-notes/new', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
       { path: 'borrow-notes/:borrowNoteId/edit', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
       { path: 'product/requisition', component: ProductRequisitionComponent },
+      { path: 'adjust-stock', canActivate: [AuthAdjustService], component: AdjustStockComponent },
+      { path: 'adjust-stock/new', canActivate: [AuthAdjustService], component: AdjustStockNewComponent },
       { path: 'reports/stock-card', component: StockCardComponent},
     ]
   }

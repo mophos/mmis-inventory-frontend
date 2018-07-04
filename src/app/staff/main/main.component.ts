@@ -71,31 +71,12 @@ export class MainComponent implements OnInit {
     }
   }
 
-  // getWarehouseDetail() {
-  //   this.staffService.getWarehouseDetail(this.warehouseId)
-  //     .then((result: any) => {
-  //       if (result.ok && result.detail) {
-  //         this.warehouseLocation = result.detail.location;
-  //         this.warehouseName = result.detail.warehouse_name;
-  //         this.warehouseCreateDate = result.detail.created_at;
-  //         this.warehouseType = result.detail.type_name;
-  //       } else {
-  //         this.alertService.error('ไม่พบข้อมูลคลังสินค้าที่ต้องการ');
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       this.alertService.error(e.message);
-  //     });
-  // }
-
   getProducts() {
     this.modalLoading.show();
     this.staffService.getProductsWarehouse(this.genericType)
       .then((result: any) => {
         if (result.ok) {
           this.products = result.rows;
-          // console.log(this.products);
-
           this.ref.detectChanges();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
@@ -114,8 +95,6 @@ export class MainComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           this.generics = result.rows;
-          // console.log(this.generics);
-
           this.ref.detectChanges();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
@@ -183,22 +162,6 @@ export class MainComponent implements OnInit {
 
   changeQty(product) {
     this.doAdjust(product.wm_product_id, product.qty);
-    // console.log(product.wm_product_id);
-
-    //   const _p = _.clone(product);
-    //   this.oldQty = _p.qty;
-    //   this.adjProductNewId = product.id;
-    //   this.adjProductName = product.product_name;
-    //   this.adjProductId = product.product_id;
-    //   this.adjLot = product.lot_no;
-    //   this.adjExpiredDate = this.toThaiDate.transform(product.expired_date);
-    //   this.adjSmallUnit = `${product.small_qty} x ${product.small_unit}`;
-    //   this.adjLargeUnit = `${product.large_qty} x ${product.large_unit}`;
-    //   this.adjQty = product.qty;
-    //   this.adjReason = null;
-
-    //   this.getAdjLogs(product.id);
-    //   this.openModalQty = true;
   }
 
   doAdjust(productNewId, adjQty) {

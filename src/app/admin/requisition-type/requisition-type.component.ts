@@ -29,10 +29,10 @@ export class RequisitionTypeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-        this.all();
+    this.all();
   }
 
-addNew() {
+  addNew() {
     this.isUpdate = false;
     this.requisitionTypeId = null;
     this.requisitionTypeName = null;
@@ -44,9 +44,6 @@ addNew() {
     this.modalLoading.show();
     let promise;
     if (this.isUpdate) {
-      // console.log("unit issue id: " + this.unitIssueId);
-      // console.log("unit issue name: " + this.unitIssueName);
-      // console.log("unit issue des: "+ this.unitIssueDesc);
       promise = this.requisiotionTypeService.update(this.requisitionTypeId, this.requisitionTypeName, this.requisitionTypeDesc);
     } else {
       promise = this.requisiotionTypeService.save(this.requisitionTypeName, this.requisitionTypeDesc);
@@ -93,8 +90,6 @@ addNew() {
     this.requisitionTypeId = w.requisition_type_id;
     this.requisitionTypeName = w.requisition_type;
     this.requisitionTypeDesc = w.requisition_type_desc;
-    // console.log("this is unitissue id: " + this.unitIssueId);
-    // console.log("this is unitissue name: " + this.unitIssueName);
     // set update flag
     this.isUpdate = true;
     // open modal

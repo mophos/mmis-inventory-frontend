@@ -17,7 +17,6 @@ export class AccessCheck {
         const decodedToken = this.jwtHelper.decodeToken(token);
         const accessRight = decodedToken.accessRight;
         this.rights = accessRight.split(',');
-        // console.log('can access: ', this.rights);
     }
 
     getRighs() {

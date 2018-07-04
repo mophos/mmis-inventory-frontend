@@ -23,8 +23,6 @@ export class ViewReceiveApproveComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("On Init View Receive-Approve");
-    console.log(this.productId);
     if (this.productId) {
       this.getProductList();
     }
@@ -34,13 +32,11 @@ export class ViewReceiveApproveComponent implements OnInit {
     this.requisitionService.getReceiveProductRemain(this.productId)
       .then((result: any) => {
         this.loading = false;
-        console.log(result);
         if (result.ok) {
           if (result.rows[0]) {
             this.receive_remain_qty = result.rows[0].qty || 0;
           }
         } else {
-          console.log("ตรงนี้ Error");
           console.log(result.error);
           this.alertService.error(JSON.stringify(result.error));
         }

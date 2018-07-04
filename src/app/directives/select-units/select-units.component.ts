@@ -24,39 +24,26 @@ export class SelectUnitsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("OnInit Select Unit x");
-    console.log("this selected unit id");
-    console.log(this.selectedUnitGenericId);
-    console.log("In This Event On Staff");
-    this.getUnits();  
-    // this.setSelect();
-
-  }  
+    this.getUnits();
+  }
 
   setSelect(event: any) {
-    /*
-    console.log("set Select Unit");
-    console.log("Units");
-    console.log(this.units);
-    */
     const idx = _.findIndex(this.units, { unit_generic_id: +this.selectedUnitGenericId });
     if (idx > -1) {
       this.onSelect.emit(this.units[idx]);
     }
   }
 
-    getUnits() {
+  getUnits() {
     this.receiveService.getUnitConversion(this.genericId)
       .then((result: any) => {
-        // this.loading = false;
         if (result.ok) {
           this.units = result.rows;
           this.unitId = this.selectedUnitId;
           this.unitGenericId = this.selectedUnitGenericId;
-          // console.log(this.requisitionDetail);
         } else {
           console.log(result.error);
-          this.alertService.error(); 
+          this.alertService.error();
         }
       })
       .catch(error => {

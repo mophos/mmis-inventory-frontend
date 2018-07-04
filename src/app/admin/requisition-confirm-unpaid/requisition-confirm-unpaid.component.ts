@@ -23,18 +23,18 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   requisitionWarehouseName: any = null;
   withdrawWarehouseName: any = null;
   requisitionType: any = null;
-  isVerify: boolean = false;
+  isVerify = false;
 
   unpaidId: any = null;
 
   confirmId: any = null;
-  
-  isEdit: boolean = false;
+
+  isEdit = false;
   actionMsg: string = null;
 
   isConfirm: any;
-  openModalConfirm: boolean = false
-  confirmApprove: boolean = false
+  openModalConfirm = false
+  confirmApprove = false
   tmpOderApprove: any
   username: any
   password: any
@@ -63,7 +63,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
         this.unpaidId = params.unpaidId;
         // this.isEdit = params.edit === '1' ? true : false;
       });
-   }
+  }
 
   async ngOnInit() {
     await this.getOrderDetail();
@@ -71,15 +71,14 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   }
 
   onSuccessConfirm(event: any, idx: any) {
-    console.log(event)
-    let obj: any = {
+    const obj: any = {
       confirm_qty: event.confirm_qty,
       conversion_qty: event.conversion_qty,
       wm_product_id: event.wm_product_id,
       generic_id: this.products[idx].generic_id
     }
 
-    let _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: obj.wm_product_id });
+    const _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: obj.wm_product_id });
 
     if (_idx > -1) {
       this.products[idx].confirmItems[_idx].confirm_qty = obj.confirm_qty;
@@ -92,11 +91,11 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
     this.modalLoading.show();
     this.products = [];
     try {
-      let rs: any = await this.requisitionService.getRequisitionOrderUnpaidItems(this.unpaidId);
+      const rs: any = await this.requisitionService.getRequisitionOrderUnpaidItems(this.unpaidId);
       this.modalLoading.hide();
       if (rs.ok) {
         rs.rows.forEach((v: any) => {
-          let obj: any = {
+          const obj: any = {
             conversion_qty: v.conversion_qty,
             unpaid_qty: v.unpaid_qty,
             cost: v.cost,
@@ -113,7 +112,6 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
             working_code: v.working_code,
             confirmItems: []
           }
-          
           this.products.push(obj);
         })
       } else {
@@ -129,10 +127,10 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   async getOrderDetail() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionService.getOrderDetail(this.requisitionId);
+      const rs: any = await this.requisitionService.getOrderDetail(this.requisitionId);
       this.modalLoading.hide();
       if (rs.ok) {
-        let detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
+        const detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
         this.requisitionCode = detail ? detail.requisition_code : null;
         this.requisitionWarehouseName = detail ? detail.requisition_warehouse_name : null;
         this.withdrawWarehouseName = detail ? detail.withdraw_warehouse_name : null;
@@ -159,12 +157,12 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
 
   async savePay() {
     let totalQty = 0;
-    let items = [];
+    const items = [];
 
     this.products.forEach((v: any) => {
       v.confirmItems.forEach((x: any) => {
         totalQty += x.confirm_qty;
-        let obj: any = {
+        const obj: any = {
           confirm_qty: (x.confirm_qty * x.conversion_qty),
           wm_product_id: x.wm_product_id,
           generic_id: v.generic_id
@@ -205,8 +203,8 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
   async checkApprove(username: any, password: any) {
     const rs: any = await this.requisitionService.checkApprove(username, password, 'WM_REQUISITION_APPROVE');
     if (rs.ok) {
-        this.savePay();
-        this.openModalConfirm = false
+      this.savePay();
+      this.openModalConfirm = false
     } else {
       this.alertService.error('ไม่มีสิทธิ์อนุมัติ รายการเบิกสินค้า');
     }
@@ -223,7 +221,7 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let rs: any = await this.requisitionService.removeOrderConfirm(this.confirmId);
+          const rs: any = await this.requisitionService.removeOrderConfirm(this.confirmId);
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
@@ -237,6 +235,6 @@ export class RequisitionConfirmUnpaidComponent implements OnInit {
         }
       }).catch(() => {
 
-       });
+      });
   }
 }

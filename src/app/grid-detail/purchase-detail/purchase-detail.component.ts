@@ -12,7 +12,7 @@ export class PurchaseDetailComponent implements OnInit {
   @Input() public purchaseId: any;
 
   productPurchases = [];
-  loading: boolean = false;
+  loading = false;
 
   constructor(
     private receiveService: ReceiveService,
@@ -36,7 +36,6 @@ export class PurchaseDetailComponent implements OnInit {
       this.loading = false;
     } catch (error) {
       this.loading = false;
-      console.log(error);
       this.alertService.error(error.message);
     }
   }

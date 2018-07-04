@@ -88,7 +88,6 @@ export class TransferNewComponent implements OnInit {
   }
 
   setSelectedProduct(event: any) {
-    console.log(event);
     try {
       if (this.srcWarehouseId) {
         this.productId = event ? event.product_id : null;
@@ -124,16 +123,13 @@ export class TransferNewComponent implements OnInit {
     try {
       const idx = _.findIndex(this.lots, { lot_no: this.lotNo });
       if (idx > -1) {
-        console.log(this.lots[idx]);
-
         this.expiredDate = this.lots[idx].expired_date;
         this.remainQty = this.lots[idx].qty;
         this.wmProductId = this.lots[idx].wm_product_id;
         this.lotNo = this.lots[idx].lot_no;
-        // this.getProductRemain();
       }
     } catch (error) {
-      //
+      this.alertService.error(error);
     }
   }
 
@@ -181,39 +177,33 @@ export class TransferNewComponent implements OnInit {
 
   async addGeneric() {
     // if (this.transferQty) {
-      const idx = _.findIndex(this.generics, { generic_id: this.genericId });
+    const idx = _.findIndex(this.generics, { generic_id: this.genericId });
 
-      if (idx === -1) {
-        if (this.genericId) {
-          const obj = {
-            working_code: this.workingCode,
-            generic_name: this.genericName,
-            generic_id: this.genericId,
-            transfer_qty: +this.transferQty,
-            remain_qty: +this.remainQty,
-            unit_generic_id: this.unitGenericId,
-            conversion_qty: this.conversionQty,
-            location_id: this.locationId,
-            primary_unit_id: this.primaryUnitId,
-            primary_unit_name: this.primaryUnitName
-          };
-          console.log();
+    if (idx === -1) {
+      if (this.genericId) {
+        const obj = {
+          working_code: this.workingCode,
+          generic_name: this.genericName,
+          generic_id: this.genericId,
+          transfer_qty: +this.transferQty,
+          remain_qty: +this.remainQty,
+          unit_generic_id: this.unitGenericId,
+          conversion_qty: this.conversionQty,
+          location_id: this.locationId,
+          primary_unit_id: this.primaryUnitId,
+          primary_unit_name: this.primaryUnitName
+        };
 
-          console.log(obj);
-
-          this.generics.push(obj);
-          await this.getProductList(this.genericId, this.transferQty);
-          this.clearForm();
-        } else {
-          this.alertService.error('ข้อมูลไม่ครบถ้วน')
-        }
-
+        this.generics.push(obj);
+        await this.getProductList(this.genericId, this.transferQty);
+        this.clearForm();
       } else {
-        this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
+        this.alertService.error('ข้อมูลไม่ครบถ้วน')
       }
-    // } else {
-    //   this.alertService.error('กรุณาระบุจำนวนที่ต้องการโอน')
-    // }
+
+    } else {
+      this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
+    }
   }
 
   clearForm() {
@@ -298,7 +288,6 @@ export class TransferNewComponent implements OnInit {
               transfer_qty: +v.transfer_qty,
               unit_generic_id: v.unit_generic_id,
               primary_unit_id: v.primary_unit_id,
-              // conversion_qty: +v.conversion_qty,
               location_id: v.location_id,
               products: v.products
             });
@@ -322,16 +311,14 @@ export class TransferNewComponent implements OnInit {
               .then(async () => {
                 this.modalLoading.show();
                 try {
-                  let rs: any = await this.transferService.saveTransfer(summary, generics);
-                  if (rs.ok) {
+                  const rsT: any = await this.transferService.saveTransfer(summary, generics);
+                  if (rsT.ok) {
                     this.alertService.success();
                     this.router.navigate(['/admin/transfer']);
                   } else {
-                    this.alertService.error(JSON.stringify(rs.error));
+                    this.alertService.error(JSON.stringify(rsT.error));
                   }
-
                   this.modalLoading.hide();
-
                 } catch (error) {
                   this.modalLoading.hide();
                 }

@@ -21,7 +21,7 @@ export class UnitissueComponent implements OnInit {
   unitIssueName: string;
   unitIssueDesc: string;
 
-  isRawmaterial: boolean = false;
+  isRawmaterial = false;
 
   constructor(
     private unitissueService: UnitissueService,
@@ -46,12 +46,8 @@ export class UnitissueComponent implements OnInit {
   save() {
     this.isSaving = true;
     let promise;
-    let isRawmaterial = this.isRawmaterial ? 'Y' : 'N' ;
+    const isRawmaterial = this.isRawmaterial ? 'Y' : 'N';
     if (this.isUpdate) {
-      // console.log("unit issue id: " + this.unitIssueId);
-      // console.log("unit issue name: " + this.unitIssueName);
-      // console.log("unit issue des: "+ this.unitIssueDesc);
-      
       promise = this.unitissueService.update(this.unitIssueId, this.unitIssueName, this.unitIssueDesc, isRawmaterial);
     } else {
       promise = this.unitissueService.save(this.unitIssueName, this.unitIssueDesc, isRawmaterial);
@@ -99,8 +95,6 @@ export class UnitissueComponent implements OnInit {
     this.unitIssueName = w.unitissue_name;
     this.unitIssueDesc = w.unitissue_desc;
     this.isRawmaterial = w.is_rawmaterial === 'Y' ? true : false;
-    // console.log("this is unitissue id: " + this.unitIssueId);
-    // console.log("this is unitissue name: " + this.unitIssueName);
     // set update flag
     this.isUpdate = true;
     // open modal
