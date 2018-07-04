@@ -8,7 +8,7 @@ import { AlertService } from './../../alert.service';
   styles: []
 })
 export class StaffProductStockRemainComponent implements OnInit {
-  @Input() productId: any;
+  @Input() genericId: any;
   loading = false;
   products = [];
 
@@ -26,7 +26,7 @@ export class StaffProductStockRemainComponent implements OnInit {
   async getProductStockRemain() {
     this.loading = true;
     try {
-      const rs = await this.staffService.getProductStockDetail(this.productId)
+      const rs = await this.staffService.getProductStockRemain(this.genericId)
       if (rs.ok) {
         this.products = rs.rows;
       } else {

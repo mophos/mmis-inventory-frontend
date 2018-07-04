@@ -207,7 +207,7 @@ export class AdjustStockNewComponent implements OnInit {
             const head = {
               reason: this.reason
             }
-            await this.staffService.save(head, this.generics);
+            await this.staffService.saveAdjustStock(head, this.generics);
             this.router.navigate(['/staff/adjust-stock']);
           } else {
             this.isSave = false;
