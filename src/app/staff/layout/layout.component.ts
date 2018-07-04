@@ -22,9 +22,12 @@ export class LayoutComponent implements OnInit {
 
   @ViewChild('modalChangePassword') public modalChangePassword;
 
-  constructor(private router: Router, private staffService: StaffService, @Inject('API_PORTAL_URL') private apiPortal: string) {
+  constructor(
+    private router: Router,
+    private staffService: StaffService,
+    @Inject('API_PORTAL_URL') private apiPortal: string,
+    @Inject('HOME_URL') private homeUrl: string) {
     this.token = sessionStorage.getItem('token');
-
   }
 
   ngOnInit() {
@@ -38,7 +41,7 @@ export class LayoutComponent implements OnInit {
   logout() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('fullname');
-    this.router.navigate(['/']);
+    location.href = this.homeUrl;
   }
 
   openChangePasswordModal() {
