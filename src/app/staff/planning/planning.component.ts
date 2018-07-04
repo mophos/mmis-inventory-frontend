@@ -47,6 +47,7 @@ export class PlanningComponent implements OnInit {
   async ngOnInit() {
     await this.getGenericType();
     await this.getProducts();
+    await this.getGenerics();
     const date = new Date();
     this.fromDate = {
       date: {

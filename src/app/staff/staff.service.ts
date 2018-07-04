@@ -142,6 +142,11 @@ export class StaffService {
     return resp.json();
   }
 
+  async getProductStockRemain(genericId: any) {
+    const resp = await this.authHttp.get(`${this.url}/staff/products/stock/remain/generic/${genericId}`).toPromise();
+    return resp.json();
+  }
+
   async getGenericsRequisitionWarehouse(genericType: any) {
     const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/requisition?genericType=${genericType}`).toPromise();
     return rs.json();
@@ -414,13 +419,8 @@ export class StaffService {
     return resp.json();
   }
 
-  async getList(limit, offset) {
+  async getListStockAdjust(limit, offset) {
     const rs = await this.authHttp.get(`${this.url}/staff/adjust-stock/list?limit=${limit}&offset=${offset}`).toPromise();
-    return rs.json();
-  }
-
-  async getGeneric(adjustId) {
-    const rs = await this.authHttp.get(`${this.url}/staff/adjust-stock/generic?adjustId=${adjustId}`).toPromise();
     return rs.json();
   }
 
@@ -429,8 +429,18 @@ export class StaffService {
     return rs.json();
   }
 
-  async save(head, detail) {
+  async saveAdjustStock(head, detail) {
     const rs = await this.authHttp.post(`${this.url}/staff/adjust-stock`, { 'head': head, 'detail': detail }).toPromise();
+    return rs.json();
+  }
+
+  async removeGeneric(genericId) {
+    const rs = await this.authHttp.delete(`${this.url}/staff/generic?genericId=${genericId}`).toPromise();
+    return rs.json();
+  }
+
+  async removeProduct(productId) {
+    const rs = await this.authHttp.delete(`${this.url}/staff/product?productId=${productId}`).toPromise();
     return rs.json();
   }
 
