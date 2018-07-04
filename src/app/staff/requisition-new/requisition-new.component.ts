@@ -417,11 +417,11 @@ export class RequisitionNewComponent implements OnInit {
 
   async getTemplates(event: any) {
     try {
-      let dstWarehouseId = this.wmWithdraw;
-      let srcWarehouseId = this.wmRequisition;
+      const dstWarehouseId = this.wmWithdraw;
+      const srcWarehouseId = this.wmRequisition;
 
       if (dstWarehouseId && srcWarehouseId) {
-        let rs: any = await this.requisitionService.getTemplates(srcWarehouseId, dstWarehouseId);
+        const rs: any = await this.requisitionService.getTemplates(srcWarehouseId, dstWarehouseId);
 
         if (rs.ok) {
           this.templates = rs.rows;
@@ -455,13 +455,12 @@ export class RequisitionNewComponent implements OnInit {
     this.getOrderDetail();
     this.getOrderItems();
     this.openTemp = false;
-    console.log(temp);
   }
 
   async getTempList() {
     try {
       this.modalLoading.show();
-      let rs: any = await this.requisitionService.getTempList();
+      const rs: any = await this.requisitionService.getTempList();
       this.modalLoading.hide();
       if (rs.ok) {
         this.tempList = [];
@@ -480,7 +479,7 @@ export class RequisitionNewComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let rs: any = await this.requisitionService.removeTemp(temp.requisition_order_id);
+          const rs: any = await this.requisitionService.removeTemp(temp.requisition_order_id);
           if (rs.ok) {
             this.alertService.success();
             this.getTempList();

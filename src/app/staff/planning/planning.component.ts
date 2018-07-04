@@ -198,7 +198,6 @@ export class PlanningComponent implements OnInit {
   }
 
   saveMinMax() {
-    console.log(this._generics);
     this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
       .then(async () => {
         try {

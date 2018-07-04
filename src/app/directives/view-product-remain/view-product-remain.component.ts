@@ -38,7 +38,6 @@ export class ViewProductRemainComponent implements OnInit {
             this.product_remain_qty = result.rows[0].remain_qty || 0;
           }
         } else {
-          console.log("ตรงนี้ Error");
           console.log(result.error);
           this.alertService.error(JSON.stringify(result.error));
         }

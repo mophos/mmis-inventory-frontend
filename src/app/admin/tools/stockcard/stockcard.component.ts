@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToolsService } from '../../tools.service';
 import { AlertService } from '../../../alert.service';
 import { LoadingModalComponent } from '../../../modals/loading-modal/loading-modal.component';
-import { constants } from 'os';
 
 @Component({
   selector: 'wm-stockcard',
