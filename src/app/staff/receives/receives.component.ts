@@ -61,9 +61,10 @@ export class ReceivesComponent implements OnInit {
 
   ngOnInit() {
     this.getApprove();
-    this.tab = sessionStorage.getItem('tabReceive');
-    this.currentPage = +sessionStorage.getItem('currentPageReceive') ? +sessionStorage.getItem('currentPageReceive') : 1;
-    this.offset = +sessionStorage.getItem('offsetReceive') ? +sessionStorage.getItem('offsetReceive') : 0;
+    this.tab = "receiveOther";
+    // this.tab = sessionStorage.getItem('tabReceive');
+    // this.currentPage = +sessionStorage.getItem('currentPageReceive') ? +sessionStorage.getItem('currentPageReceive') : 1;
+    // this.offset = +sessionStorage.getItem('offsetReceive') ? +sessionStorage.getItem('offsetReceive') : 0;
   }
 
   selectTabReceiveOther() {
@@ -79,10 +80,12 @@ export class ReceivesComponent implements OnInit {
         const rs = await this.receiveService.getReceiveOtherStatus(this.perPage, 0, this.fillterApprove);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
+        console.log('111111');
       } else {
         const rs = await this.receiveService.getReceiveOtherStatusSearch(this.perPage, 0, this.queryOther, this.fillterApprove);
         this.others = rs.rows;
         this.totalReceiveOther = rs.total;
+        console.log('222222');
       }
     }
   }
@@ -290,6 +293,11 @@ export class ReceivesComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+  }
+
+  searchReceiveOther(event: any) {
+    this.offset = 0;
+    this.doSearchReceiveOther();
   }
 
 }

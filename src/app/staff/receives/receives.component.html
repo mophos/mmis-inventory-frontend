@@ -11,7 +11,7 @@
   <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
     <label class="dropdown-header">ประเภทการรับสินค้า</label>
     <!-- <button routerLink="/admin/receives/purchase" type="button" clrDropdownItem>รับจากการซื้อ</button> -->
-    <button type="button" routerLink="/admin/receives/other" clrDropdownItem>รับอื่นๆ (เช่นบริจาค)</button>
+    <button type="button" routerLink="/staff/receives/other" clrDropdownItem>รับอื่นๆ (เช่นบริจาค)</button>
   </clr-dropdown-menu>
 </clr-dropdown>
 
@@ -128,7 +128,7 @@
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
 </clr-modal>
-<wm-modal-receive-approve #modalApprove (onSuccess)="approveSuccess($event)"></wm-modal-receive-approve>
-<wm-modal-receive-approve-other #modalApproveOther (onSuccess)="approveSuccessOther($event)"></wm-modal-receive-approve-other>
+<!-- <wm-modal-receive-approve #modalApprove (onSuccess)="approveSuccess($event)"></wm-modal-receive-approve> -->
+<wm-modal-receive-approve-other-staff #modalApproveOther (onSuccess)="approveSuccessOther($event)"></wm-modal-receive-approve-other-staff>
 <wm-html-preview #htmlPreview></wm-html-preview>
 <wm-loading-modal #modalLoading></wm-loading-modal>

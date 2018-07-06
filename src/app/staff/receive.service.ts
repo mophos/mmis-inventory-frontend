@@ -20,30 +20,6 @@ export class ReceiveService {
     return response.json();
   }
 
-  getReceiveTypes() {
-    return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/staffreceive/types`)
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
-  }
-
-  getStatusStatus() {
-    return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/staffreceive/status`)
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
-  }
-
   searchProduct(query: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/staffreceive/search`, {
@@ -298,4 +274,66 @@ export class ReceiveService {
     }).toPromise();
     return rs.json();
   }
+
+  async saveApproveOther(receiveIds: any[], approveDate: any, comment: any) {
+    const res = await this.authHttp.post(`${this.url}/staff/receives/other/approve`, {
+      receiveIds: receiveIds,
+      approveDate: approveDate,
+      comment: comment
+    }).toPromise();
+    return res.json();
+  }
+
+  async getPurchaseCheckHoliday(date) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/purchases/check-holiday?date=${date}`)
+      .toPromise();
+    return res.json();
+  }
+
+  async saveReceiveOther(summary: any, products: Array<any>) {
+    const res = await this.authHttp.post(`${this.url}/staff/receives/other`, {
+      summary: summary,
+      products: products
+    }).toPromise();
+
+    return res.json();
+  }
+
+  async saveCost(products: any) {
+    const rs: any = await this.authHttp.put(`${this.url}/staff/receives/update/cost`, {
+      products: products
+    }).toPromise();
+    return rs.json();
+  }
+
+  async getPurchaseCheckExpire(genericId: any, expiredDate: any) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/purchases/check-expire?genericId=${genericId}&expiredDate=${expiredDate}`)
+      .toPromise();
+    return res.json();
+  }
+
+  getReceiveTypes() {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/staff/receives/types`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
+  getStatusStatus() {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/staff/receives/status`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
 }
