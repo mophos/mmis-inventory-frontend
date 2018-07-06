@@ -6,7 +6,7 @@
   <div class="modal-body">
     <div style="padding-bottom: 10px;">
       <label for="query">ค้นหา</label>
-      <input type="text" placeholder="ระบุเลขที่ใบสั่งซื้อ" id="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;">
+      <input type="text" placeholder="ระบุเลขที่ใบสั่งซื้อ,ชื่อสินค้า" id="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;">
     </div>
     <clr-datagrid [clrLoading]="loading">
       <clr-dg-column [clrDgField]="'purchase_order_number'">เลขที่ใบสั่งซื้อ</clr-dg-column>

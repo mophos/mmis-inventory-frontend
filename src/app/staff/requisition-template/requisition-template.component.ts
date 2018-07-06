@@ -16,6 +16,7 @@ export class RequisitionTemplateComponent implements OnInit {
   templates = [];
   jwtHelper: JwtHelper = new JwtHelper();
   warehouseId: any;
+  query: any;
 
   constructor(
     private alertService: AlertService,
@@ -74,10 +75,34 @@ export class RequisitionTemplateComponent implements OnInit {
         // no action
       });
   }
+
   print(templateId) {
     const token = sessionStorage.getItem('token');
-    const exportUrl = `${this.url}/warehouses/export/excel?templateId=${templateId}&token=${token}`;
+    const exportUrl = `${this.url}/staff/warehouses/export/excel?templateId=${templateId}&token=${token}`;
     window.open(exportUrl);
 
+  }
+
+  search() {
+    this.modalLoading.show();
+    this.warehouseProductService.getAllTemplateInWarehouseSearch(this.warehouseId, this.query)
+      .then((result: any) => {
+        if (result.ok) {
+          this.templates = result.rows;
+        } else {
+          this.alertService.error(result.error);
+        }
+        this.modalLoading.hide();
+      })
+      .catch((error: any) => {
+        this.modalLoading.hide();
+        this.alertService.serverError();
+      });
+  }
+
+  enterSearch(e) {
+    if (e.keyCode === 13) {
+      this.search();
+    }
   }
 }

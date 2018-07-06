@@ -20,7 +20,8 @@ export class AlertExpiredComponent implements OnInit {
   openSetAllExpired = false;
   submitLoading = false;
   genericTypes = [];
-  genericType: any = "";
+  genericType: any = "all";
+  genericTypeE: any = "all";
   products = [];
 
   constructor(
@@ -30,11 +31,11 @@ export class AlertExpiredComponent implements OnInit {
     private productService: ProductsService,
   ) { }
 
-  ngOnInit() {
-    this.getAllProducts();
+  async ngOnInit() {
+    await this.getGenericType();
+    await this.getAllProducts();
     // this.getStatus();
-    this.getGenericType();
-    this.getProductExpired();
+    await this.getProductExpired();
   }
 
   // getStatus() {
@@ -61,7 +62,17 @@ export class AlertExpiredComponent implements OnInit {
   async getProductExpired() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.alertExpiredService.getProductExpired();
+      let _genericType;
+      if (this.genericTypeE === 'all') {
+        let _g = [];
+        this.genericTypes.forEach(v => {
+          _g.push(v.generic_type_id)
+        });
+        _genericType = _g;
+      } else {
+        _genericType = this.genericTypeE;
+      }
+      const rs: any = await this.alertExpiredService.getProductExpired(_genericType);
       if (rs.ok) {
         this.products = rs.rows;
       } else {
@@ -113,14 +124,18 @@ export class AlertExpiredComponent implements OnInit {
 
   }
 
+  async changeGenericTypeE() {
+    this.getProductExpired();
+  }
+
   async getGenericType() {
     try {
       this.modalLoading.show();
       const rs = await this.productService.getGenericType();
-
       if (rs.ok) {
         this.genericTypes = rs.rows;
         this.genericType = 'all';
+        this.genericTypeE = 'all';
       } else {
         this.alertService.error(rs.error);
       }
@@ -157,7 +172,7 @@ export class AlertExpiredComponent implements OnInit {
   }
 
   saveExpireCount() {
-    if (this.numDays >= 10) {
+    if (this.numDays > 0) {
       this.submitLoading = true;
       this.alertExpiredService.saveExpiredCount(this.selectedGenericIds, this.numDays)
         .then((result: any) => {
@@ -180,7 +195,7 @@ export class AlertExpiredComponent implements OnInit {
   }
 
   saveExpireCountAll() {
-    if (this.numDays >= 10) {
+    if (this.numDays > 0) {
       this.submitLoading = true;
       this.alertExpiredService.saveExpiredCountAll(this.selectedGenericIds, this.numDays)
         .then((result: any) => {
