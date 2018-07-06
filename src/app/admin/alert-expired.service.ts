@@ -22,7 +22,7 @@ export class AlertExpiredService {
     });
   }
 
-  getSelectGenerics(id:any) {
+  getSelectGenerics(id: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/alert-expired/genericSelec?id=${id}`)
         .map(res => res.json())
@@ -122,9 +122,9 @@ export class AlertExpiredService {
     return resp.json();
   }
 
-  getProductExpired(){
+  getProductExpired(genericType) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/alert-expired/products/expired`)
+      this.authHttp.get(`${this.url}/alert-expired/products/expired?genericTypeId=${genericType}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);

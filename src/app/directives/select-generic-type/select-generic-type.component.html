@@ -1,0 +1,12 @@
+<span *ngIf="loading" class="spinner spinner-sm">
+  Loading...
+</span>
+
+<div class="select" *ngIf="!loading">
+  <select name="genericTypeId" [disabled]="disabled" [(ngModel)]="genericTypeId" (change)="setSelect($event)">
+    <option selected>เลือกชนิดสินค้า</option>
+    <option *ngFor="let w of genericTypes" [value]="w.generic_type_id">
+      {{ w.generic_type_name }}
+    </option>
+  </select>
+</div>

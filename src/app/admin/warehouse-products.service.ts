@@ -28,7 +28,7 @@ export class WarehouseProductsService {
     });
   }
 
-  async searchProductsWarehouse(srcWarehouseId,dstwarehouseId: string, query: string) {
+  async searchProductsWarehouse(srcWarehouseId, dstwarehouseId: string, query: string) {
     let rs: any = await this.authHttp.post(`${this.url}/products/template/search-product-warehouse/${srcWarehouseId}/${dstwarehouseId}`, {
       query: query
     }).toPromise();
@@ -52,22 +52,22 @@ export class WarehouseProductsService {
     });
   }
 
-updateWarehouseProductsTemplate(templateId: any, templateSubject: any, products: Array<any>) {
-  return new Promise((resolve, reject) => {
-    this.authHttp.post(`${this.url}/warehouses/updatewarehouseproducttemplate`, {
-      templateId: templateId,
-      templateSubject: templateSubject,
-      products: products
-    })
-      .map(res => res.json())
-      .subscribe(data => {
-        resolve(data);
-      }, error => {
-        console.log(error);
-        reject(error);
-      });
-  });
-}
+  updateWarehouseProductsTemplate(templateId: any, templateSubject: any, products: Array<any>) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.post(`${this.url}/warehouses/updatewarehouseproducttemplate`, {
+        templateId: templateId,
+        templateSubject: templateSubject,
+        products: products
+      })
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  }
 
   // แสดง template ทั้งหมด
   getallTemplate() {
@@ -88,10 +88,22 @@ updateWarehouseProductsTemplate(templateId: any, templateSubject: any, products:
     return rs.json();
   }
 
-  //แสดงรายการ template ทั้งหมดใน warehouse
+  // แสดงรายการ template ทั้งหมดใน warehouse
   getTemplateInWarehouse(warehouseId: any, SourceWarehouseId: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/warehouses/templateinwarehouse/${warehouseId}/${SourceWarehouseId}`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
+  getAllTemplateSearch(query: any) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/warehouses/warehouseproducttemplate/search?query=${query}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
