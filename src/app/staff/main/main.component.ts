@@ -107,7 +107,7 @@ export class MainComponent implements OnInit {
       });
   }
 
-  searchProduct() {
+  searchProducts() {
     this.modalLoading.show();
     // clear old product list
     this.products = [];
@@ -150,7 +150,7 @@ export class MainComponent implements OnInit {
   // search when press ENTER
   enterSearch(e) {
     if (e.keyCode === 13) {
-      this.searchProduct();
+      this.searchProducts();
     }
   }
 
@@ -200,5 +200,37 @@ export class MainComponent implements OnInit {
     }
   }
 
+  async deleteGeneric(genericId) {
+    try {
+      this.modalLoading.show();
+      const rs = await this.staffService.removeGeneric(genericId);
+      this.modalLoading.hide();
+      if (rs.ok) {
+        await this.getGenerics();
+        this.alertService.success();
+      } else {
+        this.alertService.error(rs.error)
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error);
+    }
+  }
 
+  async deleteProduct(productId) {
+    try {
+      this.modalLoading.show();
+      const rs = await this.staffService.removeProduct(productId);
+      this.modalLoading.hide();
+      if (rs.ok) {
+        await this.getProducts();
+        this.alertService.success();
+      } else {
+        this.alertService.error(rs.error)
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error);
+    }
+  }
 }

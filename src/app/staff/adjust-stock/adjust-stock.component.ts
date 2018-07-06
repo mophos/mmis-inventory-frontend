@@ -36,7 +36,7 @@ export class AdjustStockComponent implements OnInit {
   async getLists() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.staffService.getList(this.perPage, 0);
+      const rs: any = await this.staffService.getListStockAdjust(this.perPage, 0);
       if (rs) {
         this.lists = rs.rows;
         this.totalList = rs.total;
@@ -56,7 +56,7 @@ export class AdjustStockComponent implements OnInit {
     const limit = +state.page.size;
     this.modalLoading.show();
     try {
-      const rs: any = await this.staffService.getList(limit, offset);
+      const rs: any = await this.staffService.getListStockAdjust(limit, offset);
       if (rs) {
         this.lists = rs.rows;
         this.totalList = rs.total;
