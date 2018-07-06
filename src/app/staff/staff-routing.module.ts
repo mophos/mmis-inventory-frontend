@@ -31,7 +31,8 @@ import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
-import { StockCardComponent } from 'app/staff/report/stock-card/stock-card.component'
+import { StockCardComponent } from 'app/staff/report/stock-card/stock-card.component';
+import { ReceivesComponent } from 'app/staff/receives/receives.component'
 
 const routes: Routes = [
   {
@@ -41,6 +42,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'main', pathMatch: 'full' },
       { path: 'main', component: MainComponent },
+      { path: 'receives', component: ReceivesComponent },
       { path: 'planning', canActivate: [AuthMinMaxPlanning], component: PlanningComponent },
       { path: 'requisition', component: RequisitionComponent },
       { path: 'requisition/new', component: RequisitionNewComponent },

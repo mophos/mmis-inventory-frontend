@@ -13,12 +13,12 @@ export class ReceiveService {
     private authHttp: AuthHttp
   ) { }
 
-    // get conversion
-    async getUnitConversion(genericId: any) {
-      const response = await this.authHttp.get(`${this.url}/products/unit-conversion/${genericId}`)
-        .toPromise();
-      return response.json();
-    }
+  // get conversion
+  async getUnitConversion(genericId: any) {
+    const response = await this.authHttp.get(`${this.url}/products/unit-conversion/${genericId}`)
+      .toPromise();
+    return response.json();
+  }
 
   getReceiveTypes() {
     return new Promise((resolve, reject) => {
@@ -210,7 +210,7 @@ export class ReceiveService {
         });
     });
   }
-    // ================== check product service ============== //
+  // ================== check product service ============== //
   saveCheck(summary, products) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/staffreceive/check`, {
@@ -251,4 +251,51 @@ export class ReceiveService {
     });
   }
 
+  async getReceiveOtherStatusSearch(limit: number = 15, offset: number = 0, query, status, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/staff/receives/other/status/search`, {
+      limit: limit,
+      offset: offset,
+      status: status,
+      query: query,
+      sort: sort
+    }).toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherStatus(limit: number = 15, offset: number = 0, status, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/staff/receives/other/status`, {
+      limit: limit,
+      offset: offset,
+      status: status,
+      sort: sort
+    }).toPromise();
+    return res.json();
+  }
+
+  async getApprove() {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/count/approve`)
+      .toPromise();
+    return res.json();
+  }
+
+  async getApproveOther() {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/count/approve/other`)
+      .toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherProducts(receiveOtherId) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/other/product-list/${receiveOtherId}`)
+      .toPromise();
+    return res.json();
+  }
+
+  async checkApprove(username: any, password: any, action: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/basic/checkApprove`, {
+      username: username,
+      password: password,
+      action: action
+    }).toPromise();
+    return rs.json();
+  }
 }
