@@ -43,7 +43,7 @@ export class SummaryDisbursementComponent implements OnInit {
 
   summaryDisbursementMonth() {
     this.start = this.year + '-' + this.month + '-' + 1;
-    this.end = this.year + '-' + this.month + '-' + moment(this.year, 'YYYY-MM').daysInMonth();
+    this.end = this.year + '-' + this.month + '-' + moment(`${this.year}-${this.month}`, 'YYYY-MM').daysInMonth();
     const url = `${this.apiUrl}/report/summary/disbursement?startDate=${this.start}&endDate=${this.end}&token=${this.token}`
     this.htmlPreview.showReport(url);
   }
@@ -52,6 +52,21 @@ export class SummaryDisbursementComponent implements OnInit {
     const _startDate = `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}`
     const _endDate = `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}`
     const url = `${this.apiUrl}/report/summary/disbursement?startDate=${_startDate}&endDate=${_endDate}&token=${this.token}`
+    this.htmlPreview.showReport(url);
+  }
+
+  summaryDisbursementMonthExcel() {
+    this.start = this.year + '-' + this.month + '-' + 1;
+    this.end = this.year + '-' + this.month + '-' + moment(this.year, 'YYYY-MM').daysInMonth();
+    const url = `${this.apiUrl}/report/summary/disbursement/excel?startDate=${this.start}&endDate=${this.end}&token=${this.token}`
+    // this.htmlPreview.showReport(url);
+    window.open(url);
+  }
+
+  summaryDisbursementDateExcel() {
+    const _startDate = `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}`
+    const _endDate = `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}`
+    const url = `${this.apiUrl}/report/summary/disbursement/excel?startDate=${_startDate}&endDate=${_endDate}&token=${this.token}`
     this.htmlPreview.showReport(url);
   }
 
