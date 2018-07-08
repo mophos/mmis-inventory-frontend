@@ -28,7 +28,8 @@
         <clr-dg-column [clrDgField]="'generic_code'">Generic Code</clr-dg-column>
         <clr-dg-column [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
         <clr-dg-column> min-max(base unit)</clr-dg-column>
-        <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
+        <clr-dg-column [style.width.px]="150">คงเหลือ</clr-dg-column>
+        <clr-dg-column [style.width.px]="150">คงเหลือ(หักยอดจอง unit)</clr-dg-column>
         <clr-dg-row *clrDgItems="let p of generics" [clrDgItem]="p">
           <clr-dg-action-overflow>
             <button class="action-item" (click)="deleteGeneric(p.generic_id)">ลบรายการ</button>
@@ -41,6 +42,7 @@
           <clr-dg-cell>{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
           <!-- <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.small_unit}})</clr-dg-cell> -->
           <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.small_unit}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.qty-p.reserve_qty | number}} {{p.small_unit}}</clr-dg-cell>
         </clr-dg-row>
 
         <clr-dg-footer>
@@ -70,45 +72,22 @@
         </div>
       </div>
       <clr-datagrid [style.height.%]="85">
-        <!-- <clr-dg-column [clrDgField]="'working_code'" [style.width.px]="150">
-          <ng-container *clrDgHideableColumn="{hidden: false}">
-            Trade Code
-          </ng-container>
-        </clr-dg-column> -->
         <clr-dg-column [clrDgField]="'trade_code'">Trade Code</clr-dg-column>
         <clr-dg-column [clrDgField]="'generic_name'">Trade Name</clr-dg-column>
         <clr-dg-column> min-max(base unit)</clr-dg-column>
-        <!-- <clr-dg-column [style.width.px]="100">
-          <ng-container *clrDgHideableColumn="{hidden: true}">
-            คงเหลือ(pack)
-          </ng-container>
-        </clr-dg-column> -->
-
-        <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
+        <clr-dg-column>คงเหลือ</clr-dg-column>
+        <clr-dg-column>คงเหลือ(หักยอดจอง)</clr-dg-column>
         <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
-            <clr-dg-action-overflow>
-                <button class="action-item" (click)="deleteProduct(p.product_id)">ลบรายการ</button>
-              </clr-dg-action-overflow>
+          <clr-dg-action-overflow>
+            <button class="action-item" (click)="deleteProduct(p.product_id)">ลบรายการ</button>
+          </clr-dg-action-overflow>
           <wm-staff-product-detail-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-detail-stock-remain>
-          <!-- <clr-dg-action-overflow>
-            <button class="action-item" (click)="changeQty(p)">
-              <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-            <button disabled class="action-item" (click)="getStockCard(p)">
-                  <clr-icon shape="search"></clr-icon> Stock Card</button>
-          </clr-dg-action-overflow> -->
           <clr-dg-cell>{{p.trade_code}}</clr-dg-cell>
-          <clr-dg-cell>
-            <!-- <span class="p4">{{p.product_name}}</span> -->
-            <!-- <br> -->
-            <!-- <span class="p7">{{p.generic_name}}</span> -->
-            {{p.product_name}}
+          <clr-dg-cell>{{p.product_name}}
           </clr-dg-cell>
           <clr-dg-cell>{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
-          <!-- <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.small_unit}})</clr-dg-cell> -->
           <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.small_unit}}</clr-dg-cell>
-          <!-- <clr-dg-cell>{{p.cost*p.qty | number: '1.2-2'}}</clr-dg-cell> -->
-          <!-- <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
-              <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell> -->
+          <clr-dg-cell style="text-align: center;">{{p.qty-p.reserve_qty | number}} {{p.small_unit}}</clr-dg-cell>
         </clr-dg-row>
 
         <clr-dg-footer>
