@@ -25,10 +25,8 @@ export class StaffProductStockRemainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.genericId);
     this.loading = true;
     this.getProductStockRemain();
-    // this.getProductList(this.productId);
   }
 
   async getProductStockRemain() {
