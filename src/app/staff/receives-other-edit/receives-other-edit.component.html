@@ -1,14 +1,13 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
   <a class="breadcrumb-item" href="javascript://" routerLink="/staff/receives">รับสินค้าเข้าคลัง</a>
-  <span class="breadcrumb-item active">รับอื่นๆ</span>
+  <span class="breadcrumb-item active">แก้ไข รับอื่นๆ</span>
 </nav>
 <div class="card">
   <div class="card-block" style="padding: 0px 0px 0px 10px;">
     <form class="compact" style="padding-top: 0px;">
       <section class="form-block">
-
-        <div class="form-group row wid99">
+        <div class="form-group row">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label for="dateReceive">เลขที่รับ</label>
           </div>
@@ -22,14 +21,15 @@
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="receiveDate" required></my-date-picker-th>
           </div>
+
         </div>
 
-        <div class="form-group row wid99">
+        <div class="form-group row">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label class="required" for="informName">ผู้จำหน่าย/บริจาค</label>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <wm-search-donator #donatorList (onChange)="clearSelectedDonator($event)" (onSelect)="changeDonator($event)"></wm-search-donator>
+            <wm-search-donator #donatorList (onChange)="clearSelectedDonator()" (onSelect)="changeDonator($event)"></wm-search-donator>
           </div>
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label class="required" for="deliveryCode">เลขที่ใบส่ง</label>
@@ -37,9 +37,9 @@
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <input class="form-control" id="deliveryCode" type="text" name="deliveryCode" [(ngModel)]="deliveryCode">
           </div>
-        </div>
 
-        <div class="form-group row wid99">
+        </div>
+        <div class="form-group row">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label class="required" for="gForm_1">ประเภทการรับ</label>
           </div>
@@ -53,26 +53,21 @@
               </select>
             </div>
           </div>
+
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label for="dateReceive">หมายเหตุ</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <input class="form-control" type="text" name="comment" [(ngModel)]="comment">
           </div>
-          <!-- <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" *ngIf="hospcode=='10692'">
-                <label for="dateReceive">อัพเดตราคาลงฐาน</label>
-              </div>
-              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"  *ngIf="hospcode=='10692'">
-                <input type="checkbox" (click)="checkUpdateCost()">(เปิดให้ใช้ ชั่วคราวถึงวันที่ 31/3/61)
-              </div> -->
-        </div>
 
+        </div>
       </section>
     </form>
   </div>
 </div>
 
-<clr-datagrid class="grid-order" [style.padding-top.px]="5">
+<clr-datagrid class="grid-order" [style.padding-top.px]="10">
   <clr-dg-column [style.width.px]="10">#</clr-dg-column>
   <clr-dg-column [style.width.px]="300">ชื่อสินค้า</clr-dg-column>
   <clr-dg-column>จำนวนรับ</clr-dg-column>
@@ -90,9 +85,8 @@
   <clr-dg-row *ngFor="let product of products; let idx = index;" [class.editLine]="product.is_update === 'Y'">
     <clr-dg-cell style="line-height: 25px;">{{ idx+1 }}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">
-      <span class="p4">{{product.generic_name}}</span>
-      <br>
-      <span class="p7">{{product.product_name}}</span>
+      <span [ngClass]="'p4'">{{product.generic_name}}</span>
+      <span [ngClass]="'p7'">{{product.product_name}}</span>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" #qty (keyup)="editChangeReceiveQty(idx, qty.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
@@ -112,25 +106,24 @@
       {{ product.receive_qty * product.cost | number: '1.2-2'}}
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-manufacture (onSelect)="editChangeManufacture(product.product_id, $event)" [selectedId]="product.manufacture_id"
-        [genericId]="product.generic_id"></wm-select-manufacture>
+      <wm-select-manufacture (onSelect)="editChangeManufacture(idx, $event)" [selectedId]="product.manufacture_id" [genericId]="product.generic_id"></wm-select-manufacture>
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" #lot (keyup)="editChangeLot(idx, lot.value)" style="width: 100%; background-color: #FFF9C4" name="lotNo"
+      <input #lot (keyup)="editChangeLots(idx, lot.value)" type="text" style="width: 100%; background-color: #FFF9C4" name="lotNo"
         id="lotNo" [value]="product.lot_no" wmUpperCase>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">
-      <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate" type="text"
-        [value]="product.expired_date" #expired (keyup)="editChangeExpired(idx, expired.value)" />
+      <input #expired (keyup)="editChangeExpired(idx, expired.value)" [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4"
+        name="expireDate" id="expireDate" type="text" [value]="product.expired_date" />
     </clr-dg-cell>
     <clr-dg-cell>
-      <span>{{product.warehouse_name}}</span>
-      <!-- <input type="text" name="warehouseName" [disabled]="true" [(ngModel)]="warehouseName"> -->
+      {{product.warehouse_name}}
       <!-- <wm-select-generic-warehouse (onSelect)="editChangeWarehouse(idx, $event, editLocationList)" [genericId]="product.generic_id"
         [selectedId]="product.warehouse_id"></wm-select-generic-warehouse> -->
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-product-location #editLocationList [warehouseId]="product.warehouse_id" [selectedId]="product.location_id"></wm-select-product-location>
+      <wm-select-product-location (onSelect)="editChangeLocation(idx, $event)" #editLocationList [warehouseId]="product.warehouse_id"
+        [selectedId]="product.location_id"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
@@ -168,11 +161,12 @@
       <wm-select-manufacture #manufactureList (onSelect)="changeManufacture($event)"></wm-select-manufacture>
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" style="width: 100%; background-color: #FFF9C4" name="lotNo" id="lotNo" [(ngModel)]="selectedLotNo" wmUpperCase>
+      <input type="text" [disabled]="!selectedProductId" style="width: 100%; background-color: #FFF9C4" name="lotNo" id="lotNo"
+        [(ngModel)]="selectedLotNo" wmUpperCase>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">
       <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate" type="text"
-        [(ngModel)]="selectedExpiredDate" />
+        [(ngModel)]="selectedExpiredDate" [disabled]="!selectedProductId" />
     </clr-dg-cell>
     <clr-dg-cell>
       <!-- <wm-select-generic-warehouse #warehouseList (onSelect)="changeWarehouse($event)"></wm-select-generic-warehouse> -->
@@ -182,8 +176,8 @@
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedProductId || !selectedReceiveQty || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId
-          || (isLotControl==='Y' && !selectedLotNo)" (click)="addProduct()">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedProductId || !selectedLotNo  || !selectedReceiveQty || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId"
+          (click)="addProduct()">
           เพิ่ม
         </button>
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
@@ -195,7 +189,7 @@
 </clr-datagrid>
 
 <div>
-  <button class="btn btn-success btn-sm" (click)="checkProduct()" [disabled]="isSaving || !donatorId || !receiveDate || !deliveryCode || !products.length">
+  <button class="btn btn-success btn-sm" (click)="saveReceive()" [disabled]="isSaving || !donatorId || !receiveDate || !deliveryCode || !products.length">
     <clr-icon shape="floppy"></clr-icon>
     บันทึกรับสินค้า
   </button>
@@ -212,7 +206,6 @@
 </div>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
-
 <clr-modal [(clrModalOpen)]="modalExpired" [clrModalClosable]="false">
   <h3 class="modal-title">หมายเหตุการรับสินค้าเข้าคลังใกล้วันหมดอายุ</h3>
   <div class="modal-body">

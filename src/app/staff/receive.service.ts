@@ -336,4 +336,23 @@ export class ReceiveService {
     });
   }
 
+  async getReceiveOtherDetail(receiveOtherId: any) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/other/detail/${receiveOtherId}`).toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherDetailProductList(receiveOtherId: any) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/other/detail/product-list/${receiveOtherId}`).toPromise();
+    return res.json();
+  }
+
+  async updateReceiveOther(receiveOtherId: any, summary: any, products: Array<any>) {
+    const res = await this.authHttp.put(`${this.url}/staff/receives/other/${receiveOtherId}`, {
+      summary: summary,
+      products: products
+    }).toPromise();
+
+    return res.json();
+  }
+
 }

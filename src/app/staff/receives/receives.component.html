@@ -87,7 +87,7 @@
           <clr-dg-cell style="text-align: center;">
             <div class="btn-group btn-success">
               <button title="แก้ไขข้อมูล/อนุมัติ" class="btn btn-primary btn-icon btn-sm wm-small-btn" [disabled]="w.approve_id || w.is_cancel==='Y'"
-                [routerLink]="['/admin/receives/other/edit']" [queryParams]="{receiveOtherId: w.receive_other_id}">
+                [routerLink]="['/staff/receives/other/edit']" [queryParams]="{receiveOtherId: w.receive_other_id}">
                 <clr-icon shape="note"></clr-icon>
               </button>
               <button title="ยกเลิกใบรับ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeReceiveOther(w)" [disabled]="loading || w.approve_id || w.is_cancel==='Y'">

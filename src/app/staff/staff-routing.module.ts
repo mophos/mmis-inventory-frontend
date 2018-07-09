@@ -33,7 +33,8 @@ import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 import { StockCardComponent } from 'app/staff/report/stock-card/stock-card.component';
 import { ReceivesComponent } from 'app/staff/receives/receives.component'
-import { ReceivesOtherComponent} from 'app/staff/receives-other/receives-other.component';
+import { ReceivesOtherComponent } from 'app/staff/receives-other/receives-other.component';
+import { ReceivesOtherEditComponent } from 'app/staff/receives-other-edit/receives-other-edit.component'
 
 const routes: Routes = [
   {
@@ -44,7 +45,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'main', pathMatch: 'full' },
       { path: 'main', component: MainComponent },
       { path: 'receives', component: ReceivesComponent },
-      { path: 'receives/other', component: ReceivesOtherComponent},
+      { path: 'receives/other', component: ReceivesOtherComponent },
+      { path: 'receives/other/edit', component: ReceivesOtherEditComponent },
       { path: 'planning', canActivate: [AuthMinMaxPlanning], component: PlanningComponent },
       { path: 'requisition', component: RequisitionComponent },
       { path: 'requisition/new', component: RequisitionNewComponent },
@@ -68,7 +70,7 @@ const routes: Routes = [
       { path: 'product/requisition', component: ProductRequisitionComponent },
       { path: 'adjust-stock', canActivate: [AuthAdjustService], component: AdjustStockComponent },
       { path: 'adjust-stock/new', canActivate: [AuthAdjustService], component: AdjustStockNewComponent },
-      { path: 'reports/stock-card', component: StockCardComponent},
+      { path: 'reports/stock-card', component: StockCardComponent },
     ]
   }
 ];

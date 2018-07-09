@@ -71,6 +71,7 @@ import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.com
 import { StockCardComponent } from './report/stock-card/stock-card.component';
 import { ReceivesComponent } from './receives/receives.component';
 import { ReceivesOtherComponent } from './receives-other/receives-other.component';
+import { ReceivesOtherEditComponent } from './receives-other-edit/receives-other-edit.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -111,7 +112,8 @@ import { ReceivesOtherComponent } from './receives-other/receives-other.componen
     AdjustStockNewComponent,
     StockCardComponent,
     ReceivesComponent,
-    ReceivesOtherComponent
+    ReceivesOtherComponent,
+    ReceivesOtherEditComponent
   ],
   providers: [
     ToThaiDatePipe,
