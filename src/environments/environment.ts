@@ -17,6 +17,6 @@ export const environment = {
   inventoryUrl: '/admin',
   materialsUrl: 'http://mmis.moph.go.th/inventory',
   reportUrl: 'http://mmis.moph.go.th/reports',
-  umUrl: 'http://mmis.moph.go.th/um',
+  umUrl: 'http://localhost:4013',
   contractsUrl: '/',
 };
