@@ -1,0 +1,134 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <span class="breadcrumb-item active">รับสินค้าเข้าคลัง</span>
+</nav>
+
+<clr-dropdown style="padding-top: 5px; padding-bottom: 5px;">
+  <button type="button" class="btn btn-sm btn-success" clrDropdownTrigger>
+    + รับสินค้าเข้าคลัง
+    <clr-icon shape="caret down"></clr-icon>
+  </button>
+  <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+    <label class="dropdown-header">ประเภทการรับสินค้า</label>
+    <!-- <button routerLink="/admin/receives/purchase" type="button" clrDropdownItem>รับจากการซื้อ</button> -->
+    <button type="button" routerLink="/staff/receives/other" clrDropdownItem>รับอื่นๆ (เช่นบริจาค)</button>
+  </clr-dropdown-menu>
+</clr-dropdown>
+
+<clr-tabs>
+
+  <clr-tab>
+    <button clrTabLink (click)="selectTabReceiveOther()">
+      <clr-icon shape="truck"></clr-icon> รับอื่นๆ (เช่นบริจาค)
+      <span class="badge badge-info" title="ยังไม่ได้อนุมัติอีก {{countApproveOther | number}} รายการ">{{countApproveOther | number}}</span>
+    </button>
+    <clr-tab-content *clrIfActive="tab === 'receiveOther'">
+      <div class="card">
+        <div class="card-block" style="padding: 0px 5px 5px 5px;">
+          <div class="row wid99">
+            <div class="col-md-6" style="padding-top: 5px;">
+              <label for="">ค้นหา</label>
+              <input type="text" (keyup)="searchReceiveOther($event)" name="queryOther" [(ngModel)]="queryOther" placeholder="ชื่อผู้บริจาค, เลขที่ใบรับ, เลขที่ใบส่ง, ชื่อเวชภัณฑ์"
+                style="width: 400px;">
+              <!-- <button class="btn btn-sm btn-primary" (click)="doSearchWaiting()">ค้นหา</button> -->
+            </div>
+            <div class="col-md-2 push-md-4" style="padding-top: 5px;">
+              <div class="select">
+                <select [(ngModel)]="fillterApprove" (change)="changeFillterApprove()">
+                  <option value="all">ทั้งหมด</option>
+                  <option value="approve">อนุมัติ</option>
+                  <option value="Napprove">ยังไม่ได้อนุมัติ</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2" style="padding-top: 5px;">
+              <div style="float: right;">
+                <clr-dropdown>
+                  <button type="button" [disabled]="!selectedOtherApprove.length" class="btn btn-sm btn-primary" clrDropdownTrigger>
+                    ดำเนินการ...
+                    <clr-icon shape="caret down"></clr-icon>
+                  </button>
+                  <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+                    <label class="dropdown-header">เมนูใช้งาน ({{selectedOtherApprove.length | number}} รายการที่ถูกเลือก)</label>
+                    <button type="button" clrDropdownItem (click)="approveReceiveCheck(2)">
+                      <clr-icon class="is-success" shape="check"></clr-icon> อนุมัติใบรับ
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" clrDropdownItem (click)="printProductReciveOther()">
+                      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการบริจาค
+                    </button>
+                    <button type="button" clrDropdownItem (click)="printDeliveryNoteOther()">
+                      <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
+                    </button>
+                  </clr-dropdown-menu>
+                </clr-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <clr-datagrid (clrDgRefresh)="refreshOther($event)" [(clrDgSelected)]="selectedOtherApprove" [style.height.%]="83">
+        <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'receive_type_name'" style="width: 180px;">ประเภทการรับ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'donator_name'">ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
+        <!-- <clr-dg-column>จำนวนรายการ</clr-dg-column> -->
+        <clr-dg-column style="width: 150px;">มูลค่า (บาท)</clr-dg-column>
+        <clr-dg-column style="width: 150px;"></clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+        <clr-dg-row *ngFor="let w of others" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id, 'isError': w.is_cancel === 'Y'}">
+          <wm-staff-product-receive-other-detail [receiveOtherId]="w.receive_other_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-staff-product-receive-other-detail>
+          <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{w.receive_code}}</clr-dg-cell>
+          <clr-dg-cell>{{w.receive_type_name}}</clr-dg-cell>
+          <clr-dg-cell>{{w.donator_name}}</clr-dg-cell>
+          <!-- <clr-dg-cell style="text-align: right;">{{w.total | number}}</clr-dg-cell> -->
+          <clr-dg-cell style="text-align: right;">{{w.cost | number: '1.2-2'}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <div class="btn-group btn-success">
+              <button title="แก้ไขข้อมูล/อนุมัติ" class="btn btn-primary btn-icon btn-sm wm-small-btn" [disabled]="w.approve_id || w.is_cancel==='Y'"
+                [routerLink]="['/staff/receives/other/edit']" [queryParams]="{receiveOtherId: w.receive_other_id}">
+                <clr-icon shape="note"></clr-icon>
+              </button>
+              <button title="ยกเลิกใบรับ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeReceiveOther(w)" [disabled]="loading || w.approve_id || w.is_cancel==='Y'">
+                <clr-icon shape="trash"></clr-icon>
+              </button>
+            </div>
+          </clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pageOther.firstItem + 1 | number}} - {{pageOther.lastItem + 1 | number}} จาก {{pageOther.totalItems | number}} รายการ
+          <clr-dg-pagination #pageOther [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceiveOther"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+
+</clr-tabs>
+<clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
+  <h3 class="modal-title">สิทธิ์การอนุมัติ{{titel}}</h3>
+  <div class="modal-body" style="height:150px">
+
+    <form>
+      <section class="form-block">
+        <div class="form-group">
+          <label for="aForm_1" class="required">User Name</label>
+          <input autocomplete="nope" type="text" id="username" name="username" [(ngModel)]="username">
+        </div>
+        <div class="form-group">
+          <label for="aForm_1" class="required"> password</label>
+          <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password" (keyup.enter)="checkApprove(username,password)">
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer" style="padding-top: 0px;">
+    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkApprove(username,password)">บันทึก</button>
+    <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
+  </div>
+</clr-modal>
+<!-- <wm-modal-receive-approve #modalApprove (onSuccess)="approveSuccess($event)"></wm-modal-receive-approve> -->
+<wm-modal-receive-approve-other-staff #modalApproveOther (onSuccess)="approveSuccessOther($event)"></wm-modal-receive-approve-other-staff>
+<wm-html-preview #htmlPreview></wm-html-preview>
+<wm-loading-modal #modalLoading></wm-loading-modal>

@@ -13,35 +13,11 @@ export class ReceiveService {
     private authHttp: AuthHttp
   ) { }
 
-    // get conversion
-    async getUnitConversion(genericId: any) {
-      const response = await this.authHttp.get(`${this.url}/products/unit-conversion/${genericId}`)
-        .toPromise();
-      return response.json();
-    }
-
-  getReceiveTypes() {
-    return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/staffreceive/types`)
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
-  }
-
-  getStatusStatus() {
-    return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/staffreceive/status`)
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
+  // get conversion
+  async getUnitConversion(genericId: any) {
+    const response = await this.authHttp.get(`${this.url}/products/unit-conversion/${genericId}`)
+      .toPromise();
+    return response.json();
   }
 
   searchProduct(query: string) {
@@ -210,7 +186,7 @@ export class ReceiveService {
         });
     });
   }
-    // ================== check product service ============== //
+  // ================== check product service ============== //
   saveCheck(summary, products) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/staffreceive/check`, {
@@ -249,6 +225,134 @@ export class ReceiveService {
           reject(error);
         });
     });
+  }
+
+  async getReceiveOtherStatusSearch(limit: number = 15, offset: number = 0, query, status, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/staff/receives/other/status/search`, {
+      limit: limit,
+      offset: offset,
+      status: status,
+      query: query,
+      sort: sort
+    }).toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherStatus(limit: number = 15, offset: number = 0, status, sort: any = {}) {
+    const res = await this.authHttp.post(`${this.url}/staff/receives/other/status`, {
+      limit: limit,
+      offset: offset,
+      status: status,
+      sort: sort
+    }).toPromise();
+    return res.json();
+  }
+
+  async getApprove() {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/count/approve`)
+      .toPromise();
+    return res.json();
+  }
+
+  async getApproveOther() {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/count/approve/other`)
+      .toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherProducts(receiveOtherId) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/other/product-list/${receiveOtherId}`)
+      .toPromise();
+    return res.json();
+  }
+
+  async checkApprove(username: any, password: any, action: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/basic/checkApprove`, {
+      username: username,
+      password: password,
+      action: action
+    }).toPromise();
+    return rs.json();
+  }
+
+  async saveApproveOther(receiveIds: any[], approveDate: any, comment: any) {
+    const res = await this.authHttp.post(`${this.url}/staff/receives/other/approve`, {
+      receiveIds: receiveIds,
+      approveDate: approveDate,
+      comment: comment
+    }).toPromise();
+    return res.json();
+  }
+
+  async getPurchaseCheckHoliday(date) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/purchases/check-holiday?date=${date}`)
+      .toPromise();
+    return res.json();
+  }
+
+  async saveReceiveOther(summary: any, products: Array<any>) {
+    const res = await this.authHttp.post(`${this.url}/staff/receives/other`, {
+      summary: summary,
+      products: products
+    }).toPromise();
+
+    return res.json();
+  }
+
+  async saveCost(products: any) {
+    const rs: any = await this.authHttp.put(`${this.url}/staff/receives/update/cost`, {
+      products: products
+    }).toPromise();
+    return rs.json();
+  }
+
+  async getPurchaseCheckExpire(genericId: any, expiredDate: any) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/purchases/check-expire?genericId=${genericId}&expiredDate=${expiredDate}`)
+      .toPromise();
+    return res.json();
+  }
+
+  getReceiveTypes() {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/staff/receives/types`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
+  getStatusStatus() {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/staff/receives/status`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
+  async getReceiveOtherDetail(receiveOtherId: any) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/other/detail/${receiveOtherId}`).toPromise();
+    return res.json();
+  }
+
+  async getReceiveOtherDetailProductList(receiveOtherId: any) {
+    const res = await this.authHttp.get(`${this.url}/staff/receives/other/detail/product-list/${receiveOtherId}`).toPromise();
+    return res.json();
+  }
+
+  async updateReceiveOther(receiveOtherId: any, summary: any, products: Array<any>) {
+    const res = await this.authHttp.put(`${this.url}/staff/receives/other/${receiveOtherId}`, {
+      summary: summary,
+      products: products
+    }).toPromise();
+
+    return res.json();
   }
 
 }

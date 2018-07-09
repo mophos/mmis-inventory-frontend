@@ -44,6 +44,7 @@ import { StaffProductStockRemainComponent } from './staff-product-stock-remain/s
 import { StaffProductDetailStockRemainComponent } from './staff-product-detail-stock-remain/staff-product-detail-stock-remain.component';
 import { AdjustStockDetailComponent } from './adjust-stock-detail/adjust-stock-detail.component';
 import { AdjustStockProductComponent } from './adjust-stock-product/adjust-stock-product.component';
+import { StaffProductReceiveOtherDetailComponent } from './staff-product-receive-other-detail/staff-product-receive-other-detail.component';
 
 @NgModule({
   imports: [
@@ -91,7 +92,8 @@ import { AdjustStockProductComponent } from './adjust-stock-product/adjust-stock
     StaffProductStockRemainComponent,
     StaffProductDetailStockRemainComponent,
     AdjustStockDetailComponent,
-    AdjustStockProductComponent
+    AdjustStockProductComponent,
+    StaffProductReceiveOtherDetailComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -130,7 +132,8 @@ import { AdjustStockProductComponent } from './adjust-stock-product/adjust-stock
     StaffProductStockRemainComponent,
     StaffProductDetailStockRemainComponent,
     AdjustStockDetailComponent,
-    AdjustStockProductComponent
+    AdjustStockProductComponent,
+    StaffProductReceiveOtherDetailComponent
   ]
 })
 export class GridDetailModule { }
