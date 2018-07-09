@@ -97,6 +97,7 @@ import { AdditionWarehouseComponent } from './addition-warehouse/addition-wareho
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 import { StockcardComponent } from './tools/stockcard/stockcard.component';
 import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
+import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
 
 const routes: Routes = [
   {
@@ -145,6 +146,7 @@ const routes: Routes = [
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'reports/purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
       { path: 'reports/inventory-status', component: InventoryStatusComponent },
+      { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent },
       { path: 'reports/product-receive', component: ProductReceiveComponent },
       { path: 'reports/receive-not-match-po', component: ReceiveNotMatchPoComponent },
       { path: 'reports/summary-disbursement', component: SummaryDisbursementComponent },
@@ -178,7 +180,6 @@ const routes: Routes = [
       { path: 'addition/warehouse', component: AdditionWarehouseComponent },
       { path: 'addition/generic', component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', component: AdditionEditComponent },
-
       { path: 'tools/stockcard', component: StockcardComponent },
     ]
   }
