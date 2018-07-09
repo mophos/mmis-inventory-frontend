@@ -1,0 +1,17 @@
+<clr-datagrid>
+  <clr-dg-column>Generic Code</clr-dg-column>
+  <clr-dg-column>Generic Name</clr-dg-column>
+  <clr-dg-column>คงเหลือ(เก่า</clr-dg-column>
+  <clr-dg-column>คงเหลือ(ใหม่)</clr-dg-column>
+  <clr-dg-row *clrDgItems="let d of details" [clrDgItem]="d">
+    <clr-dg-cell>{{d.generic_code}}</clr-dg-cell>
+    <clr-dg-cell>{{d.generic_name}}</clr-dg-cell>
+    <clr-dg-cell>{{d.old_qty | number}}</clr-dg-cell>
+    <clr-dg-cell>{{d.new_qty | number}}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} of {{paginationA.totalItems}} รายการ
+    <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>

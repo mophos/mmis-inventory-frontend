@@ -39,9 +39,6 @@ export class UnitissueService {
   }
 
   update(unitissueId: any, unitissueName: string, unitissueDesc: string, israwmaterial: string) {
-    // console.log("service id:" + unitissueId);
-    // console.log("service name: " + unitissueName);
-    // console.log("service desc: " + unitissueDesc);
     return new Promise((resolve, reject) => {
       this.authHttp.put(`${this.url}/unitissue/${unitissueId}`, {
         unitissueName: unitissueName,

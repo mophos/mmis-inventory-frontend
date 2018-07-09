@@ -20,7 +20,8 @@ export class AlertExpiredComponent implements OnInit {
   openSetAllExpired = false;
   submitLoading = false;
   genericTypes = [];
-  genericType: any = "";
+  genericType: any = "all";
+  genericTypeE: any = "all";
   products = [];
 
   constructor(
@@ -30,11 +31,11 @@ export class AlertExpiredComponent implements OnInit {
     private productService: ProductsService,
   ) { }
 
-  ngOnInit() {
-    this.getAllProducts();
+  async ngOnInit() {
+    await this.getGenericType();
+    await this.getAllProducts();
     // this.getStatus();
-    this.getGenericType();
-    this.getProductExpired();
+    await this.getProductExpired();
   }
 
   // getStatus() {
@@ -61,7 +62,17 @@ export class AlertExpiredComponent implements OnInit {
   async getProductExpired() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.alertExpiredService.getProductExpired();
+      let _genericType;
+      if (this.genericTypeE === 'all') {
+        let _g = [];
+        this.genericTypes.forEach(v => {
+          _g.push(v.generic_type_id)
+        });
+        _genericType = _g;
+      } else {
+        _genericType = this.genericTypeE;
+      }
+      const rs: any = await this.alertExpiredService.getProductExpired(_genericType);
       if (rs.ok) {
         this.products = rs.rows;
       } else {
@@ -73,35 +84,12 @@ export class AlertExpiredComponent implements OnInit {
       this.alertService.serverError();
     }
   }
-  // setAlertStatus() {
-  //   if (this.isAlert) {
-  //     this.isAlert = false;
-  //   } else {
-  //     this.isAlert = true;
-  //   }
-
-  //   const status = this.isAlert ? 'Y' : 'N';
-  //   this.modalLoading.show();
-  //   this.alertExpiredService.saveStatus(status)
-  //     .then((result: any) => {
-  //       if (result.ok) {
-  //         this.alertService.success();
-  //       } else {
-  //         this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-  //       }
-  //       this.modalLoading.hide();
-  //     })
-  //     .catch(() => {
-  //       this.modalLoading.hide();
-  //       this.alertService.serverError();
-  //     });
-  // }
 
   async getAllProducts() {
     this.isAll = true;
     this.modalLoading.show();
     try {
-      let rs: any = await this.alertExpiredService.getAllGenerics();
+      const rs: any = await this.alertExpiredService.getAllGenerics();
       if (rs.ok) {
         this.allGenerics = rs.rows;
       } else {
@@ -117,10 +105,11 @@ export class AlertExpiredComponent implements OnInit {
   async changeGenericType() {
     this.isAll = true;
     this.modalLoading.show();
-    if (this.genericType == 'all') this.getAllProducts()
-    else {
+    if (this.genericType === 'all') {
+      this.getAllProducts()
+    } else {
       try {
-        let rs: any = await this.alertExpiredService.getSelectGenerics(this.genericType);
+        const rs: any = await this.alertExpiredService.getSelectGenerics(this.genericType);
         if (rs.ok) {
           this.allGenerics = rs.rows;
         } else {
@@ -135,14 +124,18 @@ export class AlertExpiredComponent implements OnInit {
 
   }
 
+  async changeGenericTypeE() {
+    this.getProductExpired();
+  }
+
   async getGenericType() {
     try {
       this.modalLoading.show();
       const rs = await this.productService.getGenericType();
-
       if (rs.ok) {
         this.genericTypes = rs.rows;
         this.genericType = 'all';
+        this.genericTypeE = 'all';
       } else {
         this.alertService.error(rs.error);
       }
@@ -150,11 +143,8 @@ export class AlertExpiredComponent implements OnInit {
       this.modalLoading.hide();
     } catch (error) {
       this.modalLoading.hide();
-      console.log(error);
-      this.alertService.serverError();
+      this.alertService.error(error);
     }
-    console.log(this.genericTypes);
-
   }
 
   setExpireCount() {
@@ -166,13 +156,12 @@ export class AlertExpiredComponent implements OnInit {
       });
       this.openSetSingleExpire = true;
     } catch (error) {
-      console.log(error);
-      this.alertService.error();
+      this.alertService.error(error);
     }
   }
 
   setExpireCountAll() {
-      this.openSetAllExpired = true;
+    this.openSetAllExpired = true;
   }
 
   setSingleExpire(product: any) {
@@ -183,7 +172,7 @@ export class AlertExpiredComponent implements OnInit {
   }
 
   saveExpireCount() {
-    if (this.numDays >= 10) {
+    if (this.numDays > 0) {
       this.submitLoading = true;
       this.alertExpiredService.saveExpiredCount(this.selectedGenericIds, this.numDays)
         .then((result: any) => {
@@ -204,8 +193,9 @@ export class AlertExpiredComponent implements OnInit {
       this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
     }
   }
+
   saveExpireCountAll() {
-    if (this.numDays >= 10) {
+    if (this.numDays > 0) {
       this.submitLoading = true;
       this.alertExpiredService.saveExpiredCountAll(this.selectedGenericIds, this.numDays)
         .then((result: any) => {
@@ -226,6 +216,7 @@ export class AlertExpiredComponent implements OnInit {
       this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
     }
   }
+
   getUnsetProducts() {
     this.isAll = false;
     this.modalLoading.show();

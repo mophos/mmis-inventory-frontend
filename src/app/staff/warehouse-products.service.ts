@@ -92,7 +92,19 @@ export class WarehouseProductsService {
   // แสดงรายการ template ทั้งหมดใน warehouse
   getAllTemplateInWarehouse(warehouseId: any) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/warehouses/alltemplateinwarehouse/${warehouseId}`)
+      this.authHttp.get(`${this.url}/warehouses/alltemplateinwarehouse?warehouseId=${warehouseId}`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
+  getAllTemplateInWarehouseSearch(warehouseId: any, query: any) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/warehouses/alltemplateinwarehouse/search?warehouseId=${warehouseId}&query=${query}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -106,7 +118,7 @@ export class WarehouseProductsService {
 
   getTemplateInWarehouse(warehouseId: any, sourceWarehouseId: any) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/warehouses/templateinwarehouse/${warehouseId}/${sourceWarehouseId}`)
+      this.authHttp.get(`${this.url}/warehouses/templateinwarehouse?srcWarehouseId=${warehouseId}&dstWarehouseId=${sourceWarehouseId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);

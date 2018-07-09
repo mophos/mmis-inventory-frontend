@@ -3,7 +3,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import * as _ from 'lodash';
 
-//import product service
+// import product service
 import { ProductsService } from '../products.service'
 import { AlertService } from "../../alert.service";
 import { WarehouseProductsService } from '../warehouse-products.service';
@@ -43,7 +43,6 @@ export class WarehouseProductsDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.warehouseId);
     this.showAllProducts();
     this.showAllProductsInWarehouse();
   }
@@ -54,7 +53,6 @@ export class WarehouseProductsDetailComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           this.allProducts = result.rows;
-          console.log(this.allProducts);
           this.ref.detectChanges();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
@@ -74,8 +72,6 @@ export class WarehouseProductsDetailComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           this.products = result.rows;
-          console.log("products");
-          console.log(this.products);
           this.ref.detectChanges();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
@@ -141,28 +137,17 @@ export class WarehouseProductsDetailComponent implements OnInit {
         })
         this.ref.detectChanges();
       } else {
-        console.log(resp.error);
-        // this.alert.error(resp.error);
+        this.alertService.error(resp.error);
       }
       this.loading = false;
     } catch (error) {
       console.error(error);
-      // this.alert.error(error.message);
     }
   }
 
   async saveWarehouseProduct() {
     try {
-    // console.log(this.receiveDate);
-    this.isSaving = true;
-    // const summary = {
-    //   receiveDate: `${this.receiveDate.date.year}-${this.receiveDate.date.month}-${this.receiveDate.date.day}`,
-    //   receiveCode: this.receiveCode,
-    //   supplierId: this.selectedSupplier.supplier_id,
-    // }
-    console.log("products");
-    console.log(this.products);
-
+      this.isSaving = true;
       const resp: any = await this.warehouseProductService.saveWarehouseProducts(this.warehouseId, this.products);
       if (resp.ok) {
         this.alertService.success();
@@ -175,24 +160,24 @@ export class WarehouseProductsDetailComponent implements OnInit {
       console.error(error);
       this.isSaving = false;
       this.alertService.error(error.message);
-     }
+    }
   }
 
   setMin(g, min) {
     // this.products.forEach(s => {
-      let idx = _.findIndex(this.products, { product_id: g.product_id });
-      if (idx > -1) {
-        this.products[idx].min_qty = +min;
-      }
+    const idx = _.findIndex(this.products, { product_id: g.product_id });
+    if (idx > -1) {
+      this.products[idx].min_qty = +min;
+    }
     // });
   }
 
   setMax(g, max) {
     // this.products.forEach+(s => {
-      let idx = _.findIndex(this.products, { product_id: g.product_id });
-      if (idx > -1) {
-        this.products[idx].max_qty = +max;
-      }
+    const idx = _.findIndex(this.products, { product_id: g.product_id });
+    if (idx > -1) {
+      this.products[idx].max_qty = +max;
+    }
     // });
   }
 

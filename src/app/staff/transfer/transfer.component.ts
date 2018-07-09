@@ -138,8 +138,6 @@ export class TransferComponent implements OnInit {
   doApproveAll() {
     const transferIds = [];
     this.selectedApprove.forEach(v => {
-      // console.log(v);
-
       if (v.approved !== 'Y' && v.mark_deleted !== 'Y') {
         transferIds.push(v.transfer_id);
       }
@@ -227,7 +225,6 @@ export class TransferComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
-    console.log(value);
   }
 
   doConfirm() {

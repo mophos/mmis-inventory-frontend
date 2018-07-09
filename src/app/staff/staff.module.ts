@@ -66,6 +66,9 @@ import { BorrowNoteService } from './borrow-note.service';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
 import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { ProductRequisitionComponent } from './product-requisition/product-requisition.component';
+import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
+import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
+import { StockCardComponent } from './report/stock-card/stock-card.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -101,7 +104,10 @@ import { ProductRequisitionComponent } from './product-requisition/product-requi
     ProductsComponent,
     BorrowNoteComponent,
     BorrowNoteNewComponent,
-    ProductRequisitionComponent
+    ProductRequisitionComponent,
+    AdjustStockComponent,
+    AdjustStockNewComponent,
+    StockCardComponent
   ],
   providers: [
     ToThaiDatePipe,

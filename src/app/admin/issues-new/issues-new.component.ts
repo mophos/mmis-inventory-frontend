@@ -117,7 +117,6 @@ export class IssuesNewComponent implements OnInit {
   }
 
   onEditChangeLots(event: any, idx: any) {
-    console.log(event);
     this.products[idx].lot_no = event.lot_no;
     this.products[idx].expired_date = event.expired_date;
     this.products[idx].unit_generic_id = event.unit_generic_id;
@@ -134,7 +133,6 @@ export class IssuesNewComponent implements OnInit {
       this.remainQty = event.qty;
       this.reserveQty = event.qty - event.reserve_qty;
       this.primaryUnitName = event.primary_unit_name;
-      console.log(event);
 
     } catch (error) {
       console.log(error.message);
@@ -170,9 +168,6 @@ export class IssuesNewComponent implements OnInit {
       const rs = await this.issueService.getLots(this.productId, this.warehouseId);
       this.lots = rs.rows;
       this.remainQty = _.sumBy(this.lots, 'qty');
-      console.log(this.lots);
-      console.log(this.remainQty);
-
     } catch (error) {
       console.error(error);
     }
@@ -206,7 +201,6 @@ export class IssuesNewComponent implements OnInit {
         obj.unit_name = this.primaryUnitName;
         obj.items = [];
         this.products.push(obj);
-        // console.log(this.products);
         await this.alowcate(this.genericId);
       }
     }
@@ -273,8 +267,6 @@ export class IssuesNewComponent implements OnInit {
       this.products[idx].unit_generic_id = event.unit_generic_id;
       this.products[idx].conversion_qty = event.qty;
       await this.alowcate(event.generic_id);
-      console.log(this.products);
-
     }
   }
 

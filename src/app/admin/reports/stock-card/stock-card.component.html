@@ -14,7 +14,8 @@
           <label class="required">เลือกเวชภัณฑ์</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="true" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
+          <wm-search-generic-warehouse-zero #productSearch [warehouseId]="warehouseId" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-zero>
+          <!-- <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="true" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete> -->
         </div>
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
           <label class="required">คลัง</label>
@@ -39,21 +40,9 @@
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
           <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
         </div>
-        <div class="col-md-2 btn-group">
-          <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
-            <clr-button [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" [clrInMenu]="true" class="btn btn-sm btn-primary"
-              (click)="showReport()">
-              <clr-icon shape="printer"></clr-icon> พิมพ์รายงานแบบที่ 1
-            </clr-button>
-            <clr-button [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" [clrInMenu]="true" class="btn btn-sm btn-primary"
-              (click)="showReport2()">
-              <clr-icon shape="printer"></clr-icon> พิมพ์รายงานแบบที่ 2
-            </clr-button>
-            <clr-button [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" [clrInMenu]="true" class="btn btn-sm btn-primary"
-              (click)="showReport3()">
-              <clr-icon shape="printer"></clr-icon> พิมพ์รายงานแบบที่ 3
-            </clr-button>
-          </clr-button-group>
+        <div class="col-md-2">
+          <button class="btn btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" (click)="showReport()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน </button>
         </div>
       </div>
       <div>

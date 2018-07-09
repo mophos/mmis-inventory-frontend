@@ -79,13 +79,13 @@ export class RequisitionNewComponent implements OnInit {
   selectedGenericName: any;
   selectedWorkingCode: any;
   selectedUnitGenericId: any;
-  selectedSmallQty: number = 0;
+  selectedSmallQty = 0;
   selectedRequisitionQty: any;
-  selectedTotalSmallQty: number = 0;
-  selectedRemainQty: number = 0;
-  isVerify: boolean = false;
+  selectedTotalSmallQty = 0;
+  selectedRemainQty = 0;
+  isVerify = false;
   requisitionCode: any;
-  
+
   isTemp: any = 'N';
   isOldTemp: any = 'N';
   isUpdate = false;
@@ -95,9 +95,9 @@ export class RequisitionNewComponent implements OnInit {
   jwtHelper: JwtHelper = new JwtHelper();
 
   token: any;
-  openTemp: boolean = false;
+  openTemp = false;
   tempList: any = [];
-  
+
   constructor(
     private wareHouseService: WarehouseService,
     private productService: ProductsService,
@@ -110,7 +110,7 @@ export class RequisitionNewComponent implements OnInit {
     @Inject('API_URL') private apiUrl: string,
     private staffService: StaffService,
     private periodService: PeriodService
-  ) { 
+  ) {
     this.token = sessionStorage.getItem('token');
     this.requisitionId = this.route.snapshot.params['requisitionId'];
   }
@@ -145,7 +145,7 @@ export class RequisitionNewComponent implements OnInit {
   async getTypes() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionTypeService.all();
+      const rs: any = await this.requisitionTypeService.all();
       this.modalLoading.hide();
       if (rs.ok) {
         this.requiSitionTypes = rs.rows;
@@ -161,7 +161,7 @@ export class RequisitionNewComponent implements OnInit {
     this.modalLoading.show();
     this.products = [];
     try {
-      let rs: any = await this.requisitionService.getEditRequisitionOrderItems(this.requisitionId);
+      const rs: any = await this.requisitionService.getEditRequisitionOrderItems(this.requisitionId);
       this.modalLoading.hide();
       if (rs.ok) {
         this.products = rs.rows;
@@ -178,10 +178,10 @@ export class RequisitionNewComponent implements OnInit {
   async getOrderDetail() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionService.getOrderDetail(this.requisitionId);
+      const rs: any = await this.requisitionService.getOrderDetail(this.requisitionId);
       this.modalLoading.hide();
       if (rs.ok) {
-        let detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
+        const detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
         this.requisitionCode = detail ? detail.requisition_code : null;
         this.requisitionTypeID = detail ? detail.requisition_type_id : null;
 
@@ -214,7 +214,6 @@ export class RequisitionNewComponent implements OnInit {
   }
 
   changeSearchGeneric(event: any) {
-    // console.log(event);
     if (event) {
       this.clearItem();
     }
@@ -237,8 +236,8 @@ export class RequisitionNewComponent implements OnInit {
     this.selectedGenericId = generic.generic_id;
     this.selectedGenericName = generic.generic_name;
     this.selectedWorkingCode = generic.working_code;
-   
-    let rs: any = await this.requisitionService.getGenericWarehouseRemain(this.wmWithdraw, this.selectedGenericId)
+
+    const rs: any = await this.requisitionService.getGenericWarehouseRemain(this.wmWithdraw, this.selectedGenericId)
     this.selectedRemainQty = rs.ok ? rs.remain_qty : 0;
     this.selectUnits.getUnits(generic.generic_id);
   }
@@ -258,7 +257,6 @@ export class RequisitionNewComponent implements OnInit {
 
   onChangeEditQty(idx: any, qty: any) {
     this.products[idx].requisition_qty = +qty;
-    console.log(this.products[idx]);
   }
 
   qtyEnter(event: any) {
@@ -268,12 +266,12 @@ export class RequisitionNewComponent implements OnInit {
   }
 
   async addProduct() {
-    const idx = _.findIndex(this.products,{generic_id:this.selectedGenericId})
+    const idx = _.findIndex(this.products, { generic_id: this.selectedGenericId })
     if (idx > -1) {
       this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม')
     } else {
       // get remain qty
-      let product: IRequisitionOrderItem = {};
+      const product: IRequisitionOrderItem = {};
       product.generic_id = this.selectedGenericId;
       product.requisition_qty = this.selectedRequisitionQty;
       product.generic_name = this.selectedGenericName;
@@ -288,12 +286,12 @@ export class RequisitionNewComponent implements OnInit {
 
   async getTemplateItems(templateId: any) {
     try {
-      let rs: any = await this.requisitionService.getTemplateItems(templateId);
+      const rs: any = await this.requisitionService.getTemplateItems(templateId);
       if (rs.ok) {
         this.products = [];
 
         rs.rows.forEach(v => {
-          let product: IRequisitionOrderItem = {};
+          const product: IRequisitionOrderItem = {};
           product.generic_id = v.generic_id;
           product.requisition_qty = 0;
           product.generic_name = v.generic_name;
@@ -326,7 +324,7 @@ export class RequisitionNewComponent implements OnInit {
     this.modalLoading.show();
     this.withDrawWarehouses = [];
     try {
-      let rs: any = await this.wareHouseService.getShipingNetwork(warehouseId, 'REQ');
+      const rs: any = await this.wareHouseService.getShipingNetwork(warehouseId, 'REQ');
       this.modalLoading.hide();
       if (rs.ok) {
         this.withDrawWarehouses = rs.rows;
@@ -339,7 +337,7 @@ export class RequisitionNewComponent implements OnInit {
     }
   }
 
-  saveTemp(){
+  saveTemp() {
     this.isTemp = 'Y';
     this._save();
   }
@@ -352,70 +350,66 @@ export class RequisitionNewComponent implements OnInit {
   async _save() {
     this.isSave = true;
     const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-${this.requisitionDate.date.day}` : null;
-    const rs = await this.periodService.getStatus(reqDate); 
-    if(rs.rows[0].status_close === 'Y') {
+    const rs = await this.periodService.getStatus(reqDate);
+    if (rs.rows[0].status_close === 'Y') {
       this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถเบิกได้')
     } else {
       this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
-      .then(async () => {
-        let order: IRequisitionOrder = {};
-        // console.log(this.requisitionDate.date);
-        // let reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-${this.requisitionDate.date.day}` : null;
-        order.requisition_date = reqDate;
-        order.requisition_type_id = this.requisitionTypeID;
-        order.wm_requisition = this.wmRequisition;
-        order.wm_withdraw = this.wmWithdraw;
-        order.is_temp = this.isTemp;
-        order.requisition_code = this.requisitionCode;
-
-        let products: Array<IRequisitionOrderItem> = [];
-
-        this.products.forEach((v: IRequisitionOrderItem) => {
-          if (v.requisition_qty > 0) {
-            let obj: IRequisitionOrderItem = {};
-            obj.generic_id = v.generic_id;
-            obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
-            obj.unit_generic_id = v.unit_generic_id;
-            products.push(obj);
-          }
-        });
-
-        if (!products.length) {
-          this.alertService.error('กรุณาระบุสินค้าที่ต้องการเบิก');
-        } else {
-          this.modalLoading.show();
-          try {
-            let rs: any;
-            if (this.requisitionId) {
-              rs = await this.requisitionService.updateRequisitionOrder(this.requisitionId, order, products);
-            } else {
-              rs = await this.requisitionService.saveRequisitionOrder(order, products);
+        .then(async () => {
+          const order: IRequisitionOrder = {};
+          order.requisition_date = reqDate;
+          order.requisition_type_id = this.requisitionTypeID;
+          order.wm_requisition = this.wmRequisition;
+          order.wm_withdraw = this.wmWithdraw;
+          order.is_temp = this.isTemp;
+          order.requisition_code = this.requisitionCode;
+          const products: Array<IRequisitionOrderItem> = [];
+          this.products.forEach((v: IRequisitionOrderItem) => {
+            if (v.requisition_qty > 0) {
+              const obj: IRequisitionOrderItem = {};
+              obj.generic_id = v.generic_id;
+              obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
+              obj.unit_generic_id = v.unit_generic_id;
+              products.push(obj);
             }
+          });
 
-            this.modalLoading.hide();
+          if (!products.length) {
+            this.alertService.error('กรุณาระบุสินค้าที่ต้องการเบิก');
+          } else {
+            this.modalLoading.show();
+            try {
+              let rsR: any;
+              if (this.requisitionId) {
+                rsR = await this.requisitionService.updateRequisitionOrder(this.requisitionId, order, products);
+              } else {
+                rsR = await this.requisitionService.saveRequisitionOrder(order, products);
+              }
 
-            if (rs.ok) {
-              this.router.navigate(['/staff/requisition']);
-            } else {
+              this.modalLoading.hide();
+
+              if (rsR.ok) {
+                this.router.navigate(['/staff/requisition']);
+              } else {
+                this.isSave = false;
+                this.isTemp = this.isOldTemp;
+                this.alertService.error(rsR.error);
+              }
+
+            } catch (error) {
               this.isSave = false;
               this.isTemp = this.isOldTemp;
-              this.alertService.error(rs.error);
+              this.modalLoading.hide();
+              this.alertService.error(error.message);
             }
-
-          } catch (error) {
-            this.isSave = false;
-            this.isTemp = this.isOldTemp;
-            this.modalLoading.hide();
-            this.alertService.error(error.message);
           }
-        }
 
-      })
+        })
         .catch(() => {
           this.isSave = false;
           this.isTemp = this.isOldTemp;
           this.modalLoading.hide();
-      });
+        });
     }
 
     this.isSave = false;
@@ -423,11 +417,11 @@ export class RequisitionNewComponent implements OnInit {
 
   async getTemplates(event: any) {
     try {
-      let dstWarehouseId = this.wmWithdraw;
-      let srcWarehouseId = this.wmRequisition;
+      const dstWarehouseId = this.wmWithdraw;
+      const srcWarehouseId = this.wmRequisition;
 
       if (dstWarehouseId && srcWarehouseId) {
-        let rs: any = await this.requisitionService.getTemplates(srcWarehouseId, dstWarehouseId);
+        const rs: any = await this.requisitionService.getTemplates(srcWarehouseId, dstWarehouseId);
 
         if (rs.ok) {
           this.templates = rs.rows;
@@ -461,13 +455,12 @@ export class RequisitionNewComponent implements OnInit {
     this.getOrderDetail();
     this.getOrderItems();
     this.openTemp = false;
-    console.log(temp);
   }
 
   async getTempList() {
     try {
       this.modalLoading.show();
-      let rs: any = await this.requisitionService.getTempList();
+      const rs: any = await this.requisitionService.getTempList();
       this.modalLoading.hide();
       if (rs.ok) {
         this.tempList = [];
@@ -486,16 +479,16 @@ export class RequisitionNewComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let rs: any = await this.requisitionService.removeTemp(temp.requisition_order_id);
+          const rs: any = await this.requisitionService.removeTemp(temp.requisition_order_id);
           if (rs.ok) {
             this.alertService.success();
             this.getTempList();
           }
         } catch (error) {
-        
+
         }
       }).catch(() => {
-      
+
       });
   }
 }

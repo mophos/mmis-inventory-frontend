@@ -12,6 +12,7 @@ import { AlertService } from "../../alert.service";
 export class RequisitionTemplateComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   templates = [];
+  query: any;
 
   constructor(
     private alertService: AlertService,
@@ -65,4 +66,26 @@ export class RequisitionTemplateComponent implements OnInit {
       });
   }
 
+  search() {
+    this.modalLoading.show();
+    this.warehouseProductService.getAllTemplateSearch(this.query)
+      .then((result: any) => {
+        if (result.ok) {
+          this.templates = result.rows;
+        } else {
+          this.alertService.error(result.error);
+        }
+        this.modalLoading.hide();
+      })
+      .catch((error: any) => {
+        this.modalLoading.hide();
+        this.alertService.serverError();
+      });
+  }
+
+  enterSearch(e) {
+    if (e.keyCode === 13) {
+      this.search();
+    }
+  }
 }

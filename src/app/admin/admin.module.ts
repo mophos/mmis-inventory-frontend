@@ -1,3 +1,4 @@
+import { AdjustStockService } from './adjust-stock.service';
 import { MinMaxService } from './min-max.service';
 import { TransectionTypeService } from './transection-type.service';
 import { ReceiveotherTypeService } from './receiveother-type.service';
@@ -56,6 +57,7 @@ import { WarehouseProductsService } from './warehouse-products.service';
 import { ShippingNetworkService } from './shipping-network.service';
 import { IssueService } from './issue.service';
 import { AdditionService } from 'app/admin/addition.service';
+import { GenericService } from './generic.service';
 
 import { LayoutComponent } from './layout/layout.component';
 import { WarehouseTypeComponent } from './warehouse-type/warehouse-type.component';
@@ -126,6 +128,7 @@ import { AuthShippingNetwork } from 'app/auth-shipping-network.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
+import { AuthAdjustService } from 'app/auth-adjust.service';
 import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { ProductManufactureComponent } from './reports/product-manufacture/product-manufacture.component';
 import { AccessCheck } from '../access-check';
@@ -150,6 +153,8 @@ import { ToolsModule } from './tools/tools.module';
 import { ToolsService } from './tools.service';
 import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
+import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
+import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -252,7 +257,9 @@ Highcharts.setOptions({
     AdditionEditComponent,
     AdditionGenericComponent,
     ReceiveNotMatchPoComponent,
-    ValueReceiveOtherComponent
+    ValueReceiveOtherComponent,
+    AdjustStockComponent,
+    AdjustStockNewComponent
   ],
   providers: [
     MainService,
@@ -273,6 +280,7 @@ Highcharts.setOptions({
     AuthShippingNetwork,
     AuthHISTransaction,
     AuthWarehouseManagement,
+    AuthAdjustService,
     AuthHISMapping,
     AuthMinMaxPlanning,
     ToThaiDatePipe,
@@ -303,6 +311,8 @@ Highcharts.setOptions({
     MinMaxService,
     AdditionService,
     ToolsService,
+    GenericService,
+    AdjustStockService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })

@@ -20,12 +20,10 @@ export class SelectWarehousesComponent implements OnInit {
   @Input('selectedId')
   set setSelectedId(val) {
     this.warehouseId = val;
-    console.log(this.warehouseId);
-    
   }
 
   @Input('shippingNetwork')
-  set setWareHouse(val){
+  set setWareHouse(val) {
     this.shippingNetwork = val
   }
 
@@ -42,10 +40,8 @@ export class SelectWarehousesComponent implements OnInit {
     this.loading = true;
     try {
       this.warehouses = [];
-      console.log(this.shippingNetwork);
-      
       let res = await this.basicService.getWarehouses();
-      if(this.shippingNetwork){
+      if (this.shippingNetwork) {
         res = await this.basicService.getWarehousesShipping(this.shippingNetwork);
       }
       this.loading = false;
@@ -61,8 +57,7 @@ export class SelectWarehousesComponent implements OnInit {
   }
 
   setSelect(event) {
-    let idx = _.findIndex(this.warehouses, { warehouse_id: +this.warehouseId });
-    console.log(this.warehouses[idx]);
+    const idx = _.findIndex(this.warehouses, { warehouse_id: +this.warehouseId });
     this.onSelect.emit(this.warehouses[idx]);
   }
 

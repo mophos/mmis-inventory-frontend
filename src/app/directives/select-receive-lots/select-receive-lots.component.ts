@@ -16,7 +16,7 @@ export class SelectReceiveLotsComponent implements OnInit {
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild('modalLot') public modalLot;
-  
+
   lots: any = [];
   lotNo: any;
 
@@ -27,10 +27,9 @@ export class SelectReceiveLotsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // console.log(this.productId);
-    // console.log(this.selectedLotNo);
-    
-    if (this.productId) this.getLots(this.productId);
+    if (this.productId) {
+      this.getLots(this.productId);
+    }
   }
 
   setProductId(productId: any) {
@@ -41,14 +40,14 @@ export class SelectReceiveLotsComponent implements OnInit {
   }
 
   async getLots(productId: any) {
-    // this.productId = productId;
     try {
-      let res = await this.basicService.getProductLots(productId);
+      const res = await this.basicService.getProductLots(productId);
       if (res.ok) {
         this.lots = res.rows;
         if (this.lots.length) {
-          if (this.selectedLotNo) this.lotNo = this.selectedLotNo;
-          else {
+          if (this.selectedLotNo) {
+            this.lotNo = this.selectedLotNo;
+          } else {
             this.lotNo = this.lots[0].lot_no;
             this.onSelect.emit(this.lots[0]);
           }
@@ -62,20 +61,14 @@ export class SelectReceiveLotsComponent implements OnInit {
   }
 
   setSelect(event) {
-    let lotNo = event.target.value;
-    // if (lotNo === '_ADD_') {
-    //   this.addLots();
-    //   this.modalLot.setProductId(this.productId);
-    // } else {
-      let idx = _.findIndex(this.lots, { lot_no: lotNo });
-      this.onSelect.emit(this.lots[idx]);
-    // }
+    const lotNo = event.target.value;
+    const idx = _.findIndex(this.lots, { lot_no: lotNo });
+    this.onSelect.emit(this.lots[idx]);
   }
 
   clearLots() {
     this.lots = [];
     this.productId = null;
-    // this.modalLot.clearLots();
   }
 
   addLots() {

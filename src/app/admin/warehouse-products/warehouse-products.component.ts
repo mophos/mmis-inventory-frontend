@@ -45,7 +45,6 @@ export class WarehouseProductsComponent implements OnInit {
 
   ngOnInit() {
     this.getAllProducts();
-    // this.all();
   }
 
     getAllProducts() {
@@ -55,7 +54,6 @@ export class WarehouseProductsComponent implements OnInit {
       .then((results: any) => {
         if (results.ok) {
           this.warehouses = results.rows;
-          console.log(this.warehouses);
         } else {
           this.alertService.error(JSON.stringify(results.error));
         }

@@ -80,14 +80,11 @@ export class RequisitionConfirmComponent implements OnInit {
   }
 
   onSuccessConfirm(event: any) {
-    console.log(event);
-
-    let idx = _.findIndex(this.products, { generic_id: event.generic_id });
+    const idx = _.findIndex(this.products, { generic_id: event.generic_id });
 
     if (idx > -1) {
-      let _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: event.wm_product_id });
+      const _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: event.wm_product_id });
       this.products[idx].is_minus = event.small_remain_qty - (event.confirm_qty * event.conversion_qty) < 0;
-      // this.products[idx].allowcate_qty = event.confirm_qty * event.conversion_qty;
       this.products[idx].confirm_qty = event.confirm_qty;
 
       if (_idx > -1) {
@@ -99,8 +96,6 @@ export class RequisitionConfirmComponent implements OnInit {
       // calculate new allowcate_qty
       this.products[idx].allowcate_qty = 0;
       this.products[idx].confirmItems.forEach(v => {
-        console.log(v.confirm_qty, v.conversion_qty);
-
         this.products[idx].allowcate_qty += (v.confirm_qty * v.conversion_qty);
       });
     }
@@ -191,10 +186,9 @@ export class RequisitionConfirmComponent implements OnInit {
   async getBorrowNotes() {
     try {
       this.modalLoading.show();
-      let rs: any = await this.requisitionService.getBorrowNotes(this.wmRequisitionId, this.genericIds);
+      const rs: any = await this.requisitionService.getBorrowNotes(this.wmRequisitionId, this.genericIds);
       this.modalLoading.hide();
       if (rs.ok) {
-        console.log(rs.rows);
         this.borrowNotes = rs.rows;
       } else {
         this.alertService.error(rs.error);
@@ -208,10 +202,10 @@ export class RequisitionConfirmComponent implements OnInit {
   async getOrderDetail() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.requisitionService.getOrderDetail(this.requisitionId);
+      const rs: any = await this.requisitionService.getOrderDetail(this.requisitionId);
       this.modalLoading.hide();
       if (rs.ok) {
-        let detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
+        const detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
         this.requisitionCode = detail ? detail.requisition_code : null;
         this.requisitionWarehouseName = detail ? detail.requisition_warehouse_name : null;
         this.withdrawWarehouseName = detail ? detail.withdraw_warehouse_name : null;
@@ -239,13 +233,13 @@ export class RequisitionConfirmComponent implements OnInit {
 
   async getConfirmItems() {
     try {
-      let rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
+      const rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
       if (rs.ok) {
-        let rows = rs.rows;
+        const rows = rs.rows;
         rows.forEach(v => {
-          let idx = _.findIndex(this.products, { generic_id: v.generic_id });
+          const idx = _.findIndex(this.products, { generic_id: v.generic_id });
           if (idx > -1) {
-            let obj: any = {
+            const obj: any = {
               confirm_qty: v.confirm_qty,
               conversion_qty: v.conversion_qty,
               wm_product_id: v.wm_product_id,
@@ -336,7 +330,7 @@ export class RequisitionConfirmComponent implements OnInit {
   async saveWithOutUnPaid(data: any) {
     this.modalLoading.show();
     try {
-      let rs = await this.requisitionService.saveOrderConfirmItemsWithOutUnpaid(this.requisitionId, data.items);
+      const rs = await this.requisitionService.saveOrderConfirmItemsWithOutUnpaid(this.requisitionId, data.items);
       this.modalLoading.hide();
       if (rs.ok) {
         this.alertService.success();
@@ -353,7 +347,7 @@ export class RequisitionConfirmComponent implements OnInit {
   async saveWithUnPaid(data: any) {
     this.modalLoading.show();
     try {
-      let rs = await this.requisitionService.saveOrderConfirmItemsWithUnpaid(this.requisitionId, data.items, data.generics);
+      const rs = await this.requisitionService.saveOrderConfirmItemsWithUnpaid(this.requisitionId, data.items, data.generics);
       this.modalLoading.hide();
       if (rs.ok) {
         this.alertService.success();
@@ -372,7 +366,7 @@ export class RequisitionConfirmComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
-          let rs: any = await this.requisitionService.removeOrderConfirm(this.confirmId);
+          const rs: any = await this.requisitionService.removeOrderConfirm(this.confirmId);
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
@@ -395,37 +389,32 @@ export class RequisitionConfirmComponent implements OnInit {
   }
 
   doCalculateRequisition() {
-    console.log(this.selectedBorrowNotes);
     this.alertService.confirm('ต้องการปรับยอดการเบิกจากการยืมใหม่  ใช่หรือไม่?')
       .then(async () => {
 
-        let dataBorrow = [];
-        let borrowItems = [];
-        let data = [];
-        let slData: any = _.clone(this.selectedBorrowNotes);
+        const dataBorrow = [];
+        const borrowItems = [];
+        const data = [];
+        const slData: any = _.clone(this.selectedBorrowNotes);
 
         slData.forEach((v, i) => {
-          let idx = _.findIndex(data, { generic_id: v.generic_id });
+          const idx = _.findIndex(data, { generic_id: v.generic_id });
           if (idx > -1) {
             data[idx].qty += v.qty * v.conversion_qty;
           } else {
-            let obj: any = v;
+            const obj: any = v;
             obj.qty = v.qty * v.conversion_qty;
             data.push(obj);
           }
         });
 
         this.products.forEach((x, i) => {
-          let idx = _.findIndex(data, { generic_id: x.generic_id });
+          const idx = _.findIndex(data, { generic_id: x.generic_id });
           if (idx > -1) {
-            // let selectedQty = data[idx].qty * data[idx].conversion_qty;
-            let pQty = this.products[i].requisition_qty * this.products[i].conversion_qty;
-            let reqQty = pQty + data[idx].qty;
-            // จำนวนจ่ายจริง
-            // this.products[i].requisition_qty = Math.floor(reqQty / this.products[i].conversion_qty);
+            const pQty = this.products[i].requisition_qty * this.products[i].conversion_qty;
+            const reqQty = pQty + data[idx].qty;
             // จำนวนที่ยืมไป
             dataBorrow.push({
-              // borrowNoteDetailId: data[idx].borrow_note_detail_id,
               requisitionId: this.requisitionId,
               genericId: this.products[i].generic_id,
               requisitionQty: reqQty,
@@ -437,30 +426,31 @@ export class RequisitionConfirmComponent implements OnInit {
           slData.forEach((b, ix) => {
             if (b.generic_id === x.generic_id) {
 
-              let _idx = _.findIndex(dataBorrow, { genericId: b.generic_id });
+              const _idx = _.findIndex(dataBorrow, { genericId: b.generic_id });
               if (_idx > -1) {
-                let obj: any = {};
+                const obj: any = {};
                 obj.borrowNoteDetailId = b.borrow_note_detail_id;
                 obj.requisitionId = dataBorrow[_idx].requisitionId;
                 borrowItems.push(obj);
               }
 
-              let idxB = _.findIndex(this.borrowNotes, { borrow_note_detail_id: b.borrow_note_detail_id });
-              if (idxB > -1) this.borrowNotes.splice(idxB, 1);
+              const idxB = _.findIndex(this.borrowNotes, { borrow_note_detail_id: b.borrow_note_detail_id });
+              if (idxB > -1) {
+                this.borrowNotes.splice(idxB, 1);
+              }
               this.selectedBorrowNotes.splice(ix, 1);
             }
           });
         });
         try {
           this.modalLoading.show();
-          let rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow, borrowItems);
+          const rs: any = await this.borrowNoteService.updateRequisitionBorrow(this.requisitionId, dataBorrow, borrowItems);
           this.modalLoading.hide();
 
           if (rs.ok) {
             this.alertService.success();
             await this.getOrderItems();
             await this.getBorrowNotes();
-            // this.router.navigate(['/admin/requisition']);
           } else {
             this.alertService.error(rs.error);
             this.selectedBorrowNotes = [];

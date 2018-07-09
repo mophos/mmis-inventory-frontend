@@ -26,6 +26,7 @@ export class StockCardComponent implements OnInit {
   datageneric = [];
   generic_id = [];
   genericInStockcard = [];
+  productId: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -46,7 +47,6 @@ export class StockCardComponent implements OnInit {
 
   ngOnInit() {
     const date = new Date();
-
     this.startDate = {
       date: {
         year: date.getFullYear(),
@@ -67,10 +67,9 @@ export class StockCardComponent implements OnInit {
     this.datageneric.push({
       generic_id: generic.generic_id,
       generic_name: generic.generic_name,
-      generic_code : generic.working_code
+      generic_code: generic.working_code
     });
     this.generic_id.push('genericId=' + generic.generic_id)
-    // console.log(this.generic_id);
   }
 
   changeSearchGeneric(generic) {
@@ -82,22 +81,6 @@ export class StockCardComponent implements OnInit {
   }
 
   showReport() {
-    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
-    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}&startDate=${this.start}
-    &endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
-    this.htmlPreview.showReport(url, 'landscape');
-  }
-
-  showReport2() {
-    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
-    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/generic/stock2?&warehouseId=${this.warehouseId}
-    &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
-    this.htmlPreview.showReport(url, 'landscape');
-  }
-
-  showReport3() {
     this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/generic/stock3?&warehouseId=${this.warehouseId}
@@ -144,7 +127,7 @@ export class StockCardComponent implements OnInit {
     });
     this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/generic/stock2?&warehouseId=${this.warehouseId}
+    const url = `${this.apiUrl}/report/generic/stock3?&warehouseId=${this.warehouseId}
     &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
     this.htmlPreview.showReport(url);
   }
@@ -154,6 +137,10 @@ export class StockCardComponent implements OnInit {
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/generics-no-movement/${this.warehouseId}/${this.start}/${this.end}?token=${this.token}`
     this.htmlPreview.showReport(url);
+  }
+
+  clearProductSearch() {
+    this.productId = null;
   }
 
 

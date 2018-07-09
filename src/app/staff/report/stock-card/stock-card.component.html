@@ -1,0 +1,111 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <!-- <span class="breadcrumb-item active">รายงานคุมคลังเวชภัณฑ์</span> -->
+</nav>
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink id="link1" (click)="changeTab()">
+      <clr-icon shape="file"></clr-icon>
+      รายงานคุมคลังเวชภัณฑ์
+    </button>
+    <clr-tab-content id="content1" *clrIfActive>
+      <div class="row" style="padding:1em">
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+          <label class="required">เลือกเวชภัณฑ์</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <wm-search-generic-warehouse-zero #productSearch [warehouseId]="warehouseId" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-zero>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+          <label class="required">คลัง</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <wm-select-warehouses [disabled]="true" [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
+          </wm-select-warehouses>
+        </div>
+      </div>
+      <div class="row" style="padding:1em">
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+          <label for="startDate" class="required">ตั้งแต่</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+          <label for="endDate" class="required">ถึง</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" (click)="showReport()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน </button>
+        </div>
+      </div>
+      <div>
+        <clr-datagrid [style.height.%]="85">
+          <clr-dg-column [style.width.%]="15" [clrDgField]="'generic_id'">Generic Code</clr-dg-column>
+          <clr-dg-column [style.width.%]="50" [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
+          <clr-dg-column [style.width.%]="25"></clr-dg-column>
+          <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
+          <clr-dg-row *clrDgItems="let product of datageneric" [clrDgItem]="product">
+            <clr-dg-cell>{{product.generic_code}}</clr-dg-cell>
+            <clr-dg-cell>{{product.generic_name}}</clr-dg-cell>
+            <clr-dg-cell>
+              <div class="btn-group">
+                <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeSelected(product)">
+                  <clr-icon shape="trash"></clr-icon>
+                </button>
+              </div>
+            </clr-dg-cell>
+          </clr-dg-row>
+
+          <clr-dg-footer>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+            <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+          </clr-dg-footer>
+        </clr-datagrid>
+      </div>
+    </clr-tab-content>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink id="link2" (click)="changeTab()">
+      <clr-icon shape="file"></clr-icon>
+      รายงานการเคลื่อนไหวของเวชภัณฑ์
+    </button>
+    <clr-tab-content id="content2">
+      <div class="row" style="padding:1em">
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+          <label class="required">คลัง</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <wm-select-warehouses [disabled]="true" [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
+          </wm-select-warehouses>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 btn-group">
+          <button class="btn btn-sm btn-primary" (click)="printReportMovement()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่มีการเคลื่อนไหว
+          </button>
+          <button class="btn btn-sm btn-primary" (click)="printReportNomovement()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่ไม่มีการเคลื่อนไหว
+          </button>
+        </div>
+      </div>
+      <div class="row" style="padding:1em">
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+          <label for="startDate" class="required">ตั้งแต่</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+          <label for="endDate" class="required">ถึง</label>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+        </div>
+      </div>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
+<wm-html-preview #htmlPreview></wm-html-preview>

@@ -66,14 +66,12 @@ export class ValueProductsComponent implements OnInit {
   }
 
   showReport() {
-    console.log(+this.warehouseId);
     if (+this.warehouseId !== 0) {
       this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
       this.warehouseName = this.warehouseName.warehouse_name
     } else {
       this.warehouseName = 'ทุกคลังสินค้า'
     }
-    console.log(this.warehouseName);
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/list/cost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;

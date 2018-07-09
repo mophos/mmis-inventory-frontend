@@ -212,7 +212,7 @@ export class AdditionComponent implements OnInit {
   }
 
   async printRefills() {
-    let addition_id = _.join(_.map(this.selectedApprove, (v) => { return 'addition_id=' + v.addition_id }), '&');
+    const addition_id = _.join(_.map(this.selectedApprove, (v) => { return 'addition_id=' + v.addition_id }), '&');
     const token = sessionStorage.getItem('token');
     const url = `${this.apiUrl}/addition/print/transactions?token=${token}&` + addition_id;
     this.htmlPreview.showReport(url);
@@ -226,17 +226,16 @@ export class AdditionComponent implements OnInit {
 
   async clickPrintApprove() {
     if (this.selectedApprove.length) {
-      const addition_id = await _.join( _.map(this.selectedApprove, (v)=>{return 'addition_id='+v.addition_id}),'&')
+      const addition_id = await _.join(_.map(this.selectedApprove, (v) => { return 'addition_id=' + v.addition_id }), '&')
       const token = sessionStorage.getItem('token');
       const url = `${this.apiUrl}/addition/print/approve?token=${token}&` + addition_id;
-      console.log(url);
       this.htmlPreview.showReport(url);
     }
   }
 
   searchWarehouse(event) {
     if (event.keyCode === 13) {
-        this.getWarehouse();
+      this.getWarehouse();
     }
   }
 

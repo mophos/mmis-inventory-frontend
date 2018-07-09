@@ -45,6 +45,7 @@ import { ShowUnitsComponent } from './show-units/show-units.component';
 import { HisMappingsDirectivesComponent } from './his-mappings-directives/his-mappings-directives.component';
 import { SearchPeopleAutoCompleteComponent } from 'app/directives/search-people-autocomplete/search-people-autocomplete.component';
 import { SearchProductTmtComponent } from './search-product-tmt/search-product-tmt.component';
+import { SelectGenericTypeComponent } from './select-generic-type/select-generic-type.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -92,7 +93,8 @@ import { SearchProductTmtComponent } from './search-product-tmt/search-product-t
         ShowUnitsComponent,
         HisMappingsDirectivesComponent,
         SearchPeopleAutoCompleteComponent,
-        SearchProductTmtComponent
+        SearchProductTmtComponent,
+        SelectGenericTypeComponent
     ],
     providers: [BasicService],
     exports: [
@@ -131,7 +133,8 @@ import { SearchProductTmtComponent } from './search-product-tmt/search-product-t
         ShowUnitsComponent,
         HisMappingsDirectivesComponent,
         SearchPeopleAutoCompleteComponent,
-        SearchProductTmtComponent
+        SearchProductTmtComponent,
+        SelectGenericTypeComponent
     ]
 })
 export class DirectivesModule { }

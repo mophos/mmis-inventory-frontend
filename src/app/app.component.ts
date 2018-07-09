@@ -7,6 +7,5 @@ import { Component, Inject } from '@angular/core';
 })
 export class AppComponent {
   constructor(@Inject('API_URL') private url: string) {
-    console.log(this.url);
   }
 }

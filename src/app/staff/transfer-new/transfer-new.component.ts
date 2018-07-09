@@ -101,7 +101,6 @@ export class TransferNewComponent implements OnInit {
   }
 
   onEditChangeLots(event: any, idx: any) {
-    console.log(event);
     this.generics[idx].lot_no = event.lot_no;
     this.generics[idx].expired_date = event.expired_date;
     this.generics[idx].unit_generic_id = event.unit_generic_id;
@@ -161,13 +160,10 @@ export class TransferNewComponent implements OnInit {
     try {
       const idx = _.findIndex(this.lots, { lot_no: this.lotNo });
       if (idx > -1) {
-        console.log(this.lots[idx]);
-
         this.expiredDate = this.lots[idx].expired_date;
         this.remainQty = this.lots[idx].qty;
         this.lotNo = this.lots[idx].lot_no;
         this.wmProductId = this.lots[idx].wm_product_id;
-        // this.getProductRemain();
       }
     } catch (error) {
       //
@@ -453,13 +449,8 @@ export class TransferNewComponent implements OnInit {
     try {
       const dstWarehouseId = this.dstWarehouseId;
       const srcWarehouseId = this.srcWarehouseId;
-      console.log(dstWarehouseId);
-      console.log(srcWarehouseId);
-
       if (dstWarehouseId && srcWarehouseId) {
         const rs: any = await this.transferService.getTemplates(srcWarehouseId, dstWarehouseId);
-        console.log(rs);
-
         if (rs.ok) {
           this.templates = rs.rows;
         } else {
@@ -479,14 +470,11 @@ export class TransferNewComponent implements OnInit {
 
   async getTemplateItems(templateId: any) {
     try {
-      console.log(templateId)
       const rs: any = await this.transferService.getTemplateItems(templateId);
       if (rs.ok) {
         this.generics = [];
 
         rs.rows.forEach(v => {
-          console.log(v);
-
           const generic: any = {};
           generic.generic_id = v.generic_id;
           generic.transfer_qty = 0;
@@ -502,7 +490,6 @@ export class TransferNewComponent implements OnInit {
 
           this.generics.push(generic);
         });
-        console.log(this.generics)
       }
     } catch (error) {
       this.alertService.error(error.message);

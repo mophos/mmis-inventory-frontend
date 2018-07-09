@@ -85,7 +85,6 @@ export class TransferEditComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('transferId', this.transferId);
     const date = new Date();
     await this.getSummaryInfo();
     await this.getDetailInfo();

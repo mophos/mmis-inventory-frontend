@@ -35,6 +35,11 @@ export class ProductsService {
     return resp.json();
   }
 
+  async getProductStockRemain(genericId: any) {
+    const resp = await this.authHttp.get(`${this.url}/products/stock/remain/generic/${genericId}`).toPromise();
+    return resp.json();
+  }
+
   async getProductStockTotal() {
     const resp = await this.authHttp.post(`${this.url}/products/stock/products/total`, {}).toPromise();
     return resp.json();
@@ -99,6 +104,11 @@ export class ProductsService {
 
   async tmtExportExcel() {
     const resp = await this.authHttp.get(`${this.url}/products/mapping/tmt/export`).toPromise();
+    return resp.json();
+  }
+
+  async productInWarehouse(genericId) {
+    const resp = await this.authHttp.get(`${this.url}/products/in/warehouse?genericId=${genericId}`).toPromise();
     return resp.json();
   }
 

@@ -283,7 +283,6 @@ export class RequisitionNewComponent implements OnInit {
 
   async getTemplateItems(templateId: any) {
     try {
-      console.log(templateId)
       const rs: any = await this.requisitionService.getTemplateItems(templateId);
       if (rs.ok) {
         this.products = [];
@@ -303,7 +302,6 @@ export class RequisitionNewComponent implements OnInit {
 
           this.products.push(product);
         });
-        console.log(this.products)
       }
     } catch (error) {
       this.alertService.error(error.message);
@@ -331,7 +329,6 @@ export class RequisitionNewComponent implements OnInit {
       if (rs.ok) {
         this.templates = [];
         this.withDrawWarehouses = rs.rows;
-        console.log(rs.rows[0]);
         if (rs.rows.length > 0) {
           this.wmWithdraw = rs.rows[0].destination_warehouse_id;
           this.getTemplates();
@@ -351,7 +348,6 @@ export class RequisitionNewComponent implements OnInit {
     this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
       .then(async () => {
         const order: IRequisitionOrder = {};
-        // console.log(this.requisitionDate.date);
         order.requisition_date = reqDate;
         order.requisition_type_id = this.requisitionTypeID;
         order.wm_requisition = this.wmRequisition;
@@ -429,8 +425,6 @@ export class RequisitionNewComponent implements OnInit {
     }
   }
   changeWarehouse() {
-    console.log(this.wmRequisition, this.wmWithdraw);
-
     if (this.products.length) {
       this.alertService.confirm('หากเปลี่ยนคลังข้อมูลเวชภัณฑ์จะถูกลบ')
         .then((result) => {

@@ -21,12 +21,12 @@ export class ShippingNetworkComponent implements OnInit {
   netId: any = [];
   networkTypes = [];
   transferTypeCode: any;
-  isActive: boolean = true;
+  isActive = true;
   dstWarehouseId: any;
   srcWarehouseId: any;
-  isTwoways: boolean = false;
-  isOpenModal: boolean = false;
-  _isOpenModal: boolean = false;
+  isTwoways = false;
+  isOpenModal = false;
+  _isOpenModal = false;
   shipNetworkId: any
 
   inventory: any = []
@@ -34,7 +34,7 @@ export class ShippingNetworkComponent implements OnInit {
   selectNetwork: any = []
 
   networkId: any;
-  isUpdate: boolean = false;
+  isUpdate = false;
   networks: any = [];
 
   constructor(
@@ -51,7 +51,7 @@ export class ShippingNetworkComponent implements OnInit {
 
   async getNetworkTypes() {
     try {
-      let res: any = await this.basicService.getNetworkTypes();
+      const res: any = await this.basicService.getNetworkTypes();
       if (res.ok) {
         this.networkTypes = res.rows;
       } else {
@@ -63,7 +63,7 @@ export class ShippingNetworkComponent implements OnInit {
   }
   async getWarehouses() {
     try {
-      let res: any = await this.basicService.getWarehouses();
+      const res: any = await this.basicService.getWarehouses();
       if (res.ok) {
         this.wh = res.rows;
         this.whs = res.rows;
@@ -101,7 +101,7 @@ export class ShippingNetworkComponent implements OnInit {
     this.modalLoading.show();
     try {
       // this.networks = [];
-      let res = await this.shipNetwork.getList();
+      const res = await this.shipNetwork.getList();
       if (res.ok) {
         this.networks = res.rows;
       } else {
@@ -118,8 +118,8 @@ export class ShippingNetworkComponent implements OnInit {
     this.isOpenModal = false;
     try {
       this.modalLoading.show();
-      let isActive = this.isActive ? 'Y' : 'N';
-      let isTwoways = this.isTwoways ? 'Y' : 'N';
+      const isActive = this.isActive ? 'Y' : 'N';
+      const isTwoways = this.isTwoways ? 'Y' : 'N';
       let res;
       if (this.isUpdate) {
         res = await this.shipNetwork.updateNetwork(this.shipNetworkId, this.srcWarehouseId, this.dstWarehouseId, this.transferTypeCode)
@@ -133,8 +133,8 @@ export class ShippingNetworkComponent implements OnInit {
           await this.selectNetwork.forEach(async (e) => {
             await this.inventory1.forEach(async (n) => {
               res = await this.shipNetwork.saveNetwork(v.warehouse_id, n.warehouse_id, e.transfer_code, isActive)
-              if (isTwoways == 'Y') {
-                if (e.transfer_code == 'REQ') {
+              if (isTwoways === 'Y') {
+                if (e.transfer_code === 'REQ') {
                   res = await this.shipNetwork.saveNetwork(n.warehouse_id, v.warehouse_id, 'ISS', isActive)
                 } else {
                   res = await this.shipNetwork.saveNetwork(n.warehouse_id, v.warehouse_id, e.transfer_code, isActive)
@@ -179,9 +179,8 @@ export class ShippingNetworkComponent implements OnInit {
 
   async setEdit(network: any) {
     this.clearForm()
-    let res = await this.shipNetwork.getListEdit(network.shipping_network_id)
+    const res = await this.shipNetwork.getListEdit(network.shipping_network_id)
     this.transferTypeCode = res.rows ? res.rows[0].transfer_code : null;
-    // console.log(res.rows)
     this.srcWarehouseId = res.rows ? res.rows[0].src_warehouseId : null;
     this.dstWarehouseId = res.rows ? res.rows[0].dst_warehouseId : null;
     this.shipNetworkId = res.rows ? res.rows[0].shipping_network_id : null;

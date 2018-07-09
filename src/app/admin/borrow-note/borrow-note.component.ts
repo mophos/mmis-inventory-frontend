@@ -25,10 +25,8 @@ export class BorrowNoteComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.getList(this.perPage, 0);
   }
   async printReport() {
-    console.log(this.selectedPrint);
     const borrow_note_id = _.join(_.map(this.selectedPrint, (v: any) => { return 'id=' + v.borrow_note_id }), '&')
     const token = sessionStorage.getItem('token');
     const url = `${this.apiUrl}/borrow-notes/report?token=${token}&` + borrow_note_id;
@@ -41,11 +39,9 @@ export class BorrowNoteComponent implements OnInit {
       if (rs.ok) {
         this.notes = rs.rows;
         this.total = rs.total;
-        console.log(this.notes);
       } else {
         this.alertService.error(rs.error);
       }
-
       this.modalLoading.hide();
     } catch (error) {
       this.modalLoading.hide();

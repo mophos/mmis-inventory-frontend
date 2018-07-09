@@ -24,7 +24,7 @@ export class BorrowNoteNewComponent implements OnInit {
   @ViewChild('elUnitList') elUnitList: SelectReceiveUnitComponent;
   @ViewChild('elSearchGeneric') elSearchGeneric: SearchGenericAutocompleteComponent;
   @ViewChild('elSearchPeople') elSearchPeople: SearchPeopleAutoCompleteComponent;
-  
+
   generics: any = [];
   borrowDate: any;
   peopleId: any;
@@ -34,10 +34,10 @@ export class BorrowNoteNewComponent implements OnInit {
   selectedGenericId: any;
   selectedGenericName: any;
   selectedUnitGenericId: any;
-  selectedQty: number = 0;
-  selectedConversionQty: number = 0;
+  selectedQty = 0;
+  selectedConversionQty = 0;
   selectedPrimaryUnitName = null;
-  
+
   dateOption: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -55,13 +55,11 @@ export class BorrowNoteNewComponent implements OnInit {
     private borrowNoteService: BorrowNoteService,
     private router: Router,
     private route: ActivatedRoute
-  ) { 
+  ) {
     this.borrowNoteId = this.route.snapshot.params.borrowNoteId;
     this.token = sessionStorage.getItem('token')
     const decoded = this.jwtHelper.decodeToken(this.token);
     this.peopleName = decoded.fullname;
-    // this.peopleId = decoded.people_id;
-    console.log(decoded);
     this.warehouseShipId = decoded.warehouseId
   }
 
@@ -88,11 +86,11 @@ export class BorrowNoteNewComponent implements OnInit {
 
   async getNotesWithItems() {
     try {
-      let rs: any = await this.borrowNoteService.getDetailWithItems(this.borrowNoteId);
+      const rs: any = await this.borrowNoteService.getDetailWithItems(this.borrowNoteId);
       if (rs.ok) {
         this.generics = rs.items || null;
-        let detail = rs.detail || {};
-        
+        const detail = rs.detail || {};
+
         if (detail.borrow_date) {
           this.borrowDate = {
             date: {
@@ -104,7 +102,7 @@ export class BorrowNoteNewComponent implements OnInit {
         }
 
         this.remark = detail ? detail.remark : '';
-        let fullname = detail ? detail.fullname : '';
+        const fullname = detail ? detail.fullname : '';
         this.elSearchPeople.setDefault(fullname);
         this.peopleId = detail ? detail.people_id : '';
         this.warehouseId = detail ? detail.wm_borrow : '';
@@ -115,10 +113,10 @@ export class BorrowNoteNewComponent implements OnInit {
   }
 
   addGeneric() {
-    let idx = _.findIndex(this.generics, { generic_id: this.selectedGenericId });
+    const idx = _.findIndex(this.generics, { generic_id: this.selectedGenericId });
 
     if (idx === -1) {
-      let obj: any = {};
+      const obj: any = {};
       obj.generic_id = this.selectedGenericId;
       obj.generic_name = this.selectedGenericName;
       obj.unit_generic_id = this.selectedUnitGenericId;
@@ -172,7 +170,9 @@ export class BorrowNoteNewComponent implements OnInit {
   }
 
   onChangeSearchGeneric(event: any) {
-    if (event) this.selectedGenericId = null;
+    if (event) {
+      this.selectedGenericId = null;
+    }
   }
 
   changeUnit(event: any) {
@@ -186,25 +186,27 @@ export class BorrowNoteNewComponent implements OnInit {
   }
 
   onChangePeople(event: any) {
-    if (event) this.peopleId = null;
+    if (event) {
+      this.peopleId = null;
+    }
   }
 
   save() {
-    let borrowDate = `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`;
+    const borrowDate = `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`;
     if (this.borrowDate && this.generics.length) {
       this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
         .then(async () => {
           try {
 
-            let notes: any = {};
+            const notes: any = {};
             notes.borrow_date = borrowDate;
             notes.people_id = this.peopleId;
             notes.remark = this.remark;
             notes.wm_withdarw = this.warehouseShipId;
             notes.wm_borrow = this.warehouseId;
-            let detail: any = [];
+            const detail: any = [];
             this.generics.forEach(v => {
-              let obj: any = {};
+              const obj: any = {};
               obj.generic_id = v.generic_id;
               obj.unit_generic_id = v.unit_generic_id;
               obj.qty = v.qty; // pack
@@ -217,14 +219,14 @@ export class BorrowNoteNewComponent implements OnInit {
             } else {
               rs = await this.borrowNoteService.save(notes, detail);
             }
-            
+
             if (rs.ok) {
               this.router.navigate(['/admin/borrow-notes'])
             } else {
               this.alertService.error(rs.error);
             }
           } catch (error) {
-            
+
           }
         }).catch(() => { });
     } else {

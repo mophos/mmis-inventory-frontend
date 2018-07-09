@@ -67,7 +67,6 @@ export class HisMappingsComponent implements OnInit {
     } else {
       this.alertService.error('กรุณาระบุข้อมูลให้ครบ')
     }
-    console.log(generic);
   }
 
   async removeMapping(generic: any) {

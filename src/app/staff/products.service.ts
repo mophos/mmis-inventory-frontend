@@ -54,5 +54,9 @@ export class ProductsService {
     const resp = await this.authHttp.get(`${this.url}/products/getallproductintemplate/${templateId}`).toPromise();
     return resp.json();
   }
+  async productInWarehouse(genericId) {
+    const resp = await this.authHttp.get(`${this.url}/products/in/warehouse?genericId=${genericId}`).toPromise();
+    return resp.json();
+  }
 
 }

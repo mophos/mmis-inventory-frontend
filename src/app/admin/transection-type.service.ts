@@ -6,8 +6,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TransectionTypeService {
 
-  constructor(  @Inject('API_URL') private url: string,
-  private authHttp: AuthHttp) { }
+  constructor(@Inject('API_URL') private url: string,
+    private authHttp: AuthHttp) { }
   all() {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/transectiontype`)
@@ -21,7 +21,6 @@ export class TransectionTypeService {
   }
 
   save(transectionTypeName: string) {
-    console.log(transectionTypeName);
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/transectiontype`, {
         transectionTypeName: transectionTypeName
@@ -35,7 +34,7 @@ export class TransectionTypeService {
     });
   }
 
-  update(transectionTypeId: any, transectionTypeName: string) {   
+  update(transectionTypeId: any, transectionTypeName: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.put(`${this.url}/transectiontype/${transectionTypeId}`, {
         transectionTypeName: transectionTypeName,

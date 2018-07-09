@@ -47,6 +47,7 @@ export class PlanningComponent implements OnInit {
   async ngOnInit() {
     await this.getGenericType();
     await this.getProducts();
+    await this.getGenerics();
     const date = new Date();
     this.fromDate = {
       date: {
@@ -198,7 +199,6 @@ export class PlanningComponent implements OnInit {
   }
 
   saveMinMax() {
-    console.log(this._generics);
     this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
       .then(async () => {
         try {

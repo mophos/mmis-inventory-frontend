@@ -42,7 +42,6 @@ export class ConfirmOrderItemsComponent implements OnInit {
   @Input('isEdit')
   set setEdit(value: boolean) {
     this._isEdit = value;
-    console.log(value);
   }
 
   @ViewChild('loadingModal') loadingModal: LoadingModalComponent;
@@ -58,9 +57,6 @@ export class ConfirmOrderItemsComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.getProductList();
-    console.log(this._confirmItems);
-    
-
   }
 
   async getProductList() {

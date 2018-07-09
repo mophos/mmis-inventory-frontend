@@ -1,3 +1,4 @@
+import { SelectGenericTypeComponent } from './../../../directives/select-generic-type/select-generic-type.component';
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../../alert.service';
@@ -13,6 +14,7 @@ import { SearchGenericAutocompleteComponent } from 'app/directives/search-generi
 export class ProductExpiredComponent implements OnInit {
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('searchGenericCmp') public searchGenericCmp: SearchGenericAutocompleteComponent;
+  @ViewChild('selectGenericType') public selectGenericType: SelectGenericTypeComponent;
   startDate: any;
   endDate: any;
   warehouses: any = [];
@@ -26,7 +28,7 @@ export class ProductExpiredComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
-
+  genericTypeId;
   options: any;
 
   constructor(@Inject('API_URL') private apiUrl: string,
@@ -61,11 +63,9 @@ export class ProductExpiredComponent implements OnInit {
   }
 
   showReport() {
-    console.log(this.warehouseId);
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/
-    ${this.selectedGenericId}?token=${this.token}`;
+    const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/${this.selectedGenericId}?genericTypeId=${this.genericTypeId}&token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
   getWarehouseList() {
@@ -88,5 +88,9 @@ export class ProductExpiredComponent implements OnInit {
     this.selectedGenericId = 0;
     this.warehouseId = 0;
     this.searchGenericCmp.clearSearch();
+  }
+
+  setSelectedGenericType(e) {
+    this.genericTypeId = e.generic_type_id;
   }
 }

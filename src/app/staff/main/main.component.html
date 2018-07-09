@@ -8,54 +8,49 @@
   <clr-tab>
     <button clrTabLink>Generic Group</button>
     <clr-tab-content *clrIfActive>
-        <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
-          <div class="col-md-6">
-            ค้นหา :
-            <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;" type="text"
-              placeholder="ค้นหาสินค้า...">
-            <!-- <input type="text" class="form-control"> -->
-          </div>
-          <div class="col-md-3 push-md-3" style="text-align: right;">
-            <div class="select">
-              <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
-                <option value="">ทั้งหมด</option>
-                <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-              </select>
-            </div>
+      <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+        <div class="col-md-6">
+          ค้นหา :
+          <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;" type="text"
+            placeholder="ค้นหาสินค้า...">
+          <!-- <input type="text" class="form-control"> -->
+        </div>
+        <div class="col-md-3 push-md-3" style="text-align: right;">
+          <div class="select">
+            <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
+              <option value="">ทั้งหมด</option>
+              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+            </select>
           </div>
         </div>
-        <clr-datagrid [style.height.%]="85">
-          <clr-dg-column [clrDgField]="'generic_working_code'">Generic Code</clr-dg-column>
-          <clr-dg-column [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
-          <clr-dg-column> min-max(base unit)</clr-dg-column>
-          <!-- <clr-dg-column [style.width.px]="100">
-            <ng-container *clrDgHideableColumn="{hidden: true}">
-              คงเหลือ(pack)
-            </ng-container>
-          </clr-dg-column> -->
-  
-          <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
-          <clr-dg-row *clrDgItems="let p of generics" [clrDgItem]="p">
-            <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-stock-remain>
-            <!-- <clr-dg-action-overflow>
-              <button class="action-item" (click)="changeQty(p)">
-                <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-            </clr-dg-action-overflow> -->
-            <clr-dg-cell>{{p.generic_working_code}}</clr-dg-cell>
-            <clr-dg-cell>
-              {{p.generic_name}}
-            </clr-dg-cell>
-            <clr-dg-cell>{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
-            <!-- <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.small_unit}})</clr-dg-cell> -->
-            <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.small_unit}}</clr-dg-cell>
-          </clr-dg-row>
-  
-          <clr-dg-footer>
-            {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
-            <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
-          </clr-dg-footer>
-        </clr-datagrid>
-      </clr-tab-content>
+      </div>
+      <clr-datagrid [style.height.%]="85">
+        <clr-dg-column [clrDgField]="'generic_code'">Generic Code</clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
+        <clr-dg-column> min-max(base unit)</clr-dg-column>
+        <clr-dg-column [style.width.px]="150">คงเหลือ</clr-dg-column>
+        <clr-dg-column [style.width.px]="150">คงเหลือ(หักยอดจอง unit)</clr-dg-column>
+        <clr-dg-row *clrDgItems="let p of generics" [clrDgItem]="p">
+          <clr-dg-action-overflow>
+            <button class="action-item" (click)="deleteGeneric(p.generic_id)">ลบรายการ</button>
+          </clr-dg-action-overflow>
+          <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [genericId]="p.generic_id"></wm-staff-product-stock-remain>
+          <clr-dg-cell>{{p.generic_code}}</clr-dg-cell>
+          <clr-dg-cell>
+            {{p.generic_name}}
+          </clr-dg-cell>
+          <clr-dg-cell>{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
+          <!-- <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.small_unit}})</clr-dg-cell> -->
+          <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.small_unit}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.qty-p.reserve_qty | number}} {{p.small_unit}}</clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
+          <clr-dg-pagination #paginationA [clrDgPageSize]="20"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
   </clr-tab>
   <clr-tab>
     <button clrTabLink>Trade Group</button>
@@ -77,42 +72,22 @@
         </div>
       </div>
       <clr-datagrid [style.height.%]="85">
-        <!-- <clr-dg-column [clrDgField]="'working_code'" [style.width.px]="150">
-          <ng-container *clrDgHideableColumn="{hidden: false}">
-            Trade Code
-          </ng-container>
-        </clr-dg-column> -->
         <clr-dg-column [clrDgField]="'trade_code'">Trade Code</clr-dg-column>
         <clr-dg-column [clrDgField]="'generic_name'">Trade Name</clr-dg-column>
         <clr-dg-column> min-max(base unit)</clr-dg-column>
-        <!-- <clr-dg-column [style.width.px]="100">
-          <ng-container *clrDgHideableColumn="{hidden: true}">
-            คงเหลือ(pack)
-          </ng-container>
-        </clr-dg-column> -->
-
-        <clr-dg-column [style.width.px]="150">คงเหลือ(base unit)</clr-dg-column>
+        <clr-dg-column>คงเหลือ</clr-dg-column>
+        <clr-dg-column>คงเหลือ(หักยอดจอง)</clr-dg-column>
         <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
+          <clr-dg-action-overflow>
+            <button class="action-item" (click)="deleteProduct(p.product_id)">ลบรายการ</button>
+          </clr-dg-action-overflow>
           <wm-staff-product-detail-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-detail-stock-remain>
-          <!-- <clr-dg-action-overflow>
-            <button class="action-item" (click)="changeQty(p)">
-              <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ</button>
-            <button disabled class="action-item" (click)="getStockCard(p)">
-                  <clr-icon shape="search"></clr-icon> Stock Card</button>
-          </clr-dg-action-overflow> -->
           <clr-dg-cell>{{p.trade_code}}</clr-dg-cell>
-          <clr-dg-cell>
-            <!-- <span class="p4">{{p.product_name}}</span> -->
-            <!-- <br> -->
-            <!-- <span class="p7">{{p.generic_name}}</span> -->
-            {{p.product_name}}
+          <clr-dg-cell>{{p.product_name}}
           </clr-dg-cell>
           <clr-dg-cell>{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
-          <!-- <clr-dg-cell style="text-align: right;">{{p.large_qty | number }} {{p.large_unit}} ({{p.conversion | number}} {{p.small_unit}})</clr-dg-cell> -->
           <clr-dg-cell style="text-align: center;">{{p.qty | number}} {{p.small_unit}}</clr-dg-cell>
-          <!-- <clr-dg-cell>{{p.cost*p.qty | number: '1.2-2'}}</clr-dg-cell> -->
-          <!-- <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
-              <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell> -->
+          <clr-dg-cell style="text-align: center;">{{p.qty-p.reserve_qty | number}} {{p.small_unit}}</clr-dg-cell>
         </clr-dg-row>
 
         <clr-dg-footer>

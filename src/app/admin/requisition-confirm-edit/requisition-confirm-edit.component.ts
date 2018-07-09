@@ -87,7 +87,6 @@ export class RequisitionConfirmEditComponent implements OnInit {
       // calculate new confirm_qty
       this.products[idx].confirm_qty = 0;
       this.products[idx].confirmItems.forEach(v => {
-        // this.products[idx].small_remain_qty += v.remain_small_qty;
         this.products[idx].confirm_qty += (v.confirm_qty * v.conversion_qty);
       });
     }
@@ -98,10 +97,6 @@ export class RequisitionConfirmEditComponent implements OnInit {
     this.products = [];
     try {
       const rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
-      // console.log(rs);
-      // console.log(rs.ok);
-      // console.log(rs.rows);
-
       this.modalLoading.hide();
       if (rs.ok) {
         rs.rows.forEach((v: any) => {
@@ -175,8 +170,6 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async getConfirmItems() {
     try {
       const rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
-      console.log(rs.rows);
-      
       if (rs.ok) {
         const rows = rs.rows;
         rows.forEach(v => {
@@ -260,9 +253,6 @@ export class RequisitionConfirmEditComponent implements OnInit {
     const data: any = {};
     data.items = items;
     data.generics = generics;
-
-    console.log(data);
-
     this.alertService.confirm('ต้องการบันทึกข้อมูลการจ่ายเวชภัณฑ์ ใช่หรือไม่?')
       .then(() => {
         if (isErrorItems || isErrorTotalConfirm) {
@@ -338,7 +328,6 @@ export class RequisitionConfirmEditComponent implements OnInit {
       });
   }
   removeGeneric(g) {
-    console.log(g);
     const idx = _.findIndex(this.products, { "generic_id": g.generic_id });
     if (idx > -1) {
       this.products.splice(idx, 1);

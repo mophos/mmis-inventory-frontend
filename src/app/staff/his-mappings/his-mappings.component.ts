@@ -27,7 +27,7 @@ export class HisMappingsComponent implements OnInit {
   async searchMappings() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.warehouseService.getSearchStaffMappings(this.query);
+      const rs: any = await this.warehouseService.getSearchStaffMappings(this.query);
       this.mappings = rs.rows;
       this.modalLoading.hide();
     } catch (error) {
@@ -38,7 +38,7 @@ export class HisMappingsComponent implements OnInit {
   async getMappings() {
     this.modalLoading.show();
     try {
-      let rs: any = await this.warehouseService.getStaffMappings();
+      const rs: any = await this.warehouseService.getStaffMappings();
       this.mappings = rs.rows;
       this.modalLoading.hide();
     } catch (error) {
@@ -48,7 +48,7 @@ export class HisMappingsComponent implements OnInit {
   }
 
   onChangeCode(his: any, generic: any) {
-    let idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
+    const idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
     if (idx > -1) {
       this.mappings[idx].mmis = generic.generic_id;
       this.mappings[idx].his = his;
@@ -56,7 +56,7 @@ export class HisMappingsComponent implements OnInit {
   }
 
   onChangeConversion(conversion: any, generic: any) {
-    let idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
+    const idx = _.findIndex(this.mappings, { generic_id: generic.generic_id });
     if (idx > -1) {
       this.mappings[idx].mmis = generic.generic_id;
       this.mappings[idx].conversion = +conversion;
@@ -66,8 +66,8 @@ export class HisMappingsComponent implements OnInit {
   async save(generic: any) {
     if (generic.mmis && generic.his) {
       try {
-        let conversion = generic.conversion || 1;
-        let rs: any = await this.warehouseService.saveMapping(generic.mmis, generic.his, conversion);
+        const conversion = generic.conversion || 1;
+        const rs: any = await this.warehouseService.saveMapping(generic.mmis, generic.his, conversion);
         if (rs.ok) {
           this.alertService.success();
         } else {
@@ -80,6 +80,5 @@ export class HisMappingsComponent implements OnInit {
     } else {
       this.alertService.error('กรุณาระบุข้อมูลให้ครบ')
     }
-    console.log(generic);
   }
 }

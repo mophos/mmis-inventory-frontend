@@ -276,8 +276,6 @@ export class ReceiveOtherEditComponent implements OnInit {
 
   setSelectedProduct(event: any) {
     try {
-      console.log(event);
-      
       this.selectedProductId = event ? event.product_id : null;
       this.selectedProductName = event ? `${event.product_name}` : null;
       this.selectedGenericName = event ? `${event.generic_name}` : null;
@@ -589,7 +587,6 @@ export class ReceiveOtherEditComponent implements OnInit {
       this.deliveryCode = rsDetail.delivery_code;
       this.comment = rsDetail.comment;
       this.donatorId = rsDetail.donator_id;
-      console.log(rsDetail);
       this.donatorList.setDefault(rsDetail.donator_name);
       this.modalLoading.hide();
     } catch (error) {
@@ -603,8 +600,6 @@ export class ReceiveOtherEditComponent implements OnInit {
       this.modalLoading.show();
       const receiveOtherId = this.receiveOtherId;
       const rs = await this.receiveService.getReceiveOtherDetailProductList(receiveOtherId);
-      console.log(rs.rows);
-      
       if (rs.ok) {
         rs.rows.forEach(v => {
           const product: any = {};
@@ -631,7 +626,6 @@ export class ReceiveOtherEditComponent implements OnInit {
 
           this.countTotalCost();
         });
-        console.log(this.products);
       } else {
         this.alertService.error(rs.error);
       }
@@ -643,14 +637,12 @@ export class ReceiveOtherEditComponent implements OnInit {
   }
 
   async checkExpired() {
-    console.log('checkExpired');
     this.isExpired = false;
     this.isItemExpired = false;
     if (this.receiveExpired) {
       for (const v of this.products) {
         if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
-          console.log('err วันหมดอายุ');
           this.isExpired = true;
         }
       }
@@ -669,7 +661,6 @@ export class ReceiveOtherEditComponent implements OnInit {
       }
       if (count > 0) {
         this.alertService.error('มีเวชภัณฑ์หมดอายุ ไม่อนุญาตให้รับสินค้า');
-        console.log('เวชภัณฑ์หมดอายุ');
         this.isItemExpired = true;
       }
     }
@@ -680,16 +671,13 @@ export class ReceiveOtherEditComponent implements OnInit {
         if (moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
           const d: any = v.expired_date.split('/');
           const expired_date: any = moment(new Date(d[2], d[1] - 1, d[0])).format('YYYY-MM-DD');
-          console.log(v.generic_id, expired_date);
           checkDiffExpired = await this.receiveService.getPurchaseCheckExpire(v.generic_id, expired_date);
-          console.log(checkDiffExpired);
           if (!checkDiffExpired.ok) {
             count++;
           }
         }
       }
       if (count > 0) {
-        console.log('err ใกล้หมดอายุ');
         this.alertService.confirm(checkDiffExpired.error)
           .then(() => {
             this.isItemExpired = false; // ใช่ ดำเนินการ
@@ -704,6 +692,6 @@ export class ReceiveOtherEditComponent implements OnInit {
           this.saveReceiveTo();
         }
       }
-    } // expired
+    }
   }
 }

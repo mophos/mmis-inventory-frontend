@@ -2,50 +2,81 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">รายงานสรุปการเบิกแยกตามหน่วยเบิก</span>
 </nav>
-<div class="row" style="padding:1em">
-  <!-- <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-    <label for="startDate" class="required">ตั้งแต่</label>
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
-  </div>
-  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-    <label for="endDate" class="required">ถึง</label>
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
-  </div> -->
-  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-    <div class="select">
-      <select name="month" id="month" [(ngModel)]="month">
-        <option value='1'>มกราคม</option>
-        <option value='2'>กุมภาพันธ์</option>
-        <option value='3'>มีนาคม</option>
-        <option value='4'>เมษายน</option>
-        <option value='5'>พฤษภาคม</option>
-        <option value='6'>มิถุนายน</option>
-        <option value='7'>กรกฎาคม</option>
-        <option value='8'>สิงหาคม</option>
-        <option value='9'>กันยายน</option>
-        <option value='10'>ตุลาคม</option>
-        <option value='11'>พฤศจิกายน</option>
-        <option value='12'>ธันวาคม</option>
-      </select>
+<div class="card">
+  <div class="card-header">สรุกการเบิกแยกตามหน่วยเบิก(รายเดือน)</div>
+  <div class="card-block">
+    <div class="card-text">
+      <div class="row" style="padding:1em">
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="text-align: right">
+          <label class="required">เดือน</label>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <div class="select">
+            <select name="month" id="month" [(ngModel)]="month">
+              <option value='1'>มกราคม</option>
+              <option value='2'>กุมภาพันธ์</option>
+              <option value='3'>มีนาคม</option>
+              <option value='4'>เมษายน</option>
+              <option value='5'>พฤษภาคม</option>
+              <option value='6'>มิถุนายน</option>
+              <option value='7'>กรกฎาคม</option>
+              <option value='8'>สิงหาคม</option>
+              <option value='9'>กันยายน</option>
+              <option value='10'>ตุลาคม</option>
+              <option value='11'>พฤศจิกายน</option>
+              <option value='12'>ธันวาคม</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="text-align: right">
+          <label class="required">ปี</label>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <div class="select">
+            <select name="year" id="year" [(ngModel)]="year">
+              <option *ngFor="let w of dataYear" [value]="w">
+                {{w+(543)}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <button class="btn btn-sm btn-primary" (click)="summaryDisbursementMonth()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปเบิกแยกหน่วยเบิก
+          </button>
+          <button class="btn btn-sm btn-success" (click)="summaryDisbursementMonthExcel()">
+            <clr-icon shape="download"></clr-icon> Excel
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-    <div class="select">
-      <select name="year" id="year" [(ngModel)]="year">
-        <option *ngFor="let w of dataYear" [value]="w">
-          {{w+(543)}}
-        </option>
-      </select>
+</div>
+<div class="card">
+  <div class="card-header">สรุกการเบิกแยกตามหน่วยเบิก(วันที่ระบุ)</div>
+  <div class="card-block">
+    <div class="row">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="text-align: right">
+        <label for="startDate" class="required">ตั้งแต่</label>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="text-align: right">
+        <label for="endDate" class="required">ถึง</label>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <button class="btn btn-sm btn-primary" (click)="summaryDisbursementDate()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปเบิกแยกหน่วยเบิก
+        </button>
+        <button class="btn btn-sm btn-success" (click)="summaryDisbursementDateExcel()">
+          <clr-icon shape="download"></clr-icon> Excel
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12">
-    <button class="btn btn-sm btn-primary" (click)="summaryDisbursement()">
-      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปเบิกแยกหน่วยเบิก
-    </button>
   </div>
 </div>
 <wm-html-preview #htmlPreview></wm-html-preview>

@@ -27,8 +27,7 @@ export class ImportStockComponent implements OnInit {
     this.wareHouse = rs.rows;
   }
   async openData(e) {
-    let t = [];
-    console.log(e.target.value);
+    const t = [];
     const rs: any = await this.warehouseService.getWarehouseProductImport(e.target.value);
     if (rs.ok) {
       this.importList = rs.rows;
@@ -36,23 +35,15 @@ export class ImportStockComponent implements OnInit {
       await this.importList.forEach(async v => {
         const rs2: any = await this.warehouseService.getProductImport(v.working_code);
         if (rs2.ok) {
-          // let idx = _.findIndex(this.importList, { generic_id: v.working_code });
-          // if (idx > -1) {
-          //   this.importList[idx].product = rs2.rows
-          // }
           await rs2.rows.forEach(async i => {
             await t.push(i);
 
           });
         }
       });
-      
-      console.log(t);
-      
       await this.importList.forEach(async (j, i) => {
         this.importList[i].product = [];
         await t.forEach(v => {
-          // console.log(j.generic_id, v.working_code);
           if (j.generic_id === v.working_code) {
 
             this.zone.run(() => {
@@ -62,16 +53,7 @@ export class ImportStockComponent implements OnInit {
         });
 
       });
-
-      console.log(this.importList);
-      // console.log(this.temp);
-
-
       this.datagrid = true;
     }
-
-
   }
-
-
 }

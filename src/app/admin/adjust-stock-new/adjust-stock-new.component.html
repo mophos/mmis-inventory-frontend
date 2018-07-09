@@ -1,0 +1,111 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/adjust-stock">รายการปรับยอด</a>
+  <span class="breadcrumb-item active">บันทึกปรับยอด</span>
+</nav>
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label class="required">วันที่</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <my-date-picker-th [disabled]="true" name="adjustDate" [options]="myDatePickerOptions" [(ngModel)]="adjustDate" required></my-date-picker-th>
+          </div>
+          <!-- </div>
+
+        <div class="form-group row"> -->
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="reason" [(ngModel)]="reason">
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+<clr-datagrid>
+  <clr-dg-column>Generic Code</clr-dg-column>
+  <clr-dg-column>Generic Name</clr-dg-column>
+  <clr-dg-column>จำนวนคงเหลือ(Base unit)</clr-dg-column>
+  <clr-dg-column>จำนวนคงเหลือที่ปรับยอด(Base unit)</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
+  <clr-dg-row *ngFor="let g of generics; let idx = index;">
+    <wm-adjust-stock-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="g.products" ngProjectAs="clr-dg-row-detail"></wm-adjust-stock-product>
+    <clr-dg-cell>{{idx + 1}}. {{g.generic_code}}</clr-dg-cell>
+    <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
+    <clr-dg-cell>{{g.old_qty}} {{g.small_unit_name}}</clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #qty (keyup)="editChangeAdjust(g.generic_id, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberWithOutDot [value]="g.qty" />
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-danger btn-sm wm-small-btn" title="ลบ" (click)="removeGeneric(g.generic_id)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-row class="newLine">
+    <clr-dg-cell></clr-dg-cell>
+    <clr-dg-cell>
+      <wm-search-generic-warehouse-zero [warehouseId]="warehouseId" #productSearch (onSelect)="setSelectedGeneric($event)"></wm-search-generic-warehouse-zero>
+    </clr-dg-cell>
+    <clr-dg-cell>{{oldQty}} {{smallUnit}}</clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" class="wm-edit-box-number" style="width: 100px;" style="background-color: #FFF9C4" [disabled]="!genericId"
+        [(ngModel)]="qty" autocomplete="off" (keyup)="enterAddGeneric($event)" wmNumberWithOutDot placeholder="">
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId || !qty" (click)="addGeneric()">
+          เพิ่ม
+        </button>
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
+          ยกเลิก
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+</clr-datagrid>
+
+<div>
+  <button class="btn btn-success btn-sm" (click)="passwordModal = true" [disabled]="!reason || !generics.length">
+    <clr-icon shape="floppy"></clr-icon>
+    อนุมัติปรับยอด
+  </button>
+  <button class="btn btn-danger btn-sm" [routerLink]="['/admin/issues']">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+</div>
+
+<clr-modal [(clrModalOpen)]="passwordModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">อนุมัติปรับยอด</h3>
+  <div class="modal-body">
+    <div class="row" >
+      <div class="col-md-12">
+        กรุณาตรวจสอบความถูกต้อง การกดอนุมัติถือเป็นการใส่ปรับยอดเป็นที่เรียบร้อย
+      </div>
+    </div>
+    <div class="row" style="text-align: center;padding-top:30px;">
+      <div class="col-md-6" style="text-align: right"> รหัสผ่าน</div>
+      <div class="col-md-6" style="text-align: left;">
+        <input type="password" name="password" (keyup)="enterSave($event)" [(ngModel)]="password">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSave" (click)="save()">อนุมัติปรับยอด</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="passwordModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>
