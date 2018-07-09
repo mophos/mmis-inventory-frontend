@@ -69,6 +69,9 @@ import { ProductRequisitionComponent } from './product-requisition/product-requi
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 import { StockCardComponent } from './report/stock-card/stock-card.component';
+import { ReceivesComponent } from './receives/receives.component';
+import { ReceivesOtherComponent } from './receives-other/receives-other.component';
+import { ReceivesOtherEditComponent } from './receives-other-edit/receives-other-edit.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -107,7 +110,10 @@ import { StockCardComponent } from './report/stock-card/stock-card.component';
     ProductRequisitionComponent,
     AdjustStockComponent,
     AdjustStockNewComponent,
-    StockCardComponent
+    StockCardComponent,
+    ReceivesComponent,
+    ReceivesOtherComponent,
+    ReceivesOtherEditComponent
   ],
   providers: [
     ToThaiDatePipe,
