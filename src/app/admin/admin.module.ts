@@ -149,6 +149,7 @@ import { AdditionGenericComponent } from './addition-generic/addition-generic.co
 import { ToolsModule } from './tools/tools.module';
 import { ToolsService } from './tools.service';
 import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
+import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -250,7 +251,8 @@ Highcharts.setOptions({
     AdditionWarehouseComponent,
     AdditionEditComponent,
     AdditionGenericComponent,
-    ReceiveNotMatchPoComponent
+    ReceiveNotMatchPoComponent,
+    ValueReceiveOtherComponent
   ],
   providers: [
     MainService,
