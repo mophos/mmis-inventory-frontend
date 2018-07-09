@@ -46,6 +46,7 @@ import { HisMappingsDirectivesComponent } from './his-mappings-directives/his-ma
 import { SearchPeopleAutoCompleteComponent } from 'app/directives/search-people-autocomplete/search-people-autocomplete.component';
 import { SearchProductTmtComponent } from './search-product-tmt/search-product-tmt.component';
 import { ModalReceiveApproveOtherStaffComponent } from './modal-receive-approve-other-staff/modal-receive-approve-other-staff.component';
+import { SelectGenericTypeComponent } from './select-generic-type/select-generic-type.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -94,7 +95,8 @@ import { ModalReceiveApproveOtherStaffComponent } from './modal-receive-approve-
         HisMappingsDirectivesComponent,
         SearchPeopleAutoCompleteComponent,
         SearchProductTmtComponent,
-        ModalReceiveApproveOtherStaffComponent
+        ModalReceiveApproveOtherStaffComponent,
+        SelectGenericTypeComponent
     ],
     providers: [BasicService],
     exports: [
@@ -134,7 +136,8 @@ import { ModalReceiveApproveOtherStaffComponent } from './modal-receive-approve-
         HisMappingsDirectivesComponent,
         SearchPeopleAutoCompleteComponent,
         SearchProductTmtComponent,
-        ModalReceiveApproveOtherStaffComponent
+        ModalReceiveApproveOtherStaffComponent,
+        SelectGenericTypeComponent
     ]
 })
 export class DirectivesModule { }

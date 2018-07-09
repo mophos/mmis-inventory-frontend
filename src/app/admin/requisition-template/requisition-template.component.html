@@ -4,9 +4,21 @@
 </nav>
 
 <!-- <h1 class="h1">Template ชุดเบิก</h1> -->
-<button class="btn btn-sm btn-success" [routerLink]="['/admin/requisition-templates/new']">
+<!-- <button class="btn btn-sm btn-success" [routerLink]="['/admin/requisition-templates/new']">
   + สร้าง Template
-</button>
+</button> -->
+<div class="row">
+  <div class="col-md-2">
+    <button class="btn btn-sm btn-success" [routerLink]="['/admin/requisition-templates/new']">
+      + สร้าง Template เบิก/โอน
+    </button>
+  </div>
+  <div class="col-md-10">
+    <label for="">ค้นหา</label>
+    <input type="text" (keyup)="enterSearch($event)" name="query" [(ngModel)]="query" placeholder="ชื่อ template, คลังต้นทาง, คลังปลายทาง"
+      style="width: 400px;">
+  </div>
+</div>
 
 <clr-datagrid [style.height.%]="90">
   <!-- <clr-dg-column [clrDgField]="'template_id'">เลขที่ Template</clr-dg-column> -->
