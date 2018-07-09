@@ -7,6 +7,8 @@ import { JwtHelper } from 'angular2-jwt';
 import { SearchGenericAutocompleteComponent } from '../../../directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import * as _ from 'lodash';
 import { ReceiveService } from '../../receive.service';
+import { State } from "@clr/angular";
+
 @Component({
   selector: 'wm-value-receive-other',
   templateUrl: './value-receive-other.component.html',
@@ -30,7 +32,7 @@ export class ValueReceiveOtherComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
-  receiveTypesSelect:any =[];
+  receiveTypesSelect: any = [];
   options: any;
   receiveTypes: any;
   constructor(@Inject('API_URL') private apiUrl: string,
@@ -67,7 +69,7 @@ export class ValueReceiveOtherComponent implements OnInit {
     };
     this.getWarehouseList();
     console.log(this.receiveTypesSelect.length);
-    
+
   }
 
   showReport() {
@@ -78,8 +80,8 @@ export class ValueReceiveOtherComponent implements OnInit {
     } else {
       this.warehouseName = 'ทุกคลังสินค้า'
     }
-    let receiveTpyeId: any 
-    receiveTpyeId = _.map(this.receiveTypesSelect,(b:any)=>{
+    let receiveTpyeId: any
+    receiveTpyeId = _.map(this.receiveTypesSelect, (b: any) => {
       return b.receive_type_id;
     }).join('&receiveTpyeId=')
     console.log(receiveTpyeId);
@@ -98,7 +100,7 @@ export class ValueReceiveOtherComponent implements OnInit {
         }
       });
   }
-  refreshWaiting(){
+  refreshWaiting(state: State) {
     this.getReceiveTypes();
   }
   async getReceiveTypes() {
