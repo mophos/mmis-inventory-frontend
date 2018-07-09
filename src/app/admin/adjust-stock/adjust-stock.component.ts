@@ -1,8 +1,9 @@
 import { AdjustStockService } from './../adjust-stock.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { AlertService } from '../../alert.service';
 import { JwtHelper } from 'angular2-jwt';
 import { State } from "@clr/angular";
+import * as _ from 'lodash';
 @Component({
   selector: 'wm-adjust-stock',
   templateUrl: './adjust-stock.component.html'
@@ -11,6 +12,7 @@ export class AdjustStockComponent implements OnInit {
 
 
   @ViewChild('modalLoading') public modalLoading: any;
+  @ViewChild('htmlPreview') public htmlPreview: any;
 
   jwtHelper: JwtHelper = new JwtHelper();
   decodedToken: any;
@@ -19,12 +21,15 @@ export class AdjustStockComponent implements OnInit {
   totalList: any;
   perPage = 5;
   currentPage = 1;
+  selectAdjust = []
+  token: string;
   constructor(
     private adjustStockService: AdjustStockService,
     private alertService: AlertService,
+    @Inject('API_URL') private apiUrl: string
   ) {
-    const token = sessionStorage.getItem('token');
-    this.decodedToken = this.jwtHelper.decodeToken(token);
+    this.token = sessionStorage.getItem('token');
+    this.decodedToken = this.jwtHelper.decodeToken(this.token);
   }
 
   ngOnInit() {
@@ -65,5 +70,12 @@ export class AdjustStockComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+  }
+  report(){
+    let adjustId = _.map(this.selectAdjust,(o:any)=>{
+      return o.adjust_id
+    }).join('&adjustId=')
+    const url = `${this.apiUrl}/report/adjust-stockcard?token=${this.token}&adjustId=${adjustId}`;
+    this.htmlPreview.showReport(url, 'landscape');
   }
 }
