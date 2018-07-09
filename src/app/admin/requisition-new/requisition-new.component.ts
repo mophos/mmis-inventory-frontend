@@ -13,6 +13,7 @@ import { RequisitionService } from "../requisition.service";
 import { UnitissueService } from "../unitissue.service";
 import { LabelerService } from "../labeler.service";
 import { AlertService } from "../../alert.service";
+
 import { ProductlotsService } from "../productlots.service";
 import { IMyOptions } from 'mydatepicker-th';
 import { ActivatedRoute, Router, Params } from '@angular/router';
@@ -85,11 +86,16 @@ export class RequisitionNewComponent implements OnInit {
   requisitionCode: any;
   selectedRemainQty = 0;
 
+  decodedToken: any;
+  warehouseId: any;
+
   isUpdate = false;
   isSave = false;
 
   templates: any = [];
   templateId: any = null;
+
+  jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
     private wareHouseService: WarehouseService,
@@ -104,6 +110,9 @@ export class RequisitionNewComponent implements OnInit {
     private periodService: PeriodService
   ) {
     this.requisitionId = this.route.snapshot.params['requisitionId'];
+    const token = sessionStorage.getItem('token');
+    this.decodedToken = this.jwtHelper.decodeToken(token);
+    this.warehouseId = this.decodedToken.warehouseId;
   }
 
   async ngOnInit() {
@@ -329,10 +338,16 @@ export class RequisitionNewComponent implements OnInit {
       if (rs.ok) {
         this.templates = [];
         this.withDrawWarehouses = rs.rows;
-        if (rs.rows.length > 0) {
+        console.log(rs)
+        let idx = _.findIndex(rs.rows, { "destination_warehouse_id": this.warehouseId })
+        console.log(idx)
+        if (idx > -1) {
+          this.wmWithdraw = rs.rows[idx].destination_warehouse_id;
+        } else {
           this.wmWithdraw = rs.rows[0].destination_warehouse_id;
           this.getTemplates();
         }
+
       } else {
         this.alertService.error(rs.error);
       }
