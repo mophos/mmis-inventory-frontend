@@ -105,7 +105,6 @@ export class ProductRequisitionComponent implements OnInit {
       }
       if (result.ok) {
         this.generics = result.rows;
-        console.log(this.generics)
       } else {
         this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
       }
