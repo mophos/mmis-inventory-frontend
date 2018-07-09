@@ -15,6 +15,7 @@ import * as numeral from 'numeral';
 import * as moment from 'moment';
 import { DateService } from 'app/date.service';
 import { SettingService } from '../../setting.service';
+import { removeSummaryDuplicates } from '@angular/compiler';
 
 @Component({
   selector: 'wm-receives-other',
@@ -110,6 +111,7 @@ export class ReceivesOtherComponent implements OnInit {
   ExpiredComment: any;
   isComment = false;
   receiveExpired: any;
+  warehouseName: any;
 
   isItemExpired = false; // false = รับได้ true = หมดอายุ
   isExpired = false // false = กรอกวันหมดอายุ   true = ไม่กรอกวันหมดอายุ
@@ -160,6 +162,13 @@ export class ReceivesOtherComponent implements OnInit {
 
     this.getReceiveStatus();
     this.getReceiveTypes();
+  }
+
+  getWareHouse(warehouseId: any) {
+    this.wareHouseService.detail(warehouseId)
+      .then((result: any) => {
+        this.warehouseName = result.detail.warehouse_name;
+      })
   }
 
   async getReceiveTypes() {
@@ -287,7 +296,9 @@ export class ReceivesOtherComponent implements OnInit {
 
       this.manufactureList.getManufacture(this.selectedGenericId);
       // this.lotList.setProductId(this.selectedProductId);
-      this.warehouseList.getWarehouse(this.selectedGenericId);
+      // this.warehouseList.getWarehouse(this.selectedGenericId);
+
+      this.getWareHouse(this.userWarehouseId);
       this.getUnitConversion(this.selectedGenericId);
       this.unitList.setGenericId(this.selectedGenericId);
 
@@ -297,7 +308,6 @@ export class ReceivesOtherComponent implements OnInit {
   }
 
   addProduct() {
-
     const idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost, lot_no: this.selectedLotNo });
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้วไม่สามารถเพิ่มได้ กรุณาแก้ไขรายการ');
@@ -318,8 +328,8 @@ export class ReceivesOtherComponent implements OnInit {
       product.manufacture_name = this.selectedManufactureName;
 
       // warehouses
-      product.warehouse_id = this.selectedWarehouseId;
-      product.warehouse_name = this.selectedWarehouseName;
+      product.warehouse_id = this.userWarehouseId;
+      product.warehouse_name = this.warehouseName;
 
       // location
       product.location_id = this.selectedLocationId;
@@ -360,7 +370,6 @@ export class ReceivesOtherComponent implements OnInit {
         this.countTotalCost();
         this.clearForm();
       }
-
     }
   }
 
@@ -391,7 +400,7 @@ export class ReceivesOtherComponent implements OnInit {
     this.isLotControl = null;
 
     this.manufactureList.clearVendor();
-    this.warehouseList.clearWarehousList();
+    // this.warehouseList.clearWarehousList();
     this.locationList.clearLocation();
     // this.lotList.clearLots();
     this.productSearch.clearProductSearch();

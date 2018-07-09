@@ -186,6 +186,7 @@ export class ReceivesComponent implements OnInit {
       .then(() => {
         this.modalApproveOther.setReceiveIds(ids);
         this.modalApproveOther.openModal();
+        this.getApprove();
       }).catch(() => {
         // cancel
       });

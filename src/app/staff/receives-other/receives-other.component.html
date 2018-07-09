@@ -124,8 +124,10 @@
         [value]="product.expired_date" #expired (keyup)="editChangeExpired(idx, expired.value)" />
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-generic-warehouse (onSelect)="editChangeWarehouse(idx, $event, editLocationList)" [genericId]="product.generic_id"
-        [selectedId]="product.warehouse_id"></wm-select-generic-warehouse>
+      <span>{{warehouseName}}</span>
+      <!-- <input type="text" name="warehouseName" [disabled]="true" [(ngModel)]="warehouseName"> -->
+      <!-- <wm-select-generic-warehouse (onSelect)="editChangeWarehouse(idx, $event, editLocationList)" [genericId]="product.generic_id"
+        [selectedId]="product.warehouse_id"></wm-select-generic-warehouse> -->
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-product-location #editLocationList [warehouseId]="product.warehouse_id" [selectedId]="product.location_id"></wm-select-product-location>
@@ -173,14 +175,15 @@
         [(ngModel)]="selectedExpiredDate" />
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-generic-warehouse #warehouseList (onSelect)="changeWarehouse($event)"></wm-select-generic-warehouse>
+      <!-- <wm-select-generic-warehouse #warehouseList (onSelect)="changeWarehouse($event)"></wm-select-generic-warehouse> -->
+      <span>{{warehouseName}}</span>
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedWarehouseId || !selectedProductId || !selectedReceiveQty || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedProductId || !selectedReceiveQty || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId
           || (isLotControl==='Y' && !selectedLotNo)" (click)="addProduct()">
           เพิ่ม
         </button>
@@ -193,49 +196,49 @@
 </clr-datagrid>
 
 <div>
-    <button class="btn btn-success btn-sm" (click)="checkProduct()" [disabled]="isSaving || !donatorId || !receiveDate || !deliveryCode || !products.length">
-      <clr-icon shape="floppy"></clr-icon>
-      บันทึกรับสินค้า
-    </button>
-    <button class="btn btn-danger btn-sm" [routerLink]="['/staff/receives']">
-      <clr-icon shape="home"></clr-icon>
-      กลับหน้าหลัก
-    </button>
-  
-    <div style="float: right;">
-      จำนวน
-      <span style="color: red; font-size: 1.5em;">{{ products.length | number }}</span> รายการ | มูลค่า
-      <span style="color: green; font-size: 1.5em;">{{ totalCost | number: '1.2-2'}}</span> บาท
-    </div>
+  <button class="btn btn-success btn-sm" (click)="checkProduct()" [disabled]="isSaving || !donatorId || !receiveDate || !deliveryCode || !products.length">
+    <clr-icon shape="floppy"></clr-icon>
+    บันทึกรับสินค้า
+  </button>
+  <button class="btn btn-danger btn-sm" [routerLink]="['/staff/receives']">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+
+  <div style="float: right;">
+    จำนวน
+    <span style="color: red; font-size: 1.5em;">{{ products.length | number }}</span> รายการ | มูลค่า
+    <span style="color: green; font-size: 1.5em;">{{ totalCost | number: '1.2-2'}}</span> บาท
   </div>
+</div>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
 
 <clr-modal [(clrModalOpen)]="modalExpired" [clrModalClosable]="false">
-    <h3 class="modal-title">หมายเหตุการรับสินค้าเข้าคลังใกล้วันหมดอายุ</h3>
-    <div class="modal-body">
-      <form class="compact" style="padding-top: 0px;">
-        <section class="form-block">
-          <div class="form-group row">
+  <h3 class="modal-title">หมายเหตุการรับสินค้าเข้าคลังใกล้วันหมดอายุ</h3>
+  <div class="modal-body">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row">
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="dateReceive">หมายเหตุ</label>
           </div>
-          <div class="form-group row">
-            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-              <label for="dateReceive">หมายเหตุ</label>
-            </div>
-            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-              <textarea name="ExpiredComment" rows="2" [(ngModel)]="ExpiredComment"></textarea>
-            </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <textarea name="ExpiredComment" rows="2" [(ngModel)]="ExpiredComment"></textarea>
           </div>
-  
-        </section>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" [disabled]="!ExpiredComment" (click)="saveComment()">
-        ยืนยัน
-      </button>
-      <button type="button" class="btn btn-danger" (click)="closeExpireModal()">
-        ยกเลิก
-      </button>
-    </div>
-  </clr-modal>
+        </div>
+
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="!ExpiredComment" (click)="saveComment()">
+      ยืนยัน
+    </button>
+    <button type="button" class="btn btn-danger" (click)="closeExpireModal()">
+      ยกเลิก
+    </button>
+  </div>
+</clr-modal>
