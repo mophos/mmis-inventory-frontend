@@ -14,7 +14,7 @@
           <label class="required">เลือกเวชภัณฑ์</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <wm-search-generic-warehouse-zero #productSearch [warehouseId]="warehouseId" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-zero>
+          <wm-search-generic-warehouse-autocomplete #productSearch [warehouseId]="warehouseId" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
           <!-- <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="true" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete> -->
         </div>
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">

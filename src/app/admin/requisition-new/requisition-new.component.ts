@@ -338,11 +338,10 @@ export class RequisitionNewComponent implements OnInit {
       if (rs.ok) {
         this.templates = [];
         this.withDrawWarehouses = rs.rows;
-        console.log(rs)
         let idx = _.findIndex(rs.rows, { "destination_warehouse_id": this.warehouseId })
-        console.log(idx)
         if (idx > -1) {
           this.wmWithdraw = rs.rows[idx].destination_warehouse_id;
+          this.getTemplates();
         } else {
           this.wmWithdraw = rs.rows[0].destination_warehouse_id;
           this.getTemplates();

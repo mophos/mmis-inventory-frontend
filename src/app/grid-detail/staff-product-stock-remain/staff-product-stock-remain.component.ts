@@ -8,7 +8,14 @@ import { AlertService } from './../../alert.service';
   styles: []
 })
 export class StaffProductStockRemainComponent implements OnInit {
-  @Input() genericId: any;
+
+  genericId: any;
+
+  @Input('genericId')
+  set setGenericId(value: any) {
+    this.genericId = value;
+  }
+
   loading = false;
   products = [];
 
@@ -20,7 +27,6 @@ export class StaffProductStockRemainComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.getProductStockRemain();
-    // this.getProductList(this.productId);
   }
 
   async getProductStockRemain() {
@@ -35,7 +41,7 @@ export class StaffProductStockRemainComponent implements OnInit {
       this.loading = false;
     } catch (error) {
       this.loading = false;
-      this.alertService.error(error.message); 
+      this.alertService.error(error.message);
     }
   }
 
