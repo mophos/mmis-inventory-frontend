@@ -1,4 +1,4 @@
-import { PeriodService } from './../../period.service';
+import { PeriodService } from './../period.service';
 import { JwtHelper } from 'angular2-jwt';
 // import { AlertExpiredService } from './../alert-expired.service';
 import { ToThaiDatePipe } from './../../helper/to-thai-date.pipe';
@@ -461,9 +461,11 @@ export class ReceivesOtherEditComponent implements OnInit {
 
   async saveReceive() {
     if (this.receiveDate) {
+      console.log('5555555555');
       const _receiveDate = this.receiveDate ?
         `${this.receiveDate.date.year}-${this.receiveDate.date.month}-${this.receiveDate.date.day}` : null;
       const rsP = await this.periodService.getStatus(_receiveDate)
+      console.log(rsP.rows);
       if (rsP.rows[0].status_close === 'Y') {
         this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถรับได้');
         this.isReceivePeriod = true;
