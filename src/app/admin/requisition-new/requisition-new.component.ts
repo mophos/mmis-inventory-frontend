@@ -157,7 +157,6 @@ export class RequisitionNewComponent implements OnInit {
     try {
       const rs: any = await this.wareHouseService.getWarehouse();
       this.modalLoading.hide();
-      console.log(rs);
       if (rs.ok) {
         this.warehouses = _.sortBy(rs.rows, 'short_code');
         // this.wareHouses = _.clone(this.tmpwareHouses);
