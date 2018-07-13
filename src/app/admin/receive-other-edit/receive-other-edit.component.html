@@ -121,7 +121,7 @@
         [selectedId]="product.warehouse_id"></wm-select-generic-warehouse>
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-product-location (onSelect)="editChangeLocation(idx, $event)" #editLocationList [warehouseId]="product.warehouse_id"
+      <wm-select-product-location (onSelect)="editChangeLocation(idx, $event)" (onChange)="editChangeLocation(idx, $event)" #editLocationList [warehouseId]="product.warehouse_id"
         [selectedId]="product.location_id"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
