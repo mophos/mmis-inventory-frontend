@@ -361,6 +361,8 @@ export class ReceiveOtherComponent implements OnInit {
       }
 
     }
+    console.log(this.products);
+    
   }
 
   countTotalCost() {
@@ -439,8 +441,8 @@ export class ReceiveOtherComponent implements OnInit {
     try {
       const idx = _.findIndex(this.products, { product_id: productId })
       if (idx > -1) {
-        this.products[idx].manufacture_id = event.manufacture_id;
-        this.products[idx].manufacture_name = event.manufacture_name;
+        this.products[idx].manufacture_id = event.labeler_id;
+        this.products[idx].manufacture_name = event.labeler_name;
       } else {
         this.alertService.error('กรุณาเลือกผู้ผลิต')
       }

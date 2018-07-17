@@ -15,19 +15,21 @@ export class SelectManufactureComponent implements OnInit {
   @Input() public selectedId: any;
   @Input() public genericId: any;
   manufactures: any = [];
-  loading: boolean = false;
+  loading = false;
 
   constructor(private basicService: BasicService, private alertService: AlertService) { }
 
   ngOnInit() {
-    if (this.genericId) this.getManufacture(this.genericId);
+    if (this.genericId) {
+      this.getManufacture(this.genericId);
+    }
   }
 
   async getManufacture(genericId: any) {
     try {
       this.loading = true;
       this.manufactures = [];
-      let res = await this.basicService.getProductManufactures(genericId);
+      const res = await this.basicService.getProductManufactures(genericId);
       this.loading = false;
       if (res.ok) {
         this.manufactures = res.rows;
@@ -52,7 +54,7 @@ export class SelectManufactureComponent implements OnInit {
   }
 
   setSelect(event) {
-    const idx = _.findIndex(this.manufactures, { labeler_id: this.manufactureId });
+    const idx = _.findIndex(this.manufactures, { labeler_id: +this.manufactureId });
     this.onSelect.emit(this.manufactures[idx]);
   }
 

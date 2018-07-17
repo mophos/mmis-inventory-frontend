@@ -20,7 +20,7 @@ export class SelectVendorComponent implements OnInit {
   async getVendors(genericId: any) {
     try {
       this.vendors = [];
-      let res = await this.basicService.getProductVendors(genericId);
+      const res = await this.basicService.getProductVendors(genericId);
       if (res.ok) {
         this.vendors = res.rows;
       } else {
@@ -32,8 +32,8 @@ export class SelectVendorComponent implements OnInit {
   }
 
   setSelect(event) {
-    let labelerId = event.target.value;
-    let idx = _.findIndex(this.vendors, { labeler_id: labelerId });
+    const labelerId = event.target.value;
+    const idx = _.findIndex(this.vendors, { labeler_id: +labelerId });
     this.onSelect.emit(this.vendors[idx]);
   }
 
