@@ -28,7 +28,7 @@
         <clr-dg-column [clrDgField]="'generic_code'">Generic Code</clr-dg-column>
         <clr-dg-column [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
         <clr-dg-column> min-max(base unit)</clr-dg-column>
-        <clr-dg-column [style.width.px]="150">คงเหลือ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'qty'" [style.width.px]="150">คงเหลือ</clr-dg-column>
         <clr-dg-column [style.width.px]="150">คงเหลือ(หักยอดจอง unit)</clr-dg-column>
         <clr-dg-row *clrDgItems="let p of generics" [clrDgItem]="p">
           <clr-dg-action-overflow>

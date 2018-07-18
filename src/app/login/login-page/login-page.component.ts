@@ -19,6 +19,7 @@ export class LoginPageComponent implements OnInit {
   isLogging = false;
   warehouses = [];
   warehouseId: any;
+  userWarehouseId:any;
   token: string;
 
   constructor(
@@ -59,7 +60,7 @@ export class LoginPageComponent implements OnInit {
 
   doLogin() {
     this.isLogging = true;
-    this.loginService.doLogin(this.username, this.password, this.warehouseId)
+    this.loginService.doLogin(this.username, this.password, this.userWarehouseId)
       .then((result: any) => {
         if (result.ok) {
           const token = result.token;
@@ -94,10 +95,10 @@ export class LoginPageComponent implements OnInit {
     const rs: any = await this.loginService.searchWarehouse(this.username);
     if (rs.ok) {
       this.warehouses = rs.rows;
-      this.warehouseId = rs.rows[0].warehouse_id;
+      this.userWarehouseId = rs.rows[0].user_warehouse_id;
     } else {
       this.warehouses = [];
-      this.warehouseId = null;
+      this.userWarehouseId = null;
     }
   }
 

@@ -437,8 +437,8 @@ export class ReceiveOtherEditComponent implements OnInit {
   editChangeManufacture(idx: any, event: any) {
     try {
       if (event) {
-        this.products[idx].manufacture_id = event.manufacture_id;
-        this.products[idx].manufacture_name = event.manufacture_name;
+        this.products[idx].manufacture_id = event.labeler_id;
+        this.products[idx].manufacture_name = event.labeler_name;
       } else {
         this.alertService.error('กรุณาเลือกผู้ผลิต')
       }
@@ -450,6 +450,7 @@ export class ReceiveOtherEditComponent implements OnInit {
     try {
       this.products[idx].warehouse_id = event.warehouse_id;
       this.products[idx].warehouse_name = event.warehouse_name;
+      this.products[idx].location_id = null;
       // cmp.getLocations(event.warehouse_id);
     } catch (error) {
       console.log(error);
@@ -613,7 +614,7 @@ export class ReceiveOtherEditComponent implements OnInit {
           product.generic_id = v.generic_id;
           product.generic_name = v.generic_name;
           // vendor
-          product.manufacture_id = v.manufacture_id;
+          product.manufacture_id = v.manufacturer_labeler_id;
           // warehouses
           product.warehouse_id = v.warehouse_id;
           product.location_id = v.location_id;
