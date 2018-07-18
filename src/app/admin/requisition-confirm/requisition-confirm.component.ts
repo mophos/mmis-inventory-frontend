@@ -108,6 +108,7 @@ export class RequisitionConfirmComponent implements OnInit {
       const rs: any = await this.requisitionService.getRequisitionOrderItems(this.requisitionId);
       if (rs.ok) {
         for (const v of rs.rows) {
+          this.genericIds.push(v.generic_id);
           const obj: any = {
             conversion_qty: v.conversion_qty,
             confirm_qty: v.confirm_qty,
@@ -186,7 +187,7 @@ export class RequisitionConfirmComponent implements OnInit {
   async getBorrowNotes() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.requisitionService.getBorrowNotes(this.wmRequisitionId, this.genericIds);
+      const rs: any = await this.requisitionService.getBorrowNotes(this.wmRequisitionId, this.genericIds, this.requisitionId);
       this.modalLoading.hide();
       if (rs.ok) {
         this.borrowNotes = rs.rows;
@@ -211,7 +212,7 @@ export class RequisitionConfirmComponent implements OnInit {
         this.withdrawWarehouseName = detail ? detail.withdraw_warehouse_name : null;
         this.requisitionType = detail ? detail.requisition_type : null;
         this.wmRequisitionId = detail ? detail.wm_requisition : null;
-
+        
         if (detail.requisition_date) {
           this.requisitionDate = {
             date: {
