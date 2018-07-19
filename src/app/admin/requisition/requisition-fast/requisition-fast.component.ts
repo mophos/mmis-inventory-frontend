@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { IMyOptions } from 'mydatepicker-th';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
-import { IGeneric, } from 'app/shared';
+import { IGeneric } from 'app/shared';
 import { SelectReceiveUnitComponent } from 'app/directives/select-receive-unit/select-receive-unit.component';
 import { WarehouseService } from 'app/admin/warehouse.service';
 import { ProductsService } from 'app/admin/products.service';
@@ -38,7 +38,7 @@ export class RequisitionFastComponent implements OnInit {
   requisitionStatus: any[] = [];
 
   requisitionSummary: any = [];
-  products: Array<IRequisitionOrderItem> = [];
+  products = [];
   generics = [];
   requiSitionTypes: any = [];
   requisitionTypeID: any;
@@ -60,7 +60,7 @@ export class RequisitionFastComponent implements OnInit {
   selectedRequisitionQty: any;
   selectedTotalSmallQty: any = 0;
   requisitionCode: any;
-  selectedRemainQty: number = 0;
+  selectedRemainQty = 0;
 
   isUpdate = false;
   isSave = false;
@@ -96,12 +96,6 @@ export class RequisitionFastComponent implements OnInit {
 
     await this.getTypes();
     await this.getWarehouses();
-
-    // if (this.requisitionId) {
-    //   await this.getOrderDetail();
-    //   await this.getOrderItems();
-    //   this.isUpdate = true;
-    // }
 
   }
 
@@ -215,31 +209,71 @@ export class RequisitionFastComponent implements OnInit {
     this.selectUnits.getUnits(generic.generic_id);
   }
 
-  // onChangeUnit(event: IUnit) {
-  //   this.selectedUnitGenericId = event.unit_generic_id;
-  //   this.selectedSmallQty = event.qty;
-  // }
+  onSuccessConfirm(event: any) {
+    console.log(event);
 
-  // onChangeEditUnit(event: IUnit, idx: any) {
-  //   this.products[idx].unit_generic_id = event.unit_generic_id;
-  //   this.products[idx].to_unit_qty = event.qty;
-  //   this.products[idx].from_unit_name = event.from_unit_name;
-  //   this.products[idx].to_unit_name = event.to_unit_name;
-  //   this.products[idx].qty = event.qty;
-  // }
+    const idx = _.findIndex(this.generics, { generic_id: event.generic_id });
 
-  // onChangeEditQty(idx: any, qty: any) {
-  //   this.products[idx].requisition_qty = qty;
-  // }
+    if (idx > -1) {
+      const _idx = _.findIndex(this.generics[idx].products, { wm_product_id: event.wm_product_id });
+      if (_idx > -1) {
+        this.generics[idx].products[_idx].confirm_qty = event.confirm_qty;
+      } else {
+        this.generics[idx].products.push(event);
+      }
 
-  // qtyEnter(event: any) {
-  //   if (event.keyCode === 13) {
-  //     this.addProduct();
-  //   }
-  // }
+      // calculate new allowcate_qty
+      this.generics[idx].requisition_qty = 0;
+      this.generics[idx].products.forEach(v => {
+        this.generics[idx].requisition_qty += (v.confirm_qty * v.conversion_qty);
+      });
+      this.generics[idx].requisition_qty /= this.generics[idx].to_unit_qty;
+    }
+  }
+
+  onChangeUnit(event) {
+    this.selectedUnitGenericId = event.unit_generic_id;
+    this.selectedSmallQty = event.qty;
+  }
+
+  onChangeEditUnit(event, genericId: any) {
+
+    const idx = _.findIndex(this.generics, { 'generic_id': genericId });
+    console.log(event, idx);
+    if (idx > -1) {
+      this.generics[idx].unit_generic_id = event.unit_generic_id;
+      this.generics[idx].to_unit_qty = event.qty;
+      this.generics[idx].from_unit_name = event.from_unit_name;
+      this.generics[idx].to_unit_name = event.to_unit_name;
+      this.generics[idx].qty = event.qty;
+
+    }
+  }
+
+  async onChangeEditQty(genericId: any, qty: any) {
+    console.log('qty', qty);
+
+    const idx = _.findIndex(this.generics, { 'generic_id': genericId });
+    if (idx > -1) {
+      if (qty * this.generics[idx].to_unit_qty > this.generics[idx].remain_qty) {
+        this.generics[idx].requisition_qty = this.generics[idx].remain_qty / this.generics[idx].to_unit_qty;
+        this.alertService.error('จำนวนเบิกมากกว่าจำนวนคงเหลือ')
+      } else {
+        this.generics[idx].requisition_qty = qty;
+      }
+      await this.allowcate(genericId, qty * this.generics[idx].to_unit_qty)
+    }
+
+  }
+
+  qtyEnter(event: any) {
+    if (event.keyCode === 13) {
+      this.addProduct();
+    }
+  }
 
   async addProduct() {
-    const idx = _.findIndex(this.generics, { generic_id: this.selectedGenericId })
+    const idx = _.findIndex(this.generics, { 'generic_id': this.selectedGenericId })
     if (idx > -1) {
       this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม')
     } else {
@@ -251,86 +285,89 @@ export class RequisitionFastComponent implements OnInit {
       obj.unit_generic_id = this.selectedUnitGenericId;
       obj.working_code = this.selectedWorkingCode;
       obj.remain_qty = this.selectedRemainQty;
-      obj.products = {};
-      await this.allowcate(this.selectedGenericId);
+      obj.products = [];
       this.generics.push(obj);
       this.clearItem();
+      await this.allowcate(obj.generic_id, obj.requisition_qty * obj.to_unit_qty);
     }
   }
 
-  async allowcate(genericId) {
-    const allocate = await this.requisitionService.getAllocate([{ 'genericId': v.generic_id, 'genericQty': v.requisition_qty * v.conversion_qty }])
-    if (allocate.ok) {
-      for (const z of allocate.rows) {
-        let _obj: any;
-        if (z.generic_id === v.generic_id) {
-          if (z.pack_remain_qty > 0) {
-            _obj = {
-              conversion_qty: z.conversion_qty,
-              wm_product_id: z.wm_product_id,
-              generic_id: z.generic_id,
-              expired_date: z.expired_date,
-              from_unit_name: z.from_unit_name,
-              lot_no: z.lot_no,
-              product_name: z.product_name,
-              small_remain_qty: +z.small_remain_qty,
-              pack_remain_qty: +z.pack_remain_qty,
-              to_unit_name: z.to_unit_name,
-              unit_generic_id: z.unit_generic_id,
-              confirm_qty: Math.floor(z.product_qty / z.conversion_qty)
-            }
-            if (v.temp_confirm_id) {
-              const rsT: any = await this.requisitionService.getRequisitionConfirmTemp(v.temp_confirm_id);
-              const idx = _.findIndex(rsT.rows, { wm_product_id: z.wm_product_id });
-              if (idx > -1) {
-                _obj.confirm_qty = rsT.rows[idx].confirm_qty / z.conversion_qty;
+  async allowcate(genericId, requisitionQty) {
+    try {
+
+      const idx = _.findIndex(this.generics, { generic_id: genericId });
+      const allocate = await this.requisitionService.getAllocate([{ 'genericId': genericId, 'genericQty': requisitionQty }])
+      if (allocate.ok) {
+        this.generics[idx].products = [];
+        for (const z of allocate.rows) {
+          let _obj: any;
+          if (z.generic_id === genericId) {
+            if (z.pack_remain_qty > 0) {
+              _obj = {
+                conversion_qty: z.conversion_qty,
+                wm_product_id: z.wm_product_id,
+                generic_id: z.generic_id,
+                expired_date: z.expired_date,
+                from_unit_name: z.from_unit_name,
+                lot_no: z.lot_no,
+                product_name: z.product_name,
+                small_remain_qty: +z.small_remain_qty,
+                pack_remain_qty: +z.pack_remain_qty,
+                to_unit_name: z.to_unit_name,
+                unit_generic_id: z.unit_generic_id,
+                confirm_qty: Math.floor(z.product_qty / z.conversion_qty)
               }
+              this.generics[idx].products.push(_obj);
             }
-            obj.is_minus = (z.small_remain_qty - +z.product_qty) < 0;
-            obj.allowcate_qty += z.product_qty;
-            obj.confirmItems.push(_obj);
           }
         }
+      } else {
+        this.alertService.error(allocate.error);
       }
+    } catch (error) {
+      console.log(error);
+      this.alertService.error(error)
+
     }
-    this.products.push(obj);
   }
-  // async getTemplateItems(templateId: any) {
-  //   try {
-  //     console.log(templateId)
-  //     const rs: any = await this.requisitionService.getTemplateItems(templateId);
-  //     if (rs.ok) {
-  //       this.products = [];
 
-  //       rs.rows.forEach(v => {
-  //         const product: IRequisitionOrderItem = {};
-  //         product.generic_id = v.generic_id;
-  //         product.requisition_qty = 0;
-  //         product.generic_name = v.generic_name;
-  //         product.to_unit_qty = 0;
-  //         product.unit_generic_id = v.unit_generic_id;
-  //         product.from_unit_name = null;
-  //         product.to_unit_name = null;
-  //         product.qty = null;
-  //         product.working_code = v.working_code;
-  //         product.remain_qty = v.remain_qty;
+  async getTemplateItems(templateId: any) {
+    try {
+      console.log(this.templateId)
+      const rs: any = await this.requisitionService.getTemplateItems(this.templateId);
+      if (rs.ok) {
+        this.products = [];
 
-  //         this.products.push(product);
-  //       });
-  //       console.log(this.products)
-  //     }
-  //   } catch (error) {
-  //     this.alertService.error(error.message);
-  //   }
-  // }
+        rs.rows.forEach(v => {
+          const product: any = {};
+          product.generic_id = v.generic_id;
+          product.requisition_qty = 0;
+          product.generic_name = v.generic_name;
+          product.to_unit_qty = 0;
+          product.unit_generic_id = v.unit_generic_id;
+          product.from_unit_name = null;
+          product.to_unit_name = null;
+          product.qty = null;
+          product.working_code = v.working_code;
+          product.remain_qty = v.remain_qty;
+          this.generics.push(product);
+        });
+        console.log(this.products)
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
 
-  // removeItem(idx: any) {
-  //   this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
-  //     .then(() => {
-  //       this.products.splice(idx, 1);
-  //     })
-  //     .catch(() => { });
-  // }
+  removeItem(genericId: any) {
+    const idx = _.findIndex(this.generics, { 'generic_id': genericId });
+    if (idx > -1) {
+      this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
+        .then(() => {
+          this.generics.splice(idx, 1);
+        })
+    }
+  }
 
   async onSelectWarehouses(event: any) {
     await this.getShipingNetwork(this.wmRequisition);
@@ -358,63 +395,59 @@ export class RequisitionFastComponent implements OnInit {
     }
   }
 
-  // async save() {
-  //   this.isSave = true;
-  //   const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-${this.requisitionDate.date.day}` : null;
-  //   this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
-  //     .then(async () => {
-  //       const order: IRequisitionOrder = {};
-  //       order.requisition_date = reqDate;
-  //       order.requisition_type_id = this.requisitionTypeID;
-  //       order.wm_requisition = this.wmRequisition;
-  //       order.wm_withdraw = this.wmWithdraw;
+  async save() {
+    this.isSave = true;
+    const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-${this.requisitionDate.date.day}` : null;
+    this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
+      .then(async () => {
+        const order: any = {};
+        order.requisition_date = reqDate;
+        order.requisition_type_id = this.requisitionTypeID;
+        order.wm_requisition = this.wmRequisition;
+        order.wm_withdraw = this.wmWithdraw;
 
-  //       const products: Array<IRequisitionOrderItem> = [];
+        // const generics: any = [];
+        // this.generics.forEach((v: any) => {
+        //   if (v.requisition_qty > 0) {
+        //     const obj: any = {};
+        //     obj.generic_id = v.generic_id;
+        //     obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
+        //     obj.unit_generic_id = v.unit_generic_id;
+        //     generics.push(obj);
+        //   }
+        // });
 
-  //       this.products.forEach((v: IRequisitionOrderItem) => {
-  //         if (v.requisition_qty > 0) {
-  //           const obj: IRequisitionOrderItem = {};
-  //           obj.generic_id = v.generic_id;
-  //           obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
-  //           obj.unit_generic_id = v.unit_generic_id;
-  //           products.push(obj);
-  //         }
-  //       });
+        if (!this.generics.length) {
+          this.alertService.error('กรุณาระบุจำนวนสินค้าที่ต้องการเบิก');
+          this.isSave = false;
+        } else {
+          this.modalLoading.show();
+          try {
+            let rs: any;
+            rs = await this.requisitionService.saveRequisitionFastOrder(order, this.generics);
 
-  //       if (!products.length) {
-  //         this.alertService.error('กรุณาระบุจำนวนสินค้าที่ต้องการเบิก');
-  //         this.isSave = false;
-  //       } else {
-  //         this.modalLoading.show();
-  //         try {
-  //           let rs: any;
-  //           if (this.isUpdate) {
-  //             rs = await this.requisitionService.updateRequisitionOrder(this.requisitionId, order, products);
-  //           } else {
-  //             rs = await this.requisitionService.saveRequisitionOrder(order, products);
-  //           }
+            this.modalLoading.hide();
+            this.isSave = false;
+            if (rs.ok) {
+              sessionStorage.setItem('tabRequisition', 'waitingApprove');
+              this.router.navigate(['/admin/requisition']);
+            } else {
+              this.alertService.error(rs.error);
+            }
 
-  //           this.modalLoading.hide();
-  //           this.isSave = false;
-  //           if (rs.ok) {
-  //             this.router.navigate(['/admin/requisition']);
-  //           } else {
-  //             this.alertService.error(rs.error);
-  //           }
+          } catch (error) {
+            this.isSave = false;
+            this.modalLoading.hide();
+            this.alertService.error(error.message);
+          }
+        }
+      })
+      .catch(() => {
+        this.isSave = false;
+        this.modalLoading.hide();
+      })
 
-  //         } catch (error) {
-  //           this.isSave = false;
-  //           this.modalLoading.hide();
-  //           this.alertService.error(error.message);
-  //         }
-  //       }
-  //     })
-  //     .catch(() => {
-  //       this.isSave = false;
-  //       this.modalLoading.hide();
-  //     })
-
-  // }
+  }
 
   async getTemplates() {
     try {

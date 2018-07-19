@@ -19,11 +19,9 @@ import { TransferComponent } from './transfer/transfer.component';
 import { AdminGuard } from './../admin-guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '../auth-guard.service';
 import { LayoutComponent } from './layout/layout.component';
 // pages
 import { MainPageComponent } from './main-page/main-page.component';
-import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { WarehouseTypeComponent } from './warehouse-type/warehouse-type.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { ReceiveComponent } from './receive/receive.component';
@@ -33,18 +31,12 @@ import { WarehouseDetailComponent } from './warehouse-detail/warehouse-detail.co
 import { AbcSettingComponent } from './abc-setting/abc-setting.component';
 import { VenSettingComponent } from './ven-setting/ven-setting.component';
 import { AbcVenComponent } from './abc-ven/abc-ven.component';
-import { RequisitionTemplateComponent } from './requisition-template/requisition-template.component';
-import { RequisitionTemplateNewComponent } from './requisition-template-new/requisition-template-new.component';
-import { RequisitionTemplateEditComponent } from './requisition-template-edit/requisition-template-edit.component';
 import { WarehouseProductsComponent } from './warehouse-products/warehouse-products.component';
 import { WarehouseProductsDetailComponent } from './warehouse-products-detail/warehouse-products-detail.component';
 
 // common page
 import { AlertExpiredComponent } from './alert-expired/alert-expired.component';
-import { RequisitionComponent } from './requisition/requisition.component';
-import { RequisitionNewComponent } from './requisition-new/requisition-new.component';
 import { UnitissueComponent } from './unitissue/unitissue.component';
-import { RequisitionTypeComponent } from './requisition-type/requisition-type.component';
 import { ReturningComponent } from './returning/returning.component';
 
 // reports
@@ -71,8 +63,6 @@ import { TransferEditComponent } from 'app/admin/transfer-edit/transfer-edit.com
 import { HisIssueTransactionComponent } from 'app/admin/his-issue-transaction/his-issue-transaction.component';
 import { WarehouseProductPlanningComponent } from 'app/admin/warehouse-product-planning/warehouse-product-planning.component';
 
-import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
-import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
 import { AuthRequisition } from 'app/auth-requisition.service';
@@ -88,7 +78,6 @@ import { PurchasingNotgiveawayComponent } from 'app/admin/reports/purchasing-not
 import { InventoryStatusComponent } from 'app/admin/reports/inventory-status/inventory-status.component';
 import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
-import { RequisitionConfirmEditComponent } from './requisition-confirm-edit/requisition-confirm-edit.component';
 import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
 import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
 import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
@@ -98,6 +87,17 @@ import { AdditionGenericComponent } from './addition-generic/addition-generic.co
 import { StockcardComponent } from './tools/stockcard/stockcard.component';
 import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
+// requisition
+import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
+import { RequisitionFastComponent } from 'app/admin/requisition/requisition-fast/requisition-fast.component';
+import { RequisitionNewComponent } from 'app/admin/requisition-new/requisition-new.component';
+import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
+import { RequisitionConfirmEditComponent } from 'app/admin/requisition-confirm-edit/requisition-confirm-edit.component';
+import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
+import { RequisitionTemplateComponent } from 'app/admin/requisition-template/requisition-template.component';
+import { RequisitionTemplateNewComponent } from 'app/admin/requisition-template-new/requisition-template-new.component';
+import { RequisitionTemplateEditComponent } from 'app/admin/requisition-template-edit/requisition-template-edit.component';
+import { RequisitionTypeComponent } from 'app/admin/requisition-type/requisition-type.component';
 
 const routes: Routes = [
   {
@@ -122,18 +122,8 @@ const routes: Routes = [
       { path: 'receives/other', canActivate: [AuthReceive], component: ReceiveOtherComponent },
       { path: 'receives/other/edit', canActivate: [AuthReceive], component: ReceiveOtherEditComponent },
       { path: 'receives/edit', canActivate: [AuthReceive], component: ReceiveEditComponent },
-      { path: 'requisition', canActivate: [AuthRequisition], component: RequisitionComponent },
-      { path: 'requisition-type', component: RequisitionTypeComponent },
       { path: 'transection-type', component: TransectionTypeComponent },
       { path: 'receiveother-type', component: ReceiveotherTypeComponent },
-      { path: 'requisition/new', canActivate: [AuthRequisition], component: RequisitionNewComponent },
-      { path: 'requisition/edit/:requisitionId', canActivate: [AuthRequisition], component: RequisitionNewComponent },
-      { path: 'requisition/confirm', canActivate: [AuthRequisition], component: RequisitionConfirmComponent },
-      { path: 'requisition/confirm/edit', canActivate: [AuthRequisition], component: RequisitionConfirmEditComponent },
-      { path: 'requisition/confirm-unpaid', canActivate: [AuthRequisition], component: RequisitionConfirmUnpaidComponent },
-      { path: 'requisition-templates', canActivate: [AuthRequisition], component: RequisitionTemplateComponent },
-      { path: 'requisition-templates/new', canActivate: [AuthRequisition], component: RequisitionTemplateNewComponent },
-      { path: 'requisition-templates/edit/:templateId', canActivate: [AuthRequisition], component: RequisitionTemplateEditComponent },
       { path: 'borrow/returning/:borrowId', component: ReturningComponent },
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
@@ -156,7 +146,6 @@ const routes: Routes = [
       { path: 'warehouse-products', component: WarehouseProductsComponent },
       { path: 'warehouse-products/details/:warehouseId', component: WarehouseProductsDetailComponent },
       { path: 'code-mapping', component: CodeMappingComponent },
-      // { path: 'lots', component: LotsComponent },
       { path: 'donators', component: DonatorsComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'counting', component: CountingComponent },
@@ -181,6 +170,25 @@ const routes: Routes = [
       { path: 'addition/generic', component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', component: AdditionEditComponent },
       { path: 'tools/stockcard', component: StockcardComponent },
+      {
+        path: 'requisition',
+        canActivate: [AdminGuard],
+        children: [
+          { path: '', redirectTo: 'main', pathMatch: 'full' },
+          { path: 'main', canActivate: [AuthRequisition], component: RequisitionComponent },
+          { path: 'new', canActivate: [AuthRequisition], component: RequisitionNewComponent },
+          { path: 'type', component: RequisitionTypeComponent },
+          { path: 'new', canActivate: [AuthRequisition], component: RequisitionNewComponent },
+          { path: 'edit/:requisitionId', canActivate: [AuthRequisition], component: RequisitionNewComponent },
+          { path: 'confirm', canActivate: [AuthRequisition], component: RequisitionConfirmComponent },
+          { path: 'confirm/edit', canActivate: [AuthRequisition], component: RequisitionConfirmEditComponent },
+          { path: 'confirm-unpaid', canActivate: [AuthRequisition], component: RequisitionConfirmUnpaidComponent },
+          { path: 'templates', canActivate: [AuthRequisition], component: RequisitionTemplateComponent },
+          { path: 'templates/new', canActivate: [AuthRequisition], component: RequisitionTemplateNewComponent },
+          { path: 'templates/edit/:templateId', canActivate: [AuthRequisition], component: RequisitionTemplateEditComponent },
+          { path: 'fast', canActivate: [AuthRequisition], component: RequisitionFastComponent },
+        ]
+      },
     ]
   }
 ];
