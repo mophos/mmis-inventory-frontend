@@ -99,7 +99,11 @@
   <clr-dg-column style="width: 200px;">คงเหลือ</clr-dg-column>
   <clr-dg-column style="width: 30px;;"></clr-dg-column>
 
-  <clr-dg-row *ngFor="let g of generics;let idx=index;">
+  <clr-dg-row *ngFor="let g of generics;let idx=index;" [ngClass]="
+  {'isSuccess': g.confirm_qty >= g.requisition_qty && (+g.remain_qty - +g.confirm_qty) >= 0, 
+  'isWarning': g.confirm_qty < g.requisition_qty && g.confirm_qty > 0, 
+  'isError': g.confirm_qty === 0 || (+g.remain_qty - +g.confirm_qty) < 0}
+  ">
     <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.products" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
       [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="(g.conversion_qty * g.requisition_qty)"
       [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
@@ -156,6 +160,10 @@
   </clr-dg-row>
 
   <clr-dg-footer>
+    คำชี้แจง:
+    <span class="badge badge-danger">allowcate ไม่ได้</span>
+    <span class="badge badge-white">จำนวนจ่ายน้อยกว่าเบิก</span>
+    <span class="badge badge-success">allowcate สมบูรณ์</span>
     {{generics.length}} รายการ
     <clr-dg-pagination #paginationSelected [clrDgPageSize]="300"></clr-dg-pagination>
   </clr-dg-footer>

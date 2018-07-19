@@ -280,6 +280,7 @@ export class RequisitionFastComponent implements OnInit {
       const obj: any = {};
       obj.generic_id = this.selectedGenericId;
       obj.requisition_qty = this.selectedRequisitionQty;
+      obj.confirm_qty = this.selectedRequisitionQty * this.selectedSmallQty;
       obj.generic_name = this.selectedGenericName;
       obj.to_unit_qty = this.selectedSmallQty;
       obj.unit_generic_id = this.selectedUnitGenericId;
@@ -289,16 +290,18 @@ export class RequisitionFastComponent implements OnInit {
       this.generics.push(obj);
       this.clearItem();
       await this.allowcate(obj.generic_id, obj.requisition_qty * obj.to_unit_qty);
+      console.log(this.generics);
+
     }
   }
 
   async allowcate(genericId, requisitionQty) {
     try {
-
       const idx = _.findIndex(this.generics, { generic_id: genericId });
       const allocate = await this.requisitionService.getAllocate([{ 'genericId': genericId, 'genericQty': requisitionQty }])
       if (allocate.ok) {
         this.generics[idx].products = [];
+        let sum = 0;
         for (const z of allocate.rows) {
           let _obj: any;
           if (z.generic_id === genericId) {
@@ -317,10 +320,12 @@ export class RequisitionFastComponent implements OnInit {
                 unit_generic_id: z.unit_generic_id,
                 confirm_qty: Math.floor(z.product_qty / z.conversion_qty)
               }
+              sum += z.product_qty;
               this.generics[idx].products.push(_obj);
             }
           }
         }
+        this.generics[idx].confirm_qty = sum;
       } else {
         this.alertService.error(allocate.error);
       }
@@ -398,7 +403,7 @@ export class RequisitionFastComponent implements OnInit {
   async save() {
     this.isSave = true;
     const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-${this.requisitionDate.date.day}` : null;
-    this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
+    this.alertService.confirm('คุณตรวจสอบจำนวนจ่ายถูกต้องแล้ว ใช่หรือไม่?')
       .then(async () => {
         const order: any = {};
         order.requisition_date = reqDate;
