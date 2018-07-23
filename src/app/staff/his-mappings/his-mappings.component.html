@@ -9,6 +9,14 @@
       placeholder="ค้นหาเวชภัณฑ์...">
     <!-- <input type="text" class="form-control"> -->
   </div>
+  <!-- <div class="col-md-3" style="text-align: right;">
+    <div class="select">
+      <select [(ngModel)]="genericType" name="genericType" (change)="getGenerics()">
+        <option value="all">ทั้งหมด</option>
+        <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+      </select>
+    </div>
+  </div> -->
 </div>
 <clr-datagrid class="order-form">
   <clr-dg-column style="width: 150px;" [clrDgField]="'working_code'">Working Code</clr-dg-column>

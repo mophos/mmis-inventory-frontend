@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { WarehouseService } from './../warehouse.service';
 import { AlertService } from '../../alert.service';
+import { ProductsService } from './../products.service';
 
 import * as _ from 'lodash';
 
@@ -13,13 +14,17 @@ export class HisMappingsComponent implements OnInit {
 
   mappings = [];
   query = '';
+  genericTypes = [];
+  genericType = 'all';
 
   constructor(
     private warehouseService: WarehouseService,
+    private productService: ProductsService,
     private alertService: AlertService) { }
 
   ngOnInit() {
     this.getMappings();
+    this.getGenericsType();
   }
 
   async getMappings() {
@@ -98,14 +103,62 @@ export class HisMappingsComponent implements OnInit {
       if (this.query.length) {
         this.modalLoading.show();
         try {
-          const rs: any = await this.warehouseService.getMappingsGenericsSearch(this.query);
+          const rs: any = await this.warehouseService.getMappingsGenericsSearchType(this.query, this.genericType);
+          this.mappings = rs.rows;
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error();
+        }
+      } else {
+        try {
+          this.modalLoading.show();
+          const rs: any = await this.warehouseService.getMappingsGenericsType(this.genericType);
           this.mappings = rs.rows;
           this.modalLoading.hide();
         } catch (error) {
           this.modalLoading.hide();
           this.alertService.error(error.message);
         }
-      } else { this.getMappings() };
+      };
+    }
+  }
+
+  async getGenericsType() {
+    try {
+      const rs = await this.productService.getGenericType();
+      if (rs.ok) {
+        this.genericTypes = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.serverError();
+    }
+  }
+
+  async changeGenericType() {
+    if (this.query) {
+      try {
+        this.modalLoading.show();
+        const rs: any = await this.warehouseService.getMappingsGenericsSearchType(this.query, this.genericType);
+        this.mappings = rs.rows;
+        this.modalLoading.hide();
+      } catch (error) {
+        this.modalLoading.hide();
+        this.alertService.error(error.message);
+      }
+    } else {
+      try {
+        this.modalLoading.show();
+        const rs: any = await this.warehouseService.getMappingsGenericsType(this.genericType);
+        this.mappings = rs.rows;
+        this.modalLoading.hide();
+      } catch (error) {
+        this.modalLoading.hide();
+        this.alertService.error(error.message);
+      }
     }
   }
 }
