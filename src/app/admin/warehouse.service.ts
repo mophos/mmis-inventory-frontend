@@ -28,8 +28,13 @@ export class WarehouseService {
     return rs.json();
   }
 
-  async getMappingsGenericsSearch(keywords: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics-search/${keywords}`).toPromise();
+  async getMappingsGenericsSearchType(keywords: any, genericType: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics-search-type/${keywords}/${genericType}`).toPromise();
+    return rs.json();
+  }
+
+  async getMappingsGenericsType(genericType: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics-type/${genericType}`).toPromise();
     return rs.json();
   }
 
