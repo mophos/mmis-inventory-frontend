@@ -10,7 +10,7 @@
   </div>
   <div class="col-md-3" style="text-align: right;">
     <div class="select">
-      <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
+      <select [(ngModel)]="genericType" name="genericType" (change)="searchMappings()">
         <option value="all">ทั้งหมด</option>
         <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
       </select>
