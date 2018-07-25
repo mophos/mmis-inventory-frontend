@@ -118,4 +118,17 @@ export class ValueProductsComponent implements OnInit {
     }
   }
 
+  exportExcel() {
+    if (+this.warehouseId !== 0) {
+      this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
+      this.warehouseName = this.warehouseName.warehouse_name
+    } else {
+      this.warehouseName = 'ทุกคลังสินค้า'
+    }
+    const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/list/cost/excel/${startDate}/${this.warehouseId}/${this.warehouseName}/${this.genericType}?token=${this.token}`
+    window.open(url, '_blank');
+    // this.htmlPreview.showReport(url, 'landscape');
+  }
+
 }
