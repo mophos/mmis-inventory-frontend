@@ -9,7 +9,7 @@
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
         <label for="startDate" class="required">คลัง</label>
       </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
         <div class="select">
           <select name="warehouseId" [(ngModel)]="warehouseId">
             <option value="0">ทุกคลังสินค้า</option>
@@ -19,32 +19,28 @@
           </select>
         </div>
       </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="text-align: right;">
+        <div class="select">
+          <select [(ngModel)]="genericType" name="genericType" (change)="searchMappings()">
+            <option value="all">ทั้งหมด</option>
+            <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
         <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
       </div>
-      <div class="col-lg-3 col-md-3">
-        <button class="btn btn-primary" [disabled]="isPreview" (click)="showReport()">แสดงรายงาน</button>
-        <button class="btn btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button>
+      <div class="col-lg-3 col-md-2">
+        <button class="btn btn-sm btn-primary" [disabled]="isPreview" (click)="showReport()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงานมูลค่ายาและเวชภัณฑ์คงคลัง
+        </button>
+        <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
+          <clr-icon shape="download"></clr-icon>
+          ส่งออก Excel
+        </button>
+        <!-- <button class="btn btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button> -->
       </div>
     </div>
-    <!-- <div class="form-group row">
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label for="startDate" class="required">ตั้งแต่</label>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
-      </div>
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label for="endDate" class="required">ถึง</label>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-primary" [disabled]="isPreview" (click)="showReport()">แสดงรายงาน</button>
-        <button class="btn btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button>
-      </div>
-    </div> -->
   </section>
 </form>
 <span class="spinner spinner-inline" *ngIf="isPreview">
