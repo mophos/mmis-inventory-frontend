@@ -155,6 +155,7 @@ import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/recei
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
+import { RequisitionFastComponent } from './requisition/requisition-fast/requisition-fast.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -259,7 +260,8 @@ Highcharts.setOptions({
     ReceiveNotMatchPoComponent,
     ValueReceiveOtherComponent,
     AdjustStockComponent,
-    AdjustStockNewComponent
+    AdjustStockNewComponent,
+    RequisitionFastComponent
   ],
   providers: [
     MainService,

@@ -6,6 +6,8 @@ import * as moment from 'moment';
 import { JwtHelper } from 'angular2-jwt';
 import { SearchGenericAutocompleteComponent } from '../../../directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import * as _ from 'lodash';
+import { ProductsService } from '../../products.service';
+
 @Component({
   selector: 'wm-value-products',
   templateUrl: './value-products.component.html',
@@ -29,10 +31,13 @@ export class ValueProductsComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
+  genericTypes = [];
+  genericType = 'all';
 
   options: any;
   constructor(@Inject('API_URL') private apiUrl: string,
     private warehouseService: WarehouseService,
+    private productService: ProductsService,
     private alertService: AlertService) {
     this.token = sessionStorage.getItem('token')
     const decodedToken = this.jwtHelper.decodeToken(this.token);
@@ -63,6 +68,7 @@ export class ValueProductsComponent implements OnInit {
       }
     };
     this.getWarehouseList();
+    this.getGenericsType();
   }
 
   showReport() {
@@ -74,9 +80,15 @@ export class ValueProductsComponent implements OnInit {
     }
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/list/cost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
-    this.htmlPreview.showReport(url, 'landscape');
+    if (this.genericType == 'all') {
+      const url = `${this.apiUrl}/report/list/cost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
+      this.htmlPreview.showReport(url, 'landscape');
+    } else {
+      const url = `${this.apiUrl}/report/list/cost/type/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}/${this.genericType}?token=${this.token}`;
+      this.htmlPreview.showReport(url, 'landscape');
+    }
   }
+
   getWarehouseList() {
     this.warehouseService.all()
       .then((result: any) => {
@@ -87,8 +99,36 @@ export class ValueProductsComponent implements OnInit {
         }
       });
   }
+
   refresh() {
     this.warehouseId = 0;
+  }
+
+  async getGenericsType() {
+    try {
+      const rs = await this.productService.getGenericType();
+      if (rs.ok) {
+        this.genericTypes = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.serverError();
+    }
+  }
+
+  exportExcel() {
+    if (+this.warehouseId !== 0) {
+      this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
+      this.warehouseName = this.warehouseName.warehouse_name
+    } else {
+      this.warehouseName = 'ทุกคลังสินค้า'
+    }
+    const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/list/cost/excel/${startDate}/${this.warehouseId}/${this.warehouseName}/${this.genericType}?token=${this.token}`
+    window.open(url, '_blank');
+    // this.htmlPreview.showReport(url, 'landscape');
   }
 
 }

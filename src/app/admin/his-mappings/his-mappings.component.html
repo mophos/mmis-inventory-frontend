@@ -2,10 +2,20 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">Map รหัสยา (Generic) กับ HIS</span>
 </nav>
-<div class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;">
-  ค้นหา :
-  <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;" type="text"
-    placeholder="ค้นหาสินค้า...">
+<div class="row">
+  <div class="col-md-9" style="padding-top: 5px; padding-bottom: 5px;">
+    ค้นหา :
+    <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;" type="text"
+      placeholder="ค้นหาสินค้า...">
+  </div>
+  <div class="col-md-3" style="text-align: right;">
+    <div class="select">
+      <select [(ngModel)]="genericType" name="genericType" (change)="searchMappings()">
+        <option value="all">ทั้งหมด</option>
+        <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+      </select>
+    </div>
+  </div>
 </div>
 
 <clr-datagrid class="order-form">
