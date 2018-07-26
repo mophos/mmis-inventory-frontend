@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { WarehouseService } from './../warehouse.service';
 import { AlertService } from '../../alert.service';
+import { ProductsService } from './../products.service';
 
 import * as _ from 'lodash';
 
@@ -13,13 +14,17 @@ export class HisMappingsComponent implements OnInit {
 
   mappings = [];
   query = '';
+  genericTypes = [];
+  genericType = 'all';
 
   constructor(
     private warehouseService: WarehouseService,
+    private productService: ProductsService,
     private alertService: AlertService) { }
 
   ngOnInit() {
     this.getMappings();
+    this.getGenericsType();
   }
 
   async getMappings() {
@@ -95,17 +100,42 @@ export class HisMappingsComponent implements OnInit {
 
   async enterSearchGeneric(e) {
     if (e.keyCode === 13) {
-      if (this.query.length) {
+      this.searchMappings();
+    }
+  }
+
+  async getGenericsType() {
+    try {
+      const rs = await this.productService.getGenericType();
+      if (rs.ok) {
+        this.genericTypes = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.serverError();
+    }
+  }
+
+  async searchMappings() {
+    let rs: any;
+    try {
+      if (this.query) {
         this.modalLoading.show();
-        try {
-          const rs: any = await this.warehouseService.getMappingsGenericsSearch(this.query);
-          this.mappings = rs.rows;
-          this.modalLoading.hide();
-        } catch (error) {
-          this.modalLoading.hide();
-          this.alertService.error(error.message);
-        }
-      } else { this.getMappings() };
+        rs = await this.warehouseService.getMappingsGenericsSearchType(this.query, this.genericType);
+        this.mappings = rs.rows;
+        this.modalLoading.hide();
+      } else if (this.genericType != 'all') {
+        rs = await this.warehouseService.getMappingsGenericsType(this.genericType);
+        this.mappings = rs.rows;
+        this.modalLoading.hide();
+      } else {
+        this.getMappings();
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
     }
   }
 }

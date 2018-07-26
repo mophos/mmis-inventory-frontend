@@ -208,10 +208,11 @@ export class RequisitionService {
     return rs.json();
   }
 
-  async getBorrowNotes(warehouseId: any, genericIds: any[]) {
+  async getBorrowNotes(warehouseId: any, genericIds: any[], requisitionId: any[]) {
     const rs: any = await this.authHttp.post(`${this.url}/requisition/borrow-notes`, {
       genericIds: genericIds,
-      warehouseId: warehouseId
+      warehouseId: warehouseId,
+      requisitionId:requisitionId
     }).toPromise();
     return rs.json();
   }

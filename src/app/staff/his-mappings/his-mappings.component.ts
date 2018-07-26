@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { WarehouseService } from './../../admin/warehouse.service';
 import { AlertService } from '../../alert.service';
+import { StaffService } from './../staff.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -9,14 +10,20 @@ import * as _ from 'lodash';
 })
 export class HisMappingsComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
+
   mappings = [];
   query: any;
+  genericType = 'all';
+  genericTypes = [];
+
   constructor(
     private warehouseService: WarehouseService,
+    private staffService: StaffService,
     private alertService: AlertService) { }
 
   ngOnInit() {
     this.getMappings();
+    this.getGenericsType();
   }
   enterSearch(e) {
     if (e.keyCode === 13) {
@@ -25,11 +32,23 @@ export class HisMappingsComponent implements OnInit {
   }
 
   async searchMappings() {
-    this.modalLoading.show();
+    let rs: any;
     try {
-      const rs: any = await this.warehouseService.getSearchStaffMappings(this.query);
-      this.mappings = rs.rows;
-      this.modalLoading.hide();
+      if (this.query) {
+        this.modalLoading.show();
+        rs = await this.warehouseService.getSearchStaffMappings(this.query, this.genericType);
+        this.mappings = rs.rows;
+        this.modalLoading.hide();
+      }
+      else if (this.genericType != 'all') {
+        this.modalLoading.show();
+        rs = await this.warehouseService.getSearchStaffMappingsType(this.genericType);
+        this.mappings = rs.rows;
+        this.modalLoading.hide();
+      }
+      else {
+        this.getMappings();
+      }
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
@@ -79,6 +98,24 @@ export class HisMappingsComponent implements OnInit {
       }
     } else {
       this.alertService.error('กรุณาระบุข้อมูลให้ครบ')
+    }
+  }
+
+  async getGenericsType() {
+    try {
+      this.modalLoading.show();
+      const rs = await this.staffService.getGenericType();
+      if (rs.ok) {
+        this.genericTypes = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      console.log(error);
+      this.alertService.serverError();
     }
   }
 }

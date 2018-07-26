@@ -7,7 +7,7 @@
   <section class="form-block">
     <div class="form-group row wid99">
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label  class="required">คลัง</label>
+        <label class="required">คลัง</label>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
         <div class="select">
@@ -25,9 +25,9 @@
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
         <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="false" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
       </div>
-      
+
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label  class="required">ชนิดสินค้า</label>
+        <label class="required">ชนิดสินค้า</label>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
         <wm-select-generic-type #selectGenericType (onSelect)="setSelectedGenericType($event)" (onChange)="setSelectedGenericType($event)"></wm-select-generic-type>
@@ -48,8 +48,10 @@
         <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
       </div>
       <div class="col-md-2">
-        <button class="btn btn-primary" [disabled]="isPreview || !genericTypeId" (click)="showReport()">แสดงรายงาน</button>
-        <button class="btn btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button>
+        <button class="btn btn-sm btn-primary" [disabled]="isPreview || !genericTypeId" (click)="showReport()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายการยาใกล้หมดอายุ
+        </button>
+        <button class="btn btn-sm btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button>
       </div>
     </div>
   </section>
