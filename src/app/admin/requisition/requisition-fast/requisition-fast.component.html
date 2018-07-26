@@ -1,0 +1,187 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/requisition">เบิกยาและเวชภัณฑ์</a>
+  <span class="breadcrumb-item active">จ่ายด่วน</span>
+</nav>
+
+<div class="card" style="padding: 0px 3px 0 3px; height: 150px;">
+  <div class="card-block" style="padding: 0px 3px 0 3px;">
+    <form style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="requisitionCode">รหัสใบเบิก</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input type="text" name="requisitionCode" id="requisitionCode" placeholder="สร้างอัตโนมัติ" style="width: 100%;" disabled
+              [(ngModel)]="requisitionCode">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="requisitionDate" class="required">วันที่เบิก</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="requisitionDate" required></my-date-picker-th>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="gForm_1">ประเภทการเบิกจ่าย</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="select">
+              <select name="slRequisitionType" [(ngModel)]="requisitionTypeID">
+                <option value="">
+                  <เลือกประเภท>
+                </option>
+                <option *ngFor="let rt of requiSitionTypes" [value]="rt.requisition_type_id">{{ rt.requisition_type }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="wmRequisition">หน่วยเบิก</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="select">
+              <select [disabled]="isUpdate" name="wmRequisition" [(ngModel)]="wmRequisition" (change)="onSelectWarehouses($event)">
+                <option value="">
+                  <หน่วยเบิก>
+                </option>
+                <option *ngFor="let u of warehouses" [value]="u.warehouse_id">{{ u.short_code }} - {{ u.warehouse_name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="slWarehouse">เบิกจากคลัง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="select">
+              <select [disabled]="isUpdate" name="slWarehouse" id="slWarehouse" [(ngModel)]="wmWithdraw" (change)="getTemplates()">
+                <option value="">
+                  <กรุณาเลือกคลัง>
+                </option>
+                <option *ngFor="let w of withDrawWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{ w.warehouse_name }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+    </form>
+
+  </div>
+</div>
+
+<div class="row" style="padding-top: 10px; padding-bottom: 5px;">
+  <div class="col-md-7">
+    <span class="p4">รายการที่ต้องการเบิก</span>
+  </div>
+  <div class="col-md-3">
+    <div class="select">
+      <select id="slTemplate" name="slTemplateId" [(ngModel)]="templateId" (change)="getTemplateItems($event)">
+        <option value="">เลือกเทมเพลต (Template)</option>
+        <option *ngFor="let item of templates" [value]="item.template_id">{{item.template_subject}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-sm btn-outline-success" disabled>
+      เลือกจากประวัติการเบิก
+    </button>
+  </div>
+</div>
+
+<clr-datagrid class="order-form">
+  <clr-dg-column>ชื่อ Generic</clr-dg-column>
+  <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
+  <clr-dg-column style="width: 200px;">Package</clr-dg-column>
+  <clr-dg-column style="width: 120px;">รวม (Base)</clr-dg-column>
+  <clr-dg-column style="width: 200px;">คงเหลือ</clr-dg-column>
+  <clr-dg-column style="width: 30px;;"></clr-dg-column>
+
+  <clr-dg-row *ngFor="let g of generics;let idx=index;" [ngClass]="
+  {'isSuccess': g.confirm_qty >= g.requisition_qty && (+g.remain_qty - +g.confirm_qty) >= 0, 
+  'isWarning': g.confirm_qty < g.requisition_qty && g.confirm_qty > 0, 
+  'isError': g.confirm_qty === 0 || (+g.remain_qty - +g.confirm_qty) < 0}
+  ">
+    <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.products" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
+      [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="(g.conversion_qty * g.requisition_qty)"
+      [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
+    <clr-dg-cell>{{idx+1}}.
+      <strong>{{ g.working_code }}</strong> - {{ g.generic_name }}</clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #qty (keyup)="onChangeEditQty(g.generic_id, qty.value)" [value]="g.requisition_qty" style="width: 100%; text-align: right; background-color:#FFF9C4"
+        placeholder="" wmNumberWithOutDot>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit [genericId]="g.generic_id" [selectedUnitGenericId]="g.unit_generic_id" (onSelect)="onChangeEditUnit($event, g.generic_id)"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{g.to_unit_qty * g.requisition_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{(g.remain_qty - (g.to_unit_qty * g.requisition_qty))/g.to_unit_qty | number}} {{g.from_unit_name}} ({{g.to_unit_qty}}
+      {{g.to_unit_name}})
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="removeItem(g.generic_id)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <!-- แถวเพิ่ม Manual -->
+  <clr-dg-row class="newLine">
+    <clr-dg-cell>
+      <wm-search-generic-warehouse-autocomplete [clearOnSelected]="false" [warehouseId]="wmWithdraw" #searchGenericCmp [disabled]="!wmWithdraw || !wmRequisition"
+        (onSelect)="setSelectedGeneric($event)"></wm-search-generic-warehouse-autocomplete>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" [(ngModel)]="selectedRequisitionQty" wmNumberWithOutDot style="width: 100%; text-align: right; background-color:#FFF9C4"
+        placeholder="" (keyup)="qtyEnter($event)">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #selectUnits (onSelect)="onChangeUnit($event)"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">{{ selectedRequisitionQty * selectedSmallQty | number }}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <span [ngStyle]="{'color: red': selectedRemainQty < (selectedRequisitionQty * selectedSmallQty), 'color: green': selectedRemainQty >= (selectedRequisitionQty * selectedSmallQty)}">{{(selectedRemainQty - (selectedRequisitionQty * selectedSmallQty)) / selectedSmallQty || 0 | number}}</span>
+    </clr-dg-cell>
+
+    <clr-dg-cell>
+      <div class="btn-group btn-primary">
+        <button [disabled]="!selectedSmallQty || !selectedRequisitionQty || !selectedGenericId || !selectedUnitGenericId || (selectedRemainQty < (selectedRequisitionQty * selectedSmallQty)) || selectedRemainQty == 0"
+          class="btn btn-success btn-sm wm-small-btn" (click)="addProduct()">
+          <clr-icon shape="floppy"></clr-icon>
+        </button>
+        <button (click)="clearItem()" class="btn btn-danger btn-sm wm-small-btn">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    คำชี้แจง:
+    <span class="badge badge-danger">allowcate ไม่ได้</span>
+    <span class="badge badge-white">จำนวนจ่ายน้อยกว่าเบิก</span>
+    <span class="badge badge-success">allowcate สมบูรณ์</span>
+    {{generics.length}} รายการ
+    <clr-dg-pagination #paginationSelected [clrDgPageSize]="300"></clr-dg-pagination>
+  </clr-dg-footer>
+
+</clr-datagrid>
+
+<!-- <clr-checkbox name="isVerify" [(ngModel)]="isVerify">ตรวจสอบข้อมูลถูกต้อง</clr-checkbox> -->
+
+<button class="btn btn-success btn-sm" (click)="save()" [disabled]="!requisitionDate || !wmRequisition || !wmWithdraw || !requisitionTypeID || generics.length <= 0 || isSave">
+  <clr-icon shape="floppy"></clr-icon>
+  บันทึกเบิกสินค้า
+</button>
+<button class="btn btn-danger btn-sm" [routerLink]="['/admin/requisition']">
+  <clr-icon shape="home"></clr-icon>
+  กลับหน้าหลัก
+</button>
+
+<!-- <wm-modal-search-requisition #modalRequisition [wmRequisition]="wmRequisition" (onSelect)="setSelectRequisition($event)"
+  (onClose)="closeRequisitionModal($event)"></wm-modal-search-requisition> -->
+
+<wm-loading-modal #modalLoading></wm-loading-modal>
