@@ -48,4 +48,3 @@ export interface IRequisitionOrder {
   approve_people_id?: any;
   is_temp?: any;
 }
-
