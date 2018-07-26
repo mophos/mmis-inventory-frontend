@@ -38,8 +38,8 @@
           <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
         </div>
         <div class="col-md-2">
-          <button class="btn btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" (click)="showReport()">
-            <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน </button>
+          <button class="btn btn-sm btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" (click)="showReport()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์ </button>
         </div>
       </div>
       <div>
