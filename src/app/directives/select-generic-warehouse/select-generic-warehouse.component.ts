@@ -11,6 +11,7 @@ export class SelectGenericWarehouseComponent implements OnInit {
   @Input() public selectedId: any;
   @Input() public genericId: any;
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
+  @Input() public disabled: boolean;
   warehouses: any = [];
   warehouseId: any;
   defaultWarehouse: any;

@@ -16,6 +16,13 @@ export class ToolsService {
     return resp.json();
   }
 
+  async searchRequisitions(query: any) {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/requisitions/search`, {
+      query: query
+    }).toPromise();
+    return resp.json();
+  }
+
   async updateStockCard(data: any[], receiveType: any, receiveDetailId: any, newQty: number, unitGenericId: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/update`, {
       data: data,
@@ -36,7 +43,7 @@ export class ToolsService {
   }
 
   async getStockForEditCardList(receiveId: any, productId: any, lotNo: any) {
-    let params = {
+    const params = {
       receiveId: receiveId,
       productId: productId,
       lotNo: lotNo
@@ -45,5 +52,37 @@ export class ToolsService {
     const resp = await this.authHttp.post(`${this.url}/tools/stockcard/receives/list`, params).toPromise();
     return resp.json();
   }
+
+  async saveReceive(receiveId: any, products: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/receives`, {
+      receiveId: receiveId,
+      products: products
+    }).toPromise();
+    return resp.json();
+  }
+
+  async saveReceiveOther(receiveOtherId: any, products: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/receive-others`, {
+      receiveOtherId: receiveOtherId,
+      products: products
+    }).toPromise();
+    return resp.json();
+  }
+
+  async saveRequisition(requisitionId: any, confirmId: any, products: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/requisitions`, {
+      requisitionId: requisitionId,
+      confirmId: confirmId,
+      products: products
+    }).toPromise();
+    return resp.json();
+  }
+
+  async checkPassword(password) {
+    const rs = await this.authHttp.post(`${this.url}/tools/check/password`, { password: password }).toPromise();
+    return rs.json();
+  }
+
+
 
 }

@@ -84,7 +84,6 @@ import { SummaryDisbursementComponent } from './reports/summary-disbursement/sum
 import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
-import { StockcardComponent } from './tools/stockcard/stockcard.component';
 import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
 // requisition
@@ -98,7 +97,11 @@ import { RequisitionTemplateComponent } from 'app/admin/requisition-template/req
 import { RequisitionTemplateNewComponent } from 'app/admin/requisition-template-new/requisition-template-new.component';
 import { RequisitionTemplateEditComponent } from 'app/admin/requisition-template-edit/requisition-template-edit.component';
 import { RequisitionTypeComponent } from 'app/admin/requisition-type/requisition-type.component';
-
+// tool // stockcard
+import { StockcardComponent } from './tools/stockcard/stockcard.component';
+import { StockcardReceiveComponent } from './tools/stockcard-receive/stockcard-receive.component';
+import { StockcardReceiveOtherComponent } from './tools/stockcard-receive-other/stockcard-receive-other.component';
+import { StockcardRequisitionComponent } from './tools/stockcard-requisition/stockcard-requisition.component';
 const routes: Routes = [
   {
     path: 'admin',
@@ -169,7 +172,16 @@ const routes: Routes = [
       { path: 'addition/warehouse', component: AdditionWarehouseComponent },
       { path: 'addition/generic', component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', component: AdditionEditComponent },
-      { path: 'tools/stockcard', component: StockcardComponent },
+      {
+        path: 'tools',
+        canActivate: [AdminGuard],
+        children: [
+          { path: 'stockcard', component: StockcardComponent },
+          { path: 'stockcard/receive', component: StockcardReceiveComponent },
+          { path: 'stockcard/receive-other', component: StockcardReceiveOtherComponent },
+          { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
+        ]
+      }
       {
         path: 'requisition',
         canActivate: [AdminGuard],
