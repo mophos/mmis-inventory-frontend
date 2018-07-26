@@ -13,7 +13,7 @@ export class ConfirmOrderItemsComponent implements OnInit {
 
   _confirmId: any;
   _isEdit = false;
-  _confirmItems: any = [];
+  confirmItems: any = [];
   _baseUnitName: any;
 
   @Output('onSuccessConfirm') onSuccessConfirm: EventEmitter<any> = new EventEmitter<any>();
@@ -35,7 +35,9 @@ export class ConfirmOrderItemsComponent implements OnInit {
 
   @Input('confirmItems')
   set setConfirmItems(value: any) {
-    this._confirmItems = value;
+    this.confirmItems = value;
+    console.log(this.confirmItems);
+
     // this.getProductList();
   }
 
@@ -55,34 +57,38 @@ export class ConfirmOrderItemsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = true;
-    this.getProductList();
+    // this.loading = true;
+    // this.getProductList();
   }
 
-  async getProductList() {
-    try {
-      this.items = _.clone(this._confirmItems);
-      if (this.items.length) {
-        this.onSuccessConfirm.emit(this.items[0]);
-      }
-      this.calTotal();
-    } catch (error) {
-      console.log(error);
-      this.loading = false;
-      this.alertService.error(error.message);
-    }
-  }
+  // async getProductList() {
+  //   try {
+  //     this.items = _.clone(this._confirmItems);
+  //     if (this.items.length) {
+  //       this.onSuccessConfirm.emit(this.items[0]);
+  //     }
+  //     this.calTotal();
+  //   } catch (error) {
+  //     console.log(error);
+  //     this.loading = false;
+  //     this.alertService.error(error.message);
+  //   }
+  // }
 
-  onChangeQty(cmp: any, idx: any) {
+  onChangeQty(cmp: any, wmProductId: any) {
     try {
+      console.log(wmProductId);
+      const idx = _.findIndex(this.confirmItems, { 'wm_product_id': wmProductId });
+      console.log(this.confirmItems[idx], idx);
+
       // ถ้าจำนวนที่คีย์เข้ามามากว่าจำนวนคงเหลือ ให้ใช้จำนวนคงเหลือเป็นยอดยืนยัน
-      if (this.items[idx].pack_remain_qty < cmp.value) {
-        cmp.value = this.items[idx].pack_remain_qty;
+      if (this.confirmItems[idx].pack_remain_qty < cmp.value) {
+        cmp.value = this.confirmItems[idx].pack_remain_qty;
       }
-      this.items[idx].confirm_qty = +cmp.value;
-      this.items[idx].total_small_qty = (+cmp.value * +this.items[idx].conversion_qty);
+      this.confirmItems[idx].confirm_qty = +cmp.value;
+      this.confirmItems[idx].total_small_qty = (+cmp.value * +this.confirmItems[idx].conversion_qty);
 
-      this.onSuccessConfirm.emit(this.items[idx]);
+      this.onSuccessConfirm.emit(this.confirmItems[idx]);
       // นับยอดยืนยัน
       this.calTotal();
     } catch (error) {
