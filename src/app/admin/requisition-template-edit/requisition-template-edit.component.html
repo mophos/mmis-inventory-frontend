@@ -1,6 +1,6 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="#/admin" routerLink="/users">หน้าหลัก</a>
-  <a class="breadcrumb-item" href="#/admin/requisition-templates" routerLink="/admin/requisition-templates">Template ชุดเบิก</a>
+  <a class="breadcrumb-item" href="#/admin/requisition/templates" routerLink="/admin/requisition/templates">Template ชุดเบิก</a>
   <span class="breadcrumb-item active">แก้ไข Template ชุดเบิก</span>
 </nav>
 
@@ -27,13 +27,13 @@
               <label for="aForm_1">คลัง</label>
             </div>
             <div class="col-md-3">
-              <strong >{{srcWarehouseId}} - {{srcWarehouseName}}</strong>
+              <strong>{{srcWarehouseId}} - {{srcWarehouseName}}</strong>
             </div>
             <div class="col-md-1">
               <label for="aForm_1">เบิกคลัง</label>
             </div>
             <div class="col-md-3">
-                <strong>{{dstWarehouseId}} - {{dstWarehouseName}}</strong>
+              <strong>{{dstWarehouseId}} - {{dstWarehouseName}}</strong>
             </div>
           </div>
           <div class="form-group row wid99">
@@ -68,7 +68,7 @@
             <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
             <clr-dg-cell>
               <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)" [selectedUnitGenericId]="g.unit_generic_id"
-        [genericId]="g.generic_id"></wm-select-receive-unit>
+                [genericId]="g.generic_id"></wm-select-receive-unit>
             </clr-dg-cell>
             <clr-dg-cell style="text-align: center;">
               <button title="เลื่อนขึ้น" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productUp(g)">
@@ -76,14 +76,14 @@
                 <!-- เลื่อนขึ้น -->
               </button>
               <button title="เลื่อนลง" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productDown(g)">
-                  <clr-icon shape="caret down"></clr-icon>
-                  <!-- เลื่อนลง -->
+                <clr-icon shape="caret down"></clr-icon>
+                <!-- เลื่อนลง -->
               </button>
               <input type="text" class="form-control" size="14" #goto placeholder="ระบุลำดับ เพื่อเลื่อน..">
               <button title="เลื่อนไปที่" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productGoTo(g,goto.value)">
-                  <clr-icon shape="upload"></clr-icon>
-                  <!-- เลื่อนขึ้น -->
-                </button>
+                <clr-icon shape="upload"></clr-icon>
+                <!-- เลื่อนขึ้น -->
+              </button>
               <button title="ลบรายการ" class="btn btn-sm btn-icon btn-danger wm-small-btn" (click)="removeSelected(g)">
                 <clr-icon shape="trash"></clr-icon>
               </button>
@@ -101,8 +101,9 @@
     </div>
   </div>
   <div class="card-footer">
-    <button class="btn btn-sm btn-primary" [disabled]="!products.length || !srcWarehouseId || !dstWarehouseId || !templateSubject" (click)="saveTemplate()">บันทึกสร้างชุดเบิก</button>
-    <a href="#/admin/requisition-templates" class="btn btn-sm btn-danger">กลับ</a>
+    <button class="btn btn-sm btn-primary" [disabled]="!products.length || !srcWarehouseId || !dstWarehouseId || !templateSubject"
+      (click)="saveTemplate()">บันทึกสร้างชุดเบิก</button>
+    <a href="#/admin/requisition/templates" class="btn btn-sm btn-danger">กลับ</a>
   </div>
 </div>
 

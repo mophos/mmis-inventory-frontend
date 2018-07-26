@@ -9,7 +9,7 @@
 </button> -->
 <div class="row">
   <div class="col-md-2">
-    <button class="btn btn-sm btn-success" [routerLink]="['/admin/requisition-templates/new']">
+    <button class="btn btn-sm btn-success" [routerLink]="['/admin/requisition/templates/new']">
       + สร้าง Template เบิก/โอน
     </button>
   </div>
@@ -34,7 +34,7 @@
     <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group">
-        <button title="แก้ไข" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/requisition-templates/edit/', w.template_id]">
+        <button title="แก้ไข" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/requisition/templates/edit/', w.template_id]">
           <clr-icon shape="note"></clr-icon>
         </button>
         <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeTemplate(w)">
