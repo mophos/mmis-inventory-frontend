@@ -352,7 +352,14 @@ export class StockcardReceiveComponent implements OnInit {
             this.isReceivePeriod = true;
             this.isSaving = false;
           } else {
-            const rs: any = await this.toolsService.saveReceive(this.receiveId, this.products);
+            const _deliveryDate = this.deliveryDate ?
+              `${this.deliveryDate.date.year}-${this.deliveryDate.date.month}-${this.deliveryDate.date.day}` : null;
+            const summary = {
+              receive_date: _receiveDate,
+              delivery_code: this.deliveryCode,
+              delivery_date: _deliveryDate
+            }
+            const rs: any = await this.toolsService.saveReceive(this.receiveId, summary, this.products);
             if (rs.ok) {
               this.modalLoading.hide();
               this.router.navigate(['admin/tools/stockcard']);

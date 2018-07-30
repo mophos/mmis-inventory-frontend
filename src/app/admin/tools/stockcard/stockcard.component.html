@@ -8,7 +8,7 @@
   <div class="alert-items">
     <div class="alert-item static">
       <div class="alert-icon-wrapper">
-        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+        <clr-icon (click)="openInput()" class="alert-icon" shape="exclamation-circle"></clr-icon>
       </div>
       <span class="alert-text">
         การแก้ไขรายการ Stock Card จะเป็นการแก้ไข Transaction ของ Stock Card ตัวเวชภัณฑ์นั้นๆ รวมเป็นถึงเป็นการแก้ไขรายการในใบที่อนุมัติไปแล้วด้วย
@@ -25,7 +25,7 @@
 <button class="btn btn-large btn-danger" (click)="showSearchRequisition()">
   แก้ไข Stock Card จากการเบิกจ่าย
 </button>
-
+<input *ngIf="input" type="text" [(ngModel)]="passHis">
 <!-- search receive -->
 <clr-modal [(clrModalOpen)]="isOpenSearchReceive" [clrModalSize]="'lg'" [clrModalClosable]="false">
   <h3 class="modal-title">ค้นหาใบรับ</h3>
@@ -76,6 +76,41 @@
         <clr-dg-cell>{{r.requisition_date | toThaiDate}}</clr-dg-cell>
         <clr-dg-cell>{{r.confirm_date | toThaiDate}}</clr-dg-cell>
         <clr-dg-cell>{{r.requisition_code}}</clr-dg-cell>
+        <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoRequisition(r.requisition_order_id,r.confirm_id)">
+            แก้ไข
+          </button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{requisitions.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenSearchRequisition = false">ยกเลิก</button>
+  </div>
+</clr-modal>
+<!-- /search requisition -->
+
+<!-- history -->
+<clr-modal [(clrModalOpen)]="modalHistory" [clrModalSize]="'lg'" [clrModalClosable]="false">
+  <h3 class="modal-title">ค้นหาใบเบิก</h3>
+  <div class="modal-body">
+    <label for="">เลขที่ใบรับ</label>
+    <input type="text" style="width: 300px;" #queryRequisition (keyup)="doSearchRequisitions($event, queryRequisition.value)"
+      placeholder="พิมพ์เลขที่ใบเบิก แล้วกด ENTER">
+    <clr-datagrid>
+      <clr-dg-column>วันที่เบิก</clr-dg-column>
+      <clr-dg-column>วันที่จ่าย</clr-dg-column>
+      <clr-dg-column>เลขที่ใบเบิก</clr-dg-column>
+      <clr-dg-column>คลังเบิก</clr-dg-column>
+      <clr-dg-column style="width: 60px;">#</clr-dg-column>
+
+      <clr-dg-row *ngFor="let r of requisitions">
+        <clr-dg-cell>{{r.requisition_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{r.confirm_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{r.requisition_code}}</clr-dg-cell>
         <clr-dg-cell>{{r.requisition_code}}</clr-dg-cell>
         <clr-dg-cell style="text-align: center;">
           <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoRequisition(r.requisition_order_id,r.confirm_id)">
@@ -88,9 +123,8 @@
     </clr-datagrid>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenSearchRequisition = false">ยกเลิก</button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="modalHistory = false">ยกเลิก</button>
   </div>
 </clr-modal>
-<!-- /search requisition -->
-
+<!-- /history -->
 <wm-loading-modal #modalLoading></wm-loading-modal>

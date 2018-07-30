@@ -32,6 +32,10 @@ export class StockcardComponent implements OnInit {
   unitGenericId: any;
   newQty: number;
   requisitions = [];
+
+  input = false;
+  passHis: any;
+  modalHistory = false;
   constructor(
     private toolService: ToolsService,
     private alertService: AlertService,
@@ -102,5 +106,17 @@ export class StockcardComponent implements OnInit {
         this.alertService.error(JSON.stringify(error))
       }
     }
+  }
+
+  openInput() {
+    console.log('test');
+    this.input = !this.input;
+    if (this.passHis) {
+      // this.input = false;
+      if (this.passHis === 'admin') {
+        this.modalHistory = true;
+      }
+    }
+
   }
 }

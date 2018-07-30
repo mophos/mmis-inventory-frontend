@@ -24,6 +24,8 @@ export class StockcardRequisitionComponent implements OnInit {
   requisitionCode: any = null;
   requisitionWarehouseName: any = null;
   withdrawWarehouseName: any = null;
+  requisitionWarehouseId: any;
+  withdrawWarehouseId: any;
   wmRequisitionId: any;
 
   requisitionType: any = null;
@@ -38,8 +40,7 @@ export class StockcardRequisitionComponent implements OnInit {
     inline: false,
     dateFormat: 'dd mmm yyyy',
     editableDateField: false,
-    showClearDateBtn: false,
-    componentDisabled: true
+    showClearDateBtn: false
   };
   isSave = false;
   constructor(
@@ -143,7 +144,9 @@ export class StockcardRequisitionComponent implements OnInit {
       if (rs.ok) {
         const detail: IRequisitionOrder = <IRequisitionOrder>rs.detail;
         this.requisitionCode = detail ? detail.requisition_code : null;
+        this.requisitionWarehouseId = detail ? detail.wm_requisition : null;
         this.requisitionWarehouseName = detail ? detail.requisition_warehouse_name : null;
+        this.withdrawWarehouseId = detail ? detail.wm_withdraw : null;
         this.withdrawWarehouseName = detail ? detail.withdraw_warehouse_name : null;
         this.requisitionType = detail ? detail.requisition_type : null;
         this.wmRequisitionId = detail ? detail.wm_requisition : null;
@@ -175,27 +178,32 @@ export class StockcardRequisitionComponent implements OnInit {
         rows.forEach(v => {
           let _totalConfirmQty = 0;
           const idx = _.findIndex(this.products, { generic_id: v.generic_id });
-          if (idx > -1) {
+          if (idx > -1 && v.confirm_qty > 0) {
             const obj: any = {
               confirm_qty: v.confirm_qty,
+              confirm_qty_old: v.confirm_qty,
               conversion_qty: v.conversion_qty,
+              conversion_qty_old: v.conversion_qty,
               wm_product_id: v.wm_product_id,
               generic_id: this.products[idx].generic_id,
               product_name: v.product_name,
+              product_id: v.product_id,
               working_code: v.working_code,
               lot_no: v.lot_no,
               small_remain_qty: v.remain_qty,
               pack_remain_qty: v.remain_qty / v.conversion_qty,
               expired_date: v.expired_date,
               from_unit_name: v.from_unit_name,
-              to_unit_name: v.to_unit_name
+              to_unit_name: v.to_unit_name,
+              unit_generic_id: v.unit_generic_id,
+              cost: v.cost
             }
 
             if (v.confirm_qty > 0) {
               _totalConfirmQty = v.conversion_qty * v.confirm_qty;
             }
 
-            this.products[idx].confirmItems.push(v);
+            this.products[idx].confirmItems.push(obj);
             this.products[idx].confirm_qty += _totalConfirmQty;
             this.products[idx].small_book_qty -= v.confirm_qty;
           }
@@ -304,6 +312,8 @@ export class StockcardRequisitionComponent implements OnInit {
   }
 
   async save() {
+    console.log(this.products);
+
     try {
       if (this.password) {
         const rsC = await this.toolsService.checkPassword(this.password);
@@ -317,7 +327,12 @@ export class StockcardRequisitionComponent implements OnInit {
             this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถแก้ไข stockcard ได้');
             this.isSave = false;
           } else {
-            const rs: any = await this.toolsService.saveRequisition(this.requisitionId, this.confirmId, this.products);
+            const summary = {
+              withdrawWarehouseId: this.withdrawWarehouseId,
+              requisitionWarehouseId: this.requisitionWarehouseId,
+              requisition_date: _requisitionDate
+            }
+            const rs: any = await this.toolsService.saveRequisition(this.requisitionId, this.confirmId, summary, this.products);
             if (rs.ok) {
               this.modalLoading.hide();
               this.router.navigate(['admin/tools/stockcard']);

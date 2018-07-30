@@ -7,23 +7,23 @@ import { JwtHelper } from 'angular2-jwt';
   styleUrls: []
 })
 export class SearchDonatorComponent implements OnInit {
-  @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();  
+  @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
   @Input() public donatorId: any;
-  @Input() public disabled: boolean;
-  
+  @Input() public disabled = false;
+
   donatorName: string;
   token: any;
   query: any = null;
   searchProductUrl: any;
-  
+
   constructor(
     @Inject('API_URL') private apiUrl: string) {
-    
-      this.token = sessionStorage.getItem('token');
-      this.searchProductUrl = `${this.apiUrl}/basic/search-donator?token=${this.token}`;
 
-     }
+    this.token = sessionStorage.getItem('token');
+    this.searchProductUrl = `${this.apiUrl}/basic/search-donator?token=${this.token}`;
+
+  }
 
   ngOnInit() {
 

@@ -473,7 +473,14 @@ export class StockcardReceiveOtherComponent implements OnInit {
             this.isReceivePeriod = true;
             this.isSaving = false;
           } else {
-            const rs: any = await this.toolsService.saveReceiveOther(this.receiveOtherId, this.products);
+            const summary = {
+              receive_date: _receiveDate,
+              receive_type_id: this.receiveTypeId,
+              comment: this.comment,
+              delivery_code: this.deliveryCode,
+              donator_id: this.donatorId
+            }
+            const rs: any = await this.toolsService.saveReceiveOther(this.receiveOtherId, summary, this.products);
             if (rs.ok) {
               this.modalLoading.hide();
               this.router.navigate(['admin/tools/stockcard']);

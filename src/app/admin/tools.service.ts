@@ -53,26 +53,29 @@ export class ToolsService {
     return resp.json();
   }
 
-  async saveReceive(receiveId: any, products: any) {
+  async saveReceive(receiveId: any, summary: any, products: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/receives`, {
       receiveId: receiveId,
+      summary: summary,
       products: products
     }).toPromise();
     return resp.json();
   }
 
-  async saveReceiveOther(receiveOtherId: any, products: any) {
+  async saveReceiveOther(receiveOtherId: any, summary: any, products: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/receive-others`, {
       receiveOtherId: receiveOtherId,
+      summary: summary,
       products: products
     }).toPromise();
     return resp.json();
   }
 
-  async saveRequisition(requisitionId: any, confirmId: any, products: any) {
+  async saveRequisition(requisitionId: any, confirmId: any, summary: any, products: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/requisitions`, {
       requisitionId: requisitionId,
       confirmId: confirmId,
+      summary: summary,
       products: products
     }).toPromise();
     return resp.json();

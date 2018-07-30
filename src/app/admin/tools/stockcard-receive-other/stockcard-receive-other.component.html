@@ -29,13 +29,13 @@
             <label class="required" for="informName">ผู้จำหน่าย/บริจาค</label>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <wm-search-donator [disabled]="true" #donatorList (onChange)="clearSelectedDonator()" (onSelect)="changeDonator($event)"></wm-search-donator>
+            <wm-search-donator #donatorList (onChange)="clearSelectedDonator()" (onSelect)="changeDonator($event)"></wm-search-donator>
           </div>
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label class="required" for="deliveryCode">เลขที่ใบส่ง</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <input disabled class="form-control" id="deliveryCode" type="text" name="deliveryCode" [(ngModel)]="deliveryCode">
+            <input class="form-control" id="deliveryCode" type="text" name="deliveryCode" [(ngModel)]="deliveryCode">
           </div>
 
         </div>
@@ -45,7 +45,7 @@
           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <div class="select">
-              <select name="slStatus" disabled [(ngModel)]="receiveTypeId">
+              <select name="slStatus" [(ngModel)]="receiveTypeId">
                 <option value="">
                   <กรุณาเลือกประเภท>
                 </option>
@@ -58,7 +58,7 @@
             <label for="dateReceive">หมายเหตุ</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <input disabled class="form-control" type="text" name="comment" [(ngModel)]="comment">
+            <input class="form-control" type="text" name="comment" [(ngModel)]="comment">
           </div>
 
         </div>

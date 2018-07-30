@@ -181,7 +181,7 @@ const routes: Routes = [
           { path: 'stockcard/receive-other', component: StockcardReceiveOtherComponent },
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
         ]
-      }
+      },
       {
         path: 'requisition',
         canActivate: [AdminGuard],
