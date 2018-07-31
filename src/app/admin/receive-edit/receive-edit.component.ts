@@ -303,10 +303,13 @@ export class ReceiveEditComponent implements OnInit {
     }
   }
 
-  changeEditLocation(idx: any, event: any) {
+  changeEditLocation(productId: any, event: any) {
     try {
-      this.products[idx].location_id = event.location_id;
-      this.products[idx].location_name = event.location_name;
+      const idx = _.findIndex(this.products, { 'product_id': productId });
+      if (idx > -1) {
+        this.products[idx].location_id = event.location_id;
+        this.products[idx].location_name = event.location_name;
+      }
     } catch (error) {
       this.alertService.error(error);
     }

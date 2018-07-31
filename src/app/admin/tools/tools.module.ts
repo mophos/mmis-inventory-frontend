@@ -13,6 +13,7 @@ import { FormsModule } from '../../../../node_modules/@angular/forms';
 import { HttpModule } from '../../../../node_modules/@angular/http';
 import { GridDetailModule } from 'app/grid-detail/grid-detail.module';
 import { StockcardRequisitionComponent } from './stockcard-requisition/stockcard-requisition.component';
+import { StockcardTransferComponent } from './stockcard-transfer/stockcard-transfer.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,6 @@ import { StockcardRequisitionComponent } from './stockcard-requisition/stockcard
     TextMaskModule,
     GridDetailModule
   ],
-  declarations: [StockcardComponent, StockcardReceiveComponent, StockcardReceiveOtherComponent, StockcardRequisitionComponent]
+  declarations: [StockcardComponent, StockcardReceiveComponent, StockcardReceiveOtherComponent, StockcardRequisitionComponent, StockcardTransferComponent]
 })
 export class ToolsModule { }

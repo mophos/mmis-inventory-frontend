@@ -13,29 +13,30 @@ export class StockcardComponent implements OnInit {
 
   @ViewChild('modalLoading') modalLoading: LoadingModalComponent;
 
-  perPage = 20;
-  items: any = [];
-  receives: any = [];
-  receiveItems: any = [];
-  stockCardItems: any = [];
-  stockCardId: any;
-  newBalanceQty = 0;
-  isOpenSearchReceive = false;
-  isOpenSearchRequisition = false;
-
-
-  receiveType: any;
-  receiveItemId: any;
-
-  receiveId: any;
-  receiveDetailId: any;
-  unitGenericId: any;
-  newQty: number;
+  items = [];
+  receives = [];
+  receiveItems = [];
   requisitions = [];
+  stockCardItems = [];
+  transfers = [];
 
   input = false;
-  passHis: any;
+  isOpenSearchReceive = false;
+  isOpenSearchRequisition = false;
+  isOpenSearchTranfer = false;
   modalHistory = false;
+
+  newBalanceQty = 0;
+  newQty: number;
+  passHis: any;
+  perPage = 20;
+  receiveType: any;
+  receiveItemId: any;
+  receiveId: any;
+  receiveDetailId: any;
+  stockCardId: any;
+  unitGenericId: any;
+
   constructor(
     private toolService: ToolsService,
     private alertService: AlertService,
@@ -44,8 +45,6 @@ export class StockcardComponent implements OnInit {
 
   ngOnInit() {
   }
-
-
 
   // /////////////////////////////////////
 
@@ -61,6 +60,10 @@ export class StockcardComponent implements OnInit {
     this.router.navigateByUrl(`/admin/tools/stockcard/requisition?requisitionId=${requisitionId}&confirmId=${confirmId}`);
   }
 
+  gotoTransfer(transferId: any) {
+    this.router.navigateByUrl(`/admin/tools/stockcard/transfer?transferId=${transferId}`);
+  }
+
   showSearchReceive() {
     this.isOpenSearchReceive = true;
   }
@@ -69,6 +72,9 @@ export class StockcardComponent implements OnInit {
     this.isOpenSearchRequisition = true;
   }
 
+  showSearchTranfer() {
+    this.isOpenSearchTranfer = true;
+  }
 
   async doSearchReceives(event: any, query: any) {
     if (event.keyCode === 13) {
@@ -93,9 +99,30 @@ export class StockcardComponent implements OnInit {
     if (event.keyCode === 13) {
       try {
         this.modalLoading.show();
+        console.log(query);
+
         const rs: any = await this.toolService.searchRequisitions(query);
         if (rs.ok) {
           this.requisitions = rs.rows;
+        } else {
+          this.alertService.error(rs.error);
+        }
+
+        this.modalLoading.hide();
+      } catch (error) {
+        this.modalLoading.hide();
+        this.alertService.error(JSON.stringify(error))
+      }
+    }
+  }
+
+  async doSearchTranfers(event: any, query: any) {
+    if (event.keyCode === 13) {
+      try {
+        this.modalLoading.show();
+        const rs: any = await this.toolService.searchTranfers(query);
+        if (rs.ok) {
+          this.transfers = rs.rows;
         } else {
           this.alertService.error(rs.error);
         }

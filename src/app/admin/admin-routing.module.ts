@@ -98,10 +98,11 @@ import { RequisitionTemplateNewComponent } from 'app/admin/requisition-template-
 import { RequisitionTemplateEditComponent } from 'app/admin/requisition-template-edit/requisition-template-edit.component';
 import { RequisitionTypeComponent } from 'app/admin/requisition-type/requisition-type.component';
 // tool // stockcard
-import { StockcardComponent } from './tools/stockcard/stockcard.component';
-import { StockcardReceiveComponent } from './tools/stockcard-receive/stockcard-receive.component';
-import { StockcardReceiveOtherComponent } from './tools/stockcard-receive-other/stockcard-receive-other.component';
-import { StockcardRequisitionComponent } from './tools/stockcard-requisition/stockcard-requisition.component';
+import { StockcardComponent } from 'app/admin/tools/stockcard/stockcard.component';
+import { StockcardReceiveComponent } from 'app/admin/tools/stockcard-receive/stockcard-receive.component';
+import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receive-other/stockcard-receive-other.component';
+import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
+import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
 const routes: Routes = [
   {
     path: 'admin',
@@ -180,6 +181,7 @@ const routes: Routes = [
           { path: 'stockcard/receive', component: StockcardReceiveComponent },
           { path: 'stockcard/receive-other', component: StockcardReceiveOtherComponent },
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
+          { path: 'stockcard/transfer', component: StockcardTransferComponent },
         ]
       },
       {

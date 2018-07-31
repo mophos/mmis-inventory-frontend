@@ -23,6 +23,13 @@ export class ToolsService {
     return resp.json();
   }
 
+  async searchTranfers(query: any) {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/tranfers/search`, {
+      query: query
+    }).toPromise();
+    return resp.json();
+  }
+
   async updateStockCard(data: any[], receiveType: any, receiveDetailId: any, newQty: number, unitGenericId: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/update`, {
       data: data,
@@ -77,6 +84,15 @@ export class ToolsService {
       confirmId: confirmId,
       summary: summary,
       products: products
+    }).toPromise();
+    return resp.json();
+  }
+
+  async saveTransfer(transferId: any, summary: any, generics: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/transfers`, {
+      transferId: transferId,
+      summary: summary,
+      generics: generics
     }).toPromise();
     return resp.json();
   }

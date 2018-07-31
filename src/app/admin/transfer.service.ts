@@ -26,6 +26,11 @@ export class TransferService {
     return rs.json();
   }
 
+  async getDetailInfoEdit(transferId: string) {
+    const rs: any = await this.authHttp.get(`${this.url}/transfer/info-detail-edit/${transferId}`).toPromise();
+    return rs.json();
+  }
+
   getProductsWarehouse(warehouseId: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/transfer/product-warehouse/${warehouseId}`)

@@ -312,8 +312,6 @@ export class StockcardRequisitionComponent implements OnInit {
   }
 
   async save() {
-    console.log(this.products);
-
     try {
       if (this.password) {
         const rsC = await this.toolsService.checkPassword(this.password);
