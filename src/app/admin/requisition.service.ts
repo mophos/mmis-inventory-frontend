@@ -54,6 +54,14 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async saveRequisitionFastOrder(order: any, generics: Array<any>) {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/fast/orders`, {
+      order: order,
+      generics: generics
+    }).toPromise();
+    return rs.json();
+  }
+
   async saveRequisitionReOrder(requisitionOrderUnpaidId: any, requisitionOrderId: any) {
     const rs: any = await this.authHttp.post(`${this.url}/requisition/orders/unpaid/reorder`, {
       requisitionOrderUnpaidId: requisitionOrderUnpaidId,
@@ -200,10 +208,11 @@ export class RequisitionService {
     return rs.json();
   }
 
-  async getBorrowNotes(warehouseId: any, genericIds: any[]) {
+  async getBorrowNotes(warehouseId: any, genericIds: any[], requisitionId: any[]) {
     const rs: any = await this.authHttp.post(`${this.url}/requisition/borrow-notes`, {
       genericIds: genericIds,
-      warehouseId: warehouseId
+      warehouseId: warehouseId,
+      requisitionId:requisitionId
     }).toPromise();
     return rs.json();
   }

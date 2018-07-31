@@ -5,9 +5,19 @@
 
 <div class="row" style="padding-top: 5px; padding-bottom: 5px;">
   <div class="col-md-6">
-    <button class="btn btn-sm btn-success" routerLink="/admin/requisition/new">
-      <clr-icon shape="plus"></clr-icon> เบิกสินค้าและเวชภัณฑ์
-    </button>
+    <clr-dropdown>
+      <button type="button" class="btn btn-sm btn-success" clrDropdownTrigger>
+        เบิก/จ่ายสินค้าและเวชภัณฑ์
+        <clr-icon shape="caret down"></clr-icon>
+      </button>
+      <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+        <button routerLink="/admin/requisition/new" type="button" clrDropdownItem>
+          <clr-icon shape="plus"></clr-icon> เบิกสินค้าและเวชภัณฑ์
+        </button>
+        <button type="button" routerLink="/admin/requisition/fast" clrDropdownItem>
+          <clr-icon shape="fast-forward" style="color:green"></clr-icon> จ่ายด่วน</button>
+      </clr-dropdown-menu>
+    </clr-dropdown>
   </div>
 
   <div *ngIf="selectedTab === 'approved' || selectedTab === 'waitingApprove'" class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
