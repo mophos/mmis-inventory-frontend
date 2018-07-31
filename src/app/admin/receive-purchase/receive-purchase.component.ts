@@ -43,6 +43,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
   products = [];
   productPurchases = [];
+  countProduct: any;
 
   receiveTypes = [];
   receiveStatus = [];
@@ -243,6 +244,8 @@ export class ReceivePurchaseComponent implements OnInit {
 
             // ของแถม
             obj.is_free = v.giveaway;
+
+            this.countProduct += obj.receive_qty;
 
             this.products.push(obj);
           }
@@ -887,8 +890,20 @@ export class ReceivePurchaseComponent implements OnInit {
     } // expired
   }
   checkProduct() {
+    let count: number = 0;
+    this.products.forEach(v => {
+      count += v.receive_qty;
+    });
+
     if (this.selectedProductId === null) {
-      this.saveReceive();
+      if (count !== this.countProduct && this.isClosePurchase) {
+        this.alertService.confirm(`คุณมีรายการเวชภัณฑ์ที่ยังรับไม่ครบ ต้องการทำต่อใช่หรือไม่ ?`)
+          .then(() => {
+            this.saveReceive();
+          }).catch((err) => {
+            this.alertService.error(err);
+          })
+      } else this.saveReceive();
     } else {
       this.alertService.confirm(`คุณมีรายการเวชภัณฑ์ที่ยังไม่ได้กดเพิ่ม ต้องการทำต่อใช่หรือไม่ ?`)
         .then(() => {
