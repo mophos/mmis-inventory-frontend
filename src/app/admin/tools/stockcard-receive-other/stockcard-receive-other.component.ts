@@ -187,9 +187,9 @@ export class StockcardReceiveOtherComponent implements OnInit {
   //   }
   // }
 
-  // changeDonator(event: any) {
-  //   this.donatorId = event.donator_id;
-  // }
+  changeDonator(event: any) {
+    this.donatorId = event.donator_id;
+  }
 
   clearSelectedDonator() {
     this.donatorId = null;

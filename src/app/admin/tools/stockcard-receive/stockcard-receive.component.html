@@ -32,7 +32,7 @@
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <input class="form-control" disabled type="text" name="purchaseOrderNumber" style="float: left; width: 90%;" [(ngModel)]="purchaseOrderNumber">
             <div style="float: left;">
-              <button class="btn btn-icon btn-link" (click)="searchPurchase()" [disabled]="isApprove || purchaseOrderNumber">
+              <button class="btn btn-icon btn-link" [disabled]="isApprove || purchaseOrderNumber">
                 <clr-icon shape="search"></clr-icon>
               </button>
             </div>
@@ -211,7 +211,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success btn-sm" [disabled]="isSave" (click)="save()">อนุมัติ</button>
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSaving" (click)="save()">อนุมัติ</button>
     <button type="button" class="btn btn-danger btn-sm" (click)="passwordModal = false">ปิดหน้าต่าง</button>
   </div>
 </clr-modal>
