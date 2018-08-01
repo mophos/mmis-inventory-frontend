@@ -1,0 +1,41 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">รายงานการตรวจสอบการรับ-จ่ายยา ประจำปีงบประมาณ</span>
+</nav>
+
+<form>
+  <section class="form-block">
+    <div class="form-group row wid99">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ปีงบ</label>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <div class="select">
+          <select name="yearSelect" [(ngModel)]="yearSelect">
+            <option *ngFor="let y of year" [value]="y.bg_year">
+              {{ y.bg_year }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-2">
+        <button class="btn btn-sm btn-primary" [disabled]="isPreview" (click)="showReport()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน
+        </button>
+        <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
+          <clr-icon shape="download"></clr-icon>
+          ส่งออก Excel
+        </button>
+        <!-- <button class="btn btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button> -->
+      </div>
+    </div>
+  </section>
+</form>
+<span class="spinner spinner-inline" *ngIf="isPreview">
+  Loading...
+</span>
+<span *ngIf="isPreview">
+  Loading...
+</span>
+
+<wm-html-preview #htmlPreview></wm-html-preview>

@@ -156,6 +156,7 @@ import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 import { RequisitionFastComponent } from './requisition/requisition-fast/requisition-fast.component';
+import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -261,7 +262,8 @@ Highcharts.setOptions({
     ValueReceiveOtherComponent,
     AdjustStockComponent,
     AdjustStockNewComponent,
-    RequisitionFastComponent
+    RequisitionFastComponent,
+    ReceiveIssueYearComponent
   ],
   providers: [
     MainService,
