@@ -14,6 +14,8 @@ export class SelectManufactureComponent implements OnInit {
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
   @Input() public selectedId: any;
   @Input() public genericId: any;
+  @Input() public disabled: boolean;
+
   manufactures: any = [];
   loading = false;
 

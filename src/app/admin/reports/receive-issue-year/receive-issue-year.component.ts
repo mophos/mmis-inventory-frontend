@@ -15,6 +15,7 @@ export class ReceiveIssueYearComponent implements OnInit {
   year: any;
   yearSelect: any = moment().get('year') + 543;
   token: string;
+  isPreview = false;
   constructor(
     private reportProductService: ReportProductsService,
     private alertService: AlertService,
