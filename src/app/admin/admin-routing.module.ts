@@ -98,7 +98,7 @@ import { RequisitionTemplateComponent } from 'app/admin/requisition-template/req
 import { RequisitionTemplateNewComponent } from 'app/admin/requisition-template-new/requisition-template-new.component';
 import { RequisitionTemplateEditComponent } from 'app/admin/requisition-template-edit/requisition-template-edit.component';
 import { RequisitionTypeComponent } from 'app/admin/requisition-type/requisition-type.component';
-
+import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component'
 const routes: Routes = [
   {
     path: 'admin',
@@ -140,6 +140,7 @@ const routes: Routes = [
       { path: 'reports/product-receive', component: ProductReceiveComponent },
       { path: 'reports/receive-not-match-po', component: ReceiveNotMatchPoComponent },
       { path: 'reports/summary-disbursement', component: SummaryDisbursementComponent },
+      { path: 'reports/receive-issue-year', component: ReceiveIssueYearComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },
