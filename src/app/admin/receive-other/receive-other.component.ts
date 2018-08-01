@@ -201,7 +201,6 @@ export class ReceiveOtherComponent implements OnInit {
   }
 
   changeManufacture(event: any) {
-    console.log(event)
     try {
       this.selectedManufactureId = event.labeler_id ? event.labeler_id : null;
       this.selectedManufactureName = event.labeler_name ? event.labeler_name : null;
