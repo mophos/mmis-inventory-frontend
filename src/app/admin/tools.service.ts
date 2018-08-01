@@ -16,6 +16,11 @@ export class ToolsService {
     return resp.json();
   }
 
+  async getHistory() {
+    const resp = await this.authHttp.get(`${this.url}/tools/stockcard/history`).toPromise();
+    return resp.json();
+  }
+
   async searchRequisitions(query: any) {
     const resp = await this.authHttp.post(`${this.url}/tools/stockcard/requisitions/search`, {
       query: query

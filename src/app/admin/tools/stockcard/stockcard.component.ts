@@ -19,6 +19,7 @@ export class StockcardComponent implements OnInit {
   requisitions = [];
   stockCardItems = [];
   transfers = [];
+  history = [];
 
   input = false;
   isOpenSearchReceive = false;
@@ -135,15 +136,25 @@ export class StockcardComponent implements OnInit {
     }
   }
 
-  openInput() {
-    console.log('test');
+  async openInput() {
     this.input = !this.input;
     if (this.passHis) {
       // this.input = false;
       if (this.passHis === 'admin') {
+        try {
+          const rs: any = await this.toolService.getHistory();
+          if (rs.ok) {
+            this.history = rs.rows
+          } else {
+            this.alertService.error(rs.error);
+          }
+        } catch (error) {
+          this.alertService.error(error);
+        }
         this.modalHistory = true;
       }
     }
+    this.passHis = null;
 
   }
 }

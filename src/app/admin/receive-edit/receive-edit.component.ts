@@ -477,13 +477,13 @@ export class ReceiveEditComponent implements OnInit {
 
   // edit data
   editChangeReceiveQty(idx: any, cmp: any) {
-    if (+cmp.value === 0) {
+    if (cmp.value === '0') {
       this.alertService.confirm(`คุณระบุจำนวนเท่ากับ 0, ต้องการลบรายการใช่หรือไม่?`)
         .then(() => {
           this.products.splice(idx, 1);
           this.countTotalCost();
         }).catch(() => {
-          cmp.value = this.products[idx].canReceive;
+          cmp.value = this.products[idx].canReceive || 0;
         });
     } else {
       this.products[idx].receive_qty = cmp.value;
