@@ -86,6 +86,7 @@ import { AdditionWarehouseComponent } from './addition-warehouse/addition-wareho
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
+import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component'
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
 import { RequisitionFastComponent } from 'app/admin/requisition/requisition-fast/requisition-fast.component';
@@ -103,6 +104,7 @@ import { StockcardReceiveComponent } from 'app/admin/tools/stockcard-receive/sto
 import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receive-other/stockcard-receive-other.component';
 import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
+
 const routes: Routes = [
   {
     path: 'admin',
@@ -144,6 +146,7 @@ const routes: Routes = [
       { path: 'reports/product-receive', component: ProductReceiveComponent },
       { path: 'reports/receive-not-match-po', component: ReceiveNotMatchPoComponent },
       { path: 'reports/summary-disbursement', component: SummaryDisbursementComponent },
+      { path: 'reports/receive-issue-year', component: ReceiveIssueYearComponent },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },
