@@ -156,6 +156,8 @@ import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 import { RequisitionFastComponent } from './requisition/requisition-fast/requisition-fast.component';
+import { ReturnBudgetComponent } from './return-budget/return-budget.component';
+import { ReturnBudgetService } from './return-budget.service';
 import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 import { ReportComponent } from './report/report.component';
 
@@ -264,6 +266,7 @@ Highcharts.setOptions({
     AdjustStockComponent,
     AdjustStockNewComponent,
     RequisitionFastComponent,
+    ReturnBudgetComponent,
     ReceiveIssueYearComponent,
     ReportComponent
   ],
@@ -319,6 +322,7 @@ Highcharts.setOptions({
     ToolsService,
     GenericService,
     AdjustStockService,
+    ReturnBudgetService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })

@@ -87,7 +87,8 @@ import { AdditionWarehouseComponent } from './addition-warehouse/addition-wareho
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
 import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
-import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component'
+import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
+import { ReturnBudgetComponent } from './return-budget/return-budget.component';
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
 import { RequisitionFastComponent } from 'app/admin/requisition/requisition-fast/requisition-fast.component';
@@ -185,6 +186,7 @@ const routes: Routes = [
       { path: 'addition/warehouse', component: AdditionWarehouseComponent },
       { path: 'addition/generic', component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', component: AdditionEditComponent },
+      { path: 'return-budget', component: ReturnBudgetComponent },
       {
         path: 'tools',
         canActivate: [AdminGuard],
