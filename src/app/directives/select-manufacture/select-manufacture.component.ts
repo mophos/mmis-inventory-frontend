@@ -35,7 +35,6 @@ export class SelectManufactureComponent implements OnInit {
       this.loading = false;
       if (res.ok) {
         this.manufactures = res.rows;
-        console.log(this.manufactures)
         if (this.manufactures.length) {
           if (this.selectedId) {
             this.manufactureId = this.selectedId;

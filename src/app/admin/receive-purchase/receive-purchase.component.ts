@@ -43,7 +43,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
   products = [];
   productPurchases = [];
-  countProduct: number = 0;
+  countProduct = 0;
 
   receiveTypes = [];
   receiveStatus = [];
