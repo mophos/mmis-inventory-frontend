@@ -158,6 +158,8 @@ import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.com
 import { RequisitionFastComponent } from './requisition/requisition-fast/requisition-fast.component';
 import { ReturnBudgetComponent } from './return-budget/return-budget.component';
 import { ReturnBudgetService } from './return-budget.service';
+import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
+import { ReportComponent } from './report/report.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -264,7 +266,9 @@ Highcharts.setOptions({
     AdjustStockComponent,
     AdjustStockNewComponent,
     RequisitionFastComponent,
-    ReturnBudgetComponent
+    ReturnBudgetComponent,
+    ReceiveIssueYearComponent,
+    ReportComponent
   ],
   providers: [
     MainService,

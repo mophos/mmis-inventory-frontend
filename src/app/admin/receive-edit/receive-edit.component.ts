@@ -303,10 +303,13 @@ export class ReceiveEditComponent implements OnInit {
     }
   }
 
-  changeEditLocation(idx: any, event: any) {
+  changeEditLocation(productId: any, event: any) {
     try {
-      this.products[idx].location_id = event.location_id;
-      this.products[idx].location_name = event.location_name;
+      const idx = _.findIndex(this.products, { 'product_id': productId });
+      if (idx > -1) {
+        this.products[idx].location_id = event.location_id;
+        this.products[idx].location_name = event.location_name;
+      }
     } catch (error) {
       this.alertService.error(error);
     }
@@ -474,13 +477,13 @@ export class ReceiveEditComponent implements OnInit {
 
   // edit data
   editChangeReceiveQty(idx: any, cmp: any) {
-    if (+cmp.value === 0) {
+    if (cmp.value === '0') {
       this.alertService.confirm(`คุณระบุจำนวนเท่ากับ 0, ต้องการลบรายการใช่หรือไม่?`)
         .then(() => {
           this.products.splice(idx, 1);
           this.countTotalCost();
         }).catch(() => {
-          cmp.value = this.products[idx].canReceive;
+          cmp.value = this.products[idx].canReceive || 0;
         });
     } else {
       this.products[idx].receive_qty = cmp.value;

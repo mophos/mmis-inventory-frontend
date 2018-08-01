@@ -1,5 +1,5 @@
 <div class="select">
-  <select name="locationId" style="border-bottom: 0px; width: 100%" (change)="setSelect($event)" [(ngModel)]="locationId">
+  <select name="locationId" [disabled]="disabled" style="border-bottom: 0px; width: 100%" (change)="setSelect($event)" [(ngModel)]="locationId">
     <!-- <option>เลือกสถานที่จัดเก็บ</option> -->
     <option *ngFor="let l of locations" [value]="l.location_id">
       {{ l.location_name }} - {{ l.location_desc }}

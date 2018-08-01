@@ -16,6 +16,25 @@ export class ToolsService {
     return resp.json();
   }
 
+  async getHistory() {
+    const resp = await this.authHttp.get(`${this.url}/tools/stockcard/history`).toPromise();
+    return resp.json();
+  }
+
+  async searchRequisitions(query: any) {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/requisitions/search`, {
+      query: query
+    }).toPromise();
+    return resp.json();
+  }
+
+  async searchTranfers(query: any) {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/tranfers/search`, {
+      query: query
+    }).toPromise();
+    return resp.json();
+  }
+
   async updateStockCard(data: any[], receiveType: any, receiveDetailId: any, newQty: number, unitGenericId: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/update`, {
       data: data,
@@ -36,7 +55,7 @@ export class ToolsService {
   }
 
   async getStockForEditCardList(receiveId: any, productId: any, lotNo: any) {
-    let params = {
+    const params = {
       receiveId: receiveId,
       productId: productId,
       lotNo: lotNo
@@ -45,5 +64,49 @@ export class ToolsService {
     const resp = await this.authHttp.post(`${this.url}/tools/stockcard/receives/list`, params).toPromise();
     return resp.json();
   }
+
+  async saveReceive(receiveId: any, summary: any, products: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/receives`, {
+      receiveId: receiveId,
+      summary: summary,
+      products: products
+    }).toPromise();
+    return resp.json();
+  }
+
+  async saveReceiveOther(receiveOtherId: any, summary: any, products: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/receive-others`, {
+      receiveOtherId: receiveOtherId,
+      summary: summary,
+      products: products
+    }).toPromise();
+    return resp.json();
+  }
+
+  async saveRequisition(requisitionId: any, confirmId: any, summary: any, products: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/requisitions`, {
+      requisitionId: requisitionId,
+      confirmId: confirmId,
+      summary: summary,
+      products: products
+    }).toPromise();
+    return resp.json();
+  }
+
+  async saveTransfer(transferId: any, summary: any, generics: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/transfers`, {
+      transferId: transferId,
+      summary: summary,
+      generics: generics
+    }).toPromise();
+    return resp.json();
+  }
+
+  async checkPassword(password) {
+    const rs = await this.authHttp.post(`${this.url}/tools/check/password`, { password: password }).toPromise();
+    return rs.json();
+  }
+
+
 
 }
