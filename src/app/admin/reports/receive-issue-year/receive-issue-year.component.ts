@@ -3,7 +3,6 @@ import { ReportProductsService } from './../reports-products.service'
 import { AlertService } from '../../../alert.service';
 import { JwtHelper } from '../../../../../node_modules/angular2-jwt';
 import * as  moment from 'moment'
-
 @Component({
   selector: 'wm-receive-issue-year',
   templateUrl: './receive-issue-year.component.html',
@@ -24,22 +23,18 @@ export class ReceiveIssueYearComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
   }
-
   ngOnInit() {
     this.getButgetYear();
   }
-
   showReport() {
     const url = `${this.apiUrl}/report/receiveIssueYear/${this.yearSelect}?token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
-
   async exportExcel() {
     const token = sessionStorage.getItem('token');
     const url = `${this.apiUrl}/report/receive-issue/year/export/${this.yearSelect}?token=${token}`;
     window.open(url, '_blank');
   }
-
   async getButgetYear() {
     const rs: any = await this.reportProductService.getButgetYear();
     if (rs.ok) {
