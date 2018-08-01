@@ -76,22 +76,10 @@
         <clr-icon clrVerticalNavIcon shape="folder"></clr-icon>
         รายการสินค้า
       </a>
-      <clr-vertical-nav-group routerLinkActive="active">
-        <a clrVerticalNavLink href="javascript://">
-          <clr-icon shape="plus" clrVerticalNavIcon></clr-icon>
-          รับสินค้าเข้าคลัง
-        </a>
-        <clr-vertical-nav-group-children *clrIfExpanded="false">
-          <a clrVerticalNavLink routerLink="/admin/receives" routerLinkActive="active">
-            <clr-icon shape="add-text"></clr-icon>
-            บันทึกรับสินค้า
-          </a>
-          <a clrVerticalNavLink routerLink="/admin/return-budget" routerLinkActive="active">
-            <clr-icon shape="e-check"></clr-icon>
-            ตรวจสอบงบประมาณ
-          </a>
-        </clr-vertical-nav-group-children>
-      </clr-vertical-nav-group>
+      <a clrVerticalNavLink routerLink="/admin/receives" title="รับสินค้าเข้าคลัง" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="plus"></clr-icon>
+        รับสินค้าเข้าคลัง
+      </a>
       <!-- <a clrVerticalNavLink routerLink="/admin/receives" title="รับสินค้าเข้าคลัง" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="plus"></clr-icon>
         รับสินค้าเข้าคลัง
@@ -214,6 +202,10 @@
           <a clrVerticalNavLink routerLink="/admin/adjust-stock" routerLinkActive="active">
             <clr-icon shape="scissors"></clr-icon>
             ปรับยอดสินค้า
+          </a>
+          <a clrVerticalNavLink routerLink="/admin/return-budget" routerLinkActive="active">
+            <clr-icon shape="e-check"></clr-icon>
+            ตรวจสอบงบประมาณ
           </a>
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>
