@@ -1,0 +1,148 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/tools/stockcard">เครื่องมือ</a>
+  <span class="breadcrumb-item active">แก้ไข stockcard</span>
+</nav>
+
+<div class="alert alert-danger">
+  <div class="alert-items">
+    <div class="alert-item static">
+      <div class="alert-icon-wrapper">
+        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+      </div>
+      <span class="alert-text">
+        การแก้ไขรายการ Stock Card การเบิก จะแก้ไขจำนวนจ่ายได้เฉพาะ Lot ที่จ่ายเท่านั้น
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="padding: 0px 3px 0 3px;">
+  <div class="card-block" style="padding: 0px 3px 0 3px;">
+    <form>
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="requisitionCode">รหัสใบเบิก</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input type="text" name="requisitionCode" id="requisitionCode" placeholder="สร้างอัตโนมัติ" style="width: 100%;" disabled
+              [(ngModel)]="requisitionCode">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="requisitionDate" class="required">วันที่เบิก</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="requisitionDate" required></my-date-picker-th>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="gForm_1">ประเภทการเบิกจ่าย</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input disabled type="text" style="width: 100%;" [value]="requisitionType">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="wmRequisition">หน่วยเบิก</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input disabled type="text" style="width: 100%;" [value]="requisitionWarehouseName">
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="slWarehouse">เบิกจากคลัง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input disabled type="text" style="width: 100%;" [value]="withdrawWarehouseName">
+          </div>
+        </div>
+      </section>
+    </form>
+
+  </div>
+</div>
+
+<clr-datagrid style="padding-top: 5px;">
+  <!-- <clr-dg-column style="width: 15px;">ลำดับ</clr-dg-column> -->
+  <!-- <clr-dg-column style="width: 110px;">Working Code</clr-dg-column> -->
+  <clr-dg-column>ชื่อ Generic</clr-dg-column>
+  <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
+  <!-- <clr-dg-column style="width: 100px;">ค้างจ่าย</clr-dg-column> -->
+  <clr-dg-column style="width: 200px;">Package</clr-dg-column>
+  <clr-dg-column style="width: 110px;">รวม (Base)</clr-dg-column>
+  <clr-dg-column style="width: 110px;">ยอดจ่าย (Base)</clr-dg-column>
+  <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
+  <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="
+  {'isSuccess': g.confirm_qty >= (g.conversion_qty * g.requisition_qty) && g.confirm_qty <= (g.small_remain_qty - g.small_book_qty), 
+  'isWarning': g.confirm_qty < (g.conversion_qty * g.requisition_qty) && g.confirm_qty > 0, 
+  'isError': g.confirm_qty === 0 || g.confirm_qty > ( g.small_remain_qty - g.small_book_qty)}
+  ">
+    <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
+      [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="g.requisition_qty"
+      [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
+    <clr-dg-cell>
+      <span class="p4">{{ idx +1}}. {{g.working_code}} - {{ g.generic_name }} </span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <input type="text" #qty (keyup)="editChangeRequisitionQty(g.generic_id, qty.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberWithOutDot [value]="g.requisition_qty" />
+    </clr-dg-cell>
+    <!-- <clr-dg-cell style="text-align: right;"><span *ngIf="isEdit" class="p4" style="color: red;">{{ g.requisition_qty - g.confirm_qty | number}}</span></clr-dg-cell> -->
+    <clr-dg-cell>
+      <!-- <span class="p4">{{ g.from_unit_name }} ({{g.conversion_qty | number}} {{g.to_unit_name}})</span> -->
+      <wm-select-receive-unit orderBy="DESC" [showAdd]="false" (onSelect)="editChangeUnit(g.generic_id, $event)" [selectedUnitGenericId]="g.unit_generic_id"
+        [genericId]="g.generic_id"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <span class="p4">{{ g.conversion_qty * g.requisition_qty | number }} {{ g.to_unit_name }}</span>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <span class="p4">{{ g.confirm_qty | number }} {{ g.to_unit_name }}</span>
+    </clr-dg-cell>
+    <!-- <clr-dg-cell>
+      <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeGeneric(g)">
+        <clr-icon shape="trash"></clr-icon>
+      </button>
+    </clr-dg-cell> -->
+
+  </clr-dg-row>
+  <clr-dg-footer>
+    จำนวนทั้งหมด {{products.length}} รายการ &nbsp;&nbsp;&nbsp;
+    <!-- <clr-checkbox [clrInline]="true" name="isVerify" [(ngModel)]="isVerify">ตรวจสอบข้อมูลถูกต้อง</clr-checkbox> -->
+    <button class="btn btn-sm btn-success" [disabled]="isSave" (click)="passwordModal=true">
+      <clr-icon shape="floppy"></clr-icon> บันทึกจ่าย
+    </button>
+    <!-- <button class="btn btn-sm btn-danger" (click)="removeOrderConfirm()">
+      <clr-icon shape="trash"></clr-icon> ลบบันทึกจ่าย
+    </button> -->
+    <button class="btn btn-sm btn-danger-outline" routerLink="/admin/tools/stockcard">
+      <clr-icon shape="home"></clr-icon> กลับหน้าหลัก
+    </button>
+
+  </clr-dg-footer>
+
+</clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="passwordModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">แก้ไข stockcard</h3>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        กรุณาตรวจสอบความถูกต้อง การกดอนุมัติถือเป็นการปรับ stockcard เป็นที่เรียบร้อย
+      </div>
+    </div>
+    <div class="row" style="text-align: center;padding-top:30px;">
+      <div class="col-md-6" style="text-align: right"> รหัสผ่าน</div>
+      <div class="col-md-6" style="text-align: left;">
+        <input type="password" name="password" (keyup)="enterSave($event)" [(ngModel)]="password">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSave" (click)="save()">อนุมัติ</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="passwordModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+<wm-loading-modal #modalLoading></wm-loading-modal>

@@ -12,7 +12,7 @@ export class SelectReceiveUnitComponent implements OnInit {
   @Input() public genericId: any;
   @Input() public showAdd: boolean;
   @Input() public selectedUnitGenericId: any;
-  @Input() public disabled: any;
+  @Input() public disabled = false;
   @Input('orderBy') orderBy = 'ASC';
 
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();

@@ -11,7 +11,7 @@ import { AlertService } from './../../alert.service';
 export class SearchPeopleComponent implements OnInit {
 
   @Input() public peopleId: any;
-  @Input() public disabled: any;
+  @Input() public disabled = false;
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
 
   people = [];

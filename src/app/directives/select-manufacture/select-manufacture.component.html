@@ -2,10 +2,10 @@
   Loading...
 </span>
 <div class="select" *ngIf="!loading">
-  <select name="manufacture" style="border-bottom: 0px;" (change)="setSelect($event)" [(ngModel)]="manufactureId">
+  <select name="manufacture" [disabled]="disabled" style="border-bottom: 0px;" (change)="setSelect($event)" [(ngModel)]="manufactureId">
     <!-- <option>เลือกผู้ผลิต</option> -->
     <option *ngFor="let manufacture of manufactures" [value]="manufacture.labeler_id">
-     {{ manufacture.labeler_name }}
+      {{ manufacture.labeler_name }}
     </option>
   </select>
 </div>

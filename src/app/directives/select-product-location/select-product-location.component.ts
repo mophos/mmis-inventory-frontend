@@ -11,6 +11,7 @@ export class SelectProductLocationComponent implements OnInit {
   _warehouseId: any;
   @Output() public onSelect: EventEmitter<any> = new EventEmitter<any>();
   @Input() public selectedId: any;
+  @Input() public disabled: boolean;
   @Input('warehouseId')
   set setWarehouseId(value) {
     this._warehouseId = value;
@@ -43,17 +44,22 @@ export class SelectProductLocationComponent implements OnInit {
               this.onSelect.emit(this.locations[0]);
             } else {
               this.locationId = this.selectedId;
-              const idx = _.findIndex(this.locationId, { "location_id": this.locationId });
-              this.onSelect.emit(this.locationId[idx]);
+              const idx = _.findIndex(this.locations, { 'location_id': this.locationId });
+              if (idx > -1) {
+                this.onSelect.emit(this.locationId[idx]);
+              }
             }
           } else {
             this.locationId = null;
           }
         } else {
+          console.log(res.error);
           this.alertService.error(res.error);
         }
       }
     } catch (error) {
+      console.log(error);
+
       this.alertService.error(error.message);
     }
   }
