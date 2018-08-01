@@ -181,70 +181,10 @@
           </a>
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>
-      <clr-vertical-nav-group routerLinkActive="active">
-        <a clrVerticalNavLink href="javascript://">
-          <clr-icon shape="printer" clrVerticalNavIcon></clr-icon>
-          ระบบรายงาน
-        </a>
-        <clr-vertical-nav-group-children *clrIfExpanded="false">
-          <a clrVerticalNavLink routerLink="/admin/reports/stock-card" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานคุมคลังเวชภัณฑ์
-          </a>
-          <!-- <a clrVerticalNavLink routerLink="/admin/reports/product-remain" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานสินค้าคงเหลือ
-          </a> -->
-          <a clrVerticalNavLink routerLink="/admin/reports/product-expired" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานสินค้าใกล้หมดอายุ
-          </a>
-          <a clrVerticalNavLink routerLink="/admin/reports/product-manufacture" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานการผลิต
-          </a>
-          <!-- <a clrVerticalNavLink routerLink="/admin/reports/purchasing-notgiveaway" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานการจัดซื้อ
-          </a> -->
-          <a clrVerticalNavLink routerLink="/admin/reports/product-receive" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
-          </a>
-          <!-- <a clrVerticalNavLink routerLink="/admin/reports/receives" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            ประวัติการตรวจรับสินค้า
-          </a> -->
-          <a clrVerticalNavLink routerLink="/admin/reports/value-products" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานมูลค่ายาและเวชภัณฑ์คงคลัง
-          </a>
-          <a clrVerticalNavLink routerLink="/admin/reports/value-receive-other" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานมูลค่าจากการรับอื่นๆ
-          </a>
-          <a clrVerticalNavLink routerLink="/admin/reports/inventory-status" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานสถานะเวชภัณฑ์คงคลัง
-          </a>
-          <a clrVerticalNavLink routerLink="/admin/reports/summary-disbursement" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานสรุปการเบิกแยกตามหน่วยเบิก
-          </a>
-          <a clrVerticalNavLink routerLink="/admin/reports/receive-not-match-po" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานรายการยาที่รับแบบยังไม่ได้ผูกกับใบสั่งซื้อ
-          </a>
-          <!-- <a clrVerticalNavLink routerLink="/admin/reports/receive-issue-year" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            รายงานการตรวจสอบการรับ-จ่ายยา ประจำปีงบประมาณ
-          </a> -->
-          <!-- <a clrVerticalNavLink routerLink="/admin/reports/product-summary" routerLinkActive="active">
-            <clr-icon shape="printer"></clr-icon>
-            สรุปงานคลังเวชภัณฑ์
-          </a> -->
-        </clr-vertical-nav-group-children>
-      </clr-vertical-nav-group>
+      <a clrVerticalNavLink routerLink="/admin/reports" title="ระบบรายงาน" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="printer"></clr-icon>
+        ระบบรายงาน
+      </a>
       <clr-vertical-nav-group routerLinkActive="active">
         <a clrVerticalNavLink href="javascript://">
           <clr-icon shape="tools" clrVerticalNavIcon></clr-icon>

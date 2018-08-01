@@ -1,3 +1,4 @@
+import { ReportComponent } from './report/report.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdditionEditComponent } from './addition-edit/addition-edit.component';
@@ -133,20 +134,28 @@ const routes: Routes = [
       { path: 'borrow/returning/:borrowId', component: ReturningComponent },
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
-      { path: 'reports/receives', component: ReportReceives },
-      { path: 'reports/product-remain', component: ReportProductRemain },
-      { path: 'reports/product-expired', component: ProductExpiredComponent },
-      { path: 'reports/product-manufacture', component: ProductManufactureComponent },
-      { path: 'reports/value-products', component: ValueProductsComponent },
-      { path: 'reports/product-summary', component: ProductSummaryComponent },
-      { path: 'reports/stock-card', component: StockCardComponent },
-      { path: 'reports/purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
-      { path: 'reports/inventory-status', component: InventoryStatusComponent },
-      { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent },
-      { path: 'reports/product-receive', component: ProductReceiveComponent },
-      { path: 'reports/receive-not-match-po', component: ReceiveNotMatchPoComponent },
-      { path: 'reports/summary-disbursement', component: SummaryDisbursementComponent },
-      { path: 'reports/receive-issue-year', component: ReceiveIssueYearComponent },
+      {
+        path: 'reports',
+        canActivate: [AdminGuard],
+        children: [
+          { path: '', redirectTo: 'main', pathMatch: 'full' },
+          { path: 'main', component: ReportComponent },
+          { path: 'receives', component: ReportReceives },
+          { path: 'product-remain', component: ReportProductRemain },
+          { path: 'product-expired', component: ProductExpiredComponent },
+          { path: 'product-manufacture', component: ProductManufactureComponent },
+          { path: 'value-products', component: ValueProductsComponent },
+          { path: 'product-summary', component: ProductSummaryComponent },
+          { path: 'stock-card', component: StockCardComponent },
+          { path: 'purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
+          { path: 'inventory-status', component: InventoryStatusComponent },
+          { path: 'value-receive-other', component: ValueReceiveOtherComponent },
+          { path: 'product-receive', component: ProductReceiveComponent },
+          { path: 'receive-not-match-po', component: ReceiveNotMatchPoComponent },
+          { path: 'summary-disbursement', component: SummaryDisbursementComponent },
+          { path: 'receive-issue-year', component: ReceiveIssueYearComponent },
+        ]
+      },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },
