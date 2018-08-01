@@ -1,0 +1,18 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+    <clr-dg-column>วันที่รับ</clr-dg-column>
+    <clr-dg-column>เลขที่ใบส่ง</clr-dg-column>
+    <clr-dg-column>วันที่ส่ง</clr-dg-column>
+    <clr-dg-column>มูลค่ารับ (บาท)</clr-dg-column>
+    <clr-dg-placeholder>ไม่พบรายการใบรับสินค้า</clr-dg-placeholder>
+    <clr-dg-row *ngFor="let r of receives">
+      <clr-dg-cell>{{r.receive_code}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: center;">{{r.receive_date | toThaiDate }}</clr-dg-cell>
+      <clr-dg-cell>{{r.delivery_code}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: center;">{{r.delivery_date | toThaiDate }}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.receive_price || 0 | number: '1.2-2'}}</clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>{{receives.length}} รายการ</clr-dg-footer>
+  </clr-datagrid>
+</div>

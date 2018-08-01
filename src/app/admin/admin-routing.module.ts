@@ -98,6 +98,7 @@ import { RequisitionTemplateComponent } from 'app/admin/requisition-template/req
 import { RequisitionTemplateNewComponent } from 'app/admin/requisition-template-new/requisition-template-new.component';
 import { RequisitionTemplateEditComponent } from 'app/admin/requisition-template-edit/requisition-template-edit.component';
 import { RequisitionTypeComponent } from 'app/admin/requisition-type/requisition-type.component';
+import { ReturnBudgetComponent } from './return-budget/return-budget.component';
 
 const routes: Routes = [
   {
@@ -170,6 +171,7 @@ const routes: Routes = [
       { path: 'addition/generic', component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', component: AdditionEditComponent },
       { path: 'tools/stockcard', component: StockcardComponent },
+      { path: 'return-budget', component: ReturnBudgetComponent },
       {
         path: 'requisition',
         canActivate: [AdminGuard],
