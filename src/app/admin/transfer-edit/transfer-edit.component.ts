@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TransferService } from './../transfer.service';
 import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../alert.service';
-import { WarehouseService } from './../warehouse.service';
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { ProductsService } from './../products.service';
 

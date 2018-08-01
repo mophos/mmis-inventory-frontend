@@ -169,7 +169,7 @@
         [selectedId]="product.warehouse_id"></wm-select-generic-warehouse>
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-product-location #editLocationList (onSelect)="changeEditLocation(idx, $event)" [warehouseId]="product.warehouse_id"
+      <wm-select-product-location #editLocationList (onSelect)="changeEditLocation(product_id, $event)" [warehouseId]="product.warehouse_id"
         [selectedId]="product.location_id"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
@@ -211,7 +211,7 @@
         [disabled]="!selectedProductId" />
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">
-      {{ (+selectedReceiveQty  * +selectedCost) - selectedDiscount | number: '1.2-2'}}
+      {{ (+selectedReceiveQty * +selectedCost) - selectedDiscount | number: '1.2-2'}}
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-manufacture #manufactureList (onSelect)="changeManufacture($event)"></wm-select-manufacture>
