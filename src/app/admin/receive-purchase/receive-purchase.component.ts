@@ -886,7 +886,7 @@ export class ReceivePurchaseComponent implements OnInit {
     } // expired
   }
   checkProduct() {
-    let count: number = 0;
+    let count = 0;
     this.products.forEach(v => {
       count += v.receive_qty;
     });
@@ -896,10 +896,11 @@ export class ReceivePurchaseComponent implements OnInit {
         .then(() => {
           this.saveReceive();
         }).catch((err) => {
-          this.alertService.error(err);
         })
     } else if (count > this.countProduct) {
       this.alertService.error('คุณรับเกินจำนวนที่สั่งซื้อ');
-    } else this.saveReceive();
+    } else {
+      this.saveReceive();
+    }
   }
 }
