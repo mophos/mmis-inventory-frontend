@@ -6,6 +6,17 @@
   <clr-icon shape="plus"></clr-icon>
   เพิ่ม Network
 </button>
+<div class="card">
+  <div class="card-block" style="padding: 0px 5px 5px 5px;">
+    <div class="row wid99">
+      <div class="col-md-6" style="padding-top: 5px;">
+        <label for="">ค้นหาคลัง</label>
+        <input type="text" (keyup)="search($event)" name="querั" [(ngModel)]="query" placeholder="พิมพ์แล้วกด Enter"
+          style="width: 400px;">
+      </div>
+    </div>
+  </div>
+</div>
 <clr-datagrid [style.height.%]="90">
   <clr-dg-column [clrDgField]="'src_warehouse_name'">คลังต้นทาง</clr-dg-column>
   <clr-dg-column [clrDgField]="'transfer_type'" [style.width.px]="200">ประเภท</clr-dg-column>

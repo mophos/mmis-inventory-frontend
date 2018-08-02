@@ -36,7 +36,7 @@ export class ShippingNetworkComponent implements OnInit {
   networkId: any;
   isUpdate = false;
   networks: any = [];
-
+  query:any
   constructor(
     private basicService: BasicService,
     private alertService: AlertService,
@@ -48,7 +48,34 @@ export class ShippingNetworkComponent implements OnInit {
     this.getWarehouses();
     this.getList();
   }
-
+  search(even:any){
+    if (even.keyCode === 13) {
+      if (this.query) {
+        this.getSearchList();
+      } else {
+        this.getList();
+      }
+    } else if (this.query === '') {
+      this.getList();
+    }
+    
+  }
+  async getSearchList() {
+    this.modalLoading.show();
+    try {
+      // this.networks = [];
+      const res = await this.shipNetwork.getSearchList(this.query);
+      if (res.ok) {
+        this.networks = res.rows;
+      } else {
+        this.alertService.error(res.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
   async getNetworkTypes() {
     try {
       const res: any = await this.basicService.getNetworkTypes();
