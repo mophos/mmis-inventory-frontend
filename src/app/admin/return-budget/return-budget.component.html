@@ -1,0 +1,116 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ตรวจสอบงบประมาณ</span>
+</nav>
+
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink>
+      <clr-icon shape="shopping-cart" class="has-badge"></clr-icon> ใบสั่งซื้อที่รอการตรจสอบ
+    </button>
+    <clr-tab-content *clrIfActive="tab === 'po'">
+      <div class="card">
+        <div class="card-block" style="padding: 0px 5px 5px 5px;">
+          <div class="row wid99">
+            <div class="col-md-6" style="padding-top: 5px;">
+              <label for="">ค้นหา</label>
+              <input type="text" (keyup)="searchPo($event)" name="queryPo" [(ngModel)]="queryPo" placeholder="เลขที่ใบสั่งซื้อ, ผู้จำหน่าย"
+                style="width: 400px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <clr-datagrid (clrDgRefresh)="refreshPo($event)" class="grid-order" style="padding-top: 5px; height: 83%;">
+        <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
+        <clr-dg-column style="width: 150px;" [clrDgField]="'order_date'">วันที่จัดซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จำหน่าย</clr-dg-column>
+        <clr-dg-column style="width: 100px;">มูลค่าจัดซื้อ (บาท)</clr-dg-column>
+        <clr-dg-column style="width: 100px;">มูลค่ารับ (บาท)</clr-dg-column>
+        <clr-dg-column style="width: 100px;">มูลค่าแตกต่าง (บาท)</clr-dg-column>
+        <clr-dg-column style="width: 150px;">เลือก</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+        <clr-dg-row *ngFor="let p of purchases; let idx = index">
+          <clr-dg-cell>{{p.purchase_order_number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{p.order_date | toThaiDate }}</clr-dg-cell>
+          <clr-dg-cell>{{p.labeler_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{p.purchase_price | number: '1.2-2'}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{p.receive_price || 0 | number: '1.2-2'}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{p.differ_price || 0 | number: '1.2-2'}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-success wm-small-btn" (click)="clickReturnBudget(p)">
+                คืนงบ
+              </button>
+              <button class="btn btn-sm btn-danger wm-small-btn" (click)="clickNotReturnBudget(p.purchase_order_id)">
+                ไม่คืนงบ
+              </button>
+            </div>
+          </clr-dg-cell>
+          <wm-return-budget-detail *clrIfExpanded [purchaseId]="p.purchase_order_id" ngProjectAs="clr-dg-row-detail"></wm-return-budget-detail>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pagePo.firstItem + 1}} - {{pagePo.lastItem + 1}} จาก {{pagePo.totalItems}} รายการ
+          <clr-dg-pagination #pagePo [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalPurchases"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink>
+      <clr-icon shape="history"></clr-icon> ใบสั่งซื้อที่ตรวจสอบแล้ว
+    </button>
+    <clr-tab-content *clrIfActive="tab === 'hsitory'">
+      <div class="card">
+        <div class="card-block" style="padding: 0px 5px 5px 5px;">
+          <div class="row wid99">
+            <div class="col-md-6" style="padding-top: 5px;">
+              <label for="">ค้นหา</label>
+              <input type="text" (keyup)="searchHistory($event)" name="queryHistory" [(ngModel)]="queryHistory" placeholder="เลขที่ใบสั่งซื้อ, ผู้จำหน่าย"
+                style="width: 400px;">
+            </div>
+            <div class="col-md-2 push-md-4" style="padding-top: 5px;">
+              <div class="select">
+                <select [(ngModel)]="filterStatus" (change)="changeFilterStatus()">
+                  <option value="">ทั้งหมด</option>
+                  <option value="Y">คืนงบ</option>
+                  <option value="N">ไม่คืนงบ</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <clr-datagrid (clrDgRefresh)="refreshHistory($event)" class="grid-order" style="padding-top: 5px; height: 83%;">
+        <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
+        <clr-dg-column style="width: 150px;" [clrDgField]="'order_date'">วันที่จัดซื้อ</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จำหน่าย</clr-dg-column>
+        <clr-dg-column style="width: 100px;">มูลค่าจัดซื้อ (บาท)</clr-dg-column>
+        <clr-dg-column style="width: 100px;">มูลค่ารับ (บาท)</clr-dg-column>
+        <clr-dg-column style="width: 100px;">มูลค่าแตกต่าง (บาท)</clr-dg-column>
+        <clr-dg-column style="width: 120px;">มูลค่าคืนงบ</clr-dg-column>
+        <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+        <clr-dg-row *ngFor="let h of histories; let idx = index" [ngClass]="{'approve-status': h.is_return === 'Y', 'cancel-status': h.is_return === 'N'}">
+          <clr-dg-cell>{{h.purchase_order_number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{h.order_date | toThaiDate }}</clr-dg-cell>
+          <clr-dg-cell>{{h.labeler_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{h.purchase_price | number: '1.2-2'}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{h.receive_price || 0 | number: '1.2-2'}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{h.differ_price || 0 | number: '1.2-2'}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{h.return_price || 0 | number: '1.2-2'}}</clr-dg-cell>
+          <wm-return-budget-detail *clrIfExpanded [purchaseId]="h.purchase_order_id" ngProjectAs="clr-dg-row-detail"></wm-return-budget-detail>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pageHistory.firstItem + 1}} - {{pageHistory.lastItem + 1}} จาก {{pageHistory.totalItems}} รายการ
+          <clr-dg-pagination #pageHistory [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalHistory"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

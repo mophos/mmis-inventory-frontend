@@ -1,3 +1,4 @@
+import { ReportComponent } from './report/report.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdditionEditComponent } from './addition-edit/addition-edit.component';
@@ -84,9 +85,10 @@ import { SummaryDisbursementComponent } from './reports/summary-disbursement/sum
 import { CodeMappingComponent } from './code-mapping/code-mapping.component';
 import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
 import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
-import { StockcardComponent } from './tools/stockcard/stockcard.component';
 import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
+import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
+import { ReturnBudgetComponent } from './return-budget/return-budget.component';
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
 import { RequisitionFastComponent } from 'app/admin/requisition/requisition-fast/requisition-fast.component';
@@ -98,7 +100,13 @@ import { RequisitionTemplateComponent } from 'app/admin/requisition-template/req
 import { RequisitionTemplateNewComponent } from 'app/admin/requisition-template-new/requisition-template-new.component';
 import { RequisitionTemplateEditComponent } from 'app/admin/requisition-template-edit/requisition-template-edit.component';
 import { RequisitionTypeComponent } from 'app/admin/requisition-type/requisition-type.component';
-import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component'
+// tool // stockcard
+import { StockcardComponent } from 'app/admin/tools/stockcard/stockcard.component';
+import { StockcardReceiveComponent } from 'app/admin/tools/stockcard-receive/stockcard-receive.component';
+import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receive-other/stockcard-receive-other.component';
+import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
+import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
+
 const routes: Routes = [
   {
     path: 'admin',
@@ -127,20 +135,28 @@ const routes: Routes = [
       { path: 'borrow/returning/:borrowId', component: ReturningComponent },
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
-      { path: 'reports/receives', component: ReportReceives },
-      { path: 'reports/product-remain', component: ReportProductRemain },
-      { path: 'reports/product-expired', component: ProductExpiredComponent },
-      { path: 'reports/product-manufacture', component: ProductManufactureComponent },
-      { path: 'reports/value-products', component: ValueProductsComponent },
-      { path: 'reports/product-summary', component: ProductSummaryComponent },
-      { path: 'reports/stock-card', component: StockCardComponent },
-      { path: 'reports/purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
-      { path: 'reports/inventory-status', component: InventoryStatusComponent },
-      { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent },
-      { path: 'reports/product-receive', component: ProductReceiveComponent },
-      { path: 'reports/receive-not-match-po', component: ReceiveNotMatchPoComponent },
-      { path: 'reports/summary-disbursement', component: SummaryDisbursementComponent },
-      { path: 'reports/receive-issue-year', component: ReceiveIssueYearComponent },
+      {
+        path: 'reports',
+        canActivate: [AdminGuard],
+        children: [
+          { path: '', redirectTo: 'main', pathMatch: 'full' },
+          { path: 'main', component: ReportComponent },
+          { path: 'receives', component: ReportReceives },
+          { path: 'product-remain', component: ReportProductRemain },
+          { path: 'product-expired', component: ProductExpiredComponent },
+          { path: 'product-manufacture', component: ProductManufactureComponent },
+          { path: 'value-products', component: ValueProductsComponent },
+          { path: 'product-summary', component: ProductSummaryComponent },
+          { path: 'stock-card', component: StockCardComponent },
+          { path: 'purchasing-notgiveaway', component: PurchasingNotgiveawayComponent },
+          { path: 'inventory-status', component: InventoryStatusComponent },
+          { path: 'value-receive-other', component: ValueReceiveOtherComponent },
+          { path: 'product-receive', component: ProductReceiveComponent },
+          { path: 'receive-not-match-po', component: ReceiveNotMatchPoComponent },
+          { path: 'summary-disbursement', component: SummaryDisbursementComponent },
+          { path: 'receive-issue-year', component: ReceiveIssueYearComponent },
+        ]
+      },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },
@@ -170,7 +186,18 @@ const routes: Routes = [
       { path: 'addition/warehouse', component: AdditionWarehouseComponent },
       { path: 'addition/generic', component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', component: AdditionEditComponent },
-      { path: 'tools/stockcard', component: StockcardComponent },
+      { path: 'return-budget', component: ReturnBudgetComponent },
+      {
+        path: 'tools',
+        canActivate: [AdminGuard],
+        children: [
+          { path: 'stockcard', component: StockcardComponent },
+          { path: 'stockcard/receive', component: StockcardReceiveComponent },
+          { path: 'stockcard/receive-other', component: StockcardReceiveOtherComponent },
+          { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
+          { path: 'stockcard/transfer', component: StockcardTransferComponent },
+        ]
+      },
       {
         path: 'requisition',
         canActivate: [AdminGuard],

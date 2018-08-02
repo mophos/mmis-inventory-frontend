@@ -43,6 +43,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
   products = [];
   productPurchases = [];
+  countProduct = 0;
 
   receiveTypes = [];
   receiveStatus = [];
@@ -209,7 +210,7 @@ export class ReceivePurchaseComponent implements OnInit {
     try {
       const res: any = await this.receiveService.getPurchaseProductsList(purchaseOrderId);
       if (res.ok) {
-        res.rows.forEach((v: any) => {
+        for (let v of res.rows) {
           if ((+v.purchase_qty - +v.total_received_qty) > 0) {
             const obj: any = {};
 
@@ -245,12 +246,10 @@ export class ReceivePurchaseComponent implements OnInit {
             obj.is_free = v.giveaway;
 
             this.products.push(obj);
+            this.countProduct += +v.purchase_qty - +v.total_received_qty;
           }
-
-        });
-
+        };
         this.modalLoading.hide();
-
       }
     } catch (error) {
       this.modalLoading.hide();
@@ -887,15 +886,21 @@ export class ReceivePurchaseComponent implements OnInit {
     } // expired
   }
   checkProduct() {
-    if (this.selectedProductId === null) {
-      this.saveReceive();
-    } else {
-      this.alertService.confirm(`คุณมีรายการเวชภัณฑ์ที่ยังไม่ได้กดเพิ่ม ต้องการทำต่อใช่หรือไม่ ?`)
+    let count = 0;
+    this.products.forEach(v => {
+      count += v.receive_qty;
+    });
+
+    if (count < this.countProduct && this.isClosePurchase) {
+      this.alertService.confirm(`คุณมีรายการเวชภัณฑ์ที่ยังรับไม่ครบ ต้องการทำต่อใช่หรือไม่ ?`)
         .then(() => {
           this.saveReceive();
         }).catch((err) => {
-          this.alertService.error(err);
-        });
+        })
+    } else if (count > this.countProduct) {
+      this.alertService.error('คุณรับเกินจำนวนที่สั่งซื้อ');
+    } else {
+      this.saveReceive();
     }
   }
 }

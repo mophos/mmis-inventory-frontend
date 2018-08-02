@@ -1,8 +1,8 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/reports">ระบบรายงาน</a>
   <span class="breadcrumb-item active">รายงานการตรวจสอบการรับ-จ่ายยา ประจำปีงบประมาณ</span>
 </nav>
-
 <form>
   <section class="form-block">
     <div class="form-group row wid99">
@@ -26,7 +26,6 @@
           <clr-icon shape="download"></clr-icon>
           ส่งออก Excel
         </button>
-        <!-- <button class="btn btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button> -->
       </div>
     </div>
   </section>
@@ -37,5 +36,4 @@
 <span *ngIf="isPreview">
   Loading...
 </span>
-
 <wm-html-preview #htmlPreview></wm-html-preview>

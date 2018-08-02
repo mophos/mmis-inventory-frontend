@@ -1,7 +1,10 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
-  <!-- <span class="breadcrumb-item active">รายงานคุมคลังเวชภัณฑ์</span> -->
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/reports">ระบบรายงาน</a>
+  <span class="breadcrumb-item active">รายงานคุมคลังเวชภัณฑ์</span>
 </nav>
+
+
 <clr-tabs>
   <clr-tab>
     <button clrTabLink id="link1" (click)="changeTab()">
@@ -87,7 +90,7 @@
           <wm-select-warehouses [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
           </wm-select-warehouses>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 btn-group">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 btn-group">
           <button class="btn btn-sm btn-primary" (click)="printReport()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่มีการเคลื่อนไหว
           </button>

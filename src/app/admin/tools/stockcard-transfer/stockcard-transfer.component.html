@@ -1,0 +1,95 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/tools/stockcard">เครื่องมือ</a>
+  <span class="breadcrumb-item active">แก้ไข stockcard</span>
+</nav>
+<div class="progress loop" *ngIf="isLoading">
+  <progress></progress>
+</div>
+<div class="card" style="padding-top: 0px;">
+  <div class="card-block" style="padding: 0px 5px 5px 5px;">
+    <form style="padding-top: 0px; padding-bottom: 0px;">
+      <section class="form-block" style="margin-bottom: 0px;">
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="transferDate" class="required">วันที่โอน</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="transferDate" required></my-date-picker-th>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="srcWarehouseId" class="required">โอนจากคลัง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <wm-select-warehouses [disabled]="true" [selectedId]="srcWarehouseId" #srcWarehouse (onSelect)="setSrcWarehouse($event)"></wm-select-warehouses>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label class="required" for="dstWarehouseId">ไปยังคลัง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <wm-select-warehouses [disabled]="true" [selectedId]="dstWarehouseId" #dstWarehouse (onSelect)="setDstWarehouse($event)"></wm-select-warehouses>
+          </div>
+        </div>
+      </section>
+    </form>
+
+  </div>
+
+</div>
+<h4>รายการสินค้าที่ต้องการโอน</h4>
+
+<clr-datagrid [style.padding-top.px]="10">
+  <clr-dg-column>#</clr-dg-column>
+  <clr-dg-column>Working Code</clr-dg-column>
+  <clr-dg-column style="width: 300px;">ชื่อ Generic</clr-dg-column>
+  <clr-dg-column style="width: 50px;">จำนวนโอน
+    <br> (Base Unit)</clr-dg-column>
+  <clr-dg-column>คงเหลือหลังโอน
+    <br> (Base Unit)</clr-dg-column>
+  <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
+    <wm-transfer-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)"
+      ngProjectAs="clr-dg-row-detail"></wm-transfer-items>
+    <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.transfer_qty | number}} {{generic.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': generic.transfer_qty > generic.remain_qty ? 'red' : 'green'}">
+      {{generic.remain_qty - generic.transfer_qty | number}} {{generic.primary_unit_name}}
+    </clr-dg-cell>
+  </clr-dg-row>
+</clr-datagrid>
+
+<div>
+  <button class="btn btn-success btn-sm" (click)="passwordModal=true" [disabled]="isSaving || !generics.length || !dstWarehouseId || !srcWarehouseId">
+    <clr-icon shape="floppy"></clr-icon>
+    บันทึกการโอน
+  </button>
+  <button class="btn btn-danger btn-sm" routerLink="/admin/tools/stockcard">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+</div>
+
+<clr-modal [(clrModalOpen)]="passwordModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">แก้ไข stockcard</h3>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        กรุณาตรวจสอบความถูกต้อง การกดอนุมัติถือเป็นการปรับ stockcard เป็นที่เรียบร้อย
+      </div>
+    </div>
+    <div class="row" style="text-align: center;padding-top:30px;">
+      <div class="col-md-6" style="text-align: right"> รหัสผ่าน</div>
+      <div class="col-md-6" style="text-align: left;">
+        <input type="password" name="password" (keyup)="enterSave($event)" [(ngModel)]="password">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSaving" (click)="save()">อนุมัติ</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="passwordModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+<wm-loading-modal #modalLoading></wm-loading-modal>

@@ -361,7 +361,7 @@ export class ReceiveOtherComponent implements OnInit {
 
     }
     console.log(this.products);
-    
+
   }
 
   countTotalCost() {
@@ -476,6 +476,7 @@ export class ReceiveOtherComponent implements OnInit {
   }
 
   async saveReceive() {
+    this.isSaving = true;
     if (this.receiveDate) {
       const _receiveDate = this.receiveDate ?
         `${this.receiveDate.date.year}-${this.receiveDate.date.month}-${this.receiveDate.date.day}` : null;
@@ -483,6 +484,7 @@ export class ReceiveOtherComponent implements OnInit {
       if (rsP.rows[0].status_close === 'Y') {
         this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถรับได้');
         this.isReceivePeriod = true;
+        this.isSaving = false;
       } else {
         const rs = await this.receiveService.getPurchaseCheckHoliday(_receiveDate);
         if (rs.ok) {
@@ -496,6 +498,7 @@ export class ReceiveOtherComponent implements OnInit {
               await this.checkExpired();
             })
             .catch(() => {
+              this.isSaving = false;
               this.isReceiveHoliday = true;
             })
           if (!this.isExpired && !this.isItemExpired && !this.isReceiveHoliday && !this.isReceivePeriod) {
@@ -505,6 +508,7 @@ export class ReceiveOtherComponent implements OnInit {
 
       }
     } else {
+      this.isSaving = false;
       this.alertService.error('กรุณาระบุวันที่รับ');
     }
   }

@@ -1,0 +1,95 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ระบบรายงาน</span>
+</nav>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th style="text-align: left">รายงาน</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">รายงานคุมคลังเวชภัณฑ์</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/stock-card">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานสินค้าใกล้หมดอายุ</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/product-expired">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานการผลิต</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/product-manufacture">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/product-receive">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานมูลค่ายาและเวชภัณฑ์คงคลัง</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/value-products">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานมูลค่าจากการรับอื่นๆ</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/value-receive-other">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานสถานะเวชภัณฑ์คงคลัง</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/inventory-status">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานสรุปการเบิกแยกตามหน่วยเบิก</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/summary-disbursement">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานรายการยาที่รับแบบยังไม่ได้ผูกกับใบสั่งซื้อ</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/receive-not-match-po">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">รายงานการตรวจสอบการรับ-จ่ายยา ประจำปีงบประมาณ</td>
+      <td>
+        <button class="btn btn-sm btn-primary wm-small-btn" routerLink="/admin/reports/receive-issue-year">
+          <clr-icon shape="printer"></clr-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
