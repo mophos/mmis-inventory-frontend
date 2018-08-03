@@ -91,6 +91,8 @@ export class ReceiveComponent implements OnInit {
   offsetOther = 0;
   totalPurchases = 0;
   queryPo: any;
+  _openModal: boolean = false;
+  date: any;
   jwtHelper: JwtHelper = new JwtHelper();
   sort;
   constructor(
@@ -856,7 +858,14 @@ export class ReceiveComponent implements OnInit {
   }
 
   async printUnReceive() {
-    const url = `${this.apiUrl}/report/un-receive?&token=${this.token}`;
+    this._openModal = true;
+    this.date = null;
+  }
+
+  async printReportUnReceive() {
+    let sendDate = this.date.date.year + '-' + this.date.date.month + '-' + this.date.date.day;
+    this._openModal = false;
+    const url = `${this.apiUrl}/report/un-receive?&token=${this.token}&date=${sendDate}`;
     this.htmlPreview.showReport(url);
   }
 }

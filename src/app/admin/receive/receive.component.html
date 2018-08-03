@@ -520,6 +520,18 @@
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
 </clr-modal>
+
+<clr-modal [(clrModalOpen)]="_openModal" [clrModalSize]="'sm'" [clrModalClosable]="false">
+  <h3 class="modal-title">พิมพ์รายงานเวชภัณฑ์ค้างส่ง</h3>
+  <div class="modal-body" style="height: 300px;">
+    เลือกวันที่ <my-date-picker-th name="dateNow" [options]="myDatePickerOptions" [(ngModel)]="date" required></my-date-picker-th>               
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="_openModal = false">ปิดหน้าต่าง</button>
+    <button type="button" class="btn btn-outline-primary btn-sm" (click)="printReportUnReceive()">พิมพ์</button>
+  </div>
+</clr-modal>
+
 <wm-modal-receive-approve #modalApprove (onSuccess)="approveSuccess($event)"></wm-modal-receive-approve>
 <wm-modal-receive-approve-other #modalApproveOther (onSuccess)="approveSuccessOther($event)"></wm-modal-receive-approve-other>
 
