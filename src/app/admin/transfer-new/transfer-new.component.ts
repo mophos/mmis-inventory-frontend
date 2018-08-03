@@ -230,7 +230,7 @@ export class TransferNewComponent implements OnInit {
   editChangetransferQty(idx: any, qty: any) {
     const oldQty = +this.generics[idx].transfer_qty;
     if ((+qty.value * this.generics[idx].conversion_qty) > +this.generics[idx].remain_qty) {
-      this.alertService.error('จำนวนโอน มากว่าจำนวนคงเหลือ');
+      this.alertService.error('จำนวนที่โอน มากกว่าจำนวนคงเหลือ');
       qty.value = oldQty;
     } else {
       this.generics[idx].transfer_qty = +qty.value;
