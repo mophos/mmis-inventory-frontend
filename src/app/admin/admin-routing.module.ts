@@ -131,6 +131,7 @@ const routes: Routes = [
       { path: 'receives/other/edit', canActivate: [AuthReceive], component: ReceiveOtherEditComponent },
       { path: 'receives/edit', canActivate: [AuthReceive], component: ReceiveEditComponent },
       { path: 'transection-type', component: TransectionTypeComponent },
+      { path: 'requisition-type', component: RequisitionTypeComponent },
       { path: 'receiveother-type', component: ReceiveotherTypeComponent },
       { path: 'borrow/returning/:borrowId', component: ReturningComponent },
       { path: 'alert-expired', component: AlertExpiredComponent },
