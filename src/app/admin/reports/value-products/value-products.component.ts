@@ -7,6 +7,7 @@ import { JwtHelper } from 'angular2-jwt';
 import { SearchGenericAutocompleteComponent } from '../../../directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import * as _ from 'lodash';
 import { ProductsService } from '../../products.service';
+import { State } from "@clr/angular";
 
 @Component({
   selector: 'wm-value-products',
@@ -25,6 +26,7 @@ export class ValueProductsComponent implements OnInit {
   isPreview = false;
   selectedGenericId = 0;
   token: any;
+  genericTypeSelect: any = [];
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -32,7 +34,6 @@ export class ValueProductsComponent implements OnInit {
     showClearDateBtn: false
   };
   genericTypes = [];
-  genericType = 'all';
 
   options: any;
   constructor(@Inject('API_URL') private apiUrl: string,
@@ -78,15 +79,22 @@ export class ValueProductsComponent implements OnInit {
     } else {
       this.warehouseName = 'ทุกคลังสินค้า'
     }
+    let genericType = [];
+    this.genericTypeSelect.forEach(value => {
+      genericType.push('genericType=' + value.generic_type_id)
+    });
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    if (this.genericType == 'all') {
-      const url = `${this.apiUrl}/report/list/cost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
-      this.htmlPreview.showReport(url, 'landscape');
-    } else {
-      const url = `${this.apiUrl}/report/list/cost/type/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}/${this.genericType}?token=${this.token}`;
-      this.htmlPreview.showReport(url, 'landscape');
-    }
+
+    const url = `${this.apiUrl}/report/list/cost/type/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&` + genericType.join('&');
+    this.htmlPreview.showReport(url, 'landscape');
+    // if (this.genericType == 'all') {
+    //   const url = `${this.apiUrl}/report/list/cost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
+    //   this.htmlPreview.showReport(url, 'landscape');
+    // } else {
+    //   const url = `${this.apiUrl}/report/list/cost/type/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}/${this.genericType}?token=${this.token}`;
+    //   this.htmlPreview.showReport(url, 'landscape');
+    // }
   }
 
   getWarehouseList() {
@@ -125,10 +133,18 @@ export class ValueProductsComponent implements OnInit {
     } else {
       this.warehouseName = 'ทุกคลังสินค้า'
     }
+    let genericType = [];
+    this.genericTypeSelect.forEach(value => {
+      genericType.push('genericType=' + value.generic_type_id)
+    });
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/list/cost/excel/${startDate}/${this.warehouseId}/${this.warehouseName}/${this.genericType}?token=${this.token}`
+    const url = `${this.apiUrl}/report/list/cost/excel?startDate=${startDate}&warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&token=${this.token}&` + genericType.join('&');
     window.open(url, '_blank');
     // this.htmlPreview.showReport(url, 'landscape');
+  }
+
+  refreshWaiting(state: State) {
+    this.getGenericsType();
   }
 
 }
