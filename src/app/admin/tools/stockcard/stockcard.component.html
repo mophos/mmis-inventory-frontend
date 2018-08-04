@@ -29,6 +29,10 @@
 <button class="btn btn-large btn-danger" (click)="showSearchTranfer()">
   แก้ไข Stock Card จากการโอน
 </button>
+
+<button class="btn btn-large btn-danger" (click)="showSearchIssue()">
+  แก้ไข Stock Card จากการตัดจ่าย
+</button>
 <input *ngIf="input" type="text" [(ngModel)]="passHis">
 
 <!-- search receive -->
@@ -67,7 +71,7 @@
 <clr-modal [(clrModalOpen)]="isOpenSearchRequisition" [clrModalSize]="'lg'" [clrModalClosable]="false">
   <h3 class="modal-title">ค้นหาใบเบิก</h3>
   <div class="modal-body">
-    <label for="">เลขที่ใบรับ</label>
+    <label for="">เลขที่ใบเบิก</label>
     <input type="text" style="width: 300px;" #queryRequisition (keyup)="doSearchRequisitions($event, queryRequisition.value)"
       placeholder="พิมพ์เลขที่ใบเบิก แล้วกด ENTER">
     <clr-datagrid>
@@ -102,7 +106,7 @@
 <clr-modal [(clrModalOpen)]="isOpenSearchTranfer" [clrModalSize]="'lg'" [clrModalClosable]="false">
   <h3 class="modal-title">ค้นหาใบโอน</h3>
   <div class="modal-body">
-    <label for="">เลขที่ใบรับ</label>
+    <label for="">เลขที่ใบโอน</label>
     <input type="text" style="width: 300px;" #queryTranfer (keyup)="doSearchTranfers($event, queryTranfer.value)" placeholder="พิมพ์เลขที่ใบโอน แล้วกด ENTER">
     <clr-datagrid>
       <clr-dg-column>วันที่โอน</clr-dg-column>
@@ -131,6 +135,40 @@
   </div>
 </clr-modal>
 <!-- /search tranfer -->
+
+<!-- search issue -->
+<clr-modal [(clrModalOpen)]="isOpenSearchIssue" [clrModalSize]="'lg'" [clrModalClosable]="false">
+  <h3 class="modal-title">ค้นหาใบตัดจ่าย</h3>
+  <div class="modal-body">
+    <label for="">เลขที่ใบตัดจ่าย</label>
+    <input type="text" style="width: 300px;" #queryIssue (keyup)="doSearchTranfers($event, queryIssue.value)" placeholder="พิมพ์เลขที่ใบตัดจ่าย แล้วกด ENTER">
+    <clr-datagrid>
+      <clr-dg-column>วันที่ตัดจ่าย</clr-dg-column>
+      <clr-dg-column>เลขที่ใบตัดจ่าย</clr-dg-column>
+      <clr-dg-column>คลัง</clr-dg-column>
+      <clr-dg-column>คลังปลายทาง</clr-dg-column>
+      <clr-dg-column style="width: 60px;">#</clr-dg-column>
+
+      <clr-dg-row *ngFor="let r of issues">
+        <clr-dg-cell>{{r.issue_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{r.issue_code }}</clr-dg-cell>
+        <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
+        <!-- <clr-dg-cell>{{r.dst_warehouse_name}}</clr-dg-cell> -->
+        <clr-dg-cell style="text-align: center;">
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoIssue(r.issue_id)">
+            แก้ไข
+          </button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{issues.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenSearchIssue = false">ยกเลิก</button>
+  </div>
+</clr-modal>
+<!-- /search issue -->
 
 
 
