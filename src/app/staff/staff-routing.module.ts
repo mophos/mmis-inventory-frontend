@@ -35,6 +35,7 @@ import { StockCardComponent } from 'app/staff/report/stock-card/stock-card.compo
 import { ReceivesComponent } from 'app/staff/receives/receives.component'
 import { ReceivesOtherComponent } from 'app/staff/receives-other/receives-other.component';
 import { ReceivesOtherEditComponent } from 'app/staff/receives-other-edit/receives-other-edit.component'
+import { ExportdataComponent } from './exportdata/exportdata.component';
 
 const routes: Routes = [
   {
@@ -71,6 +72,7 @@ const routes: Routes = [
       { path: 'adjust-stock', canActivate: [AuthAdjustService], component: AdjustStockComponent },
       { path: 'adjust-stock/new', canActivate: [AuthAdjustService], component: AdjustStockNewComponent },
       { path: 'reports/stock-card', component: StockCardComponent },
+      { path: 'exportdata', component: ExportdataComponent }
     ]
   }
 ];
