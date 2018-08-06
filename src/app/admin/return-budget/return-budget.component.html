@@ -24,7 +24,8 @@
       <clr-datagrid (clrDgRefresh)="refreshPo($event)" class="grid-order" style="padding-top: 5px; height: 83%;">
         <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
         <clr-dg-column style="width: 150px;" [clrDgField]="'order_date'">วันที่จัดซื้อ</clr-dg-column>
-        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จำหน่าย</clr-dg-column>
+        <clr-dg-column>ผู้จำหน่าย</clr-dg-column>
+        <clr-dg-column>หมวดงบประมาณ</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่าจัดซื้อ (บาท)</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่ารับ (บาท)</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่าแตกต่าง (บาท)</clr-dg-column>
@@ -34,6 +35,7 @@
           <clr-dg-cell>{{p.purchase_order_number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{p.order_date | toThaiDate }}</clr-dg-cell>
           <clr-dg-cell>{{p.labeler_name}}</clr-dg-cell>
+          <clr-dg-cell>{{p.budget_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{p.purchase_price | number: '1.2-2'}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{p.receive_price || 0 | number: '1.2-2'}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{p.differ_price || 0 | number: '1.2-2'}}</clr-dg-cell>
@@ -87,7 +89,8 @@
       <clr-datagrid (clrDgRefresh)="refreshHistory($event)" class="grid-order" style="padding-top: 5px; height: 83%;">
         <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
         <clr-dg-column style="width: 150px;" [clrDgField]="'order_date'">วันที่จัดซื้อ</clr-dg-column>
-        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จำหน่าย</clr-dg-column>
+        <clr-dg-column>ผู้จำหน่าย</clr-dg-column>
+        <clr-dg-column>หมวดงบประมาณ</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่าจัดซื้อ (บาท)</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่ารับ (บาท)</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่าแตกต่าง (บาท)</clr-dg-column>
@@ -97,6 +100,7 @@
           <clr-dg-cell>{{h.purchase_order_number}}</clr-dg-cell>
           <clr-dg-cell style="text-align: center;">{{h.order_date | toThaiDate }}</clr-dg-cell>
           <clr-dg-cell>{{h.labeler_name}}</clr-dg-cell>
+          <clr-dg-cell>{{h.budget_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{h.purchase_price | number: '1.2-2'}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{h.receive_price || 0 | number: '1.2-2'}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{h.differ_price || 0 | number: '1.2-2'}}</clr-dg-cell>

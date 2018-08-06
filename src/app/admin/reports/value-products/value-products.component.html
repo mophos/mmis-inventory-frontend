@@ -6,9 +6,9 @@
 
 <form>
   <section class="form-block">
-    <div class="form-group row wid99">
+    <div class="row" style="padding: 1em">
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label for="startDate" class="required">คลัง</label>
+        <label class="required">คลัง</label>
       </div>
       <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
         <div class="select">
@@ -20,22 +20,32 @@
           </select>
         </div>
       </div>
-      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="text-align: right;">
-        <div class="select">
-          <select [(ngModel)]="genericType" name="genericType">
-            <option value="all">ทั้งหมด</option>
-            <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-          </select>
-        </div>
+    </div>
+    <div class="row" style="padding: 1em">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label class="required">ประเภท</label>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px; width: 400px;">
+          <clr-dg-column style="width: 150px;">ทั้งหมด</clr-dg-column>
+          <clr-dg-row *ngFor="let order of genericTypes" [clrDgItem]="order">
+            <clr-dg-cell>{{order.generic_type_name}}</clr-dg-cell>
+          </clr-dg-row>
+        </clr-datagrid>
+      </div>
+    </div>
+    <div class="row" style="padding: 1em">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label class="required">วันที่</label>
       </div>
       <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
         <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
       </div>
       <div class="col-lg-3 col-md-2">
-        <button class="btn btn-sm btn-primary" [disabled]="isPreview" (click)="showReport()">
+        <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="showReport()">
           <clr-icon shape="printer"></clr-icon> พิมพ์รายงานมูลค่ายาและเวชภัณฑ์คงคลัง
         </button>
-        <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
+        <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="exportExcel()">
           <clr-icon shape="download"></clr-icon>
           ส่งออก Excel
         </button>
