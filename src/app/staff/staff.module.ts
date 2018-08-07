@@ -72,6 +72,7 @@ import { StockCardComponent } from './report/stock-card/stock-card.component';
 import { ReceivesComponent } from './receives/receives.component';
 import { ReceivesOtherComponent } from './receives-other/receives-other.component';
 import { ReceivesOtherEditComponent } from './receives-other-edit/receives-other-edit.component';
+import { ExportdataComponent } from './exportdata/exportdata.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -113,7 +114,8 @@ import { ReceivesOtherEditComponent } from './receives-other-edit/receives-other
     StockCardComponent,
     ReceivesComponent,
     ReceivesOtherComponent,
-    ReceivesOtherEditComponent
+    ReceivesOtherEditComponent,
+    ExportdataComponent
   ],
   providers: [
     ToThaiDatePipe,
