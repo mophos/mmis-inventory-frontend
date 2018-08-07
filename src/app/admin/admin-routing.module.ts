@@ -89,6 +89,7 @@ import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/recei
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
 import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 import { ReturnBudgetComponent } from './return-budget/return-budget.component';
+import { ExportdataComponent } from './exportdata/exportdata.component';
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
 import { RequisitionFastComponent } from 'app/admin/requisition/requisition-fast/requisition-fast.component';
@@ -107,6 +108,7 @@ import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receiv
 import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
 import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
+
 
 const routes: Routes = [
   {
@@ -137,6 +139,7 @@ const routes: Routes = [
       { path: 'borrow/returning/:borrowId', component: ReturningComponent },
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
+      { path: 'exportdata', component: ExportdataComponent },
       {
         path: 'reports',
         canActivate: [AdminGuard],
