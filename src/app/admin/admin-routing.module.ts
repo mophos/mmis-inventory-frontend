@@ -106,6 +106,7 @@ import { StockcardReceiveComponent } from 'app/admin/tools/stockcard-receive/sto
 import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receive-other/stockcard-receive-other.component';
 import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
+import { ExportdataComponent } from './exportdata/exportdata.component';
 
 const routes: Routes = [
   {
@@ -136,6 +137,7 @@ const routes: Routes = [
       { path: 'borrow/returning/:borrowId', component: ReturningComponent },
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
+      { path: 'exportdata', component: ExportdataComponent },
       {
         path: 'reports',
         canActivate: [AdminGuard],
