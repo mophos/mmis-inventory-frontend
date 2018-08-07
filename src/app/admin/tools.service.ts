@@ -109,6 +109,15 @@ export class ToolsService {
     return resp.json();
   }
 
+  async saveIssue(issueId: any, summary: any, products: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/issues`, {
+      issueId: issueId,
+      summary: summary,
+      products: products
+    }).toPromise();
+    return resp.json();
+  }
+
   async checkPassword(password) {
     const rs = await this.authHttp.post(`${this.url}/tools/check/password`, { password: password }).toPromise();
     return rs.json();
