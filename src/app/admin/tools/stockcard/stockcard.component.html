@@ -141,12 +141,11 @@
   <h3 class="modal-title">ค้นหาใบตัดจ่าย</h3>
   <div class="modal-body">
     <label for="">เลขที่ใบตัดจ่าย</label>
-    <input type="text" style="width: 300px;" #queryIssue (keyup)="doSearchTranfers($event, queryIssue.value)" placeholder="พิมพ์เลขที่ใบตัดจ่าย แล้วกด ENTER">
+    <input type="text" style="width: 300px;" #queryIssue (keyup)="doSearchIssues($event, queryIssue.value)" placeholder="พิมพ์เลขที่ใบตัดจ่าย แล้วกด ENTER">
     <clr-datagrid>
       <clr-dg-column>วันที่ตัดจ่าย</clr-dg-column>
       <clr-dg-column>เลขที่ใบตัดจ่าย</clr-dg-column>
       <clr-dg-column>คลัง</clr-dg-column>
-      <clr-dg-column>คลังปลายทาง</clr-dg-column>
       <clr-dg-column style="width: 60px;">#</clr-dg-column>
 
       <clr-dg-row *ngFor="let r of issues">

@@ -134,6 +134,25 @@ export class StockcardComponent implements OnInit {
     }
   }
 
+  async doSearchIssues(event: any, query: any) {
+    if (event.keyCode === 13) {
+      try {
+        this.modalLoading.show();
+        const rs: any = await this.toolService.searchIssues(query);
+        if (rs.ok) {
+          this.issues = rs.rows;
+        } else {
+          this.alertService.error(rs.error);
+        }
+
+        this.modalLoading.hide();
+      } catch (error) {
+        this.modalLoading.hide();
+        this.alertService.error(JSON.stringify(error))
+      }
+    }
+  }
+
   async openInput() {
     this.input = !this.input;
     if (this.passHis) {

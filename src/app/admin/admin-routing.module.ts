@@ -106,6 +106,7 @@ import { StockcardReceiveComponent } from 'app/admin/tools/stockcard-receive/sto
 import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receive-other/stockcard-receive-other.component';
 import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
+import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
 
 const routes: Routes = [
   {
@@ -197,6 +198,7 @@ const routes: Routes = [
           { path: 'stockcard/receive-other', component: StockcardReceiveOtherComponent },
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
           { path: 'stockcard/transfer', component: StockcardTransferComponent },
+          { path: 'stockcard/issue', component: StockcardIssueComponent },
         ]
       },
       {
