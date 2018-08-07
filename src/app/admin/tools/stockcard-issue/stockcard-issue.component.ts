@@ -1,8 +1,6 @@
 import { PeriodService } from 'app/period.service';
 import { ToolsService } from './../../tools.service';
 
-}
-
 import { Component, OnInit, ViewChild, Inject, NgZone } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import { ToThaiDatePipe } from 'app/helper/to-thai-date.pipe';
