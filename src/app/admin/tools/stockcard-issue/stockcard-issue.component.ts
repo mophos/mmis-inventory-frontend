@@ -195,34 +195,6 @@ export class StockcardIssueComponent implements OnInit {
     }
   }
 
-  async addProduct() {
-    const idx = _.findIndex(this.products, { generic_id: this.genericId });
-    if (idx > -1) {
-      const newQty = +this.products[idx].issue_qty + +this.issueQty;
-      if (newQty > +this.products[idx].remain_qty) {
-        this.products[idx].issue_qty = this.products[idx].remain_qty;
-      } else {
-        this.products[idx].issue_qty = newQty;
-      }
-    } else {
-      if (this.remainQty < this.issueQty) {
-        this.alertService.error('จำนวนจ่าย มากกว่าจำนวน คงเหลือ');
-      } else {
-        const obj: any = {};
-        obj.issue_qty = +this.issueQty;
-        obj.generic_id = this.genericId;
-        obj.generic_name = this.genericName;
-        obj.remain_qty = +this.remainQty;
-        obj.conversion_qty = +this.conversionQty;
-        obj.unit_generic_id = this.unitGenericId;
-        obj.warehouse_id = this.warehouseId;
-        obj.items = [];
-        this.products.push(obj);
-        await this.alowcate(this.genericId);
-      }
-    }
-    this.clearForm();
-  }
   // async alowcate(genericId) {
   //   try {
   //     const data_ = [];
