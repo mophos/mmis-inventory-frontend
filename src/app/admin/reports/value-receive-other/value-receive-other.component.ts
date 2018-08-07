@@ -73,7 +73,6 @@ export class ValueReceiveOtherComponent implements OnInit {
   }
 
   showReport() {
-    console.log(+this.warehouseId);
     if (+this.warehouseId !== 0) {
       this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
       this.warehouseName = this.warehouseName.warehouse_name
@@ -121,5 +120,22 @@ export class ValueReceiveOtherComponent implements OnInit {
   refresh() {
     this.warehouseId = 0;
     this.receiveTypesSelect = []
+  }
+  exportExcel() {
+    if (+this.warehouseId !== 0) {
+      this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
+      this.warehouseName = this.warehouseName.warehouse_name
+    } else {
+      this.warehouseName = 'ทุกคลังสินค้า'
+    }
+    let receiveTpyeId: any
+    receiveTpyeId = _.map(this.receiveTypesSelect, (b: any) => {
+      return b.receive_type_id;
+    }).join('&receiveTpyeId=')
+    console.log(receiveTpyeId);
+    const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/receiveOrthorCost/excel/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&receiveTpyeId=${receiveTpyeId}`;
+    window.open(url, '_blank');
   }
 }
