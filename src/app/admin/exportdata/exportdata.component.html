@@ -1,0 +1,33 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <span class="breadcrumb-item active">ส่งออกข้อมูล Excel</span>
+</nav>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th style="text-align: left">ส่งออกข้อมูล Excel</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">ข้อมูลสินค้าคงคลังรูปแบบ Generics</td>
+      <td>
+        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportRemain()">
+          <clr-icon shape="export"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ข้อมูลสินค้าคงคลังรูปแบบ Trade</td>
+      <td>
+        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportRemainTrade()">
+          <clr-icon shape="export"></clr-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

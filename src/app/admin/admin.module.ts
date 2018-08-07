@@ -160,6 +160,7 @@ import { ReturnBudgetComponent } from './return-budget/return-budget.component';
 import { ReturnBudgetService } from './return-budget.service';
 import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 import { ReportComponent } from './report/report.component';
+import { ExportdataComponent } from './exportdata/exportdata.component';
 
 export function highchartsFactory() {
   return require('highcharts');
@@ -268,7 +269,8 @@ Highcharts.setOptions({
     RequisitionFastComponent,
     ReturnBudgetComponent,
     ReceiveIssueYearComponent,
-    ReportComponent
+    ReportComponent,
+    ExportdataComponent
   ],
   providers: [
     MainService,
