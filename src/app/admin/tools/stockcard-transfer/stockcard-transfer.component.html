@@ -3,6 +3,20 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin/tools/stockcard">เครื่องมือ</a>
   <span class="breadcrumb-item active">แก้ไข stockcard</span>
 </nav>
+
+<div class="alert alert-danger">
+  <div class="alert-items">
+    <div class="alert-item static">
+      <div class="alert-icon-wrapper">
+        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+      </div>
+      <span class="alert-text">
+        การแก้ไขรายการ Stock Card การโอน จะแก้ไขจำนวนจ่ายได้เฉพาะ Lot ที่จ่ายเท่านั้น และไม่มีการ Allocate กรุณา Expanded เพื่อตรวจสอบข้อมูล
+      </span>
+    </div>
+  </div>
+</div>
+
 <div class="progress loop" *ngIf="isLoading">
   <progress></progress>
 </div>

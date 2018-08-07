@@ -1,0 +1,128 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/tools/stockcard">เครื่องมือ</a>
+  <span class="breadcrumb-item active">แก้ไข stockcard</span>
+</nav>
+
+<div class="alert alert-danger">
+  <div class="alert-items">
+    <div class="alert-item static">
+      <div class="alert-icon-wrapper">
+        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+      </div>
+      <span class="alert-text">
+        การแก้ไขรายการ Stock Card การตัดจ่าย จะแก้ไขจำนวนจ่ายได้เฉพาะ Lot ที่จ่ายเท่านั้น และไม่มีการ Allocate กรุณา Expanded เพื่อตรวจสอบข้อมูล
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">วันที่</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="issueDate" required></my-date-picker-th>
+          </div>
+
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label class="required" for="gForm_1">ประเภท</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <div class="select">
+              <select name="slStatus" [(ngModel)]="transactionId">
+                <option value="">
+                  <กรุณาเลือกประเภท>
+                </option>
+                <option *ngFor="let s of issues" [value]="s.transaction_id">{{ s.transaction_name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="refDocument" class="required">อ้างอิง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="refDocument" [(ngModel)]="refDocument">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="comment" [(ngModel)]="comment">
+          </div>
+
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+<clr-datagrid [style.padding-top.px]="10">
+  <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">จำนวนตัดจ่าย</clr-dg-column>
+  <clr-dg-column [style.width.px]="200">หน่วยตัดจ่าย</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">รวม (Base)</clr-dg-column>
+  <clr-dg-column [style.width.px]="120">คงเหลือ (Base)</clr-dg-column>
+  <clr-dg-row *ngFor="let product of products; let idx = index;">
+    <wm-issue-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="product.items" ngProjectAs="clr-dg-row-detail"></wm-issue-product>
+
+    <clr-dg-cell style="line-height: 25px;">{{idx + 1}}. {{product.generic_name}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="line-height: 25px;">{{product.expired_date | toEngDate}}</clr-dg-cell> -->
+    <clr-dg-cell>
+      <input type="text" #issueQty (keyup)="editChangeIssueQty(idx, issueQty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberOnly [value]="product.issue_qty" />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
+        [genericId]="product.generic_id"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.issue_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.issue_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
+  </clr-dg-row>
+
+</clr-datagrid>
+
+<div>
+  <button class="btn btn-success btn-sm" (click)="passwordModal=true" [disabled]="!transactionId || !issueDate || !refDocument || !products.length">
+    <clr-icon shape="floppy"></clr-icon>
+    บันทึกตัดจ่ายสินค้า
+  </button>
+  <button class="btn btn-danger btn-sm" routerLink="/admin/tools/stockcard">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+</div>
+
+
+<clr-modal [(clrModalOpen)]="passwordModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">แก้ไข stockcard</h3>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        กรุณาตรวจสอบความถูกต้อง การกดอนุมัติถือเป็นการปรับ stockcard เป็นที่เรียบร้อย
+      </div>
+    </div>
+    <div class="row" style="text-align: center;padding-top:30px;">
+      <div class="col-md-6" style="text-align: right"> รหัสผ่าน</div>
+      <div class="col-md-6" style="text-align: left;">
+        <input type="password" name="password" (keyup)="enterSave($event)" [(ngModel)]="password">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSaving" (click)="save()">อนุมัติ</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="passwordModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+<wm-loading-modal #modalLoading></wm-loading-modal>

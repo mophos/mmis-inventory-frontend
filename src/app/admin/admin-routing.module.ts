@@ -89,6 +89,7 @@ import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/recei
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
 import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 import { ReturnBudgetComponent } from './return-budget/return-budget.component';
+import { ExportdataComponent } from './exportdata/exportdata.component';
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
 import { RequisitionFastComponent } from 'app/admin/requisition/requisition-fast/requisition-fast.component';
@@ -106,7 +107,8 @@ import { StockcardReceiveComponent } from 'app/admin/tools/stockcard-receive/sto
 import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receive-other/stockcard-receive-other.component';
 import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
-import { ExportdataComponent } from './exportdata/exportdata.component';
+import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
+
 
 const routes: Routes = [
   {
@@ -199,6 +201,7 @@ const routes: Routes = [
           { path: 'stockcard/receive-other', component: StockcardReceiveOtherComponent },
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
           { path: 'stockcard/transfer', component: StockcardTransferComponent },
+          { path: 'stockcard/issue', component: StockcardIssueComponent },
         ]
       },
       {
