@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { AlertExpiredService } from '../alert-expired.service';
 import { AlertService } from '../../alert.service';
 import { ProductsService } from './../products.service';
+import { BasicService } from '../../basic.service';
 
 @Component({
   selector: 'wm-alert-expired',
@@ -9,10 +10,13 @@ import { ProductsService } from './../products.service';
 })
 export class AlertExpiredComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
+  @ViewChild('htmlPreview') public htmlPreview: any;
 
   allGenerics: Array<any> = [];
   selectedGenerics: Array<any> = [];
   selectedGenericIds: Array<any> = [];
+  warehouses: any = [];
+  warehouseId: any;
   numDays = 10;
   isAll = true;
   isAlert = false;
@@ -23,18 +27,24 @@ export class AlertExpiredComponent implements OnInit {
   genericType: any = "all";
   genericTypeE: any = "all";
   products = [];
+  token: any;
 
   constructor(
     private alertExpiredService: AlertExpiredService,
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
     private productService: ProductsService,
-  ) { }
+    private basicService: BasicService,
+    @Inject('API_URL') private apiUrl: string
+  ) {
+    this.token = sessionStorage.getItem('token');
+  }
 
   async ngOnInit() {
     await this.getGenericType();
     await this.getAllProducts();
     // this.getStatus();
+    await this.getWarehouses();
     await this.getProductExpired();
   }
 
@@ -63,6 +73,7 @@ export class AlertExpiredComponent implements OnInit {
     this.modalLoading.show();
     try {
       let _genericType;
+      let _warehouseId;
       if (this.genericTypeE === 'all') {
         let _g = [];
         this.genericTypes.forEach(v => {
@@ -72,7 +83,16 @@ export class AlertExpiredComponent implements OnInit {
       } else {
         _genericType = this.genericTypeE;
       }
-      const rs: any = await this.alertExpiredService.getProductExpired(_genericType);
+      if (this.warehouseId === 'all') {
+        let _w = [];
+        this.warehouses.forEach(v => {
+          _w.push(v.warehouse_id)
+        });
+        _warehouseId = _w;
+      } else {
+        _warehouseId = this.warehouseId;
+      }
+      const rs: any = await this.alertExpiredService.getProductExpired(_genericType, _warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
       } else {
@@ -234,5 +254,44 @@ export class AlertExpiredComponent implements OnInit {
         this.modalLoading.hide();
         this.alertService.serverError();
       });
+  }
+
+  async getWarehouses() {
+    const rs = await this.basicService.getWarehouses();
+    if (rs.ok) {
+      this.warehouses = rs.rows;
+      this.warehouseId = 'all';
+    } else {
+      this.alertService.error(rs.error);
+    }
+  }
+
+  changeWarehouses() {
+    this.getProductExpired();
+  }
+
+  report() {
+    let _genericType
+    let _warehouseId
+    if (this.genericTypeE === 'all') {
+      let _g = [];
+      this.genericTypes.forEach(v => {
+        _g.push(v.generic_type_id)
+      });
+      _genericType = _g;
+    } else {
+      _genericType = this.genericTypeE;
+    }
+    if (this.warehouseId === 'all') {
+      let _w = [];
+      this.warehouses.forEach(v => {
+        _w.push(v.warehouse_id)
+      });
+      _warehouseId = _w;
+    } else {
+      _warehouseId = this.warehouseId;
+    }
+    const url = `${this.apiUrl}/report/print/alert-expried?token=${this.token}&genericTypeId=${_genericType}&warehouseId=${_warehouseId}`;
+    this.htmlPreview.showReport(url, 'landscape');
   }
 }

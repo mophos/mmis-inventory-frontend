@@ -5,6 +5,7 @@ import { AlertService } from './../../../alert.service';
 import { WarehouseService } from './../../warehouse.service';
 import * as moment from 'moment';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
+import { BasicService } from '../../../basic.service';
 
 @Component({
   selector: 'wm-product-expired',
@@ -21,6 +22,8 @@ export class ProductExpiredComponent implements OnInit {
   warehouseId = 0;
   isPreview = false;
   selectedGenericId = 0;
+  selectedProductGroups: any = [];
+  productGroups: any = []
   token: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -33,7 +36,9 @@ export class ProductExpiredComponent implements OnInit {
 
   constructor(@Inject('API_URL') private apiUrl: string,
     private warehouseService: WarehouseService,
-    private alertService: AlertService, ) {
+    private basicService: BasicService,
+    private alertService: AlertService
+  ) {
     this.token = sessionStorage.getItem('token')
     this.options = {
       pdfOpenParams: { toolbar: '1' },
@@ -59,13 +64,19 @@ export class ProductExpiredComponent implements OnInit {
         day: date.getDate()
       }
     };
+    this.getProductGroups();
     this.getWarehouseList();
   }
 
   showReport() {
+    let generic_type_id: any = [];
+    this.selectedProductGroups.forEach(v => {
+      generic_type_id.push("genericTypeId=" + v.generic_type_id);
+    });
+
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/${this.selectedGenericId}?genericTypeId=${this.genericTypeId}&token=${this.token}`;
+    const url = `${this.apiUrl}/report/product/expired/${startDate}/${endDate}/${this.warehouseId}/${this.selectedGenericId}?token=${this.token}&` + generic_type_id.join('&');
     this.htmlPreview.showReport(url, 'landscape');
   }
   getWarehouseList() {
@@ -92,5 +103,18 @@ export class ProductExpiredComponent implements OnInit {
 
   setSelectedGenericType(e) {
     this.genericTypeId = e.generic_type_id;
+  }
+
+  async getProductGroups() {
+    try {
+      const rs: any = await this.basicService.getGenericTypes();
+      if (rs.ok) {
+        this.productGroups = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      this.alertService.error(JSON.stringify(error));
+    }
   }
 }

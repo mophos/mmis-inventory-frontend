@@ -1,8 +1,21 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
-  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/issues">ตัดจ่ายสินค้า</a>
-  <span class="breadcrumb-item active">แก้ไขตัดจ่ายสินค้า</span>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/tools/stockcard">เครื่องมือ</a>
+  <span class="breadcrumb-item active">แก้ไข stockcard</span>
 </nav>
+
+<div class="alert alert-danger">
+  <div class="alert-items">
+    <div class="alert-item static">
+      <div class="alert-icon-wrapper">
+        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+      </div>
+      <span class="alert-text">
+        การแก้ไขรายการ Stock Card การตัดจ่าย จะแก้ไขจำนวนจ่ายได้เฉพาะ Lot ที่จ่ายเท่านั้น และไม่มีการ Allocate กรุณา Expanded เพื่อตรวจสอบข้อมูล
+      </span>
+    </div>
+  </div>
+</div>
 
 <div class="card">
   <div class="card-block" style="padding: 0px 0px 0px 10px;">
@@ -54,14 +67,12 @@
   </div>
 </div>
 
-<clr-datagrid [style.padding-top.px]="10" style="position: relative;">
+<clr-datagrid [style.padding-top.px]="10">
   <clr-dg-column>ชื่อสินค้า</clr-dg-column>
   <clr-dg-column [style.width.px]="100">จำนวนตัดจ่าย</clr-dg-column>
   <clr-dg-column [style.width.px]="200">หน่วยตัดจ่าย</clr-dg-column>
   <clr-dg-column [style.width.px]="100">รวม (Base)</clr-dg-column>
   <clr-dg-column [style.width.px]="120">คงเหลือ (Base)</clr-dg-column>
-  <clr-dg-column [style.width.px]="140"></clr-dg-column>
-
   <clr-dg-row *ngFor="let product of products; let idx = index;">
     <wm-issue-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="product.items" ngProjectAs="clr-dg-row-detail"></wm-issue-product>
 
@@ -78,53 +89,40 @@
     <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
     <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.issue_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.issue_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
-    <clr-dg-cell style="text-align: center;">
-      <div class="btn-group btn-primary">
-        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
-          <clr-icon shape="trash"></clr-icon>
-        </button>
-      </div>
-    </clr-dg-cell>
-  </clr-dg-row>
-  <clr-dg-row class="newLine">
-    <clr-dg-cell>
-      <wm-search-generic-warehouse-zero [warehouseId]="warehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
-    </clr-dg-cell>
-    <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" style="width: 100px;" style="background-color: #FFF9C4" [disabled]="!genericId"
-        [(ngModel)]="issueQty" autocomplete="off" wmNumberWithOutDot placeholder="">
-    </clr-dg-cell>
-    <clr-dg-cell>
-      <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}">{{ issueQty*conversionQty | number }}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty | number }}</clr-dg-cell>
-    <!-- <clr-dg-cell style="text-align: center; line-height: 25px;">{{ primaryUnitName }}</clr-dg-cell> -->
-
-    <clr-dg-cell style="text-align: center;">
-      <div class="btn-group btn-primary">
-        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId || !issueQty || !unitGenericId || ((issueQty * conversionQty) > remainQty)"
-          (click)="addProduct()">
-          เพิ่ม
-        </button>
-        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
-          ยกเลิก
-        </button>
-      </div>
-    </clr-dg-cell>
   </clr-dg-row>
 
 </clr-datagrid>
 
 <div>
-  <button class="btn btn-success btn-sm" (click)="saveIssue()" [disabled]="!transactionId || !issueDate || !refDocument || !products.length">
+  <button class="btn btn-success btn-sm" (click)="passwordModal=true" [disabled]="!transactionId || !issueDate || !refDocument || !products.length">
     <clr-icon shape="floppy"></clr-icon>
     บันทึกตัดจ่ายสินค้า
   </button>
-  <button class="btn btn-danger btn-sm" [routerLink]="['/admin/issues']">
+  <button class="btn btn-danger btn-sm" routerLink="/admin/tools/stockcard">
     <clr-icon shape="home"></clr-icon>
     กลับหน้าหลัก
   </button>
 </div>
 
+
+<clr-modal [(clrModalOpen)]="passwordModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">แก้ไข stockcard</h3>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        กรุณาตรวจสอบความถูกต้อง การกดอนุมัติถือเป็นการปรับ stockcard เป็นที่เรียบร้อย
+      </div>
+    </div>
+    <div class="row" style="text-align: center;padding-top:30px;">
+      <div class="col-md-6" style="text-align: right"> รหัสผ่าน</div>
+      <div class="col-md-6" style="text-align: left;">
+        <input type="password" name="password" (keyup)="enterSave($event)" [(ngModel)]="password">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSaving" (click)="save()">อนุมัติ</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="passwordModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
 <wm-loading-modal #modalLoading></wm-loading-modal>
