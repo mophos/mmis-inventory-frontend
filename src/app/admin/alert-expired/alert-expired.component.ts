@@ -1,18 +1,10 @@
-<<<<<<< HEAD
 import { JwtHelper } from 'angular2-jwt';
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { AlertExpiredService } from '../alert-expired.service';
-import { AlertService } from '../../alert.service';
-import { ProductsService } from './../products.service';
-import * as _ from 'lodash';
-=======
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { AlertExpiredService } from '../alert-expired.service';
 import { AlertService } from '../../alert.service';
 import { ProductsService } from './../products.service';
+import * as _ from 'lodash';
 import { BasicService } from '../../basic.service';
-
->>>>>>> b27f45762cf7f38611819016ab043f66ebaf5b11
 @Component({
   selector: 'wm-alert-expired',
   templateUrl: './alert-expired.component.html'
@@ -36,32 +28,24 @@ export class AlertExpiredComponent implements OnInit {
   genericType: any = "all";
   genericTypeE: any = "all";
   products = [];
-<<<<<<< HEAD
   jwtHelper: JwtHelper = new JwtHelper();
   rights: any;
   menuSettingAlertExpired
-=======
   token: any;
 
->>>>>>> b27f45762cf7f38611819016ab043f66ebaf5b11
   constructor(
     private alertExpiredService: AlertExpiredService,
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
     private productService: ProductsService,
-<<<<<<< HEAD
+    private basicService: BasicService,
+    @Inject('API_URL') private apiUrl: string
   ) {
     const token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(token);
     const accessRight = decodedToken.accessRight;
     this.rights = accessRight.split(',');
     this.menuSettingAlertExpired = _.indexOf(this.rights, 'WM_SETTING_ALERT_EXPIRED') === -1 ? false : true;
-=======
-    private basicService: BasicService,
-    @Inject('API_URL') private apiUrl: string
-  ) {
-    this.token = sessionStorage.getItem('token');
->>>>>>> b27f45762cf7f38611819016ab043f66ebaf5b11
   }
 
   async ngOnInit() {
@@ -99,7 +83,7 @@ export class AlertExpiredComponent implements OnInit {
       let _genericType;
       let _warehouseId;
       if (this.genericTypeE === 'all') {
-        let _g = [];
+        const _g = [];
         this.genericTypes.forEach(v => {
           _g.push(v.generic_type_id)
         });
@@ -108,7 +92,7 @@ export class AlertExpiredComponent implements OnInit {
         _genericType = this.genericTypeE;
       }
       if (this.warehouseId === 'all') {
-        let _w = [];
+        const _w = [];
         this.warehouses.forEach(v => {
           _w.push(v.warehouse_id)
         });
@@ -298,7 +282,7 @@ export class AlertExpiredComponent implements OnInit {
     let _genericType
     let _warehouseId
     if (this.genericTypeE === 'all') {
-      let _g = [];
+      const _g = [];
       this.genericTypes.forEach(v => {
         _g.push(v.generic_type_id)
       });
@@ -307,7 +291,7 @@ export class AlertExpiredComponent implements OnInit {
       _genericType = this.genericTypeE;
     }
     if (this.warehouseId === 'all') {
-      let _w = [];
+      const _w = [];
       this.warehouses.forEach(v => {
         _w.push(v.warehouse_id)
       });
