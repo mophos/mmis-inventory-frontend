@@ -35,6 +35,13 @@ export class ToolsService {
     return resp.json();
   }
 
+  async searchIssues(query: any) {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/issues/search`, {
+      query: query
+    }).toPromise();
+    return resp.json();
+  }
+
   async updateStockCard(data: any[], receiveType: any, receiveDetailId: any, newQty: number, unitGenericId: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/update`, {
       data: data,
@@ -98,6 +105,15 @@ export class ToolsService {
       transferId: transferId,
       summary: summary,
       generics: generics
+    }).toPromise();
+    return resp.json();
+  }
+
+  async saveIssue(issueId: any, summary: any, products: any) {
+    const resp = await this.authHttp.put(`${this.url}/tools/stockcard/issues`, {
+      issueId: issueId,
+      summary: summary,
+      products: products
     }).toPromise();
     return resp.json();
   }
