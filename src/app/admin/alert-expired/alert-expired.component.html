@@ -69,7 +69,7 @@
       </clr-datagrid>
     </clr-tab-content>
   </clr-tab>
-  <clr-tab>
+  <clr-tab *ngIf="menuSettingAlertExpired">
     <button clrTabLink (click)="getAllProducts()">
       ตั้งค่าวันหมดอายุ</button>
     <clr-tab-content *clrIfActive>

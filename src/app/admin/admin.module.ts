@@ -120,16 +120,6 @@ import { WarehouseProductPlanningComponent } from './warehouse-product-planning/
 
 import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
 import { RequisitionConfirmUnpaidComponent } from 'app/admin/requisition-confirm-unpaid/requisition-confirm-unpaid.component';
-import { AuthReceive } from 'app/auth-receive.service';
-import { AuthTransfer } from 'app/auth-transfer.service';
-import { AuthRequisition } from 'app/auth-requisition.service';
-import { AuthPeriod } from '../auth-period.service';
-import { AuthShippingNetwork } from 'app/auth-shipping-network.service';
-import { AuthHISTransaction } from 'app/auth-his-transaction.service';
-import { AuthHISMapping } from 'app/auth-his-mapping.service';
-import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
-import { AuthAdjustService } from 'app/auth-adjust.service';
-import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { ProductManufactureComponent } from './reports/product-manufacture/product-manufacture.component';
 import { AccessCheck } from '../access-check';
 import { StockCardComponent } from './reports/stock-card/stock-card.component';
@@ -162,6 +152,20 @@ import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-
 import { ReportComponent } from './report/report.component';
 import { ExportdataComponent } from './exportdata/exportdata.component';
 
+// auth
+import { AuthReceive } from 'app/auth-receive.service';
+import { AuthTransfer } from 'app/auth-transfer.service';
+import { AuthRequisition } from 'app/auth-requisition.service';
+import { AuthPeriod } from '../auth-period.service';
+import { AuthShippingNetwork } from 'app/auth-shipping-network.service';
+import { AuthHISTransaction } from 'app/auth-his-transaction.service';
+import { AuthHISMapping } from 'app/auth-his-mapping.service';
+import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
+import { AuthAdjustService } from 'app/auth-adjust.service';
+import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
+import { AuthStockcard } from 'app/auth-stockcard.service';
+import { AuthReturnBudget } from 'app/auth-return-budget.service';
+import { AuthAddition } from 'app/auth-addition.service';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -294,6 +298,9 @@ Highcharts.setOptions({
     AuthAdjustService,
     AuthHISMapping,
     AuthMinMaxPlanning,
+    AuthStockcard,
+    AuthReturnBudget,
+    AuthAddition,
     ToThaiDatePipe,
     AlertExpiredService,
     AbcVenService,
