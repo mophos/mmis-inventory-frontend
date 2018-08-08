@@ -23,6 +23,10 @@
     float: right !important;
 }
 
+.typeahead-backdrop {
+    position: relative !important;
+}
+
 .breadcrumb {
     padding: 0.5rem 0.5rem;
     list-style: none;
