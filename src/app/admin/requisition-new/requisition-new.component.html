@@ -90,7 +90,7 @@
   </div>
 </div>
 
-<clr-datagrid class="order-form">
+<clr-datagrid class="order-form" style="position: relative;"> 
   <clr-dg-column>ชื่อ Generic</clr-dg-column>
   <clr-dg-column style="width: 100px;">จำนวนเบิก</clr-dg-column>
   <clr-dg-column style="width: 200px;">Package</clr-dg-column>
@@ -120,7 +120,7 @@
   <!-- แถวเพิ่ม Manual -->
   <clr-dg-row class="newLine">
     <clr-dg-cell>
-      <wm-search-generic-warehouse-autocomplete [clearOnSelected]="false" [warehouseId]="wmWithdraw" #searchGenericCmp [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"></wm-search-generic-warehouse-autocomplete>
+      <wm-search-generic-warehouse-autocomplete [class]="typeahead-backdrop" [clearOnSelected]="false" [warehouseId]="wmWithdraw" #searchGenericCmp [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"></wm-search-generic-warehouse-autocomplete>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" [(ngModel)]="selectedRequisitionQty" wmNumberWithOutDot style="width: 100%; text-align: right; background-color:#FFF9C4"
