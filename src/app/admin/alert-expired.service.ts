@@ -122,9 +122,9 @@ export class AlertExpiredService {
     return resp.json();
   }
 
-  getProductExpired(genericType) {
+  getProductExpired(genericType, warehouseId) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/alert-expired/products/expired?genericTypeId=${genericType}`)
+      this.authHttp.get(`${this.url}/alert-expired/products/expired?genericTypeId=${genericType}&warehouseId=${warehouseId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
