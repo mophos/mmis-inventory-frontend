@@ -43,7 +43,6 @@ export class ReceivePurchaseComponent implements OnInit {
 
   products = [];
   productPurchases = [];
-  countProduct = 0;
 
   receiveTypes = [];
   receiveStatus = [];
@@ -238,6 +237,7 @@ export class ReceivePurchaseComponent implements OnInit {
             // location
             obj.location_id = null;
             obj.location_name = null;
+            obj.canReceive = +v.purchase_qty - +v.total_received_qty;
 
             obj.unit_generic_id = +v.unit_generic_id;
             obj.cost = v.cost;
@@ -246,7 +246,6 @@ export class ReceivePurchaseComponent implements OnInit {
             obj.is_free = v.giveaway;
 
             this.products.push(obj);
-            this.countProduct += +v.purchase_qty - +v.total_received_qty;
           }
         };
         this.modalLoading.hide();
@@ -886,21 +885,17 @@ export class ReceivePurchaseComponent implements OnInit {
     } // expired
   }
   checkProduct() {
-    let count = 0;
+    let check: boolean = false;
     this.products.forEach(v => {
-      count += v.receive_qty;
+      if (v.receive_qty < v.canReceive && this.isClosePurchase) check = true;
     });
 
-    if (count < this.countProduct && this.isClosePurchase) {
+    if (check) {
       this.alertService.confirm(`คุณมีรายการเวชภัณฑ์ที่ยังรับไม่ครบ ต้องการทำต่อใช่หรือไม่ ?`)
         .then(() => {
           this.saveReceive();
         }).catch((err) => {
         })
-    } else if (count > this.countProduct) {
-      this.alertService.error('คุณรับเกินจำนวนที่สั่งซื้อ');
-    } else {
-      this.saveReceive();
-    }
+    } else this.saveReceive();
   }
 }

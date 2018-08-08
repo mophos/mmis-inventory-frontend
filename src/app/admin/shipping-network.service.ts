@@ -37,7 +37,13 @@ export class ShippingNetworkService {
     }).toPromise();
     return res.json();
   }
-
+  
+  async getSearchList(query:any) {
+    let res = await this.authHttp.post(`${this.url}/shipping-networks/search`,{
+      query:query
+    }).toPromise();
+    return res.json();
+  }
   async getList() {
     let res = await this.authHttp.get(`${this.url}/shipping-networks`).toPromise();
     return res.json();

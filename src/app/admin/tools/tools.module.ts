@@ -14,6 +14,7 @@ import { HttpModule } from '../../../../node_modules/@angular/http';
 import { GridDetailModule } from 'app/grid-detail/grid-detail.module';
 import { StockcardRequisitionComponent } from './stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from './stockcard-transfer/stockcard-transfer.component';
+import { StockcardIssueComponent } from './stockcard-issue/stockcard-issue.component';
 
 @NgModule({
   imports: [
@@ -28,6 +29,6 @@ import { StockcardTransferComponent } from './stockcard-transfer/stockcard-trans
     TextMaskModule,
     GridDetailModule
   ],
-  declarations: [StockcardComponent, StockcardReceiveComponent, StockcardReceiveOtherComponent, StockcardRequisitionComponent, StockcardTransferComponent]
+  declarations: [StockcardComponent, StockcardReceiveComponent, StockcardReceiveOtherComponent, StockcardRequisitionComponent, StockcardTransferComponent, StockcardIssueComponent]
 })
 export class ToolsModule { }

@@ -13,30 +13,20 @@ export class StockcardComponent implements OnInit {
 
   @ViewChild('modalLoading') modalLoading: LoadingModalComponent;
 
-  items = [];
   receives = [];
-  receiveItems = [];
   requisitions = [];
-  stockCardItems = [];
   transfers = [];
   history = [];
+  issues = [];
 
   input = false;
   isOpenSearchReceive = false;
   isOpenSearchRequisition = false;
   isOpenSearchTranfer = false;
+  isOpenSearchIssue = false;
   modalHistory = false;
 
-  newBalanceQty = 0;
-  newQty: number;
   passHis: any;
-  perPage = 20;
-  receiveType: any;
-  receiveItemId: any;
-  receiveId: any;
-  receiveDetailId: any;
-  stockCardId: any;
-  unitGenericId: any;
 
   constructor(
     private toolService: ToolsService,
@@ -65,6 +55,10 @@ export class StockcardComponent implements OnInit {
     this.router.navigateByUrl(`/admin/tools/stockcard/transfer?transferId=${transferId}`);
   }
 
+  gotoIssue(issueId: any) {
+    this.router.navigateByUrl(`/admin/tools/stockcard/issue?issueId=${issueId}`);
+  }
+
   showSearchReceive() {
     this.isOpenSearchReceive = true;
   }
@@ -75,6 +69,10 @@ export class StockcardComponent implements OnInit {
 
   showSearchTranfer() {
     this.isOpenSearchTranfer = true;
+  }
+
+  showSearchIssue() {
+    this.isOpenSearchIssue = true;
   }
 
   async doSearchReceives(event: any, query: any) {
@@ -124,6 +122,25 @@ export class StockcardComponent implements OnInit {
         const rs: any = await this.toolService.searchTranfers(query);
         if (rs.ok) {
           this.transfers = rs.rows;
+        } else {
+          this.alertService.error(rs.error);
+        }
+
+        this.modalLoading.hide();
+      } catch (error) {
+        this.modalLoading.hide();
+        this.alertService.error(JSON.stringify(error))
+      }
+    }
+  }
+
+  async doSearchIssues(event: any, query: any) {
+    if (event.keyCode === 13) {
+      try {
+        this.modalLoading.show();
+        const rs: any = await this.toolService.searchIssues(query);
+        if (rs.ok) {
+          this.issues = rs.rows;
         } else {
           this.alertService.error(rs.error);
         }

@@ -150,6 +150,7 @@ import { ReturnBudgetComponent } from './return-budget/return-budget.component';
 import { ReturnBudgetService } from './return-budget.service';
 import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 import { ReportComponent } from './report/report.component';
+import { ExportdataComponent } from './exportdata/exportdata.component';
 
 // auth
 import { AuthReceive } from 'app/auth-receive.service';
@@ -272,7 +273,8 @@ Highcharts.setOptions({
     RequisitionFastComponent,
     ReturnBudgetComponent,
     ReceiveIssueYearComponent,
-    ReportComponent
+    ReportComponent,
+    ExportdataComponent
   ],
   providers: [
     MainService,

@@ -92,6 +92,7 @@ import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/recei
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
 import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 import { ReturnBudgetComponent } from './return-budget/return-budget.component';
+import { ExportdataComponent } from './exportdata/exportdata.component';
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
 import { RequisitionFastComponent } from 'app/admin/requisition/requisition-fast/requisition-fast.component';
@@ -109,6 +110,8 @@ import { StockcardReceiveComponent } from 'app/admin/tools/stockcard-receive/sto
 import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receive-other/stockcard-receive-other.component';
 import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
+import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
+//
 import { AuthReturnBudget } from '../auth-return-budget.service';
 
 const routes: Routes = [
@@ -135,10 +138,12 @@ const routes: Routes = [
       { path: 'receives/other/edit', canActivate: [AuthReceive], component: ReceiveOtherEditComponent },
       { path: 'receives/edit', canActivate: [AuthReceive], component: ReceiveEditComponent },
       { path: 'transection-type', component: TransectionTypeComponent },
+      { path: 'requisition-type', component: RequisitionTypeComponent },
       { path: 'receiveother-type', component: ReceiveotherTypeComponent },
       { path: 'borrow/returning/:borrowId', component: ReturningComponent },
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
+      { path: 'exportdata', component: ExportdataComponent },
       {
         path: 'reports',
         canActivate: [AdminGuard],
@@ -200,6 +205,7 @@ const routes: Routes = [
           { path: 'stockcard/receive-other', component: StockcardReceiveOtherComponent },
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
           { path: 'stockcard/transfer', component: StockcardTransferComponent },
+          { path: 'stockcard/issue', component: StockcardIssueComponent },
         ]
       },
       {
