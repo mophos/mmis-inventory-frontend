@@ -64,11 +64,11 @@
     </div>
 
     <clr-vertical-nav class="is-collapsed" [clrVerticalNavCollapsible]="collapsible" [(clrVerticalNavCollapsed)]="collapse">
-      <a clrVerticalNavLink routerLink="/admin/borrow-notes" title="บันทึกช่วยจำการยืมยา" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuBorrow" routerLink="/admin/borrow-notes" title="บันทึกช่วยจำการยืมยา" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="note" class="has-badge is-solid"></clr-icon>
         บันทึกช่วยจำการยืมยา
       </a>
-      <a clrVerticalNavLink routerLink="/admin/addition" title="เวชภัณฑ์ที่ถึงจุดเติม" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuAddition" routerLink="/admin/addition" title="เวชภัณฑ์ที่ถึงจุดเติม" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="alarm-clock" class="has-badge is-solid"></clr-icon>
         เวชภัณฑ์ที่ถึงจุดเติม
       </a>
@@ -76,7 +76,7 @@
         <clr-icon clrVerticalNavIcon shape="folder"></clr-icon>
         รายการสินค้า
       </a>
-      <a clrVerticalNavLink routerLink="/admin/receives" title="รับสินค้าเข้าคลัง" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuReceive" routerLink="/admin/receives" title="รับสินค้าเข้าคลัง" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="plus"></clr-icon>
         รับสินค้าเข้าคลัง
       </a>
@@ -84,19 +84,19 @@
         <clr-icon clrVerticalNavIcon shape="plus"></clr-icon>
         รับสินค้าเข้าคลัง
       </a> -->
-      <a clrVerticalNavLink routerLink="/admin/issues" title="ตัดจ่ายสินค้า" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuIssue" routerLink="/admin/issues" title="ตัดจ่ายสินค้า" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="scissors"></clr-icon>
         ตัดจ่ายสินค้า
       </a>
-      <a clrVerticalNavLink routerLink="/admin/transfer" title="โอนสินค้า" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuTransfer" routerLink="/admin/transfer" title="โอนสินค้า" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="two-way-arrows"></clr-icon>
         โอนสินค้า
       </a>
-      <a clrVerticalNavLink routerLink="/admin/requisition" title="เบิกสินค้า" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuRequisition" routerLink="/admin/requisition" title="เบิกสินค้า" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="tools"></clr-icon>
         เบิกสินค้า
       </a>
-      <a clrVerticalNavLink routerLink="/admin/alert-expired" title="แจ้งเตือนยาหมดอายุ" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuAlertExpired" routerLink="/admin/alert-expired" title="แจ้งเตือนยาหมดอายุ" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="alarm-clock"></clr-icon>
         แจ้งเตือนยาหมดอายุ
       </a>
@@ -108,7 +108,7 @@
         <clr-icon clrVerticalNavIcon shape="clipboard"></clr-icon>
         นับสินค้าคงเหลือ
       </a> -->
-      <a clrVerticalNavLink routerLink="/admin/his-issue-transaction" title="ตัดจ่ายจาก HIS" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuIssueHis" routerLink="/admin/his-issue-transaction" title="ตัดจ่ายจาก HIS" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="sync"></clr-icon>
         ตัดจ่ายจาก HIS
       </a>
@@ -125,13 +125,13 @@
         ตั้งค่า VEN
       </a> -->
 
-      <clr-vertical-nav-group routerLinkActive="active">
+      <clr-vertical-nav-group *ngIf="menuSetting" routerLinkActive="active">
         <a clrVerticalNavLink href="javascript://" title="กำหนดข้อมูลพื้นฐาน">
           <clr-icon shape="settings" clrVerticalNavIcon></clr-icon>
           กำหนดข้อมูลพื้นฐาน
         </a>
         <clr-vertical-nav-group-children *clrIfExpanded="false">
-          <a clrVerticalNavLink routerLink="/admin/warehouse" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuWarehouse" routerLink="/admin/warehouse" routerLinkActive="active">
             <clr-icon shape="library"></clr-icon>
             คลังสินค้า
           </a>
@@ -139,15 +139,15 @@
             <clr-icon shape="library"></clr-icon>
             ประเภทคลังสินค้า
           </a> -->
-          <a clrVerticalNavLink routerLink="/admin/requisition-type" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuRequisitionType" routerLink="/admin/requisition/type" routerLinkActive="active">
             <clr-icon shape="note"></clr-icon>
             ประเภทการเบิก
           </a>
-          <a clrVerticalNavLink routerLink="/admin/transection-type" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuIssueType" routerLink="/admin/transection-type" routerLinkActive="active">
             <clr-icon shape="note"></clr-icon>
             ประเภทการตัดจ่าย
           </a>
-          <a clrVerticalNavLink routerLink="/admin/receiveother-type" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuReceiveType" routerLink="/admin/receiveother-type" routerLinkActive="active">
             <clr-icon shape="note"></clr-icon>
             ประเภทการรับแบบอื่นๆ
           </a>
@@ -155,31 +155,31 @@
             <clr-icon shape="folder"></clr-icon>
             กำหนดสินค้าในคลัง
           </a> -->
-          <a clrVerticalNavLink routerLink="/admin/requisition/templates" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuTemplateRequisition" routerLink="/admin/requisition/templates" routerLinkActive="active">
             <clr-icon shape="plugin"></clr-icon>
             Template ชุดเบิก
           </a>
-          <a clrVerticalNavLink routerLink="/admin/shipping-network" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuShippingNetwork" routerLink="/admin/shipping-network" routerLinkActive="active">
             <clr-icon shape="car"></clr-icon>
             Shipping Network
           </a>
-          <a clrVerticalNavLink routerLink="/admin/receive-planning" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuReceivePlanning" routerLink="/admin/receive-planning" routerLinkActive="active">
             <clr-icon shape="folder-open"></clr-icon>
             กำหนดการรับสินค้า
           </a>
-          <a clrVerticalNavLink routerLink="/admin/his-mapping" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuMapGenericHis" routerLink="/admin/his-mapping" routerLinkActive="active">
             <clr-icon shape="share"></clr-icon>
             Map รหัสยากับ HIS
           </a>
-          <a clrVerticalNavLink routerLink="/admin/code-mapping" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuMapTradeTMT" routerLink="/admin/code-mapping" routerLinkActive="active">
             <clr-icon shape="share"></clr-icon>
             Map รหัสยา TMT
           </a>
-          <a clrVerticalNavLink routerLink="/admin/donators" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuDonator" routerLink="/admin/donators" routerLinkActive="active">
             <clr-icon shape="organization"></clr-icon>
             ผู้บริจาค
           </a>
-          <a clrVerticalNavLink routerLink="/admin/min-max" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuMinMax" routerLink="/admin/min-max" routerLinkActive="active">
             <clr-icon shape="calculator" class="is-solid"></clr-icon>
             กำหนด MIN - MAX
           </a>
@@ -189,21 +189,21 @@
         <clr-icon clrVerticalNavIcon shape="printer"></clr-icon>
         ระบบรายงาน
       </a>
-      <clr-vertical-nav-group routerLinkActive="active">
+      <clr-vertical-nav-group *ngIf="menuTools" routerLinkActive="active">
         <a clrVerticalNavLink href="javascript://">
           <clr-icon shape="tools" clrVerticalNavIcon></clr-icon>
           เครื่องมือ (Tools)
         </a>
         <clr-vertical-nav-group-children *clrIfExpanded="false">
-          <a clrVerticalNavLink routerLink="/admin/tools/stockcard" routerLinkActive="active">
+          <a *ngIf="menuRollback" clrVerticalNavLink routerLink="/admin/tools/stockcard" routerLinkActive="active">
             <clr-icon shape="scroll"></clr-icon>
             แก้ไข Stock Card
           </a>
-          <a clrVerticalNavLink routerLink="/admin/adjust-stock" routerLinkActive="active">
+          <a *ngIf="menuAdjust" clrVerticalNavLink routerLink="/admin/adjust-stock" routerLinkActive="active">
             <clr-icon shape="scissors"></clr-icon>
             ปรับยอดสินค้า
           </a>
-          <a clrVerticalNavLink routerLink="/admin/return-budget" routerLinkActive="active">
+          <a *ngIf="menuReturn" clrVerticalNavLink routerLink="/admin/return-budget" routerLinkActive="active">
             <clr-icon shape="e-check"></clr-icon>
             ตรวจสอบงบประมาณ
           </a>

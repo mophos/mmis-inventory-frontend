@@ -1,8 +1,9 @@
+import { JwtHelper } from 'angular2-jwt';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AlertExpiredService } from '../alert-expired.service';
 import { AlertService } from '../../alert.service';
 import { ProductsService } from './../products.service';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'wm-alert-expired',
   templateUrl: './alert-expired.component.html'
@@ -23,13 +24,21 @@ export class AlertExpiredComponent implements OnInit {
   genericType: any = "all";
   genericTypeE: any = "all";
   products = [];
-
+  jwtHelper: JwtHelper = new JwtHelper();
+  rights: any;
+  menuSettingAlertExpired
   constructor(
     private alertExpiredService: AlertExpiredService,
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
     private productService: ProductsService,
-  ) { }
+  ) {
+    const token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    const accessRight = decodedToken.accessRight;
+    this.rights = accessRight.split(',');
+    this.menuSettingAlertExpired = _.indexOf(this.rights, 'WM_SETTING_ALERT_EXPIRED') === -1 ? false : true;
+  }
 
   async ngOnInit() {
     await this.getGenericType();
