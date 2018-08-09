@@ -1,3 +1,6 @@
+import { AuthMinMaxPlanning } from './../auth-minmax-planing.service';
+import { AuthAddition } from './../auth-addition.service';
+import { AuthStockcard } from 'app/auth-stockcard.service';
 import { ReportComponent } from './report/report.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
@@ -108,7 +111,8 @@ import { StockcardReceiveOtherComponent } from 'app/admin/tools/stockcard-receiv
 import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
 import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
-
+//
+import { AuthReturnBudget } from '../auth-return-budget.service';
 
 const routes: Routes = [
   {
@@ -186,15 +190,15 @@ const routes: Routes = [
       { path: 'borrow-notes', component: BorrowNoteComponent },
       { path: 'borrow-notes/new', component: BorrowNoteNewComponent },
       { path: 'borrow-notes/:borrowNoteId/edit', component: BorrowNoteNewComponent },
-      { path: 'min-max', component: CalculateMinMaxComponent },
-      { path: 'addition', component: AdditionComponent },
-      { path: 'addition/warehouse', component: AdditionWarehouseComponent },
-      { path: 'addition/generic', component: AdditionGenericComponent },
-      { path: 'addition/edit/:additionId', component: AdditionEditComponent },
-      { path: 'return-budget', component: ReturnBudgetComponent },
+      { path: 'min-max', canActivate: [AuthMinMaxPlanning], component: CalculateMinMaxComponent },
+      { path: 'addition', canActivate: [AuthAddition], component: AdditionComponent },
+      { path: 'addition/warehouse', canActivate: [AuthAddition], component: AdditionWarehouseComponent },
+      { path: 'addition/generic', canActivate: [AuthAddition], component: AdditionGenericComponent },
+      { path: 'addition/edit/:additionId', canActivate: [AuthAddition], component: AdditionEditComponent },
+      { path: 'return-budget', canActivate: [AuthReturnBudget], component: ReturnBudgetComponent },
       {
         path: 'tools',
-        canActivate: [AdminGuard],
+        canActivate: [AdminGuard, AuthStockcard],
         children: [
           { path: 'stockcard', component: StockcardComponent },
           { path: 'stockcard/receive', component: StockcardReceiveComponent },
@@ -217,9 +221,9 @@ const routes: Routes = [
           { path: 'confirm', canActivate: [AuthRequisition], component: RequisitionConfirmComponent },
           { path: 'confirm/edit', canActivate: [AuthRequisition], component: RequisitionConfirmEditComponent },
           { path: 'confirm-unpaid', canActivate: [AuthRequisition], component: RequisitionConfirmUnpaidComponent },
-          { path: 'templates', canActivate: [AuthRequisition], component: RequisitionTemplateComponent },
-          { path: 'templates/new', canActivate: [AuthRequisition], component: RequisitionTemplateNewComponent },
-          { path: 'templates/edit/:templateId', canActivate: [AuthRequisition], component: RequisitionTemplateEditComponent },
+          { path: 'templates', component: RequisitionTemplateComponent },
+          { path: 'templates/new', component: RequisitionTemplateNewComponent },
+          { path: 'templates/edit/:templateId', component: RequisitionTemplateEditComponent },
           { path: 'fast', canActivate: [AuthRequisition], component: RequisitionFastComponent },
         ]
       },
