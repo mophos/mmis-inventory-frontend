@@ -17,6 +17,11 @@
               <input type="text" (keyup)="searchPo($event)" name="queryPo" [(ngModel)]="queryPo" placeholder="เลขที่ใบสั่งซื้อ, ผู้จำหน่าย"
                 style="width: 400px;">
             </div>
+            <div class="col-md-6" style="padding-top: 5px;">
+              <div style="float: right;">
+                มูลค่าแตกต่าง รวม: {{totalDifferPrice || 0 | number: '1.2-2'}} บาท
+              </div>
+            </div>
           </div>
         </div>
       </div>
