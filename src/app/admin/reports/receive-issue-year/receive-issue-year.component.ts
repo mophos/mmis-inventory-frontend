@@ -20,6 +20,9 @@ export class ReceiveIssueYearComponent implements OnInit {
   isPreview = false;
   genericTypes = [];
   genericTypeSelect: any = [];
+  people1: any = null;
+  people2: any = null;
+  people3: any = null;
   constructor(
     private reportProductService: ReportProductsService,
     private productService: ProductsService,
@@ -76,5 +79,35 @@ export class ReceiveIssueYearComponent implements OnInit {
 
   refreshWaiting(state: State) {
     this.getGenericsType();
+  }
+
+
+  onChangePeople1(event: any) {
+    if (event) {
+      this.people1 = '';
+    }
+  }
+  onSelectedPeople1(event: any) {
+    console.log(event);
+    
+    this.people1 = event ? event.people_id : '';
+  }
+
+  onChangePeople2(event: any) {
+    if (event) {
+      this.people2 = '';
+    }
+  }
+  onSelectedPeople2(event: any) {
+    this.people2 = event ? event.people_id : '';
+  }
+
+  onChangePeople3(event: any) {
+    if (event) {
+      this.people3 = '';
+    }
+  }
+  onSelectedPeople3(event: any) {
+    this.people3 = event ? event.people_id : '';
   }
 }
