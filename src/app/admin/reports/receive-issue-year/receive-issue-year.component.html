@@ -5,8 +5,8 @@
 </nav>
 <form>
   <section class="form-block">
-    <div class="row" style="padding: 1em">
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+    <div class="form-group row wid99" style="padding: 1em">
+      <div class="col-md-2 col-sm-12 col-xs-12">
         <label for="startDate" class="required">ปีงบ</label>
       </div>
       <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -18,17 +18,63 @@
           </select>
         </div>
       </div>
-      <div class="col-lg-3 col-md-2">
-        <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="showReport()">
-          <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน
-        </button>
-        <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="exportExcel()">
-          <clr-icon shape="download"></clr-icon>
-          ส่งออก Excel
-        </button>
-      </div>
     </div>
-    <div class="row" style="padding: 1em">
+      <div class="form-group row wid99">
+        <div class="col-md-2 col-sm-12 col-xs-12">
+          <label for="people1" class="required">
+            <span>ประธาน</span>
+          </label>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople1($event)" (onSelect)="onSelectedPeople1($event)"></wm-search-people-autocomplete>
+        </div>
+    </div>
+    <div class="form-group row wid99">
+      <div class="col-md-2 col-sm-12 col-xs-12">
+        <label for="people2" class="required">
+          <span>กรรมการ</span>
+        </label>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople2($event)" (onSelect)="onSelectedPeople2($event)"></wm-search-people-autocomplete>
+      </div>
+  </div>
+  <div class="form-group row wid99">
+    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12">
+      <label for="people3" class="required">
+        <span>กรรมการ</span>
+      </label>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+      <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople3($event)" (onSelect)="onSelectedPeople3($event)"></wm-search-people-autocomplete>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-lg-2 col-md-1 col-sm-12 col-xs-12">
+      <label class="required">ประเภท</label>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+      <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px; width: 400px;">
+        <clr-dg-column style="width: 150px;">ทั้งหมด</clr-dg-column>
+        <clr-dg-row *ngFor="let order of genericTypes" [clrDgItem]="order">
+          <clr-dg-cell>{{order.generic_type_name}}</clr-dg-cell>
+        </clr-dg-row>
+      </clr-datagrid>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12">
+      <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0 || people1 == ''|| people2 == ''|| people3 == '' " (click)="showReport()">
+        <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน
+      </button>
+      <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0 || people1 == ''|| people2 == ''|| people3 == ''  " (click)="exportExcel()">
+        <clr-icon shape="download"></clr-icon>
+        ส่งออก Excel
+      </button>
+    </div></div>
+      
+    
+    <!-- <div class="row" style="padding: 1em">
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
         <label class="required">ประเภท</label>
       </div>
@@ -40,7 +86,7 @@
           </clr-dg-row>
         </clr-datagrid>
       </div>
-    </div>
+    </div> -->
   </section>
 </form>
 <span class="spinner spinner-inline" *ngIf="isPreview">
