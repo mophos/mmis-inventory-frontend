@@ -41,7 +41,7 @@ export class ReceiveIssueYearComponent implements OnInit {
     this.genericTypeSelect.forEach(value => {
       genericType.push('genericType=' + value.generic_type_id)
     });
-    const url = `${this.apiUrl}/report/receiveIssueYear/${this.yearSelect}?token=${this.token}&` + genericType.join('&');
+    const url = `${this.apiUrl}/report/receiveIssueYear/${this.yearSelect}?token=${this.token}&` + genericType.join('&')+`&people1=${this.people1}&people2=${this.people2}&people3=${this.people3}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
   async exportExcel() {
