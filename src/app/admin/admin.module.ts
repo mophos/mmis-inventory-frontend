@@ -166,6 +166,9 @@ import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { AuthStockcard } from 'app/auth-stockcard.service';
 import { AuthReturnBudget } from 'app/auth-return-budget.service';
 import { AuthAddition } from 'app/auth-addition.service';
+import { PickComponent } from './pick/pick.component';
+import { PickNewComponent } from './pick-new/pick-new.component';
+import { PickService } from './pick.service';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -274,7 +277,9 @@ Highcharts.setOptions({
     ReturnBudgetComponent,
     ReceiveIssueYearComponent,
     ReportComponent,
-    ExportdataComponent
+    ExportdataComponent,
+    PickComponent,
+    PickNewComponent
   ],
   providers: [
     MainService,
@@ -332,6 +337,7 @@ Highcharts.setOptions({
     GenericService,
     AdjustStockService,
     ReturnBudgetService,
+    PickService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })

@@ -1,0 +1,55 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <span class="breadcrumb-item active">การหยิบ</span>
+</nav>
+
+<button class="btn btn-sm btn-success btn-icon" routerLink="/admin/pick/new">
+  <clr-icon shape="plus"></clr-icon> บันทึกหยิบ
+</button>
+<button style="float: right" [disabled]="!selectedPrint.length" class="btn btn-sm btn-success btn-icon" (click)="printReport()">
+  <clr-icon shape="printer"></clr-icon> พิมพ์รายการหยิบ
+</button>
+
+<div class="card">
+  <div class="card-block" style="padding: 5px 0px 5px 10px;">
+    <div class="form-group row wid99">
+      <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+        <label for="query">ค้นหา</label>
+        <input type="text" placeholder="ระบุคำค้นหา" id="query" [(ngModel)]="query" style="width: 300px;">
+        <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
+          <clr-icon shape="search"></clr-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<clr-datagrid (clrDgRefresh)="refresh($event)" [(clrDgSelected)]="selectedPrint" style="padding-top: 5px; height: 85%;">
+  <clr-dg-column style="width: 150px;">วันที่หยิบ</clr-dg-column>
+  <clr-dg-column style="width: 150px;">เลขที่หยิบ</clr-dg-column>
+  <clr-dg-column>หน่วยหยิบ</clr-dg-column>
+  <clr-dg-column style="width: 100px;">หมายเหตุ</clr-dg-column>
+  <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+  <clr-dg-row *ngFor="let o of order" [clrDgItem]="o" [ngClass]="{'isSuccess': o.is_approve === 'Y', 'isError': o.is_cancel === 'Y'}">
+    <clr-dg-cell style="text-align: left;">{{o.pick_date | toThaiDate}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: left;">{{o.pick_code}}</clr-dg-cell>
+    <clr-dg-cell>{{o.warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+        <div class="btn-group">
+          <button title="แก้ไข" [disabled]="s.is_approve === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/admin/pick/new"
+            [queryParams]="{issueId: s.issue_id}">
+            <clr-icon shape="note"></clr-icon>
+          </button>
+          <button title="ลบ" [disabled]="s.is_approve === 'Y' || s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="remove(o)">
+            <clr-icon shape="trash"></clr-icon>
+          </button>
+          <button title="พิมพ์" [disabled]="s.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-primary tooltip tooltip-sm tooltip-left" role="tooltip" aria-haspopup="true" (click)="showReport(o.pick_id)">
+            <clr-icon shape="printer"></clr-icon>
+            <span class="tooltip-content">พิมพ์ใบตัดจ่าย</span>
+          </button>
+        </div>
+      </clr-dg-cell>
+  </clr-dg-row>
+</clr-datagrid>
+<wm-loading-modal #modalLoading></wm-loading-modal>
+<wm-html-preview #htmlPreview></wm-html-preview>

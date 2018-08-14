@@ -113,6 +113,8 @@ import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/s
 import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
 //
 import { AuthReturnBudget } from '../auth-return-budget.service';
+import { PickComponent } from './pick/pick.component';
+import { PickNewComponent } from './pick-new/pick-new.component';
 
 const routes: Routes = [
   {
@@ -196,6 +198,8 @@ const routes: Routes = [
       { path: 'addition/generic', canActivate: [AuthAddition], component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', canActivate: [AuthAddition], component: AdditionEditComponent },
       { path: 'return-budget', canActivate: [AuthReturnBudget], component: ReturnBudgetComponent },
+      { path: 'pick', component: PickComponent },
+      { path: 'pick/new', component: PickNewComponent },
       {
         path: 'tools',
         canActivate: [AdminGuard, AuthStockcard],
