@@ -33,5 +33,15 @@ export class PickService {
         });
     });
   }
+  gerReceiveItem(receiveId:any){
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/pick/gerReceiveItem?receiveId=${receiveId}`).map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
 
 }

@@ -77,6 +77,7 @@ export class PickNewComponent implements OnInit {
   setSelectedProduct(event:any){
 
   }
+  
   async getReceive(){
     const rs:any = await this.pickService.gerReceiveNotPO()
     try {
@@ -88,7 +89,23 @@ export class PickNewComponent implements OnInit {
       this.alertService.error(error)
     }
   }
-  addReceive(receiveId:any){
+  async addReceive(receiveId:any){
+    this.modalLoading.show()
+    const rs:any = await this.pickService.gerReceiveItem(receiveId)
+    console.log(rs);
+    
+    try {
+      if(rs.ok){
+        this.products = rs.rows
+        console.log(this.products);
+        
+        this.modalLoading.hide()
+      }
+    } catch (error) {
+      this.alertService.error(error)
+    }
+    this.modalLoading.hide()
+    this.isOpenModal = false
 
   }
 }

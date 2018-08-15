@@ -113,41 +113,7 @@
             </div>
           </clr-dg-cell>
         </clr-dg-row>
-        <clr-dg-row class="newLine">
-          <clr-dg-cell>
-            <wm-search-generic-warehouse-zero [warehouseId]="warehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
-          </clr-dg-cell>
-          <clr-dg-cell>
-            <input type="text" class="wm-edit-box-number" style="width: 100px;" style="background-color: #FFF9C4"
-            [(ngModel)]="pickQty" autocomplete="off" wmNumberWithOutDot placeholder="">
-             <!-- [disabled]="!genericId" -->
-          </clr-dg-cell>
-          <clr-dg-cell>
-            <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
-          </clr-dg-cell>
-          <clr-dg-cell style="text-align: right; line-height: 25px;" >
-          <!-- [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}"> -->
-          <!-- {{ pickQty*conversionQty | number }} -->
-        </clr-dg-cell>
-          <clr-dg-cell style="text-align: right; line-height: 25px;">
-            <!-- {{ remainQty | number }} -->
-          </clr-dg-cell>
-          <!-- <clr-dg-cell style="text-align: center; line-height: 25px;">{{ primaryUnitName }}</clr-dg-cell> -->
-      
-          <clr-dg-cell style="text-align: center;">
-            <div class="btn-group btn-primary">
-              <button class="btn btn-success btn-sm wm-small-btn" (click)="addProduct()">
-                <!-- [disabled]="!genericId || !issueQty || !unitGenericId || ((issueQty * conversionQty) > remainQty)" -->
-                
-                เพิ่ม
-              </button>
-              <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
-                ยกเลิก
-              </button>
-            </div>
-          </clr-dg-cell>
-        </clr-dg-row>
-      
+       
       </clr-datagrid>
       
       <div>
@@ -170,16 +136,16 @@
             <clr-dg-column>เลขที่</clr-dg-column>
             <clr-dg-column>วันที่รับ</clr-dg-column>
             <!-- <clr-dg-column>หมายเหตุ</clr-dg-column> -->
-            <clr-dg-column></clr-dg-column>
+            <clr-dg-column style="width: 100px"></clr-dg-column>
       
             <clr-dg-row *ngFor="let i of receive">
-              <!-- <wma-issues-list *clrIfExpanded [issueId]="i.issue_id" ngProjectAs="clr-dg-row-detail"></wma-issues-list> -->
+                <wm-product-detail *clrIfExpanded [receiveId]="i.receive_id" ngProjectAs="clr-dg-row-detail"></wm-product-detail>
       
               <clr-dg-cell>{{i.receive_code}}</clr-dg-cell>
               <clr-dg-cell>{{i.receive_date | toThaiDate}}</clr-dg-cell>
               <!-- <clr-dg-cell>{{i.ref_ducoment}}</clr-dg-cell> -->
-              <clr-dg-cell>
-                <button type="button" class="btn btn-primary btn-sm wm-small-btn" (click)="addReceive(i.receive_id)">+ เพิ่ม</button>
+              <clr-dg-cell style="text-align:center">
+                <button type="button" class="btn btn-primary btn-sm wm-small-btn" (click)="addReceive(i.receive_id)">เลือก</button>
               </clr-dg-cell>
             </clr-dg-row>
           </clr-datagrid>
