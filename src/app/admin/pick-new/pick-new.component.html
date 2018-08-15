@@ -1,3 +1,192 @@
-<p>
-  pick-new works!
-</p>
+<nav class="breadcrumb">
+    <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+    <a class="breadcrumb-item" href="javascript://" routerLink="/admin/pick">การหยิบ</a>
+    <span class="breadcrumb-item active">บันทึกการหยิบ</span>
+  </nav>
+
+  <div class="card">
+      <div class="card-block" style="padding: 0px 0px 0px 10px;">
+        <form class="compact" style="padding-top: 0px;">
+          <section class="form-block">
+            <div class="form-group row wid99">
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                <label for="datePick" class="required">เลขที่ใบหยิบ</label>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <input class="form-control" placeholder="สร้างอัตโนมัติ"  disabled type="text" name="pickCode" [disabled]="isApprove" [(ngModel)]="pickCode">
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                <label for="dateReceive" class="required">วันที่รับ</label>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <my-date-picker-th name="mydate1"  [options]="myDatePickerOptions" [(ngModel)]="pickDate" required></my-date-picker-th>
+              </div>
+            </div>
+            <div class="form-group row wid99">
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                <label for="gForm_1" class="required">เลขที่ใบรับเข้า</label>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <input class="form-control" disabled type="text" name="receiveCode" style="float: left; width: 90%;" [(ngModel)]="receiveCode">
+                <div style="float: left;">
+                  <button class="btn btn-icon btn-link" (click)="searchReceive()" [disabled]="isApprove || receiveCode">
+                    <clr-icon shape="search"></clr-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                <label for="dateReceive">วันที่รับเข้า</label>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <my-date-picker-th name="receiveDate" placeholder="สร้างเมื่อเลือกใบรับ" [options]="myDatePickerReceiveOptions" [(ngModel)]="receiveDate"></my-date-picker-th>
+              </div>
+            </div>
+            <!-- <div class="form-group row wid99">
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                <label class="required" for="gForm_1">เลขที่ใบส่ง</label>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <input class="form-control" type="text" [disabled]="isApprove" name="deliverCode" [(ngModel)]="deliveryCode">
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                <label for="dateReceive" class="required">วันที่ส่ง</label>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <my-date-picker-th name="mydate2" [options]="myDatePickerOptions" [(ngModel)]="deliveryDate" required></my-date-picker-th>
+              </div>
+            </div> -->
+            <!-- <div class="form-group row wid99">
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                <label class="required" for="slLabeler">ผู้จำหน่าย</label>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <wm-search-labeler [disabled]="isApprove" #wmSearchLabeler labelerType="V" (onSelect)="selectedSupplier($event)" (onChange)="clearSupplier()"></wm-search-labeler>
+              </div>
+    
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+
+              </div>
+    
+            </div> -->
+          </section>
+        </form>
+      </div>
+    </div>
+
+
+    <clr-datagrid [style.padding-top.px]="10" style="position: relative;">
+        <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">จำนวนตัดจ่าย</clr-dg-column>
+        <clr-dg-column [style.width.px]="200">หน่วยตัดจ่าย</clr-dg-column>
+        <clr-dg-column [style.width.px]="100">รวม (Base)</clr-dg-column>
+        <clr-dg-column [style.width.px]="120">คงเหลือ (Base)</clr-dg-column>
+        <clr-dg-column [style.width.px]="140"></clr-dg-column>
+      
+        <clr-dg-row *ngFor="let product of products; let idx = index;">
+          <!-- <wm-issue-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="product.items" ngProjectAs="clr-dg-row-detail"></wm-issue-product> -->
+      
+          <clr-dg-cell style="line-height: 25px;">
+            <!-- {{idx + 1}}. {{product.generic_name}} -->
+          </clr-dg-cell>
+          <!-- <clr-dg-cell style="line-height: 25px;">{{product.expired_date | toEngDate}}</clr-dg-cell> -->
+          <clr-dg-cell>
+            <!-- <input type="text" #issueQty (keyup)="editChangeIssueQty(idx, issueQty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+              wmNumberOnly [value]="product.issue_qty" /> -->
+          </clr-dg-cell>
+          <clr-dg-cell>
+            <!-- <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
+              [genericId]="product.generic_id"></wm-select-receive-unit> -->
+          </clr-dg-cell>
+          <clr-dg-cell style="line-height: 25px; text-align: right;">
+            <!-- {{product.issue_qty*product.conversion_qty | number}} {{product.primary_unit_name}} -->
+          </clr-dg-cell>
+          <clr-dg-cell style="line-height: 25px; text-align: right;">
+            <!-- {{product.remain_qty | number}} {{product.unit_name}} -->
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">
+            <div class="btn-group btn-primary">
+              <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
+                <clr-icon shape="trash"></clr-icon>
+              </button>
+            </div>
+          </clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-row class="newLine">
+          <clr-dg-cell>
+            <wm-search-generic-warehouse-zero [warehouseId]="warehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
+          </clr-dg-cell>
+          <clr-dg-cell>
+            <input type="text" class="wm-edit-box-number" style="width: 100px;" style="background-color: #FFF9C4"
+            [(ngModel)]="pickQty" autocomplete="off" wmNumberWithOutDot placeholder="">
+             <!-- [disabled]="!genericId" -->
+          </clr-dg-cell>
+          <clr-dg-cell>
+            <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right; line-height: 25px;" >
+          <!-- [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}"> -->
+          <!-- {{ pickQty*conversionQty | number }} -->
+        </clr-dg-cell>
+          <clr-dg-cell style="text-align: right; line-height: 25px;">
+            <!-- {{ remainQty | number }} -->
+          </clr-dg-cell>
+          <!-- <clr-dg-cell style="text-align: center; line-height: 25px;">{{ primaryUnitName }}</clr-dg-cell> -->
+      
+          <clr-dg-cell style="text-align: center;">
+            <div class="btn-group btn-primary">
+              <button class="btn btn-success btn-sm wm-small-btn" (click)="addProduct()">
+                <!-- [disabled]="!genericId || !issueQty || !unitGenericId || ((issueQty * conversionQty) > remainQty)" -->
+                
+                เพิ่ม
+              </button>
+              <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
+                ยกเลิก
+              </button>
+            </div>
+          </clr-dg-cell>
+        </clr-dg-row>
+      
+      </clr-datagrid>
+      
+      <div>
+        <button class="btn btn-success btn-sm" (click)="savePick()" >
+          <!-- [disabled]="!transactionId || !issueDate || !refDocument || !products.length"> -->
+          <clr-icon shape="floppy"></clr-icon>
+          บันทึกการหยิบ
+        </button>
+        <button class="btn btn-danger btn-sm" [routerLink]="['/admin/pick']">
+          <clr-icon shape="home"></clr-icon>
+          กลับหน้าหลัก
+        </button>
+      </div>
+
+
+    <clr-modal [(clrModalOpen)]="isOpenModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+        <h3 class="modal-title">รายการรับที่ยังไม่ได้ผูก PO</h3>
+        <div class="modal-body">
+          <clr-datagrid style="height: 300px;">
+            <clr-dg-column>เลขที่</clr-dg-column>
+            <clr-dg-column>วันที่รับ</clr-dg-column>
+            <!-- <clr-dg-column>หมายเหตุ</clr-dg-column> -->
+            <clr-dg-column></clr-dg-column>
+      
+            <clr-dg-row *ngFor="let i of receive">
+              <!-- <wma-issues-list *clrIfExpanded [issueId]="i.issue_id" ngProjectAs="clr-dg-row-detail"></wma-issues-list> -->
+      
+              <clr-dg-cell>{{i.receive_code}}</clr-dg-cell>
+              <clr-dg-cell>{{i.receive_date | toThaiDate}}</clr-dg-cell>
+              <!-- <clr-dg-cell>{{i.ref_ducoment}}</clr-dg-cell> -->
+              <clr-dg-cell>
+                <button type="button" class="btn btn-primary btn-sm wm-small-btn" (click)="addReceive(i.receive_id)">+ เพิ่ม</button>
+              </clr-dg-cell>
+            </clr-dg-row>
+          </clr-datagrid>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-sm" (click)="isOpenModal = false">ปิดหน้าต่าง</button>
+        </div>
+      </clr-modal>
+      
+<wm-loading-modal #modalLoading></wm-loading-modal>

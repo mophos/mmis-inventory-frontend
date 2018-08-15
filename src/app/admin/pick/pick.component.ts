@@ -25,7 +25,6 @@ export class PickComponent implements OnInit {
   async refresh(event: any) {
     this.modalLoading.show();
     let rs:any = await this.pickService.getList();
-    console.log(rs);
     try {
       if(rs.ok){
         this.order = rs.rows

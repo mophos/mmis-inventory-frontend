@@ -11,9 +11,20 @@ export class PickService {
   ) { }
 
   getList(){
-
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/pick/getList`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
+  gerReceiveNotPO(){
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/pick/gerReceiveNotPO`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
