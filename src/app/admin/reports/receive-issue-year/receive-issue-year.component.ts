@@ -50,7 +50,7 @@ export class ReceiveIssueYearComponent implements OnInit {
       genericType.push('genericType=' + value.generic_type_id)
     });
     const token = sessionStorage.getItem('token');
-    const url = `${this.apiUrl}/report/receive-issue/year/export/${this.yearSelect}?token=${token}&` + genericType.join('&');;
+    const url = `${this.apiUrl}/report/receive-issue/year/export/${this.yearSelect}?token=${token}&` + genericType.join('&');
     window.open(url, '_blank');
   }
   async getButgetYear() {
