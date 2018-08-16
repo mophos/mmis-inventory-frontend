@@ -7,6 +7,8 @@ import { ReportProductsService } from './../reports-products.service';
 import { AlertService } from './../../../alert.service';
 import * as _ from 'lodash';
 import { ProductsService } from '../../products.service';
+import { State } from "@clr/angular";
+
 @Component({
   selector: 'wm-inventory-status',
   templateUrl: './inventory-status.component.html',
@@ -22,6 +24,7 @@ export class InventoryStatusComponent implements OnInit {
   genericTypes = [];
   genericType: any = 0;
   genericTypeIds = [];
+  genericTypeSelect: any = [];
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -77,9 +80,17 @@ export class InventoryStatusComponent implements OnInit {
   changeGenericType() {
   }
 
-  inventoryStatus() {
+  showReport() {
+    let genericType = [];
+    this.genericTypeSelect.forEach(value => {
+      genericType.push('genericType=' + value.generic_type_id)
+    });
     this.statusDate = this.statusDate ? moment(this.statusDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/inventorystatus/${this.warehouseId}/${this.genericType}/${this.statusDate}?token=${this.token}`
+    const url = `${this.apiUrl}/report/inventorystatus?warehouseId=${this.warehouseId}&statusDate=${this.statusDate}&token=${this.token}&` + genericType.join('&');
     this.htmlPreview.showReport(url);
+  }
+  
+  refreshWaiting(state: State) {
+    this.getGenericType();
   }
 }
