@@ -41,11 +41,14 @@ export class SearchPeopleAutoCompleteComponent implements OnInit {
 
   onChangeQuery(event: any) {
     if (event) {
+      if(!this.query && event.keyCode == 8){
+        this.onChange.emit(true);
+      }else {
       if (event.keyCode === 13 || event.keyCode === 37 || event.keyCode === 38 || event.keyCode === 39 || event.keyCode === 40) {
         this.onChange.emit(false);
       } else {
         this.onChange.emit(true);
-      }
+      }}
     } else {
       this.onChange.emit(false);
     }
