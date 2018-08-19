@@ -17,6 +17,7 @@ export class ReturnBudgetComponent implements OnInit {
   queryPo: any;
   perPage = 20;
   totalPurchases = 0;
+  totalDifferPrice = 0;
   totalHistory = 0;
   queryHistory: any;
   filterStatus = "";
@@ -44,6 +45,9 @@ export class ReturnBudgetComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(JSON.stringify(error));
     }
+    this.purchases.forEach(v => {
+      this.totalDifferPrice += v.differ_price;
+    });
   }
 
   async refreshPo(state: State) {

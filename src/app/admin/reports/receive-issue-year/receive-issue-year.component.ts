@@ -20,6 +20,9 @@ export class ReceiveIssueYearComponent implements OnInit {
   isPreview = false;
   genericTypes = [];
   genericTypeSelect: any = [];
+  people1: any = null;
+  people2: any = null;
+  people3: any = null;
   constructor(
     private reportProductService: ReportProductsService,
     private productService: ProductsService,
@@ -38,7 +41,7 @@ export class ReceiveIssueYearComponent implements OnInit {
     this.genericTypeSelect.forEach(value => {
       genericType.push('genericType=' + value.generic_type_id)
     });
-    const url = `${this.apiUrl}/report/receiveIssueYear/${this.yearSelect}?token=${this.token}&` + genericType.join('&');
+    const url = `${this.apiUrl}/report/receiveIssueYear/${this.yearSelect}?token=${this.token}&` + genericType.join('&')+`&people1=${this.people1}&people2=${this.people2}&people3=${this.people3}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
   async exportExcel() {
@@ -47,7 +50,7 @@ export class ReceiveIssueYearComponent implements OnInit {
       genericType.push('genericType=' + value.generic_type_id)
     });
     const token = sessionStorage.getItem('token');
-    const url = `${this.apiUrl}/report/receive-issue/year/export/${this.yearSelect}?token=${token}&` + genericType.join('&');;
+    const url = `${this.apiUrl}/report/receive-issue/year/export/${this.yearSelect}?token=${token}&` + genericType.join('&');
     window.open(url, '_blank');
   }
   async getButgetYear() {
@@ -76,5 +79,35 @@ export class ReceiveIssueYearComponent implements OnInit {
 
   refreshWaiting(state: State) {
     this.getGenericsType();
+  }
+
+
+  onChangePeople1(event: any) {
+    if (event) {
+      this.people1 = '';
+    }
+  }
+  onSelectedPeople1(event: any) {
+    console.log(event);
+    
+    this.people1 = event ? event.people_id : '';
+  }
+
+  onChangePeople2(event: any) {
+    if (event) {
+      this.people2 = '';
+    }
+  }
+  onSelectedPeople2(event: any) {
+    this.people2 = event ? event.people_id : '';
+  }
+
+  onChangePeople3(event: any) {
+    if (event) {
+      this.people3 = '';
+    }
+  }
+  onSelectedPeople3(event: any) {
+    this.people3 = event ? event.people_id : '';
   }
 }
