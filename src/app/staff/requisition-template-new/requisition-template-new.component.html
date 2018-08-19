@@ -1,6 +1,6 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="#/staff" routerLink="/staff">หน้าหลัก</a>
-  <a class="breadcrumb-item" href="#/staff/requisition-templates" routerLink="/staff/requisition-templates">ทำ Template ชุดเบิก</a>
+  <a class="breadcrumb-item" href="#/staff/requisition/templates" routerLink="/staff/requisition/templates">ทำ Template ชุดเบิก</a>
   <span class="breadcrumb-item active">จัดทำ Template เบิก/โอน</span>
 </nav>
 
@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-3">
               <div class="select form-control">
-                <select [disabled]=" srcWarehouseId" name="srcWarehouseId" id="srcWarehouseId" [(ngModel)]="srcWarehouseId" >
+                <select [disabled]=" srcWarehouseId" name="srcWarehouseId" id="srcWarehouseId" [(ngModel)]="srcWarehouseId">
                   <option *ngFor="let w of srcWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{w.warehouse_name}}</option>
                 </select>
               </div>
@@ -68,12 +68,12 @@
         </form>
         <p>รายการเบิก</p>
         <clr-datagrid [style.height.px]="300">
-            <clr-dg-column [style.width.%]="1">#</clr-dg-column>
-            <clr-dg-column [style.width.%]="30">ชื่อสินค้า</clr-dg-column>
-            <clr-dg-column [style.width.%]="15">หน่วย</clr-dg-column>
-            <clr-dg-column [style.width.%]="20">
-              <button (click)="sort()" class="btn btn-sm btn-icon btn-success wm-small-btn">เรียง ก-ฮ A-Z</button>
-            </clr-dg-column>
+          <clr-dg-column [style.width.%]="1">#</clr-dg-column>
+          <clr-dg-column [style.width.%]="30">ชื่อสินค้า</clr-dg-column>
+          <clr-dg-column [style.width.%]="15">หน่วย</clr-dg-column>
+          <clr-dg-column [style.width.%]="20">
+            <button (click)="sort()" class="btn btn-sm btn-icon btn-success wm-small-btn">เรียง ก-ฮ A-Z</button>
+          </clr-dg-column>
 
           <clr-dg-row *clrDgItems="let g of products2;let idx=index" [clrDgItem]="g">
             <clr-dg-action-overflow>
@@ -84,21 +84,23 @@
             </clr-dg-action-overflow>
             <clr-dg-cell>{{(idx+1)}}</clr-dg-cell>
             <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
-            <clr-dg-cell><wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)" [genericId]="g.generic_id"></wm-select-receive-unit></clr-dg-cell>
+            <clr-dg-cell>
+              <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)" [genericId]="g.generic_id"></wm-select-receive-unit>
+            </clr-dg-cell>
             <clr-dg-cell style="text-align: center;">
               <button title="เลื่อนขึ้น" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productUp(g)">
                 <clr-icon shape="caret up"></clr-icon>
                 <!-- เลื่อนขึ้น -->
               </button>
               <button title="เลื่อนลง" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productDown(g)">
-                  <clr-icon shape="caret down"></clr-icon>
-                  <!-- เลื่อนลง -->
+                <clr-icon shape="caret down"></clr-icon>
+                <!-- เลื่อนลง -->
               </button>
               <input type="text" class="form-control" #goto size="14" placeholder="ระบุลำดับ เพื่อเลื่อน..">
               <button title="เลื่อนไปที่" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productGoTo(g,goto.value)">
-                  <clr-icon shape="upload"></clr-icon>
-                  <!-- เลื่อนขึ้น -->
-                </button>
+                <clr-icon shape="upload"></clr-icon>
+                <!-- เลื่อนขึ้น -->
+              </button>
               <button title="ลบรายการ" class="btn btn-sm btn-icon btn-danger wm-small-btn" (click)="removeSelected(g)">
                 <clr-icon shape="trash"></clr-icon>
               </button>
@@ -117,7 +119,7 @@
   </div>
   <div class="card-footer">
     <button class="btn btn-sm btn-primary" [disabled]="!products2.length || !srcWarehouseId || !dstWarehouseId" (click)="saveTemplate()">บันทึกสร้างชุดเบิก/โอน</button>
-    <a href="#/staff/requisition-templates" class="btn btn-sm btn-danger">กลับ</a>
+    <a href="#/staff/requisition/templates" class="btn btn-sm btn-danger">กลับ</a>
   </div>
 </div>
 

@@ -1,3 +1,4 @@
+import { PayRequisitionService } from './pay-requisition.service';
 import { TransferService } from './transfer.service';
 import { GridDetailModule } from './../grid-detail/grid-detail.module';
 import { ModalsModule } from './../modals/modals.module';
@@ -15,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { StaffRoutingModule } from './staff-routing.module';
 import { LayoutComponent } from './layout/layout.component';
 import { MainComponent } from './main/main.component';
-import { RequisitionComponent} from './requisition/requisition.component';
+import { RequisitionComponent } from './requisition/requisition.component';
 import { RequisitionNewComponent } from './requisition-new/requisition-new.component';
 
 import { LocationService } from './location.service';
@@ -33,7 +34,7 @@ import { AlertExpiredService } from './alert-expired.service';
 import { ProductlotsService } from "./productlots.service";
 import { BorrowService } from './borrow.service';
 import { UploadingService } from './../uploading.service';
-import { IssueService} from './issue.service';
+import { IssueService } from './issue.service';
 import { CountingComponent } from './counting/counting.component';
 import { TransferComponent } from './transfer/transfer.component';
 import { TransferNewComponent } from './transfer-new/transfer-new.component';
@@ -73,6 +74,8 @@ import { ReceivesComponent } from './receives/receives.component';
 import { ReceivesOtherComponent } from './receives-other/receives-other.component';
 import { ReceivesOtherEditComponent } from './receives-other-edit/receives-other-edit.component';
 import { ExportdataComponent } from './exportdata/exportdata.component';
+import { PayRequisitionComponent } from './pay-requisition/pay-requisition.component';
+import { PayRequisitionConfirmComponent } from './pay-requisition-confirm/pay-requisition-confirm.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -115,7 +118,9 @@ import { ExportdataComponent } from './exportdata/exportdata.component';
     ReceivesComponent,
     ReceivesOtherComponent,
     ReceivesOtherEditComponent,
-    ExportdataComponent
+    ExportdataComponent,
+    PayRequisitionComponent,
+    PayRequisitionConfirmComponent
   ],
   providers: [
     ToThaiDatePipe,
@@ -144,7 +149,8 @@ import { ExportdataComponent } from './exportdata/exportdata.component';
     HisTransactionService,
     PeriodService,
     AccessCheck,
-    BorrowNoteService
+    BorrowNoteService,
+    PayRequisitionService
   ]
 })
 export class StaffModule { }

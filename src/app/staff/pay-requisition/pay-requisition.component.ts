@@ -1,38 +1,30 @@
+import { AccessCheck } from './../../access-check';
 import { State } from '@clr/angular';
 import { UploadingService } from './../../uploading.service';
 import {
   Component,
   OnInit,
   ViewChild,
-  NgZone,
   Inject,
   ChangeDetectorRef,
-  EventEmitter
 } from '@angular/core';
 
-import { RequisitionTypeService } from "../requisition-type.service";
-import { RequisitionService } from "../requisition.service";
+// import { RequisitionService } from "../requisition.service";
+import { PayRequisitionService } from '../pay-requisition.service';
+import { WarehouseService } from "../warehouse.service";
 import { AlertService } from "../../alert.service";
 
-import { IMyOptions } from 'mydatepicker-th';
-
-import * as moment from 'moment';
-
-import * as _ from 'lodash';
-import { IRequisitionOrderItem, IRequisitionOrder } from 'app/shared';
-import { AccessCheck } from '../../access-check';
-import { Router } from '@angular/router';
+import { JwtHelper } from 'angular2-jwt';
+import { IRequisitionOrder } from 'app/shared';
 
 @Component({
-  selector: 'wm-requisition',
-  templateUrl: './requisition.component.html'
+  selector: 'wm-pay-requisition',
+  templateUrl: './pay-requisition.component.html',
+  styles: []
 })
-export class RequisitionComponent implements OnInit {
-  @ViewChild('viewer') private viewer: any;
+export class PayRequisitionComponent implements OnInit {
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
-
-  selectedTab: any = 'waiting';
 
   filesToUpload: Array<File> = [];
   token: any;
@@ -41,52 +33,61 @@ export class RequisitionComponent implements OnInit {
   unpaids: any = [];
   waitingApproves: any = [];
   requisitionSelected: Array<any> = [];
-  title: any;
-  isConfirm: any;
-  openModalConfirm = false;
-  confirmApprove = false;
+  // tabSelect: any = 0;
+  selectedTab: any = 'waiting';
+  offset = 0;
+  perPage = 15;
+  currentPage = 1;
+
+  totalUnPaid = 0;
+  totalApprove = 0;
+  totalWaiting = 0;
+  totalWaitingApprove = 0;
+  totalApproveds
+  jwtHelper: JwtHelper = new JwtHelper();
+
+  query: any;
+  fillterCancel = 'nCancel';
+
   tmpOderApprove: any;
   username: any;
   password: any;
   action: any;
   page: any;
-  selectedCancel: any[] = [];
-
-  perPage = 20;
-  currentPage = 1;
-  offset = 0;
-  totalWaiting = 0;
-  totalUnPaid = 0;
-  totalWaitingApprove = 0;
-  totalApproveds = 0;
-  tabTotalWaiting = 0;
-  tabTotalWaitingApprove = 0;
-  tabTotalUnPaid = 0;
-  tabApprove = 0;
-  query: any;
-
-  fillterCancel = 'nCancel';
+  selectedCancel = [];
+  openModalConfirm = false;
+  confirmApprove = false;
 
   constructor(
     private alertService: AlertService,
-    private requisitionService: RequisitionService,
+    private requisitionService: PayRequisitionService,
     private accessCheck: AccessCheck,
-    private router: Router,
+    @Inject('DOC_URL') private docUrl: string,
+    @Inject('REQ_PREFIX') private documentPrefix: string,
     @Inject('API_URL') private url: string,
+    @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
     this.currentPage = +sessionStorage.getItem('currentPageRequisition') ? +sessionStorage.getItem('currentPageRequisition') : 1;
   }
 
   async ngOnInit() {
-    this.totalTab();
-    this.selectedTab = sessionStorage.getItem('tabRequisition');
+    this.loadData();
+    this.selectedTab = sessionStorage.getItem('tabRequisitionStaff');
   }
 
   setTapActive(tab: any) {
+    this.requisitionSelected = [];
     this.selectedTab = tab;
-    sessionStorage.setItem('tabRequisition', tab);
-    this.totalTab();
+    sessionStorage.setItem('tabRequisitionStaff', tab);
+  }
+
+  async loadData() {
+    await this.getWaiting();
+    await this.getWaitingApprove();
+    await this.getUnPaid();
+    await this.getApproved();
+
   }
 
   async getWaiting() {
@@ -106,16 +107,10 @@ export class RequisitionComponent implements OnInit {
     }
   }
 
-  refreshWaiting(state: State) {
-    this.offset = +state.page.from;
-    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
-    this.getWaiting();
-  }
-
   async getUnPaid() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getUnPaid(this.perPage, this.offset, this.query, this.fillterCancel);
+      const rs: any = await this.requisitionService.getUnPaid(this.perPage, this.offset, this.query, null);
       this.modalLoading.hide();
       if (rs.ok) {
         this.unpaids = rs.rows;
@@ -129,17 +124,10 @@ export class RequisitionComponent implements OnInit {
     }
   }
 
-  refreshUnPaid(state: State) {
-    this.offset = +state.page.from;
-    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
-    this.getUnPaid();
-  }
-
   async getWaitingApprove() {
-    this.requisitionSelected = [];
     this.modalLoading.show();
     try {
-      const rs: any = await this.requisitionService.getWaitingApprove(this.perPage, this.offset, this.query, this.fillterCancel);
+      const rs: any = await this.requisitionService.getPayWaitingApprove(this.perPage, this.offset, this.query, this.fillterCancel);
       this.modalLoading.hide();
       if (rs.ok) {
         this.waitingApproves = rs.rows;
@@ -153,27 +141,14 @@ export class RequisitionComponent implements OnInit {
     }
   }
 
-  refreshWaitingApprove(state: State) {
-    this.offset = +state.page.from;
-    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
-    this.getWaitingApprove();
-  }
-
-  refreshApprove(state: State) {
-    this.offset = +state.page.from;
-    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
-    this.getApproved();
-  }
-
   async getApproved() {
-    this.requisitionSelected = []
     this.modalLoading.show();
     try {
       const rs: any = await this.requisitionService.getApproved(this.perPage, this.offset, this.query);
       this.modalLoading.hide();
       if (rs.ok) {
         this.approveds = rs.rows;
-        this.totalApproveds = rs.total[0].total;
+        this.totalApprove = rs.total[0].total;
       } else {
         this.alertService.error(rs.error);
       }
@@ -181,6 +156,30 @@ export class RequisitionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+  }
+
+  refreshApprove(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisitionStaff', this.currentPage.toString());
+    this.getApproved();
+  }
+
+  refreshUnPaid(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisitionStaff', this.currentPage.toString());
+    this.getUnPaid();
+  }
+
+  refreshWaitingApprove(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisitionStaff', this.currentPage.toString());
+    this.getWaitingApprove();
+  }
+
+  refreshWaiting(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisitionStaff', this.currentPage.toString());
+    this.getWaiting();
   }
 
   async removeOrder(order: IRequisitionOrder) {
@@ -192,29 +191,7 @@ export class RequisitionComponent implements OnInit {
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
-            this.getWaiting();
-          } else {
-            this.alertService.error(rs.error);
-          }
-        } catch (error) {
-          this.modalLoading.hide();
-          this.alertService.error(error.message);
-        }
-      }).catch(() => {
-        this.modalLoading.hide();
-      });
-  }
-
-  async removeOrderConfirm(order: any) {
-    this.alertService.confirm('ต้องการลบรายการนี้ [' + order.requisition_code + ']')
-      .then(async () => {
-        this.modalLoading.show();
-        try {
-          const rs: any = await this.requisitionService.removeOrderConfirm(order.confirm_id);
-          this.modalLoading.hide();
-          if (rs.ok) {
-            this.alertService.success();
-            this.getWaitingApprove();
+            this.loadData();
           } else {
             this.alertService.error(rs.error);
           }
@@ -230,7 +207,6 @@ export class RequisitionComponent implements OnInit {
     const accessName = 'WM_REQUISITION_APPROVE'
     this.page = 1
     this.action = 'WM_REQUISITION_APPROVE'
-    this.title = 'รายการเบิกสินค้า'
     this.tmpOderApprove = order
     if (this.accessCheck.can(accessName)) {
       this.doApprove(this.tmpOderApprove)
@@ -247,7 +223,7 @@ export class RequisitionComponent implements OnInit {
         this.openModalConfirm = false
       }
     } else {
-      this.alertService.error('ไม่มีสิทธิ์อนุมัติ' + this.title);
+      this.alertService.error('ไม่มีสิทธิ์อนุมัติ รายการเบิกสินค้า');
     }
   }
 
@@ -266,8 +242,7 @@ export class RequisitionComponent implements OnInit {
           this.modalLoading.hide();
           if (rs.ok) {
             this.alertService.success();
-            this.getApproved();
-            this.getWaitingApprove();
+            this.loadData();
           } else {
             this.alertService.error(rs.error);
           }
@@ -280,7 +255,6 @@ export class RequisitionComponent implements OnInit {
         this.modalLoading.hide();
       });
   }
-
   printApprove() {
     const requisition_id: any = []
     let count: any = 0
@@ -315,83 +289,21 @@ export class RequisitionComponent implements OnInit {
     }
   }
 
-  cancelUnpaid(order: any) {
-    this.alertService.confirm('ต้องการเปลี่ยนสถานะเป็น ไม่ค้างจ่าย ใช่หรือไม่?')
-      .then(async () => {
-        this.modalLoading.show();
-        const ids: any = [];
-        ids.push(order.requisition_order_id);
-
-        try {
-          const rs: any = await this.requisitionService.cancelUnpaid(ids);
-          this.modalLoading.hide();
-          if (rs.ok) {
-            this.alertService.success();
-            this.getUnPaid();
-          } else {
-            this.alertService.error(rs.error);
-          }
-        } catch (error) {
-          this.modalLoading.hide();
-          this.alertService.error(JSON.stringify(error));
-        }
-      })
-      .catch(() => {
-        this.modalLoading.hide();
-      });
-  }
-
-  // cancel unpaids
-  doCancelUnpaids() {
-    const ids: any = [];
-
-    this.selectedCancel.forEach(v => {
-      ids.push(v.requisition_order_id);
-    });
-
-    if (ids) {
-      this.alertService.confirm('ต้องการเปลี่ยนสถานะเป็น ไม่ค้างจ่าย ใช่หรือไม่?')
-        .then(async () => {
-          this.modalLoading.show();
-          try {
-            const rs: any = await this.requisitionService.cancelUnpaid(ids);
-            this.modalLoading.hide();
-            if (rs.ok) {
-              this.alertService.success();
-              this.selectedCancel = [];
-              this.getUnPaid();
-            } else {
-              this.alertService.error(rs.error);
-            }
-          } catch (error) {
-            this.modalLoading.hide();
-            this.alertService.error(JSON.stringify(error));
-          }
-        })
-        .catch(() => {
-          this.modalLoading.hide();
-        });
-    } else {
-      this.alertService.error('กรุณาระบุรายการที่ต้องการยกเลิก');
-    }
-
-  }
-
-  async rollbackOrderConfirm(order) {
-    this.modalLoading.show();
-    try {
-      const rs = await this.requisitionService.rollbackOrder(order.confirm_id, order.requisition_order_id);
-      if (rs.ok) {
-        this.alertService.success();
-        await this.getWaitingApprove();
-      } else {
-        this.alertService.error(rs.error);
+  printUnPaid() {
+    const requisition_id: any = []
+    let count: any = 0
+    this.requisitionSelected.forEach(e => {
+      if (e.is_cancel !== 'Y') {
+        requisition_id.push('requisId=' + e.requisition_order_id);
+        count++;
       }
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(JSON.stringify(error));
+    });
+    if (count > 0) {
+      const url = this.url + `/report/UnPaid/requis?token=${this.token}&` + requisition_id.join('&');
+      this.htmlPreview.showReport(url);
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
     }
-    this.modalLoading.hide();
   }
 
   async search() {
@@ -446,29 +358,6 @@ export class RequisitionComponent implements OnInit {
     }
   }
 
-  async totalTab() {
-    try {
-      if (this.selectedTab === 'waiting' || this.tabTotalWaiting === 0) {
-        const rsW: any = await this.requisitionService.getWating(this.perPage, 0, '', this.fillterCancel);
-        this.tabTotalWaiting = rsW.total[0].total;
-      }
-      if (this.selectedTab === 'waitingApprove' || this.tabTotalWaitingApprove === 0) {
-        const rsWA: any = await this.requisitionService.getWaitingApprove(this.perPage, 0, '', this.fillterCancel);
-        this.tabTotalWaitingApprove = rsWA.total[0].total;
-      }
-      if (this.selectedTab === 'unpaid' || this.tabTotalUnPaid === 0) {
-        const rs: any = await this.requisitionService.getUnPaid(this.perPage, 0, '', this.fillterCancel);
-        this.tabTotalUnPaid = rs.total[0].total;
-      }
-      if (this.selectedTab === 'approved' || this.tabApprove === 0) {
-        const rsA: any = await this.requisitionService.getApproved(this.perPage, 0);
-        this.tabApprove = rsA.total[0].total;
-      }
-    } catch (error) {
-      this.alertService.error(error.message);
-    }
-  }
-
   clearQuery() {
     this.query = '';
     this.search();
@@ -484,28 +373,25 @@ export class RequisitionComponent implements OnInit {
     }
   }
 
-  recreateRequisitionOrder(order: any) {
-    const requisitionOrderId = order.requisition_order_id;
-    const requisitionOrderUnpaidId = order.requisition_order_unpaid_id;
-
-    this.alertService.confirm('ต้องการสร้างใบเบิกใหม่ ใช่หรือไม่?')
+  async removeOrderConfirm(order: any) {
+    this.alertService.confirm('ต้องการลบรายการนี้ [' + order.requisition_code + ']')
       .then(async () => {
+        this.modalLoading.show();
         try {
-          const rs: any = await this.requisitionService.saveRequisitionReOrder(requisitionOrderUnpaidId, requisitionOrderId);
+          const rs: any = await this.requisitionService.removeOrderConfirm(order.confirm_id);
+          this.modalLoading.hide();
           if (rs.ok) {
-            this.alertService.success('สร้างรายการใบเบิกเสร็จเรียบร้อย');
-            await this.getUnPaid();
-            await this.getWaiting();
+            this.alertService.success();
+            this.getWaitingApprove();
           } else {
-            this.alertService.error('ไม่สามารถสร้างใบเบิกใหม่ได้ : ' + rs.error);
+            this.alertService.error(rs.error);
           }
         } catch (error) {
-          this.alertService.error(JSON.stringify(error));
+          this.alertService.error(error.message);
         }
       }).catch(() => {
-        // no action
+        this.modalLoading.hide();
       });
-
   }
 }
 

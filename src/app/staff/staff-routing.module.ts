@@ -1,3 +1,5 @@
+import { PayRequisitionConfirmComponent } from './pay-requisition-confirm/pay-requisition-confirm.component';
+import { PayRequisitionComponent } from './pay-requisition/pay-requisition.component';
 
 import { ProductRequisitionComponent } from './product-requisition/product-requisition.component';
 import { TransferNewComponent } from './transfer-new/transfer-new.component';
@@ -49,16 +51,37 @@ const routes: Routes = [
       { path: 'receives/other', component: ReceivesOtherComponent },
       { path: 'receives/other/edit', component: ReceivesOtherEditComponent },
       { path: 'planning', canActivate: [AuthMinMaxPlanning], component: PlanningComponent },
-      { path: 'requisition', component: RequisitionComponent },
-      { path: 'requisition/new', component: RequisitionNewComponent },
-      { path: 'requisition/edit/:requisitionId', component: RequisitionNewComponent },
       { path: 'counting', component: CountingComponent },
       { path: 'transfer', component: TransferComponent },
       { path: 'transfer/new', component: TransferNewComponent },
       { path: 'transfer/edit', component: TransferEditComponent },
-      { path: 'requisition-templates', component: RequisitionTemplateComponent },
-      { path: 'requisition-templates/new', component: RequisitionTemplateNewComponent },
-      { path: 'requisition-templates/edit/:templateId', component: RequisitionTemplateEditComponent },
+      {
+        path: 'requisition',
+        canActivate: [StaffGuard],
+        children: [
+          { path: '', redirectTo: 'main', pathMatch: 'full' },
+          { path: 'main', component: RequisitionComponent },
+          { path: 'new', component: RequisitionNewComponent },
+          { path: 'edit/:requisitionId', component: RequisitionNewComponent },
+          { path: 'templates', component: RequisitionTemplateComponent },
+          { path: 'templates/new', component: RequisitionTemplateNewComponent },
+          { path: 'templates/edit/:templateId', component: RequisitionTemplateEditComponent }
+        ]
+      },
+      {
+        path: 'pay-requisition',
+        canActivate: [StaffGuard],
+        children: [
+          { path: '', redirectTo: 'main', pathMatch: 'full' },
+          { path: 'main', component: PayRequisitionComponent },
+          { path: 'confirm', component: PayRequisitionConfirmComponent }
+          // { path: 'new', component: RequisitionNewComponent },
+          // { path: 'edit/:requisitionId', component: RequisitionNewComponent },
+          // { path: 'templates', component: RequisitionTemplateComponent },
+          // { path: 'templates/new', component: RequisitionTemplateNewComponent },
+          // { path: 'templates/edit/:templateId', component: RequisitionTemplateEditComponent }
+        ]
+      },
       { path: 'his-mappings', canActivate: [AuthHISMapping], component: HisMappingsComponent },
       { path: 'issue-transaction', component: IssueTransactionComponent },
       { path: 'issue-transaction/new', component: IssueTransactionNewComponent },
