@@ -62,10 +62,7 @@ export class PayRequisitionComponent implements OnInit {
     private alertService: AlertService,
     private requisitionService: PayRequisitionService,
     private accessCheck: AccessCheck,
-    @Inject('DOC_URL') private docUrl: string,
-    @Inject('REQ_PREFIX') private documentPrefix: string,
     @Inject('API_URL') private url: string,
-    @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
     this.currentPage = +sessionStorage.getItem('currentPageRequisition') ? +sessionStorage.getItem('currentPageRequisition') : 1;
