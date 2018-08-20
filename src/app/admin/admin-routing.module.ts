@@ -95,7 +95,7 @@ import { ReturnBudgetComponent } from './return-budget/return-budget.component';
 import { ExportdataComponent } from './exportdata/exportdata.component';
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
-import { RequisitionFastComponent } from 'app/admin/requisition/requisition-fast/requisition-fast.component';
+import { RequisitionFastComponent } from 'app/admin/requisition-fast/requisition-fast.component';
 import { RequisitionNewComponent } from 'app/admin/requisition-new/requisition-new.component';
 import { RequisitionConfirmComponent } from 'app/admin/requisition-confirm/requisition-confirm.component';
 import { RequisitionConfirmEditComponent } from 'app/admin/requisition-confirm-edit/requisition-confirm-edit.component';
