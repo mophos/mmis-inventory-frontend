@@ -74,7 +74,7 @@ const routes: Routes = [
       { path: 'adjust-stock/new', canActivate: [AuthAdjustService], component: AdjustStockNewComponent },
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'exportdata', component: ExportdataComponent },
-      { path: 'value-receive-other', component: ValueReceiveOtherComponent}
+      { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent}
     ]
   }
 ];
