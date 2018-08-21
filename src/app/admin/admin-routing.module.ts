@@ -113,6 +113,8 @@ import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/s
 import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
 //
 import { AuthReturnBudget } from '../auth-return-budget.service';
+import { BorrowComponent } from './borrow/borrow.component';
+import { BorrowNewComponent } from './borrow-new/borrow-new.component';
 
 const routes: Routes = [
   {
@@ -144,6 +146,8 @@ const routes: Routes = [
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
       { path: 'exportdata', component: ExportdataComponent },
+      { path: 'borrow', component: BorrowComponent },
+      { path: 'borrow/new', component: BorrowNewComponent },
       {
         path: 'reports',
         canActivate: [AdminGuard],

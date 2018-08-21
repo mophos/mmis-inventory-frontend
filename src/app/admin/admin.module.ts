@@ -51,7 +51,7 @@ import { UnitissueService } from "./unitissue.service";
 import { AlertExpiredService } from './alert-expired.service';
 import { ProductlotsService } from "./productlots.service";
 import { AbcVenService } from './abc-ven.service';
-import { BorrowService } from './borrow.service';
+import { BorrowItemsService } from './borrow-items.service';
 import { ReportProductsService } from './reports/reports-products.service';
 import { WarehouseProductsService } from './warehouse-products.service';
 import { ShippingNetworkService } from './shipping-network.service';
@@ -151,6 +151,7 @@ import { ReturnBudgetService } from './return-budget.service';
 import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 import { ReportComponent } from './report/report.component';
 import { ExportdataComponent } from './exportdata/exportdata.component';
+import { BorrowComponent } from './borrow/borrow.component';
 
 // auth
 import { AuthReceive } from 'app/auth-receive.service';
@@ -166,6 +167,7 @@ import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { AuthStockcard } from 'app/auth-stockcard.service';
 import { AuthReturnBudget } from 'app/auth-return-budget.service';
 import { AuthAddition } from 'app/auth-addition.service';
+import { BorrowNewComponent } from './borrow-new/borrow-new.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -274,7 +276,9 @@ Highcharts.setOptions({
     ReturnBudgetComponent,
     ReceiveIssueYearComponent,
     ReportComponent,
-    ExportdataComponent
+    ExportdataComponent,
+    BorrowComponent,
+    BorrowNewComponent
   ],
   providers: [
     MainService,
@@ -304,7 +308,7 @@ Highcharts.setOptions({
     ToThaiDatePipe,
     AlertExpiredService,
     AbcVenService,
-    BorrowService,
+    BorrowItemsService,
     TransferService,
     UploadingService,
     ReportProductsService,
@@ -332,6 +336,7 @@ Highcharts.setOptions({
     GenericService,
     AdjustStockService,
     ReturnBudgetService,
+    BorrowItemsService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })

@@ -46,6 +46,8 @@ import { AdjustStockDetailComponent } from './adjust-stock-detail/adjust-stock-d
 import { AdjustStockProductComponent } from './adjust-stock-product/adjust-stock-product.component';
 import { StaffProductReceiveOtherDetailComponent } from './staff-product-receive-other-detail/staff-product-receive-other-detail.component';
 import { ReturnBudgetDetailComponent } from './return-budget-detail/return-budget-detail.component';
+import { BorrowItemsComponent } from './borrow-items/borrow-items.component';
+import { BorrowDetailComponent } from './borrow-detail/borrow-detail.component';
 
 @NgModule({
   imports: [
@@ -95,7 +97,9 @@ import { ReturnBudgetDetailComponent } from './return-budget-detail/return-budge
     AdjustStockDetailComponent,
     AdjustStockProductComponent,
     StaffProductReceiveOtherDetailComponent,
-    ReturnBudgetDetailComponent
+    ReturnBudgetDetailComponent,
+    BorrowItemsComponent,
+    BorrowDetailComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -136,7 +140,9 @@ import { ReturnBudgetDetailComponent } from './return-budget-detail/return-budge
     AdjustStockDetailComponent,
     AdjustStockProductComponent,
     StaffProductReceiveOtherDetailComponent,
-    ReturnBudgetDetailComponent
+    ReturnBudgetDetailComponent,
+    BorrowItemsComponent,
+    BorrowDetailComponent
   ]
 })
 export class GridDetailModule { }
