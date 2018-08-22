@@ -76,6 +76,7 @@ import { ReceivesOtherEditComponent } from './receives-other-edit/receives-other
 import { ExportdataComponent } from './exportdata/exportdata.component';
 import { PayRequisitionComponent } from './pay-requisition/pay-requisition.component';
 import { PayRequisitionConfirmComponent } from './pay-requisition-confirm/pay-requisition-confirm.component';
+import { ValueReceiveOtherComponent } from './report/value-receive-other/value-receive-other.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -120,7 +121,8 @@ import { PayRequisitionConfirmComponent } from './pay-requisition-confirm/pay-re
     ReceivesOtherEditComponent,
     ExportdataComponent,
     PayRequisitionComponent,
-    PayRequisitionConfirmComponent
+    PayRequisitionConfirmComponent,
+    ValueReceiveOtherComponent
   ],
   providers: [
     ToThaiDatePipe,
