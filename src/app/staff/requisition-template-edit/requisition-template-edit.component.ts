@@ -42,9 +42,9 @@ export class RequisitionTemplateEditComponent implements OnInit {
     private router: Router
   ) {
     this.templateId = this.route.snapshot.params['templateId'];
-   }
+  }
 
-   ngOnInit() {
+  ngOnInit() {
     this.getTemplate();
     this.getProducts();
   }
@@ -147,7 +147,7 @@ export class RequisitionTemplateEditComponent implements OnInit {
           (this.templateId, this.templateSubject, this.products);
         if (rs.ok) {
           this.alertService.success();
-          this.router.navigate(['/staff/requisition-templates']);
+          this.router.navigate(['/staff/requisition/templates']);
         } else {
           this.alertService.error(JSON.stringify(rs.error));
         }
@@ -161,7 +161,7 @@ export class RequisitionTemplateEditComponent implements OnInit {
     }
   }
   editChangeUnit(g, e) {
-    const idx = _.findIndex(this.products,{'generic_id':g.generic_id})   
+    const idx = _.findIndex(this.products, { 'generic_id': g.generic_id })
     this.products[idx].unit_generic_id = e.unit_generic_id
   }
   sort() {
