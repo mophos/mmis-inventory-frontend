@@ -145,7 +145,7 @@ import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/recei
 import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
 import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
 import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
-import { RequisitionFastComponent } from './requisition/requisition-fast/requisition-fast.component';
+import { RequisitionFastComponent } from './requisition-fast/requisition-fast.component';
 import { ReturnBudgetComponent } from './return-budget/return-budget.component';
 import { ReturnBudgetService } from './return-budget.service';
 import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
@@ -166,6 +166,7 @@ import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { AuthStockcard } from 'app/auth-stockcard.service';
 import { AuthReturnBudget } from 'app/auth-return-budget.service';
 import { AuthAddition } from 'app/auth-addition.service';
+import { RequisitionMultipleComponent } from './requisition-multiple/requisition-multiple.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -274,7 +275,8 @@ Highcharts.setOptions({
     ReturnBudgetComponent,
     ReceiveIssueYearComponent,
     ReportComponent,
-    ExportdataComponent
+    ExportdataComponent,
+    RequisitionMultipleComponent
   ],
   providers: [
     MainService,
