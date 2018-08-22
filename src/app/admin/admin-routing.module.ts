@@ -1,42 +1,6 @@
-import { AuthMinMaxPlanning } from './../auth-minmax-planing.service';
-import { AuthAddition } from './../auth-addition.service';
-import { AuthStockcard } from 'app/auth-stockcard.service';
-import { ReportComponent } from './report/report.component';
-import { AdjustStockNewComponent } from './adjust-stock-new/adjust-stock-new.component';
-import { AdjustStockComponent } from './adjust-stock/adjust-stock.component';
-import { AdditionEditComponent } from './addition-edit/addition-edit.component';
-import { AdditionComponent } from './addition/addition.component';
-import { CalculateMinMaxComponent } from './calculate-min-max/calculate-min-max.component';
-import { TransectionTypeComponent } from './transection-type/transection-type.component';
-import { ReceiveotherTypeComponent } from './receiveother-type/receiveother-type.component';
-import { PeriodComponent } from './period/period.component';
-import { ShippingNetworkComponent } from './shipping-network/shipping-network.component';
-import { CountingAdjustComponent } from './counting-adjust/counting-adjust.component';
-import { CountingVerifyComponent } from './counting-verify/counting-verify.component';
-import { CountingNewComponent } from './counting-new/counting-new.component';
-import { CountingComponent } from './counting/counting.component';
-import { ProductExpiredComponent } from './reports/product-expired/product-expired.component';
-import { ProductsComponent } from './products/products.component';
-import { DonatorsComponent } from './donators/donators.component';
-import { TransferNewComponent } from './transfer-new/transfer-new.component';
-import { TransferComponent } from './transfer/transfer.component';
-import { AdminGuard } from './../admin-guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
-// pages
-import { MainPageComponent } from './main-page/main-page.component';
-import { WarehouseTypeComponent } from './warehouse-type/warehouse-type.component';
-import { WarehouseComponent } from './warehouse/warehouse.component';
-import { ReceiveComponent } from './receive/receive.component';
-import { ReceivePurchaseComponent } from './receive-purchase/receive-purchase.component';
-
-import { WarehouseDetailComponent } from './warehouse-detail/warehouse-detail.component';
-import { AbcSettingComponent } from './abc-setting/abc-setting.component';
-import { VenSettingComponent } from './ven-setting/ven-setting.component';
-import { AbcVenComponent } from './abc-ven/abc-ven.component';
-import { WarehouseProductsComponent } from './warehouse-products/warehouse-products.component';
-import { WarehouseProductsDetailComponent } from './warehouse-products-detail/warehouse-products-detail.component';
 
 // common page
 import { AlertExpiredComponent } from './alert-expired/alert-expired.component';
@@ -44,29 +8,24 @@ import { UnitissueComponent } from './unitissue/unitissue.component';
 import { ReturningComponent } from './returning/returning.component';
 
 // reports
+import { ReportComponent } from './report/report.component';
+import { ProductExpiredComponent } from './reports/product-expired/product-expired.component';
 import { ProductRemainComponent as ReportProductRemain } from './reports/product-remain/product-remain.component';
 import { ReceivesComponent as ReportReceives } from './reports/receives/receives.component';
 import { StockCardComponent } from './reports/stock-card/stock-card.component';
+import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
+import { ValueProductsComponent } from 'app/admin/reports/value-products/value-products.component';
+import { PurchasingNotgiveawayComponent } from 'app/admin/reports/purchasing-notgiveaway/purchasing-notgiveaway.component'
+import { InventoryStatusComponent } from 'app/admin/reports/inventory-status/inventory-status.component';
+import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
+import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
+import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
+import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
+import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
+import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
 
-// receive other
-import { ReceiveOtherComponent } from './receive-other/receive-other.component';
-import { ReceiveEditComponent } from 'app/admin/receive-edit/receive-edit.component';
-
-// his mapping
-import { HisMappingsComponent } from './his-mappings/his-mappings.component';
-
-import { IssuesComponent } from 'app/admin/issues/issues.component';
-import { IssuesNewComponent } from 'app/admin/issues-new/issues-new.component';
-
-import { ReceivePlanningComponent } from 'app/admin/receive-planning/receive-planning.component';
-import { ReceivePlanningNewComponent } from 'app/admin/receive-planning-new/receive-planning-new.component';
-import { ReceivePlanningEditComponent } from 'app/admin/receive-planning-edit/receive-planning-edit.component';
-import { ReceiveOtherEditComponent } from 'app/admin/receive-other-edit/receive-other-edit.component';
-import { IssuesEditComponent } from 'app/admin/issues-edit/issues-edit.component';
-import { TransferEditComponent } from 'app/admin/transfer-edit/transfer-edit.component';
-import { HisIssueTransactionComponent } from 'app/admin/his-issue-transaction/his-issue-transaction.component';
-import { WarehouseProductPlanningComponent } from 'app/admin/warehouse-product-planning/warehouse-product-planning.component';
-
+// Auth
+import { AdminGuard } from 'app/admin-guard';
 import { AuthReceive } from 'app/auth-receive.service';
 import { AuthTransfer } from 'app/auth-transfer.service';
 import { AuthRequisition } from 'app/auth-requisition.service';
@@ -76,23 +35,10 @@ import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthWarehouseManagement } from 'app/auth-warehouse-management.service';
 import { AuthAdjustService } from 'app/auth-adjust.service';
-import { ProductManufactureComponent } from 'app/admin/reports/product-manufacture/product-manufacture.component';
-import { ValueProductsComponent } from 'app/admin/reports/value-products/value-products.component';
-import { PurchasingNotgiveawayComponent } from 'app/admin/reports/purchasing-notgiveaway/purchasing-notgiveaway.component'
-import { InventoryStatusComponent } from 'app/admin/reports/inventory-status/inventory-status.component';
-import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
-import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
-import { ProductSummaryComponent } from 'app/admin/reports/product-summary/product-summary.component';
-import { ProductReceiveComponent } from 'app/admin/reports/product-receive/product-receive.component';
-import { SummaryDisbursementComponent } from './reports/summary-disbursement/summary-disbursement.component';
-import { CodeMappingComponent } from './code-mapping/code-mapping.component';
-import { AdditionWarehouseComponent } from './addition-warehouse/addition-warehouse.component';
-import { AdditionGenericComponent } from './addition-generic/addition-generic.component';
-import { ReceiveNotMatchPoComponent } from './reports/receive-not-match-po/receive-not-match-po.component';
-import { ValueReceiveOtherComponent } from './reports/value-receive-other/value-receive-other.component';
-import { ReceiveIssueYearComponent } from './reports/receive-issue-year/receive-issue-year.component';
-import { ReturnBudgetComponent } from './return-budget/return-budget.component';
-import { ExportdataComponent } from './exportdata/exportdata.component';
+import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
+import { AuthAddition } from 'app/auth-addition.service';
+import { AuthStockcard } from 'app/auth-stockcard.service';
+import { AuthReturnBudget } from '../auth-return-budget.service';
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
 import { RequisitionFastComponent } from 'app/admin/requisition-fast/requisition-fast.component';
@@ -104,6 +50,7 @@ import { RequisitionTemplateComponent } from 'app/admin/requisition-template/req
 import { RequisitionTemplateNewComponent } from 'app/admin/requisition-template-new/requisition-template-new.component';
 import { RequisitionTemplateEditComponent } from 'app/admin/requisition-template-edit/requisition-template-edit.component';
 import { RequisitionTypeComponent } from 'app/admin/requisition-type/requisition-type.component';
+import { RequisitionMultipleComponent } from 'app/admin/requisition-multiple/requisition-multiple.component';
 // tool // stockcard
 import { StockcardComponent } from 'app/admin/tools/stockcard/stockcard.component';
 import { StockcardReceiveComponent } from 'app/admin/tools/stockcard-receive/stockcard-receive.component';
@@ -112,7 +59,54 @@ import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisi
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
 import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
 //
-import { AuthReturnBudget } from '../auth-return-budget.service';
+import { AbcSettingComponent } from 'app/admin/abc-setting/abc-setting.component';
+import { AbcVenComponent } from 'app/admin/abc-ven/abc-ven.component';
+import { AdjustStockNewComponent } from 'app/admin/adjust-stock-new/adjust-stock-new.component';
+import { AdjustStockComponent } from 'app/admin/adjust-stock/adjust-stock.component';
+import { AdditionComponent } from 'app/admin/addition/addition.component';
+import { AdditionEditComponent } from 'app/admin/addition-edit/addition-edit.component';
+import { AdditionGenericComponent } from 'app/admin/addition-generic/addition-generic.component';
+import { AdditionWarehouseComponent } from 'app/admin/addition-warehouse/addition-warehouse.component';
+import { BorrowNoteComponent } from 'app/admin/borrow-note/borrow-note.component';
+import { BorrowNoteNewComponent } from 'app/admin/borrow-note-new/borrow-note-new.component';
+import { CalculateMinMaxComponent } from 'app/admin/calculate-min-max/calculate-min-max.component';
+import { CodeMappingComponent } from 'app/admin/code-mapping/code-mapping.component';
+import { CountingAdjustComponent } from 'app/admin/counting-adjust/counting-adjust.component';
+import { CountingComponent } from 'app/admin/counting/counting.component';
+import { CountingNewComponent } from 'app/admin/counting-new/counting-new.component';
+import { CountingVerifyComponent } from 'app/admin/counting-verify/counting-verify.component';
+import { DonatorsComponent } from 'app/admin/donators/donators.component';
+import { ExportdataComponent } from 'app/admin/exportdata/exportdata.component';
+import { HisIssueTransactionComponent } from 'app/admin/his-issue-transaction/his-issue-transaction.component';
+import { HisMappingsComponent } from 'app/admin/his-mappings/his-mappings.component';
+import { IssuesComponent } from 'app/admin/issues/issues.component';
+import { IssuesEditComponent } from 'app/admin/issues-edit/issues-edit.component';
+import { IssuesNewComponent } from 'app/admin/issues-new/issues-new.component';
+import { MainPageComponent } from 'app/admin/main-page/main-page.component';
+import { PeriodComponent } from 'app/admin/period/period.component';
+import { ProductsComponent } from 'app/admin/products/products.component';
+import { ReceiveComponent } from 'app/admin/receive/receive.component';
+import { ReceiveEditComponent } from 'app/admin/receive-edit/receive-edit.component';
+import { ReceiveOtherComponent } from 'app/admin/receive-other/receive-other.component';
+import { ReceiveOtherEditComponent } from 'app/admin/receive-other-edit/receive-other-edit.component';
+import { ReceiveotherTypeComponent } from 'app/admin/receiveother-type/receiveother-type.component';
+import { ReceivePlanningComponent } from 'app/admin/receive-planning/receive-planning.component';
+import { ReceivePlanningNewComponent } from 'app/admin/receive-planning-new/receive-planning-new.component';
+import { ReceivePurchaseComponent } from 'app/admin/receive-purchase/receive-purchase.component';
+import { ReceivePlanningEditComponent } from 'app/admin/receive-planning-edit/receive-planning-edit.component';
+import { ReturnBudgetComponent } from 'app/admin/return-budget/return-budget.component';
+import { ShippingNetworkComponent } from 'app/admin/shipping-network/shipping-network.component';
+import { TransectionTypeComponent } from 'app/admin/transection-type/transection-type.component';
+import { TransferComponent } from 'app/admin/transfer/transfer.component';
+import { TransferEditComponent } from 'app/admin/transfer-edit/transfer-edit.component';
+import { TransferNewComponent } from 'app/admin/transfer-new/transfer-new.component';
+import { VenSettingComponent } from 'app/admin/ven-setting/ven-setting.component';
+import { WarehouseProductPlanningComponent } from 'app/admin/warehouse-product-planning/warehouse-product-planning.component'
+import { WarehouseTypeComponent } from 'app/admin/warehouse-type/warehouse-type.component';
+import { WarehouseComponent } from 'app/admin/warehouse/warehouse.component';
+import { WarehouseDetailComponent } from 'app/admin/warehouse-detail/warehouse-detail.component';
+import { WarehouseProductsComponent } from 'app/admin/warehouse-products/warehouse-products.component';
+import { WarehouseProductsDetailComponent } from 'app/admin/warehouse-products-detail/warehouse-products-detail.component';
 
 const routes: Routes = [
   {
@@ -225,6 +219,7 @@ const routes: Routes = [
           { path: 'templates/new', component: RequisitionTemplateNewComponent },
           { path: 'templates/edit/:templateId', component: RequisitionTemplateEditComponent },
           { path: 'fast', canActivate: [AuthRequisition], component: RequisitionFastComponent },
+          { path: 'multiple', canActivate: [AuthRequisition], component: RequisitionMultipleComponent },
         ]
       },
     ]

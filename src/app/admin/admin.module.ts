@@ -166,6 +166,7 @@ import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { AuthStockcard } from 'app/auth-stockcard.service';
 import { AuthReturnBudget } from 'app/auth-return-budget.service';
 import { AuthAddition } from 'app/auth-addition.service';
+import { RequisitionMultipleComponent } from './requisition-multiple/requisition-multiple.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -274,7 +275,8 @@ Highcharts.setOptions({
     ReturnBudgetComponent,
     ReceiveIssueYearComponent,
     ReportComponent,
-    ExportdataComponent
+    ExportdataComponent,
+    RequisitionMultipleComponent
   ],
   providers: [
     MainService,
