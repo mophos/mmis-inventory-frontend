@@ -7,52 +7,67 @@
 <form>
   <section class="form-block">
     <div class="form-group row wid99">
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label class="required">คลัง</label>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <div class="select">
-          <select name="warehouseId" [(ngModel)]="warehouseId">
-            <option value="0">ทุกคลังสินค้า</option>
-            <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
-              {{ w.warehouse_id }}-{{ w.warehouse_name }}
-            </option>
-          </select>
+      <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="form-group row wid99">
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <label>คลัง</label>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+              <div class="select">
+                <select name="warehouseId" [(ngModel)]="warehouseId">
+                  <option value="0">ทุกคลังสินค้า</option>
+                  <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+                    {{ w.warehouse_id }}-{{ w.warehouse_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <label>เวชภัณฑ์</label>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+              <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="false" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
+            </div>
+          </div>
+          <br>
+          <div class="form-group row">
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <label for="startDate">ตั้งแต่</label>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+              <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <label for="endDate">ถึง</label>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+              <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label class="required">เวชภัณฑ์</label>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="false" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
-      </div>
-
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label class="required">ชนิดสินค้า</label>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <wm-select-generic-type #selectGenericType (onSelect)="setSelectedGenericType($event)" (onChange)="setSelectedGenericType($event)"></wm-select-generic-type>
-      </div>
-
-    </div>
-    <div class="form-group row">
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label for="startDate" class="required">ตั้งแต่</label>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
-      </div>
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label for="endDate" class="required">ถึง</label>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-sm btn-primary" [disabled]="isPreview || !genericTypeId" (click)="showReport()">
-          <clr-icon shape="printer"></clr-icon> พิมพ์รายการยาใกล้หมดอายุ
-        </button>
-        <button class="btn btn-sm btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button>
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <div class="form-group row wid99">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <clr-datagrid [style.height.px]="280" [(clrDgSelected)]="selectedProductGroups">
+              <clr-dg-column>รายการประเภทของเวชภัณฑ์</clr-dg-column>
+              <clr-dg-row *clrDgItems="let pg of productGroups" [clrDgItem]="pg">
+                <clr-dg-cell>
+                  {{pg.generic_type_name}}
+                </clr-dg-cell>
+              </clr-dg-row>
+            </clr-datagrid>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button class="btn btn-sm btn-primary" [disabled]="selectedProductGroups.length == 0" (click)="showReport()">
+              <clr-icon shape="printer"></clr-icon> พิมพ์รายการยาใกล้หมดอายุ
+            </button>
+            <!-- <button class="btn btn-sm btn-primary" [disabled]="selectedProductGroups.length == 0" (click)="refresh()">ยกเลิก</button> -->
+          </div>
+        </div>
       </div>
     </div>
   </section>

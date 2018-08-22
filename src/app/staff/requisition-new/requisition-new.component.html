@@ -84,7 +84,7 @@
   </div>
 </div>
 
-<clr-datagrid>
+<clr-datagrid style="position: relative;">
   <clr-dg-column style="width: 15px;">ลำดับ</clr-dg-column>
   <clr-dg-column style="width: 100px;">Working Code</clr-dg-column>
   <clr-dg-column>ชื่อ Generic</clr-dg-column>
@@ -94,7 +94,7 @@
   <!-- <clr-dg-column style="width: 200px;">คงเหลือ</clr-dg-column> -->
   <clr-dg-column style="width: 30px;"></clr-dg-column>
 
-  <clr-dg-row *ngFor="let g of products;let idx=index;">
+  <clr-dg-row *ngFor="let g of products;let idx=index;" >
     <clr-dg-cell style="text-align: right;">
       {{ idx +1}}
     </clr-dg-cell>

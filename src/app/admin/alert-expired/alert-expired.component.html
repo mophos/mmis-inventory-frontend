@@ -14,12 +14,26 @@
     <clr-tab-content *clrIfActive>
       <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
         <div class="col-md-1">
-          <!-- <label for="">ค้นหา</label> -->
+          <label for="">คลังสินค้า</label>
         </div>
         <div class="col-md-3">
-          <!-- <input type="text" (keyup)="search($event)" placeholder="พิมพ์แล้วกด Enter" name="query" style="width: 90%;" id="query" [(ngModel)]="query"> -->
+          <div class="select">
+            <select [(ngModel)]="warehouseId" name="warehouseId" (change)="changeWarehouses()">
+              <option value="all">ทั้งหมด</option>
+              <option [value]="t.warehouse_id" *ngFor="let t of warehouses">{{t.warehouse_name}}</option>
+            </select>
+          </div>
         </div>
-        <div class="col-md-2 push-md-6" style="text-align: right;">
+        <div class="col-md-1 push-md-3">
+          <button style="float: right;" class="btn btn-sm btn-primary wm-small-btn" (click)="report()">
+            <clr-icon shape="printer"></clr-icon>
+            พิมพ์รายการแจ้งเตือนวันหมดอายุ
+          </button>
+        </div>
+        <div class="col-md-1 push-md-3">
+          <label for="">ประเภท</label>
+        </div>
+        <div class="col-md-3 push-md-3">
           <div class="select">
             <select [(ngModel)]="genericTypeE" name="genericTypeE" (change)="changeGenericTypeE()">
               <option value="all">ทั้งหมด</option>
@@ -55,7 +69,7 @@
       </clr-datagrid>
     </clr-tab-content>
   </clr-tab>
-  <clr-tab>
+  <clr-tab *ngIf="menuSettingAlertExpired">
     <button clrTabLink (click)="getAllProducts()">
       ตั้งค่าวันหมดอายุ</button>
     <clr-tab-content *clrIfActive>
@@ -144,3 +158,4 @@
 </clr-modal>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
+<wm-html-preview #htmlPreview></wm-html-preview>

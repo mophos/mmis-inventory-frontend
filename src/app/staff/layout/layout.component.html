@@ -90,7 +90,10 @@
         <clr-icon shape="certificate" clrVerticalNavIcon></clr-icon>
         Credit
       </a> -->
-
+      <a clrVerticalNavLink routerLink="/staff/exportdata" title="ส่งออกข้อมูล Excel" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="export"></clr-icon>
+        ส่งออกข้อมูล Excel
+      </a>
       <clr-vertical-nav-group routerLinkActive="active">
         <a clrVerticalNavLink href="javascript://">
           <clr-icon shape="tools" clrVerticalNavIcon></clr-icon>
@@ -119,12 +122,13 @@
             รายงานคุมคลังเวชภัณฑ์
           </a>
         </clr-vertical-nav-group-children>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <a clrVerticalNavLink routerLink="/staff/reports/value-receive-other" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            รายงานมูลค่าจากการรับอื่นๆ
+          </a>
+        </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>
-
-      <a clrVerticalNavLink routerLink="/staff/exportdata" routerLinkActive="active">
-        <clr-icon shape="printer"></clr-icon>
-        ส่งออกข้อมูล Excel
-      </a>
     </clr-vertical-nav>
 
   </div>

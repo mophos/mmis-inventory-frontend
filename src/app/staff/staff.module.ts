@@ -73,6 +73,7 @@ import { ReceivesComponent } from './receives/receives.component';
 import { ReceivesOtherComponent } from './receives-other/receives-other.component';
 import { ReceivesOtherEditComponent } from './receives-other-edit/receives-other-edit.component';
 import { ExportdataComponent } from './exportdata/exportdata.component';
+import { ValueReceiveOtherComponent } from './report/value-receive-other/value-receive-other.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -115,7 +116,8 @@ import { ExportdataComponent } from './exportdata/exportdata.component';
     ReceivesComponent,
     ReceivesOtherComponent,
     ReceivesOtherEditComponent,
-    ExportdataComponent
+    ExportdataComponent,
+    ValueReceiveOtherComponent
   ],
   providers: [
     ToThaiDatePipe,
