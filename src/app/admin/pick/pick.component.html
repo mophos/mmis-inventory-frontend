@@ -24,32 +24,38 @@
   </div>
 </div>
 
-<clr-datagrid (clrDgRefresh)="refresh($event)" [(clrDgSelected)]="selectedPrint" style="padding-top: 5px; height: 85%;">
+<clr-datagrid (clrDgRefresh)="refresh($event)" [(clrDgSelected)]="selectedPrint" style="padding-top: 5px; height: 70%;">
   <clr-dg-column >วันที่หยิบ</clr-dg-column>
-  <clr-dg-column >เลขที่หยิบ</clr-dg-column>
+  <clr-dg-column >ผู้ที่หยิบ</clr-dg-column>
   <clr-dg-column>หน่วยหยิบ</clr-dg-column>
   <clr-dg-column >หมายเหตุ</clr-dg-column>
+  <!-- <clr-dg-column ></clr-dg-column> -->
   <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
   <clr-dg-row *ngFor="let o of order" [clrDgItem]="o" [ngClass]="{'isSuccess': o.is_approve === 'Y', 'isError': o.is_cancel === 'Y'}">
+    <clr-dg-action-overflow>
+        <button title="อนุมัติ" [disabled]="o.is_approve === 'Y' || o.is_cancel === 'Y'" class="action-item" (click)="approve(o.pick_id)">
+          อนุมัติการหยิบ
+        </button>
+      <button title="แก้ไข" [disabled]="o.is_approve === 'Y' || o.is_cancel === 'Y'" class="action-item" routerLink="/admin/pick/edit/{{o.pick_id}}">
+        แก้ไขการหยิบ
+      </button>
+      <button title="ลบ" [disabled]="o.is_approve === 'Y' || o.is_cancel === 'Y'" class="action-item" (click)="remove(o.pick_id)">
+       ลบการหยิบ
+      </button>
+      <button title="พิมพ์" [disabled]="o.is_cancel === 'Y'" class="action-item" role="tooltip" aria-haspopup="true" (click)="showReport(o.pick_id)">
+        พิมพ์ใบหยิบ
+      </button>
+    </clr-dg-action-overflow>
+    <wm-pick-detail *clrIfExpanded [pickId]="o.pick_id" ngProjectAs="clr-dg-row-detail"></wm-pick-detail>
     <clr-dg-cell style="text-align: left;">{{o.pick_date | toThaiDate}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: left;">{{o.pick_code}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: left;">{{o.fullname}}</clr-dg-cell>
     <clr-dg-cell>{{o.warehouse_name}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: center;">
-        <div class="btn-group">
-          <button title="แก้ไข" [disabled]="o.is_approve === 'Y' || o.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-success" routerLink="/admin/pick/new"
-            [queryParams]="{pickId: o.pick_id}">
-            <clr-icon shape="note"></clr-icon>
-          </button>
-          <button title="ลบ" [disabled]="o.is_approve === 'Y' || o.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-danger" (click)="remove(o)">
-            <clr-icon shape="trash"></clr-icon>
-          </button>
-          <button title="พิมพ์" [disabled]="o.is_cancel === 'Y'" class="btn btn-sm btn-icon btn-primary tooltip tooltip-sm tooltip-left" role="tooltip" aria-haspopup="true" (click)="showReport(o.pick_id)">
-            <clr-icon shape="printer"></clr-icon>
-            <span class="tooltip-content">พิมพ์ใบตัดจ่าย</span>
-          </button>
-        </div>
-      </clr-dg-cell>
+    <clr-dg-cell>{{o.remark}}</clr-dg-cell>
   </clr-dg-row>
+  <clr-dg-footer>
+      {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+      <clr-dg-pagination #pagination   [(clrDgPage)]="currentPage"  [clrDgPageSize]="perPage" [clrDgTotalItems]="total"></clr-dg-pagination>
+    </clr-dg-footer>
 </clr-datagrid>
 <wm-loading-modal #modalLoading></wm-loading-modal>
 <wm-html-preview #htmlPreview></wm-html-preview>

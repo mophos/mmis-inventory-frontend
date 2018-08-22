@@ -200,6 +200,7 @@ const routes: Routes = [
       { path: 'return-budget', canActivate: [AuthReturnBudget], component: ReturnBudgetComponent },
       { path: 'pick', component: PickComponent },
       { path: 'pick/new', component: PickNewComponent },
+      { path: 'pick/edit/:pickId', component: PickNewComponent },
       {
         path: 'tools',
         canActivate: [AdminGuard, AuthStockcard],
