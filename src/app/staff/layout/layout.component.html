@@ -41,11 +41,15 @@
       </a>
       <a clrVerticalNavLink routerLink="/staff/product/requisition" title="รายการยาที่ถึงจุดเบิก" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="export"></clr-icon>
-        รายการยาที่ถึงจุดเบิก
+        รายการสินค้าถึงจุดเบิก
       </a>
-      <a clrVerticalNavLink routerLink="/staff/requisition" title="เบิกยาและเวชภัณฑ์" routerLinkActive="active">
+      <a clrVerticalNavLink routerLink="/staff/requisition" title="เบิกสินค้า" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="tools"></clr-icon>
-        เบิกยาและเวชภัณฑ์
+        เบิกสินค้า
+      </a>
+      <a clrVerticalNavLink routerLink="/staff/pay-requisition" title="จ่ายสินค้า" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="tools" class="is-solid"></clr-icon>
+        จ่ายสินค้า
       </a>
       <!-- ซ่อนเมนูนี้ออกไปก่อน อย่าเพิ่งลบ -->
       <!-- <a clrVerticalNavLink routerLink="/staff/issue" title="จ่ายยาและเวชภัณฑ์" routerLinkActive="active">
@@ -53,9 +57,9 @@
         จ่ายยาและเวชภัณฑ์
       </a> -->
       <!-- สิ้นสุดส่วนซ่อนเมนู -->
-      <a clrVerticalNavLink routerLink="/staff/transfer" title="โอนยาและเวชภัณฑ์" routerLinkActive="active">
+      <a clrVerticalNavLink routerLink="/staff/transfer" title="โอนสินค้า" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="two-way-arrows"></clr-icon>
-        โอนยาและเวชภัณฑ์
+        โอนสินค้า
       </a>
       <a clrVerticalNavLink routerLink="/staff/issue-transaction" title="บันทึกตัดจ่าย (อื่นๆ)" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="scissors"></clr-icon>
@@ -69,7 +73,7 @@
         <clr-icon clrVerticalNavIcon shape="clipboard"></clr-icon>
         นับสินค้าคงเหลือ
       </a> -->
-      <a clrVerticalNavLink routerLink="/staff/requisition-templates" title="Template ชุดเบิก" routerLinkActive="active">
+      <a clrVerticalNavLink routerLink="/staff/requisition/templates" title="Template ชุดเบิก" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="plugin"></clr-icon>
         Template เบิก/โอน
       </a>
@@ -120,6 +124,12 @@
           <a clrVerticalNavLink routerLink="/staff/reports/stock-card" routerLinkActive="active">
             <clr-icon shape="printer"></clr-icon>
             รายงานคุมคลังเวชภัณฑ์
+          </a>
+        </clr-vertical-nav-group-children>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <a clrVerticalNavLink routerLink="/staff/reports/value-receive-other" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            รายงานมูลค่าจากการรับอื่นๆ
           </a>
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>

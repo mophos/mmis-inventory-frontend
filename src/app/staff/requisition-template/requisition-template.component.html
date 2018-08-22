@@ -7,7 +7,7 @@
   <div class="card-block">
     <div class="row">
       <div class="col-md-2">
-        <button class="btn btn-sm btn-success" [routerLink]="['/staff/requisition-templates/new']">
+        <button class="btn btn-sm btn-success" [routerLink]="['/staff/requisition/templates/new']">
           + สร้าง Template เบิก/โอน
         </button>
       </div>
@@ -39,7 +39,7 @@
           <button title="ส่งออก Excel" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="print(w.template_id)">
             <clr-icon shape="printer"></clr-icon>
           </button>
-          <button title="แก้ไข" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/staff/requisition-templates/edit/', w.template_id]">
+          <button title="แก้ไข" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/staff/requisition/templates/edit/', w.template_id]">
             <clr-icon shape="note"></clr-icon>
           </button>
           <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeTemplate(w)">

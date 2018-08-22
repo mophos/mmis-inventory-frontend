@@ -222,23 +222,33 @@ export class StockcardIssueComponent implements OnInit {
   // }
 
   editChangeIssueQty(idx: any, qty: any) {
-    if (+qty.value > +this.products[idx].qty) {
-      this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
-      qty.value = this.products[idx].qty;
-    } else {
-      this.products[idx].issue_qty = +qty.value;
+    console.log(qty.value);
+
+    if (+qty.value > 0) {
+      if (+qty.value > +this.products[idx].qty) {
+        this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
+        qty.value = this.products[idx].qty;
+      } else {
+        this.products[idx].issue_qty = +qty.value;
+      }
+    } else if (qty.value === "0") {
+      this.alertService.error('จำนวนต้องมากกว่า 0')
     }
     // this.alowcate(this.products[idx].generic_id);
   }
 
   editChangeUnit(idx: any, event: any, unitCmp: any) {
-    if (this.products[idx].qty < (this.products[idx].issue_qty * event.conversion_qty)) {
-      this.alertService.error('รายการไม่พอจ่าย');
-      unitCmp.getUnits(this.products[idx].generic_id);
-      unitCmp.setSelectedUnit(this.products[idx].unit_generic_id);
-    } else {
-      this.products[idx].unit_generic_id = event.unit_generic_id;
-      this.products[idx].conversion_qty = event.qty;
+    if (+event.qty > 0) {
+      if (this.products[idx].qty < (this.products[idx].issue_qty * event.conversion_qty)) {
+        this.alertService.error('รายการไม่พอจ่าย');
+        unitCmp.getUnits(this.products[idx].generic_id);
+        unitCmp.setSelectedUnit(this.products[idx].unit_generic_id);
+      } else {
+        this.products[idx].unit_generic_id = event.unit_generic_id;
+        this.products[idx].conversion_qty = event.qty;
+      }
+    } else if (+event.qty === 0) {
+      this.alertService.error('จำนวนต้องมากกว่า 0')
     }
   }
 
@@ -277,45 +287,59 @@ export class StockcardIssueComponent implements OnInit {
 
   async save() {
     try {
-      if (this.password) {
-        const rsC = await this.toolsService.checkPassword(this.password);
-        if (rsC.ok) {
-          this.modalLoading.show();
-          this.isSaving = true;
-          const _issueDate = this.issueDate ? `${this.issueDate.date.year}-${this.issueDate.date.month}-${this.issueDate.date.day}` : null;
-          const rsP = await this.periodService.getStatus(_issueDate)
-          if (rsP.rows[0].status_close === 'Y') {
-            this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถแก้ไข stockcard ได้');
-            this.isSaving = false;
-          } else {
-            const summary = {
-              warehouse_id: this.warehouseId,
-              transaction_issue_id: this.transactionId,
-              comment: this.comment,
-              ref_document: this.refDocument,
-              issue_date: _issueDate
-            }
-            const rs: any = await this.toolsService.saveIssue(this.issueId, summary, this.products);
-            if (rs.ok) {
-              this.modalLoading.hide();
-              this.router.navigate(['admin/tools/stockcard']);
+      let isZero = false;
+      this.products.forEach(v => {
+        if (v.issue_qty === 0) {
+          isZero = true;
+        }
+      });
+
+      if (!isZero) {
+        if (this.password) {
+          const rsC = await this.toolsService.checkPassword(this.password);
+          if (rsC.ok) {
+            this.modalLoading.show();
+            this.isSaving = true;
+            const _issueDate = this.issueDate ? `${this.issueDate.date.year}-${this.issueDate.date.month}-${this.issueDate.date.day}` : null;
+            const rsP = await this.periodService.getStatus(_issueDate)
+            if (rsP.rows[0].status_close === 'Y') {
+              this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถแก้ไข stockcard ได้');
               this.isSaving = false;
             } else {
-              this.isSaving = false;
-              this.modalLoading.hide();
-              this.alertService.error(JSON.stringify(rs.error));
+              const summary = {
+                warehouse_id: this.warehouseId,
+                transaction_issue_id: this.transactionId,
+                comment: this.comment,
+                ref_document: this.refDocument,
+                issue_date: _issueDate
+              }
+              const rs: any = await this.toolsService.saveIssue(this.issueId, summary, this.products);
+              if (rs.ok) {
+                this.modalLoading.hide();
+                this.router.navigate(['admin/tools/stockcard']);
+                this.isSaving = false;
+              } else {
+                this.isSaving = false;
+                this.modalLoading.hide();
+                this.alertService.error(JSON.stringify(rs.error));
+              }
             }
+          } else {
+            this.isSaving = false;
+            this.modalLoading.hide();
+            this.passwordModal = false;
+            this.alertService.error('รหัสผ่านผิดพลาด');
           }
         } else {
           this.isSaving = false;
           this.modalLoading.hide();
-          this.passwordModal = false;
-          this.alertService.error('รหัสผ่านผิดพลาด');
+          this.alertService.error('ข้อมูลไม่สมบูรณ์');
         }
       } else {
         this.isSaving = false;
         this.modalLoading.hide();
-        this.alertService.error('ข้อมูลไม่สมบูรณ์');
+        this.passwordModal = false;
+        this.alertService.error('มีจำนวนเป็น 0');
       }
 
     } catch (error) {
