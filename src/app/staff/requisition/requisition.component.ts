@@ -4,22 +4,15 @@ import {
   Component,
   OnInit,
   ViewChild,
-  NgZone,
   Inject,
   ChangeDetectorRef,
-  EventEmitter
 } from '@angular/core';
 
-import { RequisitionTypeService } from "../requisition-type.service";
 import { RequisitionService } from "../requisition.service";
 import { WarehouseService } from "../warehouse.service";
 import { AlertService } from "../../alert.service";
 
-import { IMyOptions } from 'mydatepicker-th';
 import { JwtHelper } from 'angular2-jwt';
-
-import * as moment from 'moment';
-import * as _ from 'lodash';
 import { IRequisitionOrder } from 'app/shared';
 
 @Component({

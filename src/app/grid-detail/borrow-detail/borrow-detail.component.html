@@ -14,7 +14,7 @@
       </clr-dg-cell>
       <clr-dg-cell >{{p.lot_no}}</clr-dg-cell>
       <clr-dg-cell >{{p.expired_date | expiredDate}}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color': p.qty > 0 ? '#007cbb' : ''}">{{p.product_qty | number}} {{p.to_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color': p.qty > 0 ? '#007cbb' : ''}">{{p.qty | number}} {{p.to_unit_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{p.product_pack_qty | number}}</clr-dg-cell>
       <clr-dg-cell >{{p.from_unit_name}} ({{p.conversion_qty | number}} {{p.to_unit_name}})</clr-dg-cell>
     </clr-dg-row>

@@ -6,7 +6,7 @@
 <clr-tabs>
   <clr-tab>
     <button clrTabLink clrTabLinkId="link1">
-        ยืม/คืนในหน่วยงาน
+      ยืมในหน่วยงาน
     </button>
     <clr-tab-content clrContentId="content1" *clrIfActive>
       <div class="row wid99">
@@ -47,6 +47,7 @@
         <clr-dg-column>วันที่ยืม</clr-dg-column>
         <clr-dg-column>คลังต้นทาง</clr-dg-column>
         <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
+        <clr-dg-column></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y'}">
           <wm-borrow-detail *clrIfExpanded [borrowId]="b.borrow_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-detail>
@@ -54,7 +55,18 @@
           <clr-dg-cell>{{b.borrow_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{b.dst_warehouse_name}}</clr-dg-cell>
-          </clr-dg-row>
+          <clr-dg-cell>
+            <div class="btn-group btn-sm">
+              <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/edit']" [queryParams]="{borrowId: b.borrow_id}"
+                [disabled]="b.mark_deleted === 'Y' || b.approved === 'Y' || b.confirmed === 'Y'">
+                <clr-icon shape="note"></clr-icon>
+              </button>
+              <button title="ลบ" *ngIf="b.mark_deleted === 'N'" class="btn btn-danger wm-small-btn" (click)="removeBorrow(b)" [disabled]="b.mark_deleted === 'Y' || b.confirmed === 'Y' || b.approved === 'Y'">
+                <clr-icon shape="trash"></clr-icon>
+              </button>
+            </div>
+          </clr-dg-cell>
+        </clr-dg-row>
         <clr-dg-footer>
           {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
           <clr-dg-pagination #pagination [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalBorrow"></clr-dg-pagination>
@@ -64,7 +76,7 @@
   </clr-tab>
   <clr-tab>
     <button clrTabLink>
-      ยืม/คืนระหว่างหน่วยงาน
+      ยืมระหว่างหน่วยงาน
       <!-- <span class="badge badge-danger" *ngIf="notApproveReceiveItems">{{notApproveReceiveItems | number}}</span> -->
     </button>
     <clr-tab-content *clrIfActive>

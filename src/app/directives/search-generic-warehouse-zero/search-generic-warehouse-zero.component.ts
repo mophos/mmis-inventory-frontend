@@ -13,7 +13,11 @@ export class SearchGenericWarehouseZeroComponent implements OnInit {
   jwtHelper: JwtHelper = new JwtHelper();
   dataServiceProduct: any;
   _warehouseId: any;
-
+  setZreo = false;
+  @Input('zero')
+  set setWarehouseZero(value: boolean) {
+    this.setZreo = value
+  }
   @Input('warehouseId')
   set setWarehouse(value: boolean) {
       this._warehouseId = value;
@@ -34,7 +38,11 @@ export class SearchGenericWarehouseZeroComponent implements OnInit {
   }
 
   setApiUrl() {
-    this.searchProductUrl = `${this.apiUrl}/generics/search-warehouse-zero-autocomplete?warehouseId=${this._warehouseId}&token=${this.token}`;
+    if(this.setZreo){
+      this.searchProductUrl = `${this.apiUrl}/generics/search-warehouse-setzero-autocomplete?warehouseId=${this._warehouseId}&token=${this.token}`;
+    }else {
+      this.searchProductUrl = `${this.apiUrl}/generics/search-warehouse-zero-autocomplete?warehouseId=${this._warehouseId}&token=${this.token}`;
+    }
 
   }
 

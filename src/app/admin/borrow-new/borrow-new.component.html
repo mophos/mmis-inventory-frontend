@@ -54,9 +54,9 @@
       <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
       <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
       <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
-      <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.transfer_qty | number}} {{generic.primary_unit_name}}</clr-dg-cell>
-      <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': generic.transfer_qty > generic.remain_qty ? 'red' : 'green'}">
-        {{generic.remain_qty - generic.transfer_qty | number}} {{generic.primary_unit_name}}
+      <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty | number}} {{generic.primary_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': generic.borrow_qty > generic.remain_qty ? 'red' : 'green'}">
+        {{generic.remain_qty - generic.borrow_qty | number}} {{generic.primary_unit_name}}
       </clr-dg-cell>
       <clr-dg-cell>
         <wm-select-product-location [warehouseId]="dstWarehouseId" [selectedId]="generic.location_id" (onSelect)="editChangeLocation($event, idx)"></wm-select-product-location>

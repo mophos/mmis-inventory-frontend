@@ -24,7 +24,7 @@ export class ReceiveNotMatchPoComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
-  constructor(  @Inject('API_URL') private apiUrl: string) { 
+  constructor(@Inject('API_URL') private apiUrl: string) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
   }

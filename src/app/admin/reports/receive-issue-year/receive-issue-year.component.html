@@ -64,10 +64,10 @@
   </div>
   <div class="form-group row">
     <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12">
-      <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0 || people1 == ''|| people2 == ''|| people3 == '' " (click)="showReport()">
+      <button class="btn btn-sm btn-primary" [disabled]="genericTypeSelect.length == 0 ||  !people1 || !people2 || !people3 " (click)="showReport()">
         <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน
       </button>
-      <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0 || people1 == ''|| people2 == ''|| people3 == ''  " (click)="exportExcel()">
+      <button type="button" class="btn btn-sm btn-success" [disabled]="genericTypeSelect.length == 0 " (click)="exportExcel()">
         <clr-icon shape="download"></clr-icon>
         ส่งออก Excel
       </button>

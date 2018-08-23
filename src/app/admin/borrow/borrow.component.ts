@@ -81,12 +81,12 @@ export class BorrowComponent implements OnInit {
     this.getBorrowList();
   }
 
-  removeTransfer(t: any) {
+  removeBorrow(b: any) {
     this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
       .then(async () => {
         this.modalLoading.show();
         try {
-          const rs: any = await this.borrowItemsService.remove(t.transfer_id);
+          const rs: any = await this.borrowItemsService.remove(b.borrow_id);
           if (rs.ok) {
             this.alertService.success();
             this.getBorrowList();

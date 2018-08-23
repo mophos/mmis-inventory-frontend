@@ -1,26 +1,29 @@
 import { AlertExpiredService } from './../alert-expired.service';
-import { Router } from '@angular/router';
-import { BorrowItemsService } from '../borrow-items.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { BorrowItemsService } from './../borrow-items.service';
 import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../alert.service';
-import { WarehouseService } from './../warehouse.service';
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { ProductsService } from './../products.service';
-import { PeriodService } from './../../period.service';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { DateService } from 'app/date.service';
 
 @Component({
-  selector: 'wm-borrow-new',
-  templateUrl: './borrow-new.component.html',
+  selector: 'wm-borrow-edit',
+  templateUrl: './borrow-edit.component.html',
   styleUrls: []
 })
-export class BorrowNewComponent implements OnInit {
+export class BorrowEditComponent implements OnInit {
+
+  @ViewChild('locationList') locationList;
+  @ViewChild('modalLoading') private modalLoading;
+
   lots = [];
   generics = [];
   loading = false;
+  isLoading = false;
   locations: any = [];
   locationId: any;
 
@@ -40,6 +43,7 @@ export class BorrowNewComponent implements OnInit {
   wmProductId: any;
   workingCode: any;
   isSaving = false;
+  disableSave = false;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -51,8 +55,6 @@ export class BorrowNewComponent implements OnInit {
   // @ViewChild('lotList') public lotList;
   @ViewChild('unitList') public unitList;
   @ViewChild('productSearch') public productSearch;
-  @ViewChild('locationList') locationList;
-  @ViewChild('modalLoading') private modalLoading;
 
   primaryUnitName: any;
   primaryUnitId: any;
@@ -63,7 +65,7 @@ export class BorrowNewComponent implements OnInit {
   unitGenericId: any;
   lotNo: any;
 
-  isSave = false;
+  borrowId: any;
 
   constructor(
     private productService: ProductsService,
@@ -72,18 +74,52 @@ export class BorrowNewComponent implements OnInit {
     private alertExpireService: AlertExpiredService,
     private router: Router,
     private zone: NgZone,
-    private dateService: DateService,
-    private periodService: PeriodService
-  ) { }
+    private route: ActivatedRoute,
+    private dateService: DateService
+  ) {
+    this.route.queryParams
+      .subscribe(params => {
+        this.borrowId = params.borrowId;
+      });
+  }
 
-  ngOnInit() {
+  async ngOnInit() {
     const date = new Date();
-    this.borrowDate = {
-      date: {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        day: date.getDate()
+    await this.getSummaryInfo();
+    await this.getDetailInfo();
+  }
+
+  async getSummaryInfo() {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.borrowItemsService.getSummaryInfo(this.borrowId);
+      
+      if (rs.ok) {
+        if (rs.info.borrow_date) {
+          this.borrowDate = {
+            date: {
+              year: moment(rs.info.borrow_date).get('year'),
+              month: moment(rs.info.borrow_date).get('month') + 1,
+              day: moment(rs.info.borrow_date).get('date')
+            }
+          }
+        }
+
+        this.srcWarehouseId = rs.info.src_warehouse_id;
+        this.dstWarehouseId = rs.info.dst_warehouse_id;
+
+        if (rs.info.confirmed === 'Y' || rs.info.approved === 'Y' || rs.info.mark_deleted === 'Y') {
+          this.disableSave = true;
+        }
+
+      } else {
+        this.alertService.error(rs.error);
       }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+      console.error(error);
     }
   }
 
@@ -96,12 +132,9 @@ export class BorrowNewComponent implements OnInit {
         this.genericId = event ? event.generic_id : null;
         this.workingCode = event ? event.working_code : null;
         this.remainQty = event ? event.qty - event.reserve_qty : null;
-        this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
-        // this.wmProductId = event ? event.wm_product_id : null;
-        this.unitList.setGenericId(this.genericId);
-        // this.getLots();
+        // this.unitList.setGenericId(this.genericId);
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
       }
@@ -126,10 +159,10 @@ export class BorrowNewComponent implements OnInit {
         this.expiredDate = this.lots[idx].expired_date;
         this.remainQty = this.lots[idx].qty;
         this.wmProductId = this.lots[idx].wm_product_id;
-        this.lotNo = this.lots[idx].lot_no;
+        // this.getProductRemain();
       }
     } catch (error) {
-      this.alertService.error(error);
+      //
     }
   }
 
@@ -142,7 +175,7 @@ export class BorrowNewComponent implements OnInit {
     }
   }
 
-  clearProductSearch(event) {
+  clearProductSearch(event: any) {
     if (event) {
       this.clearForm();
     }
@@ -175,6 +208,23 @@ export class BorrowNewComponent implements OnInit {
     this.locationList.getLocations(this.dstWarehouseId);
   }
 
+  async getDetailInfo() {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.borrowItemsService.getDetailInfo(this.borrowId);
+      if (rs.ok) {
+        this.generics = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+      console.error(error);
+    }
+  }
+
   async addGeneric() {
     // if (this.borrowQty) {
     const idx = _.findIndex(this.generics, { generic_id: this.genericId });
@@ -195,7 +245,7 @@ export class BorrowNewComponent implements OnInit {
         };
 
         this.generics.push(obj);
-        await this.getProductList(this.genericId, this.borrowQty);
+        await this.getProductList(this.genericId, (this.borrowQty * this.conversionQty));
         this.clearForm();
       } else {
         this.alertService.error('ข้อมูลไม่ครบถ้วน')
@@ -204,6 +254,10 @@ export class BorrowNewComponent implements OnInit {
     } else {
       this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
     }
+    // } else {
+    //   this.alertService.error('กรุณาระบุจำนวนที่ต้องการโอน')
+    // }
+
   }
 
   clearForm() {
@@ -224,13 +278,12 @@ export class BorrowNewComponent implements OnInit {
     this.lotNo = null;
     this.locationId = null;
     this.lots = [];
-    // this.unitList.clearUnits();
   }
 
-  editChangeborrowQty(idx: any, qty: any) {
+  editChangetransferQty(idx: any, qty: any) {
     const oldQty = +this.generics[idx].borrow_qty;
     if ((+qty.value * this.generics[idx].conversion_qty) > +this.generics[idx].remain_qty) {
-      this.alertService.error('จำนวนที่ยืม มากกว่าจำนวนคงเหลือ');
+      this.alertService.error('จำนวนโอน มากว่าจำนวนคงเหลือ');
       qty.value = oldQty;
     } else {
       this.generics[idx].borrow_qty = +qty.value;
@@ -250,16 +303,20 @@ export class BorrowNewComponent implements OnInit {
   }
 
   editChangeUnit(idx: any, event: any, unitCmp: any) {
-    this.generics[idx].unit_generic_id = event.unit_generic_id;
-    this.generics[idx].conversion_qty = event.qty;
-    if (this.generics[idx].remain_qty < (this.generics[idx].borrow_qty * event.qty)) {
-      this.alertService.error('รายการไม่พอยืม');
-      this.generics[idx].products = [];
+    if (+this.generics[idx].unit_generic_id === +event.unit_generic_id) {
+      this.generics[idx].conversion_qty = event.qty;
     } else {
-      const genericId = this.generics[idx].generic_id;
-      const borrowQty = this.generics[idx].borrow_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].borrow_qty = borrowQty;
-      this.getProductList(genericId, borrowQty);
+      this.generics[idx].unit_generic_id = event.unit_generic_id;
+      this.generics[idx].conversion_qty = event.qty;
+      if (this.generics[idx].remain_qty < (this.generics[idx].borrow_qty * event.qty)) {
+        this.alertService.error('รายการไม่พอโอน');
+        this.generics[idx].products = [];
+      } else {
+        const genericId = this.generics[idx].generic_id;
+        const borrowQty = this.generics[idx].borrow_qty * this.generics[idx].conversion_qty;
+        this.generics[idx].borrow_qty = borrowQty;
+        this.getProductList(genericId, borrowQty);
+      }
     }
   }
 
@@ -270,70 +327,63 @@ export class BorrowNewComponent implements OnInit {
       }).catch(() => { });
   }
 
-  async saveBorrow() {
-    this.isSave = true;
+  saveBorrow() {
     if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.borrowDate) {
-      const borrowDate = `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`;
-      const rs = await this.periodService.getStatus(borrowDate);
-      if (rs.rows[0].status_close === 'Y') {
-        this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถยืมได้')
-      } else {
-        const generics = [];
-        let isError = false;
+      const generics = [];
+      let isError = false;
 
-        _.forEach(this.generics, v => {
-          if (v.generic_id && v.borrow_qty) {
-            generics.push({
-              generic_id: v.generic_id,
-              borrow_qty: +v.borrow_qty,
-              unit_generic_id: v.unit_generic_id,
-              primary_unit_id: v.primary_unit_id,
-              location_id: v.location_id,
-              products: v.products
-            });
-          } else {
-            isError = false;
-          }
-        });
-
-        if (isError) {
-          this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
+      _.forEach(this.generics, v => {
+        if (v.generic_id && v.borrow_qty) {
+          generics.push({
+            generic_id: v.generic_id,
+            borrow_qty: +v.borrow_qty,
+            unit_generic_id: v.unit_generic_id,
+            // conversion_qty: +v.conversion_qty,
+            primary_unit_id: v.primary_unit_id,
+            location_id: v.location_id,
+            products: v.products
+          });
         } else {
-
-          const summary = {
-            borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
-            srcWarehouseId: this.srcWarehouseId,
-            dstWarehouseId: this.dstWarehouseId
-          };
-
-          if (generics.length) {
-            this.alertService.confirm('ต้องการยืมรายการสินค้า ใช่หรือไม่?')
-              .then(async () => {
-                this.modalLoading.show();
-                try {
-                  const rsT: any = await this.borrowItemsService.saveBorrow(summary, generics);
-                  if (rsT.ok) {
-                    this.alertService.success();
-                    this.router.navigate(['/admin/borrow']);
-                  } else {
-                    this.alertService.error(JSON.stringify(rsT.error));
-                  }
-                  this.modalLoading.hide();
-                } catch (error) {
-                  this.modalLoading.hide();
-                }
-              })
-              .catch(() => {
-                this.modalLoading.hide();
-              });
-          } else {
-            this.alertService.error('ไม่พบรายการที่ต้องการยืม');
-          }
+          isError = false;
         }
+      });
 
+      if (isError) {
+        this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
+      } else {
+        const summary = {
+          borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
+          dstWarehouseId: this.dstWarehouseId
+        };
+
+        if (generics.length) {
+          this.alertService.confirm('ต้องการยืมรายการสินค้า ใช่หรือไม่?')
+            .then(async () => {
+              this.modalLoading.show();
+              try {
+                const rs: any = await this.borrowItemsService.updateBorrow(this.borrowId, summary, generics);
+                if (rs.ok) {
+                  this.alertService.success();
+                  this.router.navigate(['/admin/borrow']);
+                } else {
+                  this.alertService.error(JSON.stringify(rs.error));
+                }
+
+                this.modalLoading.hide();
+
+              } catch (error) {
+                this.modalLoading.hide();
+              }
+            })
+            .catch(() => {
+              this.modalLoading.hide();
+            });
+        } else {
+          this.alertService.error('ไม่พบรายการที่ต้องการยืม');
+        }
       }
+
     }
-    this.isSave = false;
   }
 
   async getProductList(genericId, qty) {
@@ -360,4 +410,5 @@ export class BorrowNewComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
+
 }

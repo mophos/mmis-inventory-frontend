@@ -1,0 +1,71 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <!-- <a class="breadcrumb-item" href="javascript://" routerLink="/admin/reports">ระบบรายงาน</a> -->
+  <span class="breadcrumb-item active">รายงานมูลค่าจากการรับอื่นๆ</span>
+</nav>
+<form>
+  <section class="form-block">
+    <!-- <div class="form-group row wid99">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">คลัง</label>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <div class="select">
+          <select name="warehouseId" [(ngModel)]="warehouseId">
+            <option value="0">ทุกคลังสินค้า</option>
+            <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+              {{ w.warehouse_id }}-{{ w.warehouse_name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div> -->
+    <div class="form-group row wid99">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ประเภทการรับ</label>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="receiveTypesSelect" style="padding-top: 5px;height: 200px; width: 400px;">
+          <clr-dg-column style="width: 150px;">ประเภทการรับ</clr-dg-column>
+          <clr-dg-row *ngFor="let order of receiveTypes" [clrDgItem]="order">
+            <clr-dg-cell>{{order.receive_type_name}}</clr-dg-cell>
+          </clr-dg-row>
+        </clr-datagrid>
+      </div>
+    </div>
+    <div class="form-group row wid99" style="padding-top: 5px;">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ตั้งแต่</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="endDate" class="required">ถึง</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn btn-sm btn-primary" [disabled]="isPreview || receiveTypesSelect.length == 0" (click)="showReport()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงานมูลค่ายาและเวชภัณฑ์คงคลัง
+        </button>
+        <button type="button" [disabled]="isPreview || receiveTypesSelect.length == 0" class="btn btn-sm btn-success" (click)="exportExcel()">
+          <clr-icon shape="download"></clr-icon>
+          ส่งออก Excel
+        </button>
+        <!-- <button class="btn btn-sm btn-primary" [disabled]="isPreview" (click)="refresh()">ยกเลิก</button> -->
+      </div>
+    </div>
+  </section>
+</form>
+<span class="spinner spinner-inline" *ngIf="isPreview">
+  Loading...
+</span>
+<span *ngIf="isPreview">
+  Loading...
+</span>
+
+<wm-html-preview #htmlPreview></wm-html-preview>
