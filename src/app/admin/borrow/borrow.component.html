@@ -18,7 +18,7 @@
         <div class="col-md-2" style="padding-top: 5px;">
           <div class="btn-group" style="float:right;margin: 0px 0px 0px 0px;">
             <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="doApprove()">
-              <clr-icon shape="note"></clr-icon> อนุมัติใบโอน
+              <clr-icon shape="note"></clr-icon> อนุมัติใบยืม
             </button>
             <!-- <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
               <clr-button [disabled]="!selectedApprove.length" [clrInMenu]="true" class="btn btn-sm btn-primary" (click)="printReport()">
@@ -36,8 +36,7 @@
               <option value="1">ทั้งหมด</option>
               <option value="2">อนุมัติแล้ว</option>
               <option value="3">รออนุมัติ</option>
-              <option value="4">รอยืนยัน</option>
-              <option value="5">ยกเลิก</option>
+              <option value="4">ยกเลิก</option>
             </select>
           </div>
         </div>
@@ -49,7 +48,7 @@
         <clr-dg-column>คลังต้นทาง</clr-dg-column>
         <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="t" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y'}">
+        <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y'}">
           <wm-borrow-detail *clrIfExpanded [borrowId]="b.borrow_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-detail>
           <clr-dg-cell>{{b.borrow_code}}</clr-dg-cell>
           <clr-dg-cell>{{b.borrow_date | toThaiDate}}</clr-dg-cell>

@@ -105,6 +105,7 @@ export class BorrowComponent implements OnInit {
 
   doApprove() {
     const borrowIds = [];
+      
     this.selectedApprove.forEach(v => {
       if (v.approved !== 'Y' && v.mark_deleted === 'N') {
         borrowIds.push(v.borrow_id);
@@ -112,7 +113,7 @@ export class BorrowComponent implements OnInit {
     });
 
     if (borrowIds.length) {
-      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบโอน ใช่หรือไม่?')
+      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบยืม ใช่หรือไม่?')
         .then(async () => {
           this.approve(borrowIds);
         }).catch(() => {
