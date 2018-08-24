@@ -114,8 +114,12 @@ export class TransferNewComponent implements OnInit {
       const rs: any = await this.wareHouseService.getShipingNetwork(this.srcWarehouseId, 'TRN');
       this.modalLoading.hide();
       if (rs.ok) {
-        this.dstWarehouses = rs.rows;
-        this.getTemplates();
+        if(rs.rows.length){
+          this.dstWarehouses = rs.rows;
+          this.getTemplates();
+        } else {
+          this.alertService.error('ยังไม่มีการตั้ง Shiping Network' );
+        }
       } else {
         this.alertService.error(rs.error);
       }
