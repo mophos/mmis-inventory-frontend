@@ -319,7 +319,7 @@ export class RequisitionMultipleComponent implements OnInit {
                 pack_remain_qty: +z.pack_remain_qty,
                 to_unit_name: z.to_unit_name,
                 unit_generic_id: z.unit_generic_id,
-                confirm_qty: Math.floor(z.product_qty / z.conversion_qty);
+                confirm_qty: Math.floor(z.product_qty / z.conversion_qty)
               }
               sum += z.product_qty;
               this.generics[idx].products.push(_obj);
