@@ -153,7 +153,11 @@ export class RequisitionTemplateNewComponent implements OnInit {
     await this.warehouseService.getShipingNetwork(this.srcWarehouseId, 'REQ')
       .then((result: any) => {
         if (result.ok) {
-          this.dstWarehouses = result.rows;
+          if(result.rows.length){
+            this.dstWarehouses = result.rows;
+          } else {
+            this.alertService.error('ยังไม่มีการตั้ง Shiping Network' );
+          }
         } else {
           this.alertService.error(result.error)
         }

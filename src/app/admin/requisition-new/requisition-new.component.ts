@@ -336,7 +336,6 @@ export class RequisitionNewComponent implements OnInit {
       const rs: any = await this.wareHouseService.getShipingNetwork(warehouseId, 'REQ');
       this.modalLoading.hide();
       if (rs.ok) {
-        console.log(rs.rows);
         if(rs.rows.length){
           this.templates = [];
           this.withDrawWarehouses = rs.rows;
