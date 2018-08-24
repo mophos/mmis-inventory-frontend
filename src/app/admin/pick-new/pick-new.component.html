@@ -71,7 +71,7 @@
       {{idx + 1}}. {{product.product_name}}
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{product.lot_no}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px;" [ngClass]="{'isError': product.is_cancel == 'Y'|| product.is_success == 'Y'|| product.is_completed == 'Y'}">
+    <clr-dg-cell style="line-height: 25px;" [ngClass]="{'isError': product.is_cancel == 'Y'|| product.approve_id }">
       {{product.receive_code}}
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">

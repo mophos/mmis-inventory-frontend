@@ -164,7 +164,7 @@ export class PickNewComponent implements OnInit {
         this.products.splice(idx, 1);
       })
       .catch((error) => {
-        this.alertService.error(error);
+        
       });
   }
   async getReceive(query: any) {
@@ -220,7 +220,7 @@ export class PickNewComponent implements OnInit {
   }
   editChangeReceiveQty(idx: any, cmp: any) {
     let tmp = this.products[idx].receive_qty - this.products[idx].remain_qty
-    if(tmp >= 0){
+    if(tmp <= 0){
       this.alertService.error('ไม่สามารใช้รายการนี้ได้ ลบออกจากรายการ')
         this.products.splice(idx, 1);
     } else if (cmp.value > tmp) {
