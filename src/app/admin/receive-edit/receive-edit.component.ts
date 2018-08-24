@@ -829,6 +829,7 @@ export class ReceiveEditComponent implements OnInit {
           obj.is_free = v.is_free;
           obj.is_lot_control = v.is_lot_control;
 
+          obj.receive_detail_id = v.receive_detail_id
           this.products.push(obj);
 
         })
