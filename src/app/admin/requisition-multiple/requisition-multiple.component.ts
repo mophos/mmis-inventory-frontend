@@ -410,22 +410,6 @@ export class RequisitionMultipleComponent implements OnInit {
     const reqDate = this.requisitionDate.date ? `${this.requisitionDate.date.year}-${this.requisitionDate.date.month}-${this.requisitionDate.date.day}` : null;
     this.alertService.confirm('คุณตรวจสอบจำนวนจ่ายถูกต้องแล้ว ใช่หรือไม่?')
       .then(async () => {
-        const order: any = {};
-        order.requisition_date = reqDate;
-        order.requisition_type_id = this.requisitionTypeID;
-        order.wm_requisition = this.wmRequisition;
-        order.wm_withdraw = this.wmWithdraw;
-
-        // const generics: any = [];
-        // this.generics.forEach((v: any) => {
-        //   if (v.requisition_qty > 0) {
-        //     const obj: any = {};
-        //     obj.generic_id = v.generic_id;
-        //     obj.requisition_qty = v.to_unit_qty * v.requisition_qty;
-        //     obj.unit_generic_id = v.unit_generic_id;
-        //     generics.push(obj);
-        //   }
-        // });
 
         if (!this.generics.length) {
           this.alertService.error('กรุณาระบุจำนวนสินค้าที่ต้องการเบิก');
@@ -434,7 +418,15 @@ export class RequisitionMultipleComponent implements OnInit {
           this.modalLoading.show();
           try {
             let rs: any;
-            rs = await this.requisitionService.saveRequisitionFastOrder(order, this.generics);
+
+            for (const w of this.warehouseList) {
+              const order: any = {};
+              order.requisition_date = reqDate;
+              order.requisition_type_id = this.requisitionTypeID;
+              order.wm_requisition = w.wmRequisitionId;
+              order.wm_withdraw = w.wmWithdrawId;
+              rs = await this.requisitionService.saveRequisitionFastOrder(order, this.generics);
+            }
 
             this.modalLoading.hide();
             this.isSave = false;
