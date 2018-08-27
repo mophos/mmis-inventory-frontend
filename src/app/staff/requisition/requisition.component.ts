@@ -117,9 +117,11 @@ export class RequisitionComponent implements OnInit {
     try {
       const rs: any = await this.requisitionService.getWaitingApprove(this.perPage, this.offset, this.query, this.fillterCancel);
       this.modalLoading.hide();
-      if (rs.ok && rs.rows.length > 0) {
-        this.waitingApproves = rs.rows;
-        this.totalWaitingApprove = rs.total[0].total;
+      if (rs.ok) {
+        if(rs.rows.length > 0){
+          this.waitingApproves = rs.rows;
+          this.totalWaitingApprove = rs.total[0].total;
+        }
       } else {
         this.alertService.error(rs.error);
       }

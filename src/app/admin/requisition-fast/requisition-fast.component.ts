@@ -393,7 +393,7 @@ export class RequisitionFastComponent implements OnInit {
             this.getTemplates();
           }
         } else {
-          this.alertService.error('ยังไม่มีการตั้ง Shiping Network' );
+          this.alertService.error('ยังไม่มีการตั้ง Shipping Network' );
         }
       } else {
         this.alertService.error(rs.error);
