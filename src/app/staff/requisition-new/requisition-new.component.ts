@@ -330,7 +330,7 @@ export class RequisitionNewComponent implements OnInit {
         if(rs.rows.length){
           this.withDrawWarehouses = rs.rows;
         } else {
-          this.alertService.error('ยังไม่มีการตั้ง Shiping Network' );
+          this.alertService.error('ยังไม่มีการตั้ง Shipping Network' );
         }
       } else {
         this.alertService.error(rs.error);
