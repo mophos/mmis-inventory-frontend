@@ -33,6 +33,7 @@ export class AlertExpiredComponent implements OnInit {
   menuSettingAlertExpired
   token: any;
 
+  query:any ='';
   constructor(
     private alertExpiredService: AlertExpiredService,
     private alertService: AlertService,
@@ -117,7 +118,7 @@ export class AlertExpiredComponent implements OnInit {
     this.isAll = true;
     this.modalLoading.show();
     try {
-      const rs: any = await this.alertExpiredService.getAllGenerics();
+      const rs: any = await this.alertExpiredService.getAllGenerics(this.query);
       if (rs.ok) {
         this.allGenerics = rs.rows;
       } else {
@@ -301,5 +302,9 @@ export class AlertExpiredComponent implements OnInit {
     }
     const url = `${this.apiUrl}/report/print/alert-expried?token=${this.token}&genericTypeId=${_genericType}&warehouseId=${_warehouseId}`;
     this.htmlPreview.showReport(url, 'landscape');
+  }
+
+  searc(event: any) {
+    this.getAllProducts();
   }
 }
