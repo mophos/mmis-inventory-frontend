@@ -22,6 +22,17 @@ export class WarehouseService {
         });
     });
   }
+  allSearch(query:any) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/warehouses/search?query=${query}`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
 
   async getMappingsGenerics() {
     const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics`).toPromise();
