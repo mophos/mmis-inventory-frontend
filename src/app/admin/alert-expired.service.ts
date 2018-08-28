@@ -10,9 +10,9 @@ export class AlertExpiredService {
     private authHttp: AuthHttp
   ) { }
 
-  getAllGenerics() {
+  getAllGenerics(query:any) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/alert-expired/generics`)
+      this.authHttp.get(`${this.url}/alert-expired/generics?query=${query}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
