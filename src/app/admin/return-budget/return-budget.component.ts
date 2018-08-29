@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { State } from "@clr/angular";
 import { ReturnBudgetService } from './../return-budget.service';
 import { AlertService } from '../../alert.service';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 
 @Component({
   selector: 'wm-return-budget',
@@ -10,6 +11,7 @@ import { AlertService } from '../../alert.service';
 })
 export class ReturnBudgetComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
+  jwtHelper: JwtHelper = new JwtHelper();
   purchases: any = [];
   histories: any = []
   currentPage = 1;
@@ -22,10 +24,15 @@ export class ReturnBudgetComponent implements OnInit {
   queryHistory: any;
   filterStatus = "";
   tab: any;
+  token: any;
   constructor(
+    @Inject('API_URL') private apiUrl: string,
     private returnBudgetService: ReturnBudgetService,
     private alertService: AlertService,
-  ) { }
+  ) {
+    this.token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
+  }
 
   ngOnInit() {
   }
@@ -147,6 +154,11 @@ export class ReturnBudgetComponent implements OnInit {
 
   changeFilterStatus() {
     this.getHistoryList(this.perPage, 0, {}, this.queryHistory, this.filterStatus);
+  }
+
+  exportExcel() {
+    const url = `${this.apiUrl}/report/returnBudget/export?token=${this.token}`
+    window.open(url, '_blank');
   }
 
 }

@@ -78,13 +78,23 @@
               <input type="text" (keyup)="searchHistory($event)" name="queryHistory" [(ngModel)]="queryHistory" placeholder="เลขที่ใบสั่งซื้อ, ผู้จำหน่าย"
                 style="width: 400px;">
             </div>
-            <div class="col-md-2 push-md-4" style="padding-top: 5px;">
-              <div class="select">
-                <select [(ngModel)]="filterStatus" (change)="changeFilterStatus()">
-                  <option value="">ทั้งหมด</option>
-                  <option value="Y">คืนงบ</option>
-                  <option value="N">ไม่คืนงบ</option>
-                </select>
+            <div class="col-md-6" style="padding-top: 5px;">
+              <div style="float:right;">
+                <div style="display:inline-block">
+                  <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
+                    <clr-icon shape="download"></clr-icon>
+                    ส่งออก Excel
+                  </button>
+                </div>
+                <div style="display:inline-block">
+                  <div class="select">
+                    <select [(ngModel)]="filterStatus" (change)="changeFilterStatus()">
+                      <option value="">ทั้งหมด</option>
+                      <option value="Y">คืนงบ</option>
+                      <option value="N">ไม่คืนงบ</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
