@@ -156,7 +156,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
           if(result.rows.length){
             this.dstWarehouses = result.rows;
           } else {
-            this.alertService.error('ยังไม่มีการตั้ง Shiping Network' );
+            this.alertService.error('ยังไม่มีการตั้ง Shipping Network' );
           }
         } else {
           this.alertService.error(result.error)

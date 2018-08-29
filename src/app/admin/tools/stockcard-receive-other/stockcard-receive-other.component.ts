@@ -564,6 +564,7 @@ export class StockcardReceiveOtherComponent implements OnInit {
           product.warehouse_id = v.warehouse_id;
           product.location_id = v.location_id;
           product.unit_generic_id = v.unit_generic_id;
+          product.unit_generic_id_old = v.unit_generic_id;
           product.conversion_qty = +v.conversion_qty;
           product.expired_date = moment(v.expired_date).isValid() ? moment(v.expired_date).format('DD/MM/YYYY') : null;
           product.expired_date_old = moment(v.expired_date).isValid() ? moment(v.expired_date).format('DD/MM/YYYY') : null;
