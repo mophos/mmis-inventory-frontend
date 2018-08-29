@@ -1,0 +1,21 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+    <clr-dg-column>lot_no</clr-dg-column>
+    <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+    <clr-dg-column>จำนวนที่รับ</clr-dg-column>
+    <clr-dg-column>จำนวนที่หยิบ</clr-dg-column>
+    <clr-dg-column>หน่วย</clr-dg-column>
+
+    <clr-dg-row *ngFor="let r of list">
+      <clr-dg-cell>{{r.product_name}}</clr-dg-cell>
+      <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
+      <clr-dg-cell>{{r.receive_code}}</clr-dg-cell>
+      <clr-dg-cell>{{r.receive_qty}}</clr-dg-cell>
+      <clr-dg-cell>{{r.pick_qty}} </clr-dg-cell>
+      <clr-dg-cell> {{r.large_unit}}({{r.base_unit}}{{r.small_unit}})</clr-dg-cell>
+
+    </clr-dg-row>
+    <!-- <clr-dg-footer>{{r.length}} รายการ</clr-dg-footer> -->
+  </clr-datagrid>
+</div>

@@ -147,6 +147,13 @@ export class ReceiveService {
 
     return res.json();
   }
+  async checkDeleteProductWithPick(products:any,receiveId:any){
+    const res = await this.authHttp.post(`${this.url}/receives/checkDeleteProductWithPick`,{
+      products:products,
+      receiveId:receiveId
+    }).toPromise();
+    return res.json();
+  }
 
   async getPurchaseInfo(purchaseOrderId: any) {
     const res = await this.authHttp.get(`${this.url}/receives/purchases/info/${purchaseOrderId}`).toPromise();

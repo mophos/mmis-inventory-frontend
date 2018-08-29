@@ -59,6 +59,8 @@ import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisi
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
 import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
 //
+import { PickComponent } from './pick/pick.component';
+import { PickNewComponent } from './pick-new/pick-new.component';
 import { AbcSettingComponent } from 'app/admin/abc-setting/abc-setting.component';
 import { AbcVenComponent } from 'app/admin/abc-ven/abc-ven.component';
 import { AdjustStockNewComponent } from 'app/admin/adjust-stock-new/adjust-stock-new.component';
@@ -190,6 +192,9 @@ const routes: Routes = [
       { path: 'addition/generic', canActivate: [AuthAddition], component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', canActivate: [AuthAddition], component: AdditionEditComponent },
       { path: 'return-budget', canActivate: [AuthReturnBudget], component: ReturnBudgetComponent },
+      { path: 'pick', component: PickComponent },
+      { path: 'pick/new', component: PickNewComponent },
+      { path: 'pick/edit/:pickId', component: PickNewComponent },
       {
         path: 'tools',
         canActivate: [AdminGuard, AuthStockcard],
