@@ -33,7 +33,7 @@ export class AlertExpiredComponent implements OnInit {
   menuSettingAlertExpired
   token: any;
 
-  query:any ='';
+  query: any = '';
   constructor(
     private alertExpiredService: AlertExpiredService,
     private alertService: AlertService,
@@ -42,8 +42,8 @@ export class AlertExpiredComponent implements OnInit {
     private basicService: BasicService,
     @Inject('API_URL') private apiUrl: string
   ) {
-    const token = sessionStorage.getItem('token');
-    const decodedToken = this.jwtHelper.decodeToken(token);
+    this.token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
     const accessRight = decodedToken.accessRight;
     this.rights = accessRight.split(',');
     this.menuSettingAlertExpired = _.indexOf(this.rights, 'WM_SETTING_ALERT_EXPIRED') === -1 ? false : true;
@@ -55,6 +55,7 @@ export class AlertExpiredComponent implements OnInit {
     // this.getStatus();
     await this.getWarehouses();
     await this.getProductExpired();
+    console.log(this.token);
   }
 
   // getStatus() {
@@ -300,7 +301,7 @@ export class AlertExpiredComponent implements OnInit {
     } else {
       _warehouseId = this.warehouseId;
     }
-    const url = `${this.apiUrl}/report/print/alert-expried?token=${this.token}&genericTypeId=${_genericType}&warehouseId=${_warehouseId}`;
+    const url = `${this.apiUrl}/report/print/alert-expried?genericTypeId=${_genericType}&warehouseId=${_warehouseId}&token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
 
