@@ -79,7 +79,7 @@ export class PickNewComponent implements OnInit {
   }
   searchReceive() {
     this.isOpenModal = true;
-    // this.getReceive()
+    this.getReceive('')
   }
   async getPick(pickId: any) {
     const rs: any = await this.pickService.getPick(pickId)
@@ -212,11 +212,7 @@ export class PickNewComponent implements OnInit {
     }
   }
   search(event) {
-    if (event.keyCode === 13) {
-      if (this.genericSearch) {
         this.getReceive(this.genericSearch);
-      }
-    }
   }
   editChangeReceiveQty(idx: any, cmp: any) {
     let tmp = this.products[idx].receive_qty - this.products[idx].remain_qty

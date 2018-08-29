@@ -76,7 +76,7 @@ export class PickService {
   }
   gerProductReceiveNotPO(query: any) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/pick/gerProductReceiveNotPO/${query}`)
+      this.authHttp.get(`${this.url}/pick/gerProductReceiveNotPO?query=${query}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
