@@ -96,7 +96,7 @@
         <clr-icon clrVerticalNavIcon shape="tools"></clr-icon>
         เบิกสินค้า
       </a>
-      <a clrVerticalNavLink  routerLink="/admin/pick" title="การหยิบ" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuPick" routerLink="/admin/pick" title="การหยิบ" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="cursor-hand"></clr-icon>
         การหยิบ
       </a>
