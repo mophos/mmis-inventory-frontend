@@ -170,6 +170,7 @@ import { PickComponent } from './pick/pick.component';
 import { PickNewComponent } from './pick-new/pick-new.component';
 import { PickService } from './pick.service';
 import { RequisitionMultipleComponent } from './requisition-multiple/requisition-multiple.component';
+import { AuthPick } from '../auth-pick.service';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -296,6 +297,7 @@ Highcharts.setOptions({
     ProductlotsService,
     AdminGuard,
     AuthReceive,
+    AuthPick,
     AuthTransfer,
     AuthRequisition,
     AuthPeriod,
