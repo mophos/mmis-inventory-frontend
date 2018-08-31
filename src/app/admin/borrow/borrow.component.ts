@@ -12,19 +12,20 @@ import { State } from '@clr/angular';
 @Component({
   selector: 'wm-borrow',
   templateUrl: './borrow.component.html',
-  styleUrls: [ ]
+  styleUrls: []
 })
 export class BorrowComponent implements OnInit {
   selectedApprove = [];
+  selectedApproveOther = [];
   selectedApproveReceive = [];
   notApproveReceiveItems = 0;
-  transfersRequest = [];
 
   approveStatus = 1;
   totalBorrow = 0;
+  totalBorrowOther = 0;
   totalRequest = 0;
   borrow: any = [];
-  transferDetails: any = [];
+  borrowOther: any = [];
   openDetail = false;
   isApprove = true;
   isNotApprove = false;
@@ -36,7 +37,11 @@ export class BorrowComponent implements OnInit {
   loading = false;
   token: any;
   currentPage = 1;
+  currentPageOther = 1;
   offset = 0;
+  selectedTab: any;
+  tabInside = 0;
+  tabOutside = 0;
 
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('htmlPreview') public htmlPreview: any;
@@ -49,12 +54,12 @@ export class BorrowComponent implements OnInit {
     @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
-    this.currentPage = +sessionStorage.getItem('currentPageTransfer') ? +sessionStorage.getItem('currentPageTransfer') : 1;
+    this.currentPage = +sessionStorage.getItem('currentPageBorrow') ? +sessionStorage.getItem('currentPageBorrow') : 1;
+    this.currentPageOther = +sessionStorage.getItem('currentPageBorrowOthe') ? +sessionStorage.getItem('currentPageBorrowOthe') : 1;
   }
 
   ngOnInit() {
     this.getBorrowList();
-    // this.getRequestBorrow();
   }
 
   async getBorrowList() {
@@ -75,10 +80,34 @@ export class BorrowComponent implements OnInit {
     }
   }
 
+  async getBorrowOtherList() {
+    this.modalLoading.show();
+    this.selectedApproveReceive = [];
+    try {
+      const rs = await this.borrowItemsService.listOther(this.approveStatus, this.perPage, this.offset);
+      if (rs.ok) {
+        this.borrowOther = rs.rows;
+        this.totalBorrowOther = rs.total;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
+    }
+  }
+
   async refreshBorrow(state: State) {
     this.offset = +state.page.from;
     sessionStorage.setItem('currentPageBorrow', this.currentPage.toString());
     this.getBorrowList();
+  }
+
+  async refreshBorrowOther(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageBorrowOther', this.currentPageOther.toString());
+    this.getBorrowOtherList();
   }
 
   removeBorrow(b: any) {
@@ -90,7 +119,6 @@ export class BorrowComponent implements OnInit {
           if (rs.ok) {
             this.alertService.success();
             this.getBorrowList();
-            this.getRequestBorrow();
           } else {
             this.alertService.error(rs.error);
           }
@@ -103,9 +131,48 @@ export class BorrowComponent implements OnInit {
       }).catch(() => { })
   }
 
+  removeBorrowOther(b: any) {
+    this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
+      .then(async () => {
+        this.modalLoading.show();
+        try {
+          const rs: any = await this.borrowItemsService.removeOther(b.borrow_other_id);
+          if (rs.ok) {
+            this.alertService.success();
+            this.getBorrowOtherList();
+          } else {
+            this.alertService.error(rs.error);
+          }
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(error.message);
+        }
+
+      }).catch(() => { })
+  }
+
+  setTapActive(tab: any) {
+    this.selectedTab = tab;
+    this.totalTab();
+  }
+
+  async totalTab() {
+    try {
+      if (this.selectedTab === 'inside') {
+        const rsW: any = await this.getBorrowList();
+      }
+      if (this.selectedTab === 'outside') {
+        const rsWA: any = await this.getBorrowOtherList();
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
+
   doApprove() {
     const borrowIds = [];
-      
+
     this.selectedApprove.forEach(v => {
       if (v.approved !== 'Y' && v.mark_deleted === 'N') {
         borrowIds.push(v.borrow_id);
@@ -125,24 +192,25 @@ export class BorrowComponent implements OnInit {
     }
   }
 
-  doApproveReceive() {
-    const transferIds = [];
-    this.selectedApproveReceive.forEach(v => {
-      if (v.approved !== 'Y' && v.mark_deleted === 'N') {
-        transferIds.push(v.transfer_id);
+  doApproveOther() {
+    const borrowIds = [];
+
+    this.selectedApproveOther.forEach(v => {
+      if (v.approved !== 'Y' && v.is_cancel === 'N') {
+        borrowIds.push(v.borrow_other_id);
       }
     });
 
-    if (transferIds.length) {
-      this.alertService.confirm('ต้องการยืนยันการรับสินค้าเข้าคลัง ใช่หรือไม่?')
+    if (borrowIds.length) {
+      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบยืม ใช่หรือไม่?')
         .then(async () => {
-          this.approve(transferIds);
+          this.approveOther(borrowIds);
         }).catch(() => {
           // cancel
         });
     } else {
-      this.selectedApproveReceive = [];
-      this.alertService.error('ไม่พบรายการที่ต้องการรับสินค้าเข้าคลัง');
+      this.selectedApprove = [];
+      this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     }
   }
 
@@ -155,6 +223,27 @@ export class BorrowComponent implements OnInit {
         this.selectedApprove = [];
         this.selectedApproveReceive = [];
         this.getBorrowList();
+        // this.getRequestBorrow();
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      console.error(error);
+      this.alertService.error(error.message);
+    }
+  }
+
+  async approveOther(borrowIds: any[]) {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.borrowItemsService.approveAllOther(borrowIds);
+      if (rs.ok) {
+        this.alertService.success();
+        this.selectedApproveOther = [];
+        this.selectedApproveReceive = [];
+        this.getBorrowOtherList();
         // this.getRequestBorrow();
       } else {
         this.alertService.error(rs.error);
@@ -201,88 +290,6 @@ export class BorrowComponent implements OnInit {
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
     }
-  }
-
-  activeTransfer(t: any) {
-    this.alertService.confirm('ต้องการเปลี่ยนสถานะ ใช่หรือไม่?')
-      .then(() => {
-        this.modalLoading.show();
-        this.borrowItemsService.active(t.transfer_id)
-          .then((rs: any) => {
-            if (rs.ok) {
-              this.alertService.success();
-              this.getBorrowList();
-            } else {
-              this.alertService.error(rs.error);
-            }
-            this.modalLoading.hide();
-          })
-          .catch((error: any) => {
-            this.modalLoading.hide();
-            this.alertService.error(error.message);
-          });
-      }).catch(() => { })
-  }
-
-  doConfirm() {
-    const transferIds = [];
-    this.selectedApprove.forEach(v => {
-      if (v.confirmed !== 'Y' && v.approved !== 'Y' && v.mark_deleted === 'N') {
-        transferIds.push(v.transfer_id);
-      }
-    });
-
-    if (transferIds.length) {
-      this.alertService.confirm('ต้องการยืนยันการโอน ใช่หรือไม่?')
-        .then(async () => {
-          try {
-            this.modalLoading.show();
-            const rs: any = await this.borrowItemsService.confirmAll(transferIds);
-            if (rs.ok) {
-              this.alertService.success();
-              this.selectedApprove = [];
-              this.getBorrowList();
-            } else {
-              this.alertService.error(rs.error);
-            }
-            this.modalLoading.hide();
-          } catch (error) {
-            this.modalLoading.hide();
-            console.error(error);
-            this.alertService.error(error.message);
-          }
-        }).catch(() => {
-          // cancel
-        });
-    } else {
-      this.selectedApprove = [];
-      this.alertService.error('ไม่พบรายการที่ต้องการยืนยัน');
-    }
-  }
-
-  async getRequestBorrow() {
-    try {
-      this.modalLoading.show();
-      this.selectedApprove = [];
-      const rs: any = await this.borrowItemsService.request(this.perPage, this.offset);
-      if (rs.ok) {
-        this.transfersRequest = rs.rows;
-        this.totalRequest = rs.totalRequest;
-        this.notApproveReceiveItems = rs.totalNotApprove;
-      } else {
-        this.alertService.error(JSON.stringify(rs.error));
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(JSON.stringify(error.message));
-    }
-  }
-
-  async refreshRequest(state: State) {
-    this.offset = +state.page.from;
-    sessionStorage.setItem('currentPageTransfer', this.currentPage.toString());
-    this.getRequestBorrow();
   }
 }
 

@@ -48,6 +48,7 @@ import { StaffProductReceiveOtherDetailComponent } from './staff-product-receive
 import { ReturnBudgetDetailComponent } from './return-budget-detail/return-budget-detail.component';
 import { BorrowItemsComponent } from './borrow-items/borrow-items.component';
 import { BorrowDetailComponent } from './borrow-detail/borrow-detail.component';
+import { BorrowOtherDetailComponent } from './borrow-other-detail/borrow-other-detail.component';
 
 @NgModule({
   imports: [
@@ -99,7 +100,8 @@ import { BorrowDetailComponent } from './borrow-detail/borrow-detail.component';
     StaffProductReceiveOtherDetailComponent,
     ReturnBudgetDetailComponent,
     BorrowItemsComponent,
-    BorrowDetailComponent
+    BorrowDetailComponent,
+    BorrowOtherDetailComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -142,7 +144,8 @@ import { BorrowDetailComponent } from './borrow-detail/borrow-detail.component';
     StaffProductReceiveOtherDetailComponent,
     ReturnBudgetDetailComponent,
     BorrowItemsComponent,
-    BorrowDetailComponent
+    BorrowDetailComponent,
+    BorrowOtherDetailComponent
   ]
 })
 export class GridDetailModule { }

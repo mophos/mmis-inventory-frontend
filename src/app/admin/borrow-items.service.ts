@@ -76,6 +76,14 @@ export class BorrowItemsService {
     return rs.json();
   }
 
+  async approveAllOther(borrowIds: any[]) {
+    const rs: any = await this.authHttp.post(`${this.url}/borrow-other/approve-all`, {
+      borrowIds: borrowIds
+    }).toPromise();
+
+    return rs.json();
+  }
+
   async updateBorrow(borrowId: any, summary: Object, generics: any[]) {
     const rs: any = await this.authHttp.put(`${this.url}/borrow/save/${borrowId}`, {
       summary: summary,
@@ -87,6 +95,11 @@ export class BorrowItemsService {
 
   async list(type: any, limit: number, offset: number) {
     const rs: any = await this.authHttp.get(`${this.url}/borrow/list?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    return rs.json();
+  }
+
+  async listOther(type: any, limit: number, offset: number) {
+    const rs: any = await this.authHttp.get(`${this.url}/borrow/list/other?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 
@@ -104,6 +117,11 @@ export class BorrowItemsService {
 
   async remove(borrowId: string) {
     const rs = await this.authHttp.delete(`${this.url}/borrow/${borrowId}`).toPromise();
+    return rs.json();
+  }
+
+  async removeOther(borrowId: string) {
+    const rs = await this.authHttp.delete(`${this.url}/borrow/other/${borrowId}`).toPromise();
     return rs.json();
   }
 

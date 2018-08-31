@@ -170,6 +170,9 @@ import { AuthAddition } from 'app/auth-addition.service';
 import { BorrowNewComponent } from './borrow-new/borrow-new.component';
 import { RequisitionMultipleComponent } from './requisition-multiple/requisition-multiple.component';
 import { BorrowEditComponent } from './borrow-edit/borrow-edit.component';
+import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.component';
+import { BorrowOtherService } from './borrow-other.service';
+import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -282,7 +285,9 @@ Highcharts.setOptions({
     BorrowComponent,
     BorrowNewComponent,
     RequisitionMultipleComponent,
-    BorrowEditComponent
+    BorrowEditComponent,
+    BorrowotherNewComponent,
+    BorrowotherEditComponent
   ],
   providers: [
     MainService,
@@ -341,6 +346,7 @@ Highcharts.setOptions({
     AdjustStockService,
     ReturnBudgetService,
     BorrowItemsService,
+    BorrowOtherService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })

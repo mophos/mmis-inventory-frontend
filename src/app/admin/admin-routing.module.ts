@@ -110,6 +110,8 @@ import { WarehouseComponent } from 'app/admin/warehouse/warehouse.component';
 import { WarehouseDetailComponent } from 'app/admin/warehouse-detail/warehouse-detail.component';
 import { WarehouseProductsComponent } from 'app/admin/warehouse-products/warehouse-products.component';
 import { WarehouseProductsDetailComponent } from 'app/admin/warehouse-products-detail/warehouse-products-detail.component';
+import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.component';
+import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
 
 const routes: Routes = [
   {
@@ -144,6 +146,8 @@ const routes: Routes = [
       { path: 'borrow', component: BorrowComponent },
       { path: 'borrow/new', component: BorrowNewComponent },
       { path: 'borrow/edit', component: BorrowEditComponent },
+      { path: 'borrowother/new', component: BorrowotherNewComponent },
+      { path: 'borrowother/edit', component: BorrowotherEditComponent },
       {
         path: 'reports',
         canActivate: [AdminGuard],

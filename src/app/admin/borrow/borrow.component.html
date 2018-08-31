@@ -5,7 +5,7 @@
 
 <clr-tabs>
   <clr-tab>
-    <button clrTabLink clrTabLinkId="link1">
+    <button clrTabLink clrTabLinkId="link1" (click)="setTapActive('inside')">
       ยืมในหน่วยงาน
     </button>
     <clr-tab-content clrContentId="content1" *clrIfActive>
@@ -57,8 +57,8 @@
           <clr-dg-cell>{{b.dst_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
-              <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/edit']" [queryParams]="{borrowId: b.borrow_id}"
-                [disabled]="b.mark_deleted === 'Y' || b.approved === 'Y' || b.confirmed === 'Y'">
+              <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/edit']"
+                [queryParams]="{borrowId: b.borrow_id}" [disabled]="b.mark_deleted === 'Y' || b.approved === 'Y' || b.confirmed === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
               <button title="ลบ" *ngIf="b.mark_deleted === 'N'" class="btn btn-danger wm-small-btn" (click)="removeBorrow(b)" [disabled]="b.mark_deleted === 'Y' || b.confirmed === 'Y' || b.approved === 'Y'">
@@ -75,53 +75,73 @@
     </clr-tab-content>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink>
+    <button clrTabLink (click)="setTapActive('outside')">
       ยืมระหว่างหน่วยงาน
-      <!-- <span class="badge badge-danger" *ngIf="notApproveReceiveItems">{{notApproveReceiveItems | number}}</span> -->
     </button>
-    <clr-tab-content *clrIfActive>
-      <div class="row">
-        <div class="col-md-2" style="padding-top: 5px;">
-          <!-- <button class="btn btn-primary btn-sm" [disabled]="!selectedApproveReceive.length" (click)="doApproveReceive()">
-            รับสินค้าเข้าคลัง
-          </button> -->
+    <clr-tab-content clrContentId="content1" *clrIfActive>
+      <div class="row wid99">
+        <div class="col-md-8">
+          <button class="btn btn-sm btn-success" [routerLink]="['/admin/borrowother/new']">
+            + สร้างใบยืม
+          </button>
         </div>
-        <!-- <div class="col-md-10">
-          <div style="float:right">
-            <button class="btn btn-sm btn-primary" [disabled]="!selectedApprove.length" (click)="showReport(t)">
-              <clr-icon shape="printer"></clr-icon>
-              พิมพ์ใบโอน
+        <div class="col-md-2" style="padding-top: 5px;">
+          <div class="btn-group" style="float:right;margin: 0px 0px 0px 0px;">
+            <button [disabled]="!selectedApproveOther.length" class="btn btn-sm btn-success" (click)="doApproveOther()">
+              <clr-icon shape="note"></clr-icon> อนุมัติใบยืม
             </button>
+            <!-- <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
+              <clr-button [disabled]="!selectedApprove.length" [clrInMenu]="true" class="btn btn-sm btn-primary" (click)="printReport()">
+                <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติโอน
+              </clr-button>
+              <clr-button [disabled]="!selectedApprove.length" [clrInMenu]="true" class="btn btn-sm btn-primary" (click)="printReport2()">
+                <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบโอน
+              </clr-button>
+            </clr-button-group> -->
           </div>
-        </div> -->
+        </div>
+        <div class="col-md-2" style="padding-top: 5px;">
+          <div class="select">
+            <select id="selects_3" name="approveStatus" [(ngModel)]="approveStatus" (change)="getBorrowList()">
+              <option value="1">ทั้งหมด</option>
+              <option value="2">อนุมัติแล้ว</option>
+              <option value="3">รออนุมัติ</option>
+              <option value="4">ยกเลิก</option>
+            </select>
+          </div>
+        </div>
       </div>
-      <!-- <clr-datagrid (clrDgRefresh)="refreshRequest($event)" [style.height.%]="85" [(clrDgSelected)]="selectedApproveReceive">
-        <clr-dg-column>เลขที่โอน</clr-dg-column>
-        <clr-dg-column>วันที่โอน</clr-dg-column>
-        <clr-dg-column>โอนมาจากคลัง</clr-dg-column>
-        <clr-dg-column>รับเข้าคลัง</clr-dg-column>
+
+      <clr-datagrid (clrDgRefresh)="refreshBorrowOther($event)" [style.height.%]="80" [(clrDgSelected)]="selectedApproveOther">
+        <clr-dg-column>เลขที่ยืม</clr-dg-column>
+        <clr-dg-column>วันที่ยืม</clr-dg-column>
+        <clr-dg-column>คลังต้นทาง</clr-dg-column>
+        <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
+        <clr-dg-column></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let t of transfersRequest" [clrDgItem]="t" [ngClass]="{'approve-status': t.approved === 'Y', 'cancel-status': t.mark_deleted === 'Y'}">
-          <wm-transfer-detail *clrIfExpanded [transferId]="t.transfer_id" ngProjectAs="clr-dg-row-detail"></wm-transfer-detail>
-          <clr-dg-cell>{{t.transfer_code}}</clr-dg-cell>
-          <clr-dg-cell>{{t.transfer_date | toThaiDate}}</clr-dg-cell>
-          <clr-dg-cell>{{t.src_warehouse_name}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: center">
-            <div class="btn-group btn-sm" *ngIf="t.approved === 'N' || !t.approved">
-              <button class="btn btn-danger wm-small-btn" (click)="removeTransfer(t)" [disabled]="t.mark_deleted === 'Y'">
-                ยกเลิก
+        <clr-dg-row *ngFor="let b of borrowOther" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.is_cancel === 'Y'}">
+          <wm-borrow-other-detail *clrIfExpanded [borrowId]="b.borrow_other_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-other-detail>
+          <clr-dg-cell>{{b.borrow_other_code}}</clr-dg-cell>
+          <clr-dg-cell>{{b.borrow_other_date | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
+          <clr-dg-cell>{{b.warehouse_name}}</clr-dg-cell>
+          <clr-dg-cell>
+            <div class="btn-group btn-sm">
+              <button title="แก้ไข" *ngIf="b.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrowother/edit']"
+                [queryParams]="{borrowId: b.borrow_other_id}" [disabled]="b.is_cancel === 'Y' || b.approved === 'Y'">
+                <clr-icon shape="note"></clr-icon>
+              </button>
+              <button title="ลบ" *ngIf="b.is_cancel === 'N'" class="btn btn-danger wm-small-btn" (click)="removeBorrowOther(b)" [disabled]="b.is_cancel === 'Y' || b.approved === 'Y'">
+                <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
-            <button class="btn btn-success btn-sm wm-small-btn" disabled *ngIf="t.approved === 'Y'">
-              รับเข้าคลังแล้ว
-            </button>
           </clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>
           {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
-          <clr-dg-pagination #pagination [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalRequest"></clr-dg-pagination>
+          <clr-dg-pagination #pagination [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalBorrowOther"></clr-dg-pagination>
         </clr-dg-footer>
-      </clr-datagrid> -->
+      </clr-datagrid>
     </clr-tab-content>
   </clr-tab>
 </clr-tabs>
