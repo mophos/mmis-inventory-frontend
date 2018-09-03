@@ -465,8 +465,8 @@ export class ReceiveEditComponent implements OnInit {
   }
 
   async removeSelectedProduct(idx: any) {
-    let rs:any = await this.receiveService.checkDeleteProductWithPick(this.products[idx],this.receiveId)
-    if(rs.ok){
+    // let rs:any = await this.receiveService.checkDeleteProductWithPick(this.products[idx],this.receiveId)
+    // if(rs.ok){
       this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
       .then(() => {
         this.products.splice(idx, 1);
@@ -475,9 +475,9 @@ export class ReceiveEditComponent implements OnInit {
       .catch((error) => {
         this.alertService.error(error);
       });
-    } else{
-      this.alertService.error(rs.error)
-    }
+    // } else{
+    //   this.alertService.error(rs.error)
+    // }
     
   }
 
@@ -723,7 +723,7 @@ export class ReceiveEditComponent implements OnInit {
                 this.modalLoading.hide();
                 this.isSaving = false;
                 if (rs.ok) {
-                  // this.router.navigate(['/admin/receives']);
+                  this.router.navigate(['/admin/receives']);
                 } else {
                   this.alertService.error(JSON.stringify(rs.error));
                 }

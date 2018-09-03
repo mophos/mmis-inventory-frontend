@@ -25,6 +25,7 @@
 </div>
 
 <clr-datagrid (clrDgRefresh)="refresh($event)" [(clrDgSelected)]="selectedPrint" style="padding-top: 5px; height: 70%;">
+  <clr-dg-column >เลขที่หยิบ</clr-dg-column>
   <clr-dg-column >วันที่หยิบ</clr-dg-column>
   <clr-dg-column >ผู้ที่หยิบ</clr-dg-column>
   <clr-dg-column>หน่วยหยิบ</clr-dg-column>
@@ -47,6 +48,7 @@
       </button>
     </clr-dg-action-overflow>
     <wm-pick-detail *clrIfExpanded [pickId]="o.pick_id" ngProjectAs="clr-dg-row-detail"></wm-pick-detail>
+    <clr-dg-cell>{{o.pick_code}}</clr-dg-cell>
     <clr-dg-cell style="text-align: left;">{{o.pick_date | toThaiDate}}</clr-dg-cell>
     <clr-dg-cell style="text-align: left;">{{o.fullname}}</clr-dg-cell>
     <clr-dg-cell>{{o.warehouse_name}}</clr-dg-cell>
