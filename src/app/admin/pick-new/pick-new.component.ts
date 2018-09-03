@@ -51,6 +51,7 @@ export class PickNewComponent implements OnInit {
   genericSearch: any
   peopleId: any;
   remark: any
+  pick_code: any;
   constructor(
     private alertService: AlertService,
     @Inject('API_URL') private url: string,
@@ -104,6 +105,7 @@ export class PickNewComponent implements OnInit {
         const fullname = detail ? detail.fullname : '';
         this.elSearchPeople.setDefault(fullname);
         this.peopleId = detail ? detail.people_id : '';
+        this.pick_code = detail ? detail.pick_code : '';
         this.modalLoading.hide()
       } else {
         this.alertService.error(rs.error)

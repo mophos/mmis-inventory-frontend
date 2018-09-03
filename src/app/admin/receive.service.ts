@@ -147,13 +147,13 @@ export class ReceiveService {
 
     return res.json();
   }
-  async checkDeleteProductWithPick(products:any,receiveId:any){
-    const res = await this.authHttp.post(`${this.url}/receives/checkDeleteProductWithPick`,{
-      products:products,
-      receiveId:receiveId
-    }).toPromise();
-    return res.json();
-  }
+  // async checkDeleteProductWithPick(products:any,receiveId:any){
+  //   const res = await this.authHttp.post(`${this.url}/receives/checkDeleteProductWithPick`,{
+  //     products:products,
+  //     receiveId:receiveId
+  //   }).toPromise();
+  //   return res.json();
+  // }
 
   async getPurchaseInfo(purchaseOrderId: any) {
     const res = await this.authHttp.get(`${this.url}/receives/purchases/info/${purchaseOrderId}`).toPromise();
@@ -390,6 +390,7 @@ export class ReceiveService {
   }
 
   async removeReceive(receiveId: any, purchaseOrderId: any = '') {
+    purchaseOrderId = purchaseOrderId ? purchaseOrderId : ''
     const res = await this.authHttp.delete(`${this.url}/receives/remove?receiveId=${receiveId}&purchaseOrderId=${purchaseOrderId}`).toPromise();
     return res.json();
   }
