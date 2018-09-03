@@ -278,6 +278,8 @@ export class ReceiveComponent implements OnInit {
       .then(async () => {
         try {
           this.modalLoading.show();
+          console.log(typeof w.purchase_order_id);
+          
           const rs: any = await this.receiveService.removeReceive(w.receive_id, w.purchase_order_id);
           if (rs.ok) {
             this.alertService.success();
