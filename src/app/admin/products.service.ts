@@ -97,6 +97,11 @@ export class ProductsService {
     return resp.json();
   }
 
+  async getSearchProduct(query: any) {
+    const resp = await this.authHttp.get(`${this.url}/products/mapping/search-product/${query}`).toPromise();
+    return resp.json();
+  }
+
   async updateTMT(productUpdate: any) {
     const resp = await this.authHttp.put(`${this.url}/products/mapping/update/tmt`, { productUpdate: productUpdate }).toPromise();
     return resp.json();

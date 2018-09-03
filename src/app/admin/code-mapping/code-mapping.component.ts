@@ -19,6 +19,7 @@ export class CodeMappingComponent implements OnInit {
   filePath: string;
   fileName: any = null;
   file: any;
+  query: any;
 
   constructor(
     private uploadingService: UploadingService,
@@ -127,5 +128,28 @@ export class CodeMappingComponent implements OnInit {
 
   importExcel() {
 
+  }
+
+  enterSearchGeneric(e) {
+    if (e.keyCode === 13) {
+      if (e != '') {
+        this.searchMappings();
+      }
+      else {
+        this.getAllProduct();
+      }
+    }
+  }
+
+  async searchMappings() {
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.productsService.getSearchProduct(this.query);
+      this.products = rs.rows;
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
   }
 }
