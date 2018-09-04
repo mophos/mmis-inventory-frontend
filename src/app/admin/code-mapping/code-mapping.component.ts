@@ -132,7 +132,7 @@ export class CodeMappingComponent implements OnInit {
 
   enterSearchGeneric(e) {
     if (e.keyCode === 13) {
-      if (e != '') {
+      if (this.query != '') {
         this.searchMappings();
       }
       else {
