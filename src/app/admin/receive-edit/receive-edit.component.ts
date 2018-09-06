@@ -464,8 +464,10 @@ export class ReceiveEditComponent implements OnInit {
     }
   }
 
-  removeSelectedProduct(idx: any) {
-    this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
+  async removeSelectedProduct(idx: any) {
+    // let rs:any = await this.receiveService.checkDeleteProductWithPick(this.products[idx],this.receiveId)
+    // if(rs.ok){
+      this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
       .then(() => {
         this.products.splice(idx, 1);
         this.countTotalCost();
@@ -473,6 +475,10 @@ export class ReceiveEditComponent implements OnInit {
       .catch((error) => {
         this.alertService.error(error);
       });
+    // } else{
+    //   this.alertService.error(rs.error)
+    // }
+    
   }
 
   // edit data
@@ -717,7 +723,7 @@ export class ReceiveEditComponent implements OnInit {
                 this.modalLoading.hide();
                 this.isSaving = false;
                 if (rs.ok) {
-                  this.router.navigate(['/admin/receive']);
+                  this.router.navigate(['/admin/receives']);
                 } else {
                   this.alertService.error(JSON.stringify(rs.error));
                 }
@@ -829,6 +835,7 @@ export class ReceiveEditComponent implements OnInit {
           obj.is_free = v.is_free;
           obj.is_lot_control = v.is_lot_control;
 
+          obj.receive_detail_id = v.receive_detail_id
           this.products.push(obj);
 
         })

@@ -111,24 +111,7 @@ export class StockCardComponent implements OnInit {
     this.generic_id = [];
     const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
     const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
-    await this.reportProductService.getGenericInStockcrad(this.warehouseId, startDate, endDate)
-      .then((result: any) => {
-        if (result.ok) {
-          this.genericInStockcard = result.rows;
-        } else {
-          this.alertService.error(JSON.stringify(result.error));
-        }
-      })
-      .catch(error => {
-        this.alertService.serverError();
-      });
-    this.genericInStockcard.forEach(v => {
-      this.generic_id.push('genericId=' + v.generic_id);
-    });
-    this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
-    this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/generic/stock3?&warehouseId=${this.warehouseId}
-    &startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
+    const url = `${this.apiUrl}/report/genericStock/haveMovement?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&token=${this.token}&`
     this.htmlPreview.showReport(url);
   }
 

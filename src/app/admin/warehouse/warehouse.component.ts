@@ -31,6 +31,8 @@ export class WarehouseComponent implements OnInit {
   isReceiveWarehouse = false;
   isUnitIssue = false;
 
+  query:any = ''
+
   constructor(
     private warehouseService: WarehouseService,
     private alertService: AlertService,
@@ -127,7 +129,7 @@ export class WarehouseComponent implements OnInit {
   all() {
     this.modalLoading.show();
     this.warehouses = [];
-    this.warehouseService.all()
+    this.warehouseService.allSearch(this.query)
       .then((results: any) => {
         if (results.ok) {
           this.warehouses = results.rows;
@@ -188,4 +190,7 @@ export class WarehouseComponent implements OnInit {
     this.router.navigate(['/admin/warehouse/planning', { warehouseId: warehouseId }]);
   }
 
+  searcWarehouse(event: any) {
+    this.all();
+  }
 }

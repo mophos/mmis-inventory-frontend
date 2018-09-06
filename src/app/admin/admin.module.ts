@@ -175,6 +175,10 @@ import { BorrowOtherService } from './borrow-other.service';
 import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
 import { ReturnedComponent } from './returned/returned.component';
 import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
+import { PickComponent } from './pick/pick.component';
+import { PickNewComponent } from './pick-new/pick-new.component';
+import { PickService } from './pick.service';
+import { AuthPick } from '../auth-pick.service';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -291,7 +295,10 @@ Highcharts.setOptions({
     BorrowotherNewComponent,
     BorrowotherEditComponent,
     ReturnedComponent,
-    ReturnedEditComponent
+    ReturnedEditComponent,
+    PickComponent,
+    PickNewComponent,
+    RequisitionMultipleComponent
   ],
   providers: [
     MainService,
@@ -306,6 +313,7 @@ Highcharts.setOptions({
     ProductlotsService,
     AdminGuard,
     AuthReceive,
+    AuthPick,
     AuthTransfer,
     AuthRequisition,
     AuthPeriod,
@@ -351,6 +359,7 @@ Highcharts.setOptions({
     ReturnBudgetService,
     BorrowItemsService,
     BorrowOtherService,
+    PickService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })

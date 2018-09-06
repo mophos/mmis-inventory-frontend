@@ -336,16 +336,21 @@ export class RequisitionNewComponent implements OnInit {
       const rs: any = await this.wareHouseService.getShipingNetwork(warehouseId, 'REQ');
       this.modalLoading.hide();
       if (rs.ok) {
-        this.templates = [];
-        this.withDrawWarehouses = rs.rows;
-        let idx = _.findIndex(rs.rows, { "destination_warehouse_id": this.warehouseId })
-        if (idx > -1) {
-          this.wmWithdraw = rs.rows[idx].destination_warehouse_id;
-          this.getTemplates();
+        if(rs.rows.length){
+          this.templates = [];
+          this.withDrawWarehouses = rs.rows;
+          let idx = _.findIndex(rs.rows, { "destination_warehouse_id": this.warehouseId })
+          if (idx > -1) {
+            this.wmWithdraw = rs.rows[idx].destination_warehouse_id;
+            this.getTemplates();
+          } else {
+            this.wmWithdraw = rs.rows[0].destination_warehouse_id;
+            this.getTemplates();
+          }
         } else {
-          this.wmWithdraw = rs.rows[0].destination_warehouse_id;
-          this.getTemplates();
+          this.alertService.error('ยังไม่มีการตั้ง Shipping Network' );
         }
+        
 
       } else {
         this.alertService.error(rs.error);

@@ -26,7 +26,7 @@ export class LayoutComponent implements OnInit {
   Administrator = false;
   jwtHelper: JwtHelper = new JwtHelper();
 
-
+  menuPick:boolean;
   menuPeriod: boolean;
   menuRollback: boolean;
   menuReturn: boolean;
@@ -86,7 +86,7 @@ export class LayoutComponent implements OnInit {
     this.warehouseId = decoded.warehouseId;
     this.warehouseCode = decoded.warehouseCode;
     this.warehouseName = decoded.warehouseName;
-
+    this.menuPick = _.indexOf(this.rights, 'WM_PICK') === -1 ? false : true;
     this.menuBorrow = _.indexOf(this.rights, 'WM_BORROW') === -1 ? false : true;
     this.menuReturn = _.indexOf(this.rights, 'WM_RETURN_BUDGET') === -1 ? false : true;
     this.menuRollback = _.indexOf(this.rights, 'WM_ROLLBACK') === -1 ? false : true;

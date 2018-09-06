@@ -1,0 +1,186 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/pick">การหยิบ</a>
+  <span class="breadcrumb-item active">บันทึกการหยิบ</span>
+</nav>
+
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="pick_code">เลขที่ใบหยิบ</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input id="pick_code" disabled class="form-control" type="text" name="pick_code" [(ngModel)]="pick_code">
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="peopleName">
+              <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
+              <span *ngIf="peopleId">เจ้าหน้าที่</span>
+            </label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="wmPick">หน่วยหยิบ</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="select">
+              <select name="wmPick" [(ngModel)]="wmPick">
+                <option value="">
+                  <หน่วยหยิบ>
+                </option>
+                <option *ngFor="let u of warehouses" [value]="u.warehouse_id">{{ u.short_code }} - {{ u.warehouse_name
+                  }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">วันที่หยิบ</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="pickDate" required></my-date-picker-th>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="remark">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <input id="remark" class="form-control" type="text" name="remark" [(ngModel)]="remark">
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+
+<clr-datagrid [style.padding-top.px]="10" style="position: relative;">
+  <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="170">lot_no</clr-dg-column>
+  <clr-dg-column [style.width.px]="170">เลขที่ใบรับ</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">จำนวนรับเข้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">จำนวนที่เหลือ</clr-dg-column>
+  <clr-dg-column [style.width.px]="120">จำนวนที่หยิบ</clr-dg-column>
+  <clr-dg-column [style.width.px]="120">หน่วย</clr-dg-column>
+  <clr-dg-column [style.width.px]="70"></clr-dg-column>
+
+  <clr-dg-row *ngFor="let product of products; let idx = index;">
+    <!-- <wm-issue-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="product.items" ngProjectAs="clr-dg-row-detail"></wm-issue-product> -->
+
+    <clr-dg-cell style="line-height: 25px;">
+      {{idx + 1}}. {{product.product_name}}
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{product.lot_no}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;" [ngClass]="{'isError': product.is_cancel == 'Y'|| product.approve_id }">
+      {{product.receive_code}}
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">
+      {{product.receive_qty}}
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;" [ngClass]="{'isError': product.receive_qty - product.remain_qty - product.pick_qty < 0}">
+      {{product.receive_qty - product.remain_qty - product.pick_qty}}
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #qty (keyup)="editChangeReceiveQty(idx, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberWithOutDot [value]="product.pick_qty" />
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">
+      {{product.large_unit}}({{product.base_unit}}{{product.small_unit}})
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-row class="newLine">
+    <clr-dg-cell></clr-dg-cell>
+    <clr-dg-cell></clr-dg-cell>
+    <clr-dg-cell></clr-dg-cell>
+    <clr-dg-cell></clr-dg-cell>
+    <clr-dg-cell></clr-dg-cell>
+    <clr-dg-cell></clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">กดเพื่อค้าหายา</clr-dg-cell>
+    <clr-dg-cell style="text-align: left;">
+      <button class="btn btn-primary btn-sm wm-small-btn" (click)="searchReceive()">
+        <clr-icon shape="search"></clr-icon>
+      </button>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+</clr-datagrid>
+
+<div>
+  <button class="btn btn-success btn-sm" (click)="savePick()" [disabled]="!wmPick || !products.length">
+    <clr-icon shape="floppy"></clr-icon>
+    บันทึกการหยิบ
+  </button>
+  <button class="btn btn-danger btn-sm" [routerLink]="['/admin/pick']">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+</div>
+
+
+<clr-modal [(clrModalOpen)]="isOpenModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">รายการรับที่ยังไม่ได้ผูก PO</h3>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-block" style="padding:10px;">
+        <div class="form-group row wid99">
+          <form class="compact" style="padding-top: 0px;"></form>
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="datePick" class="required">ค้นหา</label>
+          </div>
+          <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+            <input type="text" (keyup)="search($event)" placeholder="Generic Name, Generic Code, เลขที่ใบรับ" style="width: 100%;"
+              [(ngModel)]="genericSearch" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <clr-datagrid style="height: 300px;">
+      <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+      <clr-dg-column>lot_no</clr-dg-column>
+      <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+      <clr-dg-column>วันที่รับ</clr-dg-column>
+      <clr-dg-column>จำนวนรับเข้า</clr-dg-column>
+      <clr-dg-column>จำนวนที่เหลือ</clr-dg-column>
+      <clr-dg-column>หน่วย</clr-dg-column>
+      <!-- <clr-dg-column>หมายเหตุ</clr-dg-column> -->
+      <clr-dg-column style="width: 100px"></clr-dg-column>
+
+      <clr-dg-row *ngFor="let i of receive">
+
+        <clr-dg-cell>{{i.product_name}}</clr-dg-cell>
+        <clr-dg-cell>{{i.lot_no}}</clr-dg-cell>
+        <clr-dg-cell>{{i.receive_code}}</clr-dg-cell>
+        <clr-dg-cell>{{i.receive_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{i.receive_qty}} </clr-dg-cell>
+        <clr-dg-cell>{{i.receive_qty - i.remain_qty}} </clr-dg-cell>
+        <clr-dg-cell> {{i.large_unit}}({{i.base_unit}}{{i.small_unit}})</clr-dg-cell>
+        <!-- <clr-dg-cell>{{i.ref_ducoment}}</clr-dg-cell> -->
+        <clr-dg-cell style="text-align:center">
+          <button type="button" class="btn btn-primary btn-sm wm-small-btn" (click)="addReceive(i)">เลือก</button>
+        </clr-dg-cell>
+      </clr-dg-row>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="isOpenModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

@@ -39,6 +39,7 @@ import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { AuthAddition } from 'app/auth-addition.service';
 import { AuthStockcard } from 'app/auth-stockcard.service';
 import { AuthReturnBudget } from '../auth-return-budget.service';
+import { AuthPick } from '../auth-pick.service';
 // requisition
 import { RequisitionComponent } from 'app/admin/requisition/requisition.component';
 import { RequisitionFastComponent } from 'app/admin/requisition-fast/requisition-fast.component';
@@ -62,6 +63,8 @@ import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockca
 import { BorrowComponent } from './borrow/borrow.component';
 import { BorrowNewComponent } from './borrow-new/borrow-new.component';
 import { BorrowEditComponent } from './borrow-edit/borrow-edit.component';
+import { PickComponent } from './pick/pick.component';
+import { PickNewComponent } from './pick-new/pick-new.component';
 import { AbcSettingComponent } from 'app/admin/abc-setting/abc-setting.component';
 import { AbcVenComponent } from 'app/admin/abc-ven/abc-ven.component';
 import { AdjustStockNewComponent } from 'app/admin/adjust-stock-new/adjust-stock-new.component';
@@ -204,6 +207,9 @@ const routes: Routes = [
       { path: 'addition/generic', canActivate: [AuthAddition], component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', canActivate: [AuthAddition], component: AdditionEditComponent },
       { path: 'return-budget', canActivate: [AuthReturnBudget], component: ReturnBudgetComponent },
+      { path: 'pick',canActivate: [AdminGuard, AuthPick], component: PickComponent },
+      { path: 'pick/new',canActivate: [AdminGuard, AuthPick], component: PickNewComponent },
+      { path: 'pick/edit/:pickId',canActivate: [AdminGuard, AuthPick], component: PickNewComponent },
       {
         path: 'tools',
         canActivate: [AdminGuard, AuthStockcard],
