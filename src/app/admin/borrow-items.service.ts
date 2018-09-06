@@ -31,6 +31,11 @@ export class BorrowItemsService {
     return rs.json();
   }
 
+  async getReturnedDetail(returnedId: any) {
+    const res = await this.authHttp.get(`${this.url}/borrow/returned/detail/${returnedId}`).toPromise();
+    return res.json();
+  }
+
   getProductsWarehouse(warehouseId: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/borrow/product-warehouse/${warehouseId}`)
@@ -76,9 +81,17 @@ export class BorrowItemsService {
     return rs.json();
   }
 
-  async approveAllOther(borrowIds: any[]) {
+  async approveAllOther(borrowOtherIds: any[]) {
     const rs: any = await this.authHttp.post(`${this.url}/borrow-other/approve-all`, {
-      borrowIds: borrowIds
+      borrowOtherIds: borrowOtherIds
+    }).toPromise();
+
+    return rs.json();
+  }
+
+  async approveAllReturned(returnedIds: any[]) {
+    const rs: any = await this.authHttp.post(`${this.url}/borrow/returned/approved`, {
+      returnedIds: returnedIds
     }).toPromise();
 
     return rs.json();
@@ -100,6 +113,11 @@ export class BorrowItemsService {
 
   async listOther(type: any, limit: number, offset: number) {
     const rs: any = await this.authHttp.get(`${this.url}/borrow/list/other?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    return rs.json();
+  }
+
+  async returnedList(type: any, limit: number, offset: number) {
+    const rs: any = await this.authHttp.get(`${this.url}/borrow/returned/list?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 
@@ -165,4 +183,18 @@ export class BorrowItemsService {
     return rs.json();
   }
 
+  async saveReceive(summary: any, products: Array<any>) {
+    const res = await this.authHttp.post(`${this.url}/borrow/returned-product`, {
+      summary: summary,
+      products: products
+    }).toPromise();
+
+    return res.json();
+  }
+
+  async getReturnedProducts(returnedId) {
+    const res = await this.authHttp.get(`${this.url}/borrow/returned/product-list/${returnedId}`)
+      .toPromise();
+    return res.json();
+  }
 }

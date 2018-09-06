@@ -18,14 +18,17 @@ export class BorrowComponent implements OnInit {
   selectedApprove = [];
   selectedApproveOther = [];
   selectedApproveReceive = [];
+  selectedApproveReturned = [];
   notApproveReceiveItems = 0;
 
   approveStatus = 1;
   totalBorrow = 0;
   totalBorrowOther = 0;
+  totalReturned = 0;
   totalRequest = 0;
   borrow: any = [];
   borrowOther: any = [];
+  returned: any;
   openDetail = false;
   isApprove = true;
   isNotApprove = false;
@@ -82,12 +85,30 @@ export class BorrowComponent implements OnInit {
 
   async getBorrowOtherList() {
     this.modalLoading.show();
-    this.selectedApproveReceive = [];
+    this.selectedApproveOther = [];
     try {
       const rs = await this.borrowItemsService.listOther(this.approveStatus, this.perPage, this.offset);
       if (rs.ok) {
         this.borrowOther = rs.rows;
         this.totalBorrowOther = rs.total;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
+    }
+  }
+
+  async getReturnedList() {
+    this.modalLoading.show();
+    this.selectedApproveReturned = [];
+    try {
+      const rs = await this.borrowItemsService.returnedList(this.approveStatus, this.perPage, this.offset);
+      if (rs.ok) {
+        this.returned = rs.rows;
+        this.totalReturned = rs.total;
       } else {
         this.alertService.error(JSON.stringify(rs.error));
       }
@@ -108,6 +129,12 @@ export class BorrowComponent implements OnInit {
     this.offset = +state.page.from;
     sessionStorage.setItem('currentPageBorrowOther', this.currentPageOther.toString());
     this.getBorrowOtherList();
+  }
+
+  async refreshReturned(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageReturned', this.currentPageOther.toString());
+    this.getReturnedList();
   }
 
   removeBorrow(b: any) {
@@ -153,6 +180,10 @@ export class BorrowComponent implements OnInit {
   }
 
   setTapActive(tab: any) {
+    this.selectedApprove = [];
+    this.selectedApproveOther = [];
+    this.selectedApproveReturned = [];
+
     this.selectedTab = tab;
     this.totalTab();
   }
@@ -164,6 +195,9 @@ export class BorrowComponent implements OnInit {
       }
       if (this.selectedTab === 'outside') {
         const rsWA: any = await this.getBorrowOtherList();
+      }
+      if (this.selectedTab === 'returnProduct') {
+        const rsWT: any = await this.getReturnedList();
       }
     } catch (error) {
       this.alertService.error(error.message);
@@ -193,18 +227,40 @@ export class BorrowComponent implements OnInit {
   }
 
   doApproveOther() {
-    const borrowIds = [];
+    const borrowOtherIds = [];
 
     this.selectedApproveOther.forEach(v => {
       if (v.approved !== 'Y' && v.is_cancel === 'N') {
-        borrowIds.push(v.borrow_other_id);
+        borrowOtherIds.push(v.borrow_other_id);
       }
     });
 
-    if (borrowIds.length) {
+    if (borrowOtherIds.length) {
       this.alertService.confirm('ต้องการยืนยันการอนุมัติใบยืม ใช่หรือไม่?')
         .then(async () => {
-          this.approveOther(borrowIds);
+          this.approveOther(borrowOtherIds);
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.selectedApprove = [];
+      this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
+    }
+  }
+
+  doApproveReturned() {
+    const returnedIds = [];
+
+    this.selectedApproveReturned.forEach(v => {
+      if (v.is_approved !== 'Y' && v.is_cancel === 'N') {
+        returnedIds.push(v.returned_id);
+      }
+    });
+
+    if (returnedIds.length) {
+      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบคืน ใช่หรือไม่?')
+        .then(async () => {
+          this.approveReturned(returnedIds);
         }).catch(() => {
           // cancel
         });
@@ -244,6 +300,26 @@ export class BorrowComponent implements OnInit {
         this.selectedApproveOther = [];
         this.selectedApproveReceive = [];
         this.getBorrowOtherList();
+        // this.getRequestBorrow();
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      console.error(error);
+      this.alertService.error(error.message);
+    }
+  }
+
+  async approveReturned(returnedIds: any[]) {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.borrowItemsService.approveAllReturned(returnedIds);
+      if (rs.ok) {
+        this.alertService.success();
+        this.selectedApproveReturned = [];
+        this.getReturnedList();
         // this.getRequestBorrow();
       } else {
         this.alertService.error(rs.error);

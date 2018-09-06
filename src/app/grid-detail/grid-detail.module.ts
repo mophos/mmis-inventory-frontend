@@ -49,6 +49,7 @@ import { ReturnBudgetDetailComponent } from './return-budget-detail/return-budge
 import { BorrowItemsComponent } from './borrow-items/borrow-items.component';
 import { BorrowDetailComponent } from './borrow-detail/borrow-detail.component';
 import { BorrowOtherDetailComponent } from './borrow-other-detail/borrow-other-detail.component';
+import { ReturnedDetailComponent } from './returned-detail/returned-detail.component';
 
 @NgModule({
   imports: [
@@ -101,7 +102,8 @@ import { BorrowOtherDetailComponent } from './borrow-other-detail/borrow-other-d
     ReturnBudgetDetailComponent,
     BorrowItemsComponent,
     BorrowDetailComponent,
-    BorrowOtherDetailComponent
+    BorrowOtherDetailComponent,
+    ReturnedDetailComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -145,7 +147,8 @@ import { BorrowOtherDetailComponent } from './borrow-other-detail/borrow-other-d
     ReturnBudgetDetailComponent,
     BorrowItemsComponent,
     BorrowDetailComponent,
-    BorrowOtherDetailComponent
+    BorrowOtherDetailComponent,
+    ReturnedDetailComponent
   ]
 })
 export class GridDetailModule { }

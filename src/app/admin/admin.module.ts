@@ -173,6 +173,8 @@ import { BorrowEditComponent } from './borrow-edit/borrow-edit.component';
 import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.component';
 import { BorrowOtherService } from './borrow-other.service';
 import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
+import { ReturnedComponent } from './returned/returned.component';
+import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -287,7 +289,9 @@ Highcharts.setOptions({
     RequisitionMultipleComponent,
     BorrowEditComponent,
     BorrowotherNewComponent,
-    BorrowotherEditComponent
+    BorrowotherEditComponent,
+    ReturnedComponent,
+    ReturnedEditComponent
   ],
   providers: [
     MainService,
