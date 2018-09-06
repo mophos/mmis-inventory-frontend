@@ -328,6 +328,7 @@ export class BorrowEditComponent implements OnInit {
   }
 
   saveBorrow() {
+    this.isSaving = true;
     if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.borrowDate) {
       const generics = [];
       let isError = false;
@@ -366,19 +367,23 @@ export class BorrowEditComponent implements OnInit {
                   this.alertService.success();
                   this.router.navigate(['/admin/borrow']);
                 } else {
+                  this.isSaving = false;
                   this.alertService.error(JSON.stringify(rs.error));
                 }
 
                 this.modalLoading.hide();
 
               } catch (error) {
+                this.isSaving = false;
                 this.modalLoading.hide();
               }
             })
             .catch(() => {
+              this.isSaving = false;
               this.modalLoading.hide();
             });
         } else {
+          this.isSaving = false;
           this.alertService.error('ไม่พบรายการที่ต้องการยืม');
         }
       }
