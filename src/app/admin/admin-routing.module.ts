@@ -60,6 +60,9 @@ import { StockcardRequisitionComponent } from 'app/admin/tools/stockcard-requisi
 import { StockcardTransferComponent } from 'app/admin/tools/stockcard-transfer/stockcard-transfer.component';
 import { StockcardIssueComponent } from 'app/admin/tools/stockcard-issue/stockcard-issue.component';
 //
+import { BorrowComponent } from './borrow/borrow.component';
+import { BorrowNewComponent } from './borrow-new/borrow-new.component';
+import { BorrowEditComponent } from './borrow-edit/borrow-edit.component';
 import { PickComponent } from './pick/pick.component';
 import { PickNewComponent } from './pick-new/pick-new.component';
 import { AbcSettingComponent } from 'app/admin/abc-setting/abc-setting.component';
@@ -110,6 +113,10 @@ import { WarehouseComponent } from 'app/admin/warehouse/warehouse.component';
 import { WarehouseDetailComponent } from 'app/admin/warehouse-detail/warehouse-detail.component';
 import { WarehouseProductsComponent } from 'app/admin/warehouse-products/warehouse-products.component';
 import { WarehouseProductsDetailComponent } from 'app/admin/warehouse-products-detail/warehouse-products-detail.component';
+import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.component';
+import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
+import { ReturnedComponent } from './returned/returned.component';
+import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 
 const routes: Routes = [
   {
@@ -141,6 +148,8 @@ const routes: Routes = [
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
       { path: 'exportdata', component: ExportdataComponent },
+      { path: 'return-product/new', component: ReturnedComponent },
+      { path: 'return-product/edit', component: ReturnedEditComponent },
       {
         path: 'reports',
         canActivate: [AdminGuard],
@@ -206,6 +215,18 @@ const routes: Routes = [
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
           { path: 'stockcard/transfer', component: StockcardTransferComponent },
           { path: 'stockcard/issue', component: StockcardIssueComponent },
+        ]
+      },
+      {
+        path: 'borrow',
+        canActivate: [AdminGuard],
+        children: [
+          { path: '', redirectTo: 'borrow', pathMatch: 'full' },
+          { path: 'borrow', component: BorrowComponent },
+          { path: 'new', component: BorrowNewComponent },
+          { path: 'edit', component: BorrowEditComponent },
+          { path: 'other/new', component: BorrowotherNewComponent },
+          { path: 'other/edit', component: BorrowotherEditComponent },
         ]
       },
       {

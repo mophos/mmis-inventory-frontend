@@ -46,6 +46,10 @@ import { AdjustStockDetailComponent } from './adjust-stock-detail/adjust-stock-d
 import { AdjustStockProductComponent } from './adjust-stock-product/adjust-stock-product.component';
 import { StaffProductReceiveOtherDetailComponent } from './staff-product-receive-other-detail/staff-product-receive-other-detail.component';
 import { ReturnBudgetDetailComponent } from './return-budget-detail/return-budget-detail.component';
+import { BorrowItemsComponent } from './borrow-items/borrow-items.component';
+import { BorrowDetailComponent } from './borrow-detail/borrow-detail.component';
+import { BorrowOtherDetailComponent } from './borrow-other-detail/borrow-other-detail.component';
+import { ReturnedDetailComponent } from './returned-detail/returned-detail.component';
 import { PickDetailComponent } from './pick-detail/pick-detail.component';
 
 @NgModule({
@@ -97,6 +101,10 @@ import { PickDetailComponent } from './pick-detail/pick-detail.component';
     AdjustStockProductComponent,
     StaffProductReceiveOtherDetailComponent,
     ReturnBudgetDetailComponent,
+    BorrowItemsComponent,
+    BorrowDetailComponent,
+    BorrowOtherDetailComponent,
+    ReturnedDetailComponent,
     PickDetailComponent
   ],
   exports: [
@@ -139,6 +147,10 @@ import { PickDetailComponent } from './pick-detail/pick-detail.component';
     AdjustStockProductComponent,
     StaffProductReceiveOtherDetailComponent,
     ReturnBudgetDetailComponent,
+    BorrowItemsComponent,
+    BorrowDetailComponent,
+    BorrowOtherDetailComponent,
+    ReturnedDetailComponent,
     PickDetailComponent
   ]
 })
