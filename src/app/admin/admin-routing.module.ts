@@ -148,11 +148,6 @@ const routes: Routes = [
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
       { path: 'exportdata', component: ExportdataComponent },
-      { path: 'borrow', component: BorrowComponent },
-      { path: 'borrow/new', component: BorrowNewComponent },
-      { path: 'borrow/edit', component: BorrowEditComponent },
-      { path: 'borrowother/new', component: BorrowotherNewComponent },
-      { path: 'borrowother/edit', component: BorrowotherEditComponent },
       { path: 'return-product/new', component: ReturnedComponent },
       { path: 'return-product/edit', component: ReturnedEditComponent },
       {
@@ -220,6 +215,18 @@ const routes: Routes = [
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
           { path: 'stockcard/transfer', component: StockcardTransferComponent },
           { path: 'stockcard/issue', component: StockcardIssueComponent },
+        ]
+      },
+      {
+        path: 'borrow',
+        canActivate: [AdminGuard],
+        children: [
+          { path: '', redirectTo: 'borrow', pathMatch: 'full' },
+          { path: 'borrow', component: BorrowComponent },
+          { path: 'new', component: BorrowNewComponent },
+          { path: 'edit', component: BorrowEditComponent },
+          { path: 'other/new', component: BorrowotherNewComponent },
+          { path: 'other/edit', component: BorrowotherEditComponent },
         ]
       },
       {

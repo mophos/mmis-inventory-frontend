@@ -81,7 +81,7 @@
     <clr-tab-content clrContentId="content1" *clrIfActive>
       <div class="row wid99">
         <div class="col-md-8">
-          <button class="btn btn-sm btn-success" [routerLink]="['/admin/borrowother/new']">
+          <button class="btn btn-sm btn-success" [routerLink]="['/admin/borrow/other/new']">
             + สร้างใบยืม
           </button>
         </div>
@@ -127,7 +127,7 @@
           <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
-              <button title="แก้ไข" *ngIf="b.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrowother/edit']"
+              <button title="แก้ไข" *ngIf="b.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/other/edit']"
                 [queryParams]="{borrowId: b.borrow_other_id}" [disabled]="b.is_cancel === 'Y' || b.approved === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
