@@ -17,6 +17,8 @@ export class IssueProductComponent implements OnInit {
 
   @Input('data')
   set setData(value: any) {
+    console.log(value);
+    
     this.items = value;
   }
   constructor(private issueService: IssueTransactionService, private alertService: AlertService) { }

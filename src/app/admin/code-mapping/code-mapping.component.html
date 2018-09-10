@@ -3,26 +3,32 @@
   <span class="breadcrumb-item active">Map รหัสยา TMT(TPU)</span>
 </nav>
 <div class="row" style="padding: 5px;">
-  <div class="col-md-12">
-    <button type="button" class="btn btn-sm btn-success" (click)="save()">
-      <clr-icon shape="floppy"></clr-icon>
-      บันทึกข้อมูล
-    </button>
-    <div class="btn-group">
-      <button type="button" class="btn btn-sm btn-success" (click)="showUploadModal()">
-        <clr-icon shape="upload"></clr-icon>
-        นำเข้าไฟล์ Excel
+  <div class="col-md-3" style="padding-top: 5px; padding-bottom: 5px;">
+    ค้นหา :
+    <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;" type="text"
+      placeholder="ค้นหาสินค้า...">
+  </div>
+  <div class="col-md-9">
+    <div style="float:right;">
+      <button type="button" class="btn btn-sm btn-success" (click)="save()">
+        <clr-icon shape="floppy"></clr-icon>
+        บันทึกข้อมูล
       </button>
-      <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
-        <clr-icon shape="download"></clr-icon>
-        ส่งออก Excel
-      </button>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-success" (click)="showUploadModal()">
+          <clr-icon shape="upload"></clr-icon>
+          นำเข้าไฟล์ Excel
+        </button>
+        <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
+          <clr-icon shape="download"></clr-icon>
+          ส่งออก Excel
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" disabled>
+          <clr-icon shape="window-max"></clr-icon>
+          นำเข้าข้อมูล TMT...
+        </button>
+      </div>
     </div>
-
-    <button type="button" class="btn btn-sm btn-primary" disabled>
-      <clr-icon shape="window-max"></clr-icon>
-      นำเข้าข้อมูล TMT...
-    </button>
   </div>
 </div>
 <clr-datagrid style="height: 80%;">

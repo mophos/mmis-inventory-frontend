@@ -14,7 +14,7 @@ export class RequisitionService {
   ) { }
 
   async getWating(limit: number, offset: number, query = '', fillterCancel = 'all') {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/pay-requisition/orders/waiting?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
+    const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/waiting?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
       .toPromise();
     return rs.json();
   }

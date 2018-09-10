@@ -1,0 +1,371 @@
+import { Router } from '@angular/router';
+import { BorrowItemsService } from './../borrow-items.service';
+import { IMyOptions } from 'mydatepicker-th';
+import { AlertService } from './../../alert.service';
+import { WarehouseService } from './../warehouse.service';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
+
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { State } from '@clr/angular';
+
+@Component({
+  selector: 'wm-borrow',
+  templateUrl: './borrow.component.html',
+  styleUrls: []
+})
+export class BorrowComponent implements OnInit {
+  selectedApprove = [];
+  selectedApproveOther = [];
+  selectedApproveReceive = [];
+  selectedApproveReturned = [];
+  notApproveReceiveItems = 0;
+
+  approveStatus = 1;
+  totalBorrow = 0;
+  totalBorrowOther = 0;
+  totalReturned = 0;
+  totalRequest = 0;
+  borrow: any = [];
+  borrowOther: any = [];
+  returned: any;
+  openDetail = false;
+  isApprove = true;
+  isNotApprove = false;
+  isAll = false;
+
+  isSaving = false;
+  isSearching = false;
+  perPage = 15;
+  loading = false;
+  token: any;
+  currentPage = 1;
+  currentPageOther = 1;
+  offset = 0;
+  selectedTab: any;
+  tabInside = 0;
+  tabOutside = 0;
+
+  @ViewChild('modalLoading') private modalLoading;
+  @ViewChild('htmlPreview') public htmlPreview: any;
+  constructor(
+    private warehouseService: WarehouseService,
+    private alertService: AlertService,
+    private borrowItemsService: BorrowItemsService,
+    private router: Router,
+    private ref: ChangeDetectorRef,
+    @Inject('API_URL') private apiUrl: string
+  ) {
+    this.token = sessionStorage.getItem('token');
+    this.currentPage = +sessionStorage.getItem('currentPageBorrow') ? +sessionStorage.getItem('currentPageBorrow') : 1;
+    this.currentPageOther = +sessionStorage.getItem('currentPageBorrowOthe') ? +sessionStorage.getItem('currentPageBorrowOthe') : 1;
+  }
+
+  ngOnInit() {
+    this.getBorrowList();
+  }
+
+  async getBorrowList() {
+    this.modalLoading.show();
+    this.selectedApproveReceive = [];
+    try {
+      const rs = await this.borrowItemsService.list(this.approveStatus, this.perPage, this.offset);
+      if (rs.ok) {
+        this.borrow = rs.rows;
+        this.totalBorrow = rs.total;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
+    }
+  }
+
+  async getBorrowOtherList() {
+    this.modalLoading.show();
+    this.selectedApproveOther = [];
+    try {
+      const rs = await this.borrowItemsService.listOther(this.approveStatus, this.perPage, this.offset);
+      if (rs.ok) {
+        this.borrowOther = rs.rows;
+        this.totalBorrowOther = rs.total;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
+    }
+  }
+
+  async getReturnedList() {
+    this.modalLoading.show();
+    this.selectedApproveReturned = [];
+    try {
+      const rs = await this.borrowItemsService.returnedList(this.approveStatus, this.perPage, this.offset);
+      if (rs.ok) {
+        this.returned = rs.rows;
+        this.totalReturned = rs.total;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
+    }
+  }
+
+  async refreshBorrow(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageBorrow', this.currentPage.toString());
+    this.getBorrowList();
+  }
+
+  async refreshBorrowOther(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageBorrowOther', this.currentPageOther.toString());
+    this.getBorrowOtherList();
+  }
+
+  async refreshReturned(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageReturned', this.currentPageOther.toString());
+    this.getReturnedList();
+  }
+
+  removeBorrow(b: any) {
+    this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
+      .then(async () => {
+        this.modalLoading.show();
+        try {
+          const rs: any = await this.borrowItemsService.remove(b.borrow_id);
+          if (rs.ok) {
+            this.alertService.success();
+            this.getBorrowList();
+          } else {
+            this.alertService.error(rs.error);
+          }
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(error.message);
+        }
+
+      }).catch(() => { })
+  }
+
+  removeBorrowOther(b: any) {
+    this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
+      .then(async () => {
+        this.modalLoading.show();
+        try {
+          const rs: any = await this.borrowItemsService.removeOther(b.borrow_other_id);
+          if (rs.ok) {
+            this.alertService.success();
+            this.getBorrowOtherList();
+          } else {
+            this.alertService.error(rs.error);
+          }
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(error.message);
+        }
+
+      }).catch(() => { })
+  }
+
+  setTapActive(tab: any) {
+    this.selectedApprove = [];
+    this.selectedApproveOther = [];
+    this.selectedApproveReturned = [];
+
+    this.selectedTab = tab;
+    this.totalTab();
+  }
+
+  async totalTab() {
+    try {
+      if (this.selectedTab === 'inside') {
+        const rsW: any = await this.getBorrowList();
+      }
+      if (this.selectedTab === 'outside') {
+        const rsWA: any = await this.getBorrowOtherList();
+      }
+      if (this.selectedTab === 'returnProduct') {
+        const rsWT: any = await this.getReturnedList();
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
+
+  doApprove() {
+    const borrowIds = [];
+
+    this.selectedApprove.forEach(v => {
+      if (v.approved !== 'Y' && v.mark_deleted === 'N') {
+        borrowIds.push(v.borrow_id);
+      }
+    });
+
+    if (borrowIds.length) {
+      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบยืม ใช่หรือไม่?')
+        .then(async () => {
+          this.approve(borrowIds);
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.selectedApprove = [];
+      this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
+    }
+  }
+
+  doApproveOther() {
+    const borrowOtherIds = [];
+
+    this.selectedApproveOther.forEach(v => {
+      if (v.approved !== 'Y' && v.is_cancel === 'N') {
+        borrowOtherIds.push(v.borrow_other_id);
+      }
+    });
+
+    if (borrowOtherIds.length) {
+      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบยืม ใช่หรือไม่?')
+        .then(async () => {
+          this.approveOther(borrowOtherIds);
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.selectedApprove = [];
+      this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
+    }
+  }
+
+  doApproveReturned() {
+    const returnedIds = [];
+
+    this.selectedApproveReturned.forEach(v => {
+      if (v.is_approved !== 'Y' && v.is_cancel === 'N') {
+        returnedIds.push(v.returned_id);
+      }
+    });
+
+    if (returnedIds.length) {
+      this.alertService.confirm('ต้องการยืนยันการอนุมัติใบคืน ใช่หรือไม่?')
+        .then(async () => {
+          this.approveReturned(returnedIds);
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.selectedApprove = [];
+      this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
+    }
+  }
+
+  async approve(borrowIds: any[]) {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.borrowItemsService.approveAll(borrowIds);
+      if (rs.ok) {
+        this.alertService.success();
+        this.selectedApprove = [];
+        this.selectedApproveReceive = [];
+        this.getBorrowList();
+        // this.getRequestBorrow();
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      console.error(error);
+      this.alertService.error(error.message);
+    }
+  }
+
+  async approveOther(borrowIds: any[]) {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.borrowItemsService.approveAllOther(borrowIds);
+      if (rs.ok) {
+        this.alertService.success();
+        this.selectedApproveOther = [];
+        this.selectedApproveReceive = [];
+        this.getBorrowOtherList();
+        // this.getRequestBorrow();
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      console.error(error);
+      this.alertService.error(error.message);
+    }
+  }
+
+  async approveReturned(returnedIds: any[]) {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.borrowItemsService.approveAllReturned(returnedIds);
+      if (rs.ok) {
+        this.alertService.success();
+        this.selectedApproveReturned = [];
+        this.getReturnedList();
+        // this.getRequestBorrow();
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      console.error(error);
+      this.alertService.error(error.message);
+    }
+  }
+
+  showReport(t) {
+    const url = `${this.apiUrl}/report/tranfer/${t.transfer_id}?token=${this.token}`;
+    this.htmlPreview.showReport(url);
+
+  }
+
+  printReport() {
+    const transfer_id: any = [];
+    let count: any = 0
+    this.selectedApprove.forEach(e => {
+      transfer_id.push('tranferId=' + e.transfer_id);
+      count++;
+    });
+    if (count > 0) {
+      const url = this.apiUrl + `/report/tranfers?token=${this.token}&` + transfer_id.join('&');
+      this.htmlPreview.showReport(url);
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
+  }
+
+  printReport2() {
+    const transfer_id: any = [];
+    let count: any = 0
+    this.selectedApprove.forEach(e => {
+      transfer_id.push('tranferId=' + e.transfer_id);
+      count++;
+    });
+    if (count > 0) {
+      const url = this.apiUrl + `/report/tranfers2?token=${this.token}&` + transfer_id.join('&');
+      this.htmlPreview.showReport(url);
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
+  }
+}
+
