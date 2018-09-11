@@ -26,7 +26,7 @@ export class LayoutComponent implements OnInit {
   Administrator = false;
   jwtHelper: JwtHelper = new JwtHelper();
 
-  menuPick:boolean;
+  menuPick: boolean;
   menuPeriod: boolean;
   menuRollback: boolean;
   menuReturn: boolean;
@@ -51,6 +51,7 @@ export class LayoutComponent implements OnInit {
   menuDonator: boolean;
   menuSetting = true;
   menuBorrow: boolean;
+  menuBorrowProduct: boolean;
   menuAlertExpired: boolean;
 
   @ViewChild('modalChangePassword') public modalChangePassword;
@@ -64,8 +65,8 @@ export class LayoutComponent implements OnInit {
     @Inject('API_PORTAL_URL') private apiPortal: string
   ) {
     this.token = sessionStorage.getItem('token');
-    const token = sessionStorage.getItem('token');
-    const decodedToken = this.jwtHelper.decodeToken(token);
+    // const token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
     const accessRight = decodedToken.accessRight;
     this.rights = accessRight.split(',');
   }
@@ -93,6 +94,7 @@ export class LayoutComponent implements OnInit {
     if (!this.menuAdjust && !this.menuReturn && !this.menuRollback) {
       this.menuTools = false;
     }
+    this.menuBorrowProduct = _.indexOf(this.rights, 'WM_BORROWPRODUCT') === -1 ? false : true;
     this.menuPeriod = _.indexOf(this.rights, 'WM_PERIOD') === -1 ? false : true;
     this.menuReceive = _.indexOf(this.rights, 'WM_RECEIVE') === -1 ? false : true;
     this.menuIssue = _.indexOf(this.rights, 'WM_ISSUE') === -1 ? false : true;

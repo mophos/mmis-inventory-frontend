@@ -1,0 +1,29 @@
+<div [clrLoading]="loading">
+  <clr-datagrid>
+    <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+    <clr-dg-column>จำนวนคืน</clr-dg-column>
+    <clr-dg-column>รวม (Base unit)</clr-dg-column>
+    <!-- <clr-dg-column>ค้างรับ (Base unit)</clr-dg-column> -->
+    <clr-dg-column>ราคาต่อแพค (บาท)</clr-dg-column>
+    <clr-dg-column>รวม (บาท)</clr-dg-column>
+    <clr-dg-column>Lot no.</clr-dg-column>
+    <clr-dg-column>วันหมดอายุ</clr-dg-column>
+    <clr-dg-column>คลังสินค้า</clr-dg-column>
+
+    <clr-dg-row *ngFor="let r of products">
+      <clr-dg-cell>
+        <span class="p4">{{r.generic_name}}</span>
+        <br>
+        <span class="p7">{{r.product_name}}</span>
+        </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.returned_qty | number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}})</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.returned_qty * r.conversion_qty | number}} {{ r.to_unit_name }}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.cost | number: '1.2-2'}} </clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.cost * r.returned_qty | number: '1.2-2'}}</clr-dg-cell>
+      <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
+      <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
+      <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>{{products.length}} รายการ</clr-dg-footer>
+  </clr-datagrid>
+</div>

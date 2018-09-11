@@ -31,7 +31,7 @@ export class WarehouseComponent implements OnInit {
   isReceiveWarehouse = false;
   isUnitIssue = false;
 
-  query:any = ''
+  query: any = ''
 
   constructor(
     private warehouseService: WarehouseService,
@@ -110,7 +110,13 @@ export class WarehouseComponent implements OnInit {
             this.all();
             this.opened = false;
           } else {
-            this.alertService.error(JSON.stringify(results.error));
+            console.log(results.error);
+            if (results.error.code === 'ER_DUP_ENTRY') {
+              this.alertService.error('ข้อมูลซ้ำ ซึ่งอาจซ้ำกับข้อมูลที่ลบไปแล้ว')
+            } else {
+              this.alertService.error(JSON.stringify(results.error.message));
+            }
+
           }
 
           this.modalLoading.hide();
