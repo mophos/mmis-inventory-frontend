@@ -601,7 +601,7 @@ export class ReturnedComponent implements OnInit {
         `${this.returnedDate.date.year}-${this.returnedDate.date.month}-${this.returnedDate.date.day}` : null;
       if (_returnedDate) {
         this.modalLoading.show();
-        this.alertService.confirm('ต้องการบันทึกข้อมูลการรับสินค้า ใช่หรือไม่?')
+        this.alertService.confirm('ต้องการบันทึกข้อมูลการคืนสินค้า ใช่หรือไม่?')
           .then(() => {
             try {
               const summary = {

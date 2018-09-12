@@ -107,7 +107,7 @@ export class BorrowEditComponent implements OnInit {
 
         this.srcWarehouseId = rs.info.src_warehouse_id;
         this.dstWarehouseId = rs.info.dst_warehouse_id;
-
+        
         if (rs.info.confirmed === 'Y' || rs.info.approved === 'Y' || rs.info.mark_deleted === 'Y') {
           this.disableSave = true;
         }
@@ -283,7 +283,7 @@ export class BorrowEditComponent implements OnInit {
   editChangetransferQty(idx: any, qty: any) {
     const oldQty = +this.generics[idx].borrow_qty;
     if ((+qty.value * this.generics[idx].conversion_qty) > +this.generics[idx].remain_qty) {
-      this.alertService.error('จำนวนโอน มากว่าจำนวนคงเหลือ');
+      this.alertService.error('จำนวนยืม มากว่าจำนวนคงเหลือ');
       qty.value = oldQty;
     } else {
       this.generics[idx].borrow_qty = +qty.value;
@@ -309,7 +309,7 @@ export class BorrowEditComponent implements OnInit {
       this.generics[idx].unit_generic_id = event.unit_generic_id;
       this.generics[idx].conversion_qty = event.qty;
       if (this.generics[idx].remain_qty < (this.generics[idx].borrow_qty * event.qty)) {
-        this.alertService.error('รายการไม่พอโอน');
+        this.alertService.error('รายการไม่พอยืม');
         this.generics[idx].products = [];
       } else {
         const genericId = this.generics[idx].generic_id;
@@ -354,6 +354,7 @@ export class BorrowEditComponent implements OnInit {
       } else {
         const summary = {
           borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
+          srcWarehouseId: this.srcWarehouseId,
           dstWarehouseId: this.dstWarehouseId
         };
 
