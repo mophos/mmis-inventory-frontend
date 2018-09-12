@@ -28,6 +28,7 @@ import { AuthHISMapping } from 'app/auth-his-mapping.service';
 import { AuthHISTransaction } from 'app/auth-his-transaction.service';
 import { AuthMinMaxPlanning } from 'app/auth-minmax-planing.service';
 import { AuthAdjustService } from 'app/auth-adjust.service';
+import { AuthBorrowService } from 'app/auth-borrow.service';
 import { ProductsComponent } from 'app/staff/products/products.component';
 import { BorrowNoteComponent } from './borrow-note/borrow-note.component';
 import { BorrowNoteNewComponent } from './borrow-note-new/borrow-note-new.component';
@@ -89,15 +90,15 @@ const routes: Routes = [
       { path: 'issue-transaction/edit', component: IssueTransactionEditComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'his-issue-transaction', canActivate: [AuthHISTransaction], component: HisIssueTransactionComponent },
-      { path: 'borrow-notes', canActivate: [AuthHISTransaction], component: BorrowNoteComponent },
-      { path: 'borrow-notes/new', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
-      { path: 'borrow-notes/:borrowNoteId/edit', canActivate: [AuthHISTransaction], component: BorrowNoteNewComponent },
+      { path: 'borrow-notes', canActivate: [AuthBorrowService], component: BorrowNoteComponent },
+      { path: 'borrow-notes/new', canActivate: [AuthBorrowService], component: BorrowNoteNewComponent },
+      { path: 'borrow-notes/:borrowNoteId/edit', canActivate: [AuthBorrowService], component: BorrowNoteNewComponent },
       { path: 'product/requisition', component: ProductRequisitionComponent },
       { path: 'adjust-stock', canActivate: [AuthAdjustService], component: AdjustStockComponent },
       { path: 'adjust-stock/new', canActivate: [AuthAdjustService], component: AdjustStockNewComponent },
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'exportdata', component: ExportdataComponent },
-      { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent}
+      { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent }
     ]
   }
 ];

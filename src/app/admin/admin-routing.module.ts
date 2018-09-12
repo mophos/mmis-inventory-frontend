@@ -202,9 +202,9 @@ const routes: Routes = [
       { path: 'addition/generic', canActivate: [AuthAddition], component: AdditionGenericComponent },
       { path: 'addition/edit/:additionId', canActivate: [AuthAddition], component: AdditionEditComponent },
       { path: 'return-budget', canActivate: [AuthReturnBudget], component: ReturnBudgetComponent },
-      { path: 'pick',canActivate: [AdminGuard, AuthPick], component: PickComponent },
-      { path: 'pick/new',canActivate: [AdminGuard, AuthPick], component: PickNewComponent },
-      { path: 'pick/edit/:pickId',canActivate: [AdminGuard, AuthPick], component: PickNewComponent },
+      { path: 'pick', canActivate: [AdminGuard, AuthPick], component: PickComponent },
+      { path: 'pick/new', canActivate: [AdminGuard, AuthPick], component: PickNewComponent },
+      { path: 'pick/edit/:pickId', canActivate: [AdminGuard, AuthPick], component: PickNewComponent },
       {
         path: 'tools',
         canActivate: [AdminGuard, AuthStockcard],

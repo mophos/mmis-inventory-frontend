@@ -112,7 +112,7 @@ export class StockCardComponent implements OnInit {
     const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
     const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
     const url = `${this.apiUrl}/report/genericStock/haveMovement?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&token=${this.token}&`
-    this.htmlPreview.showReport(url);
+    this.htmlPreview.showReport(url, 'landscape');
   }
 
   async printReportNomovement() {

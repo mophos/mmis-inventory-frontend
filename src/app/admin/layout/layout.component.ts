@@ -26,7 +26,7 @@ export class LayoutComponent implements OnInit {
   Administrator = false;
   jwtHelper: JwtHelper = new JwtHelper();
 
-  menuPick:boolean;
+  menuPick: boolean;
   menuPeriod: boolean;
   menuRollback: boolean;
   menuReturn: boolean;
@@ -65,8 +65,8 @@ export class LayoutComponent implements OnInit {
     @Inject('API_PORTAL_URL') private apiPortal: string
   ) {
     this.token = sessionStorage.getItem('token');
-    const token = sessionStorage.getItem('token');
-    const decodedToken = this.jwtHelper.decodeToken(token);
+    // const token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
     const accessRight = decodedToken.accessRight;
     this.rights = accessRight.split(',');
   }
