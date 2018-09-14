@@ -27,6 +27,7 @@ export class StockcardComponent implements OnInit {
   modalHistory = false;
 
   passHis: any;
+  isOpenSearchPick: boolean;
 
   constructor(
     private toolService: ToolsService,
@@ -58,6 +59,7 @@ export class StockcardComponent implements OnInit {
   gotoIssue(issueId: any) {
     this.router.navigateByUrl(`/admin/tools/stockcard/issue?issueId=${issueId}`);
   }
+  
 
   showSearchReceive() {
     this.isOpenSearchReceive = true;
@@ -73,6 +75,10 @@ export class StockcardComponent implements OnInit {
 
   showSearchIssue() {
     this.isOpenSearchIssue = true;
+  }
+
+  showSearchPick() {
+    this.isOpenSearchPick = true;
   }
 
   async doSearchReceives(event: any, query: any) {
