@@ -178,11 +178,11 @@
   <h3 class="modal-title">ค้นหาใบหยิบ</h3>
   <div class="modal-body">
     <label for="">เลขที่ใบหยิบ</label>
-    <input type="text" style="width: 300px;" #queryIssue (keyup)="doSearchPick($event, queryIssue.value)" placeholder="พิมพ์เลขที่ใบหยิบ แล้วกด ENTER">
+    <input type="text" style="width: 300px;" #queryPick (keyup)="doSearchPick($event, queryPick.value)" placeholder="พิมพ์เลขที่ใบหยิบ แล้วกด ENTER">
     <clr-datagrid>
-      <clr-dg-column>วันที่หยิบ</clr-dg-column>
-      <clr-dg-column>เลขที่ใบหยิบ</clr-dg-column>
-      <clr-dg-column>คลัง</clr-dg-column>
+      <clr-dg-column >วันที่หยิบ</clr-dg-column>
+      <clr-dg-column >เลขที่หยิบ</clr-dg-column>
+      <clr-dg-column>หน่วยหยิบ</clr-dg-column>
       <clr-dg-column style="width: 60px;">#</clr-dg-column>
 
       <clr-dg-row *ngFor="let r of picks">
@@ -191,7 +191,7 @@
         <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
         <!-- <clr-dg-cell>{{r.dst_warehouse_name}}</clr-dg-cell> -->
         <clr-dg-cell style="text-align: center;">
-          <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoIssue(r.issue_id)">
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoPick(r.picks)">
             แก้ไข
           </button>
         </clr-dg-cell>
@@ -201,7 +201,7 @@
     </clr-datagrid>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenSearchIssue = false">ยกเลิก</button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenSearchPick = false">ยกเลิก</button>
   </div>
 </clr-modal>
 <!-- /search issue -->
