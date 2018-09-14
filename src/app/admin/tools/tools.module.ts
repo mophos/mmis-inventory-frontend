@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -27,7 +28,8 @@ import { StockcardIssueComponent } from './stockcard-issue/stockcard-issue.compo
     MyDatePickerTHModule,
     ModalsModule,
     TextMaskModule,
-    GridDetailModule
+    GridDetailModule,
+    RouterModule
   ],
   declarations: [StockcardComponent, StockcardReceiveComponent, StockcardReceiveOtherComponent, StockcardRequisitionComponent, StockcardTransferComponent, StockcardIssueComponent]
 })
