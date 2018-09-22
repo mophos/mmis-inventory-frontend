@@ -19,7 +19,7 @@ export class AdjustStockComponent implements OnInit {
   warehouseId: any;
   lists: any;
   totalList: any;
-  perPage = 5;
+  perPage = 15;
   currentPage = 1;
   selectAdjust = []
   token: string;
