@@ -1,3 +1,134 @@
-<p>
-  stockcard-pick works!
-</p>
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/tools/stockcard">เครื่องมือ</a>
+  <span class="breadcrumb-item active">แก้ไข stockcard</span>
+</nav>
+<div class="alert alert-danger">
+  <div class="alert-items">
+    <div class="alert-item static">
+      <div class="alert-icon-wrapper">
+        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+      </div>
+      <span class="alert-text">
+        การแก้ไขรายการ Stock Card การหยิบ จะแก้ไขจำนวนจ่ายได้เฉพาะ Lot ที่จ่ายเท่านั้น และไม่มีการ Allocate กรุณา Expanded เพื่อตรวจสอบข้อมูล
+      </span>
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="pick_code">เลขที่ใบหยิบ</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input id="pick_code" disabled class="form-control" type="text" name="pick_code" [(ngModel)]="pick_code">
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="peopleName">
+              <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
+              <span *ngIf="peopleId">เจ้าหน้าที่</span>
+            </label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="wmPick">หน่วยหยิบ</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="select" >
+              <select disabled name="wmPick" [(ngModel)]="wmPick">
+                <option value="">
+                  <หน่วยหยิบ>
+                </option>
+                <option *ngFor="let u of warehouses" [value]="u.warehouse_id">{{ u.short_code }} - {{ u.warehouse_name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">วันที่หยิบ</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="pickDate" required></my-date-picker-th>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="remark">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <input id="remark" class="form-control" type="text" name="remark" [(ngModel)]="remark">
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+
+<clr-datagrid [style.padding-top.px]="10" style="position: relative;">
+  <clr-dg-column>ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="170">lot_no</clr-dg-column>
+  <clr-dg-column [style.width.px]="170">เลขที่ใบรับ</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">จำนวนรับเข้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">จำนวนที่เหลือ</clr-dg-column>
+  <clr-dg-column [style.width.px]="120">จำนวนที่หยิบ</clr-dg-column>
+  <clr-dg-column [style.width.px]="120">หน่วย</clr-dg-column>
+  <!-- <clr-dg-column [style.width.px]="70"></clr-dg-column> -->
+
+  <clr-dg-row *ngFor="let product of products; let idx = index;">
+    <clr-dg-cell style="line-height: 25px;">
+      {{idx + 1}}. {{product.product_name}}
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{product.lot_no}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">
+      {{product.receive_code}}
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">
+      {{product.receive_qty}}
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;" >
+      {{product.receive_qty - product.remain_qty - product.pick_qty}}
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #qty (keyup)="editChangeReceiveQty(idx, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberWithOutDot [value]="product.pick_qty" />
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">
+      {{product.large_unit}}({{product.base_unit}}{{product.small_unit}})
+    </clr-dg-cell>
+    <!-- <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell> -->
+  </clr-dg-row>
+
+</clr-datagrid>
+
+<div>
+  <button class="btn btn-success btn-sm" (click)="savePick()" [disabled]="!wmPick || !products.length">
+    <clr-icon shape="floppy"></clr-icon>
+    บันทึกการหยิบ
+  </button>
+  <button class="btn btn-danger btn-sm" routerLink="/admin/tools/stockcard">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+</div>
+
+
+
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

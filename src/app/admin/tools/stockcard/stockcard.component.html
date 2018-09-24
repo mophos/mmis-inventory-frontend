@@ -34,9 +34,9 @@
   แก้ไข Stock Card จากการตัดจ่าย
 </button>
 
-<button class="btn btn-large btn-danger" (click)="showSearchPick()">
+<!-- <button class="btn btn-large btn-danger" (click)="showSearchPick()">
   แก้ไข Stock Card จากการหยิบ
-</button>
+</button> -->
 <input *ngIf="input" type="text" [(ngModel)]="passHis">
 
 <!-- search receive -->
@@ -191,7 +191,7 @@
         <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
         <!-- <clr-dg-cell>{{r.dst_warehouse_name}}</clr-dg-cell> -->
         <clr-dg-cell style="text-align: center;">
-          <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoPick(r.picks)">
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoPick(r.pick_id)">
             แก้ไข
           </button>
         </clr-dg-cell>
