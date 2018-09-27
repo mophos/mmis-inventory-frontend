@@ -196,7 +196,7 @@
           <clr-dg-cell>
             <div class="btn-group btn-sm">
               <button title="แก้ไข" *ngIf="r.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/return-product/edit']"
-                [queryParams]="{returnedId: r.returned_id}" [disabled]="r.is_cancel === 'Y' || r.approved === 'Y'">
+                [queryParams]="{returnedId: r.returned_id}" [disabled]="r.is_cancel === 'Y' || r.is_approved === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
               <button title="ลบ" *ngIf="r.is_cancel === 'N'" class="btn btn-danger wm-small-btn" (click)="removeReturned(r)" [disabled]="r.is_cancel === 'Y' || r.is_approved === 'Y'">

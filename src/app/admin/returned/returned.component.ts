@@ -224,8 +224,8 @@ export class ReturnedComponent implements OnInit {
 
             obj.product_id = v.product_id;
             obj.product_name = v.product_name;
-            obj.receive_qty = +v.purchase_qty - +v.total_received_qty;
-            obj.max_receive_qty = +v.purchase_qty - +v.total_received_qty;
+            obj.returned_qty = +v.purchase_qty - +v.total_received_qty;
+            obj.max_returned_qty = +v.purchase_qty - +v.total_received_qty;
             obj.primary_unit_id = +v.base_unit_id;
             obj.primary_unit_name = v.base_unit_name;
             obj.lot_no = null;
@@ -440,7 +440,7 @@ export class ReturnedComponent implements OnInit {
     this.totalCost = 0;
     this.products.forEach((v: any) => {
       if (v.is_free === 'N') {
-        this.totalCost += (+v.cost * +v.receive_qty);
+        this.totalCost += (+v.cost * +v.returned_qty);
       }
     })
   }
@@ -489,7 +489,7 @@ export class ReturnedComponent implements OnInit {
 
   // edit data
   editChangeReceiveQty(idx: any, cmp: any, value: any) {
-    this.products[idx].receive_qty = value;
+    this.products[idx].returned_qty = value;
   }
 
   editChangeCost(idx: any, value: any) {
@@ -683,7 +683,7 @@ export class ReturnedComponent implements OnInit {
   }
 
   async setSelected(items: any) {
-    console.log(items);
+    // console.log(items);
     this.borrowType = items.dst_warehouse_id ? 1 : 0;
     this.borrowCode = items.borrow_code ? items.borrow_code : items.borrow_other_code;
 
@@ -693,9 +693,11 @@ export class ReturnedComponent implements OnInit {
   async getBorrowList() {
     this.modalLoading.show();
     try {
-      const rs = await this.borrowItemsService.list(this.approveStatus, 0, 0);
+      const rs = await this.borrowItemsService.listBorrow(this.approveStatus, 0, 0);
       if (rs.ok) {
         this.borrow = rs.rows;
+        // console.log(this.borrow);
+        
       } else {
         this.alertService.error(JSON.stringify(rs.error));
       }
@@ -709,9 +711,11 @@ export class ReturnedComponent implements OnInit {
   async getBorrowOtherList() {
     this.modalLoading.show();
     try {
-      const rs = await this.borrowItemsService.listOther(this.approveStatus, 0, 0);
+      const rs = await this.borrowItemsService.listOtherBorrow(this.approveStatus, 0, 0);
       if (rs.ok) {
         this.borrowOther = rs.rows;
+        // console.log(this.borrowOther);
+        
       } else {
         this.alertService.error(JSON.stringify(rs.error));
       }

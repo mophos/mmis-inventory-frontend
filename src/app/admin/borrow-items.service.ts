@@ -116,6 +116,16 @@ export class BorrowItemsService {
     return rs.json();
   }
 
+  async listBorrow(type: any, limit: number, offset: number) {
+    const rs: any = await this.authHttp.get(`${this.url}/borrow/list-borrow?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    return rs.json();
+  }
+
+  async listOtherBorrow(type: any, limit: number, offset: number) {
+    const rs: any = await this.authHttp.get(`${this.url}/borrow/list-borrow/other?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    return rs.json();
+  }
+
   async returnedList(type: any, limit: number, offset: number) {
     const rs: any = await this.authHttp.get(`${this.url}/borrow/returned/list?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
