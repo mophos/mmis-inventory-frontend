@@ -24,7 +24,8 @@ export class PickComponent implements OnInit {
   menuEditAfter: boolean;
   modalEdit: boolean = false;
   editId: any;
-
+  username:any
+  password:any
   constructor(
     private alertService: AlertService,
     @Inject('API_URL') private url: string,
