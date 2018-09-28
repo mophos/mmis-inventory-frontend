@@ -289,7 +289,7 @@ export class StockcardIssueComponent implements OnInit {
     try {
       let isZero = false;
       this.products.forEach(v => {
-        if (v.issue_qty === 0) {
+        if (+v.issue_qty === 0) {
           isZero = true;
         }
       });

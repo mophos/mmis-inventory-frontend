@@ -21,13 +21,13 @@
             <label for="srcWarehouseId" class="required">ยืมจากคลัง</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <wm-select-warehouses #srcWarehouse (onSelect)="setSrcWarehouse($event)"></wm-select-warehouses>
+            <wm-select-warehouses #srcWarehouse [selectedId]="srcWarehouseId" (onSelect)="setSrcWarehouse($event)"></wm-select-warehouses>
           </div>
           <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
             <label class="required" for="dstWarehouseId">ไปยังคลัง</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <wm-select-warehouses #dstWarehouse (onSelect)="setDstWarehouse($event)"></wm-select-warehouses>
+            <wm-select-warehouses #dstWarehouse [selectedId]="dstWarehouseId" (onSelect)="setDstWarehouse($event)"></wm-select-warehouses>
           </div>
         </div>
       </section>
