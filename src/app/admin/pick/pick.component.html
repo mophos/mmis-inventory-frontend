@@ -34,6 +34,9 @@
   <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
   <clr-dg-row *ngFor="let o of order" [clrDgItem]="o" [ngClass]="{'isSuccess': o.is_approve === 'Y', 'isError': o.is_cancel === 'Y'}">
     <clr-dg-action-overflow>
+        <button title="แก้ไข" *ngIf="o.is_approve === 'Y'"  class="action-item" (click)="editAfter(o.pick_id)" >
+          แก้ไขหลังการอนุมัติ
+        </button>
         <button title="อนุมัติ" [disabled]="o.is_approve === 'Y' || o.is_cancel === 'Y'" class="action-item" (click)="approve(o.pick_id)">
           อนุมัติการหยิบ
         </button>
@@ -59,5 +62,30 @@
       <clr-dg-pagination #pagination   [(clrDgPage)]="currentPage"  [clrDgPageSize]="perPage" [clrDgTotalItems]="total"></clr-dg-pagination>
     </clr-dg-footer>
 </clr-datagrid>
+
+
+<clr-modal [(clrModalOpen)]="modalEdit" [clrModalClosable]="false">
+    <h3 class="modal-title">สิทธิ์การแก้ไข</h3>
+    <div class="modal-body" style="height:150px">
+  
+      <form>
+        <section class="form-block">
+          <div class="form-group">
+            <label for="aForm_1" class="required">User Name</label>
+            <input autocomplete="nope" type="text" id="username" name="username" [(ngModel)]="username">
+          </div>
+          <div class="form-group">
+            <label for="aForm_1" class="required"> password</label>
+            <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password" (keyup.enter)="checkEdit(username,password)">
+          </div>
+        </section>
+      </form>
+    </div>
+    <div class="modal-footer" style="padding-top: 0px;">
+      <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkEdit(username,password)">เปิด</button>
+      <button type="button" class="btn btn-md btn-danger-outline" (click)="modalEdit = false">ปิด</button>
+    </div>
+
+</clr-modal>
 <wm-loading-modal #modalLoading></wm-loading-modal>
 <wm-html-preview #htmlPreview></wm-html-preview>

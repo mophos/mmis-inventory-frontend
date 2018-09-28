@@ -45,6 +45,14 @@ export class PickService {
         });
     });
   }
+  async checkEdit(username: any, password: any, action: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/basic/checkApprove`, {
+      username: username,
+      password: password,
+      action: action
+    }).toPromise();
+    return rs.json();
+  }
   savePick(pickId: any, pickDate: any, wmPick: any, products: any, peopleId: any, remark: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.put(`${this.url}/pick/savePick`, {
@@ -55,6 +63,17 @@ export class PickService {
         remark: remark,
         pickId: pickId
       })
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+  getPickEdit(pickId: any) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/pick/getPickEdit/${pickId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);

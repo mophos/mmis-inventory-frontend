@@ -52,6 +52,10 @@ export class PickNewComponent implements OnInit {
   peopleId: any;
   remark: any
   pick_code: any;
+  decodedToken: any;
+  rights: any;
+  menuEditAfter: boolean;
+  approve: boolean = true;
   constructor(
     private alertService: AlertService,
     @Inject('API_URL') private url: string,
@@ -62,6 +66,11 @@ export class PickNewComponent implements OnInit {
 
   ) {
     this.pickId = this.route.snapshot.params.pickId;
+    const token = sessionStorage.getItem('token');
+    this.decodedToken = this.jwtHelper.decodeToken(token);
+    const accessRight = this.decodedToken.accessRight;
+    this.rights = accessRight.split(',');
+    this.menuEditAfter = _.indexOf(this.rights, 'WM_PICK_EDITAFTER') === -1 ? false : true;
   }
 
   ngOnInit() {
@@ -83,7 +92,7 @@ export class PickNewComponent implements OnInit {
     this.getReceive('')
   }
   async getPick(pickId: any) {
-    const rs: any = await this.pickService.getPick(pickId)
+    const rs: any = await this.pickService.getPickEdit(pickId)
     try {
       if (rs.ok) {
         let detail = rs.rows[0] || {}
@@ -99,6 +108,7 @@ export class PickNewComponent implements OnInit {
             }
           };
         }
+        this.approve =  detail ? detail.is_approve == 'Y' ? false : true : true;
         this.peopleId = detail ? detail.people_id : '';
         this.wmPick = detail ? detail.wm_pick : '';
         this.remark = detail ? detail.remark : '';
@@ -132,7 +142,7 @@ export class PickNewComponent implements OnInit {
         let is_save = true
         let date = this.pickDate ? `${this.pickDate.date.year}-${this.pickDate.date.month}-${this.pickDate.date.day}` : null;
         for (let _product of this.products) {
-          if (_product.pick_qty == 0 || (_product.receive_qty - _product.remain_qty - _product.pick_qty) < 0) {
+          if (( _product.pick_qty == 0 || (_product.receive_qty - _product.remain_qty - _product.pick_qty) < 0)) {
             this.alertService.error('กรุณาตรวจสอบจำนวนหยิบ');
             is_save = false
           }
