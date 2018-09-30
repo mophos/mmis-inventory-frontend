@@ -45,6 +45,7 @@ export class BorrowComponent implements OnInit {
   selectedTab: any;
   tabInside = 0;
   tabOutside = 0;
+  tabReturned = 0;
 
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('htmlPreview') public htmlPreview: any;
@@ -63,6 +64,7 @@ export class BorrowComponent implements OnInit {
 
   ngOnInit() {
     this.getBorrowList();
+    this.selectedTab = sessionStorage.getItem('tabBorrow');
   }
 
   async getBorrowList() {
@@ -180,6 +182,7 @@ export class BorrowComponent implements OnInit {
   }
 
   setTapActive(tab: any) {
+    sessionStorage.setItem('tabBorrow', tab);
     this.selectedApprove = [];
     this.selectedApproveOther = [];
     this.selectedApproveReturned = [];
@@ -190,16 +193,16 @@ export class BorrowComponent implements OnInit {
 
   async totalTab() {
     try {
-      if (this.selectedTab === 'inside') {
-        const rsW: any = await this.getBorrowList();
+      if (this.selectedTab === 'inside' || this.tabInside === 0) {
+        await this.getBorrowList();
+       }
+      if (this.selectedTab === 'outside' || this.tabOutside === 0) {
+        await this.getBorrowOtherList();
       }
-      if (this.selectedTab === 'outside') {
-        const rsWA: any = await this.getBorrowOtherList();
+      if (this.selectedTab === 'returnProduct' || this.tabReturned === 0) {
+        await this.getReturnedList();
       }
-      if (this.selectedTab === 'returnProduct') {
-        const rsWT: any = await this.getReturnedList();
-      }
-    } catch (error) {
+     } catch (error) {
       this.alertService.error(error.message);
     }
   }

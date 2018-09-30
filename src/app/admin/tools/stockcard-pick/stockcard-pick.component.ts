@@ -4,17 +4,17 @@ import { ToThaiDatePipe } from 'app/helper/to-thai-date.pipe';
 import { AlertService } from 'app/alert.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { JwtHelper } from 'angular2-jwt';
-import { PickService } from '../pick.service'
-import { WarehouseService } from '../warehouse.service';
+import { PickService } from '../../pick.service'
+import { WarehouseService } from '../../warehouse.service';
 import * as _ from 'lodash';
-import { SearchPeopleAutoCompleteComponent } from '../../directives/search-people-autocomplete/search-people-autocomplete.component';
+import { SearchPeopleAutoCompleteComponent } from '../../../directives/search-people-autocomplete/search-people-autocomplete.component';
 import * as moment from 'moment';
 @Component({
-  selector: 'wm-pick-new',
-  templateUrl: './pick-new.component.html',
-  styleUrls: ['./pick-new.component.css']
+  selector: 'wm-stockcard-pick',
+  templateUrl: './stockcard-pick.component.html',
+  styleUrls: ['./stockcard-pick.component.css']
 })
-export class PickNewComponent implements OnInit {
+export class StockcardPickComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('elSearchPeople') elSearchPeople: SearchPeopleAutoCompleteComponent;
   myDatePickerOptions: IMyOptions = {
@@ -52,10 +52,6 @@ export class PickNewComponent implements OnInit {
   peopleId: any;
   remark: any
   pick_code: any;
-  decodedToken: any;
-  rights: any;
-  menuEditAfter: boolean;
-  approve: boolean = true;
   constructor(
     private alertService: AlertService,
     @Inject('API_URL') private url: string,
@@ -65,14 +61,13 @@ export class PickNewComponent implements OnInit {
     private route: ActivatedRoute
 
   ) {
-    this.pickId = this.route.snapshot.params.pickId;
-    const token = sessionStorage.getItem('token');
-    this.decodedToken = this.jwtHelper.decodeToken(token);
-    const accessRight = this.decodedToken.accessRight;
-    this.rights = accessRight.split(',');
-    this.menuEditAfter = _.indexOf(this.rights, 'WM_PICK_EDITAFTER') === -1 ? false : true;
+    this.route.queryParams
+      .subscribe(params => {
+        this.pickId = params.pickId;
+      });
   }
 
+  
   ngOnInit() {
     this.getWarehouses()
     const date = new Date();
@@ -92,7 +87,7 @@ export class PickNewComponent implements OnInit {
     this.getReceive('')
   }
   async getPick(pickId: any) {
-    const rs: any = await this.pickService.getPickEdit(pickId)
+    const rs: any = await this.pickService.getPick(pickId)
     try {
       if (rs.ok) {
         let detail = rs.rows[0] || {}
@@ -108,7 +103,6 @@ export class PickNewComponent implements OnInit {
             }
           };
         }
-        this.approve =  detail ? detail.is_approve == 'Y' ? false : true : true;
         this.peopleId = detail ? detail.people_id : '';
         this.wmPick = detail ? detail.wm_pick : '';
         this.remark = detail ? detail.remark : '';
@@ -142,7 +136,7 @@ export class PickNewComponent implements OnInit {
         let is_save = true
         let date = this.pickDate ? `${this.pickDate.date.year}-${this.pickDate.date.month}-${this.pickDate.date.day}` : null;
         for (let _product of this.products) {
-          if (( _product.pick_qty == 0 || (_product.receive_qty - _product.remain_qty - _product.pick_qty) < 0)) {
+          if (_product.pick_qty == 0 || (_product.receive_qty - _product.remain_qty - _product.pick_qty) < 0) {
             this.alertService.error('กรุณาตรวจสอบจำนวนหยิบ');
             is_save = false
           }

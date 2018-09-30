@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { AlertService } from '../../alert.service';
 import { PickService } from '../pick.service'
 import * as _ from 'lodash'
+import { JwtHelper } from 'angular2-jwt';
+import { Router } from '@angular/router';
 @Component({
   selector: 'wm-pick',
   templateUrl: './pick.component.html',
@@ -14,16 +16,31 @@ export class PickComponent implements OnInit {
   perPage = 10;
   total = 0
   currentPage = 1
+  jwtHelper: JwtHelper = new JwtHelper();
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
-
+  decodedToken: any;
+  rights: any;
+  menuEditAfter: boolean;
+  modalEdit: boolean = false;
+  editId: any;
+  username:any
+  password:any
   constructor(
     private alertService: AlertService,
     @Inject('API_URL') private url: string,
-    private pickService: PickService
-  ) { }
+    private pickService: PickService,
+    private router: Router,
+  ) { 
+    const token = sessionStorage.getItem('token');
+    this.decodedToken = this.jwtHelper.decodeToken(token);
+    const accessRight = this.decodedToken.accessRight;
+    this.rights = accessRight.split(',');
+    this.menuEditAfter = _.indexOf(this.rights, 'WM_PICK_EDITAFTER') === -1 ? false : true;
+  }
 
   ngOnInit() {
+    
   }
 
   async refresh(event: any) {
@@ -86,5 +103,22 @@ export class PickComponent implements OnInit {
       this.alertService.error(rs.error)
      }
     }).catch(()=>{})
+  }
+  async editAfter (id:any) {
+    if(this.menuEditAfter){
+      this.router.navigate(['/admin/pick/edit/'+id])
+    } else {
+      this.editId = id
+      this.modalEdit = true
+    }
+  }
+   async checkEdit(username: any, password: any) {
+    const rs: any = await this.pickService.checkEdit(username, password ,'WM_PICK_EDITAFTER');
+    if (rs.ok) {
+      this.router.navigate(['/admin/pick/edit/'+this.editId])
+    } else {
+      this.alertService.error('ไม่มีสิทธิ์แก้ไข');
+    }
+    this.modalEdit = false;
   }
 }

@@ -14,7 +14,6 @@
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="borrowDate" required></my-date-picker-th>
           </div>
-
         </div>
 
         <div class="form-group row">
@@ -53,8 +52,8 @@
 <clr-datagrid style="position: relative;">
   <clr-dg-column>#</clr-dg-column>
   <clr-dg-column [style.width.px]="300">ชื่อสินค้า</clr-dg-column>
-  <clr-dg-column>จำนวนตัดจ่าย</clr-dg-column>
-  <clr-dg-column>หน่วยตัดจ่าย</clr-dg-column>
+  <clr-dg-column>จำนวนยืม</clr-dg-column>
+  <clr-dg-column>หน่วยยืม</clr-dg-column>
   <clr-dg-column>รวม (Base Unit)</clr-dg-column>
   <clr-dg-column>คงเหลือ (Base Unit)</clr-dg-column>
   <clr-dg-column></clr-dg-column>
@@ -121,18 +120,18 @@
     <clr-icon shape="floppy"></clr-icon>
     บันทึกยืมสินค้า
   </button>
-  <button class="btn btn-danger btn-sm" [routerLink]="['/admin/issue-transaction']">
+  <button class="btn btn-danger btn-sm" [routerLink]="['/admin/borrow']">
     <clr-icon shape="home"></clr-icon>
     กลับหน้าหลัก
   </button>
 </div>
 
 <clr-modal [(clrModalOpen)]="isOpenModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
-  <h3 class="modal-title">ประวัติการตัดจ่าย</h3>
+  <h3 class="modal-title">ประวัติการยืม</h3>
   <div class="modal-body">
     <clr-datagrid style="height: 300px;">
       <clr-dg-column>เลขที่</clr-dg-column>
-      <clr-dg-column>วันที่ตัดจ่าย</clr-dg-column>
+      <clr-dg-column>วันที่ยืม</clr-dg-column>
       <clr-dg-column>หมายเหตุ</clr-dg-column>
       <clr-dg-column></clr-dg-column>
 
