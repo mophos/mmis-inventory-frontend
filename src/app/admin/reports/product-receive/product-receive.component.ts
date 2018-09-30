@@ -53,13 +53,8 @@ export class ProductReceiveComponent implements OnInit {
   ptintReport() {
     this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
-<<<<<<< HEAD
     const url = `${this.apiUrl}/report/product/receive/${this.start}/${this.end}?token=${this.token}`
     this.htmlPreview.showReport(url, 'landscape');
-=======
-    const url = `${this.apiUrl}/report/product-receive?startDate=${this.start}&endDate=${this.end}&token=${this.token}`
-    this.htmlPreview.showReport(url);
->>>>>>> 8c9c4837f4aace86aa51b8ba18a268363dd8ce07
   }
 
   exportExcel() {
