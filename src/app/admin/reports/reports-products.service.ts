@@ -68,15 +68,20 @@ export class ReportProductsService {
     });
   }
 
-  getButgetYear(){
+  getButgetYear() {
     return new Promise((reslove, reject) => {
       this.authHttp.get(`${this.url}/report/getBudgetYear`)
-      .map(res=>res.json())
-      .subscribe(data=>{
-        reslove(data);
-      },error=>{
-        reject(error);
-      });
+        .map(res => res.json())
+        .subscribe(data => {
+          reslove(data);
+        }, error => {
+          reject(error);
+        });
     });
+  }
+
+  async getGenericWarehouse(warehouseId: any) {
+    const resp = await this.authHttp.get(`${this.url}/report/getGenericWarehouseAll?warehouseId=${warehouseId}`).toPromise();
+    return resp.json();
   }
 }
