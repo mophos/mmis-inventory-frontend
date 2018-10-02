@@ -6,8 +6,9 @@ import { WarehouseService } from './../warehouse.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 
 import * as _ from 'lodash';
-import * as moment from 'moment';
 import { State } from '@clr/angular';
+import { BorrowNoteService } from '../borrow-note.service';
+import { log } from 'util';
 
 @Component({
   selector: 'wm-borrow',
@@ -50,11 +51,9 @@ export class BorrowComponent implements OnInit {
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('htmlPreview') public htmlPreview: any;
   constructor(
-    private warehouseService: WarehouseService,
     private alertService: AlertService,
     private borrowItemsService: BorrowItemsService,
-    private router: Router,
-    private ref: ChangeDetectorRef,
+    private borrowNoteService: BorrowNoteService,
     @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
@@ -195,14 +194,14 @@ export class BorrowComponent implements OnInit {
     try {
       if (this.selectedTab === 'inside' || this.tabInside === 0) {
         await this.getBorrowList();
-       }
+      }
       if (this.selectedTab === 'outside' || this.tabOutside === 0) {
         await this.getBorrowOtherList();
       }
       if (this.selectedTab === 'returnProduct' || this.tabReturned === 0) {
         await this.getReturnedList();
       }
-     } catch (error) {
+    } catch (error) {
       this.alertService.error(error.message);
     }
   }
@@ -278,6 +277,7 @@ export class BorrowComponent implements OnInit {
       this.modalLoading.show();
       const rs: any = await this.borrowItemsService.approveAll(borrowIds);
       if (rs.ok) {
+        this.saveMemory(rs.data);
         this.alertService.success();
         this.selectedApprove = [];
         this.selectedApproveReceive = [];
@@ -368,6 +368,17 @@ export class BorrowComponent implements OnInit {
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
+  }
+
+  async saveMemory(data: any) {
+    for (const v of data) {
+      const notes: any = {};
+      notes.remark = 'ยืมนอก Stock';
+      notes.wm_withdarw = v.src_warehouse_id;
+      notes.wm_borrow = v.dst_warehouse_id;
+      
+      await this.borrowNoteService.save(notes, v.products);
     }
   }
 }
