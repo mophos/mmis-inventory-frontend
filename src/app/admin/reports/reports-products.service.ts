@@ -52,22 +52,6 @@ export class ReportProductsService {
     });
   }
 
-  getGenericInStockcrad(warehouseId: any, startDate: any, endDate: any) {
-    return new Promise((resolve, reject) => {
-      this.authHttp.post(`${this.url}/reports/products/genericinstockcrad`, {
-        warehouseId: warehouseId,
-        startDate: startDate,
-        endDate: endDate
-      })
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
-  }
-
   getButgetYear() {
     return new Promise((reslove, reject) => {
       this.authHttp.get(`${this.url}/report/getBudgetYear`)
@@ -82,6 +66,11 @@ export class ReportProductsService {
 
   async getGenericWarehouse(warehouseId: any) {
     const resp = await this.authHttp.get(`${this.url}/report/getGenericWarehouseAll?warehouseId=${warehouseId}`).toPromise();
+    return resp.json();
+  }
+
+  async getGenericInStockcrad(warehouseId: any, startDate: any, endDate: any) {
+    const resp = await this.authHttp.get(`${this.url}/report/getGenericInStockcrad?warehouseId=${warehouseId}&startDate=${startDate}&endDate=${endDate}`).toPromise();
     return resp.json();
   }
 }

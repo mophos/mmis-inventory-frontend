@@ -49,7 +49,7 @@
             (click)="showReport()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์
           </button>
-          <button class="btn btn-sm btn-success" (click)="Openmodal()">
+          <button class="btn btn-sm btn-success" (click)="OpenmodalAll()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์ทุกรายการ
           </button>
         </div>
@@ -95,7 +95,7 @@
           </wm-select-warehouses>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 btn-group">
-          <button class="btn btn-sm btn-primary" (click)="printReport()">
+          <button class="btn btn-sm btn-primary" (click)="OpenmodalMovement()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่มีการเคลื่อนไหว
           </button>
           <button class="btn btn-sm btn-primary" (click)="printReportNomovement()">
@@ -121,13 +121,25 @@
     </clr-tab-content>
   </clr-tab>
 </clr-tabs>
-<clr-modal [(clrModalOpen)]="modal">
-  <h3 class="modal-title">รายการทั้งหมด {{sumGeneric}} รายการ</h3>
+<clr-modal [(clrModalOpen)]="modalAll">
+  <h3 class="modal-title">รายการทั้งหมด {{sumGenericAll}} รายการ</h3>
   <div class="modal-body">
     <div class="form-group row">
-      <div *ngFor="let item of numButton;let idx=index;">
+      <div *ngFor="let item of numButtonAll;let idx=index;">
         <div style="text-align: center;padding: 1em">
           <button type="button" class="btn btn-outline" (click)="printReportAll(item)">{{idx+1}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</clr-modal>
+<clr-modal [(clrModalOpen)]="modalMovement">
+  <h3 class="modal-title">รายการทั้งหมด {{sumGenericMovement}} รายการ</h3>
+  <div class="modal-body">
+    <div class="form-group row">
+      <div *ngFor="let item of numButtonMovement;let idx=index;">
+        <div style="text-align: center;padding: 1em">
+          <button type="button" class="btn btn-outline" (click)="printReportHaveMovement(item)">{{idx+1}}</button>
         </div>
       </div>
     </div>
