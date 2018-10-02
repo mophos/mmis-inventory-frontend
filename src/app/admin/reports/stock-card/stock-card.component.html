@@ -45,8 +45,12 @@
           <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
         </div>
         <div class="col-md-2">
-          <button class="btn btn-sm btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" (click)="showReport()">
+          <button class="btn btn-sm btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId"
+            (click)="showReport()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์
+          </button>
+          <button class="btn btn-sm btn-success" (click)="Openmodal()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์ทุกรายการ
           </button>
         </div>
       </div>
@@ -117,4 +121,17 @@
     </clr-tab-content>
   </clr-tab>
 </clr-tabs>
+<clr-modal [(clrModalOpen)]="modal">
+  <h3 class="modal-title">รายการทั้งหมด {{sumGeneric}} รายการ</h3>
+  <div class="modal-body">
+    <div class="form-group row">
+      <div *ngFor="let item of numButton;let idx=index;">
+        <div style="text-align: center;padding: 1em">
+          <button type="button" class="btn btn-outline" (click)="printReportAll(item)">{{idx+1}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</clr-modal>
+<wm-loading-modal #modalLoading></wm-loading-modal>
 <wm-html-preview #htmlPreview></wm-html-preview>

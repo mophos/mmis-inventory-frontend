@@ -14,7 +14,8 @@
           <label class="required">เลือกเวชภัณฑ์</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <wm-search-generic-warehouse-autocomplete #productSearch [warehouseId]="warehouseId" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
+          <wm-search-generic-warehouse-autocomplete #productSearch [warehouseId]="warehouseId" (onSelect)="setSelectedGeneric($event)"
+            (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
         </div>
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
           <label class="required">คลัง</label>
@@ -38,9 +39,15 @@
           <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
         </div>
         <div class="col-md-2">
-          <button class="btn btn-sm btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" (click)="showReport()">
-            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์ </button>
+          <button class="btn btn-sm btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId"
+            (click)="showReport()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์
+          </button>
+          <button class="btn btn-sm btn-success" (click)="Openmodal()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์ทุกรายการ
+          </button>
         </div>
+
       </div>
       <div>
         <clr-datagrid [style.height.%]="85">
@@ -108,4 +115,17 @@
     </clr-tab-content>
   </clr-tab>
 </clr-tabs>
+<clr-modal [(clrModalOpen)]="modal">
+  <h3 class="modal-title">รายการทั้งหมด {{sumGeneric}} รายการ</h3>
+  <div class="modal-body">
+    <div class="form-group row">
+      <div *ngFor="let item of numButton;let idx=index;">
+        <div style="text-align: center;padding: 1em">
+          <button type="button" class="btn btn-outline" (click)="printReportAll(item)">{{idx+1}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</clr-modal>
+<wm-loading-modal #modalLoading></wm-loading-modal>
 <wm-html-preview #htmlPreview></wm-html-preview>

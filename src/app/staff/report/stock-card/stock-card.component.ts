@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
-import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import { ReportProductsService } from 'app/admin/reports/reports-products.service';
 import * as moment from 'moment';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
@@ -35,7 +34,9 @@ export class StockCardComponent implements OnInit {
   warehouseId: any;
   token: any;
   genericInStockcard = [];
-
+  modal = false;
+  numButton: any = [];
+  sumGeneric: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -131,6 +132,29 @@ export class StockCardComponent implements OnInit {
       this.datageneric.splice(idx, 1);
       this.generic_id.splice(idx, 1)
     }
+  }
+
+  async Openmodal() {
+    this.modal = true;
+    this.numButton = [];
+    let rs = await this.reportProductService.getGenericWarehouse(this.warehouseId);
+    this.sumGeneric = rs.rows;
+    let sumButton = Math.ceil(rs.rows / 150);
+    for (let i = 0; i < sumButton; i++) {
+      if (i == 0) {
+        this.numButton.push(0)
+      } else {
+        this.numButton.push(i * 150)
+      }
+    }
+  }
+
+  async printReportAll(offset: any) {
+    this.modal = false;
+    const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
+    const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
+    const url = `${this.apiUrl}/report/genericStock/all?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
+    this.htmlPreview.showReport(url, 'landscape');
   }
 
 }

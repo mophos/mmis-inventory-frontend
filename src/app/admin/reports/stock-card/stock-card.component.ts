@@ -3,9 +3,9 @@ import { IMyOptions } from 'mydatepicker-th';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
 import * as moment from 'moment';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
-import { ReportProductsService } from './../reports-products.service';
 import { AlertService } from './../../../alert.service';
 import * as _ from 'lodash';
+import { ReportProductsService } from '../reports-products.service'
 @Component({
   selector: 'wm-stock-card',
   templateUrl: './stock-card.component.html',
@@ -33,10 +33,13 @@ export class StockCardComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
+  modal = false;
+  numButton: any = [];
+  sumGeneric: any;
   jwtHelper: JwtHelper = new JwtHelper();
   constructor(
-    private reportProductService: ReportProductsService,
     private alertService: AlertService,
+    private reportProducts: ReportProductsService,
     @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
@@ -120,6 +123,29 @@ export class StockCardComponent implements OnInit {
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/generics-no-movement/${this.warehouseId}/${this.start}/${this.end}?token=${this.token}`
     this.htmlPreview.showReport(url);
+  }
+
+  async Openmodal() {
+    this.modal = true;
+    this.numButton = [];
+    let rs = await this.reportProducts.getGenericWarehouse(this.warehouseId);
+    this.sumGeneric = rs.rows;
+    let sumButton = Math.ceil(rs.rows / 150);
+    for (let i = 0; i < sumButton; i++) {
+      if (i == 0) {
+        this.numButton.push(0)
+      } else {
+        this.numButton.push(i * 150)
+      }
+    }
+  }
+
+  async printReportAll(offset: any) {
+    this.modal = false;
+    const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
+    const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
+    const url = `${this.apiUrl}/report/genericStock/all?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
+    this.htmlPreview.showReport(url, 'landscape');
   }
 
   clearProductSearch() {
