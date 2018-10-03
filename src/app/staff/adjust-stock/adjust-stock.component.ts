@@ -20,6 +20,8 @@ export class AdjustStockComponent implements OnInit {
   totalList: any;
   perPage = 5;
   currentPage = 1;
+  query:any = '';
+
   constructor(
     private staffService: StaffService,
     private alertService: AlertService,
@@ -56,7 +58,21 @@ export class AdjustStockComponent implements OnInit {
     const limit = +state.page.size;
     this.modalLoading.show();
     try {
-      const rs: any = await this.staffService.getListStockAdjust(limit, offset);
+      const rs: any = await this.staffService.getListStockAdjustSearch(limit, offset,this.query);
+      if (rs) {
+        this.lists = rs.rows;
+        this.totalList = rs.total;
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
+  async search(even:any){
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.staffService.getListStockAdjustSearch(this.perPage, 0,this.query);
       if (rs) {
         this.lists = rs.rows;
         this.totalList = rs.total;

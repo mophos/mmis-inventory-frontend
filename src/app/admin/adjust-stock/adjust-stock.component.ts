@@ -23,6 +23,8 @@ export class AdjustStockComponent implements OnInit {
   currentPage = 1;
   selectAdjust = []
   token: string;
+  query:any = '';
+  
   constructor(
     private adjustStockService: AdjustStockService,
     private alertService: AlertService,
@@ -60,7 +62,7 @@ export class AdjustStockComponent implements OnInit {
     const limit = +state.page.size;
     this.modalLoading.show();
     try {
-      const rs: any = await this.adjustStockService.getList(limit, offset);
+      const rs: any = await this.adjustStockService.getListSearch(limit, offset,this.query);
       if (rs) {
         this.lists = rs.rows;
         this.totalList = rs.total;
@@ -77,5 +79,20 @@ export class AdjustStockComponent implements OnInit {
     }).join('&adjustId=')
     const url = `${this.apiUrl}/report/adjust-stockcard?token=${this.token}&adjustId=${adjustId}`;
     this.htmlPreview.showReport(url, 'landscape');
+  }
+
+  async search(even:any){
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.adjustStockService.getListSearch(this.perPage, 0,this.query);
+      if (rs) {
+        this.lists = rs.rows;
+        this.totalList = rs.total;
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
   }
 }
