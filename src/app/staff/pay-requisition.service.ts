@@ -171,7 +171,7 @@ export class PayRequisitionService {
   }
 
   async getAllocate(data: any) {
-    const rs = await this.authHttp.post(`${this.url}/generics/allocate`, { data: data }).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/generics/allocate/baseunit`, { data: data }).toPromise();
     return rs.json();
   }
 
