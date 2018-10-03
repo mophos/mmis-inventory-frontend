@@ -1,16 +1,11 @@
-import { AlertExpiredService } from './../alert-expired.service';
 import { Router } from '@angular/router';
 import { BorrowItemsService } from '../borrow-items.service';
 import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../alert.service';
-import { WarehouseService } from './../warehouse.service';
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { ProductsService } from './../products.service';
 import { PeriodService } from './../../period.service';
 
 import * as _ from 'lodash';
-import * as moment from 'moment';
-import { DateService } from 'app/date.service';
 
 @Component({
   selector: 'wm-borrow-new',
@@ -66,13 +61,9 @@ export class BorrowNewComponent implements OnInit {
   isSave = false;
 
   constructor(
-    private productService: ProductsService,
     private alertService: AlertService,
     private borrowItemsService: BorrowItemsService,
-    private alertExpireService: AlertExpiredService,
     private router: Router,
-    private zone: NgZone,
-    private dateService: DateService,
     private periodService: PeriodService
   ) { }
 
