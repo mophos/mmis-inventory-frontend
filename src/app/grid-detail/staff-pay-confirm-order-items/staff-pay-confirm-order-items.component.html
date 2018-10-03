@@ -1,0 +1,39 @@
+<div [clrLoading]="loading">
+    <clr-datagrid class="grid-order">
+      <!-- <clr-dg-column style="width: 100px;">Working Code</clr-dg-column> -->
+      <clr-dg-column>ชื่อเวชภัณฑ์ (Trade name)</clr-dg-column>
+      <clr-dg-column>Lot No.</clr-dg-column>
+      <clr-dg-column [style.width.px]="50">วันหมดอายุ</clr-dg-column>
+      <clr-dg-column>คงเหลือ (Base)</clr-dg-column>
+      <clr-dg-column>จำนวนจ่าย (Base)</clr-dg-column>
+      <!-- <clr-dg-column>รวม (Base)</clr-dg-column> -->
+      <clr-dg-column>คงเหลือหลังจ่าย (Base)</clr-dg-column>
+      <clr-dg-placeholder>ไม่พบรายการเวชภัณฑ์สำหรับจ่าย</clr-dg-placeholder>
+      <clr-dg-row *ngFor="let i of confirmItems; let idx = index;">
+        <clr-dg-cell>{{ i.product_name }}</clr-dg-cell>
+        <clr-dg-cell>{{ i.lot_no }}</clr-dg-cell>
+        <clr-dg-cell>{{ i.expired_date | expiredDate }}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">
+          <span [ngClass]="{'error-message': (i.confirm_qty) > i.small_remain_qty}">
+            {{i.small_remain_qty | number}}</span> {{i.to_unit_name}}
+        </clr-dg-cell>
+        <clr-dg-cell>
+          <input type="text" #qty (keyup)="onChangeQty(qty, i.wm_product_id)" style="width: 100%; text-align: right; background-color:#FFF9C4"
+            placeholder="0" wmNumberWithOutDot [value]="i.confirm_qty">
+        </clr-dg-cell>
+        <!-- <clr-dg-cell style="text-align: right;">{{i.confirm_qty  || 0 | number}} {{i.to_unit_name}}</clr-dg-cell> -->
+        <clr-dg-cell style="text-align: right;">
+          <span style="color: red; font-weight: bold;" *ngIf="(i.small_remain_qty   - (i.confirm_qty))  < 0">{{(i.small_remain_qty - (i.confirm_qty))| number}}</span>
+          <span style="color: green; font-weight: bold;" *ngIf="(i.small_remain_qty - (i.confirm_qty))  >= 0">{{ (i.small_remain_qty - (i.confirm_qty)) | number}}</span>
+          {{ i.to_unit_name }}
+        </clr-dg-cell>
+      </clr-dg-row>
+  
+      <clr-dg-footer>
+        รวมจ่าย (Base Unit)
+        <span class="p4">{{currentTotalSmallQty || 0 | number}}</span> {{ _baseUnitName }}
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  
+  <wm-loading-modal #loadingModal></wm-loading-modal>

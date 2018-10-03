@@ -1,0 +1,28 @@
+<div [clrLoading]="loading">
+    <span class="p4" style="padding-left: 15px;">รายการจ่ายเวชภัณฑ์</span>
+    <clr-datagrid>
+      <clr-dg-column style="width: 100px;">Working Code</clr-dg-column>
+      <clr-dg-column>ชื่อ Generic</clr-dg-column>
+      <clr-dg-column style="width: 100px;">จำนวนเบิก (base unit)</clr-dg-column>
+      <clr-dg-column style="width: 100px;">จำนวนจ่าย (base unit)</clr-dg-column>
+      <clr-dg-column style="width: 100px;" *ngIf="showUnpaid">ค้างจ่าย/จ่ายเกิน (base unit)</clr-dg-column>
+      <!-- <clr-dg-column style="width: 100px;">Package</clr-dg-column> -->
+      <clr-dg-row *ngFor="let i of items">
+        <clr-dg-cell>{{ i.working_code }}</clr-dg-cell>
+        <clr-dg-cell>{{ i.generic_name }}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">
+          <span class="p4" style="color: #318700;">{{i.requisition_qty | number}} {{ i.order_to_unit_name }}</span>
+        </clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">
+          <div *ngIf="i.confirm_qty">
+            <span class="p4" style="color: #318700;">{{i.confirm_qty | number}} {{ i.confirm_to_unit_name }}</span>
+          </div>
+        </clr-dg-cell>
+        <clr-dg-cell style="text-align: right;" *ngIf="showUnpaid">
+          <span class="p4" style="color: #E62700;" *ngIf="i.confirm_qty < i.requisition_qty && (i.requisition_qty) - (i.confirm_qty) > 0">{{(i.requisition_qty) - (i.confirm_qty) | number}} {{ i.order_to_unit_name }}</span>
+          <span class="p4" style="color: #318700;" *ngIf="i.confirm_qty > i.requisition_qty ">0</span>
+        </clr-dg-cell>
+        <!-- <clr-dg-cell>{{ i.from_unit_name }} ({{ i.conversion_qty }} {{ i.to_unit_name }})</clr-dg-cell> -->
+      </clr-dg-row>
+    </clr-datagrid>
+  </div>
