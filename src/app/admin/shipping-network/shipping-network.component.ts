@@ -142,9 +142,9 @@ export class ShippingNetworkComponent implements OnInit {
   }
 
   async saveNetwork() {
-    this.isOpenModal = false;
+    this.modalLoading.show();
+    // this.isOpenModal = false;
     try {
-      this.modalLoading.show();
       const isActive = this.isActive ? 'Y' : 'N';
       const isTwoways = this.isTwoways ? 'Y' : 'N';
       let res;
@@ -162,7 +162,7 @@ export class ShippingNetworkComponent implements OnInit {
               res = await this.shipNetwork.saveNetwork(v.warehouse_id, n.warehouse_id, e.transfer_code, isActive)
               if (isTwoways === 'Y') {
                 if (e.transfer_code === 'REQ') {
-                  res = await this.shipNetwork.saveNetwork(n.warehouse_id, v.warehouse_id, 'ISS', isActive)
+                  res = await this.shipNetwork.saveNetwork(n.warehouse_id, v.warehouse_id, 'REQ', isActive)
                 } else {
                   res = await this.shipNetwork.saveNetwork(n.warehouse_id, v.warehouse_id, e.transfer_code, isActive)
                 }
