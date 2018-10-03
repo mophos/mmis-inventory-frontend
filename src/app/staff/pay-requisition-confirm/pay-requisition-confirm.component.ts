@@ -85,7 +85,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
 
     if (idx > -1) {
       const _idx = _.findIndex(this.products[idx].confirmItems, { wm_product_id: event.wm_product_id });
-      this.products[idx].is_minus = event.small_remain_qty - (event.confirm_qty * event.conversion_qty) < 0;
+      this.products[idx].is_minus = event.small_remain_qty - (event.confirm_qty) < 0;
       this.products[idx].confirm_qty = event.confirm_qty;
 
       if (_idx > -1) {
@@ -97,7 +97,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
       // calculate new allowcate_qty
       this.products[idx].allowcate_qty = 0;
       this.products[idx].confirmItems.forEach(v => {
-        this.products[idx].allowcate_qty += (v.confirm_qty * v.conversion_qty);
+        this.products[idx].allowcate_qty += (v.confirm_qty);
       });
     }
   }
@@ -128,14 +128,14 @@ export class PayRequisitionConfirmComponent implements OnInit {
             unit_generic_id: v.unit_generic_id,
             working_code: v.working_code,
             confirmItems: [],
-            remain_qty: v.small_remain_qty, // small qty
+            remain_qty: 0, // small qty
           }
-          const allocate = await this.requisitionService.getAllocate([{ 'genericId': v.generic_id, 'genericQty': v.requisition_qty * v.conversion_qty }])
+          const allocate = await this.requisitionService.getAllocate([{ 'genericId': v.generic_id, 'genericQty': v.requisition_qty }])
           if (allocate.ok) {
             for (const z of allocate.rows) {
               let _obj: any;
               if (z.generic_id === v.generic_id) {
-                if (z.pack_remain_qty > 0) {
+                if (z.small_remain_qty > 0) {
                   _obj = {
                     conversion_qty: z.conversion_qty,
                     wm_product_id: z.wm_product_id,
@@ -148,13 +148,13 @@ export class PayRequisitionConfirmComponent implements OnInit {
                     pack_remain_qty: +z.pack_remain_qty,
                     to_unit_name: z.to_unit_name,
                     unit_generic_id: z.unit_generic_id,
-                    confirm_qty: Math.floor(z.product_qty / z.conversion_qty)
+                    confirm_qty: +z.product_qty
                   }
                   if (v.temp_confirm_id) {
                     const rsT: any = await this.requisitionService.getRequisitionConfirmTemp(v.temp_confirm_id);
                     const idx = _.findIndex(rsT.rows, { wm_product_id: z.wm_product_id });
                     if (idx > -1) {
-                      _obj.confirm_qty = rsT.rows[idx].confirm_qty / z.conversion_qty;
+                      _obj.confirm_qty = rsT.rows[idx].confirm_qty ;
 
                       // if (_obj.confirm_qty > z.pay_qty) {
                       //   _obj.remain_qty += (_obj.confirm_qty - z.pay_qty);
@@ -163,7 +163,8 @@ export class PayRequisitionConfirmComponent implements OnInit {
                     }
                   }
                   obj.is_minus = (z.small_remain_qty - +z.product_qty) < 0;
-                  obj.allowcate_qty += z.product_qty;
+                  obj.allowcate_qty += +z.product_qty;
+                  obj.remain_qty += +z.small_remain_qty;
                   obj.confirmItems.push(_obj);
                 }
               }
@@ -268,7 +269,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
     const generics = [];
     this.products.forEach((v: any) => {
       const objx: any = {};
-      objx.requisition_qty = v.requisition_qty * v.conversion_qty;
+      objx.requisition_qty = v.requisition_qty;
       objx.generic_id = v.generic_id;
       objx.requisition_order_id = v.requisition_order_id;
 
@@ -279,7 +280,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
           minus = true;
         }
         totalQty += x.confirm_qty;
-        const _totalConfirmQty = x.confirm_qty * x.conversion_qty;
+        const _totalConfirmQty = x.confirm_qty ;
         totalConfirmQty += _totalConfirmQty;
 
         const obj: any = {
@@ -402,10 +403,10 @@ export class PayRequisitionConfirmComponent implements OnInit {
         slData.forEach((v, i) => {
           const idx = _.findIndex(data, { generic_id: v.generic_id });
           if (idx > -1) {
-            data[idx].qty += v.qty * v.conversion_qty;
+            data[idx].qty += v.qty;
           } else {
             const obj: any = v;
-            obj.qty = v.qty * v.conversion_qty;
+            obj.qty = v.qty;
             data.push(obj);
           }
         });
@@ -413,7 +414,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
         this.products.forEach((x, i) => {
           const idx = _.findIndex(data, { generic_id: x.generic_id });
           if (idx > -1) {
-            const pQty = this.products[i].requisition_qty * this.products[i].conversion_qty;
+            const pQty = this.products[i].requisition_qty ;
             const reqQty = pQty + data[idx].qty;
             // จำนวนที่ยืมไป
             dataBorrow.push({

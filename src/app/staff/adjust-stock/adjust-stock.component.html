@@ -20,6 +20,17 @@
   <button class="btn btn-sm btn-success wm-small-btn" routerLink="/staff/adjust-stock/new">
     <clr-icon shape="plus"></clr-icon>บันทึกปรับยอด
   </button>
+  <div class="card">
+    <div class="card-block" style="padding: 0px 5px 5px 5px;">
+      <div class="row wid99">
+        <div class="col-md-6" style="padding-top: 5px;">
+          <label for="">ค้นหา</label>
+          <input type="text" (keyup)="search($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบปรับยอด, ชื่อเวชภัณฑ์, รหัสเวชภัณฑ์, หมายเหตุ"
+            style="width: 400px;">
+        </div>
+      </div>
+    </div>
+  </div>
   <clr-datagrid (clrDgRefresh)="refresh($event)" [style.height.%]="75">
     <clr-dg-column>รหัสการปรับยอด</clr-dg-column>
     <clr-dg-column>วันที่ปรับยอด</clr-dg-column>

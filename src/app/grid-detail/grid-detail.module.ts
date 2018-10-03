@@ -51,6 +51,10 @@ import { BorrowDetailComponent } from './borrow-detail/borrow-detail.component';
 import { BorrowOtherDetailComponent } from './borrow-other-detail/borrow-other-detail.component';
 import { ReturnedDetailComponent } from './returned-detail/returned-detail.component';
 import { PickDetailComponent } from './pick-detail/pick-detail.component';
+import { StaffPayRequisitionOrderItemsComponent } from './staff-pay-requisition-order-items/staff-pay-requisition-order-items.component';
+import { StaffPayConfirmOrderItemsComponent } from './staff-pay-confirm-order-items/staff-pay-confirm-order-items.component';
+import { StaffPayRequisitionOrderItemsPayComponent } from './staff-pay-requisition-order-items-pay/staff-pay-requisition-order-items-pay.component';
+import { StaffPayRequisitionOrderUnpaidItemsComponent } from './staff-pay-requisition-order-unpaid-items/staff-pay-requisition-order-unpaid-items.component';
 
 @NgModule({
   imports: [
@@ -105,7 +109,11 @@ import { PickDetailComponent } from './pick-detail/pick-detail.component';
     BorrowDetailComponent,
     BorrowOtherDetailComponent,
     ReturnedDetailComponent,
-    PickDetailComponent
+    PickDetailComponent,
+    StaffPayRequisitionOrderItemsComponent,
+    StaffPayConfirmOrderItemsComponent,
+    StaffPayRequisitionOrderItemsPayComponent,
+    StaffPayRequisitionOrderUnpaidItemsComponent
   ],
   exports: [
     ProductDetailComponent,
@@ -151,7 +159,11 @@ import { PickDetailComponent } from './pick-detail/pick-detail.component';
     BorrowDetailComponent,
     BorrowOtherDetailComponent,
     ReturnedDetailComponent,
-    PickDetailComponent
+    PickDetailComponent,
+    StaffPayRequisitionOrderItemsComponent,
+    StaffPayConfirmOrderItemsComponent,
+    StaffPayRequisitionOrderItemsPayComponent,
+    StaffPayRequisitionOrderUnpaidItemsComponent
   ]
 })
 export class GridDetailModule { }
