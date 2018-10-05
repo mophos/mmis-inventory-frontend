@@ -62,7 +62,7 @@ export class LayoutComponent implements OnInit {
     this.menuTranfer = _.indexOf(this.rights, 'WM_TRANSFER') === -1 ? false : true;
     this.menuIssue = _.indexOf(this.rights, 'WM_ISSUE') === -1 ? false : true;
     this.menuIssueHis = _.indexOf(this.rights, 'WM_HIS_TRANSACTION') === -1 ? false : true;
-    this.menuTemplate = _.indexOf(this.rights, 'WM_TEMPLATE') === -1 ? false : true;
+    this.menuTemplate = _.indexOf(this.rights, 'WM_REQUISITION_TEMPLATE') === -1 ? false : true;
     this.menuMinMax = _.indexOf(this.rights, 'WM_MINMAX_PLANNING') === -1 ? false : true;
     this.menuMap = _.indexOf(this.rights, 'WM_HIS_MAPPING') === -1 ? false : true;
     this.menuAdjust = _.indexOf(this.rights, 'WM_ADJUST') === -1 ? false : true;
