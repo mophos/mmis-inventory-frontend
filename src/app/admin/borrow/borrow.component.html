@@ -8,7 +8,7 @@
     <button clrTabLink clrTabLinkId="link1" (click)="setTapActive('inside')">
       ยืมในหน่วยงาน
     </button>
-    <clr-tab-content clrContentId="content1" *clrIfActive>
+    <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'inside'">
       <div class="row wid99">
         <div class="col-md-8">
           <button class="btn btn-sm btn-success" [routerLink]="['/admin/borrow/new']">
@@ -78,7 +78,7 @@
     <button clrTabLink (click)="setTapActive('outside')">
       ยืมระหว่างหน่วยงาน
     </button>
-    <clr-tab-content clrContentId="content1" *clrIfActive>
+    <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'outside'">
       <div class="row wid99">
         <div class="col-md-8">
           <button class="btn btn-sm btn-success" [routerLink]="['/admin/borrow/other/new']">
@@ -148,7 +148,7 @@
     <button clrTabLink (click)="setTapActive('returnProduct')">
       คืนสินค้า
     </button>
-    <clr-tab-content clrContentId="content1" *clrIfActive>
+    <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'returnProduct'">
       <div class="row wid99">
         <div class="col-md-8">
           <button class="btn btn-sm btn-success" [routerLink]="['/admin/return-product/new']">
@@ -196,7 +196,7 @@
           <clr-dg-cell>
             <div class="btn-group btn-sm">
               <button title="แก้ไข" *ngIf="r.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/return-product/edit']"
-                [queryParams]="{returnedId: r.returned_id}" [disabled]="r.is_cancel === 'Y' || r.approved === 'Y'">
+                [queryParams]="{returnedId: r.returned_id}" [disabled]="r.is_cancel === 'Y' || r.is_approved === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
               <button title="ลบ" *ngIf="r.is_cancel === 'N'" class="btn btn-danger wm-small-btn" (click)="removeReturned(r)" [disabled]="r.is_cancel === 'Y' || r.is_approved === 'Y'">

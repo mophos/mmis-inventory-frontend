@@ -262,7 +262,7 @@ export class PayRequisitionComponent implements OnInit {
       }
     });
     if (count > 0) {
-      const url = this.url + `/report/approve/requis?token=${this.token}&` + requisition_id.join('&');
+      const url = this.url + `/report/staff/approve/requis?token=${this.token}&` + requisition_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
@@ -279,7 +279,7 @@ export class PayRequisitionComponent implements OnInit {
       }
     });
     if (count > 0) {
-      const url = this.url + `/report/list/requis?token=${this.token}&` + requisition_id.join('&');
+      const url = this.url + `/report/staff/list/requis?token=${this.token}&` + requisition_id.join('&');
       this.htmlPreview.showReport(url, 'landscape');
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
@@ -296,7 +296,7 @@ export class PayRequisitionComponent implements OnInit {
       }
     });
     if (count > 0) {
-      const url = this.url + `/report/UnPaid/requis?token=${this.token}&` + requisition_id.join('&');
+      const url = this.url + `/report/staff/UnPaid/requis?token=${this.token}&` + requisition_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');

@@ -16,6 +16,7 @@ import { GridDetailModule } from 'app/grid-detail/grid-detail.module';
 import { StockcardRequisitionComponent } from './stockcard-requisition/stockcard-requisition.component';
 import { StockcardTransferComponent } from './stockcard-transfer/stockcard-transfer.component';
 import { StockcardIssueComponent } from './stockcard-issue/stockcard-issue.component';
+import { StockcardPickComponent } from './stockcard-pick/stockcard-pick.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,6 @@ import { StockcardIssueComponent } from './stockcard-issue/stockcard-issue.compo
     GridDetailModule,
     RouterModule
   ],
-  declarations: [StockcardComponent, StockcardReceiveComponent, StockcardReceiveOtherComponent, StockcardRequisitionComponent, StockcardTransferComponent, StockcardIssueComponent]
+  declarations: [StockcardComponent, StockcardReceiveComponent, StockcardReceiveOtherComponent, StockcardRequisitionComponent, StockcardTransferComponent, StockcardIssueComponent, StockcardPickComponent]
 })
 export class ToolsModule { }

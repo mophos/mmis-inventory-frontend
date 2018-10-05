@@ -82,6 +82,7 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit() {
     const decoded = this.jwtHelper.decodeToken(this.token);
+    
     this.fullname = decoded.fullname;
     this.warehouseId = decoded.warehouseId;
     this.warehouseCode = decoded.warehouseCode;

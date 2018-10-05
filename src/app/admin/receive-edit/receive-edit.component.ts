@@ -465,19 +465,25 @@ export class ReceiveEditComponent implements OnInit {
   }
 
   async removeSelectedProduct(idx: any) {
-    // let rs:any = await this.receiveService.checkDeleteProductWithPick(this.products[idx],this.receiveId)
-    // if(rs.ok){
-      this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
-      .then(() => {
-        this.products.splice(idx, 1);
-        this.countTotalCost();
-      })
-      .catch((error) => {
-        this.alertService.error(error);
-      });
-    // } else{
-    //   this.alertService.error(rs.error)
-    // }
+    let index:any = _.findIndex(this.products,{ product_id: this.products[idx].product_id, lot_no: this.products[idx].lot_no, unit_generic_id: this.products[idx].unit_generic_id })
+    if(index > -1){
+      // let rs:any = await this.receiveService.checkDeleteProductWithPick(this.products[idx],this.receiveId)
+      // if(rs.ok || index != idx){
+        this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
+        .then(() => {
+          this.products.splice(idx, 1);
+          this.countTotalCost();
+        })
+        .catch((error) => {
+          this.alertService.error(error);
+        });
+      // } else{
+      //   this.alertService.error(rs.error)
+      // }
+    }  else{
+      this.alertService.error('ไม่มีรายการที่เลือก')
+    }
+    
     
   }
 

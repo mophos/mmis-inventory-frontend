@@ -301,7 +301,7 @@ export class BorrowotherEditComponent implements OnInit {
   }
 
   saveIssue() {
-    this.alertService.confirm('ต้องการบันทึกรายการ ตัดจ่าย ใช่หรือไม่?')
+    this.alertService.confirm('ต้องการบันทึกรายการ ยืม ใช่หรือไม่?')
       .then(() => {
         this.modalLoading.show();
         console.log(this.srcWarehouseName);

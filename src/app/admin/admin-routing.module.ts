@@ -117,6 +117,7 @@ import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.compo
 import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
 import { ReturnedComponent } from './returned/returned.component';
 import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
+import { StockcardPickComponent } from './tools/stockcard-pick/stockcard-pick.component';
 
 const routes: Routes = [
   {
@@ -215,6 +216,7 @@ const routes: Routes = [
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
           { path: 'stockcard/transfer', component: StockcardTransferComponent },
           { path: 'stockcard/issue', component: StockcardIssueComponent },
+          { path: 'stockcard/pick', component: StockcardPickComponent }
         ]
       },
       {

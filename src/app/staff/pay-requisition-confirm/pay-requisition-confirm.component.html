@@ -66,13 +66,13 @@
   <clr-dg-column style="width: 110px;">คงเหลือหักยอดจ่าย (Base)</clr-dg-column>
   <!-- <clr-dg-column style="width: 50px;"></clr-dg-column> -->
   <clr-dg-row *ngFor="let g of products; let idx=index;" [ngClass]="
-    {'isSuccess': g.allowcate_qty >= (g.conversion_qty * g.requisition_qty) && (+g.remain_qty - +g.allowcate_qty) >= 0, 
-    'isWarning': g.allowcate_qty < (g.conversion_qty * g.requisition_qty) && g.allowcate_qty > 0, 
+    {'isSuccess': g.allowcate_qty >= ( g.requisition_qty) && (+g.remain_qty - +g.allowcate_qty) >= 0, 
+    'isWarning': g.allowcate_qty < ( g.requisition_qty) && g.allowcate_qty > 0, 
     'isError': g.allowcate_qty === 0 || (+g.remain_qty - +g.allowcate_qty) < 0}
     ">
-    <wm-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
-      [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="(g.conversion_qty * g.requisition_qty)"
-      [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-confirm-order-items>
+    <wm-staff-pay-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
+      [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="( g.requisition_qty)"
+      [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-staff-pay-confirm-order-items>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ idx +1}}</span>
     </clr-dg-cell>
@@ -83,8 +83,7 @@
       <span class="p4">{{ g.generic_name }}</span>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
-      <span class="p4">{{ g.requisition_qty }} {{ g.from_unit_name }} ({{g.conversion_qty | number}} {{g.to_unit_name}}) = {{ g.conversion_qty
-        * g.requisition_qty | number }} {{ g.to_unit_name }}</span>
+      <span class="p4">{{ g.requisition_qty | number }} {{ g.to_unit_name }}</span>
     </clr-dg-cell>
     <!-- <clr-dg-cell style="text-align: right;"><span *ngIf="isEdit" class="p4" style="color: red;">{{ g.requisition_qty - g.confirm_qty | number}}</span></clr-dg-cell> -->
     <clr-dg-cell style="text-align: right;">
@@ -125,8 +124,8 @@
       <clr-dg-column>เจ้าหน้าที่ยืม</clr-dg-column>
       <clr-dg-row *clrDgItems="let generic of borrowNotes" [clrDgItem]="generic">
         <clr-dg-cell> {{generic.generic_name}} </clr-dg-cell>
-        <clr-dg-cell style="text-align: right;">{{generic.qty | number}} {{generic.from_unit_name}} (x {{generic.conversion_qty | number}} {{generic.to_unit_name}})</clr-dg-cell>
-        <clr-dg-cell style="text-align: right;">{{generic.qty * generic.conversion_qty | number}} {{ generic.to_unit_name }}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{generic.qty | number}} {{generic.to_unit_name}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{generic.qty  | number}} {{ generic.to_unit_name }}</clr-dg-cell>
         <clr-dg-cell>{{generic.title_name}}{{ generic.fname }} {{generic.lname}}</clr-dg-cell>
       </clr-dg-row>
       <clr-dg-footer>{{borrowNotes.length}} รายการ</clr-dg-footer>

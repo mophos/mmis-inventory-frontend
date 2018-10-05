@@ -41,7 +41,13 @@ export class ToolsService {
     }).toPromise();
     return resp.json();
   }
-
+  
+  async searchPick(query: any) {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/pick/search`, {
+      query: query
+    }).toPromise();
+    return resp.json();
+  }
   async updateStockCard(data: any[], receiveType: any, receiveDetailId: any, newQty: number, unitGenericId: any) {
     const resp = await this.authHttp.put(`${this.url}/tools/stockcard/update`, {
       data: data,

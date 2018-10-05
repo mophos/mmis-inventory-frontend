@@ -423,7 +423,10 @@ export class StaffService {
     const rs = await this.authHttp.get(`${this.url}/staff/adjust-stock/list?limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
-
+  async getListStockAdjustSearch(limit, offset,query) {
+    const rs = await this.authHttp.get(`${this.url}/staff/adjust-stock/list/search?limit=${limit}&offset=${offset}&query=${query}`).toPromise();
+    return rs.json();
+  }
   async checkPassword(password) {
     const rs = await this.authHttp.post(`${this.url}/staff/adjust-stock/check/password`, { password: password }).toPromise();
     return rs.json();

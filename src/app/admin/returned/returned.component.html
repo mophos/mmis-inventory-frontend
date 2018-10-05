@@ -70,13 +70,13 @@
     </clr-dg-cell> -->
     <clr-dg-cell>
       <input type="text" #qty (keyup)="editChangeReceiveQty(idx, qty, qty.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
-        wmNumberWithOutDot [value]="product.receive_qty" />
+        wmNumberWithOutDot [value]="product.returned_qty" />
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-receive-unit orderBy="DESC" [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="product.unit_generic_id"
         [genericId]="product.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: center; line-height: 25px;">{{product.receive_qty * product.conversion_qty | number}}
+    <clr-dg-cell style="text-align: center; line-height: 25px;">{{product.returned_qty * product.conversion_qty | number}}
       {{product.to_unit_name}}
     </clr-dg-cell>
     <clr-dg-cell>
@@ -88,7 +88,7 @@
         wmNumberOnly [value]="product.discount" />
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">
-      {{ (+product.receive_qty * +product.cost) - +product.discount | number: '1.2-2'}}
+      {{ (+product.returned_qty * +product.cost) - +product.discount | number: '1.2-2'}}
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-manufacture (onSelect)="editChangeManufacture(idx, $event)" [selectedId]="product.manufacture_id" [genericId]="product.generic_id"></wm-select-manufacture>
