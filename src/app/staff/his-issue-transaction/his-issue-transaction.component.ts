@@ -2,7 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertService } from 'app/alert.service';
 import * as moment from 'moment';
 import { HisTransactionService } from 'app/staff/his-transaction.service';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { error } from 'util';
+import * as _ from 'lodash';
+import * as path from 'path';
 
 @Component({
   selector: 'wm-his-issue-transaction',
@@ -11,6 +14,7 @@ import { error } from 'util';
 export class HisIssueTransactionComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading;
 
+  path: string;
   products: any = [];
   openUpload = false;
   filePath: string;
@@ -18,16 +22,21 @@ export class HisIssueTransactionComponent implements OnInit {
   file: any;
   perPage = 100;
   selected = [];
-
+  warehouseId: any;
+  token: any;
   genericTypes = [];
   genericType: any;
   _genericTypes: any = [];
   _genericType: any;
-  
+  jwtHelper: JwtHelper = new JwtHelper();
+
   constructor(
     private alertService: AlertService,
     private hisTransactionService: HisTransactionService
   ) {
+    this.token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.warehouseId = decodedToken.warehouseId;
   }
 
   ngOnInit() {
@@ -46,7 +55,7 @@ export class HisIssueTransactionComponent implements OnInit {
           this._genericTypes.push(e.generic_type_id)
         });
         this.genericType = '';
-        this.getTransactionList() ;
+        this.getTransactionList();
       } else {
         this.alertService.error(rs.error);
       }
@@ -66,7 +75,7 @@ export class HisIssueTransactionComponent implements OnInit {
         this._genericType.push(this.genericType)
       }
       this.modalLoading.show();
-      const rs: any = await this.hisTransactionService.getTransactionList(this._genericType);
+      const rs: any = await this.hisTransactionService.getTransactionList(this._genericType, this.warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
       } else {
@@ -77,6 +86,7 @@ export class HisIssueTransactionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.serverError();
     }
+    console.log(this.products);
   }
 
   showUploadModal() {
@@ -84,6 +94,7 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   fileChangeEvent(fileInput: any) {
+    console.log(fileInput)
     this.file = <Array<File>>fileInput.target.files;
     this.fileName = this.file[0].name;
   }
@@ -114,7 +125,7 @@ export class HisIssueTransactionComponent implements OnInit {
     this.alertService.confirm('ต้องการลบรายการทั้งหมดที่ยังไม่ตัดจ่าย ใช่หรือไม่?')
       .then(() => {
         this.modalLoading.show();
-        this.hisTransactionService.removeTransactionList()
+        this.hisTransactionService.removeTransactionList(this.warehouseId)
           .then((rs: any) => {
             if (rs.ok) {
               this.alertService.success();
@@ -182,5 +193,25 @@ export class HisIssueTransactionComponent implements OnInit {
       }).catch(() => {
 
       });
+  }
+
+  removeSelected(g) {
+    this.alertService.confirm('ต้องการลบรายการ ตัดจ่าย ใช่หรือไม่?')
+      .then(() => {
+        this.hisTransactionService.removeTransactionListSelect(g.transaction_id)
+          .then((rs: any) => {
+            if (rs.ok) {
+              this.alertService.success();
+              this.getTransactionList();
+            } else {
+              this.alertService.error(rs.error);
+            }
+            this.modalLoading.hide();
+          })
+          .catch((error: any) => {
+            this.modalLoading.hide();
+            this.alertService.serverError();
+          });
+      }).catch(() => { });
   }
 }
