@@ -6,9 +6,9 @@
 <button class="btn btn-sm btn-success btn-icon" routerLink="/admin/pick/new">
   <clr-icon shape="plus"></clr-icon> บันทึกหยิบ
 </button>
-<button style="float: right" [disabled]="!selectedPrint.length" class="btn btn-sm btn-success btn-icon" (click)="printReport()">
+<!-- <button style="float: right" [disabled]="!selectedPrint.length" class="btn btn-sm btn-success btn-icon" (click)="printReport()">
   <clr-icon shape="printer"></clr-icon> พิมพ์รายการหยิบ
-</button>
+</button> -->
 
 <div class="card">
   <div class="card-block" style="padding: 5px 0px 5px 10px;">
@@ -82,7 +82,7 @@
       </form>
     </div>
     <div class="modal-footer" style="padding-top: 0px;">
-      <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkEdit(username,password)">เปิด</button>
+      <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkEdit(username,password)">ยืนยัน</button>
       <button type="button" class="btn btn-md btn-danger-outline" (click)="modalEdit = false">ปิด</button>
     </div>
 

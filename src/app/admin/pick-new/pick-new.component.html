@@ -91,7 +91,6 @@
         {{product.receive_qty - product.remain_qty - product.pick_qty}}
       </clr-dg-cell>
     <clr-dg-cell>
-        {{ !approve }}
       <input [disabled]="!approve && product.approve_id" type="text" #qty (keyup)="editChangeReceiveQty(idx, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
         wmNumberWithOutDot [value]="product.pick_qty" />
     </clr-dg-cell>
