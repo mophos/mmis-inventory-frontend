@@ -356,7 +356,7 @@ export class ReceiveService {
   }
 
   async removeReceiveOther(receiveOtherId: any) {
-    const rs = await this.authHttp.delete(`${this.url}/receives/other/${receiveOtherId}`).toPromise();
+    const rs = await this.authHttp.delete(`${this.url}/staff/receives/other/${receiveOtherId}`).toPromise();
     return rs.json();
   }
 
