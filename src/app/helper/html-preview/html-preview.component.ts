@@ -20,7 +20,8 @@ export class HtmlPreviewComponent implements OnInit {
     this.width = type === 'landscape' ? this.width = '80%' : this.width = '50%';
     this.isShow = true;
     this.reportURL = this.santizer.bypassSecurityTrustResourceUrl(url);
-
+    debugger
+    
   }
   getWidth() {
     return this.width;
