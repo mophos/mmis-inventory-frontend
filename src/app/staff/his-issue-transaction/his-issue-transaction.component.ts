@@ -5,7 +5,7 @@ import { HisTransactionService } from 'app/staff/his-transaction.service';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { error } from 'util';
 import * as _ from 'lodash';
-import * as path from 'path';
+// import * as path from 'path';
 
 @Component({
   selector: 'wm-his-issue-transaction',
