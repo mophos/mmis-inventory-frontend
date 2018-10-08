@@ -32,4 +32,9 @@ export class HisTransactionService {
     return resp.json();
   }
 
+  async removeTransactionListSelect(transactionId: any) {
+    const resp = await this.authHttp.delete(`${this.url}/his-transaction/remove-transaction-select/${transactionId}`).toPromise();
+    return resp.json();
+  }
+
 }
