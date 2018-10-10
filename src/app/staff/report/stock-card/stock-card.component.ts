@@ -92,7 +92,7 @@ export class StockCardComponent implements OnInit {
   showReport() {
     this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}&startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
+    const url = `${this.apiUrl}/report/generic/stock/staff?&warehouseId=${this.warehouseId}&startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
     this.htmlPreview.showReport(url, 'landscape');
   }
 
@@ -101,7 +101,7 @@ export class StockCardComponent implements OnInit {
     this.modalMovement = false;
     const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
     const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
-    const url = `${this.apiUrl}/report/genericStock/haveMovement?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
+    const url = `${this.apiUrl}/report/genericStock/haveMovement/staff?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
     this.htmlPreview.showReport(url, 'landscape');
   }
 
@@ -160,7 +160,7 @@ export class StockCardComponent implements OnInit {
     this.modalAll = false;
     const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
     const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
-    const url = `${this.apiUrl}/report/genericStock/all?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
+    const url = `${this.apiUrl}/report/genericStock/all/staff?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
     this.htmlPreview.showReport(url, 'landscape');
   }
 
