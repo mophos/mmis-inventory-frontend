@@ -17,9 +17,9 @@
         </div>
         <div class="col-md-2" style="padding-top: 5px;">
           <div class="btn-group" style="float:right;margin: 0px 0px 0px 0px;">
-            <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="doApprove()">
+            <!-- <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="doApprove()">
               <clr-icon shape="note"></clr-icon> อนุมัติใบยืม
-            </button>
+            </button> -->
             <!-- <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
               <clr-button [disabled]="!selectedApprove.length" [clrInMenu]="true" class="btn btn-sm btn-primary" (click)="printReport()">
                 <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติโอน
@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      <clr-datagrid (clrDgRefresh)="refreshBorrow($event)" [style.height.%]="80" [(clrDgSelected)]="selectedApprove">
+      <clr-datagrid (clrDgRefresh)="refreshBorrow($event)" [style.height.%]="80">
         <clr-dg-column>เลขที่ยืม</clr-dg-column>
         <clr-dg-column>วันที่ยืม</clr-dg-column>
         <clr-dg-column>ยืมจากคลัง</clr-dg-column>
@@ -50,6 +50,9 @@
         <clr-dg-column></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y'}">
+          <clr-dg-action-overflow>
+            <button class="action-item" (click)="doApprove(b.borrow_id)">อนุมัติใบยืม</button>
+          </clr-dg-action-overflow>
           <wm-borrow-detail *clrIfExpanded [borrowId]="b.borrow_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-detail>
           <clr-dg-cell>{{b.borrow_code}}</clr-dg-cell>
           <clr-dg-cell>{{b.borrow_date | toThaiDate}}</clr-dg-cell>
@@ -61,7 +64,8 @@
                 [queryParams]="{borrowId: b.borrow_id}" [disabled]="b.mark_deleted === 'Y' || b.approved === 'Y' || b.confirmed === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
-              <button title="ลบ" *ngIf="b.mark_deleted === 'N'" class="btn btn-danger wm-small-btn" (click)="removeBorrow(b)" [disabled]="b.mark_deleted === 'Y' || b.confirmed === 'Y' || b.approved === 'Y'">
+              <button title="ลบ" *ngIf="b.mark_deleted === 'N'" class="btn btn-danger wm-small-btn" (click)="removeBorrow(b)"
+                [disabled]="b.mark_deleted === 'Y' || b.confirmed === 'Y' || b.approved === 'Y'">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
@@ -131,7 +135,8 @@
                 [queryParams]="{borrowId: b.borrow_other_id}" [disabled]="b.is_cancel === 'Y' || b.approved === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
-              <button title="ลบ" *ngIf="b.is_cancel === 'N'" class="btn btn-danger wm-small-btn" (click)="removeBorrowOther(b)" [disabled]="b.is_cancel === 'Y' || b.approved === 'Y'">
+              <button title="ลบ" *ngIf="b.is_cancel === 'N'" class="btn btn-danger wm-small-btn" (click)="removeBorrowOther(b)"
+                [disabled]="b.is_cancel === 'Y' || b.approved === 'Y'">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
@@ -199,7 +204,8 @@
                 [queryParams]="{returnedId: r.returned_id}" [disabled]="r.is_cancel === 'Y' || r.is_approved === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
-              <button title="ลบ" *ngIf="r.is_cancel === 'N'" class="btn btn-danger wm-small-btn" (click)="removeReturned(r)" [disabled]="r.is_cancel === 'Y' || r.is_approved === 'Y'">
+              <button title="ลบ" *ngIf="r.is_cancel === 'N'" class="btn btn-danger wm-small-btn" (click)="removeReturned(r)"
+                [disabled]="r.is_cancel === 'Y' || r.is_approved === 'Y'">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
