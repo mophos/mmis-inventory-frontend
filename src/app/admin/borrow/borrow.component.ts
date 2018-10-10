@@ -206,14 +206,9 @@ export class BorrowComponent implements OnInit {
     }
   }
 
-  doApprove() {
+  doApprove(borrowId: any) {
     const borrowIds = [];
-
-    this.selectedApprove.forEach(v => {
-      if (v.approved !== 'Y' && v.mark_deleted === 'N') {
-        borrowIds.push(v.borrow_id);
-      }
-    });
+    borrowIds.push(borrowId);
 
     if (borrowIds.length) {
       this.alertService.confirm('ต้องการยืนยันการอนุมัติใบยืม ใช่หรือไม่?')
@@ -378,7 +373,7 @@ export class BorrowComponent implements OnInit {
       notes.remark = 'ยืมนอก Stock';
       notes.wm_withdarw = v.src_warehouse_id;
       notes.wm_borrow = v.dst_warehouse_id;
-      
+
       await this.borrowNoteService.save(notes, v.products);
     }
   }
