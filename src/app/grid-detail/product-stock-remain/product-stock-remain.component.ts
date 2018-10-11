@@ -9,6 +9,7 @@ import { ProductsService } from './../../admin/products.service';
 })
 export class ProductStockRemainComponent implements OnInit {
   @Input() productId: any;
+  @Input() warehouseId: any;
   loading = false;
   products = [];
 
@@ -26,7 +27,7 @@ export class ProductStockRemainComponent implements OnInit {
   async getProductStockRemain() {
     this.loading = true;
     try {
-      const rs = await this.productService.getProductStockDetail(this.productId)
+      const rs = await this.productService.getProductStockDetail(this.productId, this.warehouseId)
       if (rs.ok) {
         this.products = rs.rows;
       } else {
@@ -35,7 +36,7 @@ export class ProductStockRemainComponent implements OnInit {
       this.loading = false;
     } catch (error) {
       this.loading = false;
-      this.alertService.error(error.message); 
+      this.alertService.error(error.message);
     }
   }
 
