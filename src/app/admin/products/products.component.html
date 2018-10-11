@@ -10,9 +10,20 @@
     <label for="">ค้นหา</label>
   </div>
   <div class="col-md-3">
-    <input type="text" (keyup)="search($event)" placeholder="พิมพ์แล้วกด Enter" name="query" style="width: 90%;" id="query" [(ngModel)]="query">
+    <input type="text" (keyup)="search($event)" placeholder="พิมพ์แล้วกด Enter" name="query" style="width: 90%;" id="query"
+      [(ngModel)]="query">
   </div>
-  <div class="col-md-2 push-md-6" style="text-align: right;">
+  <div class="col-lg-2 push-md-6">
+    <div class="select">
+      <select name="warehouseId" [(ngModel)]="warehouseId" (change)="changewarehouses()">
+        <option value="0">ทุกคลังสินค้า</option>
+        <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+          {{ w.short_code }}-{{ w.warehouse_name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-2 push-md-2">
     <div class="select">
       <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
         <option value="">ทั้งหมด</option>
@@ -67,7 +78,7 @@
   </clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *ngFor="let p of products">
-    <wm-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-product-stock-remain>
+    <wm-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [warehouseId]="warehouseId" [productId]="p.product_id"></wm-product-stock-remain>
     <!-- <clr-dg-cell></clr-dg-cell>
     <clr-dg-cell></clr-dg-cell> -->
     <clr-dg-cell>
@@ -76,8 +87,10 @@
       <span class="p7">{{p.working_code}} - {{p.product_name}}</span>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.qty, 'success-message': p.min_qty < p.qty}">{{p.qty | number}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.reserve_qty, 'success-message': p.min_qty < p.qty}">{{p.qty - p.reserve_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.qty, 'success-message': p.min_qty < p.qty}">{{p.qty
+      | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.reserve_qty, 'success-message': p.min_qty < p.qty}">{{p.qty
+      - p.reserve_qty | number}}</clr-dg-cell>
 
     <clr-dg-cell>{{p.primary_unit_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.total_cost | number: '1.2'}}</clr-dg-cell>
