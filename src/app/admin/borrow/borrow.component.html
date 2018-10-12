@@ -10,25 +10,20 @@
     </button>
     <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'inside'">
       <div class="row wid99">
-        <div class="col-md-8">
+        <div class="col-md-6">
           <button class="btn btn-sm btn-success" [routerLink]="['/admin/borrow/new']">
             + สร้างใบยืม
           </button>
         </div>
-        <div class="col-md-2" style="padding-top: 5px;">
-          <div class="btn-group" style="float:right;margin: 0px 0px 0px 0px;">
-            <!-- <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="doApprove()">
-              <clr-icon shape="note"></clr-icon> อนุมัติใบยืม
-            </button> -->
-            <!-- <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
-              <clr-button [disabled]="!selectedApprove.length" [clrInMenu]="true" class="btn btn-sm btn-primary" (click)="printReport()">
-                <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติโอน
-              </clr-button>
-              <clr-button [disabled]="!selectedApprove.length" [clrInMenu]="true" class="btn btn-sm btn-primary" (click)="printReport2()">
-                <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบโอน
-              </clr-button>
-            </clr-button-group> -->
-          </div>
+        <div *ngIf="selectedTab === 'inside'" class="col-md-4" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+          <clr-button-group style="float:right;">
+            <clr-button [disabled]="!selectedApprove.length" class="btn btn-sm btn-primary" (click)="printApprove()">
+              <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติยืม
+            </clr-button>
+            <!-- <clr-button [disabled]="!selectedApprove.length" class="btn btn-sm btn-primary" (click)="printSetProduct()">
+              <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบยืม
+            </clr-button> -->
+          </clr-button-group>
         </div>
         <div class="col-md-2" style="padding-top: 5px;">
           <div class="select">
@@ -42,16 +37,17 @@
         </div>
       </div>
 
-      <clr-datagrid (clrDgRefresh)="refreshBorrow($event)" [style.height.%]="80">
+      <clr-datagrid (clrDgRefresh)="refreshBorrow($event)" [style.height.%]="80" [(clrDgSelected)]="selectedApprove">
         <clr-dg-column>เลขที่ยืม</clr-dg-column>
         <clr-dg-column>วันที่ยืม</clr-dg-column>
         <clr-dg-column>ยืมจากคลัง</clr-dg-column>
         <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
         <clr-dg-column></clr-dg-column>
+        <clr-dg-column>สถานะการคืน</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y'}">
           <clr-dg-action-overflow>
-            <button class="action-item" (click)="doApprove(b.borrow_id)">อนุมัติใบยืม</button>
+            <button [disabled]="b.approved === 'N' || b.mark_deleted === 'N'" class="action-item" (click)="doApprove(b.borrow_id)">อนุมัติใบยืม</button>
           </clr-dg-action-overflow>
           <wm-borrow-detail *clrIfExpanded [borrowId]="b.borrow_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-detail>
           <clr-dg-cell>{{b.borrow_code}}</clr-dg-cell>
@@ -69,6 +65,11 @@
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
+          </clr-dg-cell>
+          <clr-dg-cell style="width:30px;">
+            <span *ngIf="b.returned_approved === 'Y'">
+              <clr-icon shape="check-circle" style="width: 25px; height: 25px;" class="is-highlight"></clr-icon>
+            </span>
           </clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>
@@ -122,6 +123,7 @@
         <clr-dg-column>ยืมจากคลัง</clr-dg-column>
         <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
         <clr-dg-column></clr-dg-column>
+        <clr-dg-column>สถานะการคืน</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *ngFor="let b of borrowOther" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.is_cancel === 'Y'}">
           <wm-borrow-other-detail *clrIfExpanded [borrowId]="b.borrow_other_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-other-detail>
@@ -140,6 +142,11 @@
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
+          </clr-dg-cell>
+          <clr-dg-cell style="width:30px;">
+            <span *ngIf="b.returned_approved === 'Y'">
+              <clr-icon shape="check-circle" style="width: 25px; height: 25px;" class="is-highlight"></clr-icon>
+            </span>
           </clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>

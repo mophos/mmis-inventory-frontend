@@ -43,7 +43,7 @@ export class BorrowComponent implements OnInit {
   currentPage = 1;
   currentPageOther = 1;
   offset = 0;
-  selectedTab: any;
+  selectedTab: any = 'inside';
   tabInside = 0;
   tabOutside = 0;
   tabReturned = 0;
@@ -375,6 +375,40 @@ export class BorrowComponent implements OnInit {
       notes.wm_borrow = v.dst_warehouse_id;
 
       await this.borrowNoteService.save(notes, v.products);
+    }
+  }
+
+  printApprove() {
+    const borrow_id: any = []
+    let count: any = 0
+    this.selectedApprove.forEach(e => {
+      if (e.mark_deleted !== 'Y') {
+        borrow_id.push('borrow_id=' + e.borrow_id);
+        count++;
+      }
+    });
+    if (count > 0) {
+      const url = this.apiUrl + `/report/approve/borrow?token=${this.token}&` + borrow_id.join('&');
+      this.htmlPreview.showReport(url);
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
+  }
+
+  printSetProduct() {
+    const borrow_id: any = []
+    let count: any = 0
+    this.selectedApprove.forEach(e => {
+      if (e.mark_deleted !== 'Y') {
+        borrow_id.push('borrow_id=' + e.borrow_id);
+        count++;
+      }
+    });
+    if (count > 0) {
+      const url = this.apiUrl + `/report/list-borrow?token=${this.token}&` + borrow_id.join('&');
+      this.htmlPreview.showReport(url, 'landscape');
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
     }
   }
 }
