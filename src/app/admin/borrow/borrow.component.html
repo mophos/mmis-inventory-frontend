@@ -20,9 +20,9 @@
             <clr-button [disabled]="!selectedApprove.length" class="btn btn-sm btn-primary" (click)="printApprove()">
               <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติยืม
             </clr-button>
-            <!-- <clr-button [disabled]="!selectedApprove.length" class="btn btn-sm btn-primary" (click)="printSetProduct()">
+            <clr-button [disabled]="!selectedApprove.length" class="btn btn-sm btn-primary" (click)="printSetProduct()">
               <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบยืม
-            </clr-button> -->
+            </clr-button>
           </clr-button-group>
         </div>
         <div class="col-md-2" style="padding-top: 5px;">
@@ -47,7 +47,7 @@
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y'}">
           <clr-dg-action-overflow>
-            <button [disabled]="b.approved === 'N' || b.mark_deleted === 'N'" class="action-item" (click)="doApprove(b.borrow_id)">อนุมัติใบยืม</button>
+            <button [disabled]="b.approved === 'Y' || b.mark_deleted === 'Y'" class="action-item" (click)="doApprove(b.borrow_id)">อนุมัติใบยืม</button>
           </clr-dg-action-overflow>
           <wm-borrow-detail *clrIfExpanded [borrowId]="b.borrow_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-detail>
           <clr-dg-cell>{{b.borrow_code}}</clr-dg-cell>
