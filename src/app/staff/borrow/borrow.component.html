@@ -1,5 +1,5 @@
 <nav class="breadcrumb">
-  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
   <span class="breadcrumb-item active">ยืม/คืนสินค้า</span>
 </nav>
 
@@ -11,7 +11,7 @@
     <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'inside'">
       <div class="row wid99">
         <div class="col-md-6">
-          <button class="btn btn-sm btn-success" [routerLink]="['/admin/borrow/new']">
+          <button class="btn btn-sm btn-success" [routerLink]="['/staff/borrow/new']">
             + สร้างใบยืม
           </button>
         </div>
@@ -56,7 +56,7 @@
           <clr-dg-cell>{{b.dst_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
-              <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/edit']"
+              <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/staff/borrow/edit']"
                 [queryParams]="{borrowId: b.borrow_id}" [disabled]="b.mark_deleted === 'Y' || b.approved === 'Y' || b.confirmed === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
@@ -86,7 +86,7 @@
     <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'outside'">
       <div class="row wid99">
         <div class="col-md-8">
-          <button class="btn btn-sm btn-success" [routerLink]="['/admin/borrow/other/new']">
+          <button class="btn btn-sm btn-success" [routerLink]="['/staff/borrow/other/new']">
             + สร้างใบยืม
           </button>
         </div>
@@ -133,7 +133,7 @@
           <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
-              <button title="แก้ไข" *ngIf="b.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/other/edit']"
+              <button title="แก้ไข" *ngIf="b.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/staff/borrow/other/edit']"
                 [queryParams]="{borrowId: b.borrow_other_id}" [disabled]="b.is_cancel === 'Y' || b.approved === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
@@ -163,7 +163,7 @@
     <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'returnProduct'">
       <div class="row wid99">
         <div class="col-md-8">
-          <button class="btn btn-sm btn-success" [routerLink]="['/admin/return-product/new']">
+          <button class="btn btn-sm btn-success" [routerLink]="['/staff/return-product/new']">
             + สร้างใบคืน
           </button>
         </div>
@@ -207,7 +207,7 @@
           <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
-              <button title="แก้ไข" *ngIf="r.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/return-product/edit']"
+              <button title="แก้ไข" *ngIf="r.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/staff/return-product/edit']"
                 [queryParams]="{returnedId: r.returned_id}" [disabled]="r.is_cancel === 'Y' || r.is_approved === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>

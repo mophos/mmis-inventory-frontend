@@ -1,0 +1,277 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff/borrow">ยืม/คืนสินค้า</a>
+  <span class="breadcrumb-item active">คืนสินค้า</span>
+</nav>
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">เลขที่คืน</label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <input placeholder="ปล่อยว่างเพื่อสร้างอัติโนมัติ" disabled class="form-control" type="text" name="returnedCode" [(ngModel)]="returnedCode">
+          </div>
+
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">วันที่คืน</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="returnedDate" required></my-date-picker-th>
+          </div>
+
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="gForm_1">เลือกใบยืม</label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <input class="form-control" disabled type="text" name="borrowCode" style="float: left; width: 85%;" [(ngModel)]="borrowCode">
+            <!-- <div style="float: left;" (click)="searchPurchase()">
+              <clr-icon shape="search"></clr-icon>
+            </div> -->
+            <button class="btn btn-sm btn-icon btn-primary" (click)="searchBorrow()">
+              <clr-icon shape="search"></clr-icon>
+            </button>
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+<clr-datagrid class="grid-order" [style.padding-top.px]="5">
+  <clr-dg-column [style.width.px]="300">ชื่อสินค้า</clr-dg-column>
+  <!-- <clr-dg-column [style.width.px]="100">ของแถม</clr-dg-column> -->
+  <clr-dg-column>จำนวนคืน</clr-dg-column>
+  <clr-dg-column [style.width.px]="180">หน่วย</clr-dg-column>
+  <clr-dg-column style="text-align: center; width: 100px;">รวม</clr-dg-column>
+  <clr-dg-column>ราคาต่อแพค</clr-dg-column>
+  <clr-dg-column>ส่วนลด (บาท)</clr-dg-column>
+  <clr-dg-column>รวม (บาท)</clr-dg-column>
+  <clr-dg-column [style.width.px]="180">ผู้ผลิต</clr-dg-column>
+  <clr-dg-column [style.width.px]="120">Lot no.</clr-dg-column>
+  <clr-dg-column [style.width.px]="150">หมดอายุ</clr-dg-column>
+  <clr-dg-column [style.width.px]="150">คลังสินค้า</clr-dg-column>
+  <clr-dg-column [style.width.px]="150">สถานที่เก็บ</clr-dg-column>
+  <clr-dg-column [style.width.px]="150"></clr-dg-column>
+
+  <clr-dg-row *ngFor="let product of products; let idx = index;" [class.editLine]="product.is_update === 'Y'">
+    <clr-dg-cell style="line-height: 25px;">
+      {{idx + 1}}. {{product.product_name}}
+    </clr-dg-cell>
+    <!-- <clr-dg-cell>
+      <div class="toggle-switch" (click)="editChangeFree(idx, free.value)">
+        <input type="checkbox" [checked]="product.is_free === 'Y'" #free>
+        <label></label>
+      </div>
+    </clr-dg-cell> -->
+    <clr-dg-cell>
+      <input type="text" #qty (keyup)="editChangeReceiveQty(idx, qty, qty.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberWithOutDot [value]="product.receive_qty" />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit orderBy="DESC" [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="product.unit_generic_id"
+        [genericId]="product.generic_id"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center; line-height: 25px;">{{product.receive_qty * product.conversion_qty | number}}
+      {{product.to_unit_name}}
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #cost (keyup)="editChangeCost(idx, cost.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberOnly [value]="product.cost" />
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <input type="text" #discount (keyup)="editChangeDiscount(idx, discount.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberOnly [value]="product.discount" />
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">
+      {{ (+product.receive_qty * +product.cost) - +product.discount | number: '1.2-2'}}
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-manufacture (onSelect)="editChangeManufacture(idx, $event)" [selectedId]="product.manufacture_id" [genericId]="product.generic_id"></wm-select-manufacture>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" #lot (keyup)="editChangeLot(idx, lot.value)" style="width: 100%; background-color: #FFF9C4" name="lotNo"
+        id="lotNo" [value]="product.lot_no">
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">
+      <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate" type="text"
+        [value]="product.expired_date" #expired (keyup)="editChangeExpired(idx, expired.value)" />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-generic-warehouse (onSelect)="editChangeWarehouse(idx, $event, editLocationList)" [genericId]="product.generic_id"
+        [selectedId]="product.warehouse_id"></wm-select-generic-warehouse>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-product-location #editLocationList (onSelect)="changeEditLocation(idx, $event)" [warehouseId]="product.warehouse_id"
+        [selectedId]="product.location_id"></wm-select-product-location>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-row class="newLine">
+    <clr-dg-cell>
+      <wm-search-product #productSearch (onSelect)="setSelectedProduct($event)" (onChange)="changeSearchProduct($event)"></wm-search-product>
+    </clr-dg-cell>
+    <!-- <clr-dg-cell>
+      <div class="toggle-switch">
+        <input type="checkbox" id="isFree" [(ngModel)]="isFree">
+        <label for="isFree"></label>
+      </div>
+    </clr-dg-cell> -->
+    <clr-dg-cell>
+      <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4" [disabled]="!selectedProductId" [(ngModel)]="selectedReturnedQty"
+        wmNumberWithOutDot placeholder="">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit orderBy="DESC" [showAdd]="true" #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: center;">
+      {{+selectedReturnedQty * +conversionQty | number}} {{primaryUnitName}}
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" class="wm-edit-box-number" [disabled]="!selectedProductId" [(ngModel)]="selectedCost" wmNumberOnly style="width: 100%; background-color: #FFF9C4"
+        placeholder="0">
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      <input type="text" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4" wmNumberOnly [(ngModel)]="selectedDiscount"
+        [disabled]="!selectedProductId" />
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">
+      {{ (+selectedReturnedQty * +selectedCost) - selectedDiscount | number: '1.2-2'}}
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-manufacture #manufactureList (onSelect)="changeManufacture($event)"></wm-select-manufacture>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" style="width: 100%; background-color: #FFF9C4" name="lotNo" id="lotNo" [(ngModel)]="selectedLotNo" wmUpperCase>
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">
+      <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate" type="text"
+        [(ngModel)]="selectedExpiredDate" />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-generic-warehouse #warehouseList (onSelect)="changeWarehouse($event)"></wm-select-generic-warehouse>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!selectedProductId || !selectedWarehouseId || !selectedReturnedQty || !selectedCost || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId || (!selectedLotNo && isLotControl)"
+          (click)="addProduct()">
+          เพิ่ม
+        </button>
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
+          ยกเลิก
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer>
+
+  </clr-dg-footer>
+</clr-datagrid>
+
+<div class="row wid99">
+  <div class="col-md-12">
+    <button (click)="checkProduct()" class="btn btn-success btn-sm" [disabled]=" !borrowCode || !products.length">
+      <clr-icon shape="floppy"></clr-icon>
+      บันทึกคืนสินค้า
+    </button>
+    <button class="btn btn-danger btn-sm" routerLink="/staff/borrow">
+      <clr-icon shape="home"></clr-icon>
+      กลับหน้าหลัก
+    </button>
+  </div>
+</div>
+
+<clr-modal [(clrModalOpen)]="modalBorrow" [clrModalClosable]="false" [clrModalSize]="'xl'">
+  <h3 class="modal-title">ค้นหาใบยืม</h3>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-header">
+        เลือกประเภทการยืม
+      </div>
+      <div class="card-block">
+        <div class="card-text">
+          <clr-tabs>
+            <clr-tab>
+              <button clrTabLink clrTabLinkId="link1">
+                ยืมในหน่วยงาน
+              </button>
+              <clr-tab-content clrContentId="content1" *clrIfActive>
+                <clr-datagrid [style.height.%]="80">
+                  <clr-dg-column>เลขที่ยืม</clr-dg-column>
+                  <clr-dg-column>วันที่ยืม</clr-dg-column>
+                  <clr-dg-column>ยืมจากคลัง</clr-dg-column>
+                  <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
+                  <clr-dg-column>เลือก</clr-dg-column>
+                  <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+                  <clr-dg-row *ngFor="let b of borrow">
+                    <clr-dg-cell>{{b.borrow_code}}</clr-dg-cell>
+                    <clr-dg-cell>{{b.borrow_date | toThaiDate}}</clr-dg-cell>
+                    <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
+                    <clr-dg-cell>{{b.dst_warehouse_name}}</clr-dg-cell>
+                    <clr-dg-cell>
+                      <button class="btn btn-sm btn-primary wm-small-btn" (click)="setSelected(b)">
+                        เลือก
+                      </button>
+                    </clr-dg-cell>
+                  </clr-dg-row>
+                </clr-datagrid>
+              </clr-tab-content>
+            </clr-tab>
+            <clr-tab>
+              <button clrTabLink>
+                ยืมระหว่างหน่วยงาน
+              </button>
+              <clr-tab-content clrContentId="content1" *clrIfActive>
+                <clr-datagrid [style.height.%]="80">
+                  <clr-dg-column>เลขที่ยืม</clr-dg-column>
+                  <clr-dg-column>วันที่ยืม</clr-dg-column>
+                  <clr-dg-column>ยืมจากคลัง</clr-dg-column>
+                  <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
+                  <clr-dg-column>เลือก</clr-dg-column>
+                  <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
+                  <clr-dg-row *ngFor="let b of borrowOther">
+                    <clr-dg-cell>{{b.borrow_other_code}}</clr-dg-cell>
+                    <clr-dg-cell>{{b.borrow_other_date | toThaiDate}}</clr-dg-cell>
+                    <clr-dg-cell>{{b.warehouse_name}}</clr-dg-cell>
+                    <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
+                    <clr-dg-cell>
+                      <button class="btn btn-sm btn-primary wm-small-btn" (click)="setSelected(b)">
+                        เลือก
+                      </button>
+                    </clr-dg-cell>
+                  </clr-dg-row>
+                </clr-datagrid>
+              </clr-tab-content>
+            </clr-tab>
+          </clr-tabs>
+        </div>
+      </div>
+      <div class="card-footer">
+
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modalBorrow = false">
+      ปิดหน้าต่าง
+    </button>
+  </div>
+</clr-modal>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

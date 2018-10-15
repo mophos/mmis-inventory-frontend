@@ -40,6 +40,13 @@ import { ReceivesOtherComponent } from 'app/staff/receives-other/receives-other.
 import { ReceivesOtherEditComponent } from 'app/staff/receives-other-edit/receives-other-edit.component';
 import { ExportdataComponent } from './exportdata/exportdata.component';
 import { ValueReceiveOtherComponent } from '../staff/report/value-receive-other/value-receive-other.component';
+import { BorrowComponent } from './borrow/borrow.component';
+import { BorrowNewComponent } from './borrow-new/borrow-new.component';
+import { BorrowEditComponent } from './borrow-edit/borrow-edit.component';
+import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.component';
+import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
+import { ReturnedComponent } from './returned/returned.component';
+import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 
 const routes: Routes = [
   {
@@ -57,6 +64,8 @@ const routes: Routes = [
       { path: 'transfer', component: TransferComponent },
       { path: 'transfer/new', component: TransferNewComponent },
       { path: 'transfer/edit', component: TransferEditComponent },
+      { path: 'return-product/new', component: ReturnedComponent },
+      { path: 'return-product/edit', component: ReturnedEditComponent },
       {
         path: 'requisition',
         canActivate: [StaffGuard],
@@ -68,6 +77,18 @@ const routes: Routes = [
           { path: 'templates', component: RequisitionTemplateComponent },
           { path: 'templates/new', component: RequisitionTemplateNewComponent },
           { path: 'templates/edit/:templateId', component: RequisitionTemplateEditComponent }
+        ]
+      },
+      {
+        path: 'borrow',
+        canActivate: [StaffGuard],
+        children: [
+          { path: '', redirectTo: 'borrow', pathMatch: 'full' },
+          { path: 'borrow', component: BorrowComponent },
+          { path: 'new', component: BorrowNewComponent },
+          { path: 'edit', component: BorrowEditComponent },
+          { path: 'other/new', component: BorrowotherNewComponent },
+          { path: 'other/edit', component: BorrowotherEditComponent },
         ]
       },
       {

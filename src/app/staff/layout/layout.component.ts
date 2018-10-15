@@ -32,6 +32,7 @@ export class LayoutComponent implements OnInit {
   menuMinMax: boolean;
   menuMap: boolean;
   menuAdjust: boolean;
+  menuBorrowProduct: boolean;
 
   menuTools = true;
   @ViewChild('modalChangePassword') public modalChangePassword;
@@ -56,6 +57,7 @@ export class LayoutComponent implements OnInit {
     this.warehouseCode = decoded.warehouseCode;
 
     this.menuNote = _.indexOf(this.rights, 'WM_BORROW') === -1 ? false : true;
+    this.menuBorrowProduct = _.indexOf(this.rights, 'WM_BORROWPRODUCT') === -1 ? false : true;
     this.menuReceive = _.indexOf(this.rights, 'WM_RECEIVE') === -1 ? false : true;
     this.menuRequisition = _.indexOf(this.rights, 'WM_REQUISITION') === -1 ? false : true;
     this.menuPayRequisition = _.indexOf(this.rights, 'WM_REQUISITION') === -1 ? false : true;
