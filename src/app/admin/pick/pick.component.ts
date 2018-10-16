@@ -22,25 +22,25 @@ export class PickComponent implements OnInit {
   decodedToken: any;
   rights: any;
   menuEditAfter: boolean;
-  modalEdit: boolean = false;
+  modalEdit = false;
   editId: any;
-  username:any
-  password:any
+  username: any
+  password: any
   constructor(
     private alertService: AlertService,
     @Inject('API_URL') private url: string,
     private pickService: PickService,
     private router: Router,
-  ) { 
+  ) {
     const token = sessionStorage.getItem('token');
     this.decodedToken = this.jwtHelper.decodeToken(token);
     const accessRight = this.decodedToken.accessRight;
     this.rights = accessRight.split(',');
-    this.menuEditAfter = _.indexOf(this.rights, 'WM_PICK_EDITAFTER') === -1 ? false : true;
+    this.menuEditAfter = _.indexOf(this.rights, 'WM_PICK_EDIT_AFTER') === -1 ? false : true;
   }
 
   ngOnInit() {
-    
+
   }
 
   async refresh(event: any) {
@@ -51,7 +51,7 @@ export class PickComponent implements OnInit {
 
   async getList(limit: number = this.perPage, offset: number = 0) {
     this.modalLoading.show();
-    let rs: any = await this.pickService.getList(limit, offset);
+    const rs: any = await this.pickService.getList(limit, offset);
     try {
       if (rs.ok) {
         this.order = rs.rows
@@ -79,7 +79,7 @@ export class PickComponent implements OnInit {
     this.alertService.confirm('ต้องการยกเลิกรายการหยิบ ใช่หรือไม่?')
       .then(async () => {
         this.modalLoading.show();
-        let rs: any = await this.pickService.removePick(pick_id);
+        const rs: any = await this.pickService.removePick(pick_id);
         try {
           if (rs.ok) {
             this.order[_.findIndex(this.order, { pick_id: pick_id })].is_cancel = 'Y'
@@ -92,30 +92,30 @@ export class PickComponent implements OnInit {
       })
       .catch(() => { })
   }
-  async approve(pick_id:any){
+  async approve(pick_id: any) {
     this.alertService.confirm('ยืนยันการอนุมัติรายการหยิบ ใช่หรือไม่?')
-    .then(async ()=>{
-     let rs:any =  await this.pickService.approvePick(pick_id)
-     if(rs.ok){
-      this.order[_.findIndex(this.order, { pick_id: pick_id })].is_approve = 'Y'
-       this.alertService.success()
-     } else {
-      this.alertService.error(rs.error)
-     }
-    }).catch(()=>{})
+      .then(async () => {
+        const rs: any = await this.pickService.approvePick(pick_id)
+        if (rs.ok) {
+          this.order[_.findIndex(this.order, { pick_id: pick_id })].is_approve = 'Y'
+          this.alertService.success()
+        } else {
+          this.alertService.error(rs.error)
+        }
+      }).catch(() => { })
   }
-  async editAfter (id:any) {
-    if(this.menuEditAfter){
-      this.router.navigate(['/admin/pick/edit/'+id])
+  async editAfter(id: any) {
+    if (this.menuEditAfter) {
+      this.router.navigate(['/admin/pick/edit/' + id])
     } else {
       this.editId = id
       this.modalEdit = true
     }
   }
-   async checkEdit(username: any, password: any) {
-    const rs: any = await this.pickService.checkEdit(username, password ,'WM_PICK_EDITAFTER');
+  async checkEdit(username: any, password: any) {
+    const rs: any = await this.pickService.checkEdit(username, password, 'WM_PICK_EDIT_AFTER');
     if (rs.ok) {
-      this.router.navigate(['/admin/pick/edit/'+this.editId])
+      this.router.navigate(['/admin/pick/edit/' + this.editId])
     } else {
       this.alertService.error('ไม่มีสิทธิ์แก้ไข');
     }
