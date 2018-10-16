@@ -27,7 +27,14 @@
             <label class="required" for="dstWarehouseId">ไปยังคลัง</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <wm-select-warehouses #dstWarehouse (onSelect)="setDstWarehouse($event)"></wm-select-warehouses>
+            <div class="select">
+              <select name="dstWarehouseId" [disabled]="true" [(ngModel)]="dstWarehouseId" (change)="setDstWarehouse($event)">
+                <option selected>เลือกคลังสินค้า</option>
+                <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+                  {{w.short_code}} - {{ w.warehouse_name }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
       </section>
