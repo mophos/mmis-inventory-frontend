@@ -4,12 +4,14 @@ import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { State } from '@clr/angular';
 import { JwtHelper } from 'angular2-jwt';
 import { WarehouseService } from './../warehouse.service';
+
 @Component({
-  selector: 'wm-products',
-  templateUrl: './products.component.html',
-  styleUrls: []
+  selector: 'wm-products-warehouse',
+  templateUrl: './products-warehouse.component.html',
+  styleUrls: ['./products-warehouse.component.css']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsWarehouseComponent implements OnInit {
+
   sort: any = {};
 
   products = [];
@@ -24,7 +26,7 @@ export class ProductsComponent implements OnInit {
   query: any;
   currentPage = 1;
   warehouses: any = [];
-  warehouseId = 0;
+  warehouseId: any;
   jwtHelper: JwtHelper = new JwtHelper();
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
@@ -38,7 +40,7 @@ export class ProductsComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decoded = this.jwtHelper.decodeToken(this.token);
     this.genericTypeIds = decoded.generic_type_id ? decoded.generic_type_id.split(',') : [];
-    // this.warehouseId = decoded.warehouseId;
+    this.warehouseId = decoded.warehouseId;
   }
 
   ngOnInit() {
