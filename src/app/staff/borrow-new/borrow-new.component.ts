@@ -4,7 +4,8 @@ import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../alert.service';
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { PeriodService } from './../../period.service';
-
+import { JwtHelper } from 'angular2-jwt';
+import { BasicService} from './../../basic.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -35,6 +36,7 @@ export class BorrowNewComponent implements OnInit {
   wmProductId: any;
   workingCode: any;
   isSaving = false;
+  warehouses: any;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -49,6 +51,7 @@ export class BorrowNewComponent implements OnInit {
   @ViewChild('locationList') locationList;
   @ViewChild('modalLoading') private modalLoading;
 
+  jwtHelper: JwtHelper = new JwtHelper();
   primaryUnitName: any;
   primaryUnitId: any;
   productId: any;
@@ -57,17 +60,26 @@ export class BorrowNewComponent implements OnInit {
   genericId: any;
   unitGenericId: any;
   lotNo: any;
+  token: any;
+  decodedToken: any;
 
   isSave = false;
 
   constructor(
     private alertService: AlertService,
+    private basicService: BasicService,
     private borrowItemsService: BorrowItemsService,
     private router: Router,
     private periodService: PeriodService
-  ) { }
+  ) {
+    this.token = sessionStorage.getItem('token');
+    this.decodedToken = this.jwtHelper.decodeToken(this.token);
+  }
 
   ngOnInit() {
+    this.dstWarehouseId = this.decodedToken.warehouseId;
+    console.log(this.dstWarehouseId);
+
     const date = new Date();
     this.borrowDate = {
       date: {
@@ -76,6 +88,7 @@ export class BorrowNewComponent implements OnInit {
         day: date.getDate()
       }
     }
+    this.getWarehouses();
   }
 
   setSelectedProduct(event: any) {
@@ -148,6 +161,17 @@ export class BorrowNewComponent implements OnInit {
         }).catch(() => { });
     } else {
       this.srcWarehouseId = event.warehouse_id;
+    }
+  }
+
+  async getWarehouses() {
+    const rs = await this.basicService.getWarehouses();
+    if (rs.ok) {
+      this.warehouses = rs.rows;
+      console.log(this.warehouses);
+      
+    } else {
+      this.alertService.error(rs.error);
     }
   }
 
