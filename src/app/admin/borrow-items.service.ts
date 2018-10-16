@@ -133,7 +133,7 @@ export class BorrowItemsService {
 
   detail(borrowId: string) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/basic/borrow-detail/${borrowId}`)
+      this.authHttp.get(`${this.url}/basic/dst-borrow/detail/${borrowId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
