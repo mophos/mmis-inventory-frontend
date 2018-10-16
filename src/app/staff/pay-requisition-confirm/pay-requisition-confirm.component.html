@@ -13,8 +13,8 @@
             <label for="requisitionCode">รหัสใบเบิก</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <input type="text" name="requisitionCode" id="requisitionCode" placeholder="สร้างอัตโนมัติ" style="width: 100%;" disabled
-              [(ngModel)]="requisitionCode">
+            <input type="text" name="requisitionCode" id="requisitionCode" placeholder="สร้างอัตโนมัติ" style="width: 100%;"
+              disabled [(ngModel)]="requisitionCode">
           </div>
         </div>
         <div class="form-group row">
@@ -70,9 +70,9 @@
     'isWarning': g.allowcate_qty < ( g.requisition_qty) && g.allowcate_qty > 0, 
     'isError': g.allowcate_qty === 0 || (+g.remain_qty - +g.allowcate_qty) < 0}
     ">
-    <wm-staff-pay-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)" [isEdit]="isEdit"
-      [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId" [requisitionQty]="( g.requisition_qty)"
-      [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-staff-pay-confirm-order-items>
+    <wm-staff-pay-confirm-order-items *clrIfExpanded [confirmItems]="g.confirmItems" (onSuccessConfirm)="onSuccessConfirm($event)"
+      [isEdit]="isEdit" [baseUnitName]="g.to_unit_name" [genericId]="g.generic_id" [confirmId]="confirmId"
+      [requisitionQty]="( g.requisition_qty)" [requisitionId]="requisitionId" ngProjectAs="clr-dg-row-detail"></wm-staff-pay-confirm-order-items>
     <clr-dg-cell style="text-align: right;">
       <span class="p4">{{ idx +1}}</span>
     </clr-dg-cell>
@@ -106,7 +106,7 @@
     <!-- <button class="btn btn-sm btn-danger" (click)="removeOrderConfirm()">
         <clr-icon shape="trash"></clr-icon> ลบบันทึกจ่าย
       </button> -->
-    <button class="btn btn-sm btn-danger-outline" routerLink="/admin/requisition">
+    <button class="btn btn-sm btn-danger-outline" routerLink="/staff/pay-requisition">
       <clr-icon shape="home"></clr-icon> กลับหน้าหลัก/ยกเลิก
     </button>
 
@@ -125,7 +125,7 @@
       <clr-dg-row *clrDgItems="let generic of borrowNotes" [clrDgItem]="generic">
         <clr-dg-cell> {{generic.generic_name}} </clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{generic.qty | number}} {{generic.to_unit_name}}</clr-dg-cell>
-        <clr-dg-cell style="text-align: right;">{{generic.qty  | number}} {{ generic.to_unit_name }}</clr-dg-cell>
+        <clr-dg-cell style="text-align: right;">{{generic.qty | number}} {{ generic.to_unit_name }}</clr-dg-cell>
         <clr-dg-cell>{{generic.title_name}}{{ generic.fname }} {{generic.lname}}</clr-dg-cell>
       </clr-dg-row>
       <clr-dg-footer>{{borrowNotes.length}} รายการ</clr-dg-footer>
