@@ -9,20 +9,20 @@
       <clr-icon shape="plus"></clr-icon> เบิกสินค้าและเวชภัณฑ์
     </button> -->
   <!-- </div> -->
-  <div class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
-    <clr-button-group *ngIf="selectedTab === 'unpaid'" style="float:right;">
-      <clr-button [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printUnPaid()">
-        <clr-icon shape="printer"></clr-icon> พิมพ์รายการค้างจ่าย
-      </clr-button>
-    </clr-button-group>
-  </div>
-  <div class="col-md-6" *ngIf="selectedTab === 'approved' || selectedTab === 'waitingApprove'" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+  <div class="col-md-12" *ngIf="selectedTab === 'approved' || selectedTab === 'waitingApprove'" style="padding-top: 5px; padding-bottom: 5px;float:right;">
     <clr-button-group style="float:right;">
       <clr-button [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printApprove()">
         <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติเบิก
       </clr-button>
       <clr-button [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printSetProduct()">
         <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก
+      </clr-button>
+    </clr-button-group>
+  </div>
+  <div class="col-md-12" *ngIf="selectedTab === 'unpaid'" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+    <clr-button-group style="float:right;">
+      <clr-button [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printUnPaid()">
+        <clr-icon shape="printer"></clr-icon> พิมพ์รายการค้างจ่าย
       </clr-button>
     </clr-button-group>
   </div>
@@ -41,7 +41,8 @@
           <div class="form-group row wid99">
             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:30%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
+                style="width:30%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
@@ -70,7 +71,8 @@
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let order of orders" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y'}">
           <clr-dg-action-overflow>
-            <button class="action-item" [disabled]="order.is_cancel === 'Y'" [routerLink]="['/staff/pay-requisition/confirm']" [queryParams]="{requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'" [routerLink]="['/staff/pay-requisition/confirm']"
+              [queryParams]="{requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button>
             <button [disabled]="order.is_cancel === 'Y'" class="action-item" (click)="removeOrder(order)">ยกเลิกใบเบิก</button>
             <!-- <button class="action-item" (click)="onDelete(user)">พิมพ์ใบเบิก</button> -->
           </clr-dg-action-overflow>
@@ -112,7 +114,8 @@
           <div class="form-group row wid99">
             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:30%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
+                style="width:30%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
@@ -130,7 +133,8 @@
           </div>
         </div>
       </div>
-      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" (clrDgRefresh)="refreshWaitingApprove($event)" [(clrDgSelected)]="requisitionSelected">
+      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" (clrDgRefresh)="refreshWaitingApprove($event)"
+        [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -181,7 +185,8 @@
           <div class="form-group row wid99">
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:50%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
+                style="width:50%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
@@ -204,7 +209,8 @@
           </div>
         </div>
       </div>
-      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected" (clrDgRefresh)="refreshUnPaid($event)">
+      <clr-datagrid style="height: 90%;" style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected"
+        (clrDgRefresh)="refreshUnPaid($event)">
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -215,7 +221,8 @@
           <!-- <clr-dg-action-overflow>
             <button class="action-item" [routerLink]="['/admin/requisition/confirm-unpaid/']" [queryParams]="{unpaidId: order.requisition_order_unpaid_id, requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button>
           </clr-dg-action-overflow> -->
-          <wm-staff-pay-requisition-order-unpaid-items *clrIfExpanded [unpaidId]="order.requisition_order_unpaid_id" ngProjectAs="clr-dg-row-detail"></wm-staff-pay-requisition-order-unpaid-items>
+          <wm-staff-pay-requisition-order-unpaid-items *clrIfExpanded [unpaidId]="order.requisition_order_unpaid_id"
+            ngProjectAs="clr-dg-row-detail"></wm-staff-pay-requisition-order-unpaid-items>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_warehouse}}</clr-dg-cell>
@@ -243,7 +250,8 @@
           <div class="form-group row wid99">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:20%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
+                style="width:20%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
@@ -252,7 +260,8 @@
           </div>
         </div>
       </div>
-      <clr-datagrid (clrDgRefresh)="refreshApprove($event)" style="height: 90%;" style="padding-top: 5px;" [(clrDgSelected)]="requisitionSelected">
+      <clr-datagrid (clrDgRefresh)="refreshApprove($event)" style="height: 90%;" style="padding-top: 5px;"
+        [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 100px;">วันที่อนุมัติ</clr-dg-column>
         <clr-dg-column style="width: 100px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลขที่เบิก</clr-dg-column>
@@ -262,8 +271,8 @@
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let order of approveds" [clrDgItem]="order">
 
-          <wm-staff-pay-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [showUnpaid]="false" [requisitionId]="order.requisition_order_id"
-            ngProjectAs="clr-dg-row-detail"></wm-staff-pay-requisition-order-items-pay>
+          <wm-staff-pay-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [showUnpaid]="false"
+            [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-staff-pay-requisition-order-items-pay>
           <clr-dg-cell>{{order.approve_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
@@ -292,7 +301,8 @@
         </div>
         <div class="form-group">
           <label for="aForm_1" class="required"> password</label>
-          <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password" (keyup.enter)="checkApprove(username,password)">
+          <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password"
+            (keyup.enter)="checkApprove(username,password)">
         </div>
       </section>
     </form>
