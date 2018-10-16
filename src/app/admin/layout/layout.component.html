@@ -11,13 +11,13 @@
         <clr-icon shape="home"></clr-icon>
         <span class="tooltip-content">Home</span>
       </a>
-      <a href="{{env.purchasingUrl}}" *ngIf="Purchasing" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip"
-        aria-haspopup="true">
+      <a href="{{env.purchasingUrl}}" *ngIf="Purchasing" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right"
+        role="tooltip" aria-haspopup="true">
         <clr-icon shape="shopping-cart"></clr-icon>
         <span class="tooltip-content">Purchasing</span>
       </a>
-      <a href="{{env.planningUrl}}" *ngIf="Planning" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip"
-        aria-haspopup="true">
+      <a href="{{env.planningUrl}}" *ngIf="Planning" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right"
+        role="tooltip" aria-haspopup="true">
         <clr-icon shape="event"></clr-icon>
         <span class="tooltip-content">Planning</span>
       </a>
@@ -26,18 +26,18 @@
         <clr-icon shape="data-cluster"></clr-icon>
         <span class="tooltip-content">Inventory</span>
       </a>
-      <a href="{{env.materialsUrl}}" *ngIf="Materials" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip"
-        aria-haspopup="true">
+      <a href="{{env.materialsUrl}}" *ngIf="Materials" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right"
+        role="tooltip" aria-haspopup="true">
         <clr-icon shape="storage"></clr-icon>
         <span class="tooltip-content">Materials</span>
       </a>
-      <a href="{{env.contractsUrl}}" *ngIf="Contracts" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip"
-        aria-haspopup="true">
+      <a href="{{env.contractsUrl}}" *ngIf="Contracts" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right"
+        role="tooltip" aria-haspopup="true">
         <clr-icon shape="scroll"></clr-icon>
         <span class="tooltip-content">Contracts</span>
       </a>
-      <a href="{{env.umUrl}}" *ngIf="Administrator" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip"
-        aria-haspopup="true">
+      <a href="{{env.umUrl}}" *ngIf="Administrator" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right"
+        role="tooltip" aria-haspopup="true">
         <clr-icon shape="cog"></clr-icon>
         <span class="tooltip-content">Administrator</span>
       </a>
@@ -64,17 +64,23 @@
     </div>
 
     <clr-vertical-nav class="is-collapsed" [clrVerticalNavCollapsible]="collapsible" [(clrVerticalNavCollapsed)]="collapse">
-      <a clrVerticalNavLink *ngIf="menuBorrow" routerLink="/admin/borrow-notes" title="บันทึกช่วยจำการยืมยา" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuBorrow" routerLink="/admin/borrow-notes" title="บันทึกช่วยจำการยืมยา"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="note" class="has-badge is-solid"></clr-icon>
         บันทึกช่วยจำการยืมยา
       </a>
-      <a clrVerticalNavLink *ngIf="menuAddition" routerLink="/admin/addition" title="เวชภัณฑ์ที่ถึงจุดเติม" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuAddition" routerLink="/admin/addition" title="เวชภัณฑ์ที่ถึงจุดเติม"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="alarm-clock" class="has-badge is-solid"></clr-icon>
         เวชภัณฑ์ที่ถึงจุดเติม
       </a>
-      <a clrVerticalNavLink routerLink="/admin/products" title="รายการสินค้า" routerLinkActive="active">
+      <a clrVerticalNavLink routerLink="/admin/products" title="รายการสินค้าทั้งหมด" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="file-group"></clr-icon>
+        รายการสินค้าทั้งหมด
+      </a>
+      <a clrVerticalNavLink routerLink="/admin/products-warehouse" title="รายการสินค้าในคลัง" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="folder"></clr-icon>
-        รายการสินค้า
+        รายการสินค้าในคลัง
       </a>
       <a clrVerticalNavLink *ngIf="menuReceive" routerLink="/admin/receives" title="รับสินค้าเข้าคลัง" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="plus"></clr-icon>
@@ -104,7 +110,8 @@
         <clr-icon clrVerticalNavIcon shape="cursor-hand"></clr-icon>
         การหยิบ
       </a>
-      <a clrVerticalNavLink *ngIf="menuAlertExpired" routerLink="/admin/alert-expired" title="แจ้งเตือนยาหมดอายุ" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuAlertExpired" routerLink="/admin/alert-expired" title="แจ้งเตือนยาหมดอายุ"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="alarm-clock"></clr-icon>
         แจ้งเตือนยาหมดอายุ
       </a>
@@ -116,7 +123,8 @@
         <clr-icon clrVerticalNavIcon shape="clipboard"></clr-icon>
         นับสินค้าคงเหลือ
       </a> -->
-      <a clrVerticalNavLink *ngIf="menuIssueHis" routerLink="/admin/his-issue-transaction" title="ตัดจ่ายจาก HIS" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuIssueHis" routerLink="/admin/his-issue-transaction" title="ตัดจ่ายจาก HIS"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="sync"></clr-icon>
         ตัดจ่ายจาก HIS
       </a>
@@ -163,7 +171,8 @@
             <clr-icon shape="folder"></clr-icon>
             กำหนดสินค้าในคลัง
           </a> -->
-          <a clrVerticalNavLink *ngIf="menuTemplateRequisition" routerLink="/admin/requisition/templates" routerLinkActive="active">
+          <a clrVerticalNavLink *ngIf="menuTemplateRequisition" routerLink="/admin/requisition/templates"
+            routerLinkActive="active">
             <clr-icon shape="plugin"></clr-icon>
             Template ชุดเบิก
           </a>
