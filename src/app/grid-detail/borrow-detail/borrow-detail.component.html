@@ -16,21 +16,29 @@
       <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;" [ngStyle]="{'color':'#007cbb'}">
         <span>{{p.product_pack_qty |
-          number}} {{p.from_unit_name}} ({{p.qty | number}}
+          number}} {{p.from_unit_name}} ({{p.conversion_qty | number}}
           {{p.to_unit_name}})</span>
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;" [ngStyle]="{'color':'#007cbb'}">
-        <span *ngIf="p.qty>p.balance_qty">{{p.balance_qty/p.conversion_qty | number}} {{p.from_unit_name}}
-          ({{p.balance_qty | number}}
+        <span *ngIf="p.approved==='Y'">{{p.out_qty/p.conversion_qty}} {{p.from_unit_name}}
+            ({{p.conversion_qty | number}}
+            {{p.to_unit_name}})</span>
+        <span *ngIf="p.approved==='N' && p.qty>p.balance_qty">{{p.balance_qty/p.conversion_qty | number}} {{p.from_unit_name}}
+          ({{p.conversion_qty | number}}
           {{p.to_unit_name}})</span>
-        <span *ngIf="p.balance_qty>p.qty">{{p.product_pack_qty | number}} {{p.from_unit_name}}
-          ({{p.balance_qty | number}}
+        <span *ngIf="p.approved==='N' && p.balance_qty>p.qty">{{p.product_pack_qty | number}} {{p.from_unit_name}}
+          ({{p.conversion_qty | number}}
           {{p.to_unit_name}})</span>
       </clr-dg-cell>
-      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color':'#FF0000'}"><span *ngIf="p.qty>p.balance_qty">
-          {{(p.qty-p.balance_qty)/p.conversion_qty | number}} {{p.from_unit_name}} ({{p.qty-p.balance_qty | number}}
+      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color':'#FF0000'}">
+        <span *ngIf="p.approved==='Y'">{{(p.product_pack_qty-(p.out_qty/p.conversion_qty))}} {{p.from_unit_name}}
+            ({{p.conversion_qty | number}}
+            {{p.to_unit_name}})</span>
+        <span *ngIf="p.approved==='N' && p.qty>p.balance_qty">
+          {{(p.qty-p.balance_qty)/p.conversion_qty | number}} {{p.from_unit_name}} ({{p.conversion_qty | number}}
           {{p.to_unit_name}})
-        </span><span *ngIf="p.balance_qty>p.qty">
+        </span>
+        <span *ngIf="p.approved==='N' && p.balance_qty>p.qty">
           0 {{p.from_unit_name}} ({{p.conversion_qty | number}}
           {{p.to_unit_name}})
         </span></clr-dg-cell>

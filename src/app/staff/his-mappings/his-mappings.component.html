@@ -19,7 +19,7 @@
   </div>
 </div>
 <clr-datagrid class="order-form">
-  <clr-dg-column style="width: 150px;" [clrDgField]="'working_code'">Working Code</clr-dg-column>
+  <clr-dg-column style="width: 150px;" [clrDgField]="'working_code'">Generic Code</clr-dg-column>
   <clr-dg-column [clrDgField]="'generic_name'">รายละเอียด</clr-dg-column>
   <clr-dg-column style="width: 120px;" [clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
   <clr-dg-column style="width: 200px;" [clrDgField]="'his'">รหัสยา (HIS)</clr-dg-column>
@@ -28,7 +28,7 @@
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let m of mappings; let idx = index">
     <!-- <wm-his-mappings-directives *clrIfExpanded ngProjectAs="clr-dg-row-detail" [genericId]="m.generic_id"></wm-his-mappings-directives> -->
-    <clr-dg-cell>{{m.generic_id}}</clr-dg-cell>
+    <clr-dg-cell>{{m.working_code}}</clr-dg-cell>
     <clr-dg-cell>{{m.generic_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">{{m.base_unit_name}}</clr-dg-cell>
     <clr-dg-cell>

@@ -40,6 +40,7 @@ export class StockCardComponent implements OnInit {
   numButtonMovement: any = [];
   sumGenericAll: any;
   sumGenericMovement: any;
+  myWarehouseId: any;
   jwtHelper: JwtHelper = new JwtHelper();
   constructor(
     private alertService: AlertService,
@@ -48,6 +49,7 @@ export class StockCardComponent implements OnInit {
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.myWarehouseId = decodedToken.warehouseId;
     this.warehouseId = decodedToken.warehouseId;
   }
 
@@ -90,8 +92,13 @@ export class StockCardComponent implements OnInit {
   showReport() {
     this.start = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     this.end = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}&startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
-    this.htmlPreview.showReport(url, 'landscape');
+    if (this.warehouseId === this.myWarehouseId) {
+      const url = `${this.apiUrl}/report/generic/stock?&warehouseId=${this.warehouseId}&startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
+      this.htmlPreview.showReport(url, 'landscape');
+    } else {
+      const url = `${this.apiUrl}/report/generic/stock/staff?&warehouseId=${this.warehouseId}&startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + this.generic_id.join('&');
+      this.htmlPreview.showReport(url, 'landscape');
+    }
   }
 
   refresh() {
@@ -117,8 +124,13 @@ export class StockCardComponent implements OnInit {
     this.modalMovement = false;
     const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
     const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
-    const url = `${this.apiUrl}/report/genericStock/haveMovement?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
-    this.htmlPreview.showReport(url, 'landscape');
+    if (this.warehouseId === this.myWarehouseId) {
+      const url = `${this.apiUrl}/report/genericStock/haveMovement?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
+      this.htmlPreview.showReport(url, 'landscape');
+    } else {
+      const url = `${this.apiUrl}/report/genericStock/haveMovement/staff?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
+      this.htmlPreview.showReport(url, 'landscape');
+    }
   }
 
   async printReportNomovement() {
@@ -168,8 +180,13 @@ export class StockCardComponent implements OnInit {
     this.modalAll = false;
     const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
     const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
-    const url = `${this.apiUrl}/report/genericStock/all?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
-    this.htmlPreview.showReport(url, 'landscape');
+    if (this.warehouseId === this.myWarehouseId) {
+      const url = `${this.apiUrl}/report/genericStock/all?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
+      this.htmlPreview.showReport(url, 'landscape');
+    } else {
+      const url = `${this.apiUrl}/report/genericStock/all/staff?&warehouseId=${this.warehouseId}&startDate=${startDate}&endDate=${endDate}&offset=${offset}&token=${this.token}&`
+      this.htmlPreview.showReport(url, 'landscape');
+    }
   }
 
   clearProductSearch() {

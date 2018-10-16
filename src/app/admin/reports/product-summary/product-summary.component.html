@@ -14,7 +14,7 @@
             <select name="warehouseId" [(ngModel)]="warehouseId">
               <option value="0">ทุกคลังสินค้า</option>
               <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
-                {{ w.warehouse_id }}-{{ w.warehouse_name }}
+                {{ w.short_code }}-{{ w.warehouse_name }}
               </option>
             </select>
           </div>

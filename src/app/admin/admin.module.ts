@@ -179,6 +179,7 @@ import { PickComponent } from './pick/pick.component';
 import { PickNewComponent } from './pick-new/pick-new.component';
 import { PickService } from './pick.service';
 import { AuthPick } from '../auth-pick.service';
+import { ProductsWarehouseComponent } from './products-warehouse/products-warehouse.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -298,7 +299,8 @@ Highcharts.setOptions({
     ReturnedEditComponent,
     PickComponent,
     PickNewComponent,
-    RequisitionMultipleComponent
+    RequisitionMultipleComponent,
+    ProductsWarehouseComponent
   ],
   providers: [
     MainService,
