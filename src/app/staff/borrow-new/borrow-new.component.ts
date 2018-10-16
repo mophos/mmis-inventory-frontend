@@ -5,7 +5,7 @@ import { AlertService } from './../../alert.service';
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { PeriodService } from './../../period.service';
 import { JwtHelper } from 'angular2-jwt';
-import { BasicService} from './../../basic.service';
+import { BasicService } from './../../basic.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -78,7 +78,6 @@ export class BorrowNewComponent implements OnInit {
 
   ngOnInit() {
     this.dstWarehouseId = this.decodedToken.warehouseId;
-    console.log(this.dstWarehouseId);
 
     const date = new Date();
     this.borrowDate = {
@@ -168,8 +167,6 @@ export class BorrowNewComponent implements OnInit {
     const rs = await this.basicService.getWarehouses();
     if (rs.ok) {
       this.warehouses = rs.rows;
-      console.log(this.warehouses);
-      
     } else {
       this.alertService.error(rs.error);
     }
