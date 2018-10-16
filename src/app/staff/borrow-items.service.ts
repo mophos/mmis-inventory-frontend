@@ -17,28 +17,28 @@ export class BorrowItemsService {
   }
 
   async getSummaryInfo(borrowId: string) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/info-summary/${borrowId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/info-summary/${borrowId}`).toPromise();
     return rs.json();
   }
 
   async getDetailInfo(borrowId: string) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/info-detail/${borrowId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/info-detail/${borrowId}`).toPromise();
     return rs.json();
   }
 
   async getDetailInfoEdit(borrowId: string) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/info-detail-edit/${borrowId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/info-detail-edit/${borrowId}`).toPromise();
     return rs.json();
   }
 
   async getReturnedDetail(returnedId: any) {
-    const res = await this.authHttp.get(`${this.url}/borrow/returned/detail/${returnedId}`).toPromise();
+    const res = await this.authHttp.get(`${this.url}/staff/borrow/returned/detail/${returnedId}`).toPromise();
     return res.json();
   }
 
   getProductsWarehouse(warehouseId: string) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/borrow/product-warehouse/${warehouseId}`)
+      this.authHttp.get(`${this.url}/staff/borrow/product-warehouse/${warehouseId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -50,7 +50,7 @@ export class BorrowItemsService {
 
   getProductForBorrow(productId: string, warehouseId: string) {
     return new Promise((resolve, reject) => {
-      this.authHttp.post(`${this.url}/borrow/product-borrow`, {
+      this.authHttp.post(`${this.url}/staff/borrow/product-borrow`, {
         productId: productId,
         warehouseId: warehouseId
       })
@@ -65,7 +65,7 @@ export class BorrowItemsService {
   }
 
   async saveBorrow(summary: Object, generics: any[]) {
-    const rs: any = await this.authHttp.post(`${this.url}/borrow/save`, {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/borrow/save`, {
       summary: summary,
       generics: generics
     }).toPromise();
@@ -74,7 +74,7 @@ export class BorrowItemsService {
   }
 
   async approveAll(borrowIds: any[]) {
-    const rs: any = await this.authHttp.post(`${this.url}/borrow/approve-all`, {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/borrow/approve-all`, {
       borrowIds: borrowIds
     }).toPromise();
 
@@ -90,7 +90,7 @@ export class BorrowItemsService {
   }
 
   async approveAllReturned(returnedIds: any[]) {
-    const rs: any = await this.authHttp.post(`${this.url}/borrow/returned/approved`, {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/borrow/returned/approved`, {
       returnedIds: returnedIds
     }).toPromise();
 
@@ -98,7 +98,7 @@ export class BorrowItemsService {
   }
 
   async updateBorrow(borrowId: any, summary: Object, generics: any[]) {
-    const rs: any = await this.authHttp.put(`${this.url}/borrow/save/${borrowId}`, {
+    const rs: any = await this.authHttp.put(`${this.url}/staff/borrow/save/${borrowId}`, {
       summary: summary,
       generics: generics
     }).toPromise();
@@ -107,33 +107,33 @@ export class BorrowItemsService {
   }
 
   async list(type: any, limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/list?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/list?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 
   async listOther(type: any, limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/list/other?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/list/other?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 
   async listBorrow(type: any, limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/list-borrow?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/list-borrow?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 
   async listOtherBorrow(type: any, limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/list-borrow/other?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/list-borrow/other?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 
   async returnedList(type: any, limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/returned/list?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/returned/list?t=${type}&limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 
   detail(borrowId: string) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/basic/dst-borrow/detail/${borrowId}`)
+      this.authHttp.get(`${this.url}/staff/borrow/detail/${borrowId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -144,31 +144,31 @@ export class BorrowItemsService {
   }
 
   async remove(borrowId: string) {
-    const rs = await this.authHttp.delete(`${this.url}/borrow/${borrowId}`).toPromise();
+    const rs = await this.authHttp.delete(`${this.url}/staff/borrow/${borrowId}`).toPromise();
     return rs.json();
   }
 
   async removeOther(borrowId: string) {
-    const rs = await this.authHttp.delete(`${this.url}/borrow/other/${borrowId}`).toPromise();
+    const rs = await this.authHttp.delete(`${this.url}/staff/borrow/other/${borrowId}`).toPromise();
     return rs.json();
   }
 
   async approve(borrowId: string) {
-    const rs = await this.authHttp.post(`${this.url}/borrow/approve`, {
+    const rs = await this.authHttp.post(`${this.url}/staff/borrow/approve`, {
       borrowId: borrowId
     }).toPromise();
     return rs.json();
   }
 
   async active(borrowId: string) {
-    const rs = await this.authHttp.post(`${this.url}/borrow/active`, {
+    const rs = await this.authHttp.post(`${this.url}/staff/borrow/active`, {
       borrowId: borrowId
     }).toPromise();
     return rs.json();
   }
 
   async getLots(productId: any, warehouseId: any) {
-    const rs = await this.authHttp.get(`${this.url}/borrow/product-warehouse-lots/${productId}/${warehouseId}`).toPromise();
+    const rs = await this.authHttp.get(`${this.url}/staff/borrow/product-warehouse-lots/${productId}/${warehouseId}`).toPromise();
     return rs.json();
   }
 
@@ -181,7 +181,7 @@ export class BorrowItemsService {
   }
 
   async confirmAll(borrowIds: any[]) {
-    const rs: any = await this.authHttp.post(`${this.url}/borrow/confirm`, {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/borrow/confirm`, {
       borrowIds: borrowIds
     }).toPromise();
 
@@ -189,12 +189,12 @@ export class BorrowItemsService {
   }
 
   async request(limit: number, offset: number) {
-    const rs: any = await this.authHttp.get(`${this.url}/borrow/request?limit=${limit}&offset=${offset}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/staff/borrow/request?limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
 
   async saveReceive(summary: any, products: Array<any>) {
-    const res = await this.authHttp.post(`${this.url}/borrow/returned-product`, {
+    const res = await this.authHttp.post(`${this.url}/staff/borrow/returned-product`, {
       summary: summary,
       products: products
     }).toPromise();
@@ -203,7 +203,7 @@ export class BorrowItemsService {
   }
 
   async getReturnedProducts(returnedId) {
-    const res = await this.authHttp.get(`${this.url}/basic/returned/product-list/${returnedId}`)
+    const res = await this.authHttp.get(`${this.url}/staff/borrow/returned/product-list/${returnedId}`)
       .toPromise();
     return res.json();
   }

@@ -1,0 +1,129 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/staff/borrow">ยืม/คืนสินค้า</a>
+  <span class="breadcrumb-item active">ยืมสินค้าระหว่างหน่วยงาน</span>
+</nav>
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">วันที่</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate1" [options]="myDatePickerOptions" [(ngModel)]="borrowDate" required></my-date-picker-th>
+          </div>
+
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label class="required" for="srcWarehouseName">ชื่อหน่วยงาน</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" placeholder="กรอกชื่อหน่วยงาน..." name="srcWarehouseName" [(ngModel)]="srcWarehouseName">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="comment" [(ngModel)]="comment">
+          </div>
+          <!-- <div class=" col-lg-5 col-md-5 col-sm-12 col-xs-12">
+            <div class="btn-group">
+              <button class="btn btn-primary btn-sm" (click)="showUploadModal()">
+                <clr-icon shape="import"></clr-icon>
+                นำเข้ารายการจาก Excel
+              </button>
+              <button type="button" class="btn btn-outline-primary btn-sm" (click)="openModal()">
+                <clr-icon shape="search"></clr-icon> เลือกจากประวัติ
+              </button>
+            </div>
+          </div> -->
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+<clr-datagrid style="position: relative;">
+  <clr-dg-column>#</clr-dg-column>
+  <clr-dg-column [style.width.px]="300">ชื่อสินค้า</clr-dg-column>
+  <clr-dg-column>จำนวนยืม</clr-dg-column>
+  <clr-dg-column>หน่วยยืม</clr-dg-column>
+  <clr-dg-column>รวม (Base Unit)</clr-dg-column>
+  <clr-dg-column>คงเหลือ (Base Unit)</clr-dg-column>
+  <clr-dg-column></clr-dg-column>
+
+  <clr-dg-row *ngFor="let product of products; let idx = index;">
+    <wm-issue-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="product.items" ngProjectAs="clr-dg-row-detail"></wm-issue-product>
+
+    <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{product.generic_name}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="line-height: 25px;">{{product.expired_date | toEngDate}}</clr-dg-cell> -->
+    <clr-dg-cell>
+      <input type="text" #borrowQty (keyup)="editChangeBorrowQty(idx, borrowQty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+        wmNumberOnly [value]="product.borrow_qty" />
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
+        [genericId]="product.generic_id"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.borrow_qty*product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
+    <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.borrow_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.borrow_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeSelectedProduct(idx)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+  <clr-dg-row class="newLine">
+    <clr-dg-cell>&nbsp;</clr-dg-cell>
+    <clr-dg-cell>
+      <wm-search-generic-warehouse-zero [warehouseId]="warehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <input type="text" class="wm-edit-box-number" style="width: 100px;" style="background-color: #FFF9C4" [disabled]="!genericId"
+        [(ngModel)]="borrowQty" autocomplete="off" wmNumberWithOutDot placeholder="">
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (borrowQty * conversionQty) > remainQty ? 'red' : 'green'}">{{
+      borrowQty*conversionQty | number }}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty | number }}</clr-dg-cell>
+    <!-- <clr-dg-cell style="text-align: center; line-height: 25px;">{{ primaryUnitName }}</clr-dg-cell> -->
+
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId || !borrowQty || !unitGenericId || ((borrowQty * conversionQty) > remainQty)"
+          (click)="addProduct()">
+          เพิ่ม
+        </button>
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
+          ยกเลิก
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+</clr-datagrid>
+
+<div>
+  <button class="btn btn-success btn-sm" (click)="saveIssue()" [disabled]="!borrowDate || !products.length">
+    <clr-icon shape="floppy"></clr-icon>
+    บันทึกยืมสินค้า
+  </button>
+  <button class="btn btn-danger btn-sm" [routerLink]="['/staff/borrow']">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+</div>
+<wm-loading-modal #modalLoading></wm-loading-modal>
