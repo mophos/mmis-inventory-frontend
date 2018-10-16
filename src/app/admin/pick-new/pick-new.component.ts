@@ -55,7 +55,7 @@ export class PickNewComponent implements OnInit {
   decodedToken: any;
   rights: any;
   menuEditAfter: boolean;
-  approve: boolean = true;
+  approve = true;
   constructor(
     private alertService: AlertService,
     @Inject('API_URL') private url: string,
@@ -70,7 +70,7 @@ export class PickNewComponent implements OnInit {
     this.decodedToken = this.jwtHelper.decodeToken(token);
     const accessRight = this.decodedToken.accessRight;
     this.rights = accessRight.split(',');
-    this.menuEditAfter = _.indexOf(this.rights, 'WM_PICK_EDITAFTER') === -1 ? false : true;
+    this.menuEditAfter = _.indexOf(this.rights, 'WM_PICK_EDIT_AFTER') === -1 ? false : true;
   }
 
   ngOnInit() {
@@ -95,7 +95,7 @@ export class PickNewComponent implements OnInit {
     const rs: any = await this.pickService.getPickEdit(pickId)
     try {
       if (rs.ok) {
-        let detail = rs.rows[0] || {}
+        const detail = rs.rows[0] || {}
         this.products = rs.products || []
         console.log(this.products);
 
@@ -108,7 +108,7 @@ export class PickNewComponent implements OnInit {
             }
           };
         }
-        this.approve =  detail ? detail.is_approve == 'Y' ? false : true : true;
+        this.approve = detail ? detail.is_approve === 'Y' ? false : true : true;
         this.peopleId = detail ? detail.people_id : '';
         this.wmPick = detail ? detail.wm_pick : '';
         this.remark = detail ? detail.remark : '';
@@ -140,9 +140,9 @@ export class PickNewComponent implements OnInit {
     this.alertService.confirm('คุณต้องการบันทึกการหยิบ ใช่หรือไม่?')
       .then(async () => {
         let is_save = true
-        let date = this.pickDate ? `${this.pickDate.date.year}-${this.pickDate.date.month}-${this.pickDate.date.day}` : null;
-        for (let _product of this.products) {
-          if (( _product.pick_qty == 0 || (_product.receive_qty - _product.remain_qty - _product.pick_qty) < 0)) {
+        const date = this.pickDate ? `${this.pickDate.date.year}-${this.pickDate.date.month}-${this.pickDate.date.day}` : null;
+        for (const _product of this.products) {
+          if ((_product.pick_qty === 0 || (_product.receive_qty - _product.remain_qty - _product.pick_qty) < 0)) {
             this.alertService.error('กรุณาตรวจสอบจำนวนหยิบ');
             is_save = false
           }
@@ -163,7 +163,7 @@ export class PickNewComponent implements OnInit {
             });
         }
       })
-      .catch(()=>{})
+      .catch(() => { })
 
 
   }
@@ -176,7 +176,7 @@ export class PickNewComponent implements OnInit {
         this.products.splice(idx, 1);
       })
       .catch((error) => {
-        
+
       });
   }
   async getReceive(query: any) {
@@ -224,13 +224,13 @@ export class PickNewComponent implements OnInit {
     }
   }
   search(event) {
-        this.getReceive(this.genericSearch);
+    this.getReceive(this.genericSearch);
   }
   editChangeReceiveQty(idx: any, cmp: any) {
-    let tmp = this.products[idx].receive_qty - this.products[idx].remain_qty
-    if(tmp <= 0){
+    const tmp = this.products[idx].receive_qty - this.products[idx].remain_qty
+    if (tmp <= 0) {
       this.alertService.error('ไม่สามารใช้รายการนี้ได้ ลบออกจากรายการ')
-        this.products.splice(idx, 1);
+      this.products.splice(idx, 1);
     } else if (cmp.value > tmp) {
       this.alertService.error(`หยิบได้ไม่เกินจำนวนที่รับเข้า`)
       this.products[idx].pick_qty = tmp;
