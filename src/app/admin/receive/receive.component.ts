@@ -92,7 +92,8 @@ export class ReceiveComponent implements OnInit {
   totalPurchases = 0;
   queryPo: any;
   _openModal: boolean = false;
-  date: any;
+  Sdate: any;
+  Edate: any;
   jwtHelper: JwtHelper = new JwtHelper();
   sort;
   constructor(
@@ -279,7 +280,7 @@ export class ReceiveComponent implements OnInit {
         try {
           this.modalLoading.show();
           console.log(typeof w.purchase_order_id);
-          
+
           const rs: any = await this.receiveService.removeReceive(w.receive_id, w.purchase_order_id);
           if (rs.ok) {
             this.alertService.success();
@@ -861,13 +862,15 @@ export class ReceiveComponent implements OnInit {
 
   async printUnReceive() {
     this._openModal = true;
-    this.date = null;
+    this.Sdate = null;
+    this.Edate = null;
   }
 
   async printReportUnReceive() {
-    let sendDate = this.date.date.year + '-' + this.date.date.month + '-' + this.date.date.day;
+    let startdate = this.Sdate.date.year + '-' + this.Sdate.date.month + '-' + this.Sdate.date.day;
+    let enddate = this.Edate.date.year + '-' + this.Edate.date.month + '-' + this.Edate.date.day;
     this._openModal = false;
-    const url = `${this.apiUrl}/report/un-receive?&token=${this.token}&date=${sendDate}`;
+    const url = `${this.apiUrl}/report/un-receive?&startdate=${startdate}&enddate=${enddate}&token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
 }

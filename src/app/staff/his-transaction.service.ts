@@ -18,14 +18,14 @@ export class HisTransactionService {
     return resp.json();
   }
 
-  async getTransactionList(genericTypes: any) {
+  async getTransactionList(genericTypes: any, warehouseId: any) {
     const resp = await this.authHttp.post(`${this.url}/staff/his-transaction/list`,
-      { genericTypes: genericTypes }).toPromise();
+      { genericTypes: genericTypes, warehouseId: warehouseId }).toPromise();
     return resp.json();
   }
 
-  async removeTransactionList() {
-    const resp = await this.authHttp.delete(`${this.url}/staff/his-transaction/remove`).toPromise();
+  async removeTransactionList(warehouseId: any) {
+    const resp = await this.authHttp.delete(`${this.url}/staff/his-transaction/remove/${warehouseId}?token=${this.token}`).toPromise();
     return resp.json();
   }
 
@@ -78,5 +78,10 @@ export class HisTransactionService {
       xhr.open("POST", url, true);
       xhr.send(formData);
     });
+  }
+
+  async removeTransactionListSelect(transactionId: any) {
+    const resp = await this.authHttp.delete(`${this.url}/staff/his-transaction/remove-transaction-select/${transactionId}?token=${this.token}`).toPromise();
+    return resp.json();
   }
 }

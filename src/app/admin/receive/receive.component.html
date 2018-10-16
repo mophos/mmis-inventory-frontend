@@ -524,7 +524,8 @@
 <clr-modal [(clrModalOpen)]="_openModal" [clrModalSize]="'sm'" [clrModalClosable]="false">
   <h3 class="modal-title">พิมพ์รายงานเวชภัณฑ์ค้างส่ง</h3>
   <div class="modal-body" style="height: 300px;">
-    เลือกวันที่ <my-date-picker-th name="dateNow" [options]="myDatePickerOptions" [(ngModel)]="date" required></my-date-picker-th>               
+    เลือกวันที่ <my-date-picker-th name="dateNow" [options]="myDatePickerOptions" [(ngModel)]="Sdate" required></my-date-picker-th>
+    ถึง <my-date-picker-th name="dateNow" [options]="myDatePickerOptions" [(ngModel)]="Edate" required></my-date-picker-th>            
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger btn-sm" (click)="_openModal = false">ปิดหน้าต่าง</button>

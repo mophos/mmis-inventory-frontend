@@ -77,6 +77,14 @@ import { ExportdataComponent } from './exportdata/exportdata.component';
 import { PayRequisitionComponent } from './pay-requisition/pay-requisition.component';
 import { PayRequisitionConfirmComponent } from './pay-requisition-confirm/pay-requisition-confirm.component';
 import { ValueReceiveOtherComponent } from './report/value-receive-other/value-receive-other.component';
+import { BorrowComponent } from './borrow/borrow.component';
+import { BorrowNewComponent } from './borrow-new/borrow-new.component';
+import { BorrowEditComponent } from './borrow-edit/borrow-edit.component';
+import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
+import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.component';
+import { BorrowItemsService } from './borrow-items.service';
+import { ReturnedComponent } from './returned/returned.component';
+import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -122,7 +130,14 @@ import { ValueReceiveOtherComponent } from './report/value-receive-other/value-r
     ExportdataComponent,
     PayRequisitionComponent,
     PayRequisitionConfirmComponent,
-    ValueReceiveOtherComponent
+    ValueReceiveOtherComponent,
+    BorrowComponent,
+    BorrowNewComponent,
+    BorrowEditComponent,
+    BorrowotherEditComponent,
+    BorrowotherNewComponent,
+    ReturnedComponent,
+    ReturnedEditComponent
   ],
   providers: [
     ToThaiDatePipe,
@@ -152,7 +167,8 @@ import { ValueReceiveOtherComponent } from './report/value-receive-other/value-r
     PeriodService,
     AccessCheck,
     BorrowNoteService,
-    PayRequisitionService
+    PayRequisitionService,
+    BorrowItemsService
   ]
 })
 export class StaffModule { }

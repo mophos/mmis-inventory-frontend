@@ -133,7 +133,7 @@ export class BorrowItemsService {
 
   detail(borrowId: string) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/borrow/detail/${borrowId}`)
+      this.authHttp.get(`${this.url}/basic/borrow-detail/${borrowId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -203,7 +203,7 @@ export class BorrowItemsService {
   }
 
   async getReturnedProducts(returnedId) {
-    const res = await this.authHttp.get(`${this.url}/borrow/returned/product-list/${returnedId}`)
+    const res = await this.authHttp.get(`${this.url}/basic/returned/product-list/${returnedId}`)
       .toPromise();
     return res.json();
   }

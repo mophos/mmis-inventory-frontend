@@ -64,6 +64,8 @@
       คลังสินค้า/หน่วยเบิก ที่ถูกตัด Stock
     </ng-container>
   </clr-dg-column>
+  <clr-dg-column>
+  </clr-dg-column>
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
     <clr-dg-cell>{{p.date_serv | toThaiDate}}</clr-dg-cell>
@@ -73,6 +75,13 @@
     <clr-dg-cell style="text-align: right;">{{p.qty * p.conversion | number}}</clr-dg-cell>
     <clr-dg-cell>{{p.unit_name}}</clr-dg-cell>
     <clr-dg-cell>{{p.warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell>
+      <div class="btn-group">
+        <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeSelected(p)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
   </clr-dg-row>
 
   <clr-dg-footer>

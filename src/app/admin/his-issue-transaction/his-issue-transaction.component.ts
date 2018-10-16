@@ -187,4 +187,24 @@ export class HisIssueTransactionComponent implements OnInit {
 
       });
   }
+
+  removeSelected(g) {
+    this.alertService.confirm('ต้องการลบรายการ ตัดจ่าย ใช่หรือไม่?')
+      .then(() => {
+        this.hisTransactionService.removeTransactionListSelect(g.transaction_id)
+          .then((rs: any) => {
+            if (rs.ok) {
+              this.alertService.success();
+              this.getTransactionList();
+            } else {
+              this.alertService.error(rs.error);
+            }
+            this.modalLoading.hide();
+          })
+          .catch((error: any) => {
+            this.modalLoading.hide();
+            this.alertService.serverError();
+          });
+      }).catch(() => { });
+  }
 }

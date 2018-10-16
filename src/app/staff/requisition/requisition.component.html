@@ -238,7 +238,7 @@
             <!-- <button class="action-item" [routerLink]="['/admin/requisition/confirm/']" [queryParams]="{requisitionId: order.requisition_order_id, confirmId: order.confirm_id}">แก้ไขรายการจ่ายเวชภัณฑ์</button>
             <button class="action-item" (click)="removeOrder(order)">ยกเลิกใบจ่าย</button> -->
             <button class="action-item" (click)="printApprove(order)">พิมพ์ใบอนุมัติเบิก</button>
-            <button class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button>
+            <button disabled class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button>
           </clr-dg-action-overflow>
           <wm-staff-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [showUnpaid]="false" [requisitionId]="order.requisition_order_id"
             ngProjectAs="clr-dg-row-detail"></wm-staff-requisition-order-items-pay>

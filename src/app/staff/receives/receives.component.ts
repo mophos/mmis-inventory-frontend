@@ -301,4 +301,31 @@ export class ReceivesComponent implements OnInit {
     this.doSearchReceiveOther();
   }
 
+  removeReceiveOther(receive: any) {
+    // this.loading = true;
+    this.alertService.confirm(`ต้องการลบรายการนี้ [${receive.receive_code}] ใช่หรือไม่?`)
+      .then(async () => {
+        try {
+          const rs: any = await this.receiveService.removeReceiveOther(receive.receive_other_id);
+          if (rs.ok) {
+            const idx = _.findIndex(this.others, { receive_other_id: receive.receive_other_id });
+            if (idx > -1) {
+              this.others.splice(idx, 1);
+            }
+            this.alertService.success();
+          } else {
+            this.alertService.error(rs.error);
+          }
+          this.modalLoading.hide();
+
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(error.message);
+        }
+
+      }).catch(() => {
+        this.modalLoading.hide();
+      });
+  }
+
 }
