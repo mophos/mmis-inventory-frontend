@@ -55,6 +55,9 @@
               <button type="button" class="btn btn-outline-primary btn-sm" (click)="openModal()">
                 <clr-icon shape="search"></clr-icon> เลือกจากประวัติ
               </button>
+              <button type="button" class="btn btn-success-outline btn-sm" (click)="openModalTemplate()">
+                <clr-icon shape="search"></clr-icon> เลือกจาก template
+              </button>
             </div>
           </div>
         </div>
@@ -164,7 +167,27 @@
     <button type="button" class="btn btn-danger btn-sm" (click)="isOpenModal = false">ปิดหน้าต่าง</button>
   </div>
 </clr-modal>
+<clr-modal [(clrModalOpen)]="isOpenModalTemplate" [clrModalSize]="'md'" [clrModalClosable]="false">
+  <h3 class="modal-title">template ตัดจ่าย</h3>
+  <div class="modal-body">
+    <clr-datagrid style="height: 300px;">
+      <clr-dg-column>ชื่อ template</clr-dg-column>
+      <clr-dg-column></clr-dg-column>
 
+      <clr-dg-row *ngFor="let i of temlistIssues">
+        <!-- <wma-issues-list *clrIfExpanded [issueId]="i.issue_id" ngProjectAs="clr-dg-row-detail"></wma-issues-list> -->
+
+        <clr-dg-cell>{{i.template_subject}}</clr-dg-cell>
+        <clr-dg-cell [style.width.%]="15">
+          <button type="button" class="btn btn-primary btn-sm wm-small-btn" (click)="addIssueTemplate(i.template_id)">+ เพิ่ม</button>
+        </clr-dg-cell>
+      </clr-dg-row>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="isOpenModalTemplate = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
 <clr-modal [(clrModalOpen)]="openUpload" [clrModalClosable]="false">
   <h3 class="modal-title">อัปโหลดไฟล์</h3>
   <div class="modal-body">

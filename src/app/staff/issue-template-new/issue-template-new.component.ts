@@ -81,6 +81,8 @@ export class IssueTemplateNewComponent implements OnInit {
     this.productService.getProductsInTemplateIssue(this.templateId)
       .then((result: any) => {
         if (result.ok) {
+          console.log(this.products2);
+          
           this.products2 = result.rows;
           // this.chekSelectedItems();
           // this.ref.detectChanges();
