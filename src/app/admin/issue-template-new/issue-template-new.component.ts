@@ -1,25 +1,20 @@
-import { StaffService } from './../staff.service';
 import { SelectUnitsComponent } from 'app/directives/select-units/select-units.component';
+import { WarehouseProductsService } from './../warehouse-products.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { IMyOptions } from 'mydatepicker-th';
-import * as _ from 'lodash';
 import { AlertService } from "../../alert.service";
-
 import { WarehouseService } from "../warehouse.service";
-
-
-import { WarehouseProductsService } from '../warehouse-products.service';
-
-
-import { JwtHelper } from 'angular2-jwt';
+import { ProductsService } from "../products.service";
+import * as _ from 'lodash';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
 
 @Component({
-  selector: 'wm-requisition-template-new',
-  templateUrl: './requisition-template-new.component.html'
+  selector: 'wm-issue-template-new',
+  templateUrl: './issue-template-new.component.html',
 })
-export class RequisitionTemplateNewComponent implements OnInit {
+export class IssueTemplateNewComponent implements OnInit {
+
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('goto') public goto: any;
   @ViewChild('genericSearch') public genericSearch: SearchGenericAutocompleteComponent;
@@ -28,41 +23,73 @@ export class RequisitionTemplateNewComponent implements OnInit {
   dstWarehouses = [];
   srcWarehouses = [];
 
-  dstWarehouseId: any;
-  srcWarehouseId: any;
-  srcWarehouseName: any;
+  // dstwarehouseId: any;
+  warehouseId: any;
+
   products2 = [];
   templateSubject: any;
+  templateId: any = '';
+  templates: any;
+  warehouseName: any;
 
-  jwtHelper: JwtHelper = new JwtHelper();
+
   constructor(
+    private route: ActivatedRoute,
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
     private warehouseService: WarehouseService,
+    private productService: ProductsService,
     private warehouseProductService: WarehouseProductsService,
-    private router: Router,
-    private staffService: StaffService
-  ) { }
-
-  // ngOnInit() {
-  //   // this.getWarehouses();
-  //   this.token = sessionStorage.getItem('token');
-  //   const decodedToken = this.jwtHelper.decodeToken(this.token);
-  //   this.srcWarehouseId = decodedToken.warehouseId;
-  //   this.getReqShipingNetwork();
-  // }
+    private router: Router
+  ) { 
+    this.templateId = this.route.snapshot.params['templateId'];
+  }
   ngOnInit() {
-    const token = sessionStorage.getItem('token');
-    const decodedToken = this.jwtHelper.decodeToken(token);
-    this.srcWarehouseId = decodedToken.warehouseId;
     this.getWarehouses();
-    this.getDstShipingNetwork();
+    this.templateId ? this.getTemplate() : ''
+  }
+  async getTemplate() {
+    try {
+      const rs: any = await this.warehouseProductService.getTemplateIssue(this.templateId);
+      if (rs.ok) {
+        this.templates = rs.rows[0];
+        this.templateSubject = this.templates['template_subject'];
+        this.warehouseName = this.templates['warehouse_name'];
+        this.warehouseId = this.templates['warehouse_id'];
+        this.isRequest = true;
+        // this.ref.detectChanges();
+        this.getProducts()
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      console.error(error);
+      this.alertService.error(error.message);
+    }
+  }
+  async getProducts() {
+    this.modalLoading.show();
+    this.productService.getProductsInTemplateIssue(this.templateId)
+      .then((result: any) => {
+        if (result.ok) {
+          this.products2 = result.rows;
+          // this.chekSelectedItems();
+          // this.ref.detectChanges();
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
+        }
+        this.modalLoading.hide();
+      })
+      .catch(() => {
+        this.modalLoading.hide();
+        this.alertService.serverError();
+      });
   }
   async getWarehouses() {
     try {
       const resp: any = await this.warehouseService.getWarehouse();
       if (resp.ok) {
-        this.srcWarehouses = resp.rows;
+        this.srcWarehouses = _.sortBy(resp.rows, 'short_code');
       } else {
         this.alertService.error(resp.error);
       }
@@ -134,20 +161,20 @@ export class RequisitionTemplateNewComponent implements OnInit {
       }
     }
   }
-  saveTemplate() {
+  updateTemplate() {
     const templateSubject = this.templateSubject;
-    const templateSummary = {
-      dstWarehouseId: this.dstWarehouseId,
-      srcWarehouseId: this.srcWarehouseId,
-      templateSubject: templateSubject
-    };
-    if (templateSummary && this.products2) {
+    // const templateSummary = {
+    //   // dstwarehouseId: this.dstwarehouseId,
+    //   warehouseId: this.warehouseId,
+    //   templateSubject: templateSubject
+    // };
+    if (templateSubject && this.products2) {
       this.modalLoading.show();
-      this.warehouseProductService.saveWarehouseProductsTemplate(templateSummary, this.products2)
+      this.warehouseProductService.updateWarehouseProductsTemplateIssue(this.templateId,templateSubject, this.products2)
         .then((result: any) => {
           if (result.ok) {
             this.alertService.success();
-            this.router.navigate(['/staff/templates/main']);
+            this.router.navigate(['/admin/templates/main']);
           } else {
             this.alertService.error(JSON.stringify(result.error));
           }
@@ -162,21 +189,33 @@ export class RequisitionTemplateNewComponent implements OnInit {
       this.alertService.error('ข้อมูลไม่ครบถ้วน')
     }
   }
+  saveTemplate() {
+    const templateSubject = this.templateSubject;
+    const templateSummary = {
+      // dstwarehouseId: this.dstwarehouseId,
+      warehouseId: this.warehouseId,
+      templateSubject: templateSubject
+    };
+    if (templateSummary && this.products2) {
+      this.modalLoading.show();
+      this.warehouseProductService.saveWarehouseProductsTemplateIssue(templateSummary, this.products2)
+        .then((result: any) => {
+          if (result.ok) {
+            this.alertService.success();
+            this.router.navigate(['/admin/templates/main']);
+          } else {
+            this.alertService.error(JSON.stringify(result.error));
+          }
 
-  async getDstShipingNetwork() {
-    this.dstWarehouses = [];
-    await this.staffService.getWarehouseDst(this.srcWarehouseId)
-      .then((result: any) => {
-        if (result.ok) {
-          this.dstWarehouses = result.rows;
-          this.dstWarehouseId = result.rows[0].warehouse_id;
-        } else {
-          this.alertService.error(result.error)
-        }
-      })
-      .catch(() => {
-        this.alertService.serverError();
-      });
+          this.modalLoading.hide();
+        })
+        .catch(error => {
+          this.modalLoading.hide();
+          this.alertService.serverError();
+        });
+    } else {
+      this.alertService.error('ข้อมูลไม่ครบถ้วน')
+    }
   }
   editChangeUnit(g, e) {
     const idx = _.findIndex(this.products2, { 'generic_id': g.generic_id })
@@ -186,3 +225,4 @@ export class RequisitionTemplateNewComponent implements OnInit {
     this.products2 = _.sortBy(this.products2, ['generic_name']);
   }
 }
+

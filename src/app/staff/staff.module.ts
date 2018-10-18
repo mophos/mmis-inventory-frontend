@@ -85,6 +85,7 @@ import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.compo
 import { BorrowItemsService } from './borrow-items.service';
 import { ReturnedComponent } from './returned/returned.component';
 import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
+import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -137,7 +138,8 @@ import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
     BorrowotherEditComponent,
     BorrowotherNewComponent,
     ReturnedComponent,
-    ReturnedEditComponent
+    ReturnedEditComponent,
+    IssueTemplateNewComponent
   ],
   providers: [
     ToThaiDatePipe,

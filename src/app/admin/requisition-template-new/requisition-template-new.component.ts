@@ -129,7 +129,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
         .then((result: any) => {
           if (result.ok) {
             this.alertService.success();
-            this.router.navigate(['/admin/requisition/templates']);
+            this.router.navigate(['/admin/templates/main']);
           } else {
             this.alertService.error(JSON.stringify(result.error));
           }

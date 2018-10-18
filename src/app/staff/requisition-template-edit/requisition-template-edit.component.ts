@@ -147,7 +147,7 @@ export class RequisitionTemplateEditComponent implements OnInit {
           (this.templateId, this.templateSubject, this.products);
         if (rs.ok) {
           this.alertService.success();
-          this.router.navigate(['/staff/requisition/templates']);
+          this.router.navigate(['/staff/templates/main']);
         } else {
           this.alertService.error(JSON.stringify(rs.error));
         }

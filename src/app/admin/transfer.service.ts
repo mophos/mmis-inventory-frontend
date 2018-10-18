@@ -146,4 +146,9 @@ export class TransferService {
     return rs.json();
   }
 
+  async getTemplateItems(templateId: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/transfer/templates-items/${templateId}`).toPromise();
+    return rs.json();
+  }
+
 }

@@ -145,8 +145,63 @@ export class WarehouseProductsService {
 
 
   async removeRequisitionTemplate(templateId: any) {
-    const rs: any = await this.authHttp.delete(`${this.url}/warehouses/requisition/remove-template/${templateId}`)
+    const rs: any = await this.authHttp.delete(`${this.url}/staff/warehouses/requisition/remove-template/${templateId}`)
       .toPromise();
     return rs.json();
+  }
+
+  async getTemplateIssue(templateId: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouses/warehousetemplate-issue/${templateId}`).toPromise();
+    return rs.json();
+  }
+  getAllTemplateSearchIssue(query: any) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/staff/warehouses/warehouseproducttemplate-issue/search?query=${query}`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+  async removeRequisitionTemplateIssue(templateId: any) {
+    const rs: any = await this.authHttp.delete(`${this.url}/staff/warehouses/issue/remove-template/${templateId}`)
+      .toPromise();
+    return rs.json();
+  }
+  getallTemplateIssue() {
+    return new Promise((resolve, reject) => {
+      this.authHttp.get(`${this.url}/staff/warehouses/getwarehouseproducttemplate-issue`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+  updateWarehouseProductsTemplateIssue(templateId: any, templateSubject: any, products: Array<any>) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.post(`${this.url}/staff/warehouses/updatewarehouseproducttemplate-issue`, {
+        templateId: templateId,
+        templateSubject: templateSubject,
+        products: products
+      })
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  }
+  async saveWarehouseProductsTemplateIssue(templateSummary, products: Array<any>) {
+    const rs:any =  await this.authHttp.post(`${this.url}/staff/warehouses/savewarehouseproducttemplate-issue`, {
+        templateSummary: templateSummary,
+        products: products
+      }).toPromise();
+      return rs.json();
   }
 }
