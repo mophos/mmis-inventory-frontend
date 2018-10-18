@@ -57,7 +57,7 @@ export class IssuesNewComponent implements OnInit {
   file: any;
 
   isImport = false;
-
+  isOpenModalTemplate = false
   isOpenModal = false;
   reserveQty;
   @ViewChild('unitList') public unitList: any;
@@ -77,6 +77,7 @@ export class IssuesNewComponent implements OnInit {
 
   token: any;
   jwtHelper: JwtHelper = new JwtHelper();
+  temlistIssues: any = [];
 
   constructor(
     private toThaiDate: ToThaiDatePipe,
@@ -364,7 +365,58 @@ export class IssuesNewComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-
+  openModalTemplate(){
+    this.isOpenModalTemplate = true;
+    this.getIssuesTemplate();
+  }
+  async getIssuesTemplate() {
+    try {
+      const res = await this.issueService._getIssuesTemplate(this.warehouseId)
+      if (res.ok) {
+        console.log(res);
+        this.temlistIssues = res.rows;
+      } else {
+        this.alertService.error(res.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
+async addIssueTemplate(id:any){
+  this.products = []
+    this.isOpenModalTemplate = false;
+    this.modalLoading.show();
+    try {
+      const res = await this.issueService.getGenericTemplateList(id)
+      if (res.ok) {
+        console.log(res.rows);
+        this.objProduct = res.rows;
+        for (const v of this.objProduct) {
+          const obj: any = {};
+          obj.issue_qty = 0;
+          obj.generic_id = v.generic_id;
+          obj.generic_name = v.generic_name;
+          obj.conversion_qty = +v.conversion_qty;
+          obj.unit_generic_id = v.unit_generic_id;
+          obj.warehouse_id = this.warehouseId;
+          obj.reserve_qty = +v.qty - +v.reserve_qty;
+          obj.qty = +v.qty;
+          obj.unit_name = v.unit_name;
+          this.products.push(obj);
+          await this.alowcate(v.generic_id);
+        }
+        this.modalLoading.hide();
+      } else {
+        this.alertService.error(res.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+}
   async addIssue(id: any) {
     this.products = []
     this.isOpenModal = false;

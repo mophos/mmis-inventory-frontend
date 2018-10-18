@@ -11,6 +11,8 @@ import { PeriodService } from './../../period.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { DateService } from 'app/date.service';
+import { RequisitionService } from '../requisition.service';
+import { IGeneric, IUnit, IRequisitionOrderItem, IRequisitionOrder } from 'app/shared';
 
 @Component({
   selector: 'wm-transfer-new',
@@ -64,6 +66,8 @@ export class TransferNewComponent implements OnInit {
   lotNo: any;
 
   isSave = false;
+  templateId: any;
+  templates: any;
 
   constructor(
     private productService: ProductsService,
@@ -73,7 +77,9 @@ export class TransferNewComponent implements OnInit {
     private router: Router,
     private zone: NgZone,
     private dateService: DateService,
-    private periodService: PeriodService
+    private periodService: PeriodService,
+    private requisitionService: RequisitionService,
+
   ) { }
 
   ngOnInit() {
@@ -88,6 +94,8 @@ export class TransferNewComponent implements OnInit {
   }
 
   setSelectedProduct(event: any) {
+    console.log(event);
+    
     try {
       if (this.srcWarehouseId) {
         this.productId = event ? event.product_id : null;
@@ -100,7 +108,7 @@ export class TransferNewComponent implements OnInit {
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
         // this.wmProductId = event ? event.wm_product_id : null;
-        this.unitList.setGenericId(this.genericId);
+        // this.unitList.setGenericId(this.genericId);
         // this.getLots();
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
@@ -173,38 +181,10 @@ export class TransferNewComponent implements OnInit {
     this.locations = [];
     this.locationId = null;
     this.locationList.getLocations(this.dstWarehouseId);
+    this.getTemplates()
   }
 
-  async addGeneric() {
-    // if (this.transferQty) {
-    const idx = _.findIndex(this.generics, { generic_id: this.genericId });
-
-    if (idx === -1) {
-      if (this.genericId) {
-        const obj = {
-          working_code: this.workingCode,
-          generic_name: this.genericName,
-          generic_id: this.genericId,
-          transfer_qty: +this.transferQty,
-          remain_qty: +this.remainQty,
-          unit_generic_id: this.unitGenericId,
-          conversion_qty: this.conversionQty,
-          location_id: this.locationId,
-          primary_unit_id: this.primaryUnitId,
-          primary_unit_name: this.primaryUnitName
-        };
-
-        this.generics.push(obj);
-        await this.getProductList(this.genericId, this.transferQty);
-        this.clearForm();
-      } else {
-        this.alertService.error('ข้อมูลไม่ครบถ้วน')
-      }
-
-    } else {
-      this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
-    }
-  }
+  
 
   clearForm() {
     this.workingCode = null;
@@ -357,6 +337,87 @@ export class TransferNewComponent implements OnInit {
     } catch (error) {
       console.log(error);
       this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
+  async getTemplates() {
+    try {
+      const dstWarehouseId = this.srcWarehouseId;
+      const srcWarehouseId = this.dstWarehouseId;
+
+      if (dstWarehouseId && srcWarehouseId) {
+        const rs: any = await this.requisitionService.getTemplates(srcWarehouseId, dstWarehouseId);
+console.log(rs);
+
+        if (rs.ok) {
+          this.templates = rs.rows;
+        } else {
+          this.alertService.error(rs.error);
+        }
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
+  async getGenericItems(event: any) {
+    if (this.templateId) {
+      this.getTemplateItems(this.templateId);
+    }
+  }
+  async addGeneric() {
+    // if (this.transferQty) {
+    const idx = _.findIndex(this.generics, { generic_id: this.genericId });
+
+    if (idx === -1) {
+      if (this.genericId) {
+        const obj = {
+          working_code: this.workingCode,
+          generic_name: this.genericName,
+          generic_id: this.genericId,
+          transfer_qty: +this.transferQty,
+          remain_qty: +this.remainQty,
+          unit_generic_id: this.unitGenericId,
+          conversion_qty: this.conversionQty,
+          location_id: this.locationId,
+          primary_unit_id: this.primaryUnitId,
+          primary_unit_name: this.primaryUnitName
+        };
+
+        this.generics.push(obj);
+        await this.getProductList(this.genericId, this.transferQty);
+        this.clearForm();
+      } else {
+        this.alertService.error('ข้อมูลไม่ครบถ้วน')
+      }
+
+    } else {
+      this.alertService.error('รายการซ้ำกรุณาแก้ไขรายการเดิม');
+    }
+  }
+  async getTemplateItems(templateId: any) {
+    try {
+      const rs: any = await this.transferService.getTemplateItems(templateId);
+      console.log(rs.rows);
+      
+      if (rs.ok) {
+        this.generics = [];
+      for (const v of rs.rows) {
+          const product:any = {};
+          product.generic_id = v.generic_id || null;
+          product.generic_name = v.generic_name || null;
+          product.primary_unit_id = v.primary_unit_id || null;
+          product.unit_generic_id = v.unit_generic_id || null;
+          product.primary_unit_name = v.primary_unit_name || null;
+          product.conversion_qty = this.conversionQty || null;
+          product.working_code = v.working_code || null;//
+          product.remain_qty = +v.qty - +v.reserve_qty || null ; //
+          product.transfer_qty = 0;
+          this.generics.push(product);
+          await this.getProductList(product.generic_id, this.transferQty);
+        this.clearForm();
+        }
+      }
+    } catch (error) {
       this.alertService.error(error.message);
     }
   }

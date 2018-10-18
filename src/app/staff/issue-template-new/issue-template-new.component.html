@@ -1,12 +1,12 @@
 <nav class="breadcrumb">
-  <a class="breadcrumb-item" href="#/staff" routerLink="/staff">หน้าหลัก</a>
-  <a class="breadcrumb-item" href="#/staff/templates/main" routerLink="/staff/templates/main">ทำ Template ชุดเบิก</a>
-  <span class="breadcrumb-item active">จัดทำ Template เบิก/โอน</span>
+  <a class="breadcrumb-item" href="#/staff" routerLink="/users">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="#/staff/templates/main" routerLink="/staff/templates/main">ทำ Templates</a>
+  <span class="breadcrumb-item active">จัดทำ Template ชุดตัดจ่าย</span>
 </nav>
 
 <div class="card">
   <div class="card-header">
-    รายการสินค้าในคลัง สำหรับจัดทำ Templateเบิก/โอน
+    รายการสินค้าในคลัง สำหรับจัดทำชุดตัดจ่าย
   </div>
   <div class="card-block">
     <div class="card-text">
@@ -15,7 +15,7 @@
         <section class="form-block">
           <div class="form-group row">
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-              <label for="aForm_1" class="required">ชื่อ Template เบิก/โอน</label>
+              <label for="aForm_1" class="required">ชื่อ Template ชุดตัดจ่าย</label>
             </div>
             <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
               <input type="text" style="text-align: left;" class="col-lg-9 col-md-9" id="templateSubject" name="templateSubject" [(ngModel)]="templateSubject">
@@ -28,21 +28,23 @@
             </div>
             <div class="col-md-3">
               <div class="select form-control">
-                <select [disabled]=" srcWarehouseId" name="srcWarehouseId" id="srcWarehouseId" [(ngModel)]="srcWarehouseId">
+                <select disabled name="warehouseId" id="warehouseId" [(ngModel)]="warehouseId" (change)="onSelectWarehouses()">
+                  <option value="">ระบุคลังที่ต้องการตัดจ่าย</option>
                   <option *ngFor="let w of srcWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{w.warehouse_name}}</option>
                 </select>
               </div>
             </div>
-            <div class="col-md-1">
-              <label for="aForm_1" class="required">เบิกคลัง</label>
+            <!-- <div class="col-md-1">
+              <label for="aForm_1" class="required">ตัดจ่ายคลัง</label>
             </div>
             <div class="col-md-3">
               <div class="select form-control">
-                <select [disabled]="isRequest" name="dstWarehouseId" id="dstWarehouseId" [(ngModel)]="dstWarehouseId">
+                <select [disabled]="isRequest" name="dstwarehouseId" id="dstwarehouseId" [(ngModel)]="dstwarehouseId">
+                  <option value="">ระบุคลังที่ต้องการจ่าย</option>
                   <option *ngFor="let w of dstWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{w.warehouse_name}}</option>
                 </select>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="form-group row">
             <div class="col-md-2">
@@ -50,10 +52,10 @@
             </div>
             <div class="col-md-2">
               <div class="btn-group">
-                <button class="btn btn-sm btn-success" [disabled]="isRequest || !srcWarehouseId || !dstWarehouseId || !templateSubject" (click)="showProducts()">
+                <button class="btn btn-sm btn-success" [disabled]="isRequest || !warehouseId " (click)="showProducts()">
                   เลือกรายการสินค้า
                 </button>
-                <button class="btn btn-sm btn-danger" [disabled]="!isRequest || !srcWarehouseId || !dstWarehouseId" (click)="changeWarehouse()">
+                <button class="btn btn-sm btn-danger" [disabled]="!isRequest || !warehouseId" (click)="changeWarehouse()">
                   เปลี่ยนคลัง
                 </button>
               </div>
@@ -62,11 +64,11 @@
         </section>
       </form>
       <div *ngIf="isRequest">
-        <p>เลือกสินค้าที่ต้องการเบิก</p>
+        <p>เลือกสินค้าที่ต้องการตัดจ่าย</p>
         <form class="search">
           <wm-search-generic-autocomplete [clearOnSelected]="true" #genericSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-autocomplete>
         </form>
-        <p>รายการเบิก</p>
+        <p>รายการตัดจ่าย</p>
         <clr-datagrid [style.height.px]="300">
           <clr-dg-column [style.width.%]="1">#</clr-dg-column>
           <clr-dg-column [style.width.%]="30">ชื่อสินค้า</clr-dg-column>
@@ -85,7 +87,7 @@
             <clr-dg-cell>{{(idx+1)}}</clr-dg-cell>
             <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
             <clr-dg-cell>
-              <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)" [genericId]="g.generic_id"></wm-select-receive-unit>
+              <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)" [genericId]="g.generic_id" [selectedUnitGenericId]="g.unit_generic_id"></wm-select-receive-unit>
             </clr-dg-cell>
             <clr-dg-cell style="text-align: center;">
               <button title="เลื่อนขึ้น" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productUp(g)">
@@ -96,7 +98,7 @@
                 <clr-icon shape="caret down"></clr-icon>
                 <!-- เลื่อนลง -->
               </button>
-              <input type="text" class="form-control" #goto size="14" placeholder="ระบุลำดับ เพื่อเลื่อน..">
+              <input type="text" class="form-control" size="14" #goto placeholder="ระบุลำดับ เพื่อเลื่อน..">
               <button title="เลื่อนไปที่" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productGoTo(g,goto.value)">
                 <clr-icon shape="upload"></clr-icon>
                 <!-- เลื่อนขึ้น -->
@@ -118,9 +120,9 @@
     </div>
   </div>
   <div class="card-footer">
-    <button class="btn btn-sm btn-primary" [disabled]="!products2.length || !srcWarehouseId || !dstWarehouseId" (click)="saveTemplate()">บันทึกสร้างชุดเบิก/โอน</button>
+    <button *ngIf="!templateId" class="btn btn-sm btn-primary" [disabled]="!products2.length || !warehouseId" (click)="saveTemplate()">บันทึกสร้างชุดตัดจ่าย</button>
+    <button *ngIf="templateId" class="btn btn-sm btn-primary" [disabled]="!products2.length || !warehouseId" (click)="updateTemplate()">บันทึกสร้างชุดตัดจ่าย</button>
     <a href="#/staff/templates/main" class="btn btn-sm btn-danger">กลับ</a>
   </div>
 </div>
-
 <wm-loading-modal #modalLoading></wm-loading-modal>

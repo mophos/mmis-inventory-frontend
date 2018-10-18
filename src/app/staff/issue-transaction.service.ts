@@ -107,4 +107,12 @@ export class IssueTransactionService {
     }).toPromise();
     return rs.json();
   }
+  async _getIssuesTemplate(warehouseId: any) {
+    const rs = await this.authHttp.get(`${this.url}/staff/issue/_getissuestemplate/${warehouseId}`).toPromise();
+    return rs.json();
+  }
+  async getGenericTemplateList(issueId: any) {
+    const rs = await this.authHttp.get(`${this.url}/staff/issue/generic-template-list/${issueId}`).toPromise();
+    return rs.json();
+  }
 }
