@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-3">
               <div class="select form-control">
-                <select disabled name="warehouseId" id="warehouseId" [(ngModel)]="warehouseId" (change)="onSelectWarehouses()">
+                <select disabled name="warehouseId" id="warehouseId" [(ngModel)]="warehouseId">
                   <option value="">ระบุคลังที่ต้องการตัดจ่าย</option>
                   <option *ngFor="let w of srcWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{w.warehouse_name}}</option>
                 </select>
