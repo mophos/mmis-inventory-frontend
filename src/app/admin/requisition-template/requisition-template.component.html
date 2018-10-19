@@ -13,6 +13,11 @@
       <clr-icon shape="tools"></clr-icon> Template เบิก/โอน
     </button>
     <clr-tab-content *clrIfActive="tab === 'tmpReq'">
+      <div style="margin-top:10px" class="col-lg-3 col-md-3 col-sm-12 col-xs-3">
+        <button class="btn btn-sm btn-success" [routerLink]="['/admin/templates/requisition/new']">
+          + สร้าง Template เบิก/โอน
+        </button>
+      </div>
       <div class="card">
         <div class="card-block">
           <div class="row">
@@ -23,11 +28,7 @@
                 placeholder="ชื่อ template, คลังต้นทาง, คลังปลายทาง">
             </div>
 
-            <div style="text-align:right;" class="col-lg-3 col-md-3 col-sm-12 col-xs-3">
-              <button class="btn btn-sm btn-success" [routerLink]="['/admin/templates/requisition/new']">
-                + สร้าง Template เบิก/โอน
-              </button>
-            </div>
+
           </div>
         </div>
       </div>
@@ -68,20 +69,19 @@
       <clr-icon shape="scissors"></clr-icon> Template ตัดจ่าย
     </button>
     <clr-tab-content *clrIfActive="tab === 'tmpIss'">
+      <div style="margin-top:10px" class="col-lg-3 col-md-3 col-sm-12 col-xs-3">
+        <button class="btn btn-sm btn-success" [routerLink]="['/admin/templates/issue/new']">
+          + สร้าง Template ตัดจ่าย
+        </button>
+      </div>
       <div class="card">
         <div class="card-block">
           <div class="row">
-
-            <div  class="col-lg-9 col-md-9 col-sm-12 col-xs-9">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-9">
               <label for="">ค้นหา</label>
               <input type="text" (keyup)="enterSearch($event)" name="queryIssue" [(ngModel)]="queryIssue" placeholder="ชื่อ template">
             </div>
 
-            <div style="text-align:right;" class="col-lg-3 col-md-3 col-sm-12 col-xs-3">
-              <button class="btn btn-sm btn-success" [routerLink]="['/admin/templates/issue/new']">
-                + สร้าง Template ตัดจ่าย
-              </button>
-            </div>
           </div>
         </div>
       </div>
