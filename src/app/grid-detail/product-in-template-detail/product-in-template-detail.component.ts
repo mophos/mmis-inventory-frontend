@@ -10,6 +10,7 @@ import { ProductsService } from './../../admin/products.service';
 })
 export class ProductInTemplateDetailComponent implements OnInit {
   @Input() templateId: any;
+  @Input() ifIssue: any;
   loading = false;
   productsdetail = [];
 
@@ -21,12 +22,31 @@ export class ProductInTemplateDetailComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.ifIssue ? 
+    this.showAllProductsInTemplateIssue() :
     this.showAllProductsInTemplate();
   }
 
   showAllProductsInTemplate() {
     this.loading = true;
     this.productService.getProductsInTemplate(this.templateId)
+      .then((result: any) => {
+        if (result.ok) {
+          this.productsdetail = result.rows;
+          this.ref.detectChanges();
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
+        }
+        this.loading = false;
+      })
+      .catch(() => {
+        this.loading = false;
+        this.alertService.serverError();
+      });
+  }
+  showAllProductsInTemplateIssue() {
+    this.loading = true;
+    this.productService.getProductsInTemplateIssue(this.templateId)
       .then((result: any) => {
         if (result.ok) {
           this.productsdetail = result.rows;

@@ -61,6 +61,14 @@ export class IssueService {
     const rs = await this.authHttp.get(`${this.url}/issues/_getissues/${warehouseId}`).toPromise();
     return rs.json();
   }
+  async _getIssuesTemplate(warehouseId: any) {
+    const rs = await this.authHttp.get(`${this.url}/issues/_getissuestemplate/${warehouseId}`).toPromise();
+    return rs.json();
+  }
+  async getGenericTemplateList(issueId: any) {
+    const rs = await this.authHttp.get(`${this.url}/issues/generic-template-list/${issueId}`).toPromise();
+    return rs.json();
+  }
   async getGenericsDetail(issueId: any) {
     const rs = await this.authHttp.get(`${this.url}/issues/info/generics?issueId=${issueId}`).toPromise();
     return rs.json();

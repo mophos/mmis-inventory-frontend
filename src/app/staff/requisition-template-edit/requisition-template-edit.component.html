@@ -1,6 +1,6 @@
 <nav class="breadcrumb">
   <a class="breadcrumb-item" href="#/staff" routerLink="/staff">หน้าหลัก</a>
-  <a class="breadcrumb-item" href="#/staff/requisition/templates" routerLink="/staff/requisition/templates">ทำ Template เบิก/โอน</a>
+  <a class="breadcrumb-item" href="#/staff/templates/main" routerLink="/staff/templates/main">ทำ Template เบิก/โอน</a>
   <span class="breadcrumb-item active">จัดทำ Template เบิก/โอน</span>
 </nav>
 
@@ -104,7 +104,7 @@
   <div class="card-footer">
     <button class="btn btn-sm btn-primary" [disabled]="!products.length || !srcWarehouseId || !dstWarehouseId || !templateSubject"
       (click)="saveTemplate()">บันทึกสร้างชุดเบิก/โอน</button>
-    <a href="#/staff/requisition/templates" class="btn btn-sm btn-danger">กลับ</a>
+    <a href="#/staff/templates/main" class="btn btn-sm btn-danger">กลับ</a>
   </div>
 </div>
 

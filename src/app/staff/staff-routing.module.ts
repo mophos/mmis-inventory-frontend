@@ -47,6 +47,7 @@ import { BorrowotherNewComponent } from './borrowother-new/borrowother-new.compo
 import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.component';
 import { ReturnedComponent } from './returned/returned.component';
 import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
+import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 
 const routes: Routes = [
   {
@@ -74,9 +75,22 @@ const routes: Routes = [
           { path: 'main', component: RequisitionComponent },
           { path: 'new', component: RequisitionNewComponent },
           { path: 'edit/:requisitionId', component: RequisitionNewComponent },
-          { path: 'templates', component: RequisitionTemplateComponent },
-          { path: 'templates/new', component: RequisitionTemplateNewComponent },
-          { path: 'templates/edit/:templateId', component: RequisitionTemplateEditComponent }
+          // { path: 'templates', component: RequisitionTemplateComponent },
+          // { path: 'templates/new', component: RequisitionTemplateNewComponent },
+          // { path: 'templates/edit/:templateId', component: RequisitionTemplateEditComponent }
+        ]
+      },
+      {
+        path: 'templates',
+        canActivate: [StaffGuard],
+        children: [
+          { path: '', redirectTo: 'templates', pathMatch: 'full' },
+          { path: 'main', component: RequisitionTemplateComponent },
+          { path: 'requisition/new', component: RequisitionTemplateNewComponent },
+          { path: 'requisition/edit/:templateId', component: RequisitionTemplateEditComponent },
+          { path: 'issue/new', component: IssueTemplateNewComponent },
+          { path: 'issue/edit/:templateId', component: IssueTemplateNewComponent },
+
         ]
       },
       {
