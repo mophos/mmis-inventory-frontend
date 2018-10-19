@@ -63,4 +63,9 @@ export class ProductsService {
     return resp.json();
   }
 
+  async getGenericType() {
+    const resp = await this.authHttp.get(`${this.url}/generics/types`).toPromise();
+    return resp.json();
+  }
+
 }
