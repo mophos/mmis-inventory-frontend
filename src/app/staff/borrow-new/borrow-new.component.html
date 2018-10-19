@@ -18,13 +18,7 @@
         </div>
         <div class="form-group row wid99">
           <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-            <label for="srcWarehouseId" class="required">ยืมจากคลัง</label>
-          </div>
-          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <wm-select-warehouses #srcWarehouse (onSelect)="setSrcWarehouse($event)"></wm-select-warehouses>
-          </div>
-          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-            <label class="required" for="dstWarehouseId">ไปยังคลัง</label>
+            <label class="required" for="dstWarehouseId">หน่วยเบิก</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="select">
@@ -35,6 +29,12 @@
                 </option>
               </select>
             </div>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="srcWarehouseId" class="required">ยืมจากคลัง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <wm-select-warehouses #srcWarehouse (onSelect)="setSrcWarehouse($event)"></wm-select-warehouses>
           </div>
         </div>
       </section>
@@ -49,24 +49,21 @@
   <clr-dg-column>#</clr-dg-column>
   <clr-dg-column>Working Code</clr-dg-column>
   <clr-dg-column style="width: 300px;">ชื่อ Generic</clr-dg-column>
-  <clr-dg-column style="width: 50px;">จำนวนยืม <br> (Base Unit)</clr-dg-column>
-  <!-- <clr-dg-column>รวม <br> (Base Unit)</clr-dg-column> -->
-  <!-- <clr-dg-column>ยอดโอนจริง <br> (Base Unit)</clr-dg-column> -->
-  <clr-dg-column>คงเหลือหลังยืม <br> (Base Unit)</clr-dg-column>
-  <clr-dg-column>Location</clr-dg-column>
+  <clr-dg-column style="width: 50px;">จำนวนยืม</clr-dg-column>
+  <clr-dg-column>Package</clr-dg-column>
+  <clr-dg-column>รวม (Base Unit)</clr-dg-column>
   <clr-dg-column></clr-dg-column>
 
   <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
-    <wm-borrow-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)" ngProjectAs="clr-dg-row-detail"></wm-borrow-items>
     <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty | number}} {{generic.primary_unit_name}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': generic.borrow_qty > generic.remain_qty ? 'red' : 'green'}">
-      {{generic.remain_qty - generic.borrow_qty | number}} {{generic.primary_unit_name}}
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty/generic.conversion_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">
+      <wm-select-receive-unit [disabled]="true" [genericId]="generic.generic_id" [selectedUnitGenericId]="generic.unit_generic_id" (onSelect)="editChangeUnit($event, idx)"></wm-select-receive-unit>
     </clr-dg-cell>
-    <clr-dg-cell>
-      <wm-select-product-location [warehouseId]="dstWarehouseId" [selectedId]="generic.location_id" (onSelect)="editChangeLocation($event, idx)"></wm-select-product-location>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">
+      {{generic.borrow_qty | number}}
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
@@ -84,15 +81,19 @@
       <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
       <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': borrowQty > remainQty ? 'red' : 'green'}">{{ borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
     <clr-dg-cell>
-        <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
+      <input type="text" #qty (keyup)="onChangeEditQty(qty.value)" [value]="borrowQty" style="width: 100%; text-align: right; background-color:#FFF9C4"
+        placeholder="" wmNumberWithOutDot>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right;">
+      {{borrowQty * conversionQty}} {{primaryUnitName}}
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId"
-          (click)="addGeneric()">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId" (click)="addGeneric()">
           เพิ่ม
         </button>
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
@@ -115,4 +116,4 @@
   </button>
 </div>
 
-<wm-loading-modal #modalLoading></wm-loading-modal>  
+<wm-loading-modal #modalLoading></wm-loading-modal>

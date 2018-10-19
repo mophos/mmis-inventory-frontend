@@ -93,6 +93,7 @@ export class BorrowNewComponent implements OnInit {
   setSelectedProduct(event: any) {
     try {
       if (this.srcWarehouseId) {
+        console.log(event)
         this.productId = event ? event.product_id : null;
         this.productName = event ? event.product_name : null;
         this.genericName = event ? event.generic_name : null;
@@ -197,7 +198,7 @@ export class BorrowNewComponent implements OnInit {
           working_code: this.workingCode,
           generic_name: this.genericName,
           generic_id: this.genericId,
-          borrow_qty: +this.borrowQty,
+          borrow_qty: +this.borrowQty * this.conversionQty,
           remain_qty: +this.remainQty,
           unit_generic_id: this.unitGenericId,
           conversion_qty: this.conversionQty,
@@ -207,7 +208,7 @@ export class BorrowNewComponent implements OnInit {
         };
 
         this.generics.push(obj);
-        await this.getProductList(this.genericId, this.borrowQty);
+        // await this.getProductList(this.genericId, this.borrowQty);
         this.clearForm();
       } else {
         this.alertService.error('ข้อมูลไม่ครบถ้วน')
@@ -236,21 +237,11 @@ export class BorrowNewComponent implements OnInit {
     this.lotNo = null;
     this.locationId = null;
     this.lots = [];
-    // this.unitList.clearUnits();
+    this.unitList.clearUnits();
   }
 
-  editChangeborrowQty(idx: any, qty: any) {
-    const oldQty = +this.generics[idx].borrow_qty;
-    if ((+qty.value * this.generics[idx].conversion_qty) > +this.generics[idx].remain_qty) {
-      this.alertService.error('จำนวนที่ยืม มากกว่าจำนวนคงเหลือ');
-      qty.value = oldQty;
-    } else {
-      this.generics[idx].borrow_qty = +qty.value;
-      const genericId = this.generics[idx].generic_id;
-      const borrowQty = this.generics[idx].borrow_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].borrow_qty = borrowQty;
-      this.getProductList(genericId, borrowQty);
-    }
+  onChangeEditQty(qty: any) {
+    this.borrowQty = qty;
   }
 
   changeProductQty(genericId, event) {
@@ -261,18 +252,13 @@ export class BorrowNewComponent implements OnInit {
     });
   }
 
-  editChangeUnit(idx: any, event: any, unitCmp: any) {
+  editChangeUnit(idx: any, event: any) {
     this.generics[idx].unit_generic_id = event.unit_generic_id;
     this.generics[idx].conversion_qty = event.qty;
-    if (this.generics[idx].remain_qty < (this.generics[idx].borrow_qty * event.qty)) {
-      this.alertService.error('รายการไม่พอยืม');
-      this.generics[idx].products = [];
-    } else {
-      const genericId = this.generics[idx].generic_id;
-      const borrowQty = this.generics[idx].borrow_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].borrow_qty = borrowQty;
-      this.getProductList(genericId, borrowQty);
-    }
+    // const genericId = this.generics[idx].generic_id;
+    const borrowQty = this.generics[idx].borrow_qty * this.generics[idx].conversion_qty;
+    this.generics[idx].borrow_qty = borrowQty;
+    // this.getProductList(genericId, borrowQty);
   }
 
   removeProduct(idx: any) {
@@ -286,28 +272,38 @@ export class BorrowNewComponent implements OnInit {
     this.isSave = true;
     if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.borrowDate) {
       const borrowDate = `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`;
-      // const rs = await this.periodService.getStatus(borrowDate);
 
-      // if (rs.rows[0].status_close === 'Y') {
-      //   this.alertService.error('ปิดรอบบัญชีแล้ว ไม่สามารถยืมได้')
-      // } else {
+
       const generics = [];
       let isError = false;
 
-      _.forEach(this.generics, v => {
+      let data = [];
+      for (const v of this.generics) {
         if (v.generic_id && v.borrow_qty) {
+          const _data = {
+            genericId: v.generic_id,
+            genericQty: v.borrow_qty
+          }
+
+          data.push(_data);
+
+          let allocate = await this.borrowItemsService.allocate(data, this.srcWarehouseId);
+          let wmRows = [];
+          wmRows.push(allocate.rows);
+
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,
             unit_generic_id: v.unit_generic_id,
             primary_unit_id: v.primary_unit_id,
-            location_id: v.location_id,
-            products: v.products
+            products: {
+              data: wmRows
+            }
           });
         } else {
           isError = false;
         }
-      });
+      }
 
       if (isError) {
         this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
@@ -349,28 +345,28 @@ export class BorrowNewComponent implements OnInit {
     this.isSave = false;
   }
 
-  async getProductList(genericId, qty) {
-    try {
-      this.modalLoading.show();
-      const data = [{
-        genericId: genericId,
-        genericQty: qty
-      }];
-      const srcWarehouseId = this.srcWarehouseId;
-      const rs: any = await this.borrowItemsService.allocate(data, srcWarehouseId);
-      if (rs.ok) {
-        const idx = _.findIndex(this.generics, { generic_id: genericId });
-        if (idx > -1) {
-          this.generics[idx].products = rs.rows;
-        }
-      } else {
-        this.alertService.error(rs.error);
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      console.log(error);
-      this.modalLoading.hide();
-      this.alertService.error(error.message);
-    }
-  }
+  // async getProductList(genericId, qty) {
+  //   try {
+  //     this.modalLoading.show();
+  //     const data = [{
+  //       genericId: genericId,
+  //       genericQty: qty
+  //     }];
+  //     const srcWarehouseId = this.srcWarehouseId;
+  //     const rs: any = await this.borrowItemsService.allocate(data, srcWarehouseId);
+  //     if (rs.ok) {
+  //       const idx = _.findIndex(this.generics, { generic_id: genericId });
+  //       if (idx > -1) {
+  //         this.generics[idx].products = rs.rows;
+  //       }
+  //     } else {
+  //       this.alertService.error(rs.error);
+  //     }
+  //     this.modalLoading.hide();
+  //   } catch (error) {
+  //     console.log(error);
+  //     this.modalLoading.hide();
+  //     this.alertService.error(error.message);
+  //   }
+  // }
 }
