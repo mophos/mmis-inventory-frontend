@@ -51,7 +51,8 @@
         <clr-icon clrVerticalNavIcon shape="share"></clr-icon>
         ยืม/คืนสินค้า
       </a>
-      <a clrVerticalNavLink *ngIf="menuPayRequisition" routerLink="/staff/pay-requisition" title="จ่ายสินค้า" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuPayRequisition" routerLink="/staff/pay-requisition" title="จ่ายสินค้า"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="tools" class="is-solid"></clr-icon>
         จ่ายสินค้า
       </a>
@@ -65,11 +66,13 @@
         <clr-icon clrVerticalNavIcon shape="two-way-arrows"></clr-icon>
         โอนสินค้า
       </a>
-      <a clrVerticalNavLink *ngIf="menuIssue" routerLink="/staff/issue-transaction" title="บันทึกตัดจ่าย (อื่นๆ)" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuIssue" routerLink="/staff/issue-transaction" title="บันทึกตัดจ่าย (อื่นๆ)"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="scissors"></clr-icon>
         บันทึกตัดจ่าย (อื่นๆ)
       </a>
-      <a clrVerticalNavLink *ngIf="menuIssueHis" routerLink="/staff/his-issue-transaction" title="ตัดจ่ายจาก HIS" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuIssueHis" routerLink="/staff/his-issue-transaction" title="ตัดจ่ายจาก HIS"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="sync"></clr-icon>
         ตัดจ่ายจาก HIS
       </a>
@@ -77,15 +80,18 @@
         <clr-icon clrVerticalNavIcon shape="clipboard"></clr-icon>
         นับสินค้าคงเหลือ
       </a> -->
-      <a clrVerticalNavLink *ngIf="menuTemplate" routerLink="/staff/templates/main" title="Template ชุดเบิก" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuTemplate" routerLink="/staff/templates/main" title="Template ชุดเบิก"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="plugin"></clr-icon>
         Template เบิก/โอน,ตัดจ่าย
       </a>
-      <a clrVerticalNavLink *ngIf="menuMinMax" routerLink="/staff/planning" title="กำหนดยอดคงเหลือ/MIN-MAX" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuMinMax" routerLink="/staff/planning" title="กำหนดยอดคงเหลือ/MIN-MAX"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="note"></clr-icon>
         กำหนด MIN-MAX
       </a>
-      <a clrVerticalNavLink *ngIf="menuMap" routerLink="/staff/his-mappings" title="Map รหัสยาและเวชภัณฑ์" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuMap" routerLink="/staff/his-mappings" title="Map รหัสยาและเวชภัณฑ์"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="share"></clr-icon>
         Map รหัสยาและเวชภัณฑ์
       </a>
@@ -134,6 +140,12 @@
           <a clrVerticalNavLink routerLink="/staff/reports/value-receive-other" routerLinkActive="active">
             <clr-icon shape="printer"></clr-icon>
             รายงานมูลค่าจากการรับอื่นๆ
+          </a>
+        </clr-vertical-nav-group-children>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <a clrVerticalNavLink routerLink="/staff/reports/inventory-status" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            รายงานสถานะเวชภัณฑ์คงคลัง
           </a>
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>

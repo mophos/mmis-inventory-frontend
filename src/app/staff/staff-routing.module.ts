@@ -48,6 +48,7 @@ import { BorrowotherEditComponent } from './borrowother-edit/borrowother-edit.co
 import { ReturnedComponent } from './returned/returned.component';
 import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
+import { InventoryStatusComponent } from './report/inventory-status/inventory-status.component'
 
 const routes: Routes = [
   {
@@ -133,7 +134,8 @@ const routes: Routes = [
       { path: 'adjust-stock/new', canActivate: [AuthAdjustService], component: AdjustStockNewComponent },
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'exportdata', component: ExportdataComponent },
-      { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent }
+      { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent },
+      { path: 'reports/inventory-status', component: InventoryStatusComponent }
     ]
   }
 ];
