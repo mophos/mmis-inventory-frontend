@@ -5,6 +5,7 @@ import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../alert.service';
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { ProductsService } from './../products.service';
+import { SearchPeopleAutoCompleteComponent } from '../../directives/search-people-autocomplete/search-people-autocomplete.component';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -19,6 +20,7 @@ export class BorrowEditComponent implements OnInit {
 
   @ViewChild('locationList') locationList;
   @ViewChild('modalLoading') private modalLoading;
+  @ViewChild('elSearchPeople') elSearchPeople: SearchPeopleAutoCompleteComponent;
 
   lots = [];
   generics = [];
@@ -104,6 +106,9 @@ export class BorrowEditComponent implements OnInit {
             }
           }
         }
+        
+        const fullname = rs.info.fullname;
+        this.elSearchPeople.setDefault(fullname);
 
         this.srcWarehouseId = rs.info.src_warehouse_id;
         this.dstWarehouseId = rs.info.dst_warehouse_id;

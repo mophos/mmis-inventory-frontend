@@ -5,6 +5,7 @@ import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../alert.service';
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { ProductsService } from './../products.service';
+import { SearchPeopleAutoCompleteComponent } from '../../directives/search-people-autocomplete/search-people-autocomplete.component';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -19,6 +20,7 @@ export class BorrowEditComponent implements OnInit {
 
   @ViewChild('locationList') locationList;
   @ViewChild('modalLoading') private modalLoading;
+  @ViewChild('elSearchPeople') elSearchPeople: SearchPeopleAutoCompleteComponent;
 
   lots = [];
   generics = [];
@@ -44,6 +46,7 @@ export class BorrowEditComponent implements OnInit {
   workingCode: any;
   isSaving = false;
   disableSave = false;
+  peopleId: any;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -93,7 +96,7 @@ export class BorrowEditComponent implements OnInit {
     try {
       this.modalLoading.show();
       const rs: any = await this.borrowItemsService.getSummaryInfo(this.borrowId);
-      
+
       if (rs.ok) {
         if (rs.info.borrow_date) {
           this.borrowDate = {
@@ -105,9 +108,12 @@ export class BorrowEditComponent implements OnInit {
           }
         }
 
+        const fullname = rs.info.fullname;
+        this.elSearchPeople.setDefault(fullname);
+
         this.srcWarehouseId = rs.info.src_warehouse_id;
         this.dstWarehouseId = rs.info.dst_warehouse_id;
-        
+
         if (rs.info.confirmed === 'Y' || rs.info.approved === 'Y' || rs.info.mark_deleted === 'Y') {
           this.disableSave = true;
         }
@@ -134,6 +140,8 @@ export class BorrowEditComponent implements OnInit {
         this.remainQty = event ? event.qty - event.reserve_qty : null;
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
+        this.unitList.setGenericId(this.genericId);
+    
         // this.unitList.setGenericId(this.genericId);
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
@@ -214,6 +222,8 @@ export class BorrowEditComponent implements OnInit {
       const rs: any = await this.borrowItemsService.getDetailInfo(this.borrowId);
       if (rs.ok) {
         this.generics = rs.rows;
+        console.log(this.generics);
+        
       } else {
         this.alertService.error(rs.error);
       }
@@ -280,18 +290,8 @@ export class BorrowEditComponent implements OnInit {
     this.lots = [];
   }
 
-  editChangetransferQty(idx: any, qty: any) {
-    const oldQty = +this.generics[idx].borrow_qty;
-    if ((+qty.value * this.generics[idx].conversion_qty) > +this.generics[idx].remain_qty) {
-      this.alertService.error('จำนวนยืม มากว่าจำนวนคงเหลือ');
-      qty.value = oldQty;
-    } else {
-      this.generics[idx].borrow_qty = +qty.value;
-      const genericId = this.generics[idx].generic_id;
-      const borrowQty = this.generics[idx].borrow_qty * this.generics[idx].conversion_qty;
-      this.generics[idx].borrow_qty = borrowQty;
-      this.getProductList(genericId, borrowQty);
-    }
+  onChangeEditQty(qty: any) {
+    this.borrowQty = qty;
   }
 
   changeProductQty(genericId, event) {
@@ -302,22 +302,13 @@ export class BorrowEditComponent implements OnInit {
     });
   }
 
-  editChangeUnit(idx: any, event: any, unitCmp: any) {
-    if (+this.generics[idx].unit_generic_id === +event.unit_generic_id) {
-      this.generics[idx].conversion_qty = event.qty;
-    } else {
-      this.generics[idx].unit_generic_id = event.unit_generic_id;
-      this.generics[idx].conversion_qty = event.qty;
-      if (this.generics[idx].remain_qty < (this.generics[idx].borrow_qty * event.qty)) {
-        this.alertService.error('รายการไม่พอยืม');
-        this.generics[idx].products = [];
-      } else {
-        const genericId = this.generics[idx].generic_id;
-        const borrowQty = this.generics[idx].borrow_qty * this.generics[idx].conversion_qty;
-        this.generics[idx].borrow_qty = borrowQty;
-        this.getProductList(genericId, borrowQty);
-      }
-    }
+  editChangeUnit(idx: any, event: any) {
+    this.generics[idx].unit_generic_id = event.unit_generic_id;
+    this.generics[idx].conversion_qty = event.qty;
+    // const genericId = this.generics[idx].generic_id;
+    const borrowQty = this.generics[idx].borrow_qty * this.generics[idx].conversion_qty;
+    this.generics[idx].borrow_qty = borrowQty;
+    // this.getProductList(genericId, borrowQty);
   }
 
   removeProduct(idx: any) {
@@ -327,35 +318,48 @@ export class BorrowEditComponent implements OnInit {
       }).catch(() => { });
   }
 
-  saveBorrow() {
+  async saveBorrow() {
     this.isSaving = true;
     if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.borrowDate) {
       const generics = [];
       let isError = false;
 
-      _.forEach(this.generics, v => {
+      let data = [];
+      for (const v of this.generics) {
         if (v.generic_id && v.borrow_qty) {
+          const _data = {
+            genericId: v.generic_id,
+            genericQty: v.borrow_qty
+          }
+
+          data.push(_data);
+
+          let allocate = await this.borrowItemsService.allocate(data, this.srcWarehouseId);
+          let wmRows = [];
+          wmRows.push(allocate.rows);
+
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,
             unit_generic_id: v.unit_generic_id,
-            // conversion_qty: +v.conversion_qty,
             primary_unit_id: v.primary_unit_id,
-            location_id: v.location_id,
-            products: v.products
+            products: {
+              data: wmRows
+            }
           });
         } else {
           isError = false;
         }
-      });
-
+      }
+      
       if (isError) {
         this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
       } else {
         const summary = {
           borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
           srcWarehouseId: this.srcWarehouseId,
-          dstWarehouseId: this.dstWarehouseId
+          dstWarehouseId: this.dstWarehouseId,
+          peopleId: this.peopleId
         };
 
         if (generics.length) {
@@ -417,4 +421,12 @@ export class BorrowEditComponent implements OnInit {
     }
   }
 
+  onChangePeople(event: any) {
+    if (event) {
+      this.peopleId = null;
+    }
+  }
+  onSelectedPeople(event: any) {
+    this.peopleId = event ? event.people_id : null;
+  }
 }
