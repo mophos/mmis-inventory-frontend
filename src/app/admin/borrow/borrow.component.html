@@ -42,6 +42,7 @@
         <clr-dg-column>วันที่ยืม</clr-dg-column>
         <clr-dg-column>ยืมจากคลัง</clr-dg-column>
         <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
+        <clr-dg-column>ชื่อผู้ยืม</clr-dg-column>
         <clr-dg-column></clr-dg-column>
         <clr-dg-column>สถานะการคืน</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
@@ -54,6 +55,7 @@
           <clr-dg-cell>{{b.borrow_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{b.dst_warehouse_name}}</clr-dg-cell>
+          <clr-dg-column>{{b.fullname}}</clr-dg-column>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
               <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/edit']"

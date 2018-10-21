@@ -1,7 +1,6 @@
 <div [clrLoading]="loading">
   <clr-datagrid>
     <clr-dg-column [style.width.%]="40">ชื่อยา</clr-dg-column>
-    <clr-dg-column [style.width.%]="15">Lot No.</clr-dg-column>
     <clr-dg-column [style.width.%]="15">หมดอายุ</clr-dg-column>
     <clr-dg-column [style.width.%]="15">จำนวนที่ยืม</clr-dg-column>
     <clr-dg-column [style.width.%]="15">จำนวนที่ให้ยืม</clr-dg-column>
@@ -9,13 +8,10 @@
     <clr-dg-row *clrDgItems="let p of items">
       <clr-dg-cell>
         <span class="p4">{{p.generic_name}}</span>
-        <br>
-        <span class="p7">{{p.product_name}}</span>
-      </clr-dg-cell>
-      <clr-dg-cell>{{p.lot_no}}</clr-dg-cell>
+       </clr-dg-cell>
       <clr-dg-cell>{{p.expired_date | expiredDate}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;" [ngStyle]="{'color':'#007cbb'}">
-        <span>{{p.product_pack_qty |
+        <span>{{p.qty |
           number}} {{p.from_unit_name}} ({{p.conversion_qty | number}}
           {{p.to_unit_name}})</span>
       </clr-dg-cell>
@@ -26,12 +22,12 @@
         <span *ngIf="p.approved==='N' && p.qty>p.balance_qty">{{p.balance_qty/p.conversion_qty | number}} {{p.from_unit_name}}
           ({{p.conversion_qty | number}}
           {{p.to_unit_name}})</span>
-        <span *ngIf="p.approved==='N' && p.balance_qty>p.qty">{{p.product_pack_qty | number}} {{p.from_unit_name}}
+        <span *ngIf="p.approved==='N' && p.balance_qty>p.qty">{{p.qty | number}} {{p.from_unit_name}}
           ({{p.conversion_qty | number}}
           {{p.to_unit_name}})</span>
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;" [ngStyle]="{'color':'#FF0000'}">
-        <span *ngIf="p.approved==='Y'">{{(p.product_pack_qty-(p.out_qty/p.conversion_qty))}} {{p.from_unit_name}}
+        <span *ngIf="p.approved==='Y'">{{(p.qty-(p.out_qty/p.conversion_qty))}} {{p.from_unit_name}}
             ({{p.conversion_qty | number}}
             {{p.to_unit_name}})</span>
         <span *ngIf="p.approved==='N' && p.qty>p.balance_qty">

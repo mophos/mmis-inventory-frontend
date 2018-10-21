@@ -74,7 +74,7 @@
       <wm-select-receive-unit [disabled]="true" [genericId]="generic.generic_id" [selectedUnitGenericId]="generic.unit_generic_id" (onSelect)="editChangeUnit($event, idx)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">
-      {{generic.borrow_qty | number}}
+      {{generic.borrow_qty | number}} {{generic.primary_unit_name}}
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
