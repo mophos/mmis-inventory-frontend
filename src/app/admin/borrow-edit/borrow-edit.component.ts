@@ -46,6 +46,7 @@ export class BorrowEditComponent implements OnInit {
   workingCode: any;
   isSaving = false;
   disableSave = false;
+  peopleId: any;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -360,7 +361,8 @@ export class BorrowEditComponent implements OnInit {
         const summary = {
           borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
           srcWarehouseId: this.srcWarehouseId,
-          dstWarehouseId: this.dstWarehouseId
+          dstWarehouseId: this.dstWarehouseId,
+          peopleId: this.peopleId
         };
 
         if (generics.length) {
@@ -422,4 +424,14 @@ export class BorrowEditComponent implements OnInit {
     }
   }
 
+  onChangePeople(event: any) {
+    if (event) {
+      console.log(event);
+
+      this.peopleId = null;
+    }
+  }
+  onSelectedPeople(event: any) {
+    this.peopleId = event ? event.people_id : null;
+  }
 }
