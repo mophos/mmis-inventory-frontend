@@ -18,6 +18,17 @@
           </div>
           <div class="form-group row wid99">
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <label for="peopleName">
+                <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
+                <span *ngIf="peopleId">เจ้าหน้าที่</span>
+              </label>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+              <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
+            </div>
+          </div>  
+          <div class="form-group row wid99">
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
               <label for="srcWarehouseId" class="required">ยืมจากคลัง</label>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">

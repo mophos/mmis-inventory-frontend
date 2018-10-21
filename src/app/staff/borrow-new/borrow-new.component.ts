@@ -37,6 +37,7 @@ export class BorrowNewComponent implements OnInit {
   workingCode: any;
   isSaving = false;
   warehouses: any;
+  peopleId: any;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -312,7 +313,8 @@ export class BorrowNewComponent implements OnInit {
         const summary = {
           borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
           srcWarehouseId: this.srcWarehouseId,
-          dstWarehouseId: this.dstWarehouseId
+          dstWarehouseId: this.dstWarehouseId,
+          peopleId: this.peopleId
         };
 
         if (generics.length) {
@@ -343,6 +345,15 @@ export class BorrowNewComponent implements OnInit {
     }
     // }
     this.isSave = false;
+  }
+
+  onChangePeople(event: any) {
+    if (event) {
+      this.peopleId = null;
+    }
+  }
+  onSelectedPeople(event: any) {
+    this.peopleId = event ? event.people_id : null;
   }
 
   // async getProductList(genericId, qty) {

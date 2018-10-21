@@ -48,13 +48,14 @@ export class BorrowNewComponent implements OnInit {
   @ViewChild('productSearch') public productSearch;
   @ViewChild('locationList') locationList;
   @ViewChild('modalLoading') private modalLoading;
-
+  
   primaryUnitName: any;
   primaryUnitId: any;
   productId: any;
   productName: any;
   genericName: any;
   genericId: any;
+  peopleId: any;
   unitGenericId: any;
   lotNo: any;
 
@@ -294,7 +295,8 @@ export class BorrowNewComponent implements OnInit {
           const summary = {
             borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
             srcWarehouseId: this.srcWarehouseId,
-            dstWarehouseId: this.dstWarehouseId
+            dstWarehouseId: this.dstWarehouseId,
+            peopleId: this.peopleId
           };
 
           if (generics.length) {
@@ -325,6 +327,17 @@ export class BorrowNewComponent implements OnInit {
       }
     }
     this.isSave = false;
+  }
+
+  onChangePeople(event: any) {
+    if (event) {
+      console.log(event);
+
+      this.peopleId = null;
+    }
+  }
+  onSelectedPeople(event: any) {
+    this.peopleId = event ? event.people_id : null;
   }
 
   async getProductList(genericId, qty) {
