@@ -61,7 +61,9 @@
       <clr-dg-row *clrDgItems="let product of productPurchases" [clrDgItem]="product">
         <!-- <clr-dg-cell>{{product.working_code}}</clr-dg-cell> -->
         <!-- <clr-dg-cell>{{product.generic_name}}</clr-dg-cell> -->
-        <clr-dg-cell>{{product.product_name}}</clr-dg-cell>
+        <clr-dg-cell><span class="p4">{{product.product_name}}</span>
+          <br>
+          <span class="p7">{{product.generic_name}}</span></clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{product.cost | number: '1.2-2'}}</clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{product.purchase_qty | number}} {{product.from_unit_name}} ({{product.conversion_qty | number}} {{product.to_unit_name}})</clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{product.total_received_qty | number}}</clr-dg-cell>

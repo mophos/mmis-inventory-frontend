@@ -101,7 +101,9 @@
 
   <clr-dg-row *ngFor="let product of products; let idx = index;" [class.editLine]="product.is_update === 'Y'">
     <clr-dg-cell style="line-height: 25px;">
-      {{idx + 1}}. {{product.product_name}}
+       <span class="p4">{{idx + 1}}.{{product.product_name}}</span>
+      <br>
+      <span class="p7">{{product.generic_name}}</span>
     </clr-dg-cell>
     <clr-dg-cell>
       <div class="toggle-switch" (click)="editChangeFree(idx, free.value)">
