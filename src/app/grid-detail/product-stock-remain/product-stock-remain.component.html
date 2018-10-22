@@ -15,7 +15,9 @@
         <clr-dg-cell style="text-align: right;">{{r.cost | number: '1.2-2'}} </clr-dg-cell>
         <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">{{r.pack_qty | number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty | number}} </clr-dg-cell>
 
-        <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}" >{{r.pack_qty - (r.reserve_qty/r.conversion_qty)| number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty - r.reserve_qty}}</clr-dg-cell>
+        <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}" >
+          <span *ngIf="0 > r.qty - r.reserve_qty">0 {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = 0</span>
+          <span *ngIf="r.qty - r.reserve_qty > 0">{{r.pack_qty - (r.reserve_qty/r.conversion_qty)| number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty - r.reserve_qty}}</span></clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{r.total_cost | number: '1.2-2'}} </clr-dg-cell>
       </clr-dg-row>
       <clr-dg-footer>

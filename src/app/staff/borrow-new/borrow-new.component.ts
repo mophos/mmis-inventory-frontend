@@ -207,9 +207,8 @@ export class BorrowNewComponent implements OnInit {
           primary_unit_id: this.primaryUnitId,
           primary_unit_name: this.primaryUnitName
         };
-
+     
         this.generics.push(obj);
-        // await this.getProductList(this.genericId, this.borrowQty);
         this.clearForm();
       } else {
         this.alertService.error('ข้อมูลไม่ครบถ้วน')
@@ -234,7 +233,6 @@ export class BorrowNewComponent implements OnInit {
     this.remainQty = 0;
     this.borrowQty = 0;
     this.expiredDate = null;
-    this.productSearch.clearProductSearch();
     this.lotNo = null;
     this.locationId = null;
     this.lots = [];
@@ -274,7 +272,6 @@ export class BorrowNewComponent implements OnInit {
     if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.borrowDate) {
       const borrowDate = `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`;
 
-
       const generics = [];
       let isError = false;
 
@@ -289,9 +286,10 @@ export class BorrowNewComponent implements OnInit {
           data.push(_data);
 
           let allocate = await this.borrowItemsService.allocate(data, this.srcWarehouseId);
+          
           let wmRows = [];
           wmRows.push(allocate.rows);
-
+         
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,
