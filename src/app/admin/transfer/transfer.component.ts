@@ -8,6 +8,7 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angula
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { State } from '@clr/angular';
+import { AccessCheck } from 'app/access-check';
 
 @Component({
   selector: 'wm-transfer',
@@ -36,15 +37,20 @@ export class TransferComponent implements OnInit {
   token: any;
   currentPage = 1;
   offset = 0;
+  openModalConfirm = false;
+  accessName = 'WM_TRANSFER_APPROVE'
 
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('htmlPreview') public htmlPreview: any;
+  username: string;
+  password: string;
   constructor(
     private warehouseService: WarehouseService,
     private alertService: AlertService,
     private transferService: TransferService,
     private router: Router,
     private ref: ChangeDetectorRef,
+    private accessCheck: AccessCheck,
     @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
@@ -122,6 +128,25 @@ export class TransferComponent implements OnInit {
       this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     }
   }
+  async checkApprove(username: any, password: any) {
+    const rs: any = await this.transferService.checkApprove(username, password, this.accessName);
+    if (rs.ok) {
+      this.doApprove();
+    } else {
+      this.alertService.error('ไม่มีสิทธิ์อนุมัติใบโอน');
+    }
+    this.openModalConfirm = false;
+  }
+  async checkRight() {
+    const rs = await this.accessCheck.can(this.accessName);
+    if (rs) {
+      this.doApprove();
+    } else {
+      this.username = ''
+      this.password = ''
+      this.openModalConfirm = true
+    }
+  }
 
   doApproveReceive() {
     const transferIds = [];
@@ -164,7 +189,11 @@ export class TransferComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-
+  close() {
+    this.openModalConfirm = false;
+    this.username = '';
+    this.password = '';
+  }
   showReport(t) {
     const url = `${this.apiUrl}/report/tranfer/${t.transfer_id}?token=${this.token}`;
     this.htmlPreview.showReport(url);

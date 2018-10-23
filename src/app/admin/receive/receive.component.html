@@ -152,7 +152,8 @@
         <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column style="width: 180px;" [clrDgField]="'purchase_order_number'">เลขที่ใบสั่งซื้อ</clr-dg-column>
-        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จัดจำหน่าย</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labeler_name'" >ผู้จัดจำหน่าย</clr-dg-column>
+        <clr-dg-column [clrDgField]="'delivery_code'" >เลขที่ใบนำส่ง</clr-dg-column>
         <clr-dg-column style="width: 150px;"></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let w of waitings" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id, 'isError': w.is_cancel === 'Y'}">
@@ -162,7 +163,8 @@
           <clr-dg-cell *ngIf="!w.purchase_order_book_number">{{w.purchase_order_number}}</clr-dg-cell>
           <clr-dg-cell *ngIf="w.purchase_order_book_number">{{w.purchase_order_book_number}}</clr-dg-cell>
           <clr-dg-cell>{{w.labeler_name}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: center;">
+          <clr-dg-cell>{{w.delivery_code}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
             <div class="btn-group btn-success">
               <button [disabled]="w.is_cancel === 'Y'" title="แก้ไขข้อมูล/อนุมัติ/เอกสาร" class="btn btn-primary btn-icon btn-sm wm-small-btn"
                 [routerLink]="['/admin/receives/edit']" [queryParams]="{receiveId: w.receive_id}">
@@ -244,6 +246,7 @@
         <clr-dg-column [clrDgField]="'receive_type_name'" style="width: 180px;">ประเภทการรับ</clr-dg-column>
         <clr-dg-column [clrDgField]="'donator_name'">ผู้จัดจำหน่าย/ผู้บริจาค</clr-dg-column>
         <!-- <clr-dg-column>จำนวนรายการ</clr-dg-column> -->
+        <clr-dg-column [clrDgField]="'delivery_code'">เลขที่ใบนำส่ง</clr-dg-column>
         <clr-dg-column style="width: 150px;">มูลค่า (บาท)</clr-dg-column>
         <clr-dg-column style="width: 150px;"></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
@@ -253,9 +256,10 @@
           <clr-dg-cell>{{w.receive_code}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_type_name}}</clr-dg-cell>
           <clr-dg-cell>{{w.donator_name}}</clr-dg-cell>
+          <clr-dg-cell>{{w.delivery_code}}</clr-dg-cell>
           <!-- <clr-dg-cell style="text-align: right;">{{w.total | number}}</clr-dg-cell> -->
           <clr-dg-cell style="text-align: right;">{{w.cost | number: '1.2-2'}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: center;">
+          <clr-dg-cell style="text-align: right;">
             <div class="btn-group btn-success">
               <button title="แก้ไขข้อมูล/อนุมัติ" class="btn btn-primary btn-icon btn-sm wm-small-btn" [disabled]="w.approve_id || w.is_cancel==='Y'"
                 [routerLink]="['/admin/receives/other/edit']" [queryParams]="{receiveOtherId: w.receive_other_id}">
