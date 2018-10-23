@@ -89,8 +89,10 @@
     <clr-dg-cell style="text-align: center;">{{p.min_qty | number}}/{{p.max_qty | number}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.qty, 'success-message': p.min_qty < p.qty}">{{p.qty
       | number}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.reserve_qty, 'success-message': p.min_qty < p.qty}">{{p.qty
-      - p.reserve_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right;" [ngClass]="{'error-message': p.min_qty > p.reserve_qty, 'success-message': p.min_qty < p.qty}">
+      <span *ngIf="0>p.qty - p.reserve_qty">0</span>
+      <span *ngIf="p.qty - p.reserve_qty>0">{{p.qty - p.reserve_qty | number}}</span>
+    </clr-dg-cell>
 
     <clr-dg-cell>{{p.primary_unit_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.total_cost | number: '1.2'}}</clr-dg-cell>

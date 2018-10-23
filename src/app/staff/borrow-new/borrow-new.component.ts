@@ -233,6 +233,7 @@ export class BorrowNewComponent implements OnInit {
     this.remainQty = 0;
     this.borrowQty = 0;
     this.expiredDate = null;
+    this.productSearch.clearProductSearch();
     this.lotNo = null;
     this.locationId = null;
     this.lots = [];
@@ -285,11 +286,11 @@ export class BorrowNewComponent implements OnInit {
 
           data.push(_data);
 
-          let allocate = await this.borrowItemsService.allocate(data, this.srcWarehouseId);
+          let allocate = await this.borrowItemsService.allocateBorrow(data, this.srcWarehouseId);
           
           let wmRows = [];
           wmRows.push(allocate.rows);
-         
+          console.log(wmRows)
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,

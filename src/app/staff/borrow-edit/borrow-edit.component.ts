@@ -141,7 +141,7 @@ export class BorrowEditComponent implements OnInit {
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
         this.unitList.setGenericId(this.genericId);
-    
+
         // this.unitList.setGenericId(this.genericId);
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
@@ -222,8 +222,6 @@ export class BorrowEditComponent implements OnInit {
       const rs: any = await this.borrowItemsService.getDetailInfo(this.borrowId);
       if (rs.ok) {
         this.generics = rs.rows;
-        console.log(this.generics);
-        
       } else {
         this.alertService.error(rs.error);
       }
@@ -291,6 +289,7 @@ export class BorrowEditComponent implements OnInit {
   }
 
   onChangeEditQty(qty: any) {
+    console.log(qty)
     this.borrowQty = qty;
   }
 
@@ -334,13 +333,13 @@ export class BorrowEditComponent implements OnInit {
 
           data.push(_data);
 
-          let allocate = await this.borrowItemsService.allocate(data, this.srcWarehouseId);
+          let allocate = await this.borrowItemsService.allocateBorrow(data, this.srcWarehouseId);
           let wmRows = [];
           wmRows.push(allocate.rows);
-
+          
           generics.push({
             generic_id: v.generic_id,
-            borrow_qty: +v.borrow_qty,
+            borrow_qty: +v.borrow_qty*v.conversion_qty,
             unit_generic_id: v.unit_generic_id,
             primary_unit_id: v.primary_unit_id,
             products: {
@@ -351,7 +350,8 @@ export class BorrowEditComponent implements OnInit {
           isError = false;
         }
       }
-      
+      console.log(generics)
+
       if (isError) {
         this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
       } else {
