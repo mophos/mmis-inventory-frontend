@@ -56,8 +56,6 @@
     <clr-dg-column style="width: 50px;">จำนวนยืม <br> (Base Unit)</clr-dg-column>
     <!-- <clr-dg-column>รวม <br> (Base Unit)</clr-dg-column> -->
     <!-- <clr-dg-column>ยอดโอนจริง <br> (Base Unit)</clr-dg-column> -->
-    <clr-dg-column>คงเหลือหลังยืม <br> (Base Unit)</clr-dg-column>
-    <clr-dg-column>Location</clr-dg-column>
     <clr-dg-column></clr-dg-column>
   
     <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
@@ -66,12 +64,6 @@
       <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
       <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
       <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty | number}} {{generic.primary_unit_name}}</clr-dg-cell>
-      <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': generic.borrow_qty > generic.remain_qty ? 'red' : 'green'}">
-        {{generic.remain_qty - generic.borrow_qty | number}} {{generic.primary_unit_name}}
-      </clr-dg-cell>
-      <clr-dg-cell>
-        <wm-select-product-location [warehouseId]="dstWarehouseId" [selectedId]="generic.location_id" (onSelect)="editChangeLocation($event, idx)"></wm-select-product-location>
-      </clr-dg-cell>
       <clr-dg-cell style="text-align: center;">
         <div class="btn-group btn-primary">
           <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeProduct(idx)">

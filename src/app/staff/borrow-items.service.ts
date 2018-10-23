@@ -173,6 +173,14 @@ export class BorrowItemsService {
   }
 
   async allocate(data: any, srcWarehouseId: any) {
+    const rs = await this.authHttp.post(`${this.url}/generics/allocate`, {
+      data: data,
+      srcWarehouseId: srcWarehouseId
+    }).toPromise();
+    return rs.json();
+  }
+
+  async allocateBorrow(data: any, srcWarehouseId: any) {
     const rs = await this.authHttp.post(`${this.url}/generics/allocate-borrow`, {
       data: data,
       srcWarehouseId: srcWarehouseId

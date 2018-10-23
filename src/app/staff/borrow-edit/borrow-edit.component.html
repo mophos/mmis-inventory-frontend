@@ -26,13 +26,14 @@
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
           </div>
-        </div>  
+        </div>
         <div class="form-group row wid99">
           <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
             <label class="required" for="dstWarehouseId">หน่วยเบิก</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <wm-select-warehouses #dstWarehouse [selectedId]="dstWarehouseId" (onSelect)="setDstWarehouse($event)" [disabled]="true"></wm-select-warehouses>
+            <wm-select-warehouses #dstWarehouse [selectedId]="dstWarehouseId" (onSelect)="setDstWarehouse($event)"
+              [disabled]="true"></wm-select-warehouses>
           </div>
           <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
             <label for="srcWarehouseId" class="required">ยืมจากคลัง</label>
@@ -62,12 +63,13 @@
     <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty/generic.conversion_qty | number}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty | number}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">
-      <wm-select-receive-unit [disabled]="true" [genericId]="generic.generic_id" [selectedUnitGenericId]="generic.unit_generic_id" (onSelect)="editChangeUnit($event, idx)"></wm-select-receive-unit>
+      <wm-select-receive-unit [disabled]="true" [genericId]="generic.generic_id" [selectedUnitGenericId]="generic.unit_generic_id"
+        (onSelect)="editChangeUnit($event, idx)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">
-      {{generic.borrow_qty | number}} {{generic.primary_unit_name}}
+      {{generic.borrow_qty*generic.conversion_qty | number}} {{generic.primary_unit_name}}
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
