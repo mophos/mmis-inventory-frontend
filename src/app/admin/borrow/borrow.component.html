@@ -46,7 +46,7 @@
         <clr-dg-column></clr-dg-column>
         <clr-dg-column>สถานะการคืน</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y', 'success-status': b.remain_qty < 0}">
+        <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y'}">
           <clr-dg-action-overflow>
             <button [disabled]="b.approved === 'Y' || b.mark_deleted === 'Y'" class="action-item" (click)="doApprove(b.borrow_id)">อนุมัติใบยืม</button>
           </clr-dg-action-overflow>
