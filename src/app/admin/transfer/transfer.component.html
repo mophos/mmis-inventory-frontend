@@ -19,7 +19,7 @@
             <button [disabled]="!selectedApprove.length" class="btn btn-sm confirm" (click)="doConfirm()">
               <clr-icon shape="note"></clr-icon> ยืนยันใบโอน ({{selectedApprove.length | number}} รายการ)
             </button>
-            <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="doApprove()">
+            <button [disabled]="!selectedApprove.length" class="btn btn-sm btn-success" (click)="checkRight()">
               <clr-icon shape="note"></clr-icon> อนุมัติใบโอน ({{selectedApprove.length | number}} รายการ)
             </button>
             <clr-button-group [clrMenuPosition]="'bottom-right'" class="btn btn-sm btn-primary" style="padding:0px">
@@ -134,5 +134,28 @@
     </clr-tab-content>
   </clr-tab>
 </clr-tabs>
+
+<clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
+  <h3 class="modal-title">สิทธิ์การอนุมัติ{{titel}}</h3>
+  <div class="modal-body" style="height:150px">
+
+    <form>
+      <section class="form-block">
+        <div class="form-group">
+          <label for="aForm_1" class="required">User Name</label>
+          <input autocomplete="nope" type="text" id="username" name="username" [(ngModel)]="username">
+        </div>
+        <div class="form-group">
+          <label for="aForm_1" class="required"> password</label>
+          <input autocomplete="new-password" type="password" id="password" name="password" [(ngModel)]="password" (keyup.enter)="checkApprove(username,password)">
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer" style="padding-top: 0px;">
+    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkApprove(username,password)">บันทึก</button>
+    <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
+  </div>
+</clr-modal>
 <wm-html-preview #htmlPreview></wm-html-preview>
 <wm-loading-modal #modalLoading></wm-loading-modal>

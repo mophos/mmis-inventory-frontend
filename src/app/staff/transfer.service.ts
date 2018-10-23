@@ -22,7 +22,14 @@ export class TransferService {
         });
     });
   }
-
+  async checkApprove(username: any, password: any, action: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/basic/checkApprove`, {
+      username: username,
+      password: password,
+      action: action
+    }).toPromise();
+    return rs.json();
+  }
   getProductForTransfer(productId: string, warehouseId: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/staff/transfer/product-transfer`, {

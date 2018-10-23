@@ -20,7 +20,14 @@ export class TransferService {
     const rs: any = await this.authHttp.get(`${this.url}/transfer/info-summary/${transferId}`).toPromise();
     return rs.json();
   }
-
+  async checkApprove(username: any, password: any, action: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/basic/checkApprove`, {
+      username: username,
+      password: password,
+      action: action
+    }).toPromise();
+    return rs.json();
+  }
   async getDetailInfo(transferId: string) {
     const rs: any = await this.authHttp.get(`${this.url}/transfer/info-detail/${transferId}`).toPromise();
     return rs.json();

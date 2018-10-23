@@ -8,6 +8,7 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angula
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { AccessCheck } from 'app/access-check';
 
 @Component({
   selector: 'wm-transfer',
@@ -28,13 +29,17 @@ export class TransferComponent implements OnInit {
   approveStatus = 1;
 
   notApproveReceiveItems = [];
-
+  openModalConfirm = false;
+  accessName = 'WM_TRANSFER_APPROVE'
+  username: string;
+  password: string;
   constructor(
     private warehouseService: WarehouseService,
     private alertService: AlertService,
     private transferService: TransferService,
     private router: Router,
     private ref: ChangeDetectorRef,
+    private accessCheck: AccessCheck,
     @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
@@ -226,7 +231,30 @@ export class TransferComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-
+  close() {
+    this.openModalConfirm = false;
+    this.username = '';
+    this.password = '';
+  }
+  async checkApprove(username: any, password: any) {
+    const rs: any = await this.transferService.checkApprove(username, password, this.accessName);
+    if (rs.ok) {
+      this.doConfirm();
+    } else {
+      this.alertService.error('ไม่มีสิทธิ์อนุมัติใบโอน');
+    }
+    this.openModalConfirm = false;
+  }
+  async checkRight() {
+    const rs = await this.accessCheck.can(this.accessName);
+    if (rs) {
+      this.doConfirm();
+    } else {
+      this.username = ''
+      this.password = ''
+      this.openModalConfirm = true
+    }
+  }
   doConfirm() {
     const transferIds = [];
     this.selectedApprove.forEach(v => {
