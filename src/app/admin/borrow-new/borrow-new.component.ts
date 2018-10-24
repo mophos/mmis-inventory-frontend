@@ -35,6 +35,7 @@ export class BorrowNewComponent implements OnInit {
   wmProductId: any;
   workingCode: any;
   isSaving = false;
+  remark:any;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -214,6 +215,7 @@ export class BorrowNewComponent implements OnInit {
     this.expiredDate = null;
     this.productSearch.clearProductSearch();
     this.lotNo = null;
+    this.remark = null;
     this.locationId = null;
     this.lots = [];
     // this.unitList.clearUnits();
@@ -296,7 +298,8 @@ export class BorrowNewComponent implements OnInit {
             borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
             srcWarehouseId: this.srcWarehouseId,
             dstWarehouseId: this.dstWarehouseId,
-            peopleId: this.peopleId
+            peopleId: this.peopleId,
+            remark: this.remark
           };
 
           if (generics.length) {
