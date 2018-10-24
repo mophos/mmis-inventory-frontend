@@ -1,29 +1,31 @@
 <div [clrLoading]="loading">
-    <clr-datagrid>
-      <clr-dg-column>คลังสินค้า</clr-dg-column>
-      <clr-dg-column>Lot no.</clr-dg-column>
-      <clr-dg-column>วันหมดอายุ</clr-dg-column>
-      <clr-dg-column >ราคาต่อหน่วย</clr-dg-column>
-      <clr-dg-column>คงเหลือ</clr-dg-column>
-      <clr-dg-column>คงเหลือ (หักยอดจอง)</clr-dg-column>
-      <clr-dg-column>มูลค่า</clr-dg-column>
-  
-      <clr-dg-row *clrDgItems="let r of products">
-        <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
-        <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
-        <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
-        <clr-dg-cell style="text-align: right;">{{r.cost | number: '1.2-2'}} </clr-dg-cell>
-        <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">{{r.pack_qty | number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty | number}} </clr-dg-cell>
+  <clr-datagrid>
+    <clr-dg-column>คลังสินค้า</clr-dg-column>
+    <clr-dg-column>Lot no.</clr-dg-column>
+    <clr-dg-column>วันหมดอายุ</clr-dg-column>
+    <clr-dg-column>ราคาต่อหน่วย</clr-dg-column>
+    <clr-dg-column>คงเหลือ</clr-dg-column>
+    <clr-dg-column>คงเหลือ (หักยอดจอง)</clr-dg-column>
+    <clr-dg-column>มูลค่า</clr-dg-column>
 
-        <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}" >
-          <span *ngIf="0 > r.qty - r.reserve_qty">0 {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = 0</span>
-          <span *ngIf="r.qty - r.reserve_qty > 0">{{r.pack_qty - (r.reserve_qty/r.conversion_qty)| number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty - r.reserve_qty}}</span></clr-dg-cell>
-        <clr-dg-cell style="text-align: right;">{{r.total_cost | number: '1.2-2'}} </clr-dg-cell>
-      </clr-dg-row>
-      <clr-dg-footer>
-        <clr-dg-pagination #pagination [clrDgPageSize]="10">
-          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
-        </clr-dg-pagination>
-      </clr-dg-footer>
-    </clr-datagrid>
-  </div>
+    <clr-dg-row *clrDgItems="let r of products">
+      <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
+      <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
+      <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.cost | number: '1.2-2'}} </clr-dg-cell>
+      <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">{{r.pack_qty
+        | number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty | number}}
+      </clr-dg-cell>
+
+      <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">
+        {{r.pack_qty - (r.reserve_qty/r.conversion_qty)| number}} {{r.from_unit_name}} ({{r.conversion_qty | number}}
+        {{r.to_unit_name}}) = {{r.qty - r.reserve_qty}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{r.total_cost | number: '1.2-2'}} </clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>
+      <clr-dg-pagination #pagination [clrDgPageSize]="10">
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+      </clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>
