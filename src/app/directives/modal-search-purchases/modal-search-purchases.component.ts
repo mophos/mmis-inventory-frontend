@@ -177,7 +177,8 @@ export class ModalSearchPurchasesComponent implements OnInit {
       // location
       product.location_id = null;
       product.location_name = null;
-
+      product.generic_id = v.generic_id;
+      product.generic_name = v.generic_name;
       product.unit_generic_id = v.unit_generic_id;
       // product.unit_name = v.to_unit_name;
       // product.unit_id = v.unit_id;
