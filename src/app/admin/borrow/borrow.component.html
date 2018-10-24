@@ -55,7 +55,7 @@
           <clr-dg-cell>{{b.borrow_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{b.dst_warehouse_name}}</clr-dg-cell>
-          <clr-dg-column>{{b.fullname}}</clr-dg-column>
+          <clr-dg-cell>{{b.fullname}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
               <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/edit']"

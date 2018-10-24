@@ -1,114 +1,124 @@
 <nav class="breadcrumb">
-    <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
-    <a class="breadcrumb-item" href="javascript://" routerLink="/admin/borrow">ยืม/คืนสินค้า</a>
-    <span class="breadcrumb-item active">ยืมสินค้าในหน่วยงาน</span>
-  </nav>
-  
-  <div class="card" style="padding-top: 0px;">
-    <div class="card-block" style="padding: 0px 5px 5px 5px;">
-      <form style="padding-top: 0px; padding-bottom: 0px;">
-        <section class="form-block" style="margin-bottom: 0px;">
-          <div class="form-group row wid99">
-            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-              <label for="borrowDate" class="required">วันที่ยืม</label>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-              <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="borrowDate" required></my-date-picker-th>
-            </div>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/borrow">ยืม/คืนสินค้า</a>
+  <span class="breadcrumb-item active">ยืมสินค้าในหน่วยงาน</span>
+</nav>
+
+<div class="card" style="padding-top: 0px;">
+  <div class="card-block" style="padding: 0px 5px 5px 5px;">
+    <form style="padding-top: 0px; padding-bottom: 0px;">
+      <section class="form-block" style="margin-bottom: 0px;">
+        <div class="form-group row wid99">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="borrowDate" class="required">วันที่ยืม</label>
           </div>
-          <div class="form-group row wid99">
-            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-              <label for="peopleName">
-                <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
-                <span *ngIf="peopleId">เจ้าหน้าที่</span>
-              </label>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
-            </div>
-          </div>  
-          <div class="form-group row wid99">
-            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-              <label for="srcWarehouseId" class="required">ยืมจากคลัง</label>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-              <wm-select-warehouses #srcWarehouse (onSelect)="setSrcWarehouse($event)"></wm-select-warehouses>
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-              <label class="required" for="dstWarehouseId">ไปยังคลัง</label>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-              <wm-select-warehouses #dstWarehouse (onSelect)="setDstWarehouse($event)"></wm-select-warehouses>
-            </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="borrowDate" required></my-date-picker-th>
           </div>
-        </section>
-      </form>
-  
-    </div>
-  
-  </div>
-  <h4>รายการสินค้าที่ต้องการยืม</h4>
-  
-  <clr-datagrid class="grid-order" style="position: relative;">
-    <clr-dg-column>#</clr-dg-column>
-    <clr-dg-column>Working Code</clr-dg-column>
-    <clr-dg-column style="width: 300px;">ชื่อ Generic</clr-dg-column>
-    <clr-dg-column style="width: 50px;">จำนวนยืม <br> (Base Unit)</clr-dg-column>
-    <!-- <clr-dg-column>รวม <br> (Base Unit)</clr-dg-column> -->
-    <!-- <clr-dg-column>ยอดโอนจริง <br> (Base Unit)</clr-dg-column> -->
-    <clr-dg-column></clr-dg-column>
-  
-    <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
-      <wm-borrow-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)" ngProjectAs="clr-dg-row-detail"></wm-borrow-items>
-      <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
-      <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
-      <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
-      <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty | number}} {{generic.primary_unit_name}}</clr-dg-cell>
-      <clr-dg-cell style="text-align: center;">
-        <div class="btn-group btn-primary">
-          <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeProduct(idx)">
-            <clr-icon shape="trash"></clr-icon>
-          </button>
         </div>
-      </clr-dg-cell>
-    </clr-dg-row>
-  
-    <clr-dg-row class="newLine">
-      <clr-dg-cell>&nbsp;</clr-dg-cell>
-      <clr-dg-cell style="line-height: 25px;">{{workingCode}}</clr-dg-cell>
-      <clr-dg-cell>
-        <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
-        <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
-      </clr-dg-cell>
-      <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': borrowQty > remainQty ? 'red' : 'green'}">{{ borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
-      <clr-dg-cell>
-          <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
-      </clr-dg-cell>
-      <clr-dg-cell style="text-align: center;">
-        <div class="btn-group btn-primary">
-          <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId"
-            (click)="addGeneric()">
-            เพิ่ม
-          </button>
-          <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
-            ยกเลิก
-          </button>
+        <div class="form-group row wid99">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="peopleName">
+              <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
+              <span *ngIf="peopleId">เจ้าหน้าที่</span>
+            </label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
+          </div>
         </div>
-      </clr-dg-cell>
-    </clr-dg-row>
-  
-  </clr-datagrid>
-  
-  <div style="height: 200px;">
-    <button class="btn btn-success btn-sm" (click)="saveBorrow()" [disabled]="isSaving || !generics.length || !dstWarehouseId || !srcWarehouseId || isSave">
-      <clr-icon shape="floppy"></clr-icon>
-      บันทึกการยืม
-    </button>
-    <button class="btn btn-danger btn-sm" [routerLink]="['/admin/borrow']">
-      <clr-icon shape="home"></clr-icon>
-      กลับหน้าหลัก
-    </button>
+        <div class="form-group row wid99">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="srcWarehouseId" class="required">ยืมจากคลัง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <wm-select-warehouses #srcWarehouse (onSelect)="setSrcWarehouse($event)"></wm-select-warehouses>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label class="required" for="dstWarehouseId">ไปยังคลัง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <wm-select-warehouses #dstWarehouse (onSelect)="setDstWarehouse($event)"></wm-select-warehouses>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
+            <label for="remark">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-4 col-md-10 col-sm-12 col-xs-12">
+            <input id="remark" class="form-control" type="text" name="remark" [(ngModel)]="remark" placeholder="หมายเหตุ">
+          </div>
+        </div>
+      </section>
+    </form>
+
   </div>
 
-  <wm-loading-modal #modalLoading></wm-loading-modal>  
+</div>
+<h4>รายการสินค้าที่ต้องการยืม</h4>
+
+<clr-datagrid class="grid-order" style="position: relative;">
+  <clr-dg-column>#</clr-dg-column>
+  <clr-dg-column>Working Code</clr-dg-column>
+  <clr-dg-column style="width: 300px;">ชื่อ Generic</clr-dg-column>
+  <clr-dg-column style="width: 50px;">จำนวนยืม <br> (Base Unit)</clr-dg-column>
+  <!-- <clr-dg-column>รวม <br> (Base Unit)</clr-dg-column> -->
+  <!-- <clr-dg-column>ยอดโอนจริง <br> (Base Unit)</clr-dg-column> -->
+  <clr-dg-column></clr-dg-column>
+
+  <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
+    <wm-borrow-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)"
+      ngProjectAs="clr-dg-row-detail"></wm-borrow-items>
+    <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty | number}}
+      {{generic.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="removeProduct(idx)">
+          <clr-icon shape="trash"></clr-icon>
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-row class="newLine">
+    <clr-dg-cell>&nbsp;</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px;">{{workingCode}}</clr-dg-cell>
+    <clr-dg-cell>
+      <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
+      <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': borrowQty > remainQty ? 'red' : 'green'}">{{
+      borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
+    <clr-dg-cell>
+      <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: center;">
+      <div class="btn-group btn-primary">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId" (click)="addGeneric()">
+          เพิ่ม
+        </button>
+        <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
+          ยกเลิก
+        </button>
+      </div>
+    </clr-dg-cell>
+  </clr-dg-row>
+
+</clr-datagrid>
+
+<div style="height: 200px;">
+  <button class="btn btn-success btn-sm" (click)="saveBorrow()" [disabled]="isSaving || !generics.length || !dstWarehouseId || !srcWarehouseId || isSave">
+    <clr-icon shape="floppy"></clr-icon>
+    บันทึกการยืม
+  </button>
+  <button class="btn btn-danger btn-sm" [routerLink]="['/admin/borrow']">
+    <clr-icon shape="home"></clr-icon>
+    กลับหน้าหลัก
+  </button>
+</div>
+
+<wm-loading-modal #modalLoading></wm-loading-modal>

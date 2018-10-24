@@ -26,7 +26,7 @@
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
           </div>
-        </div>  
+        </div>
         <div class="form-group row wid99">
           <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
             <label class="required" for="dstWarehouseId">หน่วยเบิก</label>
@@ -46,6 +46,14 @@
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <wm-select-warehouses #srcWarehouse (onSelect)="setSrcWarehouse($event)"></wm-select-warehouses>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
+            <label for="remark">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-4 col-md-10 col-sm-12 col-xs-12">
+            <input id="remark" class="form-control" type="text" name="remark" [(ngModel)]="remark" placeholder="หมายเหตุ">
           </div>
         </div>
       </section>
@@ -71,7 +79,8 @@
     <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.borrow_qty/generic.conversion_qty | number}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">
-      <wm-select-receive-unit [disabled]="true" [genericId]="generic.generic_id" [selectedUnitGenericId]="generic.unit_generic_id" (onSelect)="editChangeUnit($event, idx)"></wm-select-receive-unit>
+      <wm-select-receive-unit [disabled]="true" [genericId]="generic.generic_id" [selectedUnitGenericId]="generic.unit_generic_id"
+        (onSelect)="editChangeUnit($event, idx)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">
       {{generic.borrow_qty | number}} {{generic.primary_unit_name}}
@@ -89,8 +98,8 @@
     <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{workingCode}}</clr-dg-cell>
     <clr-dg-cell>
-      <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
-      <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
+      <wm-search-generic-autocomplete [clearOnSelected]="false" #elSearchGeneric (onSelect)="setSelectedGeneric($event)"
+        (onChange)="onChangeSearchGeneric($event)"></wm-search-generic-autocomplete>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" #qty (keyup)="onChangeEditQty(qty.value)" [value]="borrowQty" style="width: 100%; text-align: right; background-color:#FFF9C4"
