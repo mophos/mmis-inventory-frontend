@@ -279,7 +279,7 @@ export class BorrowNewComponent implements OnInit {
           if (v.generic_id && v.borrow_qty) {
             generics.push({
               generic_id: v.generic_id,
-              borrow_qty: +v.borrow_qty*v.conversion_qty,
+              borrow_qty: +v.borrow_qty,
               unit_generic_id: v.unit_generic_id,
               primary_unit_id: v.primary_unit_id,
               location_id: v.location_id,

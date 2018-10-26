@@ -90,12 +90,7 @@
       <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
       <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': borrowQty > remainQty ? 'red' : 'green'}">{{
-      borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
-    <clr-dg-cell>
-      <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
-    </clr-dg-cell>
+    <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId" (click)="addGeneric()">

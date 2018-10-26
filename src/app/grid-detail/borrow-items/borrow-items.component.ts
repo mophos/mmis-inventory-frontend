@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { AlertService } from 'app/alert.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 
 @Component({
@@ -20,23 +19,13 @@ export class BorrowItemsComponent implements OnInit {
   loading = false;
 
   constructor(
-    private alertService: AlertService
   ) { }
 
   ngOnInit() { }
 
   changeQty(qty: any, idx: any, ) {
-    // const oldQty = +this.products[idx].product_qty;
     this.products[idx].product_qty = +qty.value;
     this.onChangeQty.emit(this.products);
-    // if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].small_remain_qty) {
-    //   this.alertService.error('จำนวนยืม มากว่าจำนวนคงเหลือ');
-    //   qty.value = oldQty;
-    // } else {
-    //   this.products[idx].product_qty = +qty.value;
-    //   this.onChangeQty.emit(this.products);
-    // }
   }
-
 }
 
