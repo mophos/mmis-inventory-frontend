@@ -327,7 +327,8 @@ export class BorrowEditComponent implements OnInit {
           borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
           srcWarehouseId: this.srcWarehouseId,
           dstWarehouseId: this.dstWarehouseId,
-          peopleId: this.peopleId
+          peopleId: this.peopleId,
+          remark: this.remark
         };
 
         if (generics.length) {
