@@ -134,7 +134,9 @@ export class BorrowEditComponent implements OnInit {
         this.remainQty = event ? event.qty - event.reserve_qty : null;
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
-        // this.unitList.setGenericId(this.genericId);
+        this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
+        
+        this.unitList.setGenericId(this.genericId);
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
       }
@@ -214,7 +216,6 @@ export class BorrowEditComponent implements OnInit {
       const rs: any = await this.borrowItemsService.getDetailInfo(this.borrowId);
       if (rs.ok) {
         this.generics = rs.rows;
-        console.log(rs.rows)
       } else {
         this.alertService.error(rs.error);
       }
