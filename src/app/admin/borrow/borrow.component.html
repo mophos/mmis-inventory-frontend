@@ -43,6 +43,7 @@
         <clr-dg-column>ยืมจากคลัง</clr-dg-column>
         <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
         <clr-dg-column>ชื่อผู้ยืม</clr-dg-column>
+        <clr-dg-column>หมายเหตุ</clr-dg-column>
         <clr-dg-column></clr-dg-column>
         <clr-dg-column>สถานะการคืน</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
@@ -56,6 +57,7 @@
           <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{b.dst_warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{b.fullname}}</clr-dg-cell>
+          <clr-dg-cell>{{b.remark}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
               <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/edit']"
@@ -116,6 +118,7 @@
         <clr-dg-column>วันที่ยืม</clr-dg-column>
         <clr-dg-column>ยืมจากคลัง</clr-dg-column>
         <clr-dg-column>ไปยังคลังปลายทาง</clr-dg-column>
+        <clr-dg-column>หมายเหตุ</clr-dg-column>
         <clr-dg-column></clr-dg-column>
         <clr-dg-column>สถานะการคืน</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
@@ -125,6 +128,7 @@
           <clr-dg-cell>{{b.borrow_other_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{b.warehouse_name}}</clr-dg-cell>
           <clr-dg-cell>{{b.src_warehouse_name}}</clr-dg-cell>
+          <clr-dg-cell>{{b.comment}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
               <button title="แก้ไข" *ngIf="b.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/other/edit']"
@@ -192,6 +196,7 @@
         <clr-dg-column>เลขที่คืน</clr-dg-column>
         <clr-dg-column>วันที่คืน</clr-dg-column>
         <clr-dg-column>คืนคลัง</clr-dg-column>
+        <clr-dg-column>หมายเหตุ</clr-dg-column>
         <clr-dg-column></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *ngFor="let r of returned" [clrDgItem]="r" [ngClass]="{'approve-status': r.is_approved === 'Y', 'cancel-status': r.is_cancel === 'Y'}">
@@ -199,6 +204,7 @@
           <clr-dg-cell>{{r.returned_code}}</clr-dg-cell>
           <clr-dg-cell>{{r.returned_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
+          <clr-dg-cell>{{r.comment}}</clr-dg-cell>
           <clr-dg-cell>
             <div class="btn-group btn-sm">
               <button title="แก้ไข" *ngIf="r.is_cancel === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/return-product/edit']"

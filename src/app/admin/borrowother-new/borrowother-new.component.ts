@@ -48,7 +48,7 @@ export class BorrowotherNewComponent implements OnInit {
   lotNo: any;
   conversionQty = 0;
   unitGenericId: null;
-
+ 
   warehouseId: any;
   refDocument: any;
 
@@ -155,7 +155,7 @@ export class BorrowotherNewComponent implements OnInit {
         this.products.push(obj);
         await this.alowcate(this.genericId);
         console.log(this.products);
-        
+
       }
     }
     this.clearForm();
