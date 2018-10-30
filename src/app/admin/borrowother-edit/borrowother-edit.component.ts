@@ -108,8 +108,7 @@ export class BorrowotherEditComponent implements OnInit {
   async getWarehouses(){
     const rs = await this.borrowOtherService.getWarehouses(this.borrowId);
     this.srcWarehouseName = rs.rows.src_warehouse_name;
-    console.log(this.srcWarehouseName);
-    
+    this.comment = rs.rows.comment;
   }
 
   // async getTransactionaIssues() {

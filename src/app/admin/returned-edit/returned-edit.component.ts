@@ -194,6 +194,7 @@ export class ReturnedEditComponent implements OnInit {
       const rsDetail = rs.detail[0];
       this.borrowCode = rs.borrow.length ? rs.borrow[0].borrow_code : rs.borrowOther[0].borrow_other_code;
       this.returnedCode = rsDetail.returned_code;
+      this.comment = rsDetail.comment;
       if (rsDetail.returned_date) {
         this.returnedDate = {
           date: {
