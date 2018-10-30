@@ -49,6 +49,7 @@ export class ReceiveOtherComponent implements OnInit {
   receiveStatus = [];
   warehouses = [];
   locations = [];
+  locationId: any = '';
 
   isUpdate = false;
   isSaving = false;
@@ -234,13 +235,17 @@ export class ReceiveOtherComponent implements OnInit {
       this.selectedWarehouseId = event.warehouse_id ? event.warehouse_id : null;
       this.selectedWarehouseName = event.warehouse_name ? event.warehouse_name : null;
       if (this.selectedWarehouseId) {
+        this.setLocation(this.selectedWarehouseId);
         this.locationList.getLocations(event.warehouse_id);
       }
     } catch (error) {
       this.alertService.error(error);
     }
   }
-
+  async setLocation(warehouseId){
+    let rs:any = await this.receiveService.getLastLocationOther(warehouseId,this.selectedProductId);
+    this.locationId = rs.ok ? rs.detail.location_id : '';
+  }
   clearProductSearch() {
     this.selectedProductId = null;
     this.conversionQty = 0;
@@ -280,9 +285,7 @@ export class ReceiveOtherComponent implements OnInit {
       this.selectedGenericId = event ? event.generic_id : null;
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.primaryUnitName = event ? event.primary_unit_name : null;
-
       this.isLotControl = event ? event.is_lot_control : null;
-
       this.manufactureList.getManufacture(this.selectedGenericId);
       // this.lotList.setProductId(this.selectedProductId);
       this.warehouseList.getWarehouse(this.selectedGenericId);
@@ -295,7 +298,6 @@ export class ReceiveOtherComponent implements OnInit {
   }
 
   addProduct() {
-
     const idx = _.findIndex(this.products, { product_id: this.selectedProductId, cost: this.selectedCost, lot_no: this.selectedLotNo });
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้วไม่สามารถเพิ่มได้ กรุณาแก้ไขรายการ');
@@ -389,7 +391,7 @@ export class ReceiveOtherComponent implements OnInit {
     this.selectedManufactureId = null;
     this.selectedManufactureName = null;
     this.isLotControl = null;
-
+    this.locationId = ''
     this.manufactureList.clearVendor();
     this.warehouseList.clearWarehousList();
     this.locationList.clearLocation();
