@@ -7,6 +7,7 @@ import { PeriodService } from './../../period.service';
 import { JwtHelper } from 'angular2-jwt';
 import { BasicService } from './../../basic.service';
 import * as _ from 'lodash';
+import { SearchGenericAutocompleteComponent } from '../../directives/search-generic-autocomplete/search-generic-autocomplete.component';
 
 @Component({
   selector: 'wm-borrow-new',
@@ -38,6 +39,7 @@ export class BorrowNewComponent implements OnInit {
   isSaving = false;
   warehouses: any;
   peopleId: any;
+  remark: any;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -51,6 +53,7 @@ export class BorrowNewComponent implements OnInit {
   @ViewChild('productSearch') public productSearch;
   @ViewChild('locationList') locationList;
   @ViewChild('modalLoading') private modalLoading;
+  @ViewChild('elSearchGeneric') elSearchGeneric: SearchGenericAutocompleteComponent;
 
   jwtHelper: JwtHelper = new JwtHelper();
   primaryUnitName: any;
@@ -91,16 +94,24 @@ export class BorrowNewComponent implements OnInit {
     this.getWarehouses();
   }
 
-  setSelectedProduct(event: any) {
+  changeUnit(event: any) {
+    try {
+      this.conversionQty = event.qty ? event.qty : 0;
+      this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
+    } catch (error) {
+      //
+    }
+  }
+
+  setSelectedGeneric(event: any) {
     try {
       if (this.srcWarehouseId) {
-        console.log(event)
         this.productId = event ? event.product_id : null;
         this.productName = event ? event.product_name : null;
         this.genericName = event ? event.generic_name : null;
         this.genericId = event ? event.generic_id : null;
         this.workingCode = event ? event.working_code : null;
-        this.remainQty = event ? event.qty - event.reserve_qty : null;
+        this.remainQty = event ? event.qty - event.reserve_qty : 0;
         this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
@@ -115,39 +126,7 @@ export class BorrowNewComponent implements OnInit {
     }
   }
 
-  changeUnit(event: any) {
-    try {
-      this.conversionQty = event.qty ? event.qty : 0;
-      this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
-    } catch (error) {
-      //
-    }
-  }
-
-  changeLots(event: any) {
-    try {
-      const idx = _.findIndex(this.lots, { lot_no: this.lotNo });
-      if (idx > -1) {
-        this.expiredDate = this.lots[idx].expired_date;
-        this.remainQty = this.lots[idx].qty;
-        this.wmProductId = this.lots[idx].wm_product_id;
-        this.lotNo = this.lots[idx].lot_no;
-      }
-    } catch (error) {
-      this.alertService.error(error);
-    }
-  }
-
-  async getLots() {
-    try {
-      const rs = await this.borrowItemsService.getLots(this.productId, this.srcWarehouseId);
-      this.lots = rs.rows;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  clearProductSearch(event) {
+  onChangeSearchGeneric(event: any) {
     if (event) {
       this.clearForm();
     }
@@ -174,14 +153,6 @@ export class BorrowNewComponent implements OnInit {
     }
   }
 
-  changeLocation(event: any) {
-    this.locationId = event.location_id;
-  }
-
-  editChangeLocation(event: any, idx: any) {
-    this.generics[idx].location_id = event.location_id;
-  }
-
   async setDstWarehouse(event: any) {
     this.dstWarehouseId = event.warehouse_id;
     this.locations = [];
@@ -203,12 +174,12 @@ export class BorrowNewComponent implements OnInit {
           remain_qty: +this.remainQty,
           unit_generic_id: this.unitGenericId,
           conversion_qty: this.conversionQty,
-          location_id: this.locationId,
           primary_unit_id: this.primaryUnitId,
           primary_unit_name: this.primaryUnitName
         };
-     
+
         this.generics.push(obj);
+        console.log(this.generics)
         this.clearForm();
       } else {
         this.alertService.error('ข้อมูลไม่ครบถ้วน')
@@ -233,23 +204,16 @@ export class BorrowNewComponent implements OnInit {
     this.remainQty = 0;
     this.borrowQty = 0;
     this.expiredDate = null;
-    this.productSearch.clearProductSearch();
+    this.elSearchGeneric.clearSearch();
     this.lotNo = null;
     this.locationId = null;
+    this.remark = null;
     this.lots = [];
     this.unitList.clearUnits();
   }
 
   onChangeEditQty(qty: any) {
     this.borrowQty = qty;
-  }
-
-  changeProductQty(genericId, event) {
-    const idx = _.findIndex(this.generics, ['generic_id', genericId]);
-    this.generics[idx].products = event;
-    this.generics[idx].borrow_qty = _.sumBy(event, function (e: any) {
-      return e.product_qty * e.conversion_qty;
-    });
   }
 
   editChangeUnit(idx: any, event: any) {
@@ -287,10 +251,10 @@ export class BorrowNewComponent implements OnInit {
           data.push(_data);
 
           let allocate = await this.borrowItemsService.allocateBorrow(data, this.srcWarehouseId);
-          
+
           let wmRows = [];
           wmRows.push(allocate.rows);
-          console.log(wmRows)
+          
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,
@@ -313,7 +277,8 @@ export class BorrowNewComponent implements OnInit {
           borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
           srcWarehouseId: this.srcWarehouseId,
           dstWarehouseId: this.dstWarehouseId,
-          peopleId: this.peopleId
+          peopleId: this.peopleId,
+          remark: this.remark
         };
 
         if (generics.length) {
@@ -354,29 +319,4 @@ export class BorrowNewComponent implements OnInit {
   onSelectedPeople(event: any) {
     this.peopleId = event ? event.people_id : null;
   }
-
-  // async getProductList(genericId, qty) {
-  //   try {
-  //     this.modalLoading.show();
-  //     const data = [{
-  //       genericId: genericId,
-  //       genericQty: qty
-  //     }];
-  //     const srcWarehouseId = this.srcWarehouseId;
-  //     const rs: any = await this.borrowItemsService.allocate(data, srcWarehouseId);
-  //     if (rs.ok) {
-  //       const idx = _.findIndex(this.generics, { generic_id: genericId });
-  //       if (idx > -1) {
-  //         this.generics[idx].products = rs.rows;
-  //       }
-  //     } else {
-  //       this.alertService.error(rs.error);
-  //     }
-  //     this.modalLoading.hide();
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.modalLoading.hide();
-  //     this.alertService.error(error.message);
-  //   }
-  // }
 }

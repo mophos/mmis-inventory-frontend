@@ -1,16 +1,12 @@
-import { AlertExpiredService } from './../alert-expired.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BorrowItemsService } from './../borrow-items.service';
 import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../alert.service';
-import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
-import { ProductsService } from './../products.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SearchPeopleAutoCompleteComponent } from '../../directives/search-people-autocomplete/search-people-autocomplete.component';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { DateService } from 'app/date.service';
-
 @Component({
   selector: 'wm-borrow-edit',
   templateUrl: './borrow-edit.component.html',
@@ -67,18 +63,15 @@ export class BorrowEditComponent implements OnInit {
   genericId: any;
   unitGenericId: any;
   lotNo: any;
+  remark: any;
 
   borrowId: any;
 
   constructor(
-    private productService: ProductsService,
     private alertService: AlertService,
     private borrowItemsService: BorrowItemsService,
-    private alertExpireService: AlertExpiredService,
     private router: Router,
-    private zone: NgZone,
     private route: ActivatedRoute,
-    private dateService: DateService
   ) {
     this.route.queryParams
       .subscribe(params => {
@@ -113,6 +106,7 @@ export class BorrowEditComponent implements OnInit {
 
         this.srcWarehouseId = rs.info.src_warehouse_id;
         this.dstWarehouseId = rs.info.dst_warehouse_id;
+        this.remark = rs.info.remark;
         
         if (rs.info.confirmed === 'Y' || rs.info.approved === 'Y' || rs.info.mark_deleted === 'Y') {
           this.disableSave = true;
@@ -140,7 +134,9 @@ export class BorrowEditComponent implements OnInit {
         this.remainQty = event ? event.qty - event.reserve_qty : null;
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
-        // this.unitList.setGenericId(this.genericId);
+        this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
+        
+        this.unitList.setGenericId(this.genericId);
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
       }
@@ -282,6 +278,7 @@ export class BorrowEditComponent implements OnInit {
     this.expiredDate = null;
     this.productSearch.clearProductSearch();
     this.lotNo = null;
+    this.remark = null;
     this.locationId = null;
     this.lots = [];
   }
@@ -362,7 +359,8 @@ export class BorrowEditComponent implements OnInit {
           borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
           srcWarehouseId: this.srcWarehouseId,
           dstWarehouseId: this.dstWarehouseId,
-          peopleId: this.peopleId
+          peopleId: this.peopleId,
+          remark: this.remark
         };
 
         if (generics.length) {

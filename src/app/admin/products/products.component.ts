@@ -134,7 +134,7 @@ export class ProductsComponent implements OnInit {
   }
 
   showStockCard(p: any) {
-    const url = `${this.apiUrl}/report/product/balance/${p.product_id}?token=${this.token}`;
+    const url = `${this.apiUrl}/report/product/balance?&productId=${p.product_id}&warehouseId=${this.warehouseId}&token=${this.token}`;
     this.htmlPreview.showReport(url);
   }
 

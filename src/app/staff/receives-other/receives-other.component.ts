@@ -120,6 +120,7 @@ export class ReceivesOtherComponent implements OnInit {
 
   hospcode: any; // ใช้ชั่วคราว
   isCheckUpdateCost = false;
+  locationId: any = '';
 
   constructor(
     private wareHouseService: WarehouseService,
@@ -168,9 +169,13 @@ export class ReceivesOtherComponent implements OnInit {
     this.wareHouseService.detail(warehouseId)
       .then((result: any) => {
         this.warehouseName = result.detail.warehouse_name;
+        this.setLocation(warehouseId)
       })
   }
-
+  async setLocation(warehouseId){
+    let rs:any = await this.receiveService.getLastLocation(warehouseId,this.selectedProductId);
+    this.locationId = rs.ok ? rs.detail.location_id : '';
+  }
   async getReceiveTypes() {
     this.modalLoading.show();
     try {
@@ -299,6 +304,7 @@ export class ReceivesOtherComponent implements OnInit {
       // this.warehouseList.getWarehouse(this.selectedGenericId);
 
       this.getWareHouse(this.userWarehouseId);
+
       this.getUnitConversion(this.selectedGenericId);
       this.unitList.setGenericId(this.selectedGenericId);
 
@@ -398,7 +404,7 @@ export class ReceivesOtherComponent implements OnInit {
     this.selectedManufactureId = null;
     this.selectedManufactureName = null;
     this.isLotControl = null;
-
+    this.locationId = ''
     this.manufactureList.clearVendor();
     // this.warehouseList.clearWarehousList();
     this.locationList.clearLocation();

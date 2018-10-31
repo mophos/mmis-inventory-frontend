@@ -46,7 +46,7 @@ export class SelectProductLocationComponent implements OnInit {
               this.locationId = this.selectedId;
               const idx = _.findIndex(this.locations, { 'location_id': this.locationId });
               if (idx > -1) {
-                this.onSelect.emit(this.locationId[idx]);
+                this.onSelect.emit(this.locations[idx]);
               }
             }
           } else {
