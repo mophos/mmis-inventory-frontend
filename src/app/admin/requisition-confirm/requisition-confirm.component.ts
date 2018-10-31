@@ -147,7 +147,8 @@ export class RequisitionConfirmComponent implements OnInit {
                     pack_remain_qty: +z.pack_remain_qty,
                     to_unit_name: z.to_unit_name,
                     unit_generic_id: z.unit_generic_id,
-                    confirm_qty: Math.floor(z.product_qty / z.conversion_qty)
+                    confirm_qty: Math.floor(z.product_qty / z.conversion_qty),
+                    cost: z.cost
                   }
                   if (v.temp_confirm_id) {
                     const rsT: any = await this.requisitionService.getRequisitionConfirmTemp(v.temp_confirm_id);
@@ -212,7 +213,7 @@ export class RequisitionConfirmComponent implements OnInit {
         this.withdrawWarehouseName = detail ? detail.withdraw_warehouse_name : null;
         this.requisitionType = detail ? detail.requisition_type : null;
         this.wmRequisitionId = detail ? detail.wm_requisition : null;
-        
+
         if (detail.requisition_date) {
           this.requisitionDate = {
             date: {
@@ -235,17 +236,19 @@ export class RequisitionConfirmComponent implements OnInit {
   async getConfirmItems() {
     try {
       const rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
+      console.log(rs);
       if (rs.ok) {
         const rows = rs.rows;
         rows.forEach(v => {
+
           const idx = _.findIndex(this.products, { generic_id: v.generic_id });
           if (idx > -1) {
-            const obj: any = {
-              confirm_qty: v.confirm_qty,
-              conversion_qty: v.conversion_qty,
-              wm_product_id: v.wm_product_id,
-              generic_id: this.products[idx].generic_id
-            }
+            // const obj: any = {
+            //   confirm_qty: v.confirm_qty,
+            //   conversion_qty: v.conversion_qty,
+            //   wm_product_id: v.wm_product_id,
+            //   generic_id: this.products[idx].generic_id
+            // }
             this.products[idx].confirmItems.push(v);
           }
         });
@@ -260,6 +263,8 @@ export class RequisitionConfirmComponent implements OnInit {
   }
 
   async savePay() {
+    // console.log();
+
     let totalQty = 0;
     let minus = false;
     const items = [];
@@ -284,7 +289,8 @@ export class RequisitionConfirmComponent implements OnInit {
         const obj: any = {
           confirm_qty: _totalConfirmQty,
           wm_product_id: x.wm_product_id,
-          generic_id: v.generic_id
+          generic_id: v.generic_id,
+          cost: x.cost
         }
 
         items.push(obj);
