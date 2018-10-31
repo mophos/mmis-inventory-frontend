@@ -6,7 +6,7 @@
     <clr-dg-column>จ่ายแล้ว</clr-dg-column>
     <clr-dg-row *ngFor="let g of generics">
       <clr-dg-cell> {{g.generic_name}} </clr-dg-cell>
-      <clr-dg-cell style="text-align: right;">{{g.qty | number}} {{g.from_unit_name}}  (x {{g.conversion_qty | number}} {{g.to_unit_name}})</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{g.qty | number}} {{g.from_unit_name}}  ({{g.conversion_qty | number}} {{g.to_unit_name}})</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{g.qty * g.conversion_qty | number}} {{ g.to_unit_name }}</clr-dg-cell>
       <clr-dg-cell style="text-align: center;">
         <clr-icon shape="check" class="is-success" *ngIf="g.requisition_order_id"></clr-icon>

@@ -88,6 +88,7 @@ export class BorrowNoteNewComponent implements OnInit {
     try {
       const rs: any = await this.borrowNoteService.getDetailWithItems(this.borrowNoteId);
       if (rs.ok) {
+        console.log(rs.detail)
         this.generics = rs.items || null;
         const detail = rs.detail || {};
 
