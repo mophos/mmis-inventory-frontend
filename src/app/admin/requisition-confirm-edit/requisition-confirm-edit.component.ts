@@ -188,7 +188,8 @@ export class RequisitionConfirmEditComponent implements OnInit {
               pack_remain_qty: v.remain_qty / v.conversion_qty,
               expired_date: v.expired_date,
               from_unit_name: v.from_unit_name,
-              to_unit_name: v.to_unit_name
+              to_unit_name: v.to_unit_name,
+              cost: v.cost
             }
 
             if (v.confirm_qty > 0) {
@@ -231,7 +232,8 @@ export class RequisitionConfirmEditComponent implements OnInit {
         const obj: any = {
           confirm_qty: x.confirm_qty * x.conversion_qty, // base
           wm_product_id: x.wm_product_id,
-          generic_id: v.generic_id
+          generic_id: v.generic_id,
+          cost: x.cost
         }
 
         items.push(obj);
