@@ -443,7 +443,16 @@ export class ReceiveService {
       .toPromise();
     return res.json();
   }
-
+  async getLastLocation(warehouseId,productId:any){
+    const res = await this.authHttp.get(`${this.url}/receives/purchases/get-last-location?productId=${productId}&warehouseId=${warehouseId}`)
+    .toPromise();
+    return res.json();
+  }
+  async getLastLocationOther(warehouseId,productId:any){
+    const res = await this.authHttp.get(`${this.url}/receives/purchases/get-last-location-other?productId=${productId}&warehouseId=${warehouseId}`)
+    .toPromise();
+    return res.json();
+  }
   async getPurchaseCheckExpire(genericId: any, expiredDate: any) {
     const res = await this.authHttp.get(`${this.url}/receives/purchases/check-expire?genericId=${genericId}&expiredDate=${expiredDate}`)
       .toPromise();

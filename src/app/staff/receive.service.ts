@@ -19,7 +19,11 @@ export class ReceiveService {
       .toPromise();
     return response.json();
   }
-
+  async getLastLocation(warehouseId,productId:any){
+    const res = await this.authHttp.get(`${this.url}/receives/purchases/get-last-location-other?productId=${productId}&warehouseId=${warehouseId}`)
+    .toPromise();
+  return res.json();
+   }
   searchProduct(query: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/staffreceive/search`, {

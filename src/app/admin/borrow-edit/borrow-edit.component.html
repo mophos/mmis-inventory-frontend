@@ -26,7 +26,7 @@
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
           </div>
-        </div>  
+        </div>
         <div class="form-group row wid99">
           <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
             <label for="srcWarehouseId" class="required">ยืมจากคลัง</label>
@@ -39,6 +39,14 @@
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <wm-select-warehouses #dstWarehouse [selectedId]="dstWarehouseId" (onSelect)="setDstWarehouse($event)"></wm-select-warehouses>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
+            <label for="remark">หมายเหตุ</label>
+          </div>
+          <div class="col-lg-4 col-md-10 col-sm-12 col-xs-12">
+            <input id="remark" class="form-control" type="text" name="remark" [(ngModel)]="remark" placeholder="หมายเหตุ">
           </div>
         </div>
       </section>
@@ -58,7 +66,7 @@
   <!-- <clr-dg-column>ยอดโอนจริง <br> (Base Unit)</clr-dg-column> -->
   <clr-dg-column></clr-dg-column>
 
-  <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
+  <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;" [ngClass]="{'cancel-status': generic.products.length === 0}">
     <wm-borrow-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)"
       ngProjectAs="clr-dg-row-detail"></wm-borrow-items>
     <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
@@ -82,9 +90,7 @@
       <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
       <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': borrowQty > remainQty ? 'red' : 'green'}">{{
-      borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - borrowQty | number }} {{primaryUnitName}}</clr-dg-cell>
+    <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId" (click)="addGeneric()">

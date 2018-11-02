@@ -1,14 +1,10 @@
-import { Router } from '@angular/router';
 import { BorrowItemsService } from './../borrow-items.service';
-import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../alert.service';
-import { WarehouseService } from './../warehouse.service';
-import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 
 import * as _ from 'lodash';
 import { State } from '@clr/angular';
 import { BorrowNoteService } from '../borrow-note.service';
-import { log } from 'util';
 
 @Component({
   selector: 'wm-borrow',
