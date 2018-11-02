@@ -43,7 +43,7 @@ export class BorrowComponent implements OnInit {
   currentPage = 1;
   currentPageOther = 1;
   offset = 0;
-  selectedTab: any = 'inside';
+  selectedTab = 'inside';
   tabInside = 0;
   tabOutside = 0;
   tabReturned = 0;
@@ -63,7 +63,7 @@ export class BorrowComponent implements OnInit {
 
   ngOnInit() {
     this.getBorrowList();
-    this.selectedTab = sessionStorage.getItem('tabBorrow');
+    this.selectedTab = sessionStorage.getItem('tabBorrow') ? sessionStorage.getItem('tabBorrow') : 'inside';
   }
 
   async getBorrowList() {

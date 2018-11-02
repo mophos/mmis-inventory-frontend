@@ -147,10 +147,10 @@ export class ReceiveService {
 
     return res.json();
   }
-  async checkDeleteProductWithPick(products:any,receiveId:any){
-    const res = await this.authHttp.post(`${this.url}/receives/checkDeleteProductWithPick`,{
-      products:products,
-      receiveId:receiveId
+  async checkDeleteProductWithPick(products: any, receiveId: any) {
+    const res = await this.authHttp.post(`${this.url}/receives/checkDeleteProductWithPick`, {
+      products: products,
+      receiveId: receiveId
     }).toPromise();
     return res.json();
   }
@@ -528,6 +528,10 @@ export class ReceiveService {
       query: query,
       sort: sort
     }).toPromise();
+    return res.json();
+  }
+  async getReport(type: any) {
+    const res = await this.authHttp.get(`${this.url}/std/report?type=${type}`).toPromise();
     return res.json();
   }
 }
