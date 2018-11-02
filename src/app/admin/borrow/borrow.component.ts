@@ -59,7 +59,7 @@ export class BorrowComponent implements OnInit {
 
   ngOnInit() {
     this.getBorrowList();
-    this.selectedTab = sessionStorage.getItem('tabBorrow');
+    this.selectedTab = sessionStorage.getItem('tabBorrow') ? sessionStorage.getItem('tabBorrow') : 'inside';
   }
 
   async getBorrowList() {
