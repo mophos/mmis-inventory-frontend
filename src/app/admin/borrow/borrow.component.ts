@@ -39,7 +39,7 @@ export class BorrowComponent implements OnInit {
   currentPage = 1;
   currentPageOther = 1;
   offset = 0;
-  selectedTab: any;
+  selectedTab = 'inside';
   tabInside = 0;
   tabOutside = 0;
   tabReturned = 0;

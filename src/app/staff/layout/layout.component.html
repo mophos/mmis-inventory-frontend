@@ -47,14 +47,14 @@
         <clr-icon clrVerticalNavIcon shape="tools"></clr-icon>
         เบิกสินค้า
       </a>
-      <a clrVerticalNavLink *ngIf="menuBorrowProduct" routerLink="/staff/borrow" title="ยืม/คืนสินค้า" routerLinkActive="active">
-        <clr-icon clrVerticalNavIcon shape="share"></clr-icon>
-        ยืม/คืนสินค้า
-      </a>
       <a clrVerticalNavLink *ngIf="menuPayRequisition" routerLink="/staff/pay-requisition" title="จ่ายสินค้า"
         routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="tools" class="is-solid"></clr-icon>
         จ่ายสินค้า
+      </a>
+      <a clrVerticalNavLink *ngIf="menuBorrowProduct" routerLink="/staff/borrow" title="ยืม/คืนสินค้า" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="share"></clr-icon>
+        ยืม/คืนสินค้า
       </a>
       <!-- ซ่อนเมนูนี้ออกไปก่อน อย่าเพิ่งลบ -->
       <!-- <a clrVerticalNavLink routerLink="/staff/issue" title="จ่ายยาและเวชภัณฑ์" routerLinkActive="active">
