@@ -254,7 +254,7 @@ export class BorrowNewComponent implements OnInit {
 
           let wmRows = [];
           wmRows.push(allocate.rows);
-          console.log(wmRows)
+          
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,

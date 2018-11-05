@@ -631,14 +631,20 @@ export class ReceiveComponent implements OnInit {
     });
     if (receiveIds.length) {
       this.alertService.confirm('พิมพ์ใบตรวจรับ ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
-        .then(() => {
+        .then(async () => {
           let strIds = '';
           receiveIds.forEach((v: any) => {
             strIds += `receiveID=${v}&`;
           });
-          const url = `${this.apiUrl}/report/check/receive?${strIds}token=${this.token}`;
+          const rs: any = await this.receiveService.getReport('CR');
+          const report_url = rs.rows[0].report_url;
+
+          const url = `${this.apiUrl}${report_url}?${strIds}token=${this.token}`;
+
           this.htmlPreview.showReport(url);
-        }).catch(() => {
+        }).catch((error) => {
+          console.log(error);
+
           // cancel
         });
     } else {
