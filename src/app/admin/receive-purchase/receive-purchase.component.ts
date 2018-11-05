@@ -133,6 +133,7 @@ export class ReceivePurchaseComponent implements OnInit {
   isExpired = false // false = กรอกวันหมดอายุ   true = ไม่กรอกวันหมดอายุ
   isReceiveHoliday = false; // false = รับได้ true = เป็นวันหยุด
   isReceivePeriod = false; // false = รับได้ true = ปิดรอบ
+  locationId: any = '';
 
 
   constructor(
@@ -289,6 +290,7 @@ export class ReceivePurchaseComponent implements OnInit {
       this.selectedWarehouseId = event.warehouse_id ? event.warehouse_id : null;
       this.selectedWarehouseName = event.warehouse_name ? event.warehouse_name : null;
       if (this.selectedWarehouseId) {
+        this.setLocation(this.selectedWarehouseId);
         this.locationList.getLocations(event.warehouse_id);
       }
     } catch (error) {
@@ -296,7 +298,10 @@ export class ReceivePurchaseComponent implements OnInit {
 
     }
   }
-
+  async setLocation(warehouseId){
+    let rs:any = await this.receiveService.getLastLocation(warehouseId,this.selectedProductId);
+    this.locationId = rs.ok ? rs.detail.location_id : '';
+  }
   editChangeWarehouse(idx, event: any, cmp: any) {
     try {
       this.products[idx].warehouse_id = event.warehouse_id;
@@ -340,17 +345,15 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
 
-  setSelectedProduct(event: any) {
+ async setSelectedProduct(event: any) {
     try {
       this.selectedProductId = event ? event.product_id : null;
       this.selectedGenericId = event ? event.generic_id : null;
       this.selectedProductName = event ? `${event.product_name}` : null;
       this.selectedGenericName = event ? `${event.generic_name}` : null;
       this.selectedExpireNumDays = event ? event.expire_num_days : 0;
-
       this.manufactureList.getManufacture(this.selectedGenericId);
       this.warehouseList.getWarehouse(this.selectedGenericId);
-
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.unitList.setGenericId(this.selectedGenericId);
 
@@ -437,6 +440,7 @@ export class ReceivePurchaseComponent implements OnInit {
     this.primaryUnitName = null;
     this.conversionQty = 0;
     this.selectedDiscount = 0;
+    this.locationId = ''
 
     // ของแถม
     this.isFree = false;

@@ -147,10 +147,10 @@ export class ReceiveService {
 
     return res.json();
   }
-  async checkDeleteProductWithPick(products:any,receiveId:any){
-    const res = await this.authHttp.post(`${this.url}/receives/checkDeleteProductWithPick`,{
-      products:products,
-      receiveId:receiveId
+  async checkDeleteProductWithPick(products: any, receiveId: any) {
+    const res = await this.authHttp.post(`${this.url}/receives/checkDeleteProductWithPick`, {
+      products: products,
+      receiveId: receiveId
     }).toPromise();
     return res.json();
   }
@@ -443,7 +443,16 @@ export class ReceiveService {
       .toPromise();
     return res.json();
   }
-
+  async getLastLocation(warehouseId,productId:any){
+    const res = await this.authHttp.get(`${this.url}/receives/purchases/get-last-location?productId=${productId}&warehouseId=${warehouseId}`)
+    .toPromise();
+    return res.json();
+  }
+  async getLastLocationOther(warehouseId,productId:any){
+    const res = await this.authHttp.get(`${this.url}/receives/purchases/get-last-location-other?productId=${productId}&warehouseId=${warehouseId}`)
+    .toPromise();
+    return res.json();
+  }
   async getPurchaseCheckExpire(genericId: any, expiredDate: any) {
     const res = await this.authHttp.get(`${this.url}/receives/purchases/check-expire?genericId=${genericId}&expiredDate=${expiredDate}`)
       .toPromise();
@@ -528,6 +537,10 @@ export class ReceiveService {
       query: query,
       sort: sort
     }).toPromise();
+    return res.json();
+  }
+  async getReport(type: any) {
+    const res = await this.authHttp.get(`${this.url}/std/report?type=${type}`).toPromise();
     return res.json();
   }
 }
