@@ -3,7 +3,7 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin/reports">ระบบรายงาน</a>
   <span class="breadcrumb-item active">รายงานสถานะเวชภัณฑ์คงคลัง</span>
 </nav>
-<div class="row" style="padding:1em">
+<div class="row" style="padding-top:1em">
   <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
     <label class="required">คลัง</label>
   </div>
@@ -30,11 +30,28 @@
     </button>
   </div>
 </div>
+<div class="row">
+  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12"></div>
+  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+    <div class="clr-form-control">
+      <div class="clr-control-container clr-control-inline">
+        <div class="clr-radio-wrapper" style="display:inline;padding-right: 1em;padding-left: 1em">
+          <input type="radio" id="vertical-radio1" name="radio" value="generic" class="clr-radio" [(ngModel)]="radio">
+          <label for="vertical-radio1" class="clr-control-label">Generic</label>
+        </div>
+        <div class="clr-radio-wrapper" style="display:inline">
+          <input type="radio" id="vertical-radio2" name="radio" value="product" class="clr-radio" [(ngModel)]="radio">
+          <label for="vertical-radio2" class="clr-control-label">Product</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="row" style="padding: 1em">
   <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
     <label class="required">ประเภท</label>
   </div>
-  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+  <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
     <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px; width: 400px;">
       <clr-dg-column style="width: 150px;">ทั้งหมด</clr-dg-column>
       <clr-dg-row *ngFor="let order of genericTypes" [clrDgItem]="order">
