@@ -124,8 +124,8 @@
     <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell>
-      <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="false" [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"
-        (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete>
+      <wm-search-generic-warehouse-autocomplete #searchGenericCmp [clearOnSelected]="false" [warehouseId]="wmWithdraw" [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"
+        (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" [(ngModel)]="selectedRequisitionQty" wmNumberWithOutDot style="width: 100%; text-align: right; background-color:#FFF9C4"
