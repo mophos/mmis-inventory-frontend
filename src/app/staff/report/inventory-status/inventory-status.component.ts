@@ -16,6 +16,7 @@ export class InventoryStatusComponent implements OnInit {
 
   @ViewChild('htmlPreview') public htmlPreview: any;
 
+  radio = 'generic';
   token: any;
   warehouseId: any;
   genericTypes = [];
@@ -82,8 +83,13 @@ export class InventoryStatusComponent implements OnInit {
       genericType.push('genericType=' + value.generic_type_id)
     });
     this.statusDate = this.statusDate ? moment(this.statusDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/inventorystatus?warehouseId=${this.warehouseId}&statusDate=${this.statusDate}&warehouseName=${this.warehouseName}&token=${this.token}&` + genericType.join('&');
-    this.htmlPreview.showReport(url);
+    if (this.radio == 'generic') {
+      const url = `${this.apiUrl}/report/inventoryStatus/generic?warehouseId=${this.warehouseId}&statusDate=${this.statusDate}&warehouseName=${this.warehouseName}&token=${this.token}&` + genericType.join('&');
+      this.htmlPreview.showReport(url);
+    } else if (this.radio == 'product') {
+      const url = `${this.apiUrl}/report/inventoryStatus/product?warehouseId=${this.warehouseId}&statusDate=${this.statusDate}&warehouseName=${this.warehouseName}&token=${this.token}&` + genericType.join('&');
+      this.htmlPreview.showReport(url);
+    }
   }
 
   exportExcel() {
@@ -92,8 +98,13 @@ export class InventoryStatusComponent implements OnInit {
       genericType.push('genericType=' + value.generic_type_id)
     });
     this.statusDate = this.statusDate ? moment(this.statusDate.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/inventorystatus/excel?warehouseId=${this.warehouseId}&statusDate=${this.statusDate}&warehouseName=${this.warehouseName}&token=${this.token}&` + genericType.join('&');
-    window.open(url, '_blank');
+    if (this.radio == 'generic') {
+      const url = `${this.apiUrl}/report/inventoryStatus/generic/excel?warehouseId=${this.warehouseId}&statusDate=${this.statusDate}&warehouseName=${this.warehouseName}&token=${this.token}&` + genericType.join('&');
+      window.open(url, '_blank');
+    } else if (this.radio == 'product') {
+      const url = `${this.apiUrl}/report/inventoryStatus/product/excel?warehouseId=${this.warehouseId}&statusDate=${this.statusDate}&warehouseName=${this.warehouseName}&token=${this.token}&` + genericType.join('&');
+      window.open(url, '_blank');
+    }
   }
 
 }
