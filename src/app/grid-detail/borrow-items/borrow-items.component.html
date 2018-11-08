@@ -20,7 +20,7 @@
         </clr-dg-cell>
         <clr-dg-cell>
           <input type="text" #qty (keyup)="changeQty(qty, idx)" style="width: 100%; text-align: right; background-color:#FFF9C4"
-            placeholder="0" wmNumberWithOutDot [value]="p.product_qty/p.conversion_qty">
+            placeholder="0" wmNumberWithOutDot [value]="p.product_qty">
         </clr-dg-cell>
         <clr-dg-cell style="text-align: right;">{{p.product_qty*p.conversion_qty || 0 | number}} {{p.to_unit_name}}</clr-dg-cell>
         <clr-dg-cell style="text-align: right;">
