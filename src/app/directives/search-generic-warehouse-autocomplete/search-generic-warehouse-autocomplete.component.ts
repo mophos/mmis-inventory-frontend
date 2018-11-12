@@ -43,6 +43,7 @@ export class SearchGenericWarehouseAutocompleteComponent implements OnInit {
     this.query = null;
   }
 
+
   clearSelected(event: any) {
     if (this.clearOnSelected || (event.keyCode === 80 && this.query === '')) {
       if (event.keyCode === 13 || event.keyCode === 37 || event.keyCode === 38 || event.keyCode === 39 || event.keyCode === 40) {
