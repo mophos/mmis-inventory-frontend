@@ -22,7 +22,7 @@ export class WarehouseService {
         });
     });
   }
-  allSearch(query:any) {
+  allSearch(query: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/warehouses/search?query=${query}`)
         .map(res => res.json())
@@ -222,9 +222,9 @@ export class WarehouseService {
     });
   }
 
-  async changeCost(productId: any, cost: number) {
+  async changeCost(wmProductId: any, cost: number) {
     const rs: any = await this.authHttp.post(`${this.url}/warehouses/products/change-cost`, {
-      productId: productId,
+      wmProductId: wmProductId,
       cost: cost
     }).toPromise();
     return rs.json();
