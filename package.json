@@ -22,7 +22,7 @@
     "@clr/angular": "0.11.9",
     "@clr/icons": "0.11.9",
     "@clr/ui": "0.11.9",
-    "@siteslave/agx-typeahead": "^0.0.20",
+    "@siteslave/agx-typeahead": "^0.1.8",
     "@webcomponents/custom-elements": "^1.1.2",
     "angular2-highcharts": "^0.5.5",
     "angular2-jwt": "^0.2.3",
