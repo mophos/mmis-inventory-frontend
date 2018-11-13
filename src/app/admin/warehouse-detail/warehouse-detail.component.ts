@@ -43,6 +43,7 @@ export class WarehouseDetailComponent implements OnInit {
   cost: any = 0;
   productId: any;
   productName: any;
+  wmProductId: any;
 
   constructor(
     private warehouseService: WarehouseService,
@@ -138,22 +139,24 @@ export class WarehouseDetailComponent implements OnInit {
   }
 
   changeCost(product: any) {
+    console.log(product);
     this.cost = product.cost;
-    this.productId = product.product_id;
+    this.wmProductId = product.wm_product_id;
     this.productName = product.product_name;
     this.openCost = true;
   }
 
   async saveCost() {
-    if (this.productId && this.cost) {
+    if (this.wmProductId && this.cost) {
       try {
         this.modalLoading.show();
-        let rs: any = await this.warehouseService.changeCost(this.productId, this.cost);
+        const rs: any = await this.warehouseService.changeCost(this.wmProductId, this.cost);
         this.modalLoading.hide();
         if (rs.ok) {
+          this.searchProduct();
           this.alertService.success();
           this.cost = 0;
-          this.productId = null;
+          this.wmProductId = null;
           this.openCost = false;
           this.productName = null;
         } else {
