@@ -88,13 +88,6 @@ export class ValueProductsComponent implements OnInit {
 
     const url = `${this.apiUrl}/report/list/cost/type/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&` + genericType.join('&');
     this.htmlPreview.showReport(url, 'landscape');
-    // if (this.genericType == 'all') {
-    //   const url = `${this.apiUrl}/report/list/cost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
-    //   this.htmlPreview.showReport(url, 'landscape');
-    // } else {
-    //   const url = `${this.apiUrl}/report/list/cost/type/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}/${this.genericType}?token=${this.token}`;
-    //   this.htmlPreview.showReport(url, 'landscape');
-    // }
   }
 
   getWarehouseList() {
