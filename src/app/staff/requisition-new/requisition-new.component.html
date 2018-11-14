@@ -13,7 +13,8 @@
             <label for="requisitionCode">รหัสใบเบิก</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <input type="text" name="requisitionCode" id="requisitionCode" placeholder="สร้างอัตโนมัติ" style="width: 100%;" disabled [(ngModel)]="requisitionCode">
+            <input type="text" name="requisitionCode" id="requisitionCode" placeholder="สร้างอัตโนมัติ" style="width: 100%;"
+              disabled [(ngModel)]="requisitionCode">
           </div>
         </div>
         <div class="form-group row">
@@ -42,19 +43,20 @@
             <label class="required" for="wmRequisitionName">หน่วยเบิก</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <input type="text" name="wmRequisitionName" id="wmRequisitionName" 
-            [(ngModel)]="wmRequisitionName" style="width: 100%;" disabled >
+            <input type="text" name="wmRequisitionName" id="wmRequisitionName" [(ngModel)]="wmRequisitionName" style="width: 100%;"
+              disabled>
           </div>
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label class="required" for="slWarehouse">เบิกจากคลัง</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="select">
-              <select [disabled]="isUpdate" name="slWarehouse" id="slWarehouse" [(ngModel)]="wmWithdraw" (change)="getTemplates($event)">
+              <select [disabled]="isUpdate" name="slWarehouse" id="slWarehouse" [(ngModel)]="wmWithdraw" (change)="getTemplates($event);changeWarehouse($event)">
                 <option value="">
                   <กรุณาเลือกคลัง>
                 </option>
-                <option *ngFor="let w of withDrawWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{ w.warehouse_name }}</option>
+                <option *ngFor="let w of withDrawWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{
+                  w.warehouse_name }}</option>
               </select>
             </div>
           </div>
@@ -94,7 +96,7 @@
   <!-- <clr-dg-column style="width: 200px;">คงเหลือ</clr-dg-column> -->
   <clr-dg-column style="width: 30px;"></clr-dg-column>
 
-  <clr-dg-row *ngFor="let g of products;let idx=index;" >
+  <clr-dg-row *ngFor="let g of products;let idx=index;">
     <clr-dg-cell style="text-align: right;">
       {{ idx +1}}
     </clr-dg-cell>
@@ -108,7 +110,8 @@
       <wm-select-receive-unit [genericId]="g.generic_id" [selectedUnitGenericId]="g.unit_generic_id" (onSelect)="onChangeEditUnit($event, idx)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
-      <span [ngClass]="{'error-message': (g.to_unit_qty * g.requisition_qty) > g.remain_qty}">{{g.to_unit_qty * g.requisition_qty | number}}</span>
+      <span [ngClass]="{'error-message': (g.to_unit_qty * g.requisition_qty) > g.remain_qty}">{{g.to_unit_qty *
+        g.requisition_qty | number}}</span>
     </clr-dg-cell>
     <!-- <clr-dg-cell style="text-align: right;">{{(g.remain_qty - (g.to_unit_qty * g.requisition_qty))/g.to_unit_qty | number}} {{g.from_unit_name}} ({{g.to_unit_qty}} {{g.to_unit_name}})</clr-dg-cell> -->
     <clr-dg-cell style="text-align: center;">
@@ -124,8 +127,8 @@
     <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell>
-      <wm-search-generic-warehouse-autocomplete #searchGenericCmp [clearOnSelected]="false" [warehouseId]="wmWithdraw" [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"
-        (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
+      <wm-search-generic-warehouse-autocomplete #searchGenericCmp [clearOnSelected]="false" [warehouseId]="wmWithdraw"
+        [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" [(ngModel)]="selectedRequisitionQty" wmNumberWithOutDot style="width: 100%; text-align: right; background-color:#FFF9C4"
@@ -135,14 +138,15 @@
       <wm-select-receive-unit #selectUnits (onSelect)="onChangeUnit($event)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
-      <span [ngClass]="{'error-message': (selectedRequisitionQty * selectedSmallQty) > selectedRemainQty}">{{ selectedRequisitionQty * selectedSmallQty | number }}</span>
+      <span [ngClass]="{'error-message': (selectedRequisitionQty * selectedSmallQty) > selectedRemainQty}">{{
+        selectedRequisitionQty * selectedSmallQty | number }}</span>
     </clr-dg-cell>
     <!-- <clr-dg-cell style="text-align: right;">{{ selectedRemainQty | number}}</clr-dg-cell> -->
 
     <clr-dg-cell>
       <div class="btn-group btn-primary">
-        <button [disabled]="!selectedSmallQty || !selectedRequisitionQty || !selectedGenericId || !selectedUnitGenericId" class="btn btn-success btn-sm wm-small-btn"
-          (click)="addProduct()">
+        <button [disabled]="!selectedSmallQty || !selectedRequisitionQty || !selectedGenericId || !selectedUnitGenericId"
+          class="btn btn-success btn-sm wm-small-btn" (click)="addProduct()">
           <clr-icon shape="floppy"></clr-icon>
         </button>
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearItem()">
@@ -153,7 +157,8 @@
   </clr-dg-row>
 
   <clr-dg-footer>
-    {{paginationSelected.firstItem + 1}} - {{paginationSelected.lastItem + 1}} จาก {{paginationSelected.totalItems}} รายการ
+    {{paginationSelected.firstItem + 1}} - {{paginationSelected.lastItem + 1}} จาก {{paginationSelected.totalItems}}
+    รายการ
     <clr-dg-pagination #paginationSelected [clrDgPageSize]="50"></clr-dg-pagination>
   </clr-dg-footer>
 
@@ -166,8 +171,8 @@
   บันทึกเบิกสินค้า
 </button>
 <button class="btn btn-success btn-sm" (click)="saveTemp()" [disabled]="isTemp === 'Y' || !requisitionDate || !wmRequisition || !wmWithdraw || !requisitionTypeID || products.length <= 0 || isSave">
-    <clr-icon shape="pause"></clr-icon>
-    บันทึกชั่วคราว
+  <clr-icon shape="pause"></clr-icon>
+  บันทึกชั่วคราว
 </button>
 <button class="btn btn-danger btn-sm" [routerLink]="['/staff/requisition']">
   <clr-icon shape="home"></clr-icon>
@@ -185,7 +190,7 @@
       <clr-dg-column>เบิกจากคลัง</clr-dg-column>
       <clr-dg-column style="width: 200px;">ประเภทการเบิกจ่าย</clr-dg-column>
       <clr-dg-column style="width: 150px;">#</clr-dg-column>
-    
+
       <clr-dg-row *ngFor="let t of tempList">
         <clr-dg-cell>{{t.requisition_date | toThaiDate}}</clr-dg-cell>
         <clr-dg-cell>{{t.warehouse_name}}</clr-dg-cell>
@@ -202,7 +207,7 @@
         </clr-dg-cell>
         <wm-staff-requisition-order-items *clrIfExpanded [requisitionId]="t.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-staff-requisition-order-items>
       </clr-dg-row>
-    
+
       <clr-dg-footer>{{tempList.length}} รายการ</clr-dg-footer>
     </clr-datagrid>
   </div>
