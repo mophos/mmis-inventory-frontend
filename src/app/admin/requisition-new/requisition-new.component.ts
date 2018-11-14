@@ -58,6 +58,8 @@ export class RequisitionNewComponent implements OnInit {
   withDrawWarehouses: any[] = [];
   wmRequisition: any;
   wmWithdraw: any;
+  wmRequisitionOld: any;
+  wmWithdrawOld: any;
 
   requisitionTypes: any[] = [];
   requisitionStatus: any[] = [];
@@ -336,7 +338,7 @@ export class RequisitionNewComponent implements OnInit {
       const rs: any = await this.wareHouseService.getShipingNetwork(warehouseId, 'REQ');
       this.modalLoading.hide();
       if (rs.ok) {
-        if(rs.rows.length){
+        if (rs.rows.length) {
           this.templates = [];
           this.withDrawWarehouses = rs.rows;
           let idx = _.findIndex(rs.rows, { "destination_warehouse_id": this.warehouseId })
@@ -348,9 +350,9 @@ export class RequisitionNewComponent implements OnInit {
             this.getTemplates();
           }
         } else {
-          this.alertService.error('ยังไม่มีการตั้ง Shipping Network' );
+          this.alertService.error('ยังไม่มีการตั้ง Shipping Network');
         }
-        
+
 
       } else {
         this.alertService.error(rs.error);
@@ -443,15 +445,31 @@ export class RequisitionNewComponent implements OnInit {
       this.getTemplateItems(this.templateId);
     }
   }
-  changeWarehouse() {
+  async changeWarehouse(e, w) {
     if (this.products.length) {
-      this.alertService.confirm('หากเปลี่ยนคลังข้อมูลเวชภัณฑ์จะถูกลบ')
+      await this.alertService.confirm('หากเปลี่ยนคลังข้อมูลเวชภัณฑ์จะถูกลบ')
         .then((result) => {
+          console.log(result);
+
           this.products = [];
         }).catch((err) => {
+          console.log(err);
+          if (w === 'r') {
+            this.wmRequisition = this.wmRequisitionOld;
+            e.target.value = this.wmRequisitionOld;
+          } else if (w === 'w') {
+            this.wmWithdraw = this.wmWithdrawOld;
+            e.target.value = this.wmWithdrawOld;
+          }
 
         });
     }
     this.clearItem();
+    console.log(this.wmRequisition);
+    if (w === 'r') {
+      this.wmRequisitionOld = e.target.value
+    } else if (w === 'w') {
+      this.wmWithdrawOld = e.target.value
+    }
   }
 }
