@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, Output, EventEmitter, Input } from '@angular/core';
-
+import { JwtHelper } from 'angular2-jwt';
 @Component({
   selector: 'wm-search-generic-warehouse-autocomplete',
   templateUrl: './search-generic-warehouse-autocomplete.component.html'
@@ -25,18 +25,21 @@ export class SearchGenericWarehouseAutocompleteComponent implements OnInit {
   token: any;
   query: any = null;
   url: any;
-
+  limitAutocomplete: any;
+  public jwtHelper: JwtHelper = new JwtHelper();
   constructor(
     @Inject('API_URL') private apiUrl: string) {
     this.token = sessionStorage.getItem('token');
-    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${this._warehouseId}&token=${this.token}`;
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.limitAutocomplete = decodedToken.WM_AUTOCOMPLETE;
+    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${this._warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
   }
 
   ngOnInit() {
   }
 
   setApiUrl(warehouseId: any) {
-    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${warehouseId}&token=${this.token}`;
+    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
   }
 
   clearSearch() {
