@@ -516,9 +516,16 @@ export class ReceivePurchaseComponent implements OnInit {
     this.products[idx].expired_date = expired;
   }
 
-  editChangeFree(idx: any, value: any) {
+  async editChangeFree(idx: any, value: any) {
     try {
       this.products[idx].is_free = this.products[idx].is_free === 'Y' ? 'N' : 'Y';
+      console.log(this.products[idx].unit_generic_id);
+      if (this.products[idx].is_free === 'Y') {
+        this.products[idx].cost = 0
+      } else {
+        let cost = await this.receiveService.getUnitGeneric(this.products[idx].unit_generic_id);
+        this.products[idx].cost = cost.rows[0].cost
+      }
       this.countTotalCost();
     } catch (error) {
       this.alertService.error(error);

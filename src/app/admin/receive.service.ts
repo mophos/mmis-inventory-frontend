@@ -443,14 +443,14 @@ export class ReceiveService {
       .toPromise();
     return res.json();
   }
-  async getLastLocation(warehouseId,productId:any){
+  async getLastLocation(warehouseId, productId: any) {
     const res = await this.authHttp.get(`${this.url}/receives/purchases/get-last-location?productId=${productId}&warehouseId=${warehouseId}`)
-    .toPromise();
+      .toPromise();
     return res.json();
   }
-  async getLastLocationOther(warehouseId,productId:any){
+  async getLastLocationOther(warehouseId, productId: any) {
     const res = await this.authHttp.get(`${this.url}/receives/purchases/get-last-location-other?productId=${productId}&warehouseId=${warehouseId}`)
-    .toPromise();
+      .toPromise();
     return res.json();
   }
   async getPurchaseCheckExpire(genericId: any, expiredDate: any) {
@@ -543,4 +543,10 @@ export class ReceiveService {
     const res = await this.authHttp.get(`${this.url}/std/report?type=${type}`).toPromise();
     return res.json();
   }
+
+  async getUnitGeneric(unitGenericId: any) {
+    const res = await this.authHttp.get(`${this.url}/receives/getUnitGeneric?unitGenericId=${unitGenericId}`).toPromise();
+    return res.json();
+  }
+
 }
