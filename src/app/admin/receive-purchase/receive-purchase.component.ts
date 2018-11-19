@@ -298,8 +298,8 @@ export class ReceivePurchaseComponent implements OnInit {
 
     }
   }
-  async setLocation(warehouseId){
-    let rs:any = await this.receiveService.getLastLocation(warehouseId,this.selectedProductId);
+  async setLocation(warehouseId) {
+    let rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
     this.locationId = rs.ok ? rs.detail.location_id : '';
   }
   editChangeWarehouse(idx, event: any, cmp: any) {
@@ -345,7 +345,7 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
 
- async setSelectedProduct(event: any) {
+  async setSelectedProduct(event: any) {
     try {
       this.selectedProductId = event ? event.product_id : null;
       this.selectedGenericId = event ? event.generic_id : null;
