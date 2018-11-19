@@ -34,6 +34,20 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async getKeeps(limit: number, offset: number, query = '') {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/keep?limit=${limit}&offset=${offset}&query=${query}`)
+      .toPromise();
+    return rs.json();
+  }
+
+  async keep(requisitionId) {
+    const rs: any = await this.authHttp.post(`${this.url}/requisition/orders/keep`, {
+      requisitionId: requisitionId
+    })
+      .toPromise();
+    return rs.json();
+  }
+
   async getUnPaid(limit: number, offset: number, query = '', fillterCancel = 'all') {
     const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/unpaid?limit=${limit}&offset=${offset}&query=${query}&fillterCancel=${fillterCancel}`)
       .toPromise();
@@ -212,7 +226,7 @@ export class RequisitionService {
     const rs: any = await this.authHttp.post(`${this.url}/requisition/borrow-notes`, {
       genericIds: genericIds,
       warehouseId: warehouseId,
-      requisitionId:requisitionId
+      requisitionId: requisitionId
     }).toPromise();
     return rs.json();
   }
