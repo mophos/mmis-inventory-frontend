@@ -9,21 +9,24 @@ export class SearchGenericAutocompleteComponent implements OnInit {
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();
   @Input('clearOnSelected') clearOnSelected: EventEmitter<boolean> = new EventEmitter<boolean>();
-  _disabled: boolean = false;
+  _disabled = false;
 
   @Input('disabled')
   set setDisabled(value: boolean) {
     this._disabled = value;
-  }  
-  
+  }
+
   token: any;
   query: any = null;
   searchGenericUrl: any;
-
+  limitAutocomplete: any;
+  public jwtHelper: JwtHelper = new JwtHelper();
   constructor(
     @Inject('API_URL') private apiUrl: string) {
     this.token = sessionStorage.getItem('token');
-    this.searchGenericUrl = `${this.apiUrl}/generics/search-autocomplete?token=${this.token}`;
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.limitAutocomplete = decodedToken.WM_AUTOCOMPLETE;
+    this.searchGenericUrl = `${this.apiUrl}/generics/search-autocomplete?limit=${this.limitAutocomplete}&token=${this.token}`;
 
   }
 
@@ -46,7 +49,7 @@ export class SearchGenericAutocompleteComponent implements OnInit {
 
   handleResultSelected(event: any) {
     this.onSelect.emit(event);
-    if(this.clearOnSelected) {
+    if (this.clearOnSelected) {
       this.query = null;
     } else {
       this.query = event ? event.generic_name : null;
