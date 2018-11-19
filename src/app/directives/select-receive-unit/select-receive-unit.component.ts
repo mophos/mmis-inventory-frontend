@@ -48,8 +48,7 @@ export class SelectReceiveUnitComponent implements OnInit {
     this.units = [];
     this.genericId = genericId;
     const _orderBy = this.orderBy ? this.orderBy : orderBy;
-
-    this.getUnits(this.genericId, orderBy);
+    this.getUnits(this.genericId, _orderBy);
   }
 
   async getUnits(genericId: any, orderBy: any = 'ASC') {

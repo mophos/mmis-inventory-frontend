@@ -1,25 +1,18 @@
 import { State } from '@clr/angular';
-import { UploadingService } from './../../uploading.service';
 import {
   Component,
   OnInit,
   ViewChild,
-  NgZone,
-  Inject,
-  ChangeDetectorRef,
-  EventEmitter
+  Inject
 } from '@angular/core';
 
-import { RequisitionTypeService } from "../requisition-type.service";
+
 import { RequisitionService } from "../requisition.service";
 import { AlertService } from "../../alert.service";
-
-import { IMyOptions } from 'mydatepicker-th';
-
-import * as moment from 'moment';
+import { JwtHelper } from 'angular2-jwt';
 
 import * as _ from 'lodash';
-import { IRequisitionOrderItem, IRequisitionOrder } from 'app/shared';
+import { IRequisitionOrder } from 'app/shared';
 import { AccessCheck } from '../../access-check';
 import { Router } from '@angular/router';
 
@@ -40,6 +33,7 @@ export class RequisitionComponent implements OnInit {
   approveds: any = [];
   unpaids: any = [];
   waitingApproves: any = [];
+  keeps: any = [];
   requisitionSelected: Array<any> = [];
   title: any;
   isConfirm: any;
@@ -59,13 +53,16 @@ export class RequisitionComponent implements OnInit {
   totalUnPaid = 0;
   totalWaitingApprove = 0;
   totalApproveds = 0;
+  totalKeeps = 0;
   tabTotalWaiting = 0;
   tabTotalWaitingApprove = 0;
   tabTotalUnPaid = 0;
-  tabApprove = 0;
+  tabTotalApprove = 0;
+  tabTotalKeep = 0;
   query: any;
-
+  tabKeep: boolean;
   fillterCancel = 'nCancel';
+  public jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
     private alertService: AlertService,
@@ -76,6 +73,8 @@ export class RequisitionComponent implements OnInit {
   ) {
     this.token = sessionStorage.getItem('token');
     this.currentPage = +sessionStorage.getItem('currentPageRequisition') ? +sessionStorage.getItem('currentPageRequisition') : 1;
+    const decoded = this.jwtHelper.decodeToken(this.token);
+    this.tabKeep = decoded.WM_REQUISITION_TAB_TRASH === 'Y' ? true : false;
   }
 
   async ngOnInit() {
@@ -163,6 +162,52 @@ export class RequisitionComponent implements OnInit {
     this.offset = +state.page.from;
     sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
     this.getApproved();
+  }
+
+  refreshKeep(state: State) {
+    this.offset = +state.page.from;
+    sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
+    this.getKeep();
+  }
+
+  async getKeep() {
+    this.requisitionSelected = []
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.requisitionService.getKeeps(this.perPage, this.offset, this.query);
+      this.modalLoading.hide();
+      if (rs.ok) {
+        this.keeps = rs.rows;
+        this.totalKeeps = rs.total[0].total;
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
+
+  async keep() {
+    this.modalLoading.show();
+    const requisitionId = [];
+    try {
+      this.requisitionSelected.forEach(e => {
+        requisitionId.push(e.requisition_order_id);
+      });
+      const rs: any = await this.requisitionService.keep(requisitionId);
+      this.modalLoading.hide();
+      if (rs.ok) {
+        this.getApproved();
+        this.totalTab();
+        this.alertService.success();
+      } else {
+        this.alertService.error(rs.error);
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
   }
 
   async getApproved() {
@@ -460,9 +505,13 @@ export class RequisitionComponent implements OnInit {
         const rs: any = await this.requisitionService.getUnPaid(this.perPage, 0, '', this.fillterCancel);
         this.tabTotalUnPaid = rs.total[0].total;
       }
-      if (this.selectedTab === 'approved' || this.tabApprove === 0) {
+      if (this.selectedTab === 'approved' || this.tabTotalApprove === 0) {
         const rsA: any = await this.requisitionService.getApproved(this.perPage, 0);
-        this.tabApprove = rsA.total[0].total;
+        this.tabTotalApprove = rsA.total[0].total;
+      }
+      if (this.selectedTab === 'keep' || this.tabTotalKeep === 0) {
+        const rsA: any = await this.requisitionService.getKeeps(this.perPage, 0);
+        this.tabTotalKeep = rsA.total[0].total;
       }
     } catch (error) {
       this.alertService.error(error.message);
