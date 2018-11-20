@@ -106,7 +106,7 @@ export class RequisitionTemplateComponent implements OnInit {
 
   enterSearch(e) {
     if (e.keyCode === 13) {
-      this.tab == 'req' ? this.search() : this.searchIssue();
+      this.tab == 'tmpReq' ? this.search() : this.searchIssue();
     }
   }
   selectTabTmpReq(){
