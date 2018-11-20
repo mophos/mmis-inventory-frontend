@@ -33,7 +33,7 @@
       <clr-button [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printSetProduct()">
         <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก
       </clr-button>
-      <clr-button *ngIf="selectedTab === 'approved'" [disabled]="!requisitionSelected.length" class="btn btn-sm btn-danger"
+      <clr-button *ngIf="selectedTab === 'approved' && tabKeep" [disabled]="!requisitionSelected.length" class="btn btn-sm btn-danger"
         (click)="keep()">
         <clr-icon shape="redo"></clr-icon> จัดเก็บ
       </clr-button>
