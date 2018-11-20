@@ -9,7 +9,6 @@ import * as _ from 'lodash';
 import { BasicService } from 'app/basic.service';
 import { BorrowOtherService } from 'app/admin/borrow-other.service';
 import { PeriodService } from './../../period.service';
-import { UploadingService } from 'app/uploading.service';
 
 @Component({
   selector: 'wm-borrowother-edit',
@@ -74,7 +73,6 @@ export class BorrowotherEditComponent implements OnInit {
     private route: ActivatedRoute,
     private basicService: BasicService,
     private borrowOtherService: BorrowOtherService,
-    private uploadingService: UploadingService,
     @Inject('API_URL') private apiUrl: string,
     private zone: NgZone,
     private periodService: PeriodService
@@ -385,51 +383,6 @@ export class BorrowotherEditComponent implements OnInit {
   fileChangeEvent(fileInput: any) {
     this.file = <Array<File>>fileInput.target.files;
     this.fileName = this.file[0].name;
-  }
-
-
-  async doUpload() {
-    try {
-      this.modalLoading.show();
-      const rs: any = await this.uploadingService.uploadStaffIssueTransaction(this.file[0]);
-      this.modalLoading.hide();
-      // clear products
-      this.products = [];
-
-      if (rs.ok) {
-        const data = [];
-        rs.rows.forEach(v => {
-          if (v.borrow_qty > 0) {
-            const obj: any = {};
-            obj.borrow_qty = v.borrow_qty;
-            obj.generic_id = v.generic_id;
-            obj.generic_name = v.generic_name;
-            obj.remain_qty = +v.remain_qty;
-            obj.conversion_qty = 1;
-            obj.unit_generic_id = null;
-            obj.warehouse_id = this.warehouseId;
-            obj.unit_name = v.unit_name;
-            obj.items = [];
-            this.products.push(obj);
-
-            data.push({
-              genericId: v.generic_id,
-              genericQty: v.borrow_qty
-            });
-          }
-        });
-
-        this.getAllowcateData(data);
-
-        this.openUpload = false;
-      } else {
-        this.alertService.error(JSON.stringify(rs.error));
-      }
-
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(JSON.stringify(error));
-    }
   }
 
   async getAllowcateData(data) {

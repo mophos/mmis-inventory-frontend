@@ -97,6 +97,7 @@ export class RequisitionNewComponent implements OnInit {
   token: any;
   openTemp = false;
   tempList: any = [];
+  wmWithdrawOld: any;
 
   constructor(
     private wareHouseService: WarehouseService,
@@ -327,10 +328,10 @@ export class RequisitionNewComponent implements OnInit {
       const rs: any = await this.wareHouseService.getShipingNetwork(warehouseId, 'REQ');
       this.modalLoading.hide();
       if (rs.ok) {
-        if(rs.rows.length){
+        if (rs.rows.length) {
           this.withDrawWarehouses = rs.rows;
         } else {
-          this.alertService.error('ยังไม่มีการตั้ง Shipping Network' );
+          this.alertService.error('ยังไม่มีการตั้ง Shipping Network');
         }
       } else {
         this.alertService.error(rs.error);
@@ -494,5 +495,19 @@ export class RequisitionNewComponent implements OnInit {
       }).catch(() => {
 
       });
+  }
+
+  async changeWarehouse(e) {
+    if (this.products.length) {
+      await this.alertService.confirm('หากเปลี่ยนคลังข้อมูลสินค้าจะถูกลบ')
+        .then((result) => {
+          this.products = [];
+        }).catch((err) => {
+          this.wmWithdraw = this.wmWithdrawOld;
+          e.target.value = this.wmWithdrawOld;
+        });
+    }
+    this.clearItem();
+    this.wmWithdrawOld = e.target.value
   }
 }

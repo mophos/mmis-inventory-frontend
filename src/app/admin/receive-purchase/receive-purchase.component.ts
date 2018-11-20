@@ -298,8 +298,8 @@ export class ReceivePurchaseComponent implements OnInit {
 
     }
   }
-  async setLocation(warehouseId){
-    let rs:any = await this.receiveService.getLastLocation(warehouseId,this.selectedProductId);
+  async setLocation(warehouseId) {
+    let rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
     this.locationId = rs.ok ? rs.detail.location_id : '';
   }
   editChangeWarehouse(idx, event: any, cmp: any) {
@@ -345,7 +345,7 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
 
- async setSelectedProduct(event: any) {
+  async setSelectedProduct(event: any) {
     try {
       this.selectedProductId = event ? event.product_id : null;
       this.selectedGenericId = event ? event.generic_id : null;
@@ -516,9 +516,16 @@ export class ReceivePurchaseComponent implements OnInit {
     this.products[idx].expired_date = expired;
   }
 
-  editChangeFree(idx: any, value: any) {
+  async editChangeFree(idx: any, value: any) {
     try {
       this.products[idx].is_free = this.products[idx].is_free === 'Y' ? 'N' : 'Y';
+      console.log(this.products[idx].unit_generic_id);
+      if (this.products[idx].is_free === 'Y') {
+        this.products[idx].cost = 0
+      } else {
+        let cost = await this.receiveService.getUnitGeneric(this.products[idx].unit_generic_id);
+        this.products[idx].cost = cost.rows[0].cost
+      }
       this.countTotalCost();
     } catch (error) {
       this.alertService.error(error);

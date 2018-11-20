@@ -15,7 +15,27 @@
     </clr-datagrid>
   </div>
   <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="statusDate" required></my-date-picker-th>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="statusDate" required></my-date-picker-th>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="clr-form-control">
+          <div class="clr-control-container clr-control-inline">
+            <div class="clr-radio-wrapper" style="display:inline;padding-right: 1em;">
+              <input type="radio" id="vertical-radio1" name="radio" value="generic" class="clr-radio" [(ngModel)]="radio">
+              <label for="vertical-radio1" class="clr-control-label">Generic</label>
+            </div>
+            <div class="clr-radio-wrapper" style="display:inline">
+              <input type="radio" id="vertical-radio2" name="radio" value="product" class="clr-radio" [(ngModel)]="radio">
+              <label for="vertical-radio2" class="clr-control-label">Product</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
     <button class="btn btn-sm btn-primary" [disabled]="genericTypeSelect.length == 0" (click)="showReport()">

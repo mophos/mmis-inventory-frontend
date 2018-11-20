@@ -5,7 +5,7 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import * as _ from 'lodash';
 import { State } from '@clr/angular';
 import { BorrowNoteService } from '../borrow-note.service';
-
+import { JwtHelper } from 'angular2-jwt';
 @Component({
   selector: 'wm-borrow',
   templateUrl: './borrow.component.html',
@@ -43,6 +43,8 @@ export class BorrowComponent implements OnInit {
   tabInside = 0;
   tabOutside = 0;
   tabReturned = 0;
+  rights: any;
+  jwtHelper: JwtHelper = new JwtHelper();
 
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('htmlPreview') public htmlPreview: any;
@@ -55,6 +57,10 @@ export class BorrowComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     this.currentPage = +sessionStorage.getItem('currentPageBorrow') ? +sessionStorage.getItem('currentPageBorrow') : 1;
     this.currentPageOther = +sessionStorage.getItem('currentPageBorrowOthe') ? +sessionStorage.getItem('currentPageBorrowOthe') : 1;
+
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
+    const accessRight = decodedToken.accessRight;
+    this.rights = accessRight.split(',');
   }
 
   ngOnInit() {
@@ -135,45 +141,51 @@ export class BorrowComponent implements OnInit {
   }
 
   removeBorrow(b: any) {
-    this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
-      .then(async () => {
-        this.modalLoading.show();
-        try {
-          const rs: any = await this.borrowItemsService.remove(b.borrow_id);
-          if (rs.ok) {
-            this.alertService.success();
-            this.getBorrowList();
-          } else {
-            this.alertService.error(rs.error);
+    if (_.indexOf(this.rights, 'WM_BORROW_CANCEL') > -1) {
+      this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
+        .then(async () => {
+          this.modalLoading.show();
+          try {
+            const rs: any = await this.borrowItemsService.remove(b.borrow_id);
+            if (rs.ok) {
+              this.alertService.success();
+              this.getBorrowList();
+            } else {
+              this.alertService.error(rs.error);
+            }
+            this.modalLoading.hide();
+          } catch (error) {
+            this.modalLoading.hide();
+            this.alertService.error(error.message);
           }
-          this.modalLoading.hide();
-        } catch (error) {
-          this.modalLoading.hide();
-          this.alertService.error(error.message);
-        }
-
-      }).catch(() => { })
+        }).catch(() => { })
+    } else {
+      this.alertService.error('คุณไม่มีสิทธิในการยกเลิก')
+    }
   }
 
   removeBorrowOther(b: any) {
-    this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
-      .then(async () => {
-        this.modalLoading.show();
-        try {
-          const rs: any = await this.borrowItemsService.removeOther(b.borrow_other_id);
-          if (rs.ok) {
-            this.alertService.success();
-            this.getBorrowOtherList();
-          } else {
-            this.alertService.error(rs.error);
+    if (_.indexOf(this.rights, 'WM_BORROW_CANCEL') > -1) {
+      this.alertService.confirm('ต้องการลบรายการนี้ ใช่หรือไม่?')
+        .then(async () => {
+          this.modalLoading.show();
+          try {
+            const rs: any = await this.borrowItemsService.removeOther(b.borrow_other_id);
+            if (rs.ok) {
+              this.alertService.success();
+              this.getBorrowOtherList();
+            } else {
+              this.alertService.error(rs.error);
+            }
+            this.modalLoading.hide();
+          } catch (error) {
+            this.modalLoading.hide();
+            this.alertService.error(error.message);
           }
-          this.modalLoading.hide();
-        } catch (error) {
-          this.modalLoading.hide();
-          this.alertService.error(error.message);
-        }
-
-      }).catch(() => { })
+        }).catch(() => { })
+    } else {
+      this.alertService.error('คุณไม่มีสิทธิในการยกเลิก')
+    }
   }
 
   setTapActive(tab: any) {
@@ -265,19 +277,24 @@ export class BorrowComponent implements OnInit {
 
   async approve(borrowIds: any[]) {
     try {
-      this.modalLoading.show();
-      const rs: any = await this.borrowItemsService.approveAll(borrowIds);
-      if (rs.ok) {
-        this.saveMemory(rs.data);
-        this.alertService.success();
-        this.selectedApprove = [];
-        this.selectedApproveReceive = [];
-        this.getBorrowList();
-        // this.getRequestBorrow();
-      } else {
-        this.alertService.error(rs.error);
+      if (_.indexOf(this.rights, 'WM_BORROW_APPROVE') > -1) {
+        this.modalLoading.show();
+        const rs: any = await this.borrowItemsService.approveAll(borrowIds);
+        if (rs.ok) {
+          this.saveMemory(rs.data);
+          this.alertService.success();
+          this.selectedApprove = [];
+          this.selectedApproveReceive = [];
+          this.getBorrowList();
+          // this.getRequestBorrow();
+        } else {
+          this.alertService.error(rs.error);
+        }
+        this.modalLoading.hide();
       }
-      this.modalLoading.hide();
+      else {
+        this.alertService.error('คุณไม่มีสิทธิในการอนุมัติ')
+      }
     } catch (error) {
       this.modalLoading.hide();
       console.error(error);
@@ -287,18 +304,23 @@ export class BorrowComponent implements OnInit {
 
   async approveOther(borrowIds: any[]) {
     try {
-      this.modalLoading.show();
-      const rs: any = await this.borrowItemsService.approveAllOther(borrowIds);
-      if (rs.ok) {
-        this.alertService.success();
-        this.selectedApproveOther = [];
-        this.selectedApproveReceive = [];
-        this.getBorrowOtherList();
-        // this.getRequestBorrow();
-      } else {
-        this.alertService.error(rs.error);
+      if (_.indexOf(this.rights, 'WM_BORROW_APPROVE') > -1) {
+        this.modalLoading.show();
+        const rs: any = await this.borrowItemsService.approveAllOther(borrowIds);
+        if (rs.ok) {
+          this.alertService.success();
+          this.selectedApproveOther = [];
+          this.selectedApproveReceive = [];
+          this.getBorrowOtherList();
+          // this.getRequestBorrow();
+        } else {
+          this.alertService.error(rs.error);
+        }
+        this.modalLoading.hide();
       }
-      this.modalLoading.hide();
+      else {
+        this.alertService.error('คุณไม่มีสิทธิในการอนุมัติ')
+      }
     } catch (error) {
       this.modalLoading.hide();
       console.error(error);
@@ -308,17 +330,22 @@ export class BorrowComponent implements OnInit {
 
   async approveReturned(returnedIds: any[]) {
     try {
-      this.modalLoading.show();
-      const rs: any = await this.borrowItemsService.approveAllReturned(returnedIds);
-      if (rs.ok) {
-        this.alertService.success();
-        this.selectedApproveReturned = [];
-        this.getReturnedList();
-        // this.getRequestBorrow();
-      } else {
-        this.alertService.error(rs.error);
+      if (_.indexOf(this.rights, 'WM_BORROW_APPROVE') > -1) {
+        this.modalLoading.show();
+        const rs: any = await this.borrowItemsService.approveAllReturned(returnedIds);
+        if (rs.ok) {
+          this.alertService.success();
+          this.selectedApproveReturned = [];
+          this.getReturnedList();
+          // this.getRequestBorrow();
+        } else {
+          this.alertService.error(rs.error);
+        }
+        this.modalLoading.hide();
       }
-      this.modalLoading.hide();
+      else {
+        this.alertService.error('คุณไม่มีสิทธิในการอนุมัติ')
+      }
     } catch (error) {
       this.modalLoading.hide();
       console.error(error);
@@ -367,6 +394,7 @@ export class BorrowComponent implements OnInit {
       console.log(v)
       const notes: any = {};
       notes.remark = 'ยืมนอก Stock';
+      notes.people_id = v.people_id;
       notes.wm_withdarw = v.src_warehouse_id;
       notes.wm_borrow = v.dst_warehouse_id;
 

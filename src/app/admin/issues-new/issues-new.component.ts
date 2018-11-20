@@ -51,7 +51,8 @@ export class IssuesNewComponent implements OnInit {
   genericName: any;
   isApprove: any;
 
-  openUpload = false;
+  openUploadHIS = false;
+  openUploadMMIS = false;
   filePath: string;
   fileName: any = null;
   file: any;
@@ -365,7 +366,7 @@ export class IssuesNewComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-  openModalTemplate(){
+  openModalTemplate() {
     this.isOpenModalTemplate = true;
     this.getIssuesTemplate();
   }
@@ -384,8 +385,8 @@ export class IssuesNewComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-async addIssueTemplate(id:any){
-  this.products = []
+  async addIssueTemplate(id: any) {
+    this.products = []
     this.isOpenModalTemplate = false;
     this.modalLoading.show();
     try {
@@ -416,7 +417,7 @@ async addIssueTemplate(id:any){
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
-}
+  }
   async addIssue(id: any) {
     this.products = []
     this.isOpenModal = false;
@@ -447,8 +448,12 @@ async addIssueTemplate(id:any){
   }
 
   // file upload
-  showUploadModal() {
-    this.openUpload = true;
+  showUploadModalHIS() {
+    this.openUploadHIS = true;
+  }
+
+  showUploadModalMMIS() {
+    this.openUploadMMIS = true;
   }
 
   fileChangeEvent(fileInput: any) {
@@ -456,11 +461,11 @@ async addIssueTemplate(id:any){
     this.fileName = this.file[0].name;
   }
 
-  async doUpload() {
+  async doUploadHIS() {
     this.isImport = true;
     try {
       this.modalLoading.show();
-      const rs: any = await this.uploadingService.uploadIssueTransaction(this.file[0]);
+      const rs: any = await this.uploadingService.uploadIssueTransactionHIS(this.file[0]);
       this.modalLoading.hide();
       // clear products
       this.products = [];
@@ -474,6 +479,7 @@ async addIssueTemplate(id:any){
             obj.generic_id = v.generic_id;
             obj.generic_name = v.generic_name;
             obj.remain_qty = +v.remain_qty;
+            obj.reserve_qty = +v.reserve_qty;
             obj.conversion_qty = 1;
             obj.unit_generic_id = null;
             obj.warehouse_id = this.warehouseId;
@@ -490,7 +496,54 @@ async addIssueTemplate(id:any){
 
         this.getAllowcateData(data);
 
-        this.openUpload = false;
+        this.openUploadHIS = false;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
+    }
+  }
+
+  async doUploadMMIS() {
+    this.isImport = true;
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.uploadingService.uploadIssueTransactionMMIS(this.file[0]);
+      this.modalLoading.hide();
+      // clear products
+      this.products = [];
+
+      if (rs.ok) {
+        const data = [];
+        rs.rows.forEach(v => {
+          if (v.issue_qty > 0) {
+            const obj: any = {};
+            obj.issue_qty = v.issue_qty;
+            obj.generic_id = v.generic_id;
+            obj.generic_name = v.generic_name;
+            obj.remain_qty = +v.remain_qty;
+            obj.reserve_qty = +v.reserve_qty;
+            obj.conversion_qty = 1;
+            obj.unit_generic_id = null;
+            obj.warehouse_id = this.warehouseId;
+            obj.unit_name = v.unit_name;
+            obj.items = [];
+            this.products.push(obj);
+
+            data.push({
+              genericId: v.generic_id,
+              genericQty: v.issue_qty
+            });
+          }
+        });
+        console.log(data);
+
+        this.getAllowcateData(data);
+
+        this.openUploadMMIS = false;
       } else {
         this.alertService.error(JSON.stringify(rs.error));
       }
@@ -504,6 +557,8 @@ async addIssueTemplate(id:any){
   async getAllowcateData(data) {
     this.modalLoading.show();
     const result: any = await this.issueService.getIssuesProduct(data);
+    console.log(result.rows);
+
     if (result.ok) {
       const list = result.rows;
       this.products.forEach((v, i) => {
