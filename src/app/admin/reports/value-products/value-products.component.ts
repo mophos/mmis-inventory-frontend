@@ -86,15 +86,8 @@ export class ValueProductsComponent implements OnInit {
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
 
-    const url = `${this.apiUrl}/report/list/cost/type/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&` + genericType.join('&');
+    const url = `${this.apiUrl}/report/list/cost/type?startDate=${startDate}&warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&token=${this.token}&` + genericType.join('&');
     this.htmlPreview.showReport(url, 'landscape');
-    // if (this.genericType == 'all') {
-    //   const url = `${this.apiUrl}/report/list/cost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}`;
-    //   this.htmlPreview.showReport(url, 'landscape');
-    // } else {
-    //   const url = `${this.apiUrl}/report/list/cost/type/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}/${this.genericType}?token=${this.token}`;
-    //   this.htmlPreview.showReport(url, 'landscape');
-    // }
   }
 
   getWarehouseList() {
