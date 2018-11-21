@@ -120,6 +120,7 @@ import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 import { StockcardPickComponent } from './tools/stockcard-pick/stockcard-pick.component';
 import { ProductsWarehouseComponent } from './products-warehouse/products-warehouse.component';
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
+import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.component';
 
 const routes: Routes = [
   {
@@ -173,6 +174,7 @@ const routes: Routes = [
           { path: 'receive-not-match-po', component: ReceiveNotMatchPoComponent },
           { path: 'summary-disbursement', component: SummaryDisbursementComponent },
           { path: 'receive-issue-year', component: ReceiveIssueYearComponent },
+          { path: 'monthly-report', component: MonthlyReportComponent },
         ]
       },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },

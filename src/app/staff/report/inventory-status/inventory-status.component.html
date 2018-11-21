@@ -7,8 +7,8 @@
     <label class="required">ประเภท</label>
   </div>
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px; width: 400px;">
-      <clr-dg-column style="width: 150px;">ทั้งหมด</clr-dg-column>
+    <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px;">
+      <clr-dg-column >ทั้งหมด</clr-dg-column>
       <clr-dg-row *ngFor="let order of genericTypes" [clrDgItem]="order">
         <clr-dg-cell>{{order.generic_type_name}}</clr-dg-cell>
       </clr-dg-row>

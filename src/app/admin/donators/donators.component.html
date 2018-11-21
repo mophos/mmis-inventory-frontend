@@ -2,8 +2,18 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">ผู้บริจาค</span>
 </nav>
-
 <button type="button" class="btn btn-success btn-sm" (click)="addNew()">+ เพิ่มรายการ</button>
+<div class="card">
+  <div class="card-block">
+    <div class="row">
+      <div class="col-lg-9 col-md-9 col-sm-12 col-xs-9">
+        <label for="">ค้นหา</label>
+        <input type="text" (keyup)="enterSearch($event)" name="query" [(ngModel)]="query" style="width: 250px;"
+          placeholder="ชื่อ ผู้บริจาค">
+      </div>
+    </div>
+  </div>
+</div>
 <clr-datagrid>
   <clr-dg-column [clrDgField]="'donator_name'">ชื่อผู้บริจาค</clr-dg-column>
   <clr-dg-column [clrDgField]="'donator_address'">ที่อยู่</clr-dg-column>
