@@ -144,7 +144,7 @@
     <clr-dg-cell style="text-align: center; line-height: 25px;">{{product.receive_qty * product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
     <clr-dg-cell>
       <input type="text" #cost (keyup)="editChangeCost(idx, cost.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
-        wmNumberOnly [disabled]="product.is_free == 'Y'" [value]="product.cost" />
+        wmNumberOnly [value]="product.cost" />
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <input type="text" #discount (keyup)="editChangeDiscount(idx, discount.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
@@ -185,7 +185,7 @@
     <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell>
       <div class="toggle-switch">
-        <input type="checkbox" id="isFree" [(ngModel)]="isFree">
+        <input type="checkbox" id="isFree" [(ngModel)]="isFree" [disabled] = true>
         <label for="isFree"></label>
       </div>
     </clr-dg-cell>
