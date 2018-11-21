@@ -107,7 +107,7 @@ export class UploadingService {
     });
   }
 
-  uploadStaffIssueTransaction(files: File) {
+  uploadIssueTransactionHIS(files: File) {
     return new Promise((resolve, reject) => {
       const formData: any = new FormData();
       const xhr = new XMLHttpRequest();
@@ -123,7 +123,73 @@ export class UploadingService {
         }
       };
 
-      const url = `${this.url}/staff/upload/issue?token=${this.token}`;
+      const url = `${this.url}/his-transaction/upload/issue-his?token=${this.token}`;
+      xhr.open("POST", url, true);
+      xhr.send(formData);
+    });
+  }
+
+  uploadIssueTransactionMMIS(files: File) {
+    return new Promise((resolve, reject) => {
+      const formData: any = new FormData();
+      const xhr = new XMLHttpRequest();
+
+      formData.append("file", files, files.name);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(JSON.parse(xhr.response));
+          } else {
+            reject(xhr.response);
+          }
+        }
+      };
+
+      const url = `${this.url}/his-transaction/upload/issue-mmis?token=${this.token}`;
+      xhr.open("POST", url, true);
+      xhr.send(formData);
+    });
+  }
+
+  uploadStaffIssueTransactionHIS(files: File) {
+    return new Promise((resolve, reject) => {
+      const formData: any = new FormData();
+      const xhr = new XMLHttpRequest();
+
+      formData.append("file", files, files.name);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(JSON.parse(xhr.response));
+          } else {
+            reject(xhr.response);
+          }
+        }
+      };
+
+      const url = `${this.url}/staff/upload/issue-his?token=${this.token}`;
+      xhr.open("POST", url, true);
+      xhr.send(formData);
+    });
+  }
+
+  uploadStaffIssueTransactionMMIS(files: File) {
+    return new Promise((resolve, reject) => {
+      const formData: any = new FormData();
+      const xhr = new XMLHttpRequest();
+
+      formData.append("file", files, files.name);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(JSON.parse(xhr.response));
+          } else {
+            reject(xhr.response);
+          }
+        }
+      };
+
+      const url = `${this.url}/staff/upload/issue-mmis?token=${this.token}`;
       xhr.open("POST", url, true);
       xhr.send(formData);
     });

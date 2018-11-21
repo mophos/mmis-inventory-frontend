@@ -18,7 +18,8 @@ import { UploadingService } from 'app/uploading.service';
 })
 export class IssueTransactionNewComponent implements OnInit {
 
-  openUpload = false;
+  openUploadHIS = false;
+  openUploadMMIS = false;
   fileName: any = null;
   file: any;
 
@@ -344,8 +345,11 @@ export class IssueTransactionNewComponent implements OnInit {
   }
 
   // file upload
-  showUploadModal() {
-    this.openUpload = true;
+  showUploadModalHIS() {
+    this.openUploadHIS = true;
+  }
+  showUploadModalMMIS() {
+    this.openUploadMMIS = true;
   }
 
   fileChangeEvent(fileInput: any) {
@@ -354,10 +358,10 @@ export class IssueTransactionNewComponent implements OnInit {
   }
 
 
-  async doUpload() {
+  async doUploadHIS() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.uploadingService.uploadStaffIssueTransaction(this.file[0]);
+      const rs: any = await this.uploadingService.uploadStaffIssueTransactionHIS(this.file[0]);
       this.modalLoading.hide();
       // clear products
       this.products = [];
@@ -371,6 +375,7 @@ export class IssueTransactionNewComponent implements OnInit {
             obj.generic_id = v.generic_id;
             obj.generic_name = v.generic_name;
             obj.remain_qty = +v.remain_qty;
+            obj.reserve_qty = +v.reserve_qty;
             obj.conversion_qty = 1;
             obj.unit_generic_id = null;
             obj.warehouse_id = this.warehouseId;
@@ -387,7 +392,52 @@ export class IssueTransactionNewComponent implements OnInit {
 
         this.getAllowcateData(data);
 
-        this.openUpload = false;
+        this.openUploadHIS = false;
+      } else {
+        this.alertService.error(JSON.stringify(rs.error));
+      }
+
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
+    }
+  }
+
+  async doUploadMMIS() {
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.uploadingService.uploadStaffIssueTransactionMMIS(this.file[0]);
+      this.modalLoading.hide();
+      // clear products
+      this.products = [];
+
+      if (rs.ok) {
+        const data = [];
+        rs.rows.forEach(v => {
+          if (v.issue_qty > 0) {
+            const obj: any = {};
+            obj.issue_qty = v.issue_qty;
+            obj.generic_id = v.generic_id;
+            obj.generic_name = v.generic_name;
+            obj.remain_qty = +v.remain_qty;
+            obj.reserve_qty = +v.reserve_qty;
+            obj.conversion_qty = 1;
+            obj.unit_generic_id = null;
+            obj.warehouse_id = this.warehouseId;
+            obj.unit_name = v.unit_name;
+            obj.items = [];
+            this.products.push(obj);
+
+            data.push({
+              genericId: v.generic_id,
+              genericQty: v.issue_qty
+            });
+          }
+        });
+
+        this.getAllowcateData(data);
+
+        this.openUploadMMIS = false;
       } else {
         this.alertService.error(JSON.stringify(rs.error));
       }
@@ -432,10 +482,11 @@ export class IssueTransactionNewComponent implements OnInit {
     }
 
   }
-  openModalTemplate(){
+  openModalTemplate() {
     this.isOpenModalTemplate = true;
     this.getIssuesTemplate();
   }
+
   async getIssuesTemplate() {
     try {
       const res = await this.issueService._getIssuesTemplate(this.warehouseId)
@@ -451,8 +502,8 @@ export class IssueTransactionNewComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-async addIssueTemplate(id:any){
-  this.products = []
+  async addIssueTemplate(id: any) {
+    this.products = []
     this.isOpenModalTemplate = false;
     this.modalLoading.show();
     try {
@@ -483,5 +534,5 @@ async addIssueTemplate(id:any){
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
-}
+  }
 }

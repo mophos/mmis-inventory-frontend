@@ -37,6 +37,20 @@
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <input class="form-control" type="text" name="refDocument" [(ngModel)]="refDocument">
           </div>
+          <div class="ccol-lg-5 col-md-5">
+            <div class="btn-group">
+              <button class="btn btn-primary btn-sm" (click)="showUploadModalMMIS()">
+
+                นำเข้ารายการจาก Excel ด้วย
+                &nbsp;&nbsp;
+                <clr-icon shape="import"></clr-icon> รหัส MMIS
+              </button>
+              <button class="btn btn-primary btn-sm" (click)="showUploadModalHIS()">
+                <clr-icon shape="import"></clr-icon>
+                รหัส HIS
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="form-group row">
@@ -48,10 +62,6 @@
           </div>
           <div class=" col-lg-5 col-md-5 col-sm-12 col-xs-12">
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm" (click)="showUploadModal()">
-                <clr-icon shape="import"></clr-icon>
-                นำเข้ารายการจาก Excel
-              </button>
               <button type="button" class="btn btn-outline-primary btn-sm" (click)="openModal()">
                 <clr-icon shape="search"></clr-icon> เลือกจากประวัติ
               </button>
@@ -89,7 +99,8 @@
       <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
         [genericId]="product.generic_id"></wm-select-receive-unit>
     </clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}}
+      {{product.primary_unit_name}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
     <!-- <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': (product.issue_qty * product.conversion_qty) > product.remain_qty ? 'red' : 'green'}">{{product.remain_qty - (product.issue_qty*product.conversion_qty) | number}}</clr-dg-cell> -->
     <clr-dg-cell style="text-align: center;">
@@ -112,7 +123,8 @@
     <clr-dg-cell>
       <wm-select-receive-unit #unitList (onSelect)="changeUnit($event)"></wm-select-receive-unit>
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}">{{ issueQty*conversionQty | number }}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}">{{
+      issueQty*conversionQty | number }}</clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty | number }}</clr-dg-cell>
     <!-- <clr-dg-cell style="text-align: center; line-height: 25px;">{{ primaryUnitName }}</clr-dg-cell> -->
 
@@ -179,7 +191,8 @@
 
         <clr-dg-cell>{{i.template_subject}}</clr-dg-cell>
         <clr-dg-cell [style.width.%]="15">
-          <button type="button" class="btn btn-primary btn-sm wm-small-btn" (click)="addIssueTemplate(i.template_id)">+ เพิ่ม</button>
+          <button type="button" class="btn btn-primary btn-sm wm-small-btn" (click)="addIssueTemplate(i.template_id)">+
+            เพิ่ม</button>
         </clr-dg-cell>
       </clr-dg-row>
     </clr-datagrid>
@@ -188,8 +201,8 @@
     <button type="button" class="btn btn-danger btn-sm" (click)="isOpenModalTemplate = false">ปิดหน้าต่าง</button>
   </div>
 </clr-modal>
-<clr-modal [(clrModalOpen)]="openUpload" [clrModalClosable]="false">
-  <h3 class="modal-title">อัปโหลดไฟล์</h3>
+<clr-modal [(clrModalOpen)]="openUploadHIS" [clrModalClosable]="false">
+  <h3 class="modal-title">อัปโหลดไฟล์ (รหัส HIS)</h3>
   <div class="modal-body">
     <p>เลือกไฟล์ที่ต้องการอัปโหลดโดยเลือกไฟล์ .xls, xlsx เท่านั้น</p>
     <form>
@@ -212,10 +225,43 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-sm btn-primary" [disabled]="!fileName" (click)="doUpload()">
+    <button type="button" class="btn btn-sm btn-primary" [disabled]="!fileName" (click)="doUploadHIS()">
       อัปโหลดไฟล์
     </button>
-    <button type="button" class="btn btn-sm btn-danger" (click)="openUpload = false">
+    <button type="button" class="btn btn-sm btn-danger" (click)="openUploadHIS = false">
+      ปิด/ยกเลิก
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="openUploadMMIS" [clrModalClosable]="false">
+  <h3 class="modal-title">อัปโหลดไฟล์ (รหัส MMIS)</h3>
+  <div class="modal-body">
+    <p>เลือกไฟล์ที่ต้องการอัปโหลดโดยเลือกไฟล์ .xls, xlsx เท่านั้น</p>
+    <form>
+      <section class="form-block">
+        <div class="form-group row">
+          <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <input class="form-control" disabled type="text" id="txtFile" placeholder="..." [value]="fileName">
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <div>
+              <label class="btn btn-sm btn-success btn-link wm-small-btn">
+                <input type="file" #file accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                  style="display: none;" (change)="fileChangeEvent($event)">
+                <clr-icon shape="search"></clr-icon>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-primary" [disabled]="!fileName" (click)="doUploadMMIS()">
+      อัปโหลดไฟล์
+    </button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="openUploadMMIS = false">
       ปิด/ยกเลิก
     </button>
   </div>

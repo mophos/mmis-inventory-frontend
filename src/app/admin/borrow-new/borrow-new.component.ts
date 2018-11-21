@@ -215,7 +215,6 @@ export class BorrowNewComponent implements OnInit {
     this.expiredDate = null;
     this.productSearch.clearProductSearch();
     this.lotNo = null;
-    this.remark = null;
     this.locationId = null;
     this.lots = [];
     // this.unitList.clearUnits();
