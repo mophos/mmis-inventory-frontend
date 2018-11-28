@@ -41,7 +41,7 @@ export class ToolsService {
     }).toPromise();
     return resp.json();
   }
-  
+
   async searchPick(query: any) {
     const resp = await this.authHttp.post(`${this.url}/tools/stockcard/pick/search`, {
       query: query
@@ -126,6 +126,11 @@ export class ToolsService {
 
   async checkPassword(password) {
     const rs = await this.authHttp.post(`${this.url}/tools/check/password`, { password: password }).toPromise();
+    return rs.json();
+  }
+
+  async calStockCard() {
+    const rs = await this.authHttp.get(`${this.url}/tools/calculate/stockcard`).toPromise();
     return rs.json();
   }
 
