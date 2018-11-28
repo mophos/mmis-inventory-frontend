@@ -33,7 +33,7 @@ export class StockcardComponent implements OnInit {
   isOpenSearchPick: boolean;
   picks: any;
   password: any;
-
+  isSaving = false;
   constructor(
     private toolService: ToolsService,
     private alertService: AlertService,
@@ -225,6 +225,7 @@ export class StockcardComponent implements OnInit {
 
   async calStockCard() {
     try {
+      this.isSaving = true;
       this.modalLoading.show();
       const rs: any = this.toolService.calStockCard();
       this.modalLoading.hide();
