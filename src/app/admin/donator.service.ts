@@ -10,8 +10,8 @@ export class DonatorService {
     private authHttp: AuthHttp
   ) { }
 
-  async all() {
-    const resp = await this.authHttp.get(`${this.url}/donators`).toPromise();
+  async all(query:any) {
+    const resp = await this.authHttp.get(`${this.url}/donators?query=${query}`).toPromise();
     return resp.json();
   }
 

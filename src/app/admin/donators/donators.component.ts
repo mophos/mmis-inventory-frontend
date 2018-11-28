@@ -18,7 +18,7 @@ export class DonatorsComponent implements OnInit {
   donatorName: string;
   donatorAddress: string;
   donatorTelephone: string;
-
+  query:any = ''
   constructor(
     private donatorService: DonatorService,
     private alertService: AlertService,
@@ -37,7 +37,11 @@ export class DonatorsComponent implements OnInit {
     this.donatorTelephone = null;
     this.opened = true;
   }
-
+  enterSearch(event){
+    if (event.keyCode === 13) {
+      this.all();      
+    }
+  }
   async save() {
     this.modalLoading.show();
     try {
@@ -66,7 +70,7 @@ export class DonatorsComponent implements OnInit {
     this.modalLoading.show();
     try {
       this.donators = [];
-      const results = await this.donatorService.all();
+      const results = await this.donatorService.all(this.query);
       if (results.ok) {
         this.donators = results.rows;
       } else {
