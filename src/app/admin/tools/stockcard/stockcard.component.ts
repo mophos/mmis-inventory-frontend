@@ -231,6 +231,7 @@ export class StockcardComponent implements OnInit {
       this.modalLoading.hide();
       this.passwordModal = false;
       this.alertService.success('ระบบกำลังประมวลผลอยู่พื้นหลัง อาจใช้เวลา 5 - 20 นาที');
+      this.isSaving = false;
       // if (rs.ok) {
       // } else {
       //   this.alertService.error(rs.error);
