@@ -404,15 +404,31 @@ export class ReceivePurchaseComponent implements OnInit {
 
     const idx = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: product.is_free })
 
-    if (idx > -1) {
-      this.alertService.error('รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ');
+    const fill = _.filter(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: 'Y' })
+    if(fill.length < 1)
+    {
+      if (idx > -1) {
+        this.alertService.confirm('รายการซ้ำ ต้องการเพิ่มเป็นของแถมใช่ หรือ ไม่?')
+        .then(() => {
+          product.is_free = 'Y';
+          
+          this.products.push(product);
+          // cal total price
+          this.countTotalCost();
+          this.clearForm();
+        })
+        .catch(() => {
+          product.is_free = 'N';
+        });
+      } else {
+        this.products.push(product);
+        // cal total price
+        this.countTotalCost();
+        this.clearForm();
+      }
     } else {
-      this.products.push(product);
-      // cal total price
-      this.countTotalCost();
-      this.clearForm();
+      this.alertService.error('รายการซ้ำ');
     }
-
   }
 
   countTotalCost() {
