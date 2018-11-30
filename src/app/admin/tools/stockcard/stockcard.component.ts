@@ -25,11 +25,15 @@ export class StockcardComponent implements OnInit {
   isOpenSearchTranfer = false;
   isOpenSearchIssue = false;
   modalHistory = false;
+  passwordModal = false;
+  checkEnterPass = true;
+  showBtnCal = false;
 
   passHis: any;
   isOpenSearchPick: boolean;
   picks: any;
-
+  password: any;
+  isSaving = false;
   constructor(
     private toolService: ToolsService,
     private alertService: AlertService,
@@ -64,7 +68,7 @@ export class StockcardComponent implements OnInit {
   gotoPick(pickId: any) {
     this.router.navigateByUrl(`/admin/tools/stockcard/pick?pickId=${pickId}`);
   }
-  
+
 
   showSearchReceive() {
     this.isOpenSearchReceive = true;
@@ -86,6 +90,9 @@ export class StockcardComponent implements OnInit {
     this.isOpenSearchPick = true;
   }
 
+  showModalCal() {
+    this.passwordModal = true;
+  }
   async doSearchReceives(event: any, query: any) {
     if (event.keyCode === 13) {
       try {
@@ -199,9 +206,41 @@ export class StockcardComponent implements OnInit {
           this.alertService.error(error);
         }
         this.modalHistory = true;
+      } else if (this.passHis === 'cal') {
+        this.showBtnCal = true;
       }
     }
     this.passHis = null;
 
   }
+
+  enterCalStockCard(e) {
+    if (e.keyCode === 13 && this.password) {
+      if (this.checkEnterPass) {
+        this.calStockCard();
+      }
+      this.checkEnterPass = !this.checkEnterPass;
+    }
+  }
+
+  async calStockCard() {
+    try {
+      this.isSaving = true;
+      this.modalLoading.show();
+      const rs: any = this.toolService.calStockCard();
+      this.modalLoading.hide();
+      this.passwordModal = false;
+      this.alertService.success('ระบบกำลังประมวลผลอยู่พื้นหลัง อาจใช้เวลา 5 - 20 นาที');
+      this.isSaving = false;
+      // if (rs.ok) {
+      // } else {
+      //   this.alertService.error(rs.error);
+      // }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error))
+    }
+  }
+
+
 }

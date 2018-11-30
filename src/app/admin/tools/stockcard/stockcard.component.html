@@ -11,7 +11,8 @@
         <clr-icon (click)="openInput()" class="alert-icon" shape="exclamation-circle"></clr-icon>
       </div>
       <span class="alert-text">
-        การแก้ไขรายการ Stock Card จะเป็นการแก้ไข Transaction ของ Stock Card ตัวเวชภัณฑ์นั้นๆ รวมเป็นถึงเป็นการแก้ไขรายการในใบที่อนุมัติไปแล้วด้วย
+        การแก้ไขรายการ Stock Card จะเป็นการแก้ไข Transaction ของ Stock Card ตัวเวชภัณฑ์นั้นๆ
+        รวมเป็นถึงเป็นการแก้ไขรายการในใบที่อนุมัติไปแล้วด้วย
         ควรตรวจสอบข้อมูลให้ถูกต้องก่อนทำการแก้ไขรายการ
       </span>
     </div>
@@ -34,6 +35,10 @@
   แก้ไข Stock Card จากการตัดจ่าย
 </button>
 
+<button class="btn btn-large btn-danger" (click)="showModalCal()" *ngIf="showBtnCal">
+  ประมวลผลยอดคงเหลือใหม่
+</button>
+
 <!-- <button class="btn btn-large btn-danger" (click)="showSearchPick()">
   แก้ไข Stock Card จากการหยิบ
 </button> -->
@@ -44,7 +49,8 @@
   <h3 class="modal-title">ค้นหาใบรับ</h3>
   <div class="modal-body">
     <label for="">เลขที่ใบรับ</label>
-    <input type="text" style="width: 300px;" #queryReceive (keyup)="doSearchReceives($event, queryReceive.value)" placeholder="พิมพ์เลขที่ใบรับ แล้วกด ENTER">
+    <input type="text" style="width: 300px;" #queryReceive (keyup)="doSearchReceives($event, queryReceive.value)"
+      placeholder="พิมพ์เลขที่ใบรับ แล้วกด ENTER">
     <clr-datagrid>
       <clr-dg-column>วันที่รับ</clr-dg-column>
       <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
@@ -111,7 +117,8 @@
   <h3 class="modal-title">ค้นหาใบโอน</h3>
   <div class="modal-body">
     <label for="">เลขที่ใบโอน</label>
-    <input type="text" style="width: 300px;" #queryTranfer (keyup)="doSearchTranfers($event, queryTranfer.value)" placeholder="พิมพ์เลขที่ใบโอน แล้วกด ENTER">
+    <input type="text" style="width: 300px;" #queryTranfer (keyup)="doSearchTranfers($event, queryTranfer.value)"
+      placeholder="พิมพ์เลขที่ใบโอน แล้วกด ENTER">
     <clr-datagrid>
       <clr-dg-column>วันที่โอน</clr-dg-column>
       <clr-dg-column>เลขที่ใบโอน</clr-dg-column>
@@ -180,8 +187,8 @@
     <label for="">เลขที่ใบหยิบ</label>
     <input type="text" style="width: 300px;" #queryPick (keyup)="doSearchPick($event, queryPick.value)" placeholder="พิมพ์เลขที่ใบหยิบ แล้วกด ENTER">
     <clr-datagrid>
-      <clr-dg-column >วันที่หยิบ</clr-dg-column>
-      <clr-dg-column >เลขที่หยิบ</clr-dg-column>
+      <clr-dg-column>วันที่หยิบ</clr-dg-column>
+      <clr-dg-column>เลขที่หยิบ</clr-dg-column>
       <clr-dg-column>หน่วยหยิบ</clr-dg-column>
       <clr-dg-column style="width: 60px;">#</clr-dg-column>
 
@@ -245,5 +252,28 @@
     <button type="button" class="btn btn-sm btn-danger" (click)="modalHistory = false">ยกเลิก</button>
   </div>
 </clr-modal>
-<!-- /history -->
+
+<clr-modal [(clrModalOpen)]="passwordModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">การประมวลผลยอดคงเหลือ stockcard จะทำการประมวลผลเฉพาะยอดคงเหลือเท่านั้น และเฉพาะคลังที่ login
+    เข้ามา</h3>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        กรุณาตรวจสอบความถูกต้อง การกดประมวลผลถือว่าเป็นการปรับ stockcard เป็นที่เรียบร้อย
+      </div>
+    </div>
+    <div class="row" style="text-align: center;padding-top:30px;">
+      <div class="col-md-6" style="text-align: right"> รหัสผ่าน</div>
+      <div class="col-md-6" style="text-align: left;">
+        <input type="password" name="password" (keyup)="enterCalStockCard($event)" [(ngModel)]="password">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSaving" (click)="calStockCard()">ประมวลผล</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="passwordModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
+
 <wm-loading-modal #modalLoading></wm-loading-modal>
