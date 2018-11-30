@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReceiveotherTypeService } from '../receiveother-type.service';
 import { AlertService } from '../../alert.service';
 import { IReceiveotherTypeStructure } from 'app/models';
-
+import { JwtHelper } from 'angular2-jwt';
+import * as _ from 'lodash'
 
 @Component({
   selector: 'wm-receiveother-type',
@@ -15,11 +16,19 @@ export class ReceiveotherTypeComponent implements OnInit {
   opened = false;
   isUpdate = false;
 
-
+  btnDelete = false
+  menuDelete = false
+  jwtHelper: JwtHelper = new JwtHelper();
 
   receiveotherTypeId: any;
   receiveotherTypeName: any;
-  constructor(private receiveotherTypeService: ReceiveotherTypeService, private alertService: AlertService) { }
+  constructor(private receiveotherTypeService: ReceiveotherTypeService, private alertService: AlertService) { 
+    const token = sessionStorage.getItem('token');
+    const decoded = this.jwtHelper.decodeToken(token);
+    const accessRight = decoded.accessRight.split(',');
+    this.menuDelete = _.indexOf(accessRight, 'MM_DELETED') === -1 ? false : true;
+    console.log(accessRight);
+  }
 
   ngOnInit() {
     this.all();
@@ -53,7 +62,7 @@ export class ReceiveotherTypeComponent implements OnInit {
 
   all() {
     this.modalLoading.show();
-    this.receiveotherTypeService.all()
+    this.receiveotherTypeService.all(this.btnDelete)
       .then((results: any) => {
         if (results.ok) {
           this.receiveothertype = results.rows;
@@ -102,5 +111,25 @@ export class ReceiveotherTypeComponent implements OnInit {
     this.receiveotherTypeId = null;
     this.receiveotherTypeName = null;
     this.opened = true;
+  }
+  async returnDelete(receive_type_id) {
+    this.modalLoading.show();
+    try {
+      const resp: any = await this.receiveotherTypeService.returnDelete(receive_type_id);
+      this.modalLoading.hide();
+      if (resp.ok) {
+        const idx = _.findIndex(this.receiveothertype, { 'receive_type_id': receive_type_id })
+        this.receiveothertype[idx].is_deleted = 'N';
+      } else {
+        this.alertService.error(resp.error);
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
+  manageDelete() {
+    this.btnDelete = !this.btnDelete;
+    this.all();
   }
 }

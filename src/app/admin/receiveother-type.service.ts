@@ -8,9 +8,9 @@ export class ReceiveotherTypeService {
 
   constructor(  @Inject('API_URL') private url: string,
   private authHttp: AuthHttp) { }
-  all() {
+  all(btnDelete:any) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/receiveotherType`)
+      this.authHttp.get(`${this.url}/receiveotherType?btnDelete=${btnDelete}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -52,6 +52,18 @@ export class ReceiveotherTypeService {
   remove(receiveotherTypeId: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.delete(`${this.url}/receiveotherType/${receiveotherTypeId}`)
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
+  returnDelete(receiveotherTypeId: string) {
+    return new Promise((resolve, reject) => {
+      this.authHttp.delete(`${this.url}/receiveotherType/return-deleted/${receiveotherTypeId}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
