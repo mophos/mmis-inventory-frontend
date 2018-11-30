@@ -82,7 +82,7 @@ export class RequisitionTemplateComponent implements OnInit {
 
   print(templateId) {
     const token = sessionStorage.getItem('token');
-    const exportUrl = `${this.url}/staff/warehouses/export/excel?templateId=${templateId}&token=${token}`;
+    const exportUrl = `${this.url}/staff/warehouses/export/excel?templateId=${templateId}&warehouseId=${this.warehouseId}&token=${token}`;
     window.open(exportUrl);
 
   }
@@ -109,10 +109,10 @@ export class RequisitionTemplateComponent implements OnInit {
       this.tab == 'tmpReq' ? this.search() : this.searchIssue();
     }
   }
-  selectTabTmpReq(){
-this.tab = 'tmpReq'
+  selectTabTmpReq() {
+    this.tab = 'tmpReq'
   }
-  selectTabTmpIssue(){
+  selectTabTmpIssue() {
     this.tab = 'tmpIss'
 
   }
@@ -171,6 +171,6 @@ this.tab = 'tmpReq'
       .catch(() => {
         // no action
       });
-    
+
   }
 }
