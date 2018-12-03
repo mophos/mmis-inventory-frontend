@@ -303,7 +303,7 @@ export class ReceiveComponent implements OnInit {
   }
 
   removeReceiveOther(receive: any) {
-    this.loading = true;
+    this.modalLoading.show();
     this.alertService.confirm(`ต้องการลบรายการนี้ [${receive.receive_code}] ใช่หรือไม่?`)
       .then(async () => {
         try {
@@ -336,7 +336,7 @@ export class ReceiveComponent implements OnInit {
 
   async getWaitingList() {
     try {
-      this.loading = true;
+      this.modalLoading.show();
       this.selectedApprove = [];
       const rs = await this.receiveService.getReceiveStatus(this.perPage, this.offset, this.fillterApprove);
       if (rs.ok) {
@@ -345,9 +345,9 @@ export class ReceiveComponent implements OnInit {
       } else {
         this.alertService.error(rs.error);
       }
-      this.loading = false;
+      this.modalLoading.hide();
     } catch (error) {
-      this.loading = false;
+      this.modalLoading.hide();
       this.alertService.error(error.message);
     }
   }
