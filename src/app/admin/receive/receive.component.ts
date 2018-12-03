@@ -286,7 +286,7 @@ export class ReceiveComponent implements OnInit {
             this.alertService.success();
             const idx = _.findIndex(this.waitings, { receive_id: w.receive_id });
             if (idx > -1) {
-              this.waitings.splice(idx, 1);
+              this.waitings[idx].is_cancel = 'Y';
             }
           } else {
             this.alertService.error();
@@ -311,7 +311,7 @@ export class ReceiveComponent implements OnInit {
           if (rs.ok) {
             const idx = _.findIndex(this.others, { receive_other_id: receive.receive_other_id });
             if (idx > -1) {
-              this.others.splice(idx, 1);
+              this.others[idx].is_cancel = 'Y';
             }
             this.alertService.success();
           } else {
