@@ -8,9 +8,9 @@ export class ReceiveotherTypeService {
 
   constructor(  @Inject('API_URL') private url: string,
   private authHttp: AuthHttp) { }
-  all(btnDelete:any) {
+  all(query:any, btnDelete:any) {
     return new Promise((resolve, reject) => {
-      this.authHttp.get(`${this.url}/receiveotherType?btnDelete=${btnDelete}`)
+      this.authHttp.get(`${this.url}/receiveotherType?query=${query}&btnDelete=${btnDelete}`)
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
