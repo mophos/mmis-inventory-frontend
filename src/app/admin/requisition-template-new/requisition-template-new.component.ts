@@ -8,6 +8,8 @@ import { WarehouseService } from "../warehouse.service";
 import { ProductsService } from "../products.service";
 import * as _ from 'lodash';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
+import { IRequisitionOrderItem } from 'app/shared';
+import { RequisitionService } from '../requisition.service';
 
 @Component({
   selector: 'wm-requisition-template-new',
@@ -27,15 +29,17 @@ export class RequisitionTemplateNewComponent implements OnInit {
 
   products2 = [];
   templateSubject: any;
-
-
+  templateId:any = null;
+  templates: any = [];
+  isTemplate = false;
   constructor(
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
     private warehouseService: WarehouseService,
     private productService: ProductsService,
     private warehouseProductService: WarehouseProductsService,
-    private router: Router
+    private router: Router,
+    private requisitionService: RequisitionService
   ) { }
   ngOnInit() {
     this.getWarehouses();
@@ -56,10 +60,12 @@ export class RequisitionTemplateNewComponent implements OnInit {
 
   showProducts() {
     this.isRequest = true;
+    this.getTemplates();
   }
 
   changeWarehouse() {
     this.isRequest = false;
+    this.isTemplate = false;
     this.products2 = [];
   }
   setSelectedProduct(e) {
@@ -172,5 +178,56 @@ export class RequisitionTemplateNewComponent implements OnInit {
   }
   sort() {
     this.products2 = _.sortBy(this.products2, ['generic_name']);
+  }
+  showTemplate(){
+    this.isTemplate = !this.isTemplate
+  }
+  async getTemplates() {
+    try {
+      const dstWarehouseId = this.dstWarehouseId;
+      if (dstWarehouseId) {
+        const rs: any = await this.requisitionService.getTemplate(dstWarehouseId);
+
+        if (rs.ok) {
+          this.templates = rs.rows;
+        } else {
+          this.alertService.error(rs.error);
+        }
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
+  async getGenericItems(event: any) {
+    if (this.templateId) {
+      this.getTemplateItems(this.templateId);
+    }
+  }
+  async getTemplateItems(templateId: any) {
+    try {
+      
+      const rs: any = await this.requisitionService.getTemplateItems(templateId);
+      if (rs.ok) {
+        this.products2 = [];
+        rs.rows.forEach(v => {
+          const product: IRequisitionOrderItem = {};
+          product.generic_id = v.generic_id;
+          product.requisition_qty = 0;
+          product.generic_name = v.generic_name;
+          product.to_unit_qty = 0;
+          product.unit_generic_id = v.unit_generic_id;
+          product.from_unit_name = null;
+          product.to_unit_name = null;
+          product.qty = null;
+          product.working_code = v.working_code;
+          product.remain_qty = v.remain_qty;
+          this.products2.push(product);
+          this.isTemplate = false
+          this.templateId = null
+        });
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
   }
 }
