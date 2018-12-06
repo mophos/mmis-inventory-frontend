@@ -262,15 +262,20 @@ export class IssueTransactionNewComponent implements OnInit {
           let _products = [];
 
           this.products.forEach(v => {
-            if (v.issue_qty > 0) _products.push(v);
-            const totalIssue = v.issue_qty * v.conversion_qty;
-            if (totalIssue > v.remain_qty || v.issue_qty <= 0) {
-              isError = true;
+            if (v.issue_qty > 0) {
+              _products.push(v);
+              const totalIssue = v.issue_qty * v.conversion_qty;
+              if (totalIssue > v.remain_qty || v.issue_qty <= 0) {
+                isError = true;
+              }
             }
           });
 
           if (isError) {
             this.alertService.error('มีจำนวนที่มียอดจ่ายมากกว่ายอดคงเหลือ');
+            this.modalLoading.hide();
+          } else if (_products.length === 0) {
+            this.alertService.error('กรุณาระบุจำนวนที่ตัดจ่าย');
             this.modalLoading.hide();
           } else {
             this.issueService.saveIssue(summary, _products)

@@ -356,25 +356,41 @@ export class IssueTransactionEditComponent implements OnInit {
         summary.comment = this.comment;
         summary.refDocument = this.refDocument;
 
+        let isError = false;
         let _products = [];
         this.products.forEach(v => {
-          if (v.issue_qty > 0) _products.push(v);
-        })
-
-        this.issueService.updateIssue(this.issueId, summary, _products)
-          .then((rs: any) => {
-            if (rs.ok) {
-              this.alertService.success();
-              this.router.navigate(['/staff/issue-transaction']);
-            } else {
-              this.alertService.error(rs.error);
+          if (v.issue_qty > 0) {
+            _products.push(v);
+            const totalIssue = v.issue_qty * v.conversion_qty;
+            if (totalIssue > v.remain_qty || v.issue_qty <= 0) {
+              isError = true;
             }
-            this.modalLoading.hide();
-          })
-          .catch((error: any) => {
-            this.modalLoading.hide();
-            this.alertService.error(error.message);
-          });
+          }
+        });
+
+        if (isError) {
+          this.alertService.error('มีจำนวนที่มียอดจ่ายมากกว่ายอดคงเหลือ');
+          this.modalLoading.hide();
+        } else if (_products.length === 0) {
+          this.alertService.error('กรุณาระบุจำนวนที่ตัดจ่าย');
+          this.modalLoading.hide();
+        } else {
+          this.issueService.updateIssue(this.issueId, summary, _products)
+            .then((rs: any) => {
+              if (rs.ok) {
+                this.alertService.success();
+                this.router.navigate(['/staff/issue-transaction']);
+              } else {
+                this.alertService.error(rs.error);
+              }
+              this.modalLoading.hide();
+            })
+            .catch((error: any) => {
+              this.modalLoading.hide();
+              this.alertService.error(error.message);
+            });
+        }
+
       }).catch(() => { });
   }
 
