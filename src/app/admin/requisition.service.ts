@@ -219,6 +219,10 @@ export class RequisitionService {
     const rs: any = await this.authHttp.get(`${this.url}/requisition/templates/${srcWarehouseId}/${dstWarehouseId}`).toPromise();
     return rs.json();
   }
+  async getTemplate(dstWarehouseId: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/templates/${dstWarehouseId}`).toPromise();
+    return rs.json();
+  }
 
   async getTemplateItems(templateId: any) {
     const rs: any = await this.authHttp.get(`${this.url}/requisition/templates-items/${templateId}`).toPromise();

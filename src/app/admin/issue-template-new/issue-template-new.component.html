@@ -50,7 +50,7 @@
             <div class="col-md-2">
               &nbsp;
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
               <div class="btn-group">
                 <button class="btn btn-sm btn-success" [disabled]="isRequest || !warehouseId " (click)="showProducts()">
                   เลือกรายการสินค้า
@@ -59,15 +59,26 @@
                   เปลี่ยนคลัง
                 </button>
               </div>
+              <button class="btn btn-sm btn-success" [disabled]="!isRequest || !warehouseId" (click)="showTemplate()">
+                เลือกจาก template
+              </button>
             </div>
           </div>
         </section>
       </form>
       <div *ngIf="isRequest">
         <p>เลือกสินค้าที่ต้องการตัดจ่าย</p>
-        <form class="search">
+        <form *ngIf='!isTemplate'class="search">
           <wm-search-generic-autocomplete [clearOnSelected]="true" #genericSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-autocomplete>
         </form>
+        <div *ngIf='isTemplate' class="col-md-3">
+          <div class="select">
+            <select id="slTemplate" name="slTemplateId" [(ngModel)]="templateId" (change)="getGenericItems($event)">
+              <option value="">เลือกเทมเพลต (Template)</option>
+              <option *ngFor="let item of templates" [value]="item.template_id">{{item.template_subject}}</option>
+            </select>
+          </div>
+        </div>
         <p>รายการตัดจ่าย</p>
         <clr-datagrid [style.height.px]="300">
           <clr-dg-column [style.width.%]="1">#</clr-dg-column>
