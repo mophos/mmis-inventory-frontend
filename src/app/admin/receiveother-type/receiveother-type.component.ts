@@ -19,7 +19,7 @@ export class ReceiveotherTypeComponent implements OnInit {
   btnDelete = false
   menuDelete = false
   jwtHelper: JwtHelper = new JwtHelper();
-
+  query:any = ''
   receiveotherTypeId: any;
   receiveotherTypeName: any;
   constructor(private receiveotherTypeService: ReceiveotherTypeService, private alertService: AlertService) { 
@@ -62,7 +62,7 @@ export class ReceiveotherTypeComponent implements OnInit {
 
   all() {
     this.modalLoading.show();
-    this.receiveotherTypeService.all(this.btnDelete)
+    this.receiveotherTypeService.all(this.query,this.btnDelete)
       .then((results: any) => {
         if (results.ok) {
           this.receiveothertype = results.rows;
@@ -131,5 +131,9 @@ export class ReceiveotherTypeComponent implements OnInit {
   manageDelete() {
     this.btnDelete = !this.btnDelete;
     this.all();
+  }
+
+  async searcReceiveothertype(even){
+    this.all()
   }
 }
