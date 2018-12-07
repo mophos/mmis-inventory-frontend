@@ -294,15 +294,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
   async saveWithUnPaid(data: any) {
     this.modalLoading.show();
     try {
-      const checkUnpaid = await this.requisitionService.checkUnpaid(this.requisitionId);
-      let rs:any
-      if(checkUnpaid.ok){
-        console.log('update');
-        rs = await this.requisitionService.updateOrderConfirmItemsWithUnpaid(this.requisitionId, this.confirmId, data.items, data.generics);
-      }else{
-        console.log('save');        
-        rs = await this.requisitionService.saveOrderConfirmItemsWithUnpaid(this.requisitionId, data.items, data.generics);
-      }
+      let rs:any = await this.requisitionService.updateOrderConfirmItemsWithUnpaid(this.requisitionId, this.confirmId, data.items, data.generics);
       this.modalLoading.hide();
       if (rs.ok) {
         this.alertService.success();
