@@ -8,6 +8,7 @@ import { WarehouseService } from "../warehouse.service";
 import { ProductsService } from "../products.service";
 import * as _ from 'lodash';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
+import { IssueService } from '../issue.service';
 
 @Component({
   selector: 'wm-issue-template-new',
@@ -31,7 +32,8 @@ export class IssueTemplateNewComponent implements OnInit {
   templateId: any = '';
   templates: any;
   warehouseName: any;
-
+  isTemplate = false;
+  objProduct: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,7 +42,9 @@ export class IssueTemplateNewComponent implements OnInit {
     private warehouseService: WarehouseService,
     private productService: ProductsService,
     private warehouseProductService: WarehouseProductsService,
-    private router: Router
+    private router: Router,
+    private issueService: IssueService,
+
   ) { 
     this.templateId = this.route.snapshot.params['templateId'];
   }
@@ -101,11 +105,29 @@ export class IssueTemplateNewComponent implements OnInit {
 
   showProducts() {
     this.isRequest = true;
+    this.getTemplates();
   }
-
+  async getTemplates() {
+    try {
+      this.templates = []
+      const warehouseId = this.warehouseId;
+      if (warehouseId) {
+        const rs: any = await this.issueService._getIssuesTemplate(this.warehouseId)
+        if (rs.ok) {
+          this.templates = rs.rows;
+          console.log(rs.rows);
+        } else {
+          this.alertService.error(rs.error);
+        }
+      }
+    } catch (error) {
+      this.alertService.error(error.message);
+    }
+  }
   changeWarehouse() {
     this.isRequest = false;
     this.products2 = [];
+    this.isTemplate = false;
   }
   setSelectedProduct(e) {
     const idx = _.findIndex(this.products2, { 'generic_id': e.generic_id });
@@ -223,6 +245,42 @@ export class IssueTemplateNewComponent implements OnInit {
   }
   sort() {
     this.products2 = _.sortBy(this.products2, ['generic_name']);
+  }
+
+  showTemplate(){
+    this.isTemplate = !this.isTemplate
+  }
+
+  async getGenericItems(event:any) {
+    this.products2 = []
+    this.modalLoading.show();
+    try {
+      const res = await this.issueService.getGenericTemplateList(this.templateId)
+      if (res.ok) {
+        console.log(res.rows);
+        this.objProduct = res.rows;
+        for (const v of this.objProduct) {
+          const obj: any = {};
+          obj.issue_qty = 0;
+          obj.generic_id = v.generic_id;
+          obj.generic_name = v.generic_name;
+          obj.conversion_qty = +v.conversion_qty;
+          obj.unit_generic_id = v.unit_generic_id;
+          obj.warehouse_id = this.warehouseId;
+          obj.reserve_qty = +v.qty - +v.reserve_qty;
+          obj.qty = +v.qty;
+          obj.unit_name = v.unit_name;
+          this.products2.push(obj);
+        }
+        this.modalLoading.hide();
+      } else {
+        this.alertService.error(res.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
   }
 }
 

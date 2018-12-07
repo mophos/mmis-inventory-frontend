@@ -2,7 +2,25 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">ข้อมูลประเภทการรับแบบอื่นๆ</span>
 </nav>
-<button type="button" class="btn btn-success btn-sm" (click)="addNew()">+ เพิ่มรายการ</button>
+<div class="row" style="width:100%;">
+  <div class="col-md-6 col-sm-4 ">
+    <button type="button" class="btn btn-success btn-sm" (click)="addNew()">+ เพิ่มรายการ</button>
+  </div>
+</div>
+<div class="card">
+  <div class="card-block" style="padding: 0px 5px 5px 5px;">
+    <div class="row" style="padding-top: 5px;">
+      <div class="col-md-6" >
+        <label for="">ค้นหา</label>
+        <input type="text" (keyup)="searcReceiveothertype($event)" name="query" [(ngModel)]="query" placeholder="ชื่อประเภทการรับแบบอื่นๆ"
+          style="width: 400px;">
+      </div>
+      <div class="col-md-6" *ngIf="menuDelete" style="text-align: right;">
+        <button class="btn btn-danger btn-sm" (click)="manageDelete()">จัดการข้อมูลที่ลบไปแล้ว</button>
+      </div>
+    </div>
+  </div>
+</div>
 <clr-datagrid>
   <clr-dg-column [style.width.%]="90" [clrDgField]="'receive_type_name'">ประเภทการรับแบบอื่นๆ</clr-dg-column>
   <clr-dg-column></clr-dg-column>
@@ -13,14 +31,18 @@
       <button class="action-item" (click)="remove(r)">ลบข้อมูล</button>
     </clr-dg-action-overflow> -->
     <clr-dg-cell>{{r.receive_type_name}}</clr-dg-cell>
-    <clr-dg-cell>
-        <div class="btn-group btn-primary">
-          <button title="แก้ไข" class="btn btn-sm btn-success wm-small-btn"  (click)="showEdit(r)">
+    <clr-dg-cell style="text-align: center;">
+        <div class="btn-group btn-primary" >
+          <button [disabled]="r.is_deleted=='Y'" title="แก้ไข" class="btn btn-sm btn-success wm-small-btn"  (click)="showEdit(r)">
             <clr-icon shape="note"></clr-icon>
           </button>
-          <button title="ลบ" class="btn btn-sm btn-danger wm-small-btn" (click)="remove(r)">
+          <button [disabled]="r.is_deleted=='Y'" title="ลบ" class="btn btn-sm btn-danger wm-small-btn" (click)="remove(r)">
             <clr-icon shape="trash"></clr-icon>
           </button>
+          <button class="btn btn-danger btn-sm wm-small-btn" *ngIf="btnDelete" [disabled]="r.is_deleted=='N'" title="ลบ"
+          (click)="returnDelete(r.receive_type_id)">
+          <clr-icon shape="undo"></clr-icon>
+        </button>
         </div>
       </clr-dg-cell>
   </clr-dg-row>
