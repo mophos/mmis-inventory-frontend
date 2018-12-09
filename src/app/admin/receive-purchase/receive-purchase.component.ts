@@ -420,14 +420,15 @@ export class ReceivePurchaseComponent implements OnInit {
       } else if (fill < 0 ) {
         let ms = this.isFree ? 'ต้องการเพิ่มเป็นรายการปกติ' : 'ต้องการเพิ่มเป็นของแถม'
         let newIsFree =  !this.isFree ? 'Y' : 'N'
+        
         this.alertService.confirm( `รายการซ้ำ ${ms}ใช่ หรือ ไม่?`)
         .then(() => {
           product.is_free = newIsFree;
+          product.cost = !this.isFree ? '0' : this.tmpSelectedCost;
           this.pushProduct(product);
         })
       }
     } else {
-      this.alertService.error('5')
       this.pushProduct(product);
     }
   }
