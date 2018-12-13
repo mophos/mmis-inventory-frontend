@@ -1,7 +1,7 @@
-<input type="text" [value]="query" (keyup)="onClearSelected($event)" style="width: 100%;" placeholder="ค้นหา..." [disabled]="disabled"
-  agxTypeahead [taUrl]="searchProductUrl" taApi="http" [taItemTpl]="itemTpl" (taSelected)="handleResultSelected($event)">
+<input type="text" [value]="query" (keyup)="onClearSelected($event)" style="width: 100%;" placeholder="ค้นหา..."
+  [disabled]="disabled" agxTypeahead [taUrl]="searchProductUrl" taApi="http" [taItemTpl]="itemTpl" (taSelected)="handleResultSelected($event)">
 
 <ng-template #itemTpl let-result>
-  <span class="p4">{{ result.result.donator_name }}</span>
+  <span>{{ result.result.donator_name }}</span>
   <span class="p7">{{ result.result.donator_address }}</span>
 </ng-template>

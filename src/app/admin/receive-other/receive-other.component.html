@@ -12,7 +12,8 @@
             <label for="dateReceive">เลขที่รับ</label>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <input class="form-control" placeholder="ปล่อยว่างเพื่อสร้างอัตโนมัติ" disabled type="text" name="receiveCode" [(ngModel)]="receiveCode">
+            <input class="form-control" placeholder="ปล่อยว่างเพื่อสร้างอัตโนมัติ" disabled type="text" name="receiveCode"
+              [(ngModel)]="receiveCode">
           </div>
 
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -24,21 +25,6 @@
 
         </div>
 
-        <div class="form-group row wid99">
-          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-            <label class="required" for="informName">ผู้จำหน่าย/บริจาค</label>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <wm-search-donator #donatorList (onChange)="clearSelectedDonator($event)" (onSelect)="changeDonator($event)"></wm-search-donator>
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-            <label class="required" for="deliveryCode">เลขที่ใบส่ง</label>
-          </div>
-          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <input class="form-control" id="deliveryCode" type="text" name="deliveryCode" [(ngModel)]="deliveryCode">
-          </div>
-
-        </div>
         <div class="form-group row wid99">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label class="required" for="gForm_1">ประเภทการรับ</label>
@@ -55,11 +41,29 @@
           </div>
 
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="deliveryCode">เลขที่ใบส่ง</label>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <input class="form-control" id="deliveryCode" type="text" name="deliveryCode" [(ngModel)]="deliveryCode">
+          </div>
+
+        </div>
+        <div class="row wid99 form-group">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="informName">ผู้จำหน่าย/บริจาค</label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <wm-search-donator #donatorList (onChange)="clearSelectedDonator($event)" (onSelect)="changeDonator($event)"></wm-search-donator>
+          </div>
+          <!-- <div class="form-group"> -->
+
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label for="dateReceive">หมายเหตุ</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <input class="form-control" type="text" name="comment" [(ngModel)]="comment">
           </div>
+          <!-- </div> -->
           <!-- <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" *ngIf="hospcode=='10692'">
             <label for="dateReceive">อัพเดตราคาลงฐาน</label>
           </div>
@@ -72,7 +76,7 @@
   </div>
 </div>
 
-<clr-datagrid style="position: relative;"  class="grid-order" [style.padding-top.px]="5">
+<clr-datagrid style="position: relative;" class="grid-order" [style.padding-top.px]="5">
   <clr-dg-column [style.width.px]="10">#</clr-dg-column>
   <clr-dg-column [style.width.px]="300">ชื่อสินค้า</clr-dg-column>
   <clr-dg-column>จำนวนรับ</clr-dg-column>
@@ -99,11 +103,12 @@
         wmNumberWithOutDot [value]="product.receive_qty" />
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-receive-unit orderBy="DESC" [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitGenericId]="product.unit_generic_id"
-        [genericId]="product.generic_id"></wm-select-receive-unit>
+      <wm-select-receive-unit orderBy="DESC" [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)"
+        [selectedUnitGenericId]="product.unit_generic_id" [genericId]="product.generic_id"></wm-select-receive-unit>
       <!-- <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)" [selectedUnitProductId]="product.unit_product_id" [productId]="product.product_id"></wm-select-receive-unit> -->
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: center; line-height: 25px;">{{product.receive_qty * product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: center; line-height: 25px;">{{product.receive_qty * product.conversion_qty |
+      number}} {{product.primary_unit_name}}</clr-dg-cell>
     <clr-dg-cell>
       <input type="text" #cost (keyup)="editChangeCost(idx, cost.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
         wmNumberOnly [value]="product.cost" />
@@ -116,19 +121,19 @@
         [genericId]="product.generic_id"></wm-select-manufacture>
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" #lot (keyup)="editChangeLot(idx, lot.value)" style="width: 100%; background-color: #FFF9C4" name="lotNo"
-        id="lotNo" [value]="product.lot_no" wmUpperCase>
+      <input type="text" #lot (keyup)="editChangeLot(idx, lot.value)" style="width: 100%; background-color: #FFF9C4"
+        name="lotNo" id="lotNo" [value]="product.lot_no" wmUpperCase>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">
-      <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate" type="text"
-        [value]="product.expired_date" #expired (keyup)="editChangeExpired(idx, expired.value)" />
+      <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate"
+        type="text" [value]="product.expired_date" #expired (keyup)="editChangeExpired(idx, expired.value)" />
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-generic-warehouse (onSelect)="editChangeWarehouse(idx, $event, editLocationList)" [genericId]="product.generic_id"
         [selectedId]="product.warehouse_id"></wm-select-generic-warehouse>
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-product-location  #editLocationList [warehouseId]="product.warehouse_id" [selectedId]="product.location_id"></wm-select-product-location>
+      <wm-select-product-location #editLocationList [warehouseId]="product.warehouse_id" [selectedId]="product.location_id"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
@@ -145,8 +150,8 @@
       <wm-search-product #productSearch (onSelect)="setSelectedProduct($event)" (onChange)="changeSearchProduct($event)"></wm-search-product>
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4" [disabled]="!selectedProductId" [(ngModel)]="selectedReceiveQty"
-        wmNumberWithOutDot placeholder="">
+      <input type="text" class="wm-edit-box-number" style="background-color: #FFF9C4" [disabled]="!selectedProductId"
+        [(ngModel)]="selectedReceiveQty" wmNumberWithOutDot placeholder="">
     </clr-dg-cell>
     <clr-dg-cell>
       <!-- <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(idx, $event)"></wm-select-receive-unit>           -->
@@ -156,8 +161,8 @@
       {{+selectedReceiveQty * +conversionQty | number}} {{primaryUnitName}}
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" [disabled]="!selectedProductId" [(ngModel)]="selectedCost" wmNumberOnly style="width: 100%; background-color: #FFF9C4"
-        placeholder="">
+      <input type="text" class="wm-edit-box-number" [disabled]="!selectedProductId" [(ngModel)]="selectedCost"
+        wmNumberOnly style="width: 100%; background-color: #FFF9C4" placeholder="">
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">
       {{ +selectedReceiveQty * +selectedCost | number: '1.2-2'}}
@@ -166,11 +171,12 @@
       <wm-select-manufacture #manufactureList (onSelect)="changeManufacture($event)"></wm-select-manufacture>
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" style="width: 100%; background-color: #FFF9C4" name="lotNo" id="lotNo" [(ngModel)]="selectedLotNo" wmUpperCase>
+      <input type="text" style="width: 100%; background-color: #FFF9C4" name="lotNo" id="lotNo" [(ngModel)]="selectedLotNo"
+        wmUpperCase>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">
-      <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate" type="text"
-        [(ngModel)]="selectedExpiredDate" />
+      <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate"
+        type="text" [(ngModel)]="selectedExpiredDate" />
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-generic-warehouse #warehouseList (onSelect)="changeWarehouse($event)"></wm-select-generic-warehouse>
