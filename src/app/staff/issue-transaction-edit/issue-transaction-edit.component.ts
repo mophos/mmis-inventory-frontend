@@ -125,7 +125,7 @@ export class IssueTransactionEditComponent implements OnInit {
           obj.unit_generic_id = v.unit_generic_id;
           // const _productList = _.filter(productList.rows, { 'generic_id': v.generic_id })
           for (const e of productList.rows) {
-            console.log(e.generic_id, v.generic_id);
+            // console.log(e.generic_id, v.generic_id);
 
             if (e.generic_id === v.generic_id) {
               objP = {};
@@ -199,6 +199,9 @@ export class IssueTransactionEditComponent implements OnInit {
       this.productName = event ? `${event.product_name} (${event.generic_name})` : null;
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.primaryUnitName = event ? event.primary_unit_name : null;
+      this.unitGenericId = event ?  event.unit_generic_id : null;
+      this.genericName = event ? event.generic_name : null;
+      this.remainQty = event ? event.qty : null;
 
       this.genericId = event ? event.generic_id : null;
       this.getLots();
@@ -245,7 +248,7 @@ export class IssueTransactionEditComponent implements OnInit {
   async addProduct() {
 
     const idx = _.findIndex(this.products, { generic_id: this.genericId });
-    if (idx > -1) {
+     if (idx > -1) {
       const newQty = +this.products[idx].issue_qty + +this.issueQty;
       if (newQty > +this.products[idx].remain_qty) {
         this.products[idx].issue_qty = this.products[idx].remain_qty;
@@ -253,7 +256,6 @@ export class IssueTransactionEditComponent implements OnInit {
         this.products[idx].issue_qty = newQty;
       }
     } else {
-
       if (this.remainQty < this.issueQty) {
         this.alertService.error('จำนวนจ่าย มากกว่าจำนวน คงเหลือ');
       } else {
@@ -267,16 +269,18 @@ export class IssueTransactionEditComponent implements OnInit {
         obj.warehouse_id = this.warehouseId;
         obj.items = [];
         this.products.push(obj);
+        
         await this.alowcate(this.genericId);
       }
     }
     this.clearForm();
   }
+
   async alowcate(genericId) {
     try {
       const _data = {
-        genericId: this.products[0].generic_id,
-        genericQty: this.products[0].issue_qty * this.products[0].conversion_qty
+        genericId: genericId,
+        genericQty: +this.issueQty * this.conversionQty
       };
       const data_ = [];
       data_.push(_data);
@@ -287,7 +291,7 @@ export class IssueTransactionEditComponent implements OnInit {
         if (idx > -1) {
           this.products[idx].items = list;
         }
-        console.log(list);
+        // console.log(list);
       } else {
         console.log(result.error);
         this.alertService.error();
