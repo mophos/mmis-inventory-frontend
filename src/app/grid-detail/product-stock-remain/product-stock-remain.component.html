@@ -9,6 +9,14 @@
     <clr-dg-column>มูลค่า</clr-dg-column>
 
     <clr-dg-row *clrDgItems="let r of products">
+      <clr-dg-action-overflow>
+        <button class="action-item" (click)="changeCost(r)">
+          <clr-icon shape="note"></clr-icon> ปรับราคาต่อหน่วย
+        </button>
+        <button class="action-item" (click)="editLotExpired(r)">
+          <clr-icon shape="note"></clr-icon> แก้ไข LOT/วันหมดอายุ
+        </button>
+      </clr-dg-action-overflow>
       <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
       <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
       <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
@@ -29,3 +37,24 @@
     </clr-dg-footer>
   </clr-datagrid>
 </div>
+
+<clr-modal [(clrModalOpen)]="openCost" [clrModalClosable]="true">
+  <h3 class="modal-title">ปรับราคาต่อหน่วย (Base unit)</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <label for="">{{productName}}</label>
+        <div class="form-group">
+          <label for="aForm_1">ราคาต่อหน่วย (Base Unit)</label>
+          <input type="number" name="cost" [(ngModel)]="cost" id="cost" placeholder="0">
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="!cost" (click)="saveCost()">
+      บันทึกปรับราคา
+    </button>
+  </div>
+</clr-modal>
+<wm-edit-lot-expired #modalEditLotExpired (save)="onSaveLotExpired($event)" (past)="getProductHistory()"></wm-edit-lot-expired>
