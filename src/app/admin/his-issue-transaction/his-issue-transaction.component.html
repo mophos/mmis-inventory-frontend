@@ -18,6 +18,9 @@
     <button class="btn btn-sm btn-danger" (click)="clearTemp()">
       <clr-icon shape="trash"></clr-icon> ยกเลิกทั้งหมด
     </button>
+    <button class="btn btn-sm btn-danger-outline" (click)="showNotMappins()">
+      <clr-icon shape="share"></clr-icon> รายการที่ยังไม่ได้มีการ Map
+    </button>
   </div>
   <div class="col-md-2" style="text-align: right;">
     <div class="select">
@@ -119,6 +122,33 @@
     </button>
     <button type="button" class="btn btn-sm btn-danger" (click)="openUpload = false">
       ปิด/ยกเลิก
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="openNotMappings" [clrModalClosable]="false">
+  <h3 class="modal-title">รายการที่ยังไม่ได้มีการ Map</h3>
+  <div class="modal-body">
+    <clr-datagrid style="height: 85%;">
+      <clr-dg-column [clrDgField]="'working_code'">
+        <ng-container *clrDgHideableColumn="{hidden: false}">
+          รหัสยา HIS
+        </ng-container>
+      </clr-dg-column>
+      <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+      <clr-dg-row *clrDgItems="let h of hisNotMappings" [clrDgItem]="h">
+        <clr-dg-cell>{{h.drug_code}}</clr-dg-cell>
+      </clr-dg-row>
+      <clr-dg-footer>
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+        รายการ
+        <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="openNotMappings = false">
+      ปิด
     </button>
   </div>
 </clr-modal>

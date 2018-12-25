@@ -37,4 +37,9 @@ export class HisTransactionService {
     return resp.json();
   }
 
+  async getNotMappings() {
+    const resp = await this.authHttp.get(`${this.url}/his-transaction/get-not-mappings`).toPromise();
+    return resp.json();
+  }
+
 }

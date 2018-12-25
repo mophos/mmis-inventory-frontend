@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { HisTransactionService } from 'app/admin/his-transaction.service';
 import { error } from 'util';
 
+
 @Component({
   selector: 'wm-his-issue-transaction',
   templateUrl: './his-issue-transaction.component.html',
@@ -20,11 +21,14 @@ export class HisIssueTransactionComponent implements OnInit {
   file: any;
   perPage = 20;
   selected = [];
-
+  openNotMappings = false;
+  hisNotMappings: any;
   genericTypes = [];
   genericType: any;
   _genericTypes: any = [];
   _genericType: any;
+  token: any;
+  warehouseId: any;
 
   constructor(
     private uploadingService: UploadingService,
@@ -206,5 +210,15 @@ export class HisIssueTransactionComponent implements OnInit {
             this.alertService.serverError();
           });
       }).catch(() => { });
+  }
+
+  async showNotMappins() {
+    let rs: any = await this.hisTransactionService.getNotMappings()
+    this.hisNotMappings = rs.rows
+    if (this.hisNotMappings.length){
+      this.openNotMappings = true;
+    }else{
+      this.alertService.error('ไม่มีรายการที่ยังไม่ได้ map');
+    }
   }
 }
