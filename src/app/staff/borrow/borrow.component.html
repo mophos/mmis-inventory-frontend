@@ -10,14 +10,19 @@
     </button>
     <clr-tab-content clrContentId="content1" *clrIfActive="selectedTab === 'inside'">
       <div class="row wid99">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <button class="btn btn-sm btn-success" [routerLink]="['/staff/borrow/new']">
             + สร้างใบยืม
           </button>
         </div>
-        <div class="col-md-4" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+        <div class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+          <clr-button-group style="float:right;">
+            <clr-button [disabled]="!selectedApprove.length" class="btn btn-sm btn-primary" (click)="printApprove()">
+              <clr-icon shape="printer"></clr-icon> พิมพ์ใบอนุมัติยืม
+            </clr-button>
+          </clr-button-group>
         </div>
-        <div class="col-md-2" style="padding-top: 5px;">
+          <div class="col-md-2" style="padding-top: 5px;">
           <div class="select">
             <select id="selects_3" name="approveStatus" [(ngModel)]="approveStatus" (change)="getBorrowList()">
               <option value="1">ทั้งหมด</option>
@@ -29,7 +34,7 @@
         </div>
       </div>
 
-      <clr-datagrid (clrDgRefresh)="refreshBorrow($event)" [style.height.%]="80">
+      <clr-datagrid (clrDgRefresh)="refreshBorrow($event)" [style.height.%]="80" [(clrDgSelected)]="selectedApprove">
         <clr-dg-column>เลขที่ยืม</clr-dg-column>
         <clr-dg-column>วันที่ยืม</clr-dg-column>
         <clr-dg-column>ยืมจากคลัง</clr-dg-column>
