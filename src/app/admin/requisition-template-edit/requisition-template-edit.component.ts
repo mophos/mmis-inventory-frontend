@@ -87,7 +87,7 @@ export class RequisitionTemplateEditComponent implements OnInit {
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้ว');
     } else {
-      this.products.push(e);
+      if(e) this.products.push(e);
       this.genericSearch.clearSearch();
     }
   }

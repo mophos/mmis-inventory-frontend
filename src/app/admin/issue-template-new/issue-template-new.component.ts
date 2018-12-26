@@ -134,7 +134,7 @@ export class IssueTemplateNewComponent implements OnInit {
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้ว');
     } else {
-      this.products2.push(e);
+      if(e) this.products2.push(e);
       this.genericSearch.clearSearch();
     }
   }
