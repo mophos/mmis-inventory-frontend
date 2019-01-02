@@ -71,6 +71,15 @@ export class WarehouseService {
     return rs.json();
   }
 
+  async getShipingNetworkMulti(warehouseId: any, type: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/warehouses/get-shippingnetwork-list`,
+      {
+        warehouseId: warehouseId,
+        type: type
+      }).toPromise();
+    return rs.json();
+  }
+
   getWarehouseProduct() {
     return new Promise((resolve, reject) => {
       this.authHttp.get(`${this.url}/warehouses/listall`)
