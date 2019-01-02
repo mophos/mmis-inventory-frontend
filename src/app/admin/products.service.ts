@@ -36,7 +36,14 @@ export class ProductsService {
     const resp = await this.authHttp.get(`${this.url}/products/stock/remain/${productId}/${warehouseId}`).toPromise();
     return resp.json();
   }
-
+  async saveRepack(product: any) {
+    const resp = await this.authHttp.post(`${this.url}/products/save-repackage`,{
+      product: product
+    }).toPromise();
+    return resp.json();
+  }
+  
+  
   async getProductStockRemain(genericId: any) {
     const resp = await this.authHttp.get(`${this.url}/products/stock/remain/generic/${genericId}`).toPromise();
     return resp.json();

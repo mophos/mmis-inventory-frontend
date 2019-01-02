@@ -10,6 +10,9 @@
 
     <clr-dg-row *clrDgItems="let r of products">
       <clr-dg-action-overflow>
+        <!-- <button class="action-item" [routerLink]="['/admin/requisition/confirm-unpaid/']" [queryParams]="{unpaidId: order.requisition_order_unpaid_id, requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button> -->
+        <button class="action-item" (click)="rePackage(r)">repackage</button>
+        <!-- <button class="action-item" (click)="cancelUnpaid(order)">ยกเลิกค้างจ่าย</button> -->
         <button class="action-item" (click)="changeCost(r)">
           <clr-icon shape="note"></clr-icon> ปรับราคาต่อหน่วย
         </button>
@@ -38,6 +41,67 @@
   </clr-datagrid>
 </div>
 
+
+<clr-modal [(clrModalOpen)]="modalRepack" [clrModalSize]="'md'" [clrModalClosable]="false">
+    <h3 class="modal-title">เปลี่ยน package</h3>
+    
+    <div class="modal-body" style="">
+      <div class='card'>
+        <div class='card-block'>
+          <div class='row '>
+            <div class='col-md-2'>
+                ชื่อสินค้า
+            </div>
+            <div class='col-md-10'>
+                {{tmpProduct.product_name}} 
+            </div>
+          </div>
+          <div class='row '>
+              <div class='col-md-2'>
+                  Lot No.
+              </div>
+              <div class='col-md-10'>
+                   {{tmpProduct.lot_no}}
+              </div>
+            </div>
+        </div>
+
+        <div class='card-block'>
+            <div class='row '>
+                <div class='col-md-3'>
+                    จำนวนที่เหลือ
+                </div>
+              <div class='col-md-9'>
+                  {{tmpProduct.pack_qty - (tmpProduct.reserve_qty/tmpProduct.conversion_qty)| number}} {{tmpProduct.from_unit_name}} ({{tmpProduct.conversion_qty | number}}{{tmpProduct.to_unit_name}}) = {{tmpProduct.qty - tmpProduct.reserve_qty}} 
+              </div>
+            </div>
+          </div>
+          <div class='card-block'>
+              <div class='row '>
+                  <div class='col-md-3'>
+                      เปลี่ยนเป็น
+                  </div>
+                  <div class='col-md-9'>
+                    <div style="display: inline-block;width: 80px;">
+                        <input type="text" class="wm-edit-box-number" [(ngModel)]="selectQty" (keyup)="onChangeQty($event)" style="width: 100%; background-color: #FFF9C4" wmNumberOnly />
+                        <!-- <p style="display: inline-block;margin-top: 0px;">เลือก package ใหม่</p> -->
+                    </div>
+                      <div style="display: inline-block; width: 170px;">
+                        <wm-select-receive-unit orderBy="DESC" #unitList [showAdd]="false" (onSelect)="editChangeUnit($event)"></wm-select-receive-unit> 
+                    </div> 
+                    <div style="display: inline-block;"> = {{selectQty * selectUnit.qty}}</div>
+                  </div>    
+            </div>
+          </div>
+          </div>
+      </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary btn-sm" [disabled]="selectQty < 1 || selectUnit.unit_generic_id == tmpProduct.unit_generic_id" (click)="saveRepack()">ยืนยัน</button>
+      <button type="button" class="btn btn-danger btn-sm" (click)="closeRepack()">ปิดหน้าต่าง</button>
+    </div>
+  </clr-modal>
+
 <clr-modal [(clrModalOpen)]="openCost" [clrModalClosable]="true">
   <h3 class="modal-title">ปรับราคาต่อหน่วย (Base unit)</h3>
   <div class="modal-body">
@@ -58,3 +122,4 @@
   </div>
 </clr-modal>
 <wm-edit-lot-expired #modalEditLotExpired (save)="onSaveLotExpired($event)"></wm-edit-lot-expired>
+
