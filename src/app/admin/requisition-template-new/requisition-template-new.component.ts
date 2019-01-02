@@ -29,7 +29,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
 
   products2 = [];
   templateSubject: any;
-  templateId:any = null;
+  templateId: any = null;
   templates: any = [];
   isTemplate = false;
   constructor(
@@ -156,13 +156,13 @@ export class RequisitionTemplateNewComponent implements OnInit {
 
   async getReqShipingNetwork() {
     this.dstWarehouses = [];
-    await this.warehouseService.getShipingNetwork(this.srcWarehouseId, 'REQ')
+    await this.warehouseService.getShipingNetworkMulti(this.srcWarehouseId, ['REQ', 'IST'])
       .then((result: any) => {
         if (result.ok) {
-          if(result.rows.length){
+          if (result.rows.length) {
             this.dstWarehouses = result.rows;
           } else {
-            this.alertService.error('ยังไม่มีการตั้ง Shipping Network' );
+            this.alertService.error('ยังไม่มีการตั้ง Shipping Network');
           }
         } else {
           this.alertService.error(result.error)
@@ -179,7 +179,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
   sort() {
     this.products2 = _.sortBy(this.products2, ['generic_name']);
   }
-  showTemplate(){
+  showTemplate() {
     this.isTemplate = !this.isTemplate
   }
   async getTemplates() {
@@ -205,7 +205,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
   }
   async getTemplateItems(templateId: any) {
     try {
-      
+
       const rs: any = await this.requisitionService.getTemplateItems(templateId);
       if (rs.ok) {
         this.products2 = [];
