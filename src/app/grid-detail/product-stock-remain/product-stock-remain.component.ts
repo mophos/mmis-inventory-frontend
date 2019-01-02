@@ -108,7 +108,7 @@ export class ProductStockRemainComponent implements OnInit {
       }).catch(async () => {
 
       })
-
+  }
 
   changeCost(product: any) {
     this.cost = product.cost;
