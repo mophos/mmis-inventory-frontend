@@ -84,4 +84,9 @@ export class HisTransactionService {
     const resp = await this.authHttp.delete(`${this.url}/staff/his-transaction/remove-transaction-select/${transactionId}?token=${this.token}`).toPromise();
     return resp.json();
   }
+
+  async getNotMappings(warehouseId: any) {
+    const resp = await this.authHttp.get(`${this.url}/staff/his-transaction/get-not-mappings/${warehouseId}?token=${this.token}`).toPromise();
+    return resp.json();
+  }
 }
