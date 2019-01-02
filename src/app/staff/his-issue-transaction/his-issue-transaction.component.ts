@@ -28,6 +28,8 @@ export class HisIssueTransactionComponent implements OnInit {
   genericType: any;
   _genericTypes: any = [];
   _genericType: any;
+  openNotMappings = false;
+  hisNotMappings: any;
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -86,7 +88,7 @@ export class HisIssueTransactionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.serverError();
     }
-    console.log(this.products);
+    // console.log(this.products);
   }
 
   showUploadModal() {
@@ -94,7 +96,7 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   fileChangeEvent(fileInput: any) {
-    console.log(fileInput)
+    // console.log(fileInput)
     this.file = <Array<File>>fileInput.target.files;
     this.fileName = this.file[0].name;
   }
@@ -213,5 +215,15 @@ export class HisIssueTransactionComponent implements OnInit {
             this.alertService.serverError();
           });
       }).catch(() => { });
+  }
+
+  async showNotMappins() {
+    let rs: any = await this.hisTransactionService.getNotMappings(this.warehouseId)
+    this.hisNotMappings = rs.rows
+    if (this.hisNotMappings.length){
+      this.openNotMappings = true;
+    }else{
+      this.alertService.error('ไม่มีรายการที่ยังไม่ได้ map');
+    }
   }
 }

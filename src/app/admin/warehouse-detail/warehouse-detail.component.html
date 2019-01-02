@@ -47,7 +47,7 @@
   <clr-dg-column [style.width.%]="10">วันหมดอายุ</clr-dg-column>
   <clr-dg-column [clrDgField]="'location_name'" [style.width.%]="10">สถานที่เก็บ</clr-dg-column>
   <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
-    <clr-dg-action-overflow>
+    <!-- <clr-dg-action-overflow>
       <button class="action-item" (click)="changeQty(p)">
         <clr-icon shape="note"></clr-icon> ปรับยอดคงเหลือ
       </button>
@@ -57,8 +57,8 @@
       <button class="action-item" (click)="editLotExpired(p)">
         <clr-icon shape="note"></clr-icon> แก้ไข LOT/วันหมดอายุ
       </button>
-    </clr-dg-action-overflow>
-    <!-- <clr-dg-cell>{{p.product_id}}</clr-dg-cell> -->
+    </clr-dg-action-overflow> -->
+    <clr-dg-cell>{{p.product_id}}</clr-dg-cell>
     <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.qty | number}} {{p.base_unit_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.cost | number: '1.2-2'}}</clr-dg-cell>
