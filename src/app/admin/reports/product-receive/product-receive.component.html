@@ -19,10 +19,10 @@
     <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
   </div>
   <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12">
-    <button class="btn btn-sm btn-primary" (click)="ptintReport()">
+    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="ptintReport()">
       <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
     </button>
-    <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
+    <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="exportExcel()">
       <clr-icon shape="download"></clr-icon>
       ส่งออก Excel
     </button>
