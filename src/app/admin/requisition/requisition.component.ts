@@ -326,7 +326,7 @@ export class RequisitionComponent implements OnInit {
       });
   }
 
-  printApprove() {
+  async printApprove() {
     const requisition_id: any = []
     let count: any = 0
     this.requisitionSelected.forEach(e => {
@@ -336,7 +336,8 @@ export class RequisitionComponent implements OnInit {
       }
     });
     if (count > 0) {
-      const url = this.url + `/report/approve/requis?token=${this.token}&` + requisition_id.join('&');
+      const urlRep = await this.requisitionService.getLink();
+      const url = this.url + `${urlRep.rows[0].report_url}?token=${this.token}&` + requisition_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');

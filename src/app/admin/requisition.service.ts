@@ -624,4 +624,9 @@ export class RequisitionService {
     const rs = await this.authHttp.post(`${this.url}/generics/allocate`, { data: data }).toPromise();
     return rs.json();
   }
+
+  async getLink() {
+    const rs = await this.authHttp.get(`${this.url}/requisition/report/approve`).toPromise();
+    return rs.json();
+  }
 }
