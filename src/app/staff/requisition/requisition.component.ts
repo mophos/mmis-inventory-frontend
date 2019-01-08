@@ -118,7 +118,7 @@ export class RequisitionComponent implements OnInit {
       const rs: any = await this.requisitionService.getWaitingApprove(this.perPage, this.offset, this.query, this.fillterCancel);
       this.modalLoading.hide();
       if (rs.ok) {
-        if(rs.rows.length > 0){
+        if (rs.rows.length > 0) {
           this.waitingApproves = rs.rows;
           this.totalWaitingApprove = rs.total[0].total;
         }
@@ -215,8 +215,10 @@ export class RequisitionComponent implements OnInit {
         this.modalLoading.hide();
       });
   }
-  printApprove(order: any) {
-    const url = this.url + `/report/approve/requis?token=${this.token}&requisId=` + order.requisition_order_id;
+
+  async printApprove(order: any) {
+    const urlRep = await this.requisitionService.getLink();
+    const url = this.url + `${urlRep.rows[0].report_url}?token=${this.token}&requisId=` + order.requisition_order_id;
     this.htmlPreview.showReport(url);
   }
 
