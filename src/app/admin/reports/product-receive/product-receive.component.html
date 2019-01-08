@@ -22,7 +22,8 @@
     <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="ptintReport()">
       <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
     </button>
-    <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="exportExcel()">
+    <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="exportExcel()">
       <clr-icon shape="download"></clr-icon>
       ส่งออก Excel
     </button>
@@ -33,7 +34,7 @@
     <label class="required">ประเภท</label>
   </div>
   <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-    <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px; width: 400px;">
+    <clr-datagrid [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px; width: 400px;">
       <clr-dg-column style="width: 150px;">ทั้งหมด</clr-dg-column>
       <clr-dg-row *ngFor="let order of genericTypes" [clrDgItem]="order">
         <clr-dg-cell>{{order.generic_type_name}}</clr-dg-cell>
