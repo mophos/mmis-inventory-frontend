@@ -246,7 +246,6 @@ export class IssueTransactionEditComponent implements OnInit {
   }
 
   async addProduct() {
-
     const idx = _.findIndex(this.products, { generic_id: this.genericId });
      if (idx > -1) {
       const newQty = +this.products[idx].issue_qty + +this.issueQty;
@@ -278,20 +277,21 @@ export class IssueTransactionEditComponent implements OnInit {
 
   async alowcate(genericId) {
     try {
-      const _data = {
-        genericId: genericId,
-        genericQty: +this.issueQty * this.conversionQty
-      };
       const data_ = [];
-      data_.push(_data);
+      const idx = _.findIndex(this.products, { generic_id: genericId });
+      if (idx > -1) {
+        const _data = {
+          genericId: this.products[idx].generic_id,
+          genericQty: this.products[idx].issue_qty * this.products[idx].conversion_qty
+        };
+        data_.push(_data);
+      }
       const result: any = await this.issueService.getIssuesProduct(data_);
       if (result.ok) {
         const list = result.rows;
-        let idx = _.findIndex(this.products, { generic_id: genericId })
         if (idx > -1) {
           this.products[idx].items = list;
         }
-        // console.log(list);
       } else {
         console.log(result.error);
         this.alertService.error();
@@ -307,6 +307,7 @@ export class IssueTransactionEditComponent implements OnInit {
       this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
       qty.value = this.products[idx].qty;
     } else {
+      console.log(+qty.value)
       this.products[idx].issue_qty = +qty.value;
     }
     this.alowcate(this.products[idx].generic_id);
