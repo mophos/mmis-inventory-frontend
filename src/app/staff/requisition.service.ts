@@ -43,6 +43,11 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async getLink() {
+    const rs = await this.authHttp.get(`${this.url}/staff/requisition/report/approve`).toPromise();
+    return rs.json();
+  }
+
   // async getWating() {
   //   const rs: any = await this.authHttp.get(`${this.url}/staff/requisition/orders/waiting`)
   //     .toPromise();
