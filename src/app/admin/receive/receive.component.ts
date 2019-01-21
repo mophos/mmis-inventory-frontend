@@ -652,7 +652,7 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-  printreceiveApprovePO() {
+ async printreceiveApprovePO() {
     const receiveIds = [];
     _.forEach(this.selectedApprove, (v) => {
       if (v.purchase_order_number) {
@@ -662,12 +662,16 @@ export class ReceiveComponent implements OnInit {
 
     if (receiveIds.length) {
       this.alertService.confirm('พิมพ์ใบตรวจรับตามใบสั่งซื้อ ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
-        .then(() => {
+        .then( async () => {
           let strIds = '';
           receiveIds.forEach((v: any) => {
             strIds += `receiveID=${v}&`;
           });
-          const url = `${this.apiUrl}/report/check/receives?${strIds}&token=${this.token}`;
+          const rs: any = await this.receiveService.getReport('CRP');
+          const report_url = rs.rows[0].report_url;
+
+          const url = `${this.apiUrl}${report_url}?${strIds}token=${this.token}`;
+          // const url = `${this.apiUrl}/report/check/receives?${strIds}&token=${this.token}`;
           this.htmlPreview.showReport(url);
         }).catch(() => {
 
