@@ -107,6 +107,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   refreshWaiting(state: State) {
+    this.selectedTab = 'waiting'
     this.offset = +state.page.from;
     sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
     this.getWaiting();
