@@ -35,7 +35,7 @@ export class BorrowNewComponent implements OnInit {
   wmProductId: any;
   workingCode: any;
   isSaving = false;
-  remark:any;
+  remark: any;
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -49,7 +49,7 @@ export class BorrowNewComponent implements OnInit {
   @ViewChild('productSearch') public productSearch;
   @ViewChild('locationList') locationList;
   @ViewChild('modalLoading') private modalLoading;
-  
+
   primaryUnitName: any;
   primaryUnitId: any;
   productId: any;
@@ -276,8 +276,10 @@ export class BorrowNewComponent implements OnInit {
 
         _.forEach(this.generics, v => {
           if (v.generic_id && v.borrow_qty) {
+            console.log(v)
             generics.push({
               generic_id: v.generic_id,
+              //conversion = 0
               borrow_qty: +v.borrow_qty,
               unit_generic_id: v.unit_generic_id,
               primary_unit_id: v.primary_unit_id,
