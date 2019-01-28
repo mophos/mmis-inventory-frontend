@@ -134,6 +134,9 @@ export class ToolsService {
     return rs.json();
   }
 
-
+  async removestockcard(warehouseId: any) {
+    const rs = await this.authHttp.post(`${this.url}/tools/removestockcard`, { warehouseId: warehouseId }).toPromise();
+    return rs.json();
+  }
 
 }
