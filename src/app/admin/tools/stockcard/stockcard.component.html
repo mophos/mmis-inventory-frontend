@@ -275,5 +275,25 @@
   </div>
 </clr-modal>
 
+<clr-modal [(clrModalOpen)]="removeStockcardModal" [clrModalSize]="'l'" [clrModalClosable]="false">
+  <h3 class="modal-title">ลบ stockcard คลังที่เลือก และ ทำการยกยอดจากคงคลังมาลง stockcard ใหม่</h3>
+  <div class="modal-body">
+    <div class="row" style="text-align: center;">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label class="required">คลัง</label>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <wm-select-warehouses [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
+
+        </wm-select-warehouses>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSaving" (click)="removestockcard()">ประมวลผล</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="removeStockcardModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
