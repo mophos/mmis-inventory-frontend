@@ -243,6 +243,7 @@ export class BorrowNewComponent implements OnInit {
       let data = [];
       for (const v of this.generics) {
         if (v.generic_id && v.borrow_qty) {
+          console.log(v)
           const _data = {
             genericId: v.generic_id,
             genericQty: v.borrow_qty
