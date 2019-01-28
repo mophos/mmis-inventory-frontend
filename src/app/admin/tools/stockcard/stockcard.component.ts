@@ -262,7 +262,7 @@ export class StockcardComponent implements OnInit {
       this.modalLoading.show();
       const rs: any = await this.toolService.removestockcard(this.warehouseId);
       if (rs.ok) {
-        
+        this.removeStockcardModal = false;
       } else {
         this.alertService.error(rs.error.message);
       }
