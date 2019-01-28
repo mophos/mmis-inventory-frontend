@@ -34,6 +34,7 @@ export class StockcardComponent implements OnInit {
   token: any;
   warehouseId: any;
   passHis: any;
+  passwordRemovestockcard: any;
   isOpenSearchPick: boolean;
   picks: any;
   password: any;
@@ -258,19 +259,29 @@ export class StockcardComponent implements OnInit {
   }
 
   async removestockcard() {
+
     try {
-      this.modalLoading.show();
-      const rs: any = await this.toolService.removestockcard(this.warehouseId);
+      const rs: any = await this.toolService.checkPassword(this.passwordRemovestockcard);
       if (rs.ok) {
-        this.removeStockcardModal = false;
+        try {
+          this.modalLoading.show();
+          const rs: any = await this.toolService.removestockcard(this.warehouseId);
+          if (rs.ok) {
+            this.removeStockcardModal = false;
+          } else {
+            this.alertService.error(rs.error.message);
+          }
+
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(JSON.stringify(error))
+        }
       } else {
         this.alertService.error(rs.error.message);
       }
-
-      this.modalLoading.hide();
     } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(JSON.stringify(error))
+      this.alertService.error('รหัสไม่ถูกต้อง')
     }
   }
 
