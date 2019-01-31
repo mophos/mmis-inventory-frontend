@@ -121,6 +121,7 @@ import { StockcardPickComponent } from './tools/stockcard-pick/stockcard-pick.co
 import { ProductsWarehouseComponent } from './products-warehouse/products-warehouse.component';
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.component';
+import { PayReportComponent } from './reports/pay-report/pay-report.component';
 
 const routes: Routes = [
   {
@@ -175,6 +176,7 @@ const routes: Routes = [
           { path: 'summary-disbursement', component: SummaryDisbursementComponent },
           { path: 'receive-issue-year', component: ReceiveIssueYearComponent },
           { path: 'monthly-report', component: MonthlyReportComponent },
+          { path: 'pay-report', component: PayReportComponent }
         ]
       },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
