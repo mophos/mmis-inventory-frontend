@@ -70,6 +70,8 @@ export class CalculateMinMaxComponent implements OnInit {
   async getHeader() {
     try {
       this.modalLoading.show();
+      console.log(this.tab);
+      
       const rs: any = this.tab == 'minmax_group' ? await this.minMaxService.getHeaderGroup(this.minMaxGroupId) : await this.minMaxService.getHeader();
       if (rs.ok) {
         const result = rs.rows[0];
@@ -111,15 +113,17 @@ export class CalculateMinMaxComponent implements OnInit {
     }
   }
   async getMinMaxGroup() {
+    this.tab = 'minmax_group'
     try {
       this.modalLoading.show();
       const rs: any = await this.minMaxService.getMinMaxGroup();
       if (rs.ok) {
         this.minMaxGroups = await rs.rows;
-        this.minMaxGroupId = await this.minMaxGroups[0].group_id;
-        
-        this.getHeader()
-        this.getMinMaxGroupDetail();
+        if (this.minMaxGroups.length) {
+          this.minMaxGroupId = await this.minMaxGroups[0].group_id;
+          this.getHeader()
+          this.getMinMaxGroupDetail();
+        }
       } else {
         this.alertService.error(rs.error);
       }
@@ -132,6 +136,7 @@ export class CalculateMinMaxComponent implements OnInit {
 
   async getMinMaxGroupDetail() {
     try {
+      
       this.getHeader()
 
       this.modalLoading.show();
@@ -151,6 +156,7 @@ export class CalculateMinMaxComponent implements OnInit {
 
   async getMinMax() {
     try {
+      this.tab = 'minmax'
       this.getHeader()
       this.modalLoading.show();
       const rs: any = await this.minMaxService.getMinMax(this.genericType, this.query);
