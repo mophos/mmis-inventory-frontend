@@ -2,150 +2,296 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">กำหนด MIN - MAX</span>
 </nav>
-<form style="padding: 0px 5px 5px 5px;">
-  <section class="form-block" style="margin-bottom: 0px;">
-    <div class="form-group row wid99">
-      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-        <label for="fromDate" class="required">ยอดใช้ตั้งแต่วันที่</label>
-      </div>
-      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-        <my-date-picker-th name="fromDate" [options]="myDatePickerOptions" [(ngModel)]="fromDate" required></my-date-picker-th>
-      </div>
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink (click)="getMinMaxGroup()">
+      MIN - MAX แบบกลุ่ม
+    </button>
+    <clr-tab-content *clrIfActive="tab === 'minmax_group'">
+      <form style="padding: 0px 5px 5px 5px;">
+        <section class="form-block" style="margin-bottom: 0px;">
+          <div class="form-group row wid99">
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <label for="fromDate" class="required">กลุ่ม MIN - MAX</label>
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+              <div class="select">
+                <select name="minMaxGroupId" style="border-bottom: 0px; width: 100%;" (change)="getMinMaxGroupDetail()"
+                  [(ngModel)]="minMaxGroupId">
+                  <!-- <option>เลือกคลังสินค้า</option> -->
+                  <option *ngFor="let w of minMaxGroups" [value]="w.group_id">
+                  {{ w.group_name }}
+                </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row wid99">
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <label for="fromDate" class="required">ยอดใช้ตั้งแต่วันที่</label>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <my-date-picker-th name="fromDate" [options]="myDatePickerOptions" [(ngModel)]="fromDate" required></my-date-picker-th>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <label class="required" for="toDate">ถึงวันที่</label>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <button class="btn btn-primary" type="button" (click)="calculateMinMaxGroup()" [disabled]="!fromDate || !toDate"
+                style="margin-top: 0px;">
+                <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
+              </button>
+            </div>
+          </div>
+          <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+            <div class="col-md-9">
+              ค้นหา :
+              <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGroup($event)" style="width: 300px;"
+                type="text" placeholder="ค้นหาสินค้า...">
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+              <div class="select">
+                <select [(ngModel)]="genericType" name="genericType" (change)="searchGenericGroup()">
+                  <option value="">ทั้งหมด</option>
+                  <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+      </form>
+      <clr-datagrid [style.height.%]="75">
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'working_code'">
+          Working Code
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">
+          Generic Name
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'qty'">
+          คงเหลือ <br> (Base Unit)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="100">
+          หน่วย
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'use_total'">
+          ยอดการใช้
+        </clr-dg-column>
+
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_min_day'">
+          Safety Stock <br> MIN (วัน)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'min_qty'">
+          MIN <br> (Base Unit)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_max_day'">
+          Safety Stock <br> MAX (วัน)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'max_qty'">
+          MAX <br> (Base Unit)
+        </clr-dg-column>
+
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let g of generics">
+          <clr-dg-cell>
+            {{g.working_code}}
+          </clr-dg-cell>
+          <clr-dg-cell>
+            {{g.generic_name}}
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{g.qty | number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{g.use_total | number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #saftyMin (keyup)="onChangeSaftyStockMin(saftyMin.value, g)"
+              style="background-color: #FFF9C4" [value]="g.safety_min_day" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #min (keyup)="onChangeMinQty(min.value, g)" style="background-color: #FFF9C4"
+              [value]="g.min_qty" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #saftyMax (keyup)="onChangeSaftyStockMax(saftyMax.value, g)"
+              style="background-color: #FFF9C4" [value]="g.safety_max_day" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)" style="background-color: #FFF9C4"
+              [value]="g.max_qty" wmNumberWithOutDot>
+          </clr-dg-cell>
+
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+          รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="20" [clrDgTotalItems]="generics.length"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <label class="required" for="toDate">ถึงวันที่</label>
-      </div>
-      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-        <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
-      </div>
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-        <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate" style="margin-top: 0px;">
-          <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
+        <button class="btn btn-sm btn-success" (click)="saveGroup()">
+          <clr-icon shape="floppy"></clr-icon> บันทึกข้อมูล
         </button>
       </div>
-    </div>
-    <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
-      <div class="col-md-9">
-        ค้นหา :
-        <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;" type="text"
-          placeholder="ค้นหาสินค้า...">
-      </div>
-      <div class="col-md-3" style="text-align: right;">
-        <div class="select">
-          <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
-            <option value="">ทั้งหมด</option>
-            <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </section>
-</form>
-<clr-datagrid [style.height.%]="75">
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'working_code'">
-    Working Code
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'generic_name'">
-    Generic Name
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'qty'">
-    คงเหลือ <br> (Base Unit)
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="100">
-    หน่วย
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'use_total'">
-    ยอดการใช้
-  </clr-dg-column>
-  <!-- <clr-dg-column [style.width.px]="120" [clrDgField]="'use_per_day'">
-    อัตราการใช้ ต่อวัน
-  </clr-dg-column> -->
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_min_day'">
-    Safety Stock <br> MIN (วัน)
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'min_qty'">
-    MIN <br> (Base Unit)
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_max_day'">
-    Safety Stock <br> MAX (วัน)
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'max_qty'">
-    MAX <br> (Base Unit)
-  </clr-dg-column>
-  <!-- <clr-dg-column [style.width.px]="120" [clrDgField]="'lead_time_day'">
-    Lead Time <br> (วัน)
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'rop_qty'">
-    ROP <br> (Base Unit)
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'carrying_cost'">
-    ต้นทุนเก็บรักษา <br> (ช่วงเวลาต่อหน่วย)
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'ordering_cost'">
-    ต้นทุนการสั่งซื้อ <br> (ต่อครั้ง)
-  </clr-dg-column>
-  <clr-dg-column [style.width.px]="120" [clrDgField]="'eoq_qty'">
-    EOQ <br> (Base Unit)
-  </clr-dg-column> -->
-  <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
-  <clr-dg-row *clrDgItems="let g of generics">
-    <clr-dg-cell>
-      {{g.working_code}}
-    </clr-dg-cell>
-    <clr-dg-cell>
-      {{g.generic_name}}
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{g.qty | number}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{g.use_total | number}}</clr-dg-cell>
-    <!-- <clr-dg-cell style="text-align: right;">{{g.use_per_day | number}}</clr-dg-cell> -->
-    <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #saftyMin (keyup)="onChangeSaftyStockMin(saftyMin.value, g)" style="background-color: #FFF9C4"
-        [value]="g.safety_min_day" wmNumberWithOutDot>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #min (keyup)="onChangeMinQty(min.value, g)" style="background-color: #FFF9C4"
-        [value]="g.min_qty" wmNumberWithOutDot>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #saftyMax (keyup)="onChangeSaftyStockMax(saftyMax.value, g)" style="background-color: #FFF9C4"
-        [value]="g.safety_max_day" wmNumberWithOutDot>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)" style="background-color: #FFF9C4"
-        [value]="g.max_qty" wmNumberWithOutDot>
-    </clr-dg-cell>
-    <!-- <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #leadTime (keyup)="onChangeLeadTmie(leadTime.value, g)" style="background-color: #FFF9C4"
-        [value]="g.lead_time_day" wmNumberWithOutDot>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #rop (keyup)="onChangeReorderPoint(rop.value, g)" style="background-color: #FFF9C4"
-        [value]="g.rop_qty" wmNumberWithOutDot>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #carrying (keyup)="onChangeCarryingCost(carrying.value, g)" style="background-color: #FFF9C4"
-        [value]="g.carrying_cost" wmNumberOnly>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #ordering (keyup)="onChangeOrderingCost(ordering.value, g)" style="background-color: #FFF9C4"
-        [value]="g.ordering_cost" wmNumberOnly>
-    </clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">
-      <input type="text" class="wm-edit-box-number" #eoq (keyup)="onChangeEoqQty(eoq.value, g)" style="background-color: #FFF9C4"
-        [value]="g.eoq_qty" wmNumberWithOutDot>
-    </clr-dg-cell> -->
-  </clr-dg-row>
+    </clr-tab-content>
 
-  <clr-dg-footer>
-    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
-    <clr-dg-pagination #pagination [clrDgPageSize]="20" [clrDgTotalItems]="generics.length"></clr-dg-pagination>
-  </clr-dg-footer>
-</clr-datagrid>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="getMinMax()">
+      MIN - MAX
+    </button>
+    <clr-tab-content *clrIfActive="tab === 'minmax'">
+      <form style="padding: 0px 5px 5px 5px;">
+        <section class="form-block" style="margin-bottom: 0px;">
+          <div class="form-group row wid99">
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <label for="fromDate" class="required">ยอดใช้ตั้งแต่วันที่</label>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <my-date-picker-th name="fromDate" [options]="myDatePickerOptions" [(ngModel)]="fromDate" required></my-date-picker-th>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <label class="required" for="toDate">ถึงวันที่</label>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+              <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate"
+                style="margin-top: 0px;">
+                <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
+              </button>
+            </div>
+          </div>
+          <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+            <div class="col-md-9">
+              ค้นหา :
+              <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;"
+                type="text" placeholder="ค้นหาสินค้า...">
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+              <div class="select">
+                <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
+                  <option value="">ทั้งหมด</option>
+                  <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+      </form>
+      <clr-datagrid [style.height.%]="75">
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'working_code'">
+          Working Code
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">
+          Generic Name
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'qty'">
+          คงเหลือ <br> (Base Unit)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="100">
+          หน่วย
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'use_total'">
+          ยอดการใช้
+        </clr-dg-column>
+        <!-- <clr-dg-column [style.width.px]="120" [clrDgField]="'use_per_day'">
+          อัตราการใช้ ต่อวัน
+        </clr-dg-column> -->
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_min_day'">
+          Safety Stock <br> MIN (วัน)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'min_qty'">
+          MIN <br> (Base Unit)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'safety_max_day'">
+          Safety Stock <br> MAX (วัน)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'max_qty'">
+          MAX <br> (Base Unit)
+        </clr-dg-column>
+        <!-- <clr-dg-column [style.width.px]="120" [clrDgField]="'lead_time_day'">
+          Lead Time <br> (วัน)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'rop_qty'">
+          ROP <br> (Base Unit)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'carrying_cost'">
+          ต้นทุนเก็บรักษา <br> (ช่วงเวลาต่อหน่วย)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'ordering_cost'">
+          ต้นทุนการสั่งซื้อ <br> (ต่อครั้ง)
+        </clr-dg-column>
+        <clr-dg-column [style.width.px]="120" [clrDgField]="'eoq_qty'">
+          EOQ <br> (Base Unit)
+        </clr-dg-column> -->
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let g of generics">
+          <clr-dg-cell>
+            {{g.working_code}}
+          </clr-dg-cell>
+          <clr-dg-cell>
+            {{g.generic_name}}
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{g.qty | number}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: center;">{{g.unit_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{g.use_total | number}}</clr-dg-cell>
+          <!-- <clr-dg-cell style="text-align: right;">{{g.use_per_day | number}}</clr-dg-cell> -->
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #saftyMin (keyup)="onChangeSaftyStockMin(saftyMin.value, g)"
+              style="background-color: #FFF9C4" [value]="g.safety_min_day" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #min (keyup)="onChangeMinQty(min.value, g)" style="background-color: #FFF9C4"
+              [value]="g.min_qty" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #saftyMax (keyup)="onChangeSaftyStockMax(saftyMax.value, g)"
+              style="background-color: #FFF9C4" [value]="g.safety_max_day" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)" style="background-color: #FFF9C4"
+              [value]="g.max_qty" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <!-- <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #leadTime (keyup)="onChangeLeadTmie(leadTime.value, g)" style="background-color: #FFF9C4"
+              [value]="g.lead_time_day" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #rop (keyup)="onChangeReorderPoint(rop.value, g)" style="background-color: #FFF9C4"
+              [value]="g.rop_qty" wmNumberWithOutDot>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #carrying (keyup)="onChangeCarryingCost(carrying.value, g)" style="background-color: #FFF9C4"
+              [value]="g.carrying_cost" wmNumberOnly>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #ordering (keyup)="onChangeOrderingCost(ordering.value, g)" style="background-color: #FFF9C4"
+              [value]="g.ordering_cost" wmNumberOnly>
+          </clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">
+            <input type="text" class="wm-edit-box-number" #eoq (keyup)="onChangeEoqQty(eoq.value, g)" style="background-color: #FFF9C4"
+              [value]="g.eoq_qty" wmNumberWithOutDot>
+          </clr-dg-cell> -->
+        </clr-dg-row>
 
-<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-  <button class="btn btn-sm btn-success" (click)="save()">
-    <clr-icon shape="floppy"></clr-icon> บันทึกข้อมูล
-  </button>
-</div>
+        <clr-dg-footer>
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+          รายการ
+          <clr-dg-pagination #pagination [clrDgPageSize]="20" [clrDgTotalItems]="generics.length"></clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <button class="btn btn-sm btn-success" (click)="save()">
+          <clr-icon shape="floppy"></clr-icon> บันทึกข้อมูล
+        </button>
+      </div>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
