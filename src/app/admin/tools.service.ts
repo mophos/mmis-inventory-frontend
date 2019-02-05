@@ -139,4 +139,9 @@ export class ToolsService {
     return rs.json();
   }
 
+  async calbalanceunitcost(warehouseId: any, token: any) {
+    const rs = await this.authHttp.get(`${this.url}/tools/calculate/balanceunitcost?warehouseId=${warehouseId}&token=${token}`).toPromise();
+    return rs.json();
+  }
+
 }

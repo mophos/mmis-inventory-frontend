@@ -30,11 +30,13 @@ export class StockcardComponent implements OnInit {
   checkEnterPass = true;
   showBtnCal = false;
   removeStockcardModal = false;
+  calBalanceUnitCostModal = false;
 
   token: any;
   warehouseId: any;
   passHis: any;
-  passwordRemovestockcard: any;
+  passwordRemovestockcard: any = '';
+  passwordcalBalanceUnitCost: any = '';
   isOpenSearchPick: boolean;
   picks: any;
   password: any;
@@ -220,6 +222,8 @@ export class StockcardComponent implements OnInit {
         this.showBtnCal = true;
       } else if (this.passHis === 'removestockcard') {
         this.removeStockcardModal = true;
+      } else if (this.passHis === 'calunitcost') {
+        this.calBalanceUnitCostModal = true;
       }
     }
     this.passHis = null;
@@ -266,6 +270,32 @@ export class StockcardComponent implements OnInit {
         try {
           this.modalLoading.show();
           const rs: any = await this.toolService.removestockcard(this.warehouseId);
+          if (rs.ok) {
+            this.removeStockcardModal = false;
+          } else {
+            this.alertService.error(rs.error);
+          }
+
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(JSON.stringify(error))
+        }
+      } else {
+        this.alertService.error(rs.error.message);
+      }
+    } catch (error) {
+      this.alertService.error('รหัสไม่ถูกต้อง')
+    }
+  }
+
+  async calBalanceUnitCost() {
+    try {
+      const rs: any = await this.toolService.checkPassword(this.passwordcalBalanceUnitCost);
+      if (rs.ok) {
+        try {
+          this.modalLoading.show();
+          const rs: any = await this.toolService.calbalanceunitcost(this.warehouseId,this.token);
           if (rs.ok) {
             this.removeStockcardModal = false;
           } else {
