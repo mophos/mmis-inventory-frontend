@@ -140,7 +140,7 @@
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" #lot (keyup)="editChangeLot(idx, lot.value)" style="width: 100%; background-color: #FFF9C4"
-        name="lotNo" id="lotNo" [value]="product.lot_no">
+        name="lotNo" id="lotNo" [value]="product.lot_no" wmUpperCase>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">
       <input [textMask]="{mask: maskDate}" style="width: 100%; background-color: #FFF9C4" name="expireDate" id="expireDate"
