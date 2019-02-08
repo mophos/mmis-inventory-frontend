@@ -139,6 +139,9 @@ export class ModalSearchPurchasesComponent implements OnInit {
 
             // ของแถม
             obj.is_free = v.giveaway === 'Y' ? 'Y' : 'N';
+            if (obj.is_free === 'Y') {
+              obj.cost = 0;
+            }
 
             this.productPurchases.push(obj);
           }
