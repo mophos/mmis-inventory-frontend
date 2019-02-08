@@ -182,6 +182,7 @@ import { AuthPick } from '../auth-pick.service';
 import { ProductsWarehouseComponent } from './products-warehouse/products-warehouse.component';
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.component';
+import { PayReportComponent } from './reports/pay-report/pay-report.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -304,7 +305,8 @@ Highcharts.setOptions({
     RequisitionMultipleComponent,
     ProductsWarehouseComponent,
     IssueTemplateNewComponent,
-    MonthlyReportComponent
+    MonthlyReportComponent,
+    PayReportComponent
   ],
   providers: [
     MainService,

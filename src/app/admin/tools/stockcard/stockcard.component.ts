@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToolsService } from '../../tools.service';
 import { AlertService } from '../../../alert.service';
 import { LoadingModalComponent } from '../../../modals/loading-modal/loading-modal.component';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 
 @Component({
   selector: 'wm-stockcard',
@@ -28,17 +29,28 @@ export class StockcardComponent implements OnInit {
   passwordModal = false;
   checkEnterPass = true;
   showBtnCal = false;
+  removeStockcardModal = false;
+  calBalanceUnitCostModal = false;
 
+  token: any;
+  warehouseId: any;
   passHis: any;
+  passwordRemovestockcard: any = '';
+  passwordcalBalanceUnitCost: any = '';
   isOpenSearchPick: boolean;
   picks: any;
   password: any;
   isSaving = false;
+  jwtHelper: JwtHelper = new JwtHelper();
   constructor(
     private toolService: ToolsService,
     private alertService: AlertService,
     private router: Router
-  ) { }
+  ) {
+    this.token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.warehouseId = decodedToken.warehouseId;
+  }
 
   ngOnInit() {
   }
@@ -208,6 +220,10 @@ export class StockcardComponent implements OnInit {
         this.modalHistory = true;
       } else if (this.passHis === 'cal') {
         this.showBtnCal = true;
+      } else if (this.passHis === 'removestockcard') {
+        this.removeStockcardModal = true;
+      } else if (this.passHis === 'calunitcost') {
+        this.calBalanceUnitCostModal = true;
       }
     }
     this.passHis = null;
@@ -239,6 +255,63 @@ export class StockcardComponent implements OnInit {
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(JSON.stringify(error))
+    }
+  }
+
+  setSelectedWarehouse(event) {
+    this.warehouseId = event.warehouse_id;
+  }
+
+  async removestockcard() {
+
+    try {
+      const rs: any = await this.toolService.checkPassword(this.passwordRemovestockcard);
+      if (rs.ok) {
+        try {
+          this.modalLoading.show();
+          const rs: any = await this.toolService.removestockcard(this.warehouseId);
+          if (rs.ok) {
+            this.removeStockcardModal = false;
+          } else {
+            this.alertService.error(rs.error);
+          }
+
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(JSON.stringify(error))
+        }
+      } else {
+        this.alertService.error(rs.error.message);
+      }
+    } catch (error) {
+      this.alertService.error('รหัสไม่ถูกต้อง')
+    }
+  }
+
+  async calBalanceUnitCost() {
+    try {
+      const rs: any = await this.toolService.checkPassword(this.passwordcalBalanceUnitCost);
+      if (rs.ok) {
+        try {
+          this.modalLoading.show();
+          const rs: any = await this.toolService.calbalanceunitcost(this.warehouseId,this.token);
+          if (rs.ok) {
+            this.removeStockcardModal = false;
+          } else {
+            this.alertService.error(rs.error.message);
+          }
+
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(JSON.stringify(error))
+        }
+      } else {
+        this.alertService.error(rs.error.message);
+      }
+    } catch (error) {
+      this.alertService.error('รหัสไม่ถูกต้อง')
     }
   }
 

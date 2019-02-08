@@ -23,13 +23,19 @@ export class CalculateMinMaxComponent implements OnInit {
   genericType: any;
   query: any = "";
   processDate: any;
-
+  processDateGroup: any;
+  tab = 'minmax_group';
+  minMaxGroups: any = [];
+  minMaxGroupId: any;
+  fromDateGroup: any;
+  toDateGroup: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
     editableDateField: false,
     showClearDateBtn: false
   };
+  // minMaxGroupDatail: any;
 
   constructor(
     private minMaxService: MinMaxService,
@@ -39,8 +45,9 @@ export class CalculateMinMaxComponent implements OnInit {
 
   ngOnInit() {
     this.getGenericType();
-    this.getHeader();
-    this.getMinMax();
+    // this.getMinMax();
+    this.getMinMaxGroup();
+    // this.getHeader();
   }
 
   async getGenericType() {
@@ -63,7 +70,9 @@ export class CalculateMinMaxComponent implements OnInit {
   async getHeader() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.minMaxService.getHeader();
+      console.log(this.tab);
+
+      const rs: any = this.tab == 'minmax_group' ? await this.minMaxService.getHeaderGroup(this.minMaxGroupId) : await this.minMaxService.getHeader();
       if (rs.ok) {
         const result = rs.rows[0];
         this.processDate = result.process_date;
@@ -103,9 +112,54 @@ export class CalculateMinMaxComponent implements OnInit {
       this.alertService.error(JSON.stringify(error.message));
     }
   }
+  async getMinMaxGroup() {
+    this.tab = 'minmax_group'
+    this.generics = [];
+    this._generics = [];
+    try {
+      this.modalLoading.show();
+      const rs: any = await this.minMaxService.getMinMaxGroup();
+      if (rs.ok) {
+        this.minMaxGroups = await rs.rows;
+        if (this.minMaxGroups.length) {
+          this.minMaxGroupId = await this.minMaxGroups[0].group_id;
+          this.getHeader()
+          this.getMinMaxGroupDetail();
+        }
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
+    }
+  }
+
+  async getMinMaxGroupDetail() {
+    try {
+      this.getHeader()
+      this.modalLoading.show();
+      const rs: any = await this.minMaxService.getMinMaxGroupDetail(this.minMaxGroupId, this.genericType, this.query);
+      if (rs.ok) {
+        this.generics = rs.rows;
+        this._generics = _.clone(this.generics);
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
+    }
+  }
 
   async getMinMax() {
     try {
+      this.tab = 'minmax'
+      this.generics = [];
+      this._generics = [];
+      this.getHeader()
       this.modalLoading.show();
       const rs: any = await this.minMaxService.getMinMax(this.genericType, this.query);
       if (rs.ok) {
@@ -135,6 +189,25 @@ export class CalculateMinMaxComponent implements OnInit {
       const _fromDate = `${this.fromDate.date.year}-${this.fromDate.date.month}-${this.fromDate.date.day}`;
       const _toDate = `${this.toDate.date.year}-${this.toDate.date.month}-${this.toDate.date.day}`;
       const rs: any = await this.minMaxService.calculateMinMax(_fromDate, _toDate);
+      if (rs.ok) {
+        this.generics = rs.rows;
+        this._generics = _.clone(this.generics);
+        this.processDate = rs.process_date;
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error.message));
+    }
+  }
+  async calculateMinMaxGroup() {
+    try {
+      this.modalLoading.show();
+      const _fromDate = `${this.fromDate.date.year}-${this.fromDate.date.month}-${this.fromDate.date.day}`;
+      const _toDate = `${this.toDate.date.year}-${this.toDate.date.month}-${this.toDate.date.day}`;
+      const rs: any = await this.minMaxService.calculateMinMaxGroup(_fromDate, _toDate, this.minMaxGroupId);
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
@@ -293,16 +366,70 @@ export class CalculateMinMaxComponent implements OnInit {
       .catch(() => { });
   }
 
+  saveGroup() {
+    this.alertService.confirm('ต้องการบันทึกรายการ ใช่หรือไม่?')
+      .then(async () => {
+        try {
+          this.modalLoading.show();
+          const rs: any = await this.minMaxService.saveGenericPlanning(this.processDate, this._generics, this.minMaxGroupId);
+          if (rs.ok) {
+            this.alertService.success();
+          } else {
+            this.alertService.error(JSON.stringify(rs.error));
+          }
+          this.modalLoading.hide();
+        } catch (error) {
+          this.modalLoading.hide();
+        }
+      })
+      .catch(() => { });
+  }
   enterSearch(e) {
     if (e.keyCode === 13) {
       this.searchGenerics();
     }
   }
-
+  enterSearchGroup(e) {
+    if (e.keyCode === 13) {
+      this.searchGenericGroup();
+    }
+  }
   async searchGenerics() {
     this.modalLoading.show();
     try {
       const rs: any = await this.minMaxService.searchGenericsWarehosue(this.genericType, this.query);
+      if (rs.ok) {
+        this.generics = rs.rows;
+        for (const g of this.generics) {
+          const idx = _.findIndex(this._generics, { generic_id: g.generic_id });
+          if (idx > -1) {
+            g.use_total = this._generics[idx].use_total;
+            g.use_per_day = this._generics[idx].use_per_day;
+            g.safety_min_day = this._generics[idx].safety_min_day;
+            g.safety_max_day = this._generics[idx].safety_max_day;
+            g.qty = this._generics[idx].qty;
+            g.min_qty = this._generics[idx].min_qty;
+            g.max_qty = this._generics[idx].max_qty;
+            g.lead_time_day = this._generics[idx].lead_time_day;
+            g.rop_qty = this._generics[idx].rop_qty;
+            g.ordering_cost = this._generics[idx].ordering_cost;
+            g.carrying_cost = this._generics[idx].carrying_cost;
+            g.eoq_qty = this._generics[idx].eoq_qty;
+          }
+        }
+      } else {
+        this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
+  }
+  async searchGenericGroup() {
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.minMaxService.searchGenericsGroupWarehosue(this.genericType, this.query, this.minMaxGroupId);
       if (rs.ok) {
         this.generics = rs.rows;
         for (const g of this.generics) {

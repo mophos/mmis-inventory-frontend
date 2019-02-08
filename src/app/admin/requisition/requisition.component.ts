@@ -62,6 +62,7 @@ export class RequisitionComponent implements OnInit {
   query: any;
   tabKeep: boolean;
   fillterCancel = 'nCancel';
+  requisitionWaitSelected = []
   public jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -106,6 +107,7 @@ export class RequisitionComponent implements OnInit {
   }
 
   refreshWaiting(state: State) {
+    this.selectedTab = 'waiting'
     this.offset = +state.page.from;
     sessionStorage.setItem('currentPageRequisition', this.currentPage.toString());
     this.getWaiting();
@@ -227,7 +229,22 @@ export class RequisitionComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-
+  async printWaitReq(){
+    const requisition_id: any = []
+    let count: any = 0
+    this.requisitionWaitSelected.forEach(e => {
+      if (e.is_cancel !== 'Y') {
+        requisition_id.push('requisId=' + e.requisition_order_id);
+        count++;
+      }
+    });
+    if (count > 0) {
+      const url = this.url + `/report/list-waiting?token=${this.token}&` + requisition_id.join('&');
+      this.htmlPreview.showReport(url, 'landscape');
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
+  }
   async removeOrder(order: IRequisitionOrder) {
     this.alertService.confirm('ต้องการลบรายการนี้ [' + order.requisition_code + ']')
       .then(async () => {
