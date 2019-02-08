@@ -124,12 +124,12 @@
     <clr-dg-cell style="text-align: center; line-height: 25px;">{{product.receive_qty * product.conversion_qty |
       number}} {{product.to_unit_name}}</clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" #cost (keyup)="editChangeCost(idx, cost.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
-        wmNumberOnly [value]="product.cost" />
+      <input type="text" #cost [disabled]="product.is_free === 'Y'" (keyup)="editChangeCost(idx, cost.value)" class="wm-edit-box-number"
+        style="width: 100%; background-color: #FFF9C4" wmNumberOnly [value]="product.cost" />
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
-      <input type="text" #discount (keyup)="editChangeDiscount(idx, discount.value)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
-        wmNumberOnly [value]="product.discount" />
+      <input type="text" #discount [disabled]="product.is_free === 'Y'" (keyup)="editChangeDiscount(idx, discount.value)"
+        class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4" wmNumberOnly [value]="product.discount" />
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">
       {{ (+product.receive_qty * +product.cost) - +product.discount | number: '1.2-2'}}
@@ -169,8 +169,8 @@
         (onChange)="changeSearchProduct($event)"></wm-search-product>
     </clr-dg-cell>
     <clr-dg-cell>
-      <div class="toggle-switch" >
-        <input type="checkbox" (click)="editChangeFreeAfter($event)" id="isFree" [(ngModel)]="isFree" >
+      <div class="toggle-switch">
+        <input type="checkbox" (click)="editChangeFreeAfter($event)" id="isFree" name="isFree" [(ngModel)]="isFree">
         <label for="isFree"></label>
       </div>
     </clr-dg-cell>
@@ -185,12 +185,12 @@
       {{+selectedReceiveQty * +conversionQty | number}} {{primaryUnitName}}
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" [disabled]="!selectedProductId" [(ngModel)]="selectedCost"
+      <input type="text" class="wm-edit-box-number" [disabled]="!selectedProductId || isFree" [(ngModel)]="selectedCost"
         wmNumberOnly style="width: 100%; background-color: #FFF9C4" placeholder="0">
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">
       <input type="text" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4" wmNumberOnly
-        [(ngModel)]="selectedDiscount" [disabled]="!selectedProductId" />
+        [(ngModel)]="selectedDiscount" [disabled]="!selectedProductId || isFree" />
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">
       {{ (+selectedReceiveQty * +selectedCost) - selectedDiscount | number: '1.2-2'}}
