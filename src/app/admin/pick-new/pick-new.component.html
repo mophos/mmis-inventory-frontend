@@ -73,7 +73,7 @@
   <clr-dg-column [style.width.px]="120">หน่วย</clr-dg-column>
   <clr-dg-column [style.width.px]="70"></clr-dg-column>
 
-  <clr-dg-row *ngFor="let product of products; let idx = index;" >
+  <clr-dg-row *ngFor="let product of products; let idx = index;">
     <!-- <wm-issue-product (onChange)="changeQtyGrid($event)" *clrIfExpanded [data]="product.items" ngProjectAs="clr-dg-row-detail"></wm-issue-product> -->
 
     <clr-dg-cell style="line-height: 25px;">
@@ -86,13 +86,13 @@
     <clr-dg-cell style="line-height: 25px; text-align: right;">
       {{product.receive_qty}}
     </clr-dg-cell>
-    
+
     <clr-dg-cell style="line-height: 25px; text-align: right;" [ngClass]="{'isError': product.receive_qty - product.remain_qty - product.pick_qty < 0}">
-        {{product.receive_qty - product.remain_qty - product.pick_qty}}
-      </clr-dg-cell>
+      {{product.receive_qty - product.remain_qty - product.pick_qty}}
+    </clr-dg-cell>
     <clr-dg-cell>
-      <input [disabled]="!approve && product.approve_id" type="text" #qty (keyup)="editChangeReceiveQty(idx, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
-        wmNumberWithOutDot [value]="product.pick_qty" />
+      <input [disabled]="!approve && product.approve_id" type="text" #qty (keyup)="editChangeReceiveQty(idx, qty)"
+        class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4" wmNumberWithOutDot [value]="product.pick_qty" />
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">
       {{product.large_unit}}({{product.base_unit}}{{product.small_unit}})
@@ -105,7 +105,7 @@
       </div>
     </clr-dg-cell>
   </clr-dg-row>
-  <clr-dg-row class="newLine" >
+  <clr-dg-row class="newLine">
     <clr-dg-cell></clr-dg-cell>
     <clr-dg-cell></clr-dg-cell>
     <clr-dg-cell></clr-dg-cell>
@@ -166,7 +166,7 @@
       <clr-dg-row *ngFor="let i of receive">
 
         <clr-dg-cell>{{i.product_name}}</clr-dg-cell>
-        <clr-dg-cell>{{i.lot_no}}</clr-dg-cell>
+        <clr-dg-cell>{{i.lot_no}} <span *ngIf="i.lot_time != 1">#{{i.lot_time}}</span></clr-dg-cell>
         <clr-dg-cell>{{i.receive_code}}</clr-dg-cell>
         <clr-dg-cell>{{i.receive_date | toThaiDate}}</clr-dg-cell>
         <clr-dg-cell>{{i.receive_qty}} </clr-dg-cell>
