@@ -143,6 +143,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
                     expired_date: z.expired_date,
                     from_unit_name: z.from_unit_name,
                     lot_no: z.lot_no,
+                    lot_time: z.lot_time,
                     product_name: z.product_name,
                     small_remain_qty: +z.small_remain_qty,
                     pack_remain_qty: +z.pack_remain_qty,
@@ -154,7 +155,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
                     const rsT: any = await this.requisitionService.getRequisitionConfirmTemp(v.temp_confirm_id);
                     const idx = _.findIndex(rsT.rows, { wm_product_id: z.wm_product_id });
                     if (idx > -1) {
-                      _obj.confirm_qty = rsT.rows[idx].confirm_qty ;
+                      _obj.confirm_qty = rsT.rows[idx].confirm_qty;
 
                       // if (_obj.confirm_qty > z.pay_qty) {
                       //   _obj.remain_qty += (_obj.confirm_qty - z.pay_qty);
@@ -280,7 +281,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
           minus = true;
         }
         totalQty += x.confirm_qty;
-        const _totalConfirmQty = x.confirm_qty ;
+        const _totalConfirmQty = x.confirm_qty;
         totalConfirmQty += _totalConfirmQty;
 
         const obj: any = {
@@ -414,7 +415,7 @@ export class PayRequisitionConfirmComponent implements OnInit {
         this.products.forEach((x, i) => {
           const idx = _.findIndex(data, { generic_id: x.generic_id });
           if (idx > -1) {
-            const pQty = this.products[i].requisition_qty ;
+            const pQty = this.products[i].requisition_qty;
             const reqQty = pQty + data[idx].qty;
             // จำนวนที่ยืมไป
             dataBorrow.push({

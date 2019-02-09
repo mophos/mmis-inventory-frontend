@@ -11,9 +11,10 @@
     <clr-dg-placeholder>ไม่พบรายการเวชภัณฑ์สำหรับจ่าย</clr-dg-placeholder>
     <clr-dg-row *ngFor="let i of confirmItems; let idx = index;">
       <clr-dg-cell>{{ i.product_name }}</clr-dg-cell>
-      <clr-dg-cell>{{ i.lot_no }}</clr-dg-cell>
+      <clr-dg-cell>{{ i.lot_no }} <span *ngIf="i.lot_time != 1">#{{i.lot_time}}</span></clr-dg-cell>
       <clr-dg-cell>{{ i.expired_date | expiredDate }}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right;">{{ i.pack_remain_qty| number }} {{ i.from_unit_name }} ({{i.conversion_qty | number}} {{i.to_unit_name}}) =
+      <clr-dg-cell style="text-align: right;">{{ i.pack_remain_qty| number }} {{ i.from_unit_name }}
+        ({{i.conversion_qty | number}} {{i.to_unit_name}}) =
         <span [ngClass]="{'error-message': (i.confirm_qty*i.conversion_qty) > i.small_remain_qty}">
           {{i.small_remain_qty | number}}</span> {{i.to_unit_name}}
       </clr-dg-cell>
@@ -23,8 +24,10 @@
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{i.confirm_qty *i.conversion_qty || 0 | number}} {{i.to_unit_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
-        <span style="color: red; font-weight: bold;" *ngIf="(i.small_remain_qty   - (i.confirm_qty*i.conversion_qty))  < 0">{{(i.small_remain_qty - (i.confirm_qty*i.conversion_qty))| number}}</span>
-        <span style="color: green; font-weight: bold;" *ngIf="(i.small_remain_qty - (i.confirm_qty*i.conversion_qty))  >= 0">{{ (i.small_remain_qty - (i.confirm_qty*i.conversion_qty)) | number}}</span>
+        <span style="color: red; font-weight: bold;" *ngIf="(i.small_remain_qty   - (i.confirm_qty*i.conversion_qty))  < 0">{{(i.small_remain_qty
+          - (i.confirm_qty*i.conversion_qty))| number}}</span>
+        <span style="color: green; font-weight: bold;" *ngIf="(i.small_remain_qty - (i.confirm_qty*i.conversion_qty))  >= 0">{{
+          (i.small_remain_qty - (i.confirm_qty*i.conversion_qty)) | number}}</span>
         {{ i.to_unit_name }}
       </clr-dg-cell>
     </clr-dg-row>
