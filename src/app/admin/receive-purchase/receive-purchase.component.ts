@@ -92,7 +92,7 @@ export class ReceivePurchaseComponent implements OnInit {
   selectedUnitName = null;
   selectedUnitGenericId = null;
   selectedReceiveQty: any;
-  selectedCost:any = 0;
+  selectedCost: any = 0;
   tmpSelectedCost = 0;
   conversionQty = 0;
 
@@ -247,6 +247,10 @@ export class ReceivePurchaseComponent implements OnInit {
             // ของแถม
             obj.is_free = v.giveaway;
 
+            if (obj.is_free === 'Y') {
+              obj.cost = 0;
+            }
+
             this.products.push(obj);
           }
         };
@@ -366,8 +370,8 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
 
-  editChangeFreeAfter(event){
-    if(!this.isFree){
+  editChangeFreeAfter(event) {
+    if (!this.isFree) {
       this.tmpSelectedCost = this.selectedCost
       this.selectedCost = '0';
     } else {
@@ -417,23 +421,23 @@ export class ReceivePurchaseComponent implements OnInit {
       const fill = _.findIndex(this.products, { product_id: this.selectedProductId, lot_no: this.selectedLotNo, expired_date: this.selectedExpiredDate, is_free: !this.isFree ? 'Y' : 'N' })
       if (fill > -1) {
         this.alertService.error('รายการซ้ำ')
-      } else if (fill < 0 ) {
+      } else if (fill < 0) {
         let ms = this.isFree ? 'ต้องการเพิ่มเป็นรายการปกติ' : 'ต้องการเพิ่มเป็นของแถม'
-        let newIsFree =  !this.isFree ? 'Y' : 'N'
-        
-        this.alertService.confirm( `รายการซ้ำ ${ms}ใช่ หรือ ไม่?`)
-        .then(() => {
-          product.is_free = newIsFree;
-          product.cost = !this.isFree ? '0' : this.tmpSelectedCost;
-          this.pushProduct(product);
-        })
+        let newIsFree = !this.isFree ? 'Y' : 'N'
+
+        this.alertService.confirm(`รายการซ้ำ ${ms}ใช่ หรือ ไม่?`)
+          .then(() => {
+            product.is_free = newIsFree;
+            product.cost = !this.isFree ? '0' : this.tmpSelectedCost;
+            this.pushProduct(product);
+          })
       }
     } else {
       this.pushProduct(product);
     }
   }
 
-  async pushProduct(productTmp:any){
+  async pushProduct(productTmp: any) {
     await this.products.push(productTmp);
     // cal total price
     await this.countTotalCost();
@@ -544,11 +548,11 @@ export class ReceivePurchaseComponent implements OnInit {
 
   async editChangeFree(idx: any, value: any) {
     console.log(value);
-    
+
     try {
       let switchB = this.products[idx].is_free === 'Y' ? 'N' : 'Y'
       const fill = _.filter(this.products, { product_id: this.products[idx].product_id, lot_no: this.products[idx].lot_no, expired_date: this.products[idx].expired_date, is_free: switchB })
-      if(fill.length < 1){
+      if (fill.length < 1) {
         this.products[idx].is_free = switchB;
         console.log(this.products[idx].unit_generic_id);
         if (this.products[idx].is_free === 'Y') {
@@ -561,7 +565,7 @@ export class ReceivePurchaseComponent implements OnInit {
       } else {
         this.alertService.error('รายการซ้ำ')
       }
-      
+
     } catch (error) {
       this.alertService.error(error);
     }

@@ -94,8 +94,6 @@ export class TransferNewComponent implements OnInit {
   }
 
   setSelectedProduct(event: any) {
-    console.log(event);
-    
     try {
       if (this.srcWarehouseId) {
         this.productId = event ? event.product_id : null;
@@ -107,9 +105,6 @@ export class TransferNewComponent implements OnInit {
         this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
-        // this.wmProductId = event ? event.wm_product_id : null;
-        // this.unitList.setGenericId(this.genericId);
-        // this.getLots();
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
       }
@@ -184,7 +179,7 @@ export class TransferNewComponent implements OnInit {
     this.getTemplates()
   }
 
-  
+
 
   clearForm() {
     this.workingCode = null;
@@ -347,7 +342,7 @@ export class TransferNewComponent implements OnInit {
 
       if (dstWarehouseId && srcWarehouseId) {
         const rs: any = await this.requisitionService.getTemplates(srcWarehouseId, dstWarehouseId);
-console.log(rs);
+        console.log(rs);
 
         if (rs.ok) {
           this.templates = rs.rows;
@@ -398,11 +393,11 @@ console.log(rs);
     try {
       const rs: any = await this.transferService.getTemplateItems(templateId);
       console.log(rs.rows);
-      
+
       if (rs.ok) {
         this.generics = [];
-      for (const v of rs.rows) {
-          const product:any = {};
+        for (const v of rs.rows) {
+          const product: any = {};
           product.generic_id = v.generic_id || null;
           product.generic_name = v.generic_name || null;
           product.primary_unit_id = v.primary_unit_id || null;
@@ -410,11 +405,11 @@ console.log(rs);
           product.primary_unit_name = v.primary_unit_name || null;
           product.conversion_qty = this.conversionQty || null;
           product.working_code = v.working_code || null;//
-          product.remain_qty = +v.qty - +v.reserve_qty || null ; //
+          product.remain_qty = +v.qty - +v.reserve_qty || null; //
           product.transfer_qty = 0;
           this.generics.push(product);
           await this.getProductList(product.generic_id, this.transferQty);
-        this.clearForm();
+          this.clearForm();
         }
       }
     } catch (error) {

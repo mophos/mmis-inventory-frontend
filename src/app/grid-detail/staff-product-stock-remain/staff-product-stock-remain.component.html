@@ -1,23 +1,26 @@
 <div [clrLoading]="loading">
-    <clr-datagrid>
-      <clr-dg-column>Trade Code</clr-dg-column>
-      <clr-dg-column>Trade Name</clr-dg-column>
-      <clr-dg-column>Lot no.</clr-dg-column>
-      <clr-dg-column>วันหมดอายุ</clr-dg-column>
-      <clr-dg-column>คงเหลือ</clr-dg-column>  
-      <clr-dg-column>คงเหลือ(หักยอดจอง)</clr-dg-column>  
-      <clr-dg-row *clrDgItems="let r of products">
-        <clr-dg-cell>{{r.working_code}}</clr-dg-cell>
-        <clr-dg-cell>{{r.product_name}}</clr-dg-cell>
-        <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
-        <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
-        <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}" >{{r.pack_qty | number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty | number}}</clr-dg-cell>
-        <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}" >{{r.pack_qty - (r.reserve_qty/r.conversion_qty)| ceil}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty - r.reserve_qty | number}}</clr-dg-cell>
-      </clr-dg-row>
-      <clr-dg-footer>
-        <clr-dg-pagination #pagination [clrDgPageSize]="10">
-          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
-        </clr-dg-pagination>
-      </clr-dg-footer>
-    </clr-datagrid>
-  </div>
+  <clr-datagrid>
+    <clr-dg-column>Trade Code</clr-dg-column>
+    <clr-dg-column>Trade Name</clr-dg-column>
+    <clr-dg-column>Lot no.</clr-dg-column>
+    <clr-dg-column>วันหมดอายุ</clr-dg-column>
+    <clr-dg-column>คงเหลือ</clr-dg-column>
+    <clr-dg-column>คงเหลือ(หักยอดจอง)</clr-dg-column>
+    <clr-dg-row *clrDgItems="let r of products">
+      <clr-dg-cell>{{r.working_code}}</clr-dg-cell>
+      <clr-dg-cell>{{r.product_name}}</clr-dg-cell>
+      <clr-dg-cell>{{r.lot_no}} <span *ngIf="r.lot_time != 1">#{{r.lot_time}}</span></clr-dg-cell>
+      <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
+      <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">{{r.pack_qty
+        | number}} {{r.from_unit_name}} ({{r.conversion_qty | number}} {{r.to_unit_name}}) = {{r.qty | number}}</clr-dg-cell>
+      <clr-dg-cell [ngClass]="{'error-message': r.min_qty > r.qty, 'success-message': r.min_qty < r.qty}">{{r.pack_qty
+        - (r.reserve_qty/r.conversion_qty)| ceil}} {{r.from_unit_name}} ({{r.conversion_qty | number}}
+        {{r.to_unit_name}}) = {{r.qty - r.reserve_qty | number}}</clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>
+      <clr-dg-pagination #pagination [clrDgPageSize]="10">
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+      </clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>

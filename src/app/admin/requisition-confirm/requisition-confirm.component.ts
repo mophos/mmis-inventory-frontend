@@ -142,6 +142,7 @@ export class RequisitionConfirmComponent implements OnInit {
                     expired_date: z.expired_date,
                     from_unit_name: z.from_unit_name,
                     lot_no: z.lot_no,
+                    lot_time: z.lot_time,
                     product_name: z.product_name,
                     small_remain_qty: +z.small_remain_qty,
                     pack_remain_qty: +z.pack_remain_qty,
@@ -236,19 +237,12 @@ export class RequisitionConfirmComponent implements OnInit {
   async getConfirmItems() {
     try {
       const rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
-      console.log(rs);
       if (rs.ok) {
         const rows = rs.rows;
         rows.forEach(v => {
 
           const idx = _.findIndex(this.products, { generic_id: v.generic_id });
           if (idx > -1) {
-            // const obj: any = {
-            //   confirm_qty: v.confirm_qty,
-            //   conversion_qty: v.conversion_qty,
-            //   wm_product_id: v.wm_product_id,
-            //   generic_id: this.products[idx].generic_id
-            // }
             this.products[idx].confirmItems.push(v);
           }
         });

@@ -57,23 +57,7 @@ export class StaffPayConfirmOrderItemsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loading = true;
-    // this.getProductList();
   }
-
-  // async getProductList() {
-  //   try {
-  //     this.items = _.clone(this._confirmItems);
-  //     if (this.items.length) {
-  //       this.onSuccessConfirm.emit(this.items[0]);
-  //     }
-  //     this.calTotal();
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.loading = false;
-  //     this.alertService.error(error.message);
-  //   }
-  // }
 
   onChangeQty(cmp: any, wmProductId: any) {
     try {
@@ -81,7 +65,6 @@ export class StaffPayConfirmOrderItemsComponent implements OnInit {
       const idx = _.findIndex(this.confirmItems, { 'wm_product_id': wmProductId });
       if (idx > -1) {
         // ถ้าจำนวนที่คีย์เข้ามามากว่าจำนวนคงเหลือ ให้ใช้จำนวนคงเหลือเป็นยอดยืนยัน
-
         if (this.confirmItems[idx].small_remain_qty < cmp.value) {
           cmp.value = this.confirmItems[idx].small_remain_qty;
         }

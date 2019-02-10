@@ -11,9 +11,10 @@
     <clr-dg-placeholder>ไม่พบรายการเวชภัณฑ์สำหรับโอน</clr-dg-placeholder>
     <clr-dg-row *ngFor="let p of products; let idx = index;">
       <clr-dg-cell>{{ p.product_name }}</clr-dg-cell>
-      <clr-dg-cell>{{ p.lot_no }}</clr-dg-cell>
+      <clr-dg-cell>{{ p.lot_no }} <span *ngIf="p.lot_time != 1">#{{p.lot_time}}</span></clr-dg-cell>
       <clr-dg-cell>{{ p.expired_date | expiredDate }}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right;">{{ p.pack_remain_qty | number }} {{ p.from_unit_name }} ({{p.conversion_qty | number}} {{p.to_unit_name}})</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;">{{ p.pack_remain_qty | number }} {{ p.from_unit_name }}
+        ({{p.conversion_qty | number}} {{p.to_unit_name}})</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
         <span [ngClass]="{'error-message': (p.product_qty*p.conversion_qty) > p.small_remain_qty}">
           {{p.small_remain_qty | number}}</span> {{p.to_unit_name}}
