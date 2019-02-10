@@ -20,27 +20,27 @@ export class SearchGenericWarehouseZeroComponent implements OnInit {
   }
   @Input('warehouseId')
   set setWarehouse(value: boolean) {
-      this._warehouseId = value;
-      this.setApiUrl();
+    this._warehouseId = value;
+    this.setApiUrl();
   }
-  
+
   query: any = null;
   searchProductUrl: any;
 
   constructor(
     @Inject('API_URL') private apiUrl: string) {
-      this.token = sessionStorage.getItem('token');
-      const decodedToken: any = this.jwtHelper.decodeToken(this.token);
-      this.setApiUrl();
-     }
+    this.token = sessionStorage.getItem('token');
+    const decodedToken: any = this.jwtHelper.decodeToken(this.token);
+    this.setApiUrl();
+  }
 
   ngOnInit() {
   }
 
   setApiUrl() {
-    if(this.setZreo){
+    if (this.setZreo) {
       this.searchProductUrl = `${this.apiUrl}/generics/search-warehouse-setzero-autocomplete?warehouseId=${this._warehouseId}&token=${this.token}`;
-    }else {
+    } else {
       this.searchProductUrl = `${this.apiUrl}/generics/search-warehouse-zero-autocomplete?warehouseId=${this._warehouseId}&token=${this.token}`;
     }
 
