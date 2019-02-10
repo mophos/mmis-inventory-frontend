@@ -144,4 +144,9 @@ export class ToolsService {
     return rs.json();
   }
 
+  async calbalancelot(warehouseId: any, token: any) {
+    const rs = await this.authHttp.get(`${this.url}/tools/calculate/stockcard/lot?warehouseId=${warehouseId}&token=${token}`).toPromise();
+    return rs.json();
+  }
+
 }

@@ -331,5 +331,33 @@
   </div>
 </clr-modal>
 
+<clr-modal [(clrModalOpen)]="calBalanceLotModal" [clrModalSize]="'l'" [clrModalClosable]="false">
+  <h3 class="modal-title">คำนวณคงเหลือระดับ lot ของคลังที่เลือก ใน stockcard ใหม่</h3>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <label class="required">คลัง</label>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <wm-select-warehouses [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
+
+        </wm-select-warehouses>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 1em">
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <label class="required">รหัสผ่าน</label>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <input  type="password" [(ngModel)]="passwordcalBalanceLot">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success btn-sm" [disabled]="!passwordcalBalanceLot.length" (click)="calBalanceLot()">ประมวลผล</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="calBalanceLotModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
+
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
