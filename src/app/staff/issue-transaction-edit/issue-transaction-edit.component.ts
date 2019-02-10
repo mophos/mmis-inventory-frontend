@@ -138,6 +138,9 @@ export class IssueTransactionEditComponent implements OnInit {
               objP.wm_product_id = e.wm_product_id;
               objP.from_unit_name = e.from_unit_name;
               objP.to_unit_name = e.to_unit_name;
+              objP.lot_no = e.lot_no;
+              objP.lot_time = e.lot_time;
+              objP.expired_date = e.expired_date;
               items.push(objP);
               // console.log(items);
             }
@@ -199,7 +202,7 @@ export class IssueTransactionEditComponent implements OnInit {
       this.productName = event ? `${event.product_name} (${event.generic_name})` : null;
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.primaryUnitName = event ? event.primary_unit_name : null;
-      this.unitGenericId = event ?  event.unit_generic_id : null;
+      this.unitGenericId = event ? event.unit_generic_id : null;
       this.genericName = event ? event.generic_name : null;
       this.remainQty = event ? event.qty : null;
 
@@ -247,7 +250,7 @@ export class IssueTransactionEditComponent implements OnInit {
 
   async addProduct() {
     const idx = _.findIndex(this.products, { generic_id: this.genericId });
-     if (idx > -1) {
+    if (idx > -1) {
       const newQty = +this.products[idx].issue_qty + +this.issueQty;
       if (newQty > +this.products[idx].remain_qty) {
         this.products[idx].issue_qty = this.products[idx].remain_qty;
@@ -268,7 +271,7 @@ export class IssueTransactionEditComponent implements OnInit {
         obj.warehouse_id = this.warehouseId;
         obj.items = [];
         this.products.push(obj);
-        
+
         await this.alowcate(this.genericId);
       }
     }
