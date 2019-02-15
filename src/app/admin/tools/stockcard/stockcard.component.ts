@@ -31,12 +31,14 @@ export class StockcardComponent implements OnInit {
   showBtnCal = false;
   removeStockcardModal = false;
   calBalanceUnitCostModal = false;
+  calBalanceLotModal = false;
 
   token: any;
   warehouseId: any;
   passHis: any;
   passwordRemovestockcard: any = '';
   passwordcalBalanceUnitCost: any = '';
+  passwordcalBalanceLot: any = '';
   isOpenSearchPick: boolean;
   picks: any;
   password: any;
@@ -224,6 +226,8 @@ export class StockcardComponent implements OnInit {
         this.removeStockcardModal = true;
       } else if (this.passHis === 'calunitcost') {
         this.calBalanceUnitCostModal = true;
+      } else if (this.passHis === 'callot') {
+        this.calBalanceLotModal = true;
       }
     }
     this.passHis = null;
@@ -269,14 +273,15 @@ export class StockcardComponent implements OnInit {
       if (rs.ok) {
         try {
           this.modalLoading.show();
-          const rs: any = await this.toolService.removestockcard(this.warehouseId);
-          if (rs.ok) {
-            this.removeStockcardModal = false;
-          } else {
-            this.alertService.error(rs.error);
-          }
-
+          const rs: any = this.toolService.removestockcard(this.warehouseId);
           this.modalLoading.hide();
+          this.alertService.success('ระบบกำลังประมวลผลอยู่พื้นหลัง อาจใช้เวลา 30 - 60 นาที');
+          this.removeStockcardModal = false;
+          // if (rs.ok) {
+          //   this.removeStockcardModal = false;
+          // } else {
+          //   this.alertService.error(rs.error);
+          // }
         } catch (error) {
           this.modalLoading.hide();
           this.alertService.error(JSON.stringify(error))
@@ -295,14 +300,42 @@ export class StockcardComponent implements OnInit {
       if (rs.ok) {
         try {
           this.modalLoading.show();
-          const rs: any = await this.toolService.calbalanceunitcost(this.warehouseId,this.token);
-          if (rs.ok) {
-            this.removeStockcardModal = false;
-          } else {
-            this.alertService.error(rs.error.message);
-          }
-
+          const rs: any = this.toolService.calbalanceunitcost(this.warehouseId, this.token);
           this.modalLoading.hide();
+          this.alertService.success('ระบบกำลังประมวลผลอยู่พื้นหลัง อาจใช้เวลา 30 - 60 นาที');
+          this.calBalanceUnitCostModal = false;
+          // if (rs.ok) {
+          //   this.removeStockcardModal = false;
+          // } else {
+          //   this.alertService.error(rs.error.message);
+          // }
+        } catch (error) {
+          this.modalLoading.hide();
+          this.alertService.error(JSON.stringify(error))
+        }
+      } else {
+        this.alertService.error(rs.error.message);
+      }
+    } catch (error) {
+      this.alertService.error('รหัสไม่ถูกต้อง')
+    }
+  }
+
+  async calBalanceLot() {
+    try {
+      const rs: any = await this.toolService.checkPassword(this.passwordcalBalanceLot);
+      if (rs.ok) {
+        try {
+          this.modalLoading.show();
+          const rs: any = this.toolService.calbalancelot(this.warehouseId, this.token);
+          this.modalLoading.hide();
+          this.alertService.success('ระบบกำลังประมวลผลอยู่พื้นหลัง อาจใช้เวลา 30 - 60 นาที');
+          this.calBalanceLotModal = false;
+          // if (rs.ok) {
+          //   this.removeStockcardModal = false;
+          // } else {
+          //   this.alertService.error(rs.error.message);
+          // }
         } catch (error) {
           this.modalLoading.hide();
           this.alertService.error(JSON.stringify(error))
