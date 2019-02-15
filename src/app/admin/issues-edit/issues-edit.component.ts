@@ -132,6 +132,8 @@ export class IssuesEditComponent implements OnInit {
               objP.wm_product_id = e.wm_product_id;
               objP.from_unit_name = e.from_unit_name;
               objP.to_unit_name = e.to_unit_name;
+              objP.lot_no = e.lot_no;
+              objP.lot_time = e.lot_time;
               items.push(objP);
             }
           }

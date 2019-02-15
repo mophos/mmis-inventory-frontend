@@ -313,6 +313,7 @@ export class RequisitionFastComponent implements OnInit {
                 expired_date: z.expired_date,
                 from_unit_name: z.from_unit_name,
                 lot_no: z.lot_no,
+                lot_time: z.lot_time,
                 product_name: z.product_name,
                 small_remain_qty: +z.small_remain_qty,
                 pack_remain_qty: +z.pack_remain_qty,
@@ -385,7 +386,7 @@ export class RequisitionFastComponent implements OnInit {
       const rs: any = await this.wareHouseService.getShipingNetwork(warehouseId, 'REQ');
       this.modalLoading.hide();
       if (rs.ok) {
-        if(rs.rows.length){
+        if (rs.rows.length) {
           this.templates = [];
           this.withDrawWarehouses = rs.rows;
           if (rs.rows.length > 0) {
@@ -393,7 +394,7 @@ export class RequisitionFastComponent implements OnInit {
             this.getTemplates();
           }
         } else {
-          this.alertService.error('ยังไม่มีการตั้ง Shipping Network' );
+          this.alertService.error('ยังไม่มีการตั้ง Shipping Network');
         }
       } else {
         this.alertService.error(rs.error);

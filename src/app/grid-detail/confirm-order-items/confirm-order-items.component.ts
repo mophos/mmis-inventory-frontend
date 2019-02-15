@@ -57,23 +57,8 @@ export class ConfirmOrderItemsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loading = true;
-    // this.getProductList();
   }
 
-  // async getProductList() {
-  //   try {
-  //     this.items = _.clone(this._confirmItems);
-  //     if (this.items.length) {
-  //       this.onSuccessConfirm.emit(this.items[0]);
-  //     }
-  //     this.calTotal();
-  //   } catch (error) {
-  //     console.log(error);
-  //     this.loading = false;
-  //     this.alertService.error(error.message);
-  //   }
-  // }
 
   onChangeQty(cmp: any, wmProductId: any) {
     try {

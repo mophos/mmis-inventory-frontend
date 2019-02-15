@@ -14,7 +14,7 @@ export class HisTransactionService {
     return resp.json();
   }
 
-  async getTransactionList(genericTypes: any) {    
+  async getTransactionList(genericTypes: any) {
     const resp = await this.authHttp.post(`${this.url}/his-transaction/list`,
       { genericTypes: genericTypes }).toPromise();
     return resp.json();

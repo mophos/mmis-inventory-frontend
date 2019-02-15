@@ -11,9 +11,10 @@
         <span class="p4">{{p.generic_name}}</span> <br>
         <span class="p7">{{p.product_name}}</span>
       </clr-dg-cell>
-      <clr-dg-cell style="text-align: left;">{{p.lot_no}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: left;">{{p.lot_no}} <span *ngIf="p.lot_time != 1">#{{p.lot_time}}</span></clr-dg-cell>
       <clr-dg-cell style="text-align: left;">{{p.expired_date | expiredDate}}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color': p.product_qty > 0 ? '#007cbb' : ''}">{{p.product_qty | number}} {{p.to_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right;" [ngStyle]="{'color': p.product_qty > 0 ? '#007cbb' : ''}">{{p.product_qty
+        | number}} {{p.to_unit_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right;">{{p.product_pack_qty | number}}</clr-dg-cell>
       <clr-dg-cell style="text-align: left;">{{p.from_unit_name}} ({{p.conversion_qty | number}} {{p.to_unit_name}})</clr-dg-cell>
     </clr-dg-row>

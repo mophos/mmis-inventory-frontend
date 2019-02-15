@@ -8,11 +8,11 @@
     <clr-dg-column>คงเหลือ(base unit)</clr-dg-column>
     <clr-dg-row *ngFor="let r of items;let idx=index">
       <clr-dg-cell>{{r.product_name}}</clr-dg-cell>
-      <clr-dg-cell>{{r.lot_no}}</clr-dg-cell>
+      <clr-dg-cell>{{r.lot_no}} <span *ngIf="r.lot_time != 1">#{{r.lot_time}}</span></clr-dg-cell>
       <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
       <clr-dg-cell>
         <input type="text" #qty (keyup)="onChangeQty(qty, idx)" style="width: 100%; text-align: right; background-color:#FFF9C4"
-        placeholder="" wmNumberWithOutDot [value]="r.product_qty">
+          placeholder="" wmNumberWithOutDot [value]="r.product_qty">
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right">{{r.product_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
       <clr-dg-cell style="text-align: right">{{r.small_remain_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
