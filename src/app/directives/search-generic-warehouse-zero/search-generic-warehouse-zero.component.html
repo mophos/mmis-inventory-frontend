@@ -1,10 +1,6 @@
-<input type="text" [value]="query" (keyup)="clearSelected($event)"
-style="width: 100%;" placeholder="ค้นหาสินค้า..." 
-agxTypeahead 
-[taUrl]="searchProductUrl"
-taApi="http" 
-[taItemTpl]="itemTpl"
-(taSelected)="handleResultSelected($event)">
+<input type="text" [value]="query" (keyup)="clearSelected($event)" style="width: 100%;" placeholder="ค้นหาสินค้า..."
+  agxTypeahead [taUrl]="searchProductUrl" taApi="http" [disabled]="_disabled" [taItemTpl]="itemTpl"
+  (taSelected)="handleResultSelected($event)">
 
 <ng-template #itemTpl let-result>
   <strong>{{ result.result.generic_name }}</strong>
