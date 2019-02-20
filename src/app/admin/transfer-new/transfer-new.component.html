@@ -13,7 +13,8 @@
             <label for="transferDate" class="required">วันที่โอน</label>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="transferDate" required></my-date-picker-th>
+            <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="transferDate" required>
+            </my-date-picker-th>
           </div>
         </div>
         <div class="form-group row wid99">
@@ -63,16 +64,20 @@
   <clr-dg-column></clr-dg-column>
 
   <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;">
-    <wm-transfer-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)" ngProjectAs="clr-dg-row-detail"></wm-transfer-items>
+    <wm-transfer-items *clrIfExpanded [products]="generic.products"
+      (onChangeQty)="changeProductQty(generic.generic_id, $event)" ngProjectAs="clr-dg-row-detail"></wm-transfer-items>
     <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.working_code}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{generic.generic_name}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.transfer_qty | number}} {{generic.primary_unit_name}}</clr-dg-cell>
-    <clr-dg-cell style="line-height: 25px; text-align: right;" [ngStyle]="{'color': generic.transfer_qty > generic.remain_qty ? 'red' : 'green'}">
+    <clr-dg-cell style="line-height: 25px; text-align: right;">{{generic.transfer_qty | number}}
+      {{generic.primary_unit_name}}</clr-dg-cell>
+    <clr-dg-cell style="line-height: 25px; text-align: right;"
+      [ngStyle]="{'color': generic.transfer_qty > generic.remain_qty ? 'red' : 'green'}">
       {{generic.remain_qty - generic.transfer_qty | number}} {{generic.primary_unit_name}}
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-product-location [warehouseId]="dstWarehouseId" [selectedId]="generic.location_id" (onSelect)="editChangeLocation($event, idx)"></wm-select-product-location>
+      <wm-select-product-location [warehouseId]="dstWarehouseId" [selectedId]="generic.location_id"
+        (onSelect)="editChangeLocation($event, idx)"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
@@ -87,18 +92,21 @@
     <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{workingCode}}</clr-dg-cell>
     <clr-dg-cell>
-      <wm-search-generic-warehouse-zero [warehouseId]="srcWarehouseId" #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
+      <wm-search-generic-warehouse-zero [disabled]="!dstWarehouseId || !srcWarehouseId" [warehouseId]="srcWarehouseId"
+        #productSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-warehouse-zero>
       <!-- <wm-search-product-warehouse [warehouseId]="srcWarehouseId" #productSearch (onChange)="clearProductSearch($event)" (onSelect)="setSelectedProduct($event)"></wm-search-product-warehouse>     -->
     </clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': transferQty > remainQty ? 'red' : 'green'}">{{ transferQty | number }} {{primaryUnitName}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - transferQty | number }} {{primaryUnitName}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;"
+      [ngStyle]="{'color': transferQty > remainQty ? 'red' : 'green'}">{{ transferQty | number }} {{primaryUnitName}}
+    </clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty - transferQty | number }}
+      {{primaryUnitName}}</clr-dg-cell>
     <clr-dg-cell>
-        <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
+      <wm-select-product-location #locationList (onSelect)="changeLocation($event)"></wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
-        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId"
-          (click)="addGeneric()">
+        <button class="btn btn-success btn-sm wm-small-btn" [disabled]="!genericId" (click)="addGeneric()">
           เพิ่ม
         </button>
         <button class="btn btn-danger btn-sm wm-small-btn" (click)="clearForm()">
@@ -111,7 +119,8 @@
 </clr-datagrid>
 
 <div style="height: 200px;">
-  <button class="btn btn-success btn-sm" (click)="saveTransfer()" [disabled]="isSaving || !generics.length || !dstWarehouseId || !srcWarehouseId || isSave">
+  <button class="btn btn-success btn-sm" (click)="saveTransfer()"
+    [disabled]="isSaving || !generics.length || !dstWarehouseId || !srcWarehouseId || isSave">
     <clr-icon shape="floppy"></clr-icon>
     บันทึกการโอน
   </button>
