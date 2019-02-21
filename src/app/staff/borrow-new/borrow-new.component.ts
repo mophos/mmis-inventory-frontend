@@ -179,7 +179,6 @@ export class BorrowNewComponent implements OnInit {
         };
 
         this.generics.push(obj);
-        console.log(this.generics)
         this.clearForm();
       } else {
         this.alertService.error('ข้อมูลไม่ครบถ้วน')
@@ -252,6 +251,8 @@ export class BorrowNewComponent implements OnInit {
           data.push(_data);
 
           let allocate = await this.borrowItemsService.allocateBorrow(data, this.srcWarehouseId);
+          console.log(allocate.rows);
+          
 
           let wmRows = [];
           wmRows.push(allocate.rows);
@@ -286,8 +287,9 @@ export class BorrowNewComponent implements OnInit {
           this.alertService.confirm('ต้องการยืมรายการสินค้า ใช่หรือไม่?')
             .then(async () => {
               this.modalLoading.show();
-              try {
+              try {    
                 const rsT: any = await this.borrowItemsService.saveBorrow(summary, generics);
+                
                 if (rsT.ok) {
                   this.alertService.success();
                   this.router.navigate(['/staff/borrow']);

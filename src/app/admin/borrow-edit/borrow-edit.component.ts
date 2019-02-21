@@ -337,10 +337,12 @@ export class BorrowEditComponent implements OnInit {
       let isError = false;
 
       _.forEach(this.generics, v => {
-        if (v.generic_id && v.borrow_qty) {
+        console.log(v);
+        
+        if (v.generic_id && v.borrow_qty_old) {
           generics.push({
             generic_id: v.generic_id,
-            borrow_qty: +v.borrow_qty,
+            borrow_qty: +v.borrow_qty_old,
             unit_generic_id: v.unit_generic_id,
             // conversion_qty: +v.conversion_qty,
             primary_unit_id: v.primary_unit_id,
