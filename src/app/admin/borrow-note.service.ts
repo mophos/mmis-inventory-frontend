@@ -58,10 +58,4 @@ export class BorrowNoteService {
     const resp = await this.authHttp.get(`${this.url}/borrow-notes/${borrowNoteId}/detail-edit`).toPromise();
     return resp.json();
   }
-
-  async getRemainQty(warehouseId: any) {
-    const resp = await this.authHttp.get(`${this.url}/borrow-notes/remain/${warehouseId}`).toPromise();
-    return resp.json();
-  }
-
 }
