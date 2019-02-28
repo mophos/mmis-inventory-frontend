@@ -17,6 +17,7 @@ export class BorrowNoteComponent implements OnInit {
   total = 0;
   perPage = 20;
   query: any = '';
+  
 
   constructor(
     private alertService: AlertService,
@@ -24,8 +25,8 @@ export class BorrowNoteComponent implements OnInit {
     @Inject('API_URL') private apiUrl: string
   ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
+
   async printReport() {
     const borrow_note_id = _.join(_.map(this.selectedPrint, (v: any) => { return 'id=' + v.borrow_note_id }), '&')
     const token = sessionStorage.getItem('token');
