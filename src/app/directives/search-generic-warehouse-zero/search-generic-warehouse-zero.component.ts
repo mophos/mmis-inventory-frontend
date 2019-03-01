@@ -24,8 +24,14 @@ export class SearchGenericWarehouseZeroComponent implements OnInit {
     this.setApiUrl();
   }
 
+  @Input('disabled')
+  set setDisabled(value: boolean) {
+    this._disabled = value;
+  }
+
   query: any = null;
   searchProductUrl: any;
+  _disabled = false;
 
   constructor(
     @Inject('API_URL') private apiUrl: string) {

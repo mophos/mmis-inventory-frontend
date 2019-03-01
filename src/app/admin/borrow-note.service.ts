@@ -58,5 +58,4 @@ export class BorrowNoteService {
     const resp = await this.authHttp.get(`${this.url}/borrow-notes/${borrowNoteId}/detail-edit`).toPromise();
     return resp.json();
   }
-
 }
