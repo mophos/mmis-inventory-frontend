@@ -95,7 +95,6 @@ export class ProductStockRemainComponent implements OnInit {
       cost: this.tmpProduct.cost
     }
 
-    this.tmpProduct
     this.alertService.confirm('ต้องการปรับ package ใช่ หรือ ไม่')
       .then(async () => {
         let rs = await this.productService.saveRepack(param)
