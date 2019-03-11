@@ -27,6 +27,10 @@
   แก้ไข Stock Card จากการเบิกจ่าย
 </button>
 
+<!-- <button class="btn btn-large btn-danger" (click)="showSearchBorrow()">
+  แก้ไข Stock Card จากการยืม
+</button> -->
+
 <button class="btn btn-large btn-danger" (click)="showSearchTranfer()">
   แก้ไข Stock Card จากการโอน
 </button>
@@ -111,6 +115,41 @@
   </div>
 </clr-modal>
 <!-- /search requisition -->
+
+<!-- search borrow -->
+<clr-modal [(clrModalOpen)]="isOpenSearchBorrow" [clrModalSize]="'lg'" [clrModalClosable]="false">
+  <h3 class="modal-title">ค้นหาใบยืม</h3>
+  <div class="modal-body">
+    <label for="">เลขที่ใบยืม</label>
+    <input type="text" style="width: 300px;" #queryBorrow (keyup)="doSearchBorrows($event, queryBorrow.value)"
+      placeholder="พิมพ์เลขที่ใบยืม แล้วกด ENTER">
+    <clr-datagrid>
+      <clr-dg-column>วันที่ยืม</clr-dg-column>
+      <clr-dg-column>วันที่จ่าย</clr-dg-column>
+      <clr-dg-column>เลขที่ใบยืม</clr-dg-column>
+      <clr-dg-column>คลังยืม</clr-dg-column>
+      <clr-dg-column style="width: 60px;">#</clr-dg-column>
+
+      <clr-dg-row *ngFor="let r of borrows">
+        <clr-dg-cell>{{r.borrow_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{r.confirm_date | toThaiDate}}</clr-dg-cell>
+        <clr-dg-cell>{{r.borrow_code}}</clr-dg-cell>
+        <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
+        <clr-dg-cell style="text-align: center;">
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoBorrow(r.borrow_id)">
+            แก้ไข
+          </button>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>{{borrows.length}} รายการ</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="isOpenSearchBorrow = false">ยกเลิก</button>
+  </div>
+</clr-modal>
+<!-- /search borrow -->
 
 <!-- search tranfer -->
 <clr-modal [(clrModalOpen)]="isOpenSearchTranfer" [clrModalSize]="'lg'" [clrModalClosable]="false">

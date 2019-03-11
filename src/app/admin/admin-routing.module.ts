@@ -122,6 +122,7 @@ import { ProductsWarehouseComponent } from './products-warehouse/products-wareho
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.component';
 import { PayReportComponent } from './reports/pay-report/pay-report.component';
+import { StockcardBorrowComponent } from './tools/stockcard-borrow/stockcard-borrow.component';
 
 const routes: Routes = [
   {
@@ -221,6 +222,7 @@ const routes: Routes = [
           { path: 'stockcard/receive', component: StockcardReceiveComponent },
           { path: 'stockcard/receive-other', component: StockcardReceiveOtherComponent },
           { path: 'stockcard/requisition', component: StockcardRequisitionComponent },
+          { path: 'stockcard/borrow', component: StockcardBorrowComponent },
           { path: 'stockcard/transfer', component: StockcardTransferComponent },
           { path: 'stockcard/issue', component: StockcardIssueComponent },
           { path: 'stockcard/pick', component: StockcardPickComponent }

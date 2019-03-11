@@ -28,6 +28,13 @@ export class ToolsService {
     return resp.json();
   }
 
+  async searchBorrows(query: any) {
+    const resp = await this.authHttp.post(`${this.url}/tools/stockcard/borrows/search`, {
+      query: query
+    }).toPromise();
+    return resp.json();
+  }
+
   async searchTranfers(query: any) {
     const resp = await this.authHttp.post(`${this.url}/tools/stockcard/tranfers/search`, {
       query: query
