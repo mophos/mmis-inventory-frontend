@@ -16,6 +16,7 @@ export class StockcardComponent implements OnInit {
 
   receives = [];
   requisitions = [];
+  borrows = [];
   transfers = [];
   history = [];
   issues = [];
@@ -23,6 +24,7 @@ export class StockcardComponent implements OnInit {
   input = false;
   isOpenSearchReceive = false;
   isOpenSearchRequisition = false;
+  isOpenSearchBorrow = false;
   isOpenSearchTranfer = false;
   isOpenSearchIssue = false;
   modalHistory = false;
@@ -71,6 +73,10 @@ export class StockcardComponent implements OnInit {
     this.router.navigateByUrl(`/admin/tools/stockcard/requisition?requisitionId=${requisitionId}&confirmId=${confirmId}`);
   }
 
+  gotoBorrow(borrowId: any) {
+    this.router.navigateByUrl(`/admin/tools/stockcard/borrow?borrowId=${borrowId}`);
+  }
+
   gotoTransfer(transferId: any) {
     this.router.navigateByUrl(`/admin/tools/stockcard/transfer?transferId=${transferId}`);
   }
@@ -90,6 +96,10 @@ export class StockcardComponent implements OnInit {
 
   showSearchRequisition() {
     this.isOpenSearchRequisition = true;
+  }
+
+  showSearchBorrow() {
+    this.isOpenSearchBorrow = true;
   }
 
   showSearchTranfer() {
@@ -135,6 +145,27 @@ export class StockcardComponent implements OnInit {
         const rs: any = await this.toolService.searchRequisitions(query);
         if (rs.ok) {
           this.requisitions = rs.rows;
+        } else {
+          this.alertService.error(rs.error);
+        }
+
+        this.modalLoading.hide();
+      } catch (error) {
+        this.modalLoading.hide();
+        this.alertService.error(JSON.stringify(error))
+      }
+    }
+  }
+
+  async doSearchBorrows(event: any, query: any) {
+    if (event.keyCode === 13) {
+      try {
+        this.modalLoading.show();
+        console.log(query);
+
+        const rs: any = await this.toolService.searchBorrows(query);
+        if (rs.ok) {
+          this.borrows = rs.rows;
         } else {
           this.alertService.error(rs.error);
         }
