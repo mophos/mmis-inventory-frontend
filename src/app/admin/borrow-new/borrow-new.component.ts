@@ -276,8 +276,7 @@ export class BorrowNewComponent implements OnInit {
 
         _.forEach(this.generics, v => {
           if (v.generic_id && v.borrow_qty) {
-            console.log(v)
-            generics.push({
+           generics.push({
               generic_id: v.generic_id,
               //conversion = 0
               borrow_qty: +v.borrow_qty,

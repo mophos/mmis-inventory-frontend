@@ -239,10 +239,9 @@ export class BorrowNewComponent implements OnInit {
       const generics = [];
       let isError = false;
 
-      let data = [];
       for (const v of this.generics) {
+        let data = [];
         if (v.generic_id && v.borrow_qty) {
-          console.log(v)
           const _data = {
             genericId: v.generic_id,
             genericQty: v.borrow_qty
@@ -250,11 +249,8 @@ export class BorrowNewComponent implements OnInit {
 
           data.push(_data);
 
-          let allocate = await this.borrowItemsService.allocateBorrow(data, this.srcWarehouseId);
-          console.log(allocate.rows);
-          
-
           let wmRows = [];
+          let allocate = await this.borrowItemsService.allocateBorrow(data, this.srcWarehouseId);
           wmRows.push(allocate.rows);
           
           generics.push({
@@ -262,15 +258,13 @@ export class BorrowNewComponent implements OnInit {
             borrow_qty: +v.borrow_qty,
             unit_generic_id: v.unit_generic_id,
             primary_unit_id: v.primary_unit_id,
-            products: {
-              data: wmRows
-            }
+            products: wmRows
           });
         } else {
           isError = false;
         }
       }
-
+      
       if (isError) {
         this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
       } else {

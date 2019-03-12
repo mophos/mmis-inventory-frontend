@@ -69,10 +69,13 @@
       <clr-icon shape="scissors"></clr-icon> Template ตัดจ่าย
     </button>
     <clr-tab-content *clrIfActive="tab === 'tmpIss'">
-      <div style="margin-top:10px" class="col-lg-3 col-md-3 col-sm-12 col-xs-3">
+      <div style="margin-top:10px" class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
         <button class="btn btn-sm btn-success" [routerLink]="['/admin/templates/issue/new']">
           + สร้าง Template ตัดจ่าย
         </button>
+        <!-- <button type="button" class="btn btn-primary btn-sm" (click)="openModal()">
+          <clr-icon shape="search"></clr-icon> คัดลอก Template
+        </button> -->
       </div>
       <div class="card">
         <div class="card-block">
@@ -119,7 +122,51 @@
   </clr-tab>
 </clr-tabs>
 
-
-
-
+<clr-modal [(clrModalOpen)]="isOpenModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">คัดลอก Template</h3>
+  <div class="modal-body">
+    <section class="form-block">
+      <div class="form-group row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <label for="aForm_1" class="required">ชื่อ Template ชุดตัดจ่าย</label>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+          <input type="text" style="text-align: left;" class="col-lg-9 col-md-9" id="templateSubject" name="templateSubject"
+            [(ngModel)]="templateSubject">
+        </div>
+      </div>
+      <!--  -->
+      <div class="form-group row">
+        <div class="col-md-2">
+          <label for="aForm_1" class="required">คลัง</label>
+        </div>
+        <div class="col-md-3">
+          <div class="select form-control">
+            <select name="warehouseId" id="warehouseId" [(ngModel)]="warehouseId">
+              <option value="">ระบุคลังที่ต้องการตัดจ่าย</option>
+              <option *ngFor="let w of warehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{w.warehouse_name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+        <div class="col-md-4">
+          <div class="select form-control">
+            <select name="templateId" id="templateId" [(ngModel)]="templateId">
+              <option value="">เลือก Template</option>
+              <option *ngFor="let w of templates" [value]="w.template_id">{{ w.template_subject }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-sm" (click)="onSave()">บันทึก</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="isOpenModal = false">ปิดหน้าต่าง</button>
+  </div>
+</clr-modal>
 <wm-loading-modal #modalLoading></wm-loading-modal>

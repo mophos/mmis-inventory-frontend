@@ -118,6 +118,10 @@ export class WarehouseProductsService {
     const rs: any = await this.authHttp.get(`${this.url}/warehouses/warehousetemplate/${templateId}`).toPromise();
     return rs.json();
   }
+  async getTemplateDetail(templateId: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/warehousetemplate/detail?templateId=${templateId}`).toPromise();
+    return rs.json();
+  }
   async getTemplateIssue(templateId: any) {
     const rs: any = await this.authHttp.get(`${this.url}/warehouses/warehousetemplate-issue/${templateId}`).toPromise();
     return rs.json();

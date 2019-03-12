@@ -1,19 +1,19 @@
-import { Router, ActivatedRoute } from '@angular/router';
-import { BorrowItemsService } from './../borrow-items.service';
-import { IMyOptions } from 'mydatepicker-th';
-import { AlertService } from './../../alert.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SearchPeopleAutoCompleteComponent } from '../../directives/search-people-autocomplete/search-people-autocomplete.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BorrowItemsService } from './../../borrow-items.service';
+import { IMyOptions } from 'mydatepicker-th';
+import { AlertService } from './../../../alert.service';
+import { SearchPeopleAutoCompleteComponent } from '../../../directives/search-people-autocomplete/search-people-autocomplete.component';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
-@Component({
-  selector: 'wm-borrow-edit',
-  templateUrl: './borrow-edit.component.html',
-  styleUrls: []
-})
-export class BorrowEditComponent implements OnInit {
 
+@Component({
+  selector: 'wm-stockcard-borrow',
+  templateUrl: './stockcard-borrow.component.html',
+  styleUrls: ['./stockcard-borrow.component.css']
+})
+export class StockcardBorrowComponent implements OnInit {
   @ViewChild('locationList') locationList;
   @ViewChild('modalLoading') private modalLoading;
   @ViewChild('elSearchPeople') elSearchPeople: SearchPeopleAutoCompleteComponent;
@@ -79,17 +79,16 @@ export class BorrowEditComponent implements OnInit {
       });
   }
 
-  async ngOnInit() {
-    const date = new Date();
-    await this.getSummaryInfo();
-    await this.getDetailInfo();
+  ngOnInit() {
+    this.getSummaryInfo();
+    this.getDetailInfo();
   }
 
   async getSummaryInfo() {
     try {
       this.modalLoading.show();
       const rs: any = await this.borrowItemsService.getSummaryInfo(this.borrowId);
-      
+
       if (rs.ok) {
         if (rs.info.borrow_date) {
           this.borrowDate = {
@@ -100,14 +99,14 @@ export class BorrowEditComponent implements OnInit {
             }
           }
         }
-        
+
         const fullname = rs.info.fullname;
         this.elSearchPeople.setDefault(fullname);
 
         this.srcWarehouseId = rs.info.src_warehouse_id;
         this.dstWarehouseId = rs.info.dst_warehouse_id;
         this.remark = rs.info.remark;
-        
+
         if (rs.info.confirmed === 'Y' || rs.info.approved === 'Y' || rs.info.mark_deleted === 'Y') {
           this.disableSave = true;
         }
@@ -135,7 +134,7 @@ export class BorrowEditComponent implements OnInit {
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
         this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
-        
+
         this.unitList.setGenericId(this.genericId);
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
@@ -336,11 +335,13 @@ export class BorrowEditComponent implements OnInit {
       const generics = [];
       let isError = false;
 
-      _.forEach(this.generics, v => {   
-        if (v.generic_id && v.borrow_qty) {
+      _.forEach(this.generics, v => {
+        console.log(v);
+
+        if (v.generic_id && v.borrow_qty_old) {
           generics.push({
             generic_id: v.generic_id,
-            borrow_qty: +v.borrow_qty,
+            borrow_qty: +v.borrow_qty_old,
             unit_generic_id: v.unit_generic_id,
             // conversion_qty: +v.conversion_qty,
             primary_unit_id: v.primary_unit_id,
