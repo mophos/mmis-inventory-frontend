@@ -39,6 +39,14 @@
       </clr-button>
     </clr-button-group>
   </div>
+  <div *ngIf="selectedTab === 'unpaid'" class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
+    <clr-button-group style="float:right;">
+      <clr-button [disabled]="!selectedCancel.length" class="btn btn-sm btn-primary" (click)="printUnPaid()">
+        <clr-icon shape="printer"></clr-icon> พิมพ์รายการค้างจ่าย
+      </clr-button>
+    </clr-button-group>
+  </div>
+  
   <div *ngIf="selectedTab === 'waiting'" class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
     <clr-button-group style="float:right;">
       <clr-button [disabled]="!requisitionWaitSelected.length" class="btn btn-sm btn-primary" (click)="printWaitReq()">
