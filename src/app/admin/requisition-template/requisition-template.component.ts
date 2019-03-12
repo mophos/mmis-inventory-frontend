@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 
 import { WarehouseProductsService } from './../warehouse-products.service';
+import { BasicService } from '../../basic.service';
 import { AlertService } from "../../alert.service";
 
 @Component({
@@ -14,18 +15,40 @@ export class RequisitionTemplateComponent implements OnInit {
   templates = [];
   query: any;
   templatesIssue = [];
+  warehouses = [];
   tab = 'tmpReq';
   queryIssue: any;
-  
+  isOpenModal: boolean = false;
+  templateSubject: any;
+  templateId: any;
+  warehouseId: any;
+
   constructor(
     private alertService: AlertService,
-    private ref: ChangeDetectorRef,
+    private basicService: BasicService,
     private warehouseProductService: WarehouseProductsService
   ) { }
 
   ngOnInit() {
+    this.getWarehouse();
     this.showAllTemplate();
     this.showAllTemplateIssue();
+  }
+
+  async getWarehouse() {
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.basicService.getWarehouses();
+      if (rs.ok) {
+        this.warehouses = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
+    }
   }
 
   showAllTemplate() {
@@ -45,7 +68,7 @@ export class RequisitionTemplateComponent implements OnInit {
         this.alertService.serverError();
       });
   }
-  
+
   removeTemplate(template: any) {
     this.alertService.confirm('ต้องการลบรายการนี้ [' + template.template_subject + '] ใช่หรือไม่?')
       .then(() => {
@@ -69,7 +92,7 @@ export class RequisitionTemplateComponent implements OnInit {
         // no action
       });
   }
-  
+
 
   search() {
     this.modalLoading.show();
@@ -87,16 +110,16 @@ export class RequisitionTemplateComponent implements OnInit {
         this.alertService.serverError();
       });
   }
-  
+
   enterSearch(e) {
     if (e.keyCode === 13) {
       this.tab == 'tmpReq' ? this.search() : this.searchIssue();
     }
   }
-  selectTabTmpReq(){
+  selectTabTmpReq() {
     this.tab = 'tmpReq'
   }
-  selectTabTmpIssue(){
+  selectTabTmpIssue() {
     this.tab = 'tmpIss'
 
   }
@@ -155,5 +178,19 @@ export class RequisitionTemplateComponent implements OnInit {
       .catch(() => {
         // no action
       });
+  }
+
+  async onSave(){
+    this.isOpenModal = false;
+    try {
+      const rs = await this.warehouseProductService.getTemplateDetail(this.templateId);
+      console.log(rs);
+    } catch (error) {
+      
+    }
+  }
+
+  openModal() {
+    this.isOpenModal = true;
   }
 }

@@ -93,9 +93,7 @@ export class ProductReceiveComponent implements OnInit {
     this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
     
-    const rs: any = await this.receiveService.getReport('PR');
-    const report_url = rs.rows[0].report_url;
-    const url = `${this.apiUrl}${report_url}?startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + genericType.join('&');
+    const url = `${this.apiUrl}/report/receive/export?startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + genericType.join('&');
     window.open(url, '_blank'); // /report/receive/export
   }
 
