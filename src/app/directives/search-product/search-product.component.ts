@@ -19,7 +19,7 @@ export class SearchProductComponent implements OnInit {
   token: any;
   query: any = null;
   searchProductUrl: any;
-  limitAutocomplete:any;
+  limitAutocomplete: any;
   public jwtHelper: JwtHelper = new JwtHelper();
   constructor(
 
@@ -28,7 +28,7 @@ export class SearchProductComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.limitAutocomplete = decodedToken.WM_AUTOCOMPLETE;
-    this.searchProductUrl = `${this.apiUrl}/products/search-autocomplete?token=${this.token}`;
+    this.searchProductUrl = `${this.apiUrl}/products/search-autocomplete?token=${this.token}&limit=${this.limitAutocomplete}`;
   }
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class SearchProductComponent implements OnInit {
   }
   setApiUrl(labelerId: any) {
     // this.labelerId = labelerId;
-    this.searchProductUrl = `${this.apiUrl}/products/search-autocomplete?labelerId=${labelerId}&token=${this.token}`;
+    this.searchProductUrl = `${this.apiUrl}/products/search-autocomplete?labelerId=${labelerId}&limit=${this.limitAutocomplete}&token=${this.token}`;
   }
   clearSelected(event: any) {
     if (event) {
