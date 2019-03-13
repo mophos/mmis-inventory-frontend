@@ -10,7 +10,8 @@
     <label for="startDate" class="required">ตั้งแต่</label>
   </div>
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
+    </my-date-picker-th>
   </div>
   <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
     <label for="endDate" class="required">ถึง</label>
@@ -19,7 +20,8 @@
     <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
   </div>
   <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12">
-    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0" (click)="ptintReport()">
+    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="ptintReport()">
       <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
     </button>
     <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
@@ -31,15 +33,36 @@
 </div>
 <div class="row" style="padding: 1em">
   <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+    <label class="required">คลังสินค้า</label>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <div class="select">
+      <select name="warehouseId" [(ngModel)]="warehouseId">
+        <option value="0">ทุกคลังสินค้า</option>
+        <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+          {{ w.short_code }}-{{ w.warehouse_name }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="row" style="padding: 1em">
+  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
     <label class="required">ประเภท</label>
   </div>
   <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-    <clr-datagrid [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px; width: 400px;">
+    <clr-datagrid [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px;">
       <clr-dg-column style="width: 150px;">ทั้งหมด</clr-dg-column>
       <clr-dg-row *ngFor="let order of genericTypes" [clrDgItem]="order">
         <clr-dg-cell>{{order.generic_type_name}}</clr-dg-cell>
       </clr-dg-row>
     </clr-datagrid>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <div class="toggle-switch" (change)="editChangeFree($event)">
+      <input type="checkbox" id="toggle_1" [checked]="is_free === 'Y'" #free>
+      <label for="toggle_1">แสดงของแถม</label>
+    </div>
   </div>
 </div>
 <wm-html-preview #htmlPreview></wm-html-preview>
