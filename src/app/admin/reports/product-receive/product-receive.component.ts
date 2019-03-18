@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { ProductsService } from '../../products.service';
 import { ReceiveService } from '../../receive.service';
+import { WarehouseService } from './../../warehouse.service';
 
 @Component({
   selector: 'wm-product-receive',
@@ -13,6 +14,7 @@ import { ReceiveService } from '../../receive.service';
 export class ProductReceiveComponent implements OnInit {
   @ViewChild('htmlPreview') public htmlPreview: any;
   jwtHelper: JwtHelper = new JwtHelper();
+
   startDate: any;
   endDate: any;
   start: any;
@@ -25,21 +27,28 @@ export class ProductReceiveComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
+  warehouseId: any;
+  warehouseName: any;
+  warehouses: any = [];
   genericTypes = [];
   genericTypeSelect: any = [];
+  isFree = false
 
   constructor(
     @Inject('API_URL') private apiUrl: string,
     private productService: ProductsService,
     private receiveService: ReceiveService,
+    private warehouseService: WarehouseService,
     private alertService: AlertService
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.warehouseId = decodedToken.warehouseId;
   }
 
   ngOnInit() {
     this.getGenericsType();
+    this.getWarehouseList();
     const date = new Date();
 
     this.startDate = {
@@ -58,6 +67,17 @@ export class ProductReceiveComponent implements OnInit {
     };
   }
 
+  getWarehouseList() {
+    this.warehouseService.all()
+      .then((result: any) => {
+        if (result.ok) {
+          this.warehouses = result.rows;
+        } else {
+          this.alertService.error(JSON.stringify(result.error));
+        }
+      });
+  }
+
   async getGenericsType() {
     try {
       const rs = await this.productService.getGenericType();
@@ -72,7 +92,7 @@ export class ProductReceiveComponent implements OnInit {
     }
   }
 
- async ptintReport() {
+  async ptintReport() {
     let genericType = [];
     this.genericTypeSelect.forEach(value => {
       genericType.push('genericType=' + value.generic_type_id)
@@ -81,7 +101,7 @@ export class ProductReceiveComponent implements OnInit {
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
     const rs: any = await this.receiveService.getReport('PR');
     const report_url = rs.rows[0].report_url;
-    const url = `${this.apiUrl}${report_url}?startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + genericType.join('&');
+    const url = `${this.apiUrl}${report_url}?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&isFree=${this.isFree}&token=${this.token}&` + genericType.join('&');
     this.htmlPreview.showReport(url, 'landscape');
   }
 
@@ -92,9 +112,14 @@ export class ProductReceiveComponent implements OnInit {
     });
     this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
-    
-    const url = `${this.apiUrl}/report/receive/export?startDate=${this.start}&endDate=${this.end}&token=${this.token}&` + genericType.join('&');
-    window.open(url, '_blank'); // /report/receive/export
+
+    const url = `${this.apiUrl}/report/receive/export?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&isFree=${this.isFree}&token=${this.token}&` + genericType.join('&');
+    window.open(url, '_blank');
+  }
+
+  async editChangeFree(event){
+    console.log( event.target.checked);
+    this.isFree = event.target.checked
   }
 
 }
