@@ -45,7 +45,7 @@ export class IssueTemplateNewComponent implements OnInit {
     private router: Router,
     private issueService: IssueService,
 
-  ) { 
+  ) {
     this.templateId = this.route.snapshot.params['templateId'];
   }
   ngOnInit() {
@@ -130,12 +130,14 @@ export class IssueTemplateNewComponent implements OnInit {
     this.isTemplate = false;
   }
   setSelectedProduct(e) {
-    const idx = _.findIndex(this.products2, { 'generic_id': e.generic_id });
-    if (idx > -1) {
-      this.alertService.error('มีรายการนี้อยู่แล้ว');
-    } else {
-      if(e) this.products2.push(e);
-      this.genericSearch.clearSearch();
+    if (typeof (e) === 'object') {
+      const idx = _.findIndex(this.products2, { 'generic_id': e.generic_id });
+      if (idx > -1) {
+        this.alertService.error('มีรายการนี้อยู่แล้ว');
+      } else {
+        if (e) this.products2.push(e);
+        this.genericSearch.clearSearch();
+      }
     }
   }
   removeSelected(g) {
@@ -192,7 +194,7 @@ export class IssueTemplateNewComponent implements OnInit {
     // };
     if (templateSubject && this.products2) {
       this.modalLoading.show();
-      this.warehouseProductService.updateWarehouseProductsTemplateIssue(this.templateId,templateSubject, this.products2)
+      this.warehouseProductService.updateWarehouseProductsTemplateIssue(this.templateId, templateSubject, this.products2)
         .then((result: any) => {
           if (result.ok) {
             this.alertService.success();
@@ -247,11 +249,11 @@ export class IssueTemplateNewComponent implements OnInit {
     this.products2 = _.sortBy(this.products2, ['generic_name']);
   }
 
-  showTemplate(){
+  showTemplate() {
     this.isTemplate = !this.isTemplate
   }
 
-  async getGenericItems(event:any) {
+  async getGenericItems(event: any) {
     this.products2 = []
     this.modalLoading.show();
     try {
