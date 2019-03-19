@@ -45,7 +45,7 @@ export class IssueTemplateNewComponent implements OnInit {
     private productService: ProductsService,
     private warehouseProductService: WarehouseProductsService,
     private router: Router
-  ) { 
+  ) {
     this.templateId = this.route.snapshot.params['templateId'];
     this.token = sessionStorage.getItem('token');
     this.decodedToken = this.jwtHelper.decodeToken(this.token);
@@ -54,7 +54,7 @@ export class IssueTemplateNewComponent implements OnInit {
     this.warehouseId = this.decodedToken.warehouseId;
     this.getWarehouses();
     console.log(this.templateId);
-    
+
     this.templateId ? this.getTemplate() : ''
   }
   async getTemplate() {
@@ -82,7 +82,7 @@ export class IssueTemplateNewComponent implements OnInit {
       .then((result: any) => {
         if (result.ok) {
           console.log(this.products2);
-          
+
           this.products2 = result.rows;
           // this.chekSelectedItems();
           // this.ref.detectChanges();
@@ -119,12 +119,14 @@ export class IssueTemplateNewComponent implements OnInit {
     this.products2 = [];
   }
   setSelectedProduct(e) {
-    const idx = _.findIndex(this.products2, { 'generic_id': e.generic_id });
-    if (idx > -1) {
-      this.alertService.error('มีรายการนี้อยู่แล้ว');
-    } else {
-      this.products2.push(e);
-      this.genericSearch.clearSearch();
+    if (typeof (e) === 'object') {
+      const idx = _.findIndex(this.products2, { 'generic_id': e.generic_id });
+      if (idx > -1) {
+        this.alertService.error('มีรายการนี้อยู่แล้ว');
+      } else {
+        this.products2.push(e);
+        this.genericSearch.clearSearch();
+      }
     }
   }
   removeSelected(g) {
@@ -181,7 +183,7 @@ export class IssueTemplateNewComponent implements OnInit {
     // };
     if (templateSubject && this.products2) {
       this.modalLoading.show();
-      this.warehouseProductService.updateWarehouseProductsTemplateIssue(this.templateId,templateSubject, this.products2)
+      this.warehouseProductService.updateWarehouseProductsTemplateIssue(this.templateId, templateSubject, this.products2)
         .then((result: any) => {
           if (result.ok) {
             this.alertService.success();

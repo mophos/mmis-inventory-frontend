@@ -81,12 +81,14 @@ export class RequisitionTemplateNewComponent implements OnInit {
     this.products2 = [];
   }
   setSelectedProduct(e) {
-    const idx = _.findIndex(this.products2, { 'generic_id': e.generic_id });
-    if (idx > -1) {
-      this.alertService.error('มีรายการนี้อยู่แล้ว');
-    } else {
-      this.products2.push(e);
-      this.genericSearch.clearSearch();
+    if (typeof (e) === 'object') {
+      const idx = _.findIndex(this.products2, { 'generic_id': e.generic_id });
+      if (idx > -1) {
+        this.alertService.error('มีรายการนี้อยู่แล้ว');
+      } else {
+        this.products2.push(e);
+        this.genericSearch.clearSearch();
+      }
     }
   }
   removeSelected(g) {
