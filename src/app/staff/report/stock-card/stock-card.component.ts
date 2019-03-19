@@ -112,6 +112,13 @@ export class StockCardComponent implements OnInit {
     this.htmlPreview.showReport(url);
   }
 
+  async printReportmovement() {
+    const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
+    const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
+    const url = `${this.apiUrl}/report/generics-movement/${this.warehouseId}/${startDate}/${endDate}?token=${this.token}`
+    this.htmlPreview.showReport(url);
+  }
+
   removeSelected(g) {
     const idx = _.findIndex(this.datageneric, { generic_id: g.generic_id });
     if (idx > -1) {

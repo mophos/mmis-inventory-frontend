@@ -140,6 +140,13 @@ export class StockCardComponent implements OnInit {
     this.htmlPreview.showReport(url);
   }
 
+  async printReportmovement() {
+    const startDate = this.startDate.date.year + '-' + this.startDate.date.month + '-' + this.startDate.date.day
+    const endDate = this.endDate.date.year + '-' + this.endDate.date.month + '-' + this.endDate.date.day
+    const url = `${this.apiUrl}/report/generics-movement/${this.warehouseId}/${startDate}/${endDate}?token=${this.token}`
+    this.htmlPreview.showReport(url);
+  }
+
   async OpenmodalAll() {
     this.modalLoading.show();
     this.numButtonAll = [];
