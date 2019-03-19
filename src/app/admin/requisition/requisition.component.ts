@@ -229,6 +229,22 @@ export class RequisitionComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
+  printUnPaid() {
+    const requisition_id: any = []
+    let count: any = 0
+    this.selectedCancel.forEach(e => {
+      if (e.is_cancel !== 'Y') {
+        requisition_id.push('requisId=' + e.requisition_order_id);
+        count++;
+      }
+    });
+    if (count > 0) {
+      const url = this.url + `/report/UnPaid/requis?token=${this.token}&` + requisition_id.join('&');
+      this.htmlPreview.showReport(url);
+    } else {
+      this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
+    }
+  }
   async printWaitReq(){
     const requisition_id: any = []
     let count: any = 0

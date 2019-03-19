@@ -390,15 +390,16 @@ export class BorrowComponent implements OnInit {
   }
 
   async saveMemory(data: any) {
-    for (const v of data) {
-      console.log(v)
-      const notes: any = {};
-      notes.remark = 'ยืมนอก Stock';
-      notes.people_id = v.people_id;
-      notes.wm_withdarw = v.src_warehouse_id;
-      notes.wm_borrow = v.dst_warehouse_id;
-
-      await this.borrowNoteService.save(notes, v.products);
+    if(data.length){
+      for (const v of data) {
+        const notes: any = {};
+        notes.remark = 'ยืมนอก Stock';
+        notes.people_id = v.people_id;
+        notes.wm_withdarw = v.src_warehouse_id;
+        notes.wm_borrow = v.dst_warehouse_id;
+  
+        await this.borrowNoteService.save(notes, v.products);
+      }
     }
   }
 
