@@ -17,8 +17,9 @@
           <label class="required">เลือกเวชภัณฑ์</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <wm-search-generic-warehouse-autocomplete #productSearch [warehouseId]="warehouseId" (onSelect)="setSelectedGeneric($event)"
-            (onChange)="changeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
+          <wm-search-generic-warehouse-autocomplete #productSearch [warehouseId]="warehouseId"
+            (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)">
+          </wm-search-generic-warehouse-autocomplete>
           <!-- <wm-search-generic-autocomplete #searchGenericCmp [clearOnSelected]="true" (onSelect)="setSelectedGeneric($event)" (onChange)="changeSearchGeneric($event)"></wm-search-generic-autocomplete> -->
         </div>
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
@@ -36,17 +37,19 @@
           <label for="startDate" class="required">ตั้งแต่</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
+          </my-date-picker-th>
         </div>
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
           <label for="endDate" class="required">ถึง</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required>
+          </my-date-picker-th>
         </div>
         <div class="col-md-2">
-          <button class="btn btn-sm btn-primary" [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId"
-            (click)="showReport()">
+          <button class="btn btn-sm btn-primary"
+            [disabled]="isPreview || !startDate || !endDate || !datageneric || !warehouseId" (click)="showReport()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์
           </button>
           <button class="btn btn-sm btn-success" (click)="OpenmodalAll()">
@@ -65,7 +68,8 @@
             <clr-dg-cell>{{product.generic_name}}</clr-dg-cell>
             <clr-dg-cell>
               <div class="btn-group">
-                <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeSelected(product)">
+                <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn"
+                  (click)="removeSelected(product)">
                   <clr-icon shape="trash"></clr-icon>
                 </button>
               </div>
@@ -95,12 +99,25 @@
           </wm-select-warehouses>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 btn-group">
-          <button class="btn btn-sm btn-primary" (click)="OpenmodalMovement()">
-            <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่มีการเคลื่อนไหว
-          </button>
-          <button class="btn btn-sm btn-primary" (click)="printReportNomovement()">
-            <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่ไม่มีการเคลื่อนไหว
-          </button>
+          <div class="btn-group btn-primary">
+            <clr-dropdown>
+              <button type="button" class="btn btn-sm btn-primary" clrDropdownTrigger>
+                พิมพ์รายงาน...
+                <clr-icon shape="caret down"></clr-icon>
+              </button>
+              <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+                <button class="btn btn-sm btn-primary" clrDropdownItem (click)="OpenmodalMovement()">
+                  <clr-icon shape="printer"></clr-icon> พิมพ์รายงานคุมคลังเวชภัณฑ์เฉพาะที่มีการเคลื่อนไหว
+                </button>
+                <button class="btn btn-sm btn-primary" clrDropdownItem (click)="printReportmovement()">
+                  <clr-icon shape="printer"></clr-icon> พิมพ์รายการคงคลังเฉพาะที่มีการเคลื่อนไหว
+                </button>
+                <button class="btn btn-sm btn-primary" clrDropdownItem (click)="printReportNomovement()">
+                  <clr-icon shape="printer"></clr-icon> พิมพ์รายการเฉพาะที่ไม่มีการเคลื่อนไหว
+                </button>
+              </clr-dropdown-menu>
+            </clr-dropdown>
+          </div>
         </div>
       </div>
 
@@ -109,13 +126,15 @@
           <label for="startDate" class="required">ตั้งแต่</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
+          </my-date-picker-th>
         </div>
         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
           <label for="endDate" class="required">ถึง</label>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required>
+          </my-date-picker-th>
         </div>
       </div>
     </clr-tab-content>
