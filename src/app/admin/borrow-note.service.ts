@@ -43,6 +43,16 @@ export class BorrowNoteService {
     return resp.json();
   }
 
+  async getAllgenerics(dstWarehouseId: any) {
+    const resp = await this.authHttp.get(`${this.url}/borrow-notes/getall-remain?dstWarehouseId=${dstWarehouseId}`).toPromise();
+    return resp.json();
+  }
+
+  async getWarehouseDst() {
+    const resp = await this.authHttp.get(`${this.url}/borrow-notes/warehouses/dst`).toPromise();
+    return resp.json();
+  }
+
   async getList(query: any, limit: number = 20, offset: number = 0) {
     const resp = await this.authHttp.get(`${this.url}/borrow-notes?query=${query}&limit=${limit}&offset=${offset}`).toPromise();
     return resp.json();

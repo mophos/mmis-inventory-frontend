@@ -73,6 +73,15 @@ export class BorrowItemsService {
     return rs.json();
   }
 
+  async saveBorrowFromNote(summary: Object, generics: any[]) {
+    const rs: any = await this.authHttp.post(`${this.url}/borrow/save/from-note`, {
+      summary: summary,
+      generics: generics
+    }).toPromise();
+
+    return rs.json();
+  }
+
   async approveAll(borrowIds: any[]) {
     const rs: any = await this.authHttp.post(`${this.url}/borrow/approve-all`, {
       borrowIds: borrowIds
@@ -174,6 +183,14 @@ export class BorrowItemsService {
 
   async allocate(data: any, srcWarehouseId: any) {
     const rs = await this.authHttp.post(`${this.url}/generics/allocate`, {
+      data: data,
+      srcWarehouseId: srcWarehouseId
+    }).toPromise();
+    return rs.json();
+  }
+
+  async allocateBorrow(data: any, srcWarehouseId: any) {
+    const rs = await this.authHttp.post(`${this.url}/generics/allocate-borrow`, {
       data: data,
       srcWarehouseId: srcWarehouseId
     }).toPromise();
