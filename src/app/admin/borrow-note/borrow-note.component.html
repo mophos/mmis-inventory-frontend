@@ -6,6 +6,9 @@
   <button class="btn btn-sm btn-success btn-icon" routerLink="/admin/borrow-notes/new">
     <clr-icon shape="plus"></clr-icon> บันทึกยืมยา
   </button>
+  <button class="btn btn-sm btn-primary btn-icon" (click)="openModal()">
+    <clr-icon shape="plus"></clr-icon> สร้างใบยืม
+  </button>
   <label for="query">ค้นหา</label>
   <input type="text" placeholder="ระบุคำค้นหา" id="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;">
   <button style="float: right" [disabled]="!selectedPrint.length" class="btn btn-sm btn-success btn-icon" (click)="printReport()">
@@ -27,21 +30,53 @@
     <clr-dg-cell>{{note.remark}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group">
-        <button class="btn btn-sm btn-success wm-small-btn" routerLink="/admin/borrow-notes/{{note.borrow_note_id}}/edit" title="แก้ไข"
-          [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
+        <button class="btn btn-sm btn-success wm-small-btn" routerLink="/admin/borrow-notes/{{note.borrow_note_id}}/edit"
+          title="แก้ไข" [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
           <clr-icon shape="note"></clr-icon>
         </button>
-        <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelNote(note.borrow_note_id)" title="ลบ" [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelNote(note.borrow_note_id)" title="ลบ"
+          [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
           <clr-icon shape="trash"></clr-icon>
         </button>
       </div>
     </clr-dg-cell>
   </clr-dg-row>
   <clr-dg-footer>
-    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+    รายการ
     <clr-dg-pagination #pagination [clrDgPageSize]="perPage" [clrDgTotalItems]="total"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="isOpenModal" [clrModalSize]="'xl'" [clrModalClosable]="false">
+  <h3 class="modal-title">รายการบันทึกยืมยา</h3>
+  <div class="modal-body" style="height:500px">
+    เลือกคลัง
+    <div class="select">
+      <select name="dstWarehouse" id="dstWarehouse" [(ngModel)]="dstWarehouse" (change)="selectedWarehouse()">
+        <option *ngFor="let w of warehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{ w.warehouse_name
+          }}</option>
+      </select>
+    </div>
+    <br>
+    <clr-datagrid [(clrDgSelected)]="selectedGenerics">
+      <clr-dg-column>ชื่อ Generic</clr-dg-column>
+      <clr-dg-column>คงเหลือหักยอดจอง</clr-dg-column>
+      <clr-dg-column>จำนวนค้างยืม</clr-dg-column>
+      <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
+      <clr-dg-row *ngFor="let g of remainGenerics" [clrDgItem]="g" [ngClass]="{'isSuccess': g.wpQty >= g.unpaidQty,'isError': g.wpQty <= g.unpaidQty}">
+        <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
+        <clr-dg-cell>{{g.wpQty / g.conversion}} ({{g.large_unit}} {{g.conversion}} {{g.small_unit}})</clr-dg-cell>
+        <clr-dg-cell>{{g.qty}} ({{g.large_unit}} {{g.conversion}} {{g.small_unit}})</clr-dg-cell>
+      </clr-dg-row>
+    </clr-datagrid>
+    <br>
+    <div class="modal-footer" style="padding-top: 0px;">
+      <button type="button" class="btn btn-md btn-primary" [disabled]="!selectedGenerics" (click)="save()">บันทึก</button>
+      <button type="button" class="btn btn-md btn-danger-outline" (click)="isOpenModal=false">ปิด</button>
+    </div>
+  </div>
+</clr-modal>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
 <wm-html-preview #htmlPreview></wm-html-preview>
