@@ -35,13 +35,18 @@ export class ReceiveComponent implements OnInit {
   waitings: any = [];
   others: any = [];
   purchases: any = [];
+  purchasesEDI: any = [];
   totalReceive = 0;
   totalReceiveOther = 0;
   totalExpired = 0;
   totalOtherExpired = 0;
+  totalPurchases = 0;
+  totalPurchasesEDI = 0;
   perPage = 20;
   query: string;
   queryOther: string;
+  queryPo: any;
+  queryPoEDI: any;
   isSearching = false;
   isSearch = false;
   openModal = false;
@@ -89,8 +94,6 @@ export class ReceiveComponent implements OnInit {
   currentPage = 1;
   offset = 0;
   offsetOther = 0;
-  totalPurchases = 0;
-  queryPo: any;
   _openModal: boolean = false;
   Sdate: any;
   Edate: any;
@@ -131,6 +134,32 @@ export class ReceiveComponent implements OnInit {
         this.totalPurchases = rs.total;
       } else {
         const rs: any = await this.receiveService.getPurchasesList(limit, this.offset, sort);
+        this.purchases = rs.rows;
+        this.totalPurchases = rs.total;
+      }
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(JSON.stringify(error));
+    }
+    this.modalLoading.hide();
+  }
+
+  async refreshPoEDI(state: State) {
+    this.offset = +state.page.from;
+    const limit = +state.page.size;
+    const sort = state.sort;
+
+    sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
+    sessionStorage.setItem('offsetReceive', this.offset.toString());
+
+    this.modalLoading.show();
+    try {
+      if (this.queryPo) {
+        const rs: any = await this.receiveService.getPurchasesListSearchEDI(this.perPage, this.offset, this.queryPo, sort);
+        this.purchases = rs.rows;
+        this.totalPurchases = rs.total;
+      } else {
+        const rs: any = await this.receiveService.getPurchasesListEDI(limit, this.offset, sort);
         this.purchases = rs.rows;
         this.totalPurchases = rs.total;
       }
@@ -652,7 +681,7 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
- async printreceiveApprovePO() {
+  async printreceiveApprovePO() {
     const receiveIds = [];
     _.forEach(this.selectedApprove, (v) => {
       if (v.purchase_order_number) {
@@ -662,7 +691,7 @@ export class ReceiveComponent implements OnInit {
 
     if (receiveIds.length) {
       this.alertService.confirm('พิมพ์ใบตรวจรับตามใบสั่งซื้อ ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
-        .then( async () => {
+        .then(async () => {
           let strIds = '';
           receiveIds.forEach((v: any) => {
             strIds += `receiveID=${v}&`;
@@ -831,6 +860,10 @@ export class ReceiveComponent implements OnInit {
     this.tab = "po";
     sessionStorage.setItem('tabReceive', this.tab);
   }
+  selectTabPoEDI() {
+    this.tab = "poEDI";
+    sessionStorage.setItem('tabReceive', this.tab);
+  }
   selectTabReceive() {
     this.showOption = 1
     this.tab = "receive";
@@ -860,12 +893,27 @@ export class ReceiveComponent implements OnInit {
     this.doSearchPo();
   }
 
+  searchPoEDI(event) {
+    this.offset = 0;
+    this.doSearchPoEDI();
+  }
+
   async doSearchPo() {
     this.modalLoading.show();
     const rs: any = await this.receiveService.getPurchasesListSearch(this.perPage, this.offset, this.queryPo);
     if (rs.ok) {
       this.purchases = rs.rows;
       this.totalPurchases = rs.total;
+    }
+    this.modalLoading.hide();
+  }
+
+  async doSearchPoEDI() {
+    this.modalLoading.show();
+    const rs: any = await this.receiveService.getPurchasesListSearchEDI(this.perPage, this.offset, this.queryPo);
+    if (rs.ok) {
+      this.purchasesEDI = rs.rows;
+      this.totalPurchasesEDI = rs.total;
     }
     this.modalLoading.hide();
   }
@@ -877,10 +925,18 @@ export class ReceiveComponent implements OnInit {
   }
 
   async printReportUnReceive() {
-    let startdate = this.Sdate.date.year + '-' + this.Sdate.date.month + '-' + this.Sdate.date.day;
-    let enddate = this.Edate.date.year + '-' + this.Edate.date.month + '-' + this.Edate.date.day;
+    const startdate = this.Sdate.date.year + '-' + this.Sdate.date.month + '-' + this.Sdate.date.day;
+    const enddate = this.Edate.date.year + '-' + this.Edate.date.month + '-' + this.Edate.date.day;
     this._openModal = false;
     const url = `${this.apiUrl}/report/un-receive?&startdate=${startdate}&enddate=${enddate}&token=${this.token}`;
     this.htmlPreview.showReport(url);
+  }
+
+  showASN(asn) {
+    console.log(asn);
+    console.log(asn.header.po_number);
+    const url = `${this.apiUrl}/report/asn?purchaseorderId=${asn.header.po_number}&token=${this.token}`;
+    this.htmlPreview.showReport(url);
+
   }
 }
