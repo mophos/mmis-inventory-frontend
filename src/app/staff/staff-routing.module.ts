@@ -49,6 +49,7 @@ import { ReturnedComponent } from './returned/returned.component';
 import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 import { InventoryStatusComponent } from './report/inventory-status/inventory-status.component'
+import { AlertExpiredComponent } from './alert-expired/alert-expired.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,7 @@ const routes: Routes = [
       { path: 'transfer/edit', component: TransferEditComponent },
       { path: 'return-product/new', component: ReturnedComponent },
       { path: 'return-product/edit', component: ReturnedEditComponent },
+      { path: 'alert-expired', component: AlertExpiredComponent },
       {
         path: 'requisition',
         canActivate: [StaffGuard],
