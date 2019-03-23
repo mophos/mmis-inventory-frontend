@@ -27,6 +27,7 @@ export class SelectProductLocationComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    console.log(this.selectedId)
     // if (this.warehouseId) {
     //   await this.getLocations(this.warehouseId);
     // }

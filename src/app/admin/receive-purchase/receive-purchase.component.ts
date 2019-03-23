@@ -237,7 +237,7 @@ export class ReceivePurchaseComponent implements OnInit {
             obj.warehouse_name = null;
 
             // location
-            obj.location_id = null;
+            obj.location_id = v.location_id;
             obj.location_name = null;
             obj.canReceive = +v.purchase_qty - +v.total_received_qty;
 

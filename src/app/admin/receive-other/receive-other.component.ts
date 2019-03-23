@@ -286,12 +286,13 @@ export class ReceiveOtherComponent implements OnInit {
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.primaryUnitName = event ? event.primary_unit_name : null;
       this.isLotControl = event ? event.is_lot_control : null;
+      this.selectedLocationId = event ? event.location_id : null;
+      this.locationId = event ? event.location_id : null;
       this.manufactureList.getManufacture(this.selectedGenericId);
       // this.lotList.setProductId(this.selectedProductId);
       this.warehouseList.getWarehouse(this.selectedGenericId);
       this.getUnitConversion(this.selectedGenericId);
       this.unitList.setGenericId(this.selectedGenericId);
-
     } catch (error) {
       console.log(error.message);
     }
