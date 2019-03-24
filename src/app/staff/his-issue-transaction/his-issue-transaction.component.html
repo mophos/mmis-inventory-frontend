@@ -11,7 +11,7 @@
       <button class="btn btn-sm btn-primary" [disabled]="!selected.length" (click)="confirmImport()">
         <clr-icon shape="check-circle"></clr-icon> ยืนยันเฉพาะที่เลือก
       </button>
-      <button class="btn btn-sm btn-danger" [disabled]="!selected.length" (click)="confirmImportAll()">
+      <button class="btn btn-sm btn-primary" [disabled]="!products.length" (click)="confirmImportAll()">
         <clr-icon shape="folder"></clr-icon> ยืนยันทั้งหมด
       </button>
     </div>
@@ -72,8 +72,8 @@
   </clr-dg-column> -->
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
-    <!-- <clr-dg-cell>{{p.date_serv | toThaiDate}}</clr-dg-cell> -->
-    <!-- <clr-dg-cell>{{p.hn}}</clr-dg-cell> -->
+    <clr-dg-cell>{{p.date_serv | toThaiDate}}</clr-dg-cell>
+    <clr-dg-cell>{{p.hn}}</clr-dg-cell>
     <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
     <clr-dg-cell>{{p.generic_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{p.qty | number}}</clr-dg-cell>
@@ -89,8 +89,9 @@
   </clr-dg-row>
 
   <clr-dg-footer>
-    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
-    <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination>
+    <clr-dg-pagination #pagehis [clrDgPageSize]="50" [clrDgTotalItems]="products.length">
+      {{pagehis.firstItem + 1}} - {{pagehis.lastItem + 1 | number}} จาก {{pagehis.totalItems | number}} รายการ
+    </clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
 
@@ -107,7 +108,8 @@
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <div>
               <label class="btn btn-sm btn-success btn-link wm-small-btn">
-                <input type="file" #file accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                <input type="file" #file
+                  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                   style="display: none;" (change)="fileChangeEvent($event)">
                 <clr-icon shape="search"></clr-icon>
               </label>
@@ -141,10 +143,17 @@
         <clr-dg-cell>{{h.drug_code}}</clr-dg-cell>
       </clr-dg-row>
       <clr-dg-footer>
-        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
-        รายการ
-        <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination>
+        <clr-dg-pagination #pagination [clrDgPageSize]="20">
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+          รายการ
+        </clr-dg-pagination>
       </clr-dg-footer>
+      <!-- <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="50" [clrDgTotalItems]="hisNotMappings.length">
+          {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+          รายการ
+        </clr-dg-pagination>
+      </clr-dg-footer> -->
     </clr-datagrid>
   </div>
   <div class="modal-footer">
