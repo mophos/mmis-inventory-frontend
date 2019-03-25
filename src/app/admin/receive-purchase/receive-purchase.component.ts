@@ -115,6 +115,7 @@ export class ReceivePurchaseComponent implements OnInit {
   selectedLotNo = null;
   selectedExpireNumDays = 0;
   isLotControl = null;
+  isExpiredControl = null;
 
   token = null;
 
@@ -364,6 +365,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
       // lot control
       this.isLotControl = event ? event.is_lot_control : null;
+      this.isExpiredControl = event ? event.is_expired_control : null;
 
     } catch (error) {
       this.alertService.error(error);
@@ -409,6 +411,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
     // lot control
     product.is_lot_control = this.isLotControl;
+    product.is_expired_control = this.isExpiredControl;
 
     product.cost = this.selectedCost;
 
@@ -422,8 +425,8 @@ export class ReceivePurchaseComponent implements OnInit {
       if (fill > -1) {
         this.alertService.error('รายการซ้ำ')
       } else if (fill < 0) {
-        let ms = this.isFree ? 'ต้องการเพิ่มเป็นรายการปกติ' : 'ต้องการเพิ่มเป็นของแถม'
-        let newIsFree = !this.isFree ? 'Y' : 'N'
+        const ms = this.isFree ? 'ต้องการเพิ่มเป็นรายการปกติ' : 'ต้องการเพิ่มเป็นของแถม'
+        const newIsFree = !this.isFree ? 'Y' : 'N'
 
         this.alertService.confirm(`รายการซ้ำ ${ms}ใช่ หรือ ไม่?`)
           .then(() => {
@@ -880,7 +883,7 @@ export class ReceivePurchaseComponent implements OnInit {
     this.isItemExpired = false;
     if (this.receiveExpired) {
       for (const v of this.products) {
-        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid() && v.is_expired_control === 'Y') {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
           this.isExpired = true;
         }
