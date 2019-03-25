@@ -510,7 +510,7 @@ export class ReceiveOtherComponent implements OnInit {
             this.saveReceiveTo();
           }
         }
-
+        this.isSaving = false;
       }
     } else {
       this.isSaving = false;
@@ -621,6 +621,7 @@ export class ReceiveOtherComponent implements OnInit {
       for (const v of this.products) {
         if (!moment(v.expired_date, 'DD-MM-YYYY').isValid() && this.isExpiredControl === 'Y') {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
+          this.isSaving = false;
           this.isExpired = true;
         }
       }
