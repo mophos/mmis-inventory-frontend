@@ -37,8 +37,13 @@ export class BasicService {
     return res.json()
   }
 
-  async getProductLocation(warehouseId: any) {
-    const res = await this.authHttp.get(`${this.url}/basic/warehouse-location/${warehouseId}`).toPromise();
+  async getWarehouseLocation(warehouseId: any) {
+    const res = await this.authHttp.get(`${this.url}/basic/warehouse-location?warehouseId=${warehouseId}`).toPromise();
+    return res.json()
+  }
+
+  async getProductLocation(productId: any) {
+    const res = await this.authHttp.get(`${this.url}/basic/product-location?&productId=${productId}`).toPromise();
     return res.json()
   }
 
@@ -52,7 +57,7 @@ export class BasicService {
     return res.json();
   }
 
-  async getWarehousesShipping(val){
+  async getWarehousesShipping(val) {
     const res: any = await this.authHttp.get(`${this.url}/warehouses/get-shippingnetwork-list/${val}/REQ`).toPromise();
     return res.json();
   }
