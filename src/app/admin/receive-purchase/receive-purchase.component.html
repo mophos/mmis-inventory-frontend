@@ -217,7 +217,8 @@
       <wm-select-generic-warehouse #warehouseList (onSelect)="changeWarehouse($event)"></wm-select-generic-warehouse>
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-product-location [selectedId]="locationId" #locationList (onSelect)="changeLocation($event)">
+      <wm-select-product-location [selectedId]="locationId" [productId]="selectedProductId" #locationList
+        (onSelect)="changeLocation($event)">
       </wm-select-product-location>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
