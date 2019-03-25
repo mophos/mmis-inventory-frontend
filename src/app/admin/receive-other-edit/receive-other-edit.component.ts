@@ -647,6 +647,7 @@ export class ReceiveOtherEditComponent implements OnInit {
       for (const v of this.products) {
         if (!moment(v.expired_date, 'DD-MM-YYYY').isValid() && this.isExpiredControl === 'Y') {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
+          this.isSaving = false;
           this.isExpired = true;
         }
       }
