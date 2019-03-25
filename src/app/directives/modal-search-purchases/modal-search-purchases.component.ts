@@ -96,6 +96,8 @@ export class ModalSearchPurchasesComponent implements OnInit {
     this.mdlLoading.show();
     try {
       const res: any = await this.receiveService.getPurchaseProductsList(purchaseOrderId);
+      console.log(res);
+
       this.mdlLoading.hide();
       if (res.ok) {
         res.rows.forEach((v: any) => {
@@ -123,7 +125,8 @@ export class ModalSearchPurchasesComponent implements OnInit {
             obj.warehouse_name = null;
 
             // location
-            obj.location_id = null;
+
+            obj.location_id = v.location_id ? v.location_id : null;
             obj.location_name = null;
 
             obj.unit_generic_id = +v.unit_generic_id;
@@ -180,7 +183,7 @@ export class ModalSearchPurchasesComponent implements OnInit {
       product.warehouse_name = null;
 
       // location
-      product.location_id = null;
+      product.location_id = v.location_id;
       product.location_name = null;
       product.generic_id = v.generic_id;
       product.generic_name = v.generic_name;

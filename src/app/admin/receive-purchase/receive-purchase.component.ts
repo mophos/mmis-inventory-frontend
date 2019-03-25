@@ -238,7 +238,7 @@ export class ReceivePurchaseComponent implements OnInit {
             obj.warehouse_name = null;
 
             // location
-            obj.location_id = null;
+            obj.location_id = v.location_id ? v.location_id : null;
             obj.location_name = null;
             obj.canReceive = +v.purchase_qty - +v.total_received_qty;
 
@@ -295,13 +295,14 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
 
-  changeWarehouse(event: any) {
+  async changeWarehouse(event: any) {
     try {
       this.selectedWarehouseId = event.warehouse_id ? event.warehouse_id : null;
       this.selectedWarehouseName = event.warehouse_name ? event.warehouse_name : null;
+
       if (this.selectedWarehouseId) {
-        this.setLocation(this.selectedWarehouseId);
-        this.locationList.getLocations(event.warehouse_id);
+        await this.setLocation(this.selectedWarehouseId);
+        await this.locationList.getLocations(event.warehouse_id);
       }
     } catch (error) {
       this.alertService.error(error);
@@ -309,9 +310,10 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
   async setLocation(warehouseId) {
-    let rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
-    this.locationId = rs.ok ? rs.detail.location_id : '';
+    const rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
+    this.locationId = rs.ok ? rs.detail.location_id : null;
   }
+
   editChangeWarehouse(idx, event: any, cmp: any) {
     try {
       this.products[idx].warehouse_id = event.warehouse_id;
