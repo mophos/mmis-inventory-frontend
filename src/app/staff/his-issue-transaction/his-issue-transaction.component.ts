@@ -16,6 +16,7 @@ export class HisIssueTransactionComponent implements OnInit {
 
   path: string;
   products: any = [];
+  totalProducts = 0;
   openUpload = false;
   filePath: string;
   fileName: any = null;
@@ -80,6 +81,7 @@ export class HisIssueTransactionComponent implements OnInit {
       const rs: any = await this.hisTransactionService.getTransactionList(this._genericType, this.warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
+        this.totalProducts = this.products.length
       } else {
         this.alertService.error(rs.error);
       }
@@ -181,6 +183,7 @@ export class HisIssueTransactionComponent implements OnInit {
           .then((rs: any) => {
             if (rs.ok) {
               let isImportTotal = transactionIds.length - rs.un_cut_stock.length;
+              console.log(rs.un_cut_stock, rs.un_cut_stock.length);
               this.alertService.success('ผลการนำเข้าข้อมูลเพื่อตัดสต๊อก', 'นำเข้าข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถนำเข้าได้ ' + rs.un_cut_stock.length + ' รายการ');
               this.getTransactionList();
             } else {
