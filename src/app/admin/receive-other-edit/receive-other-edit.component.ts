@@ -113,6 +113,7 @@ export class ReceiveOtherEditComponent implements OnInit {
 
   // numDayExpired: number = 0;
   isLotControl: any;
+  isExpiredControl: any;
   receiveExpired: any;
   isItemExpired = false; // false = รับได้ true = หมดอายุ
   isExpired = false // false = กรอกวันหมดอายุ   true = ไม่กรอกวันหมดอายุ
@@ -285,6 +286,7 @@ export class ReceiveOtherEditComponent implements OnInit {
       this.selectedExpireNumDays = event ? event.expire_num_days : 0;
 
       this.isLotControl = event ? event.is_lot_control : null;
+      this.isExpiredControl = event ? event.is_expired_control : null;
 
       this.manufactureList.getManufacture(this.selectedGenericId);
       // this.lotList.setProductId(this.selectedProductId);
@@ -329,6 +331,7 @@ export class ReceiveOtherEditComponent implements OnInit {
       product.unit_generic_id = this.selectedUnitGenericId;
       product.conversion_qty = +this.conversionQty;
       product.is_lot_control = this.isLotControl;
+      product.is_expired_control = this.isExpiredControl;
 
       product.cost = this.selectedCost || 0;
 
@@ -642,7 +645,7 @@ export class ReceiveOtherEditComponent implements OnInit {
     this.isItemExpired = false;
     if (this.receiveExpired) {
       for (const v of this.products) {
-        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid() && this.isExpiredControl === 'Y') {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
           this.isExpired = true;
         }

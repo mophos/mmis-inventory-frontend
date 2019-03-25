@@ -224,7 +224,7 @@
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-success btn-sm wm-small-btn"
-          [disabled]="!selectedProductId || !selectedWarehouseId || !selectedReceiveQty || (!selectedCost && isFree ) || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId || (!selectedLotNo && isLotControl === 'Y')"
+          [disabled]="!selectedProductId || !selectedWarehouseId || !selectedReceiveQty || (!selectedCost && isFree ) || !primaryUnitId || !selectedUnitGenericId || !selectedManufactureId || (!selectedLotNo && isLotControl === 'Y') || (!selectedExpiredDate && isExpiredControl ==='Y')"
           (click)="addProduct()">
           เพิ่ม
         </button>
