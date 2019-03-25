@@ -578,6 +578,8 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
   async saveReceive() {
+    console.log(this.products);
+
     if (this.receiveDate) {
       const _receiveDate = this.receiveDate ?
         `${this.receiveDate.date.year}-${this.receiveDate.date.month}-${this.receiveDate.date.day}` : null;
