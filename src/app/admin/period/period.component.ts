@@ -117,12 +117,12 @@ export class PeriodComponent implements OnInit {
           || (issue.ok && issue.rows.length)
           || (transfer.ok && transfer.rows.length)
           || (requisition.ok && requisition.rows.length)) {
-            this.modalLoading.hide();
+          this.modalLoading.hide();
           this.show = true;
           this.users[idx].status = 'open';
           this.status = 'open';
         } else {
-          this.updateCloseDate(period_id, this.date);
+          await this.updateCloseDate(period_id, this.date);
         }
       }
       this.modalLoading.hide();
@@ -145,7 +145,7 @@ export class PeriodComponent implements OnInit {
 
   updateCloseDate(id, date) {
     this.periodService.updateCloseDate(id, date)
-      .then((result: any) => {
+      .then(async (result: any) => {
         if (result.ok) {
           const idx = _.findIndex(this.users, { period_id: id });
           this.log(id,
@@ -153,7 +153,7 @@ export class PeriodComponent implements OnInit {
             this.users[idx].period_year,
             this.users[idx].period_month,
             this.users[idx].status);
-          this.getDetail();
+          await this.getDetail();
         } else {
           this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
         }
@@ -164,20 +164,20 @@ export class PeriodComponent implements OnInit {
     try {
       this.modalLoading.show();
       this.periodService.updateOpenDate(id)
-      .then((result: any) => {
-        if (result.ok) {
-          const idx = _.findIndex(this.users, { period_id: id });
-          this.log(id,
-            this.users[idx].budget_year,
-            this.users[idx].period_year,
-            this.users[idx].period_month,
-            this.users[idx].status);
-          this.getDetail();
-        } else {
-          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-        }
-        // this.modalLoading.hide();
-      });
+        .then(async (result: any) => {
+          if (result.ok) {
+            const idx = _.findIndex(this.users, { period_id: id });
+            this.log(id,
+              this.users[idx].budget_year,
+              this.users[idx].period_year,
+              this.users[idx].period_month,
+              this.users[idx].status);
+            await this.getDetail();
+          } else {
+            this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+          }
+          // this.modalLoading.hide();
+        });
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
@@ -194,20 +194,20 @@ export class PeriodComponent implements OnInit {
       try {
         this.modalLoading.show();
         this.periodService.finalclose(id)
-        .then((result: any) => {
-          if (result.ok) {
-            const idx = _.findIndex(this.users, { period_id: id });
-            this.log(id,
-              this.users[idx].budget_year,
-              this.users[idx].period_year,
-              this.users[idx].period_month,
-              'final_close');
-            this.getDetail();
-          } else {
-            this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-          }
-          this.modalLoading.hide();
-        });
+          .then(async (result: any) => {
+            if (result.ok) {
+              const idx = _.findIndex(this.users, { period_id: id });
+              this.log(id,
+                this.users[idx].budget_year,
+                this.users[idx].period_year,
+                this.users[idx].period_month,
+                'final_close');
+              await this.getDetail();
+            } else {
+              this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+            }
+            this.modalLoading.hide();
+          });
       } catch (error) {
         this.modalLoading.hide();
         this.alertService.error(error.message);
