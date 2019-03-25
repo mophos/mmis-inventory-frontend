@@ -248,6 +248,10 @@ export class ReceivePurchaseComponent implements OnInit {
             // ของแถม
             obj.is_free = v.giveaway;
 
+            obj.is_expired_control = v.is_expired_control;
+            obj.is_lot_control = v.is_lot_control;
+
+
             if (obj.is_free === 'Y') {
               obj.cost = 0;
             }
