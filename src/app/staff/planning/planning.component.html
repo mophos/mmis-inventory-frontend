@@ -211,7 +211,7 @@
       </div>
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
           <button class="btn btn-success" type="button" (click)="openModal = true" style="margin-top: 0px;">
-             กำหนด MIN-MAX
+             กำหนด Safety Stock
           </button>
         </div>
     </div>
@@ -310,7 +310,7 @@
 </clr-datagrid>
 
 <clr-modal [(clrModalOpen)]="openModal" [clrModalSize]="'md'" [clrModalClosable]="false">
-    <h3 class="modal-title">ตั้ง min/max ทุกรายการ</h3>
+    <h3 class="modal-title">ตั้ง Safety Stock ทุกรายการ</h3>
     <div class="modal-body" >
         <div class="card">
             <div class="card-block">
@@ -329,7 +329,7 @@
         </div>
       </div>
         <div class="modal-footer" style="padding-top: 2px;">
-                <button type="button" class="btn btn-success btn-sm" (click)="cal()" [disabled]="!minQty || !maxQty">ตั้ง min/max</button>
+                <button type="button" class="btn btn-success btn-sm" (click)="cal()" [disabled]="!minQty || !maxQty">ตั้ง Safety Stock</button>
                 <button type="button" class="btn btn-danger btn-sm" (click)="openModal = false" >ยกเลิก</button>
         </div>
         
