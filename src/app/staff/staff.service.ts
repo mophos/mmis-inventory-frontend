@@ -172,6 +172,15 @@ export class StaffService {
     return rs.json();
   }
 
+
+  async saveDefaultMinMax(minF:any , maxF: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-default-minmax`, {
+      minF: minF,
+      maxF: maxF
+    }).toPromise();
+    return rs.json();
+  }
+
   async saveGenericMinMax(items: any[], processDate: any) {
     const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-minmax`, {
       items: items,
@@ -412,7 +421,7 @@ export class StaffService {
   }
 
   async calculateMinMax(fromDate: any, toDate: any) {
-    const resp = await this.authHttp.post(`${this.url}/min-max/calculate`, {
+    const resp = await this.authHttp.post(`${this.url}/staff/min-max/calculate`, {
       fromDate: fromDate,
       toDate: toDate
     }).toPromise();

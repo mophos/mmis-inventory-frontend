@@ -204,7 +204,7 @@
       <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
         <my-date-picker-th name="toDate" [options]="pickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
       </div>
-      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
         <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate" style="margin-top: 0px;">
           <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
         </button>
