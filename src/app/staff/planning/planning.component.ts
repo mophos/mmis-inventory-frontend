@@ -205,8 +205,8 @@ export class PlanningComponent implements OnInit {
         this.modalLoading.show();
 
         _.forEach(this.generics,(v: any) => {
-          v.min_qty = +this.minQty;
-          v.max_qty = +this.maxQty;
+          v.safety_min_day = +this.minQty;
+          v.safety_max_day = +this.maxQty;
         });
 
         this.modalLoading.hide();
