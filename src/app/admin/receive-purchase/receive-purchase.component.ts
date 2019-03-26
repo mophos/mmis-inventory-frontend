@@ -115,6 +115,7 @@ export class ReceivePurchaseComponent implements OnInit {
   selectedLotNo = null;
   selectedExpireNumDays = 0;
   isLotControl = null;
+  isExpiredControl = null;
 
   token = null;
 
@@ -237,7 +238,7 @@ export class ReceivePurchaseComponent implements OnInit {
             obj.warehouse_name = null;
 
             // location
-            obj.location_id = v.location_id;
+            obj.location_id = v.location_id ? v.location_id : null;
             obj.location_name = null;
             obj.canReceive = +v.purchase_qty - +v.total_received_qty;
 
@@ -246,6 +247,10 @@ export class ReceivePurchaseComponent implements OnInit {
 
             // ของแถม
             obj.is_free = v.giveaway;
+
+            obj.is_expired_control = v.is_expired_control;
+            obj.is_lot_control = v.is_lot_control;
+
 
             if (obj.is_free === 'Y') {
               obj.cost = 0;
@@ -291,13 +296,14 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
 
-  changeWarehouse(event: any) {
+  async changeWarehouse(event: any) {
     try {
       this.selectedWarehouseId = event.warehouse_id ? event.warehouse_id : null;
       this.selectedWarehouseName = event.warehouse_name ? event.warehouse_name : null;
+
       if (this.selectedWarehouseId) {
-        this.setLocation(this.selectedWarehouseId);
-        this.locationList.getLocations(event.warehouse_id);
+        await this.setLocation(this.selectedWarehouseId);
+        await this.locationList.getLocations(event.warehouse_id);
       }
     } catch (error) {
       this.alertService.error(error);
@@ -305,9 +311,10 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
   async setLocation(warehouseId) {
-    let rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
-    this.locationId = rs.ok ? rs.detail.location_id : '';
+    const rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
+    this.locationId = rs.ok ? rs.detail.location_id : null;
   }
+
   editChangeWarehouse(idx, event: any, cmp: any) {
     try {
       this.products[idx].warehouse_id = event.warehouse_id;
@@ -365,6 +372,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
       // lot control
       this.isLotControl = event ? event.is_lot_control : null;
+      this.isExpiredControl = event ? event.is_expired_control : null;
 
     } catch (error) {
       this.alertService.error(error);
@@ -410,6 +418,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
     // lot control
     product.is_lot_control = this.isLotControl;
+    product.is_expired_control = this.isExpiredControl;
 
     product.cost = this.selectedCost;
 
@@ -423,8 +432,8 @@ export class ReceivePurchaseComponent implements OnInit {
       if (fill > -1) {
         this.alertService.error('รายการซ้ำ')
       } else if (fill < 0) {
-        let ms = this.isFree ? 'ต้องการเพิ่มเป็นรายการปกติ' : 'ต้องการเพิ่มเป็นของแถม'
-        let newIsFree = !this.isFree ? 'Y' : 'N'
+        const ms = this.isFree ? 'ต้องการเพิ่มเป็นรายการปกติ' : 'ต้องการเพิ่มเป็นของแถม'
+        const newIsFree = !this.isFree ? 'Y' : 'N'
 
         this.alertService.confirm(`รายการซ้ำ ${ms}ใช่ หรือ ไม่?`)
           .then(() => {
@@ -572,6 +581,8 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
   async saveReceive() {
+    console.log(this.products);
+
     if (this.receiveDate) {
       const _receiveDate = this.receiveDate ?
         `${this.receiveDate.date.year}-${this.receiveDate.date.month}-${this.receiveDate.date.day}` : null;
@@ -881,7 +892,7 @@ export class ReceivePurchaseComponent implements OnInit {
     this.isItemExpired = false;
     if (this.receiveExpired) {
       for (const v of this.products) {
-        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid() && v.is_expired_control === 'Y') {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
           this.isExpired = true;
         }

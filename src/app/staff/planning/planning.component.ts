@@ -27,7 +27,9 @@ export class PlanningComponent implements OnInit {
   fromDate: any;
   toDate: any;
   processDate: any;
-
+  openModal = false;
+  minQty: any;
+  maxQty: any;
   pickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -197,7 +199,23 @@ export class PlanningComponent implements OnInit {
 
       });
   }
+  async cal(){
+    this.alertService.confirm('ต้องการเปลี่ยนค่า min/max ทุกรายการ ใช่หรือไม่?')
+      .then(async () => { 
+        this.modalLoading.show();
 
+        _.forEach(this.generics,(v: any) => {
+          v.safety_min_day = +this.minQty;
+          v.safety_max_day = +this.maxQty;
+        });
+
+        this.modalLoading.hide();
+        this.openModal = false
+      }).catch(()=>{
+        
+      })
+      
+  }
   saveMinMax() {
     this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
       .then(async () => {

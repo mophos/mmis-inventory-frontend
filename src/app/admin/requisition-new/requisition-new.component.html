@@ -132,7 +132,7 @@
         placeholder="" (keyup)="qtyEnter($event)">
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-receive-unit #selectUnits (onSelect)="onChangeUnit($event)"></wm-select-receive-unit>
+      <wm-select-receive-unit #selectUnits [selectedUnitGenericId]="issueUnitId" (onSelect)="onChangeUnit($event)"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right;">{{ selectedRequisitionQty * selectedSmallQty | number }}</clr-dg-cell>
     <clr-dg-cell style="text-align: right;">

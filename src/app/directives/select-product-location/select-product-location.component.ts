@@ -11,7 +11,9 @@ export class SelectProductLocationComponent implements OnInit {
   _warehouseId: any;
   @Output() public onSelect: EventEmitter<any> = new EventEmitter<any>();
   @Input() public selectedId: any;
+  @Input() public productId: any;
   @Input() public disabled: boolean;
+
   @Input('warehouseId')
   set setWarehouseId(value) {
     this._warehouseId = value;
@@ -27,16 +29,13 @@ export class SelectProductLocationComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    console.log(this.selectedId)
-    // if (this.warehouseId) {
-    //   await this.getLocations(this.warehouseId);
-    // }
   }
 
   async getLocations(warehouseId: any) {
     try {
       if (warehouseId) {
-        const res = await this.basicService.getProductLocation(warehouseId);
+        const res = await this.basicService.getWarehouseLocation(warehouseId);
+
         if (res.ok) {
           this.locations = res.rows;
           if (this.locations.length) {
@@ -45,7 +44,7 @@ export class SelectProductLocationComponent implements OnInit {
               this.onSelect.emit(this.locations[0]);
             } else {
               this.locationId = this.selectedId;
-              const idx = _.findIndex(this.locations, { 'location_id': this.locationId });
+              const idx = _.findIndex(this.locations, { 'location_id': +this.locationId });
               if (idx > -1) {
                 this.onSelect.emit(this.locations[idx]);
               }
@@ -60,7 +59,6 @@ export class SelectProductLocationComponent implements OnInit {
       }
     } catch (error) {
       console.log(error);
-
       this.alertService.error(error.message);
     }
   }

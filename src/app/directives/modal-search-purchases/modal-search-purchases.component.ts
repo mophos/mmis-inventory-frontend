@@ -96,6 +96,8 @@ export class ModalSearchPurchasesComponent implements OnInit {
     this.mdlLoading.show();
     try {
       const res: any = await this.receiveService.getPurchaseProductsList(purchaseOrderId);
+      console.log(res);
+
       this.mdlLoading.hide();
       if (res.ok) {
         res.rows.forEach((v: any) => {
@@ -113,6 +115,7 @@ export class ModalSearchPurchasesComponent implements OnInit {
             obj.generic_name = v.generic_name;
             obj.working_code = v.working_code;
             obj.is_lot_control = v.is_lot_control;
+            obj.is_expired_control = v.is_expired_control;
             // vendor
             obj.manufacture_id = v.m_labeler_id;
             obj.manufacture_name = v.m_labeler_name;
@@ -122,7 +125,8 @@ export class ModalSearchPurchasesComponent implements OnInit {
             obj.warehouse_name = null;
 
             // location
-            obj.location_id = v.location_id;
+
+            obj.location_id = v.location_id ? v.location_id : null;
             obj.location_name = null;
 
             obj.unit_generic_id = +v.unit_generic_id;
@@ -169,6 +173,7 @@ export class ModalSearchPurchasesComponent implements OnInit {
       product.canReceive = v.canReceive;
       product.discount = 0;
       product.is_lot_control = v.is_lot_control;
+      product.is_expired_control = v.is_expired_control;
       // vendor
       product.manufacture_id = v.manufacture_id;
       product.manufacture_name = v.manufacture_name;

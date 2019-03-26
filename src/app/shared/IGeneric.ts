@@ -27,4 +27,5 @@ export interface IGeneric {
   updated_at?: any;
   working_code?: any;
   qty?: number;
+  issue_unit_id?: any;
 }

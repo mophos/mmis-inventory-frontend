@@ -67,6 +67,7 @@ export class RequisitionFastComponent implements OnInit {
 
   templates: any = [];
   templateId: any = null;
+  issueUnitId: any;
 
   constructor(
     private wareHouseService: WarehouseService,
@@ -193,6 +194,7 @@ export class RequisitionFastComponent implements OnInit {
     this.selectedUnitGenericId = null;
     this.selectedGenericName = null;
     this.selectedWorkingCode = null;
+    this.issueUnitId = null;
     this.selectedSmallQty = 0;
     this.selectedTotalSmallQty = 0;
     this.selectedRequisitionQty = '';
@@ -206,6 +208,7 @@ export class RequisitionFastComponent implements OnInit {
     this.selectedWorkingCode = generic.working_code;
     this.selectedRemainQty = generic.qty;
     this.selectedRequisitionQty = 1;
+    this.issueUnitId = generic.issue_unit_id;
     this.selectUnits.getUnits(generic.generic_id);
   }
 
