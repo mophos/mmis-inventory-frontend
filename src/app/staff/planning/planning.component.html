@@ -204,11 +204,16 @@
       <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
         <my-date-picker-th name="toDate" [options]="pickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
       </div>
-      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
         <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate" style="margin-top: 0px;">
           <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
         </button>
       </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+          <button class="btn btn-success" type="button" (click)="openModal = true" style="margin-top: 0px;">
+             กำหนด MIN-MAX
+          </button>
+        </div>
     </div>
     <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
       <div class="col-md-9">
@@ -303,5 +308,32 @@
     <clr-dg-pagination #paginationA [clrDgPageSize]="100"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
+
+<clr-modal [(clrModalOpen)]="openModal" [clrModalSize]="'md'" [clrModalClosable]="false">
+    <h3 class="modal-title">ตั้ง min/max ทุกรายการ</h3>
+    <div class="modal-body" >
+        <div class="card">
+            <div class="card-block">
+                <div class="row">
+                    <!-- <div class="col-md-12">
+                      <label for="">เลขที่ใบรับ</label>
+                    </div> -->
+                    <div class="col-md-12">
+                      <label class="col-md-1 required" for="">min</label>
+                      <input wmNumberWithOutDot class="col-md-3 " type="text" name="query" [(ngModel)]="minQty" >
+                      <label class="col-md-1 required" for="">max</label>
+                      <input wmNumberWithOutDot class="col-md-3" type="text" name="query2" [(ngModel)]="maxQty" >
+                    </div>
+                  </div>
+            </div>
+        </div>
+      </div>
+        <div class="modal-footer" style="padding-top: 2px;">
+                <button type="button" class="btn btn-success btn-sm" (click)="cal()" [disabled]="!minQty || !maxQty">ตั้ง min/max</button>
+                <button type="button" class="btn btn-danger btn-sm" (click)="openModal = false" >ยกเลิก</button>
+        </div>
+        
+    
+</clr-modal>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
