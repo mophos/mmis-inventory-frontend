@@ -246,7 +246,7 @@
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group btn-primary">
         <button class="btn btn-success btn-sm wm-small-btn"
-          [disabled]="isSaving || !selectedProductId || !selectedReceiveQty || !selectedCost || (!selectedLotNo && isLotControl == 'Y') || !selectedUnitGenericId "
+          [disabled]="isSaving || !selectedProductId || !selectedReceiveQty || !selectedCost || (!selectedLotNo && isLotControl == 'Y') || !selectedUnitGenericId  || (!selectedExpiredDate && isExpiredControl ==='Y')"
           (click)="addProduct()">
           เพิ่ม
         </button>

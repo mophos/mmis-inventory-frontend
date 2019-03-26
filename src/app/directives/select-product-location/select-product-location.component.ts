@@ -35,24 +35,16 @@ export class SelectProductLocationComponent implements OnInit {
     try {
       if (warehouseId) {
         const res = await this.basicService.getWarehouseLocation(warehouseId);
+
         if (res.ok) {
           this.locations = res.rows;
           if (this.locations.length) {
             if (!this.selectedId) {
-              if (this.productId) {
-                const rs = await this.basicService.getProductLocation(this.productId);
-                if (rs.rows.length) {
-                  this.locationId = rs[0].location_id
-                  this.onSelect.emit(rs[0]);
-                } else {
-                  this.setDefaults();
-                }
-              } else {
-                this.setDefaults();
-              }
+              this.locationId = this.locations[0].location_id;
+              this.onSelect.emit(this.locations[0]);
             } else {
               this.locationId = this.selectedId;
-              const idx = _.findIndex(this.locations, { 'location_id': this.locationId });
+              const idx = _.findIndex(this.locations, { 'location_id': +this.locationId });
               if (idx > -1) {
                 this.onSelect.emit(this.locations[idx]);
               }
@@ -67,14 +59,8 @@ export class SelectProductLocationComponent implements OnInit {
       }
     } catch (error) {
       console.log(error);
-
       this.alertService.error(error.message);
     }
-  }
-
-  setDefaults() {
-    this.locationId = this.locations[0].location_id;
-    this.onSelect.emit(this.locations[0]);
   }
 
   setSelect(event) {
