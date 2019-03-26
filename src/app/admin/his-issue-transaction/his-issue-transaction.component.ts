@@ -29,6 +29,9 @@ export class HisIssueTransactionComponent implements OnInit {
   _genericType: any;
   token: any;
   warehouseId: any;
+  tab = 1;
+  productsHistory: any;
+  dateHistory: any;
 
   constructor(
     private uploadingService: UploadingService,
@@ -38,6 +41,14 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   ngOnInit() {
+    const date = new Date();
+    this.dateHistory = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
     this.getGenericType();
     // this.getTransactionList();
   }
@@ -53,7 +64,11 @@ export class HisIssueTransactionComponent implements OnInit {
           this._genericTypes.push(e.generic_type_id)
         });
         this.genericType = '';
-        this.getTransactionList();
+        if (this.tab == 1) {
+          this.getTransactionList();
+        } else if(this.tab == 2) {
+          this.getHistoryTransactionList();
+        }
       } else {
         this.alertService.error(rs.error);
       }
@@ -215,10 +230,43 @@ export class HisIssueTransactionComponent implements OnInit {
   async showNotMappins() {
     let rs: any = await this.hisTransactionService.getNotMappings()
     this.hisNotMappings = rs.rows
-    if (this.hisNotMappings.length){
+    if (this.hisNotMappings.length) {
       this.openNotMappings = true;
-    }else{
+    } else {
       this.alertService.error('ไม่มีรายการที่ยังไม่ได้ map');
+    }
+  }
+
+  async tabHis(event) {
+    this.tab = event
+    if (this.tab == 1) {
+      this.getTransactionList()
+    } else if (this.tab == 2) {
+      this.getHistoryTransactionList();
+    }
+  }
+
+  async getHistoryTransactionList() {
+    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    try {
+      if (this.genericType === '') {
+        this._genericType = this._genericTypes;
+      } else {
+        this._genericType = [];
+        this._genericType.push(this.genericType)
+      }
+
+      this.modalLoading.show();
+      const rs: any = await this.hisTransactionService.getHistoryTransactionList(this._genericType, date);
+      if (rs.ok) {
+        this.productsHistory = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.serverError();
     }
   }
 }
