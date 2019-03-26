@@ -98,6 +98,7 @@ export class RequisitionNewComponent implements OnInit {
   openTemp = false;
   tempList: any = [];
   wmWithdrawOld: any;
+  issueUnitId: any;
 
   constructor(
     private wareHouseService: WarehouseService,
@@ -226,6 +227,7 @@ export class RequisitionNewComponent implements OnInit {
     this.selectedUnitGenericId = null;
     this.selectedGenericName = null;
     this.selectedWorkingCode = null;
+    this.issueUnitId = null;
     this.selectedSmallQty = 0;
     this.selectedTotalSmallQty = 0;
     this.selectedRemainQty = 0;
@@ -240,6 +242,7 @@ export class RequisitionNewComponent implements OnInit {
 
     const rs: any = await this.requisitionService.getGenericWarehouseRemain(this.wmWithdraw, this.selectedGenericId)
     this.selectedRemainQty = rs.ok ? rs.remain_qty : 0;
+    this.issueUnitId = generic.issue_unit_id;
     this.selectUnits.getUnits(generic.generic_id);
   }
 
