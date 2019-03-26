@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { UploadingService } from 'app/uploading.service';
 import { AlertService } from 'app/alert.service';
 import * as moment from 'moment';
@@ -13,6 +13,7 @@ import { error } from 'util';
 })
 export class HisIssueTransactionComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading;
+  @ViewChild('htmlPreview') public htmlPreview: any;
 
   products = [];
   openUpload = false;
@@ -36,7 +37,8 @@ export class HisIssueTransactionComponent implements OnInit {
   constructor(
     private uploadingService: UploadingService,
     private alertService: AlertService,
-    private hisTransactionService: HisTransactionService
+    private hisTransactionService: HisTransactionService,
+    @Inject('API_URL') private apiUrl: string
   ) {
   }
 
@@ -66,7 +68,7 @@ export class HisIssueTransactionComponent implements OnInit {
         this.genericType = '';
         if (this.tab == 1) {
           this.getTransactionList();
-        } else if(this.tab == 2) {
+        } else if (this.tab == 2) {
           this.getHistoryTransactionList();
         }
       } else {
