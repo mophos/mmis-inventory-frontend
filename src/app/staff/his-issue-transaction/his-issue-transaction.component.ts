@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { AlertService } from 'app/alert.service';
 import * as moment from 'moment';
 import { HisTransactionService } from 'app/staff/his-transaction.service';
@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 })
 export class HisIssueTransactionComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading;
+  @ViewChild('htmlPreview') public htmlPreview: any;
 
   path: string;
   products: any = [];
@@ -38,7 +39,8 @@ export class HisIssueTransactionComponent implements OnInit {
 
   constructor(
     private alertService: AlertService,
-    private hisTransactionService: HisTransactionService
+    private hisTransactionService: HisTransactionService,
+    @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
@@ -277,5 +279,11 @@ export class HisIssueTransactionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.serverError();
     }
+  }
+
+  async hisReportHis() {
+    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/generics-movement/${this.warehouseId}/?token=${this.token}`
+    this.htmlPreview.showReport(url);
   }
 }

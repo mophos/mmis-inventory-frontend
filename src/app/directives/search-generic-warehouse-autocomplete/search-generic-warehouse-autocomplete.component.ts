@@ -32,14 +32,14 @@ export class SearchGenericWarehouseAutocompleteComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.limitAutocomplete = decodedToken.WM_AUTOCOMPLETE;
-    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${this._warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
+    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete/all?warehouseId=${this._warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
   }
 
   ngOnInit() {
   }
 
   setApiUrl(warehouseId: any) {
-    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
+    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete/all?warehouseId=${warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
   }
 
   clearSearch() {
