@@ -101,6 +101,12 @@
           <clr-dg-cell>{{w.dst_warehouse_name}}</clr-dg-cell> -->
           <clr-dg-cell style="text-align: center;">
             <div class="btn-group">
+                <button title="พิมพ์รายงาน" class="btn btn-info btn-icon btn-sm wm-small-btn" (click)="printIssue(w.template_id)">
+                    <clr-icon shape="printer"></clr-icon>
+                  </button>
+              <button title="ส่งออก Excel" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="exportIssue(w.template_id)">
+                <clr-icon shape="download"></clr-icon>
+              </button>
               <button title="แก้ไข" class="btn btn-success btn-icon btn-sm wm-small-btn" [routerLink]="['/staff/templates/issue/edit/', w.template_id]">
                 <clr-icon shape="note"></clr-icon>
               </button>
