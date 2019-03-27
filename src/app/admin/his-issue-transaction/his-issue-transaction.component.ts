@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { UploadingService } from 'app/uploading.service';
 import { AlertService } from 'app/alert.service';
 import * as moment from 'moment';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { HisTransactionService } from 'app/admin/his-transaction.service';
 import { error } from 'util';
 
@@ -33,6 +34,8 @@ export class HisIssueTransactionComponent implements OnInit {
   tab = 1;
   productsHistory: any;
   dateHistory: any;
+  warehouseName: any;
+  jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
     private uploadingService: UploadingService,
@@ -40,6 +43,10 @@ export class HisIssueTransactionComponent implements OnInit {
     private hisTransactionService: HisTransactionService,
     @Inject('API_URL') private apiUrl: string
   ) {
+    this.token = sessionStorage.getItem('token');
+    const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.warehouseId = decodedToken.warehouseId;
+    this.warehouseName = decodedToken.warehouseName
   }
 
   ngOnInit() {
@@ -269,6 +276,26 @@ export class HisIssueTransactionComponent implements OnInit {
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.serverError();
+    }
+  }
+
+  async hisReportHis() {
+    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    if (this.genericType === '') {
+      this._genericType = this._genericTypes;
+    } else {
+      this._genericType = [];
+      this._genericType.push(this.genericType)
+    }
+    const url = `${this.apiUrl}/report/his-history?warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&date=${date}&genericType=${this._genericType}&token=${this.token}`
+    this.htmlPreview.showReport(url);
+  }
+
+  async changeGenericTypes() {
+    if (this.tab == 1) {
+      this.getTransactionList();
+    } else if (this.tab == 2) {
+      this.getHistoryTransactionList();
     }
   }
 }

@@ -28,7 +28,7 @@
         </div>
         <div class="col-md-2" style="text-align: right;">
           <div class="select">
-            <select class="" [(ngModel)]="genericType" name="genericType" (change)="getTransactionList()">
+            <select class="" [(ngModel)]="genericType" name="genericType" (change)="changeGenericTypes()">
               <option value="">ทั้งหมด</option>
               <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
             </select>
@@ -113,12 +113,14 @@
             <clr-icon shape="search"></clr-icon> ค้นหา
           </button>
         </div>
-        <div class=" col-md-6">
-          
+        <div class="col-md-6">
+          <button class="btn btn-sm btn-primary-outline"(click)="hisReportHis()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานประวัติการจ่ายจ่าย HIS
+          </button>
         </div>
         <div class="col-md-2" style="text-align: right;">
           <div class="select">
-            <select class="" [(ngModel)]="genericType" name="genericType" (change)="getTransactionList()">
+            <select class="" [(ngModel)]="genericType" name="genericType" (change)="changeGenericTypes()">
               <option value="">ทั้งหมด</option>
               <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
             </select>

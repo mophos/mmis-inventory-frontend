@@ -35,6 +35,7 @@ export class HisIssueTransactionComponent implements OnInit {
   tab = 1;
   productsHistory: any;
   dateHistory: any;
+  warehouseName: any;
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
@@ -45,6 +46,7 @@ export class HisIssueTransactionComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.warehouseId = decodedToken.warehouseId;
+    this.warehouseName = decodedToken.warehouseName
   }
 
   ngOnInit() {
@@ -271,6 +273,7 @@ export class HisIssueTransactionComponent implements OnInit {
       const rs: any = await this.hisTransactionService.getHistoryTransactionList(this._genericType, date, this.warehouseId);
       if (rs.ok) {
         this.productsHistory = rs.rows;
+        console.log(this.productsHistory);
       } else {
         this.alertService.error(rs.error);
       }
@@ -283,7 +286,21 @@ export class HisIssueTransactionComponent implements OnInit {
 
   async hisReportHis() {
     let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
-    const url = `${this.apiUrl}/report/generics-movement/${this.warehouseId}/?token=${this.token}`
+    if (this.genericType === '') {
+      this._genericType = this._genericTypes;
+    } else {
+      this._genericType = [];
+      this._genericType.push(this.genericType)
+    }
+    const url = `${this.apiUrl}/report/his-history?warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&date=${date}&genericType=${this._genericType}&token=${this.token}`
     this.htmlPreview.showReport(url);
+  }
+
+  async changeGenericTypes() {
+    if (this.tab == 1) {
+      this.getTransactionList();
+    } else if (this.tab == 2) {
+      this.getHistoryTransactionList();
+    }
   }
 }
