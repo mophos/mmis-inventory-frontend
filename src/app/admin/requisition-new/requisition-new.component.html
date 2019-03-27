@@ -124,8 +124,8 @@
   <!-- แถวเพิ่ม Manual -->
   <clr-dg-row class="newLine">
     <clr-dg-cell>
-      <wm-search-generic-warehouse-autocomplete [clearOnSelected]="false" [warehouseId]="wmWithdraw" #searchGenericCmp
-        [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"></wm-search-generic-warehouse-autocomplete>
+      <wm-search-generic-autocomplete-all [clearOnSelected]="false" [warehouseId]="wmWithdraw" #searchGenericCmp
+        [disabled]="!wmWithdraw || !wmRequisition" (onSelect)="setSelectedGeneric($event)"></wm-search-generic-autocomplete-all>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" [(ngModel)]="selectedRequisitionQty" wmNumberWithOutDot style="width: 100%; text-align: right; background-color:#FFF9C4"

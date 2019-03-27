@@ -15,7 +15,7 @@
             <button class="btn btn-sm btn-primary" [disabled]="!selected.length" (click)="confirmImport()">
               <clr-icon shape="check-circle"></clr-icon> ยืนยันเฉพาะที่เลือก
             </button>
-            <button class="btn btn-sm btn-danger" [disabled]="!selected.length" (click)="confirmImportAll()">
+            <button class="btn btn-sm btn-primary" [disabled]="!products.length" (click)="confirmImportAll()">
               <clr-icon shape="folder"></clr-icon> ยืนยันทั้งหมด
             </button>
           </div>
