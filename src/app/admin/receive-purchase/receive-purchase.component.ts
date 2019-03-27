@@ -257,6 +257,7 @@ export class ReceivePurchaseComponent implements OnInit {
             }
 
             this.products.push(obj);
+            console.log(this.products)
           }
         };
         this.modalLoading.hide();

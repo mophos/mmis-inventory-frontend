@@ -1,10 +1,12 @@
 import { Component, OnInit, Inject, Output, EventEmitter, Input } from '@angular/core';
 import { JwtHelper } from 'angular2-jwt';
+
 @Component({
-  selector: 'wm-search-generic-warehouse-autocomplete',
-  templateUrl: './search-generic-warehouse-autocomplete.component.html'
+  selector: 'wm-search-generic-autocomplete-all',
+  templateUrl: './search-generic-autocomplete-all.component.html',
+  styleUrls: []
 })
-export class SearchGenericWarehouseAutocompleteComponent implements OnInit {
+export class SearchGenericAutocompleteAllComponent implements OnInit {
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();
   @Input('clearOnSelected') clearOnSelected: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -32,14 +34,14 @@ export class SearchGenericWarehouseAutocompleteComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.limitAutocomplete = decodedToken.WM_AUTOCOMPLETE;
-    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${this._warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
+    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete/all?warehouseId=${this._warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
   }
 
   ngOnInit() {
   }
 
   setApiUrl(warehouseId: any) {
-    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete?warehouseId=${warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
+    this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete/all?warehouseId=${warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
   }
 
   clearSearch() {
