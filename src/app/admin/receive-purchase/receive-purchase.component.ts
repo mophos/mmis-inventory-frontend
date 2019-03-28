@@ -332,11 +332,15 @@ export class ReceivePurchaseComponent implements OnInit {
 
   changeUnit(event: any) {
     try {
+      if (this.isFree) {
+        this.selectedCost = 0
+      } else {
+        this.selectedCost = event.cost
+      }
       this.selectedUnitName = event.unit_name;
       this.selectedUnitId = event.unit_id;
       this.conversionQty = event.qty;
       this.selectedUnitGenericId = event.unit_generic_id;
-      this.selectedCost = event.cost
     } catch (error) {
       this.alertService.error(error);
     }
