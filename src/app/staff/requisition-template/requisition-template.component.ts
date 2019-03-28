@@ -91,7 +91,18 @@ export class RequisitionTemplateComponent implements OnInit {
     const token = sessionStorage.getItem('token');
     const exportUrl = `${this.url}/staff/warehouses/export/excel?templateId=${templateId}&warehouseId=${this.warehouseId}&token=${token}`;
     window.open(exportUrl);
+  }
 
+  printIssue(templateId) {
+    const token = sessionStorage.getItem('token');
+    const url = `${this.url}/staff/warehouses/export-issue?templateId=${templateId}&warehouseId=${this.warehouseId}&token=${token}`;
+    this.htmlPreview.showReport(url);
+  }
+
+  exportIssue(templateId) {
+    const token = sessionStorage.getItem('token');
+    const exportUrl = `${this.url}/staff/warehouses/export-issue/excel?templateId=${templateId}&warehouseId=${this.warehouseId}&token=${token}`;
+    window.open(exportUrl);
   }
 
   search() {

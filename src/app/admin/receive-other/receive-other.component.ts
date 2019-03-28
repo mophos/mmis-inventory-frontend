@@ -293,7 +293,6 @@ export class ReceiveOtherComponent implements OnInit {
       this.warehouseList.getWarehouse(this.selectedGenericId);
       this.getUnitConversion(this.selectedGenericId);
       this.unitList.setGenericId(this.selectedGenericId);
-
     } catch (error) {
       console.log(error.message);
     }

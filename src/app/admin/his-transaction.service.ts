@@ -20,6 +20,15 @@ export class HisTransactionService {
     return resp.json();
   }
 
+  async getHistoryTransactionList(genericTypes: any, date: any) {
+    const resp = await this.authHttp.post(`${this.url}/his-transaction/history-list`,
+      {
+        genericTypes: genericTypes,
+        date: date
+      }).toPromise();
+    return resp.json();
+  }
+
   async removeTransactionList() {
     const resp = await this.authHttp.delete(`${this.url}/his-transaction/remove`).toPromise();
     return resp.json();

@@ -2,98 +2,189 @@
   <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">ตัดจ่ายจาก HIS</span>
 </nav>
-<div class="row wid99">
-  <div class=" col-md-10">
-    <button class="btn btn-sm btn-success" (click)="showUploadModal()">
-      <clr-icon shape="upload-cloud"></clr-icon> อัปโหลดไฟล์
-    </button>
-    <div class="btn-group">
-      <button class="btn btn-sm btn-primary" [disabled]="!selected.length" (click)="confirmImport()">
-        <clr-icon shape="check-circle"></clr-icon> ยืนยันเฉพาะที่เลือก
-      </button>
-      <button class="btn btn-sm btn-primary" [disabled]="!products.length" (click)="confirmImportAll()">
-        <clr-icon shape="folder"></clr-icon> ยืนยันทั้งหมด
-      </button>
-    </div>
-    <button class="btn btn-sm btn-danger" (click)="clearTemp()">
-      <clr-icon shape="trash"></clr-icon> ยกเลิกทั้งหมด
-    </button>
-    <button class="btn btn-sm btn-danger-outline" (click)="showNotMappins()">
-      <clr-icon shape="share"></clr-icon> รายการที่ยังไม่ได้มีการ Map
-    </button>
-  </div>
-  <div class="select col-md-2" style="text-align: right;">
-    <select class="" [(ngModel)]="genericType" name="genericType" (change)="getTransactionList()">
-      <option value="">ทั้งหมด</option>
-      <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-    </select>
-  </div>
-</div>
 
-<clr-datagrid style="height: 85%;" [(clrDgSelected)]="selected">
-  <clr-dg-column [clrDgField]="'date_serv'">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      วันที่จ่าย
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'hn'">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      HN
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'working_code'">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      Working Code
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column [clrDgField]="'generic_name'">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      Generic Name
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column>
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      จำนวน
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column>
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      หน่วย (Base unit)
-    </ng-container>
-  </clr-dg-column>
-  <clr-dg-column>
-    <ng-container>
-    </ng-container>
-  </clr-dg-column>
-  <!-- <clr-dg-column [clrDgField]="'warehouse_name'">
-    <ng-container *clrDgHideableColumn="{hidden: false}">
-      คลังสินค้า/หน่วยเบิก ที่ถูกตัด Stock
-    </ng-container>
-  </clr-dg-column> -->
-  <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
-  <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
-    <clr-dg-cell>{{p.date_serv | toThaiDate}}</clr-dg-cell>
-    <clr-dg-cell>{{p.hn}}</clr-dg-cell>
-    <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
-    <clr-dg-cell>{{p.generic_name}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right;">{{p.qty | number}}</clr-dg-cell>
-    <clr-dg-cell>{{p.unit_name}}</clr-dg-cell>
-    <clr-dg-cell>
-      <div class="btn-group">
-        <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeSelected(p)">
-          <clr-icon shape="trash"></clr-icon>
-        </button>
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink (click)="tabHis(1)">รายการตัดจ่าย HIS</button>
+    <clr-tab-content *clrIfActive>
+      <div class="row wid99">
+        <div class=" col-md-10">
+          <button class="btn btn-sm btn-success" (click)="showUploadModal()">
+            <clr-icon shape="upload-cloud"></clr-icon> อัปโหลดไฟล์
+          </button>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-primary" [disabled]="!selected.length" (click)="confirmImport()">
+              <clr-icon shape="check-circle"></clr-icon> ยืนยันเฉพาะที่เลือก
+            </button>
+            <button class="btn btn-sm btn-primary" [disabled]="!products.length" (click)="confirmImportAll()">
+              <clr-icon shape="folder"></clr-icon> ยืนยันทั้งหมด
+            </button>
+          </div>
+          <button class="btn btn-sm btn-danger" (click)="clearTemp()">
+            <clr-icon shape="trash"></clr-icon> ยกเลิกทั้งหมด
+          </button>
+          <button class="btn btn-sm btn-danger-outline" (click)="showNotMappins()">
+            <clr-icon shape="share"></clr-icon> รายการที่ยังไม่ได้มีการ Map
+          </button>
+        </div>
+        <div class="select col-md-2" style="text-align: right;">
+          <select class="" [(ngModel)]="genericType" name="genericType" (change)="changeGenericTypes()">
+            <option value="">ทั้งหมด</option>
+            <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+          </select>
+        </div>
       </div>
-    </clr-dg-cell>
-    <!-- <clr-dg-cell>{{p.warehouse_name}}</clr-dg-cell> -->
-  </clr-dg-row>
 
-  <clr-dg-footer>
-    <clr-dg-pagination #pagehis [clrDgPageSize]="50" [clrDgTotalItems]="products.length">
-      {{pagehis.firstItem + 1}} - {{pagehis.lastItem + 1 | number}} จาก {{pagehis.totalItems | number}} รายการ
-    </clr-dg-pagination>
-  </clr-dg-footer>
-</clr-datagrid>
+      <clr-datagrid style="height: 85%;" [(clrDgSelected)]="selected">
+        <clr-dg-column [clrDgField]="'date_serv'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            วันที่จ่าย
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'hn'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            HN
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'working_code'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            Working Code
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            Generic Name
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            จำนวน
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            หน่วย (Base unit)
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+          <ng-container>
+          </ng-container>
+        </clr-dg-column>
+        <!-- <clr-dg-column [clrDgField]="'warehouse_name'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            คลังสินค้า/หน่วยเบิก ที่ถูกตัด Stock
+          </ng-container>
+        </clr-dg-column> -->
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
+          <clr-dg-cell>{{p.date_serv | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{p.hn}}</clr-dg-cell>
+          <clr-dg-cell>{{p.working_code}}</clr-dg-cell>
+          <clr-dg-cell>{{p.generic_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{p.qty | number}}</clr-dg-cell>
+          <clr-dg-cell>{{p.unit_name}}</clr-dg-cell>
+          <clr-dg-cell>
+            <div class="btn-group">
+              <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn"
+                (click)="removeSelected(p)">
+                <clr-icon shape="trash"></clr-icon>
+              </button>
+            </div>
+          </clr-dg-cell>
+          <!-- <clr-dg-cell>{{p.warehouse_name}}</clr-dg-cell> -->
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          <clr-dg-pagination #pagehis [clrDgPageSize]="50" [clrDgTotalItems]="products.length">
+            {{pagehis.firstItem + 1}} - {{pagehis.lastItem + 1 | number}} จาก {{pagehis.totalItems | number}} รายการ
+          </clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="tabHis(2)">ประวัติรายการตัดจ่าย HIS</button>
+    <clr-tab-content *clrIfActive>
+      <div class="row wid99" style="padding:1em">
+        <div class=" col-md-3">
+          <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateHistory" required>
+          </my-date-picker-th>
+        </div>
+        <div class="col-md-1">
+          <button class="btn btn-sm btn-primary" (click)="getHistoryTransactionList()">
+            <clr-icon shape="search"></clr-icon> ค้นหา
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-sm btn-primary-outline"(click)="hisReportHis()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานประวัติการจ่ายจ่าย HIS
+          </button>
+        </div>
+        <div class="col-md-2" style="text-align: right;">
+          <div class="select">
+            <select class="" [(ngModel)]="genericType" name="genericType" (change)="changeGenericTypes()">
+              <option value="">ทั้งหมด</option>
+              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <clr-datagrid style="height: 85%;">
+        <clr-dg-column [clrDgField]="'date_serv'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            วันที่จ่าย
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'hn'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            HN
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'working_code'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            Working Code
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'generic_name'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            Generic Name
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            จำนวน
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            หน่วย (Base unit)
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'warehouse_name'">
+          <ng-container *clrDgHideableColumn="{hidden: false}">
+            คลังสินค้า/หน่วยเบิก ที่ถูกตัด Stock
+          </ng-container>
+        </clr-dg-column>
+        <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let h of productsHistory" [clrDgItem]="p">
+          <clr-dg-cell>{{h.date_serv | toThaiDate}}</clr-dg-cell>
+          <clr-dg-cell>{{h.hn}}</clr-dg-cell>
+          <clr-dg-cell>{{h.working_code}}</clr-dg-cell>
+          <clr-dg-cell>{{h.generic_name}}</clr-dg-cell>
+          <clr-dg-cell style="text-align: right;">{{h.qty| number}}</clr-dg-cell>
+          <clr-dg-cell>{{h.unit_name}}</clr-dg-cell>
+          <clr-dg-cell>{{h.warehouse_name}}</clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+          <clr-dg-pagination #pagehis [clrDgPageSize]="50" [clrDgTotalItems]="productsHistory.length">
+            {{pagehis.firstItem + 1}} - {{pagehis.lastItem + 1 | number}} จาก {{pagehis.totalItems | number}} รายการ
+          </clr-dg-pagination>
+        </clr-dg-footer>
+      </clr-datagrid>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
 
 <clr-modal [(clrModalOpen)]="openUpload" [clrModalClosable]="false">
   <h3 class="modal-title">อัปโหลดไฟล์</h3>
@@ -162,5 +253,5 @@
     </button>
   </div>
 </clr-modal>
-
+<wm-html-preview #htmlPreview></wm-html-preview>
 <wm-loading-modal #modalLoading></wm-loading-modal>
