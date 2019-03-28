@@ -28,7 +28,7 @@
           </button>
         </div>
         <div class="select col-md-2" style="text-align: right;">
-          <select class="" [(ngModel)]="genericType" name="genericType" (change)="getTransactionList()">
+          <select class="" [(ngModel)]="genericType" name="genericType" (change)="changeGenericTypes()">
             <option value="">ทั้งหมด</option>
             <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
           </select>
@@ -110,22 +110,19 @@
           <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateHistory" required>
           </my-date-picker-th>
         </div>
-        <div class=" col-md-1">
+        <div class="col-md-1">
           <button class="btn btn-sm btn-primary" (click)="getHistoryTransactionList()">
             <clr-icon shape="search"></clr-icon> ค้นหา
           </button>
         </div>
-        <div class=" col-md-4">
-
-        </div>
-        <div class=" col-md-2">
-          <!-- <button class="btn btn-sm btn-primary-outline" (click)="hisReportHis()">
+        <div class="col-md-6">
+          <button class="btn btn-sm btn-primary-outline"(click)="hisReportHis()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานประวัติการจ่ายจ่าย HIS
-          </button> -->
+          </button>
         </div>
         <div class="col-md-2" style="text-align: right;">
           <div class="select">
-            <select class="" [(ngModel)]="genericType" name="genericType" (change)="getTransactionList()">
+            <select class="" [(ngModel)]="genericType" name="genericType" (change)="changeGenericTypes()">
               <option value="">ทั้งหมด</option>
               <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
             </select>
