@@ -18,6 +18,7 @@ export class ValueReceiveOtherComponent implements OnInit {
   jwtHelper: JwtHelper = new JwtHelper();
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('searchGenericCmp') public searchGenericCmp: SearchGenericAutocompleteComponent;
+
   startDate: any;
   endDate: any;
   warehouses: any = [];
@@ -32,9 +33,11 @@ export class ValueReceiveOtherComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
+
   receiveTypesSelect: any = [];
   options: any;
   receiveTypes: any;
+
   constructor(@Inject('API_URL') private apiUrl: string,
     private warehouseService: WarehouseService,
     private receiveService: ReceiveService,
@@ -89,6 +92,25 @@ export class ValueReceiveOtherComponent implements OnInit {
     const url = `${this.apiUrl}/report/receiveOrthorCost/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&receiveTpyeId=${receiveTpyeId}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
+
+  showReportAccount() {
+    if (+this.warehouseId !== 0) {
+      this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
+      this.warehouseName = this.warehouseName.warehouse_name
+    } else {
+      this.warehouseName = 'ทุกคลังสินค้า'
+    }
+    let receiveTpyeId: any
+    receiveTpyeId = _.map(this.receiveTypesSelect, (b: any) => {
+      return b.receive_type_id;
+    }).join('&receiveTpyeId=')
+    console.log(receiveTpyeId);
+    const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/receiveOrthorCostAccount?startDate=${startDate}&endDate=${endDate}&warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&token=${this.token}&receiveTpyeId=${receiveTpyeId}`;
+    this.htmlPreview.showReport(url, 'landscape');
+  }
+
   getWarehouseList() {
     this.warehouseService.all()
       .then((result: any) => {
@@ -99,9 +121,11 @@ export class ValueReceiveOtherComponent implements OnInit {
         }
       });
   }
+
   refreshWaiting(state: State) {
     this.getReceiveTypes();
   }
+
   async getReceiveTypes() {
     try {
       // this.modalLoading.show();
@@ -117,10 +141,12 @@ export class ValueReceiveOtherComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
+
   refresh() {
     this.warehouseId = 0;
     this.receiveTypesSelect = []
   }
+
   exportExcel() {
     if (+this.warehouseId !== 0) {
       this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
