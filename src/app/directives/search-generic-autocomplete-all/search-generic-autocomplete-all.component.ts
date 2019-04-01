@@ -34,6 +34,7 @@ export class SearchGenericAutocompleteAllComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.limitAutocomplete = decodedToken.WM_AUTOCOMPLETE;
+    console.log(this.limitAutocomplete)
     this.url = `${this.apiUrl}/generics/warehouse/search/autocomplete/all?warehouseId=${this._warehouseId}&limit=${this.limitAutocomplete}&token=${this.token}`;
   }
 
