@@ -46,7 +46,7 @@
         </div>
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
           <div class="select">
-            <select [(ngModel)]="warehouseId" name="warehouseId" (change)="changeWarehouses()">
+            <select [(ngModel)]="warehouseId" name="warehouseId">
               <option value="all">ทั้งหมด</option>
               <option [value]="t.warehouse_id" *ngFor="let t of warehouses">{{t.warehouse_name}}</option>
             </select>
