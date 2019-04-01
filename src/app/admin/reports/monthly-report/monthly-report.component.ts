@@ -42,6 +42,7 @@ export class MonthlyReportComponent implements OnInit {
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.warehouseId = decodedToken.warehouseId
   }
 
   ngOnInit() {
@@ -94,7 +95,7 @@ export class MonthlyReportComponent implements OnInit {
     const rs = await this.basicService.getWarehouses();
     if (rs.ok) {
       this.warehouses = rs.rows;
-      this.warehouseId = 'all';
+      // this.warehouseId = 'all';
     } else {
       this.alertService.error(rs.error);
     }
