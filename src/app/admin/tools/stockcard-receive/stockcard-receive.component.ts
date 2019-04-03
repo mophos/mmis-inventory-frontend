@@ -273,6 +273,7 @@ export class StockcardReceiveComponent implements OnInit {
           this.countTotalCost();
         }).catch(() => {
           cmp.value = this.products[idx].canReceive || 0;
+          this.products[idx].receive_qty = 0;
         });
     } else {
       this.products[idx].receive_qty = cmp.value;
