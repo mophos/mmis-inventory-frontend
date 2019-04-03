@@ -44,6 +44,7 @@ export class ProductReceiveComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.warehouseId = decodedToken.warehouseId;
+    this.warehouseName = decodedToken.warehouseName
   }
 
   ngOnInit() {
@@ -101,7 +102,18 @@ export class ProductReceiveComponent implements OnInit {
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
     const rs: any = await this.receiveService.getReport('PR');
     const report_url = rs.rows[0].report_url;
-    const url = `${this.apiUrl}${report_url}?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&isFree=${this.isFree}&token=${this.token}&` + genericType.join('&');
+    const url = `${this.apiUrl}${report_url}?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&isFree=${this.isFree}&token=${this.token}&warehouseName=${this.warehouseName}&` + genericType.join('&');
+    this.htmlPreview.showReport(url, 'landscape');
+  }
+
+  async ptintReportAccount() {
+    let genericType = [];
+    this.genericTypeSelect.forEach(value => {
+      genericType.push('genericType=' + value.generic_type_id)
+    });
+    this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
+    this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
+    const url = `${this.apiUrl}/report/product-receive-account?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&token=${this.token}&` + genericType.join('&');
     this.htmlPreview.showReport(url, 'landscape');
   }
 

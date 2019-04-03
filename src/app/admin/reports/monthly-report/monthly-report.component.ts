@@ -3,6 +3,7 @@ import { IMyOptions } from 'mydatepicker-th';
 import { AlertService } from './../../../alert.service';
 import * as moment from 'moment';
 import { WarehouseService } from './../../warehouse.service';
+import { BasicService } from '../../../basic.service';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { ProductsService } from 'app/admin/products.service';
 import * as _ from 'lodash'
@@ -22,31 +23,34 @@ export class MonthlyReportComponent implements OnInit {
   token: any;
   isPreview = false;
   warehouses: any = [];
-  warehouseId = 0;
+  warehouseId: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
     editableDateField: false,
     showClearDateBtn: false
   };
-  genericTypeSelect:any =[]
+  genericTypeSelect: any = []
   genericTypes = [];
   constructor(
     @Inject('API_URL') private apiUrl: string,
     private warehouseService: WarehouseService,
     private alertService: AlertService,
     private productService: ProductsService,
+    private basicService: BasicService
 
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
+    this.warehouseId = decodedToken.warehouseId
   }
 
   ngOnInit() {
     this.getdate();
+    this.getWarehouses();
     // this.getWarehouseList();
     const date = new Date();
-   
+
   }
   refreshWaiting(state) {
     this.getGenericsType();
@@ -65,19 +69,19 @@ export class MonthlyReportComponent implements OnInit {
     }
   }
   monthlyReport() {
-    let type = _.map(this.genericTypeSelect,function(v){
-      return 'genericTypes='+v.generic_type_id;
+    let type = _.map(this.genericTypeSelect, function (v) {
+      return 'genericTypes=' + v.generic_type_id;
     })
-    const url = `${this.apiUrl}/report/monthlyReport?month=${this.month}&year=${this.year}&`+type.join('&')+`&token=${this.token}`
+    const url = `${this.apiUrl}/report/monthlyReport?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}`
     console.log(url);
     this.htmlPreview.showReport(url);
   }
 
   monthlyReportExcel() {
-    let type = _.map(this.genericTypeSelect,function(v){
-      return 'genericTypes='+v.generic_type_id;
+    let type = _.map(this.genericTypeSelect, function (v) {
+      return 'genericTypes=' + v.generic_type_id;
     })
-    const url = `${this.apiUrl}/report/monthlyReport/excel?month=${this.month}&year=${this.year}&`+type.join('&')+`&token=${this.token}`
+    const url = `${this.apiUrl}/report/monthlyReport/excel?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}`
     window.open(url);
   }
 
@@ -87,15 +91,13 @@ export class MonthlyReportComponent implements OnInit {
     }
   }
 
-  // getWarehouseList() {
-  //   this.warehouseService.all()
-  //     .then((result: any) => {
-  //       if (result.ok) {
-  //         this.warehouses = result.rows;
-  //       } else {
-  //         this.alertService.error(JSON.stringify(result.error));
-  //       }
-  //     });
-  // }
-
+  async getWarehouses() {
+    const rs = await this.basicService.getWarehouses();
+    if (rs.ok) {
+      this.warehouses = rs.rows;
+      // this.warehouseId = 'all';
+    } else {
+      this.alertService.error(rs.error);
+    }
+  }
 }
