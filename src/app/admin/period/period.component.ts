@@ -131,53 +131,65 @@ export class PeriodComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
-  switchStatus(event, period_id) {
+  async switchStatus(event, period_id) {
     this.status = event.target.checked ? 'open' : 'close';
     const idx = _.findIndex(this.users, { period_id: period_id });
     this.users[idx].status = event.target.checked ? 'open' : 'close';
 
     if (this.status === "open") {
-      this.updateOpenDate(period_id);
+      await this.updateOpenDate(period_id);
     } else {
-      this.close(idx, period_id);
+      await this.close(idx, period_id);
     }
   }
 
-  updateCloseDate(id, date) {
-    this.periodService.updateCloseDate(id, date)
-      .then(async (result: any) => {
-        if (result.ok) {
-          const idx = _.findIndex(this.users, { period_id: id });
-          this.log(id,
-            this.users[idx].budget_year,
-            this.users[idx].period_year,
-            this.users[idx].period_month,
-            this.users[idx].status);
-          await this.getDetail();
-        } else {
-          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-        }
+  async updateCloseDate(id, date) {
+    const result = await this.periodService.updateCloseDate(id, date);
+    // .then(async (result: any) => {
+    if (result.ok) {
+      const idx = _.findIndex(this.users, { period_id: id });
+      await this.log(id,
+        this.users[idx].budget_year,
+        this.users[idx].period_year,
+        this.users[idx].period_month,
+        this.users[idx].status);
+      await this.getDetail();
+    } else {
+      this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+    }
 
-      });
+    // });
   }
-  updateOpenDate(id) {
+  async updateOpenDate(id) {
     try {
       this.modalLoading.show();
-      this.periodService.updateOpenDate(id)
-        .then(async (result: any) => {
-          if (result.ok) {
-            const idx = _.findIndex(this.users, { period_id: id });
-            this.log(id,
-              this.users[idx].budget_year,
-              this.users[idx].period_year,
-              this.users[idx].period_month,
-              this.users[idx].status);
-            await this.getDetail();
-          } else {
-            this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-          }
-          // this.modalLoading.hide();
-        });
+      const result = await this.periodService.updateOpenDate(id);
+      if (result.ok) {
+        const idx = _.findIndex(this.users, { period_id: id });
+        this.log(id,
+          this.users[idx].budget_year,
+          this.users[idx].period_year,
+          this.users[idx].period_month,
+          this.users[idx].status);
+        await this.getDetail();
+      } else {
+        this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+      }
+      // this.periodService.updateOpenDate(id)
+      //   .then(async (result: any) => {
+      //     if (result.ok) {
+      //       const idx = _.findIndex(this.users, { period_id: id });
+      //       this.log(id,
+      //         this.users[idx].budget_year,
+      //         this.users[idx].period_year,
+      //         this.users[idx].period_month,
+      //         this.users[idx].status);
+      //       await this.getDetail();
+      //     } else {
+      //       this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+      //     }
+      //     // this.modalLoading.hide();
+      //   });
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
