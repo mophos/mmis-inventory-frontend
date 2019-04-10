@@ -369,15 +369,16 @@ export class RequisitionComponent implements OnInit {
       }
     });
     if (count > 0) {
-      const urlRep = await this.requisitionService.getLink();
-      const url = this.url + `${urlRep.rows[0].report_url}?token=${this.token}&` + requisition_id.join('&');
+      const rs: any = await this.requisitionService.getReport('AR');
+      const report_url = rs.rows[0].report_url;
+      const url = this.url + `${report_url}?token=${this.token}&` + requisition_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
     }
   }
 
-  printSetProduct() {
+  async printSetProduct() {
     const requisition_id: any = []
     let count: any = 0
     this.requisitionSelected.forEach(e => {
@@ -387,7 +388,9 @@ export class RequisitionComponent implements OnInit {
       }
     });
     if (count > 0) {
-      const url = this.url + `/report/list/requis?token=${this.token}&` + requisition_id.join('&');
+      const rs: any = await this.requisitionService.getReport('LR');
+      const report_url = rs.rows[0].report_url;
+      const url = this.url + report_url+`?token=${this.token}&` + requisition_id.join('&');
       this.htmlPreview.showReport(url, 'landscape');
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
