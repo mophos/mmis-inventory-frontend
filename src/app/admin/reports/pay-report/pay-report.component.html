@@ -87,16 +87,22 @@
     <div class="row">
       <div class="col-md-12">
         <button *ngIf="tab == 'req'" class="btn btn-sm btn-primary" [disabled]="isPreview || reqTypesSelect.length == 0" (click)="showReportReq()">
-          <clr-icon shape="printer"></clr-icon> พิมพ์รายงานการจ่ายยา
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงานการเบิกจ่าย
+        </button>
+        <button *ngIf="tab == 'req'" class="btn btn-sm btn-primary" [disabled]="isPreview || reqTypesSelect.length == 0" (click)="showReportReqAccount()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงานการเบิกจ่าย(แยกตามประเภท)
         </button>
         <button *ngIf="tab == 'req'" class="btn btn-sm btn-success" [disabled]="isPreview || reqTypesSelect.length == 0" (click)="excelReportReq()">
-          <clr-icon shape="download"></clr-icon>  ส่งออก Excel
+          <clr-icon shape="download"></clr-icon>  ส่งออก Excel รายงานการเบิกจ่าย
         </button>
         <button *ngIf="tab == 'issue'" class="btn btn-sm btn-primary" [disabled]="isPreview || issueTypesSelect.length == 0" (click)="showReportIssue()">
-            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานการจ่ายยา
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานการตัดจ่าย
+          </button>
+        <button *ngIf="tab == 'issue'" class="btn btn-sm btn-primary" [disabled]="isPreview || issueTypesSelect.length == 0" (click)="showReportIssueAccount()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานการตัดจ่าย(แยกตามประเภท)
           </button>
         <button *ngIf="tab == 'issue'" class="btn btn-sm btn-success" [disabled]="isPreview || issueTypesSelect.length == 0" (click)="excelReportIssue()">
-            <clr-icon shape="download"></clr-icon>  ส่งออก Excel
+            <clr-icon shape="download"></clr-icon>  ส่งออก Excel รายงานการตัดจ่าย
           </button>
         <!-- <button type="button" [disabled]="isPreview || receiveTypesSelect.length == 0" class="btn btn-sm btn-success"
           (click)="exportExcel()">
