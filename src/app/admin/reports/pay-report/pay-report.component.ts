@@ -101,6 +101,23 @@ export class PayReportComponent implements OnInit {
     const url = `${this.apiUrl}/report/pay-req/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&reqTypeId=${reqTypeId}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
+  showReportReqAccount() {
+    if (+this.warehouseId !== 0) {
+      this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
+      this.warehouseName = this.warehouseName.warehouse_name
+    } else {
+      this.warehouseName = 'ทุกคลังสินค้า'
+    }
+    let reqTypeId: any
+    reqTypeId = _.map(this.reqTypesSelect, (b: any) => {
+      return b.requisition_type_id;
+    }).join('&reqTypeId=')
+    console.log(reqTypeId);
+    const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/pay-req-account/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&reqTypeId=${reqTypeId}`;
+    this.htmlPreview.showReport(url, 'landscape');
+  }
   showReportIssue() {
     if (+this.warehouseId !== 0) {
       this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
@@ -116,6 +133,24 @@ export class PayReportComponent implements OnInit {
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/report/pay-issue/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&transectionId=${transectionId}`;
+    this.htmlPreview.showReport(url, 'landscape');
+  }
+
+  showReportIssueAccount() {
+    if (+this.warehouseId !== 0) {
+      this.warehouseName = _.find(this.warehouses, (v) => { return +v.warehouse_id === +this.warehouseId })
+      this.warehouseName = this.warehouseName.warehouse_name
+    } else {
+      this.warehouseName = 'ทุกคลังสินค้า'
+    }
+    let transectionId: any
+    transectionId = _.map(this.issueTypesSelect, (b: any) => {
+      return b.transaction_id;
+    }).join('&transectionId=')
+    console.log(transectionId);
+    const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
+    const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
+    const url = `${this.apiUrl}/report/pay-issue-account/${startDate}/${endDate}/${this.warehouseId}/${this.warehouseName}?token=${this.token}&transectionId=${transectionId}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
 
