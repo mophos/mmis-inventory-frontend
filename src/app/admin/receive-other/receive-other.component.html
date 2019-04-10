@@ -174,7 +174,7 @@
       {{ +selectedReceiveQty * +selectedCost | number: '1.2-2'}}
     </clr-dg-cell>
     <clr-dg-cell>
-      <wm-select-manufacture #manufactureList (onSelect)="changeManufacture($event)"></wm-select-manufacture>
+      <wm-select-manufacture #manufactureList [selectedId]="mLabelerId" (onSelect)="changeManufacture($event)"></wm-select-manufacture>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" style="width: 100%; background-color: #FFF9C4" name="lotNo" id="lotNo"
