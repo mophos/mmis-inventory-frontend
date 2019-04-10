@@ -119,6 +119,7 @@ export class ReceiveOtherComponent implements OnInit {
 
   hospcode: any; // ใช้ชั่วคราว
   isCheckUpdateCost = false;
+  mLabelerId: any;
   constructor(
     private wareHouseService: WarehouseService,
     private receiveService: ReceiveService,
@@ -288,6 +289,7 @@ export class ReceiveOtherComponent implements OnInit {
       this.primaryUnitName = event ? event.primary_unit_name : null;
       this.isLotControl = event ? event.is_lot_control : null;
       this.isExpiredControl = event ? event.is_expired_control : null;
+      this.mLabelerId = event ? event.m_labeler_id : null;
       this.manufactureList.getManufacture(this.selectedGenericId);
       // this.lotList.setProductId(this.selectedProductId);
       this.warehouseList.getWarehouse(this.selectedGenericId);
