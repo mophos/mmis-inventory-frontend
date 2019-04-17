@@ -25,7 +25,8 @@
         <label for="startDate" class="required">ประเภทการรับ</label>
       </div>
       <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-        <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="receiveTypesSelect" style="padding-top: 5px;height: 200px; width: 400px;">
+        <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="receiveTypesSelect"
+          style="padding-top: 5px;height: 200px; width: 400px;">
           <clr-dg-column style="width: 150px;">ประเภทการรับ</clr-dg-column>
           <clr-dg-row *ngFor="let order of receiveTypes" [clrDgItem]="order">
             <clr-dg-cell>{{order.receive_type_name}}</clr-dg-cell>
@@ -38,21 +39,29 @@
         <label for="startDate" class="required">ตั้งแต่</label>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required></my-date-picker-th>
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
+        </my-date-picker-th>
       </div>
       <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
         <label for="endDate" class="required">ถึง</label>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required>
+        </my-date-picker-th>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <button class="btn btn-sm btn-primary" [disabled]="isPreview || receiveTypesSelect.length == 0" (click)="showReport()">
+        <button class="btn btn-sm btn-primary" [disabled]="isPreview || receiveTypesSelect.length == 0"
+          (click)="showReport()">
           <clr-icon shape="printer"></clr-icon> พิมพ์รายงานมูลค่าจากการรับอื่นๆ
         </button>
-        <button type="button" [disabled]="isPreview || receiveTypesSelect.length == 0" class="btn btn-sm btn-success" (click)="exportExcel()">
+        <button class="btn btn-sm btn-primary" [disabled]="isPreview || receiveTypesSelect.length == 0"
+          (click)="showReportAccount()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงานมูลค่าจากการรับอื่นๆ(แยกตามประเภท)
+        </button>
+        <button type="button" [disabled]="isPreview || receiveTypesSelect.length == 0" class="btn btn-sm btn-success"
+          (click)="exportExcel()">
           <clr-icon shape="download"></clr-icon>
           ส่งออก Excel
         </button>

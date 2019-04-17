@@ -104,6 +104,7 @@ export class ReceiveOtherComponent implements OnInit {
   isApprove: any;
   receiveCode: any;
   isLotControl: any;
+  isExpiredControl: any;
 
   modalExpired = false;
   commentDate: any;
@@ -118,6 +119,7 @@ export class ReceiveOtherComponent implements OnInit {
 
   hospcode: any; // ใช้ชั่วคราว
   isCheckUpdateCost = false;
+  mLabelerId: any;
   constructor(
     private wareHouseService: WarehouseService,
     private receiveService: ReceiveService,
@@ -242,8 +244,8 @@ export class ReceiveOtherComponent implements OnInit {
       this.alertService.error(error);
     }
   }
-  async setLocation(warehouseId){
-    let rs:any = await this.receiveService.getLastLocationOther(warehouseId,this.selectedProductId);
+  async setLocation(warehouseId) {
+    let rs: any = await this.receiveService.getLastLocationOther(warehouseId, this.selectedProductId);
     this.locationId = rs.ok ? rs.detail.location_id : '';
   }
   clearProductSearch() {
@@ -286,12 +288,13 @@ export class ReceiveOtherComponent implements OnInit {
       this.primaryUnitId = event ? event.primary_unit_id : null;
       this.primaryUnitName = event ? event.primary_unit_name : null;
       this.isLotControl = event ? event.is_lot_control : null;
+      this.isExpiredControl = event ? event.is_expired_control : null;
+      this.mLabelerId = event ? event.m_labeler_id : null;
       this.manufactureList.getManufacture(this.selectedGenericId);
       // this.lotList.setProductId(this.selectedProductId);
       this.warehouseList.getWarehouse(this.selectedGenericId);
       this.getUnitConversion(this.selectedGenericId);
       this.unitList.setGenericId(this.selectedGenericId);
-
     } catch (error) {
       console.log(error.message);
     }
@@ -329,6 +332,7 @@ export class ReceiveOtherComponent implements OnInit {
       product.conversion_qty = +this.conversionQty;
       product.cost = this.selectedCost || 0;
       product.is_lot_control = this.isLotControl;
+      product.is_expired_control = this.isExpiredControl;
 
       if (this.selectedExpiredDate) {
         const valid = this.dateService.isValidDateExpire(this.selectedExpiredDate);
@@ -507,7 +511,7 @@ export class ReceiveOtherComponent implements OnInit {
             this.saveReceiveTo();
           }
         }
-
+        this.isSaving = false;
       }
     } else {
       this.isSaving = false;
@@ -616,8 +620,9 @@ export class ReceiveOtherComponent implements OnInit {
 
     if (this.receiveExpired) {
       for (const v of this.products) {
-        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid() && this.isExpiredControl === 'Y') {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
+          this.isSaving = false;
           this.isExpired = true;
         }
       }

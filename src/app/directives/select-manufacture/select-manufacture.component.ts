@@ -41,7 +41,8 @@ export class SelectManufactureComponent implements OnInit {
           } else {
             this.manufactureId = this.manufactures[0].labeler_id;
           }
-          this.onSelect.emit(this.manufactures[0]);
+          const idx = _.findIndex(this.manufactures, { labeler_id: +this.manufactureId });
+          this.onSelect.emit(this.manufactures[idx]);
         }
 
       } else {

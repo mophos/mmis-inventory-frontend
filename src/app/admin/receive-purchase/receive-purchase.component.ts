@@ -115,6 +115,7 @@ export class ReceivePurchaseComponent implements OnInit {
   selectedLotNo = null;
   selectedExpireNumDays = 0;
   isLotControl = null;
+  isExpiredControl = null;
 
   token = null;
 
@@ -236,56 +237,25 @@ export class ReceivePurchaseComponent implements OnInit {
               this.selectedExpiredDate = `${moment(sl.expired_date).get('date')}/${moment(sl.expired_date).get('month') + 1}/${moment(sl.expired_date).get('year')}`;
               this.primaryUnitId = dt.rows.primary_unit_id;
               this.isLotControl = dt.rows.is_lot_control;
+              this.isExpiredControl = dt.rows.is_expired_control;
               await this.manufactureList.getManufacture(this.selectedGenericId);
               await this.warehouseList.getWarehouse(this.selectedGenericId);
               await this.unitList.setGenericId(this.selectedGenericId);
               this.selectedReceiveQty = sl.lot_qty;
               this.selectedLotNo = sl.lot_number ? sl.lot_number.toUpperCase() : null;
               this.selectedDiscount = 0;
-
-              // this.selectedManufactureId = dt.rows.m_labeler_id;
-              // this.selectedManufactureName = dt.rows.m_labeler_name;
-
-              // warehouses
-              // product.warehouse_id = this.selectedWarehouseId;
-              // product.warehouse_name = this.selectedWarehouseName;
-
-              // location
-              // product.location_id = this.selectedLocationId;
-              // product.location_name = this.selectedLocationName;
-
-              // product.unit_generic_id = this.selectedUnitGenericId;
-
-              // product.conversion_qty = +this.conversionQty;
-
-              // lot control
-              // product.is_lot_control = this.isLotControl;
-
               this.selectedCost = sl.price_per_unit
-
               // ของแถม
               this.isFree = false;
-
-
-
-
               await this.addProduct();
             }
-            // const data = {
-            //   product_code: l.hospitem_code,
-            //   lot_no: sl.lot_number,
-            //   expired_date: sl.expired_date,
-            //   price: sl.price_per_unit,
-            //   qty: sl.lot_qty
-            // }
-
           }
         }
       }
 
     } catch (error) {
       console.log(error);
-
+      this.alertService.error(error);
     }
   }
   async getPurchaseProducts(purchaseOrderId: any) {
@@ -322,7 +292,7 @@ export class ReceivePurchaseComponent implements OnInit {
             obj.warehouse_name = null;
 
             // location
-            obj.location_id = null;
+            obj.location_id = v.location_id ? v.location_id : null;
             obj.location_name = null;
             obj.canReceive = +v.purchase_qty - +v.total_received_qty;
 
@@ -332,11 +302,16 @@ export class ReceivePurchaseComponent implements OnInit {
             // ของแถม
             obj.is_free = v.giveaway;
 
+            obj.is_expired_control = v.is_expired_control;
+            obj.is_lot_control = v.is_lot_control;
+
+
             if (obj.is_free === 'Y') {
               obj.cost = 0;
             }
 
             this.products.push(obj);
+            console.log(this.products)
           }
         };
         this.modalLoading.hide();
@@ -375,13 +350,14 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
 
-  changeWarehouse(event: any) {
+  async changeWarehouse(event: any) {
     try {
       this.selectedWarehouseId = event.warehouse_id ? event.warehouse_id : null;
       this.selectedWarehouseName = event.warehouse_name ? event.warehouse_name : null;
+
       if (this.selectedWarehouseId) {
-        this.setLocation(this.selectedWarehouseId);
-        this.locationList.getLocations(event.warehouse_id);
+        await this.setLocation(this.selectedWarehouseId);
+        await this.locationList.getLocations(event.warehouse_id);
       }
     } catch (error) {
       this.alertService.error(error);
@@ -390,8 +366,8 @@ export class ReceivePurchaseComponent implements OnInit {
   }
 
   async setLocation(warehouseId) {
-    let rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
-    this.locationId = rs.ok ? rs.detail.location_id : '';
+    const rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
+    this.locationId = rs.ok ? rs.detail.location_id : null;
   }
 
   editChangeWarehouse(idx, event: any, cmp: any) {
@@ -411,11 +387,15 @@ export class ReceivePurchaseComponent implements OnInit {
 
   changeUnit(event: any) {
     try {
+      if (this.isFree) {
+        this.selectedCost = 0
+      } else {
+        this.selectedCost = event.cost
+      }
       this.selectedUnitName = event.unit_name;
       this.selectedUnitId = event.unit_id;
       this.conversionQty = event.qty;
       this.selectedUnitGenericId = event.unit_generic_id;
-      this.selectedCost = event.cost
     } catch (error) {
       this.alertService.error(error);
     }
@@ -447,10 +427,12 @@ export class ReceivePurchaseComponent implements OnInit {
       this.primaryUnitId = event ? event.primary_unit_id : null;
       // lot control
       this.isLotControl = event ? event.is_lot_control : null;
+      this.isExpiredControl = event ? event.is_expired_control : null;
 
       this.manufactureList.getManufacture(this.selectedGenericId);
       this.warehouseList.getWarehouse(this.selectedGenericId);
       this.unitList.setGenericId(this.selectedGenericId);
+
 
 
     } catch (error) {
@@ -497,6 +479,7 @@ export class ReceivePurchaseComponent implements OnInit {
 
     // lot control
     product.is_lot_control = this.isLotControl;
+    product.is_expired_control = this.isExpiredControl;
 
     product.cost = this.selectedCost;
 
@@ -510,8 +493,8 @@ export class ReceivePurchaseComponent implements OnInit {
       if (fill > -1) {
         this.alertService.error('รายการซ้ำ')
       } else if (fill < 0) {
-        let ms = this.isFree ? 'ต้องการเพิ่มเป็นรายการปกติ' : 'ต้องการเพิ่มเป็นของแถม'
-        let newIsFree = !this.isFree ? 'Y' : 'N'
+        const ms = this.isFree ? 'ต้องการเพิ่มเป็นรายการปกติ' : 'ต้องการเพิ่มเป็นของแถม'
+        const newIsFree = !this.isFree ? 'Y' : 'N'
 
         this.alertService.confirm(`รายการซ้ำ ${ms}ใช่ หรือ ไม่?`)
           .then(() => {
@@ -659,6 +642,8 @@ export class ReceivePurchaseComponent implements OnInit {
     }
   }
   async saveReceive() {
+    console.log(this.products);
+
     if (this.receiveDate) {
       const _receiveDate = this.receiveDate ?
         `${this.receiveDate.date.year}-${this.receiveDate.date.month}-${this.receiveDate.date.day}` : null;
@@ -968,7 +953,7 @@ export class ReceivePurchaseComponent implements OnInit {
     this.isItemExpired = false;
     if (this.receiveExpired) {
       for (const v of this.products) {
-        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid() && v.is_expired_control === 'Y') {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
           this.isExpired = true;
         }

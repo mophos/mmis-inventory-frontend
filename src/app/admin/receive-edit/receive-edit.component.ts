@@ -143,7 +143,7 @@ export class ReceiveEditComponent implements OnInit {
   isComment = false;
 
   isLotControl: any;
-
+  isExpiredControl: any;
   isItemExpired = false; // false = รับได้ true = หมดอายุ
   isExpired = false // false = กรอกวันหมดอายุ   true = ไม่กรอกวันหมดอายุ
   isReceiveHoliday = false; // false = รับได้ true = เป็นวันหยุด
@@ -322,7 +322,11 @@ export class ReceiveEditComponent implements OnInit {
 
   changeUnit(event: any) {
     try {
-      this.selectedCost = event.cost;
+      if (this.isFree) {
+        this.selectedCost = 0
+      } else {
+        this.selectedCost = event.cost
+      }
       this.selectedUnitGenericId = event.unit_generic_id;
       this.conversionQty = event.qty;
     } catch (error) {
@@ -357,6 +361,7 @@ export class ReceiveEditComponent implements OnInit {
       this.primaryUnitName = event ? event.primary_unit_name : null;
       // lot control
       this.isLotControl = event ? event.is_lot_control : null;
+      this.isExpiredControl = event ? event.is_expired_control : null;
 
       this.unitList.setGenericId(this.selectedGenericId);
 
@@ -401,6 +406,7 @@ export class ReceiveEditComponent implements OnInit {
 
     // lot control
     product.is_lot_control = this.isLotControl;
+    product.is_expired_control = this.isExpiredControl;
 
     product.expired_date = this.selectedExpiredDate;
 
@@ -847,6 +853,7 @@ export class ReceiveEditComponent implements OnInit {
           // ของแถม
           obj.is_free = v.is_free;
           obj.is_lot_control = v.is_lot_control;
+          obj.is_expired_control = v.is_expired_control;
 
           obj.receive_detail_id = v.receive_detail_id
           this.products.push(obj);
@@ -1013,7 +1020,7 @@ export class ReceiveEditComponent implements OnInit {
 
     if (this.receiveExpired) {
       for (const v of this.products) {
-        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid()) {
+        if (!moment(v.expired_date, 'DD-MM-YYYY').isValid() && v.is_expired_control === 'Y') {
           this.alertService.error('กรุณาระบุวันหมดอายุ');
           this.isExpired = true;
         }

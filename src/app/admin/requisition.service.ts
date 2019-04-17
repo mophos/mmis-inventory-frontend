@@ -625,6 +625,11 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async getReport(type: any) {
+    const res = await this.authHttp.get(`${this.url}/std/report?type=${type}`).toPromise();
+    return res.json();
+  }
+  
   async getLink() {
     const rs = await this.authHttp.get(`${this.url}/requisition/report/approve`).toPromise();
     return rs.json();

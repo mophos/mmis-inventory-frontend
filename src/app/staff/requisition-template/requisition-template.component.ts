@@ -12,6 +12,7 @@ import { JwtHelper } from 'angular2-jwt';
   templateUrl: './requisition-template.component.html'
 })
 export class RequisitionTemplateComponent implements OnInit {
+  @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
   templates = [];
   jwtHelper: JwtHelper = new JwtHelper();
@@ -82,9 +83,26 @@ export class RequisitionTemplateComponent implements OnInit {
 
   print(templateId) {
     const token = sessionStorage.getItem('token');
+    const url = `${this.url}/staff/warehouses/export?templateId=${templateId}&warehouseId=${this.warehouseId}&token=${token}`;
+    this.htmlPreview.showReport(url);
+  }
+
+  export(templateId) {
+    const token = sessionStorage.getItem('token');
     const exportUrl = `${this.url}/staff/warehouses/export/excel?templateId=${templateId}&warehouseId=${this.warehouseId}&token=${token}`;
     window.open(exportUrl);
+  }
 
+  printIssue(templateId) {
+    const token = sessionStorage.getItem('token');
+    const url = `${this.url}/staff/warehouses/export-issue?templateId=${templateId}&warehouseId=${this.warehouseId}&token=${token}`;
+    this.htmlPreview.showReport(url);
+  }
+
+  exportIssue(templateId) {
+    const token = sessionStorage.getItem('token');
+    const exportUrl = `${this.url}/staff/warehouses/export-issue/excel?templateId=${templateId}&warehouseId=${this.warehouseId}&token=${token}`;
+    window.open(exportUrl);
   }
 
   search() {

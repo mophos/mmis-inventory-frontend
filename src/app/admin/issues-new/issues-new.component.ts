@@ -475,12 +475,12 @@ export class IssuesNewComponent implements OnInit {
         rs.rows.forEach(v => {
           if (v.issue_qty > 0) {
             const obj: any = {};
-            obj.issue_qty = v.issue_qty;
+            obj.issue_qty = +v.issue_qty / +v.conversion_qty;
             obj.generic_id = v.generic_id;
             obj.generic_name = v.generic_name;
             obj.remain_qty = +v.remain_qty;
             obj.reserve_qty = +v.reserve_qty;
-            obj.conversion_qty = 1;
+            obj.conversion_qty = +v.conversion_qty;
             obj.unit_generic_id = null;
             obj.warehouse_id = this.warehouseId;
             obj.unit_name = v.unit_name;

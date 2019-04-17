@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { AlertService } from 'app/alert.service';
 import * as moment from 'moment';
 import { HisTransactionService } from 'app/staff/his-transaction.service';
@@ -13,9 +13,11 @@ import * as _ from 'lodash';
 })
 export class HisIssueTransactionComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading;
+  @ViewChild('htmlPreview') public htmlPreview: any;
 
   path: string;
   products: any = [];
+  totalProducts = 0;
   openUpload = false;
   filePath: string;
   fileName: any = null;
@@ -30,18 +32,32 @@ export class HisIssueTransactionComponent implements OnInit {
   _genericType: any;
   openNotMappings = false;
   hisNotMappings: any;
+  tab = 1;
+  productsHistory: any;
+  dateHistory: any;
+  warehouseName: any;
   jwtHelper: JwtHelper = new JwtHelper();
 
   constructor(
     private alertService: AlertService,
-    private hisTransactionService: HisTransactionService
+    private hisTransactionService: HisTransactionService,
+    @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.warehouseId = decodedToken.warehouseId;
+    this.warehouseName = decodedToken.warehouseName
   }
 
   ngOnInit() {
+    const date = new Date();
+    this.dateHistory = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
     this.getGenericType();
     // this.getTransactionList();
   }
@@ -57,7 +73,11 @@ export class HisIssueTransactionComponent implements OnInit {
           this._genericTypes.push(e.generic_type_id)
         });
         this.genericType = '';
-        this.getTransactionList();
+        if (this.tab == 1) {
+          this.getTransactionList();
+        } else if (this.tab == 2) {
+          this.getHistoryTransactionList();
+        }
       } else {
         this.alertService.error(rs.error);
       }
@@ -80,6 +100,7 @@ export class HisIssueTransactionComponent implements OnInit {
       const rs: any = await this.hisTransactionService.getTransactionList(this._genericType, this.warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
+        this.totalProducts = this.products.length
       } else {
         this.alertService.error(rs.error);
       }
@@ -181,6 +202,7 @@ export class HisIssueTransactionComponent implements OnInit {
           .then((rs: any) => {
             if (rs.ok) {
               let isImportTotal = transactionIds.length - rs.un_cut_stock.length;
+              console.log(rs.un_cut_stock, rs.un_cut_stock.length);
               this.alertService.success('ผลการนำเข้าข้อมูลเพื่อตัดสต๊อก', 'นำเข้าข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถนำเข้าได้ ' + rs.un_cut_stock.length + ' รายการ');
               this.getTransactionList();
             } else {
@@ -220,10 +242,65 @@ export class HisIssueTransactionComponent implements OnInit {
   async showNotMappins() {
     let rs: any = await this.hisTransactionService.getNotMappings(this.warehouseId)
     this.hisNotMappings = rs.rows
-    if (this.hisNotMappings.length){
+    if (this.hisNotMappings.length) {
       this.openNotMappings = true;
-    }else{
+    } else {
       this.alertService.error('ไม่มีรายการที่ยังไม่ได้ map');
+    }
+  }
+
+  async tabHis(event) {
+    this.tab = event
+    if (this.tab == 1) {
+      this.getTransactionList()
+    } else if (this.tab == 2) {
+      this.getHistoryTransactionList();
+      console.log(this.productsHistory);
+    }
+  }
+
+  async getHistoryTransactionList() {
+    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    try {
+      if (this.genericType === '') {
+        this._genericType = this._genericTypes;
+      } else {
+        this._genericType = [];
+        this._genericType.push(this.genericType)
+      }
+
+      this.modalLoading.show();
+      const rs: any = await this.hisTransactionService.getHistoryTransactionList(this._genericType, date, this.warehouseId);
+      if (rs.ok) {
+        this.productsHistory = rs.rows;
+        console.log(this.productsHistory);
+      } else {
+        this.alertService.error(rs.error);
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.serverError();
+    }
+  }
+
+  async hisReportHis() {
+    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    if (this.genericType === '') {
+      this._genericType = this._genericTypes;
+    } else {
+      this._genericType = [];
+      this._genericType.push(this.genericType)
+    }
+    const url = `${this.apiUrl}/report/his-history?warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&date=${date}&genericType=${this._genericType}&token=${this.token}`
+    this.htmlPreview.showReport(url);
+  }
+
+  async changeGenericTypes() {
+    if (this.tab == 1) {
+      this.getTransactionList();
+    } else if (this.tab == 2) {
+      this.getHistoryTransactionList();
     }
   }
 }
