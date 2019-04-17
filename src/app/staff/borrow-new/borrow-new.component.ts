@@ -170,7 +170,7 @@ export class BorrowNewComponent implements OnInit {
           working_code: this.workingCode,
           generic_name: this.genericName,
           generic_id: this.genericId,
-          borrow_qty: +this.borrowQty * this.conversionQty,
+          borrow_qty: +this.borrowQty,
           remain_qty: +this.remainQty,
           unit_generic_id: this.unitGenericId,
           conversion_qty: this.conversionQty,
