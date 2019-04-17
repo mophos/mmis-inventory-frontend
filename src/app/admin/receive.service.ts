@@ -570,5 +570,14 @@ export class ReceiveService {
     const res = await this.authHttp.get(`${this.url}/receives/getUnitGeneric?unitGenericId=${unitGenericId}`).toPromise();
     return res.json();
   }
+  async getASN(purchaseOrderId: any) {
+    const res = await this.authHttp.get(`${this.url}/receives/asn?purchaseOrderId=${purchaseOrderId}`).toPromise();
+    return res.json();
+  }
+
+  async getASNDetail(tradeCode: any) {
+    const res = await this.authHttp.get(`${this.url}/receives/asn-detail?tradeCode=${tradeCode}`).toPromise();
+    return res.json();
+  }
 
 }

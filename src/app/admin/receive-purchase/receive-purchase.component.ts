@@ -135,7 +135,7 @@ export class ReceivePurchaseComponent implements OnInit {
   isReceiveHoliday = false; // false = รับได้ true = เป็นวันหยุด
   isReceivePeriod = false; // false = รับได้ true = ปิดรอบ
   locationId: any = '';
-
+  asn: any;
 
   constructor(
     private wareHouseService: WarehouseService,
@@ -153,13 +153,12 @@ export class ReceivePurchaseComponent implements OnInit {
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken: any = this.jwtHelper.decodeToken(this.token);
-    // this.numDayExpired = +decodedToken.WM_CHECK_EXPIRE_ALERT_DAY || 60;
-    // this.nullExpired = decodedToken.WM_RECEIVE_EXPIRED === 'N' ? true : false; // เก่า
     this.receiveExpired = decodedToken.WM_RECEIVE_EXPIRED === 'Y' ? true : false;
 
     this.route.queryParams
       .subscribe(params => {
         this.purchaseId = params.purchaseId;
+        this.asn = params.asn === 'true' ? true : false;
       });
   }
 
@@ -195,14 +194,100 @@ export class ReceivePurchaseComponent implements OnInit {
     }
 
     this.modalLoading.hide();
-
-    if (this.purchaseId) {
+    if (this.purchaseId && !this.asn) {
       // get purchase items
       this.getPurchaseProducts(this.purchaseId);
       this.getPurchaseInfo(this.purchaseId);
+    } else if (this.purchaseId && this.asn) {
+      // this.getPurchaseProducts(this.purchaseId);
+      await this.getPurchaseInfo(this.purchaseId);
+      await this.getASN(this.purchaseOrderNumber);
+
     }
   }
+  async getASN(purchaseOrderId: any) {
+    try {
+      const rs: any = await this.receiveService.getASN(purchaseOrderId);
+      console.log(rs.rows.header.shipped_date);
+      if (rs.ok) {
+        this.deliveryDate = {
+          date: {
+            year: moment(rs.rows.header.shipped_date).get('year'),
+            month: moment(rs.rows.header.shipped_date).get('month') + 1,
+            day: moment(rs.rows.header.shipped_date).get('date')
+          }
+        };
+        this.receiveDate = {
+          date: {
+            year: moment(rs.rows.header.shipped_date).get('year'),
+            month: moment(rs.rows.header.shipped_date).get('month') + 1,
+            day: moment(rs.rows.header.shipped_date).get('date')
+          }
+        };
+        for (const l of rs.rows.line) {
+          for (const sl of l.subline) {
+            const dt: any = await this.receiveService.getASNDetail(l.hospitem_code);
+            if (dt.ok) {
+              this.selectedProductId = dt.rows.product_id;
+              this.selectedGenericId = dt.rows.generic_id;
+              this.selectedProductName = dt.rows.product_name;
+              this.selectedGenericName = dt.rows.generic_name;
+              this.selectedExpireNumDays = dt.rows.expire_num_days ? dt.rows.expire_num_days : 0;
+              this.selectedExpiredDate = `${moment(sl.expired_date).get('date')}/${moment(sl.expired_date).get('month') + 1}/${moment(sl.expired_date).get('year')}`;
+              this.primaryUnitId = dt.rows.primary_unit_id;
+              this.isLotControl = dt.rows.is_lot_control;
+              await this.manufactureList.getManufacture(this.selectedGenericId);
+              await this.warehouseList.getWarehouse(this.selectedGenericId);
+              await this.unitList.setGenericId(this.selectedGenericId);
+              this.selectedReceiveQty = sl.lot_qty;
+              this.selectedLotNo = sl.lot_number ? sl.lot_number.toUpperCase() : null;
+              this.selectedDiscount = 0;
 
+              // this.selectedManufactureId = dt.rows.m_labeler_id;
+              // this.selectedManufactureName = dt.rows.m_labeler_name;
+
+              // warehouses
+              // product.warehouse_id = this.selectedWarehouseId;
+              // product.warehouse_name = this.selectedWarehouseName;
+
+              // location
+              // product.location_id = this.selectedLocationId;
+              // product.location_name = this.selectedLocationName;
+
+              // product.unit_generic_id = this.selectedUnitGenericId;
+
+              // product.conversion_qty = +this.conversionQty;
+
+              // lot control
+              // product.is_lot_control = this.isLotControl;
+
+              this.selectedCost = sl.price_per_unit
+
+              // ของแถม
+              this.isFree = false;
+
+
+
+
+              await this.addProduct();
+            }
+            // const data = {
+            //   product_code: l.hospitem_code,
+            //   lot_no: sl.lot_number,
+            //   expired_date: sl.expired_date,
+            //   price: sl.price_per_unit,
+            //   qty: sl.lot_qty
+            // }
+
+          }
+        }
+      }
+
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
   async getPurchaseProducts(purchaseOrderId: any) {
     // clear old products
     const _products = [];
@@ -303,10 +388,12 @@ export class ReceivePurchaseComponent implements OnInit {
 
     }
   }
+
   async setLocation(warehouseId) {
     let rs: any = await this.receiveService.getLastLocation(warehouseId, this.selectedProductId);
     this.locationId = rs.ok ? rs.detail.location_id : '';
   }
+
   editChangeWarehouse(idx, event: any, cmp: any) {
     try {
       this.products[idx].warehouse_id = event.warehouse_id;
@@ -357,13 +444,14 @@ export class ReceivePurchaseComponent implements OnInit {
       this.selectedProductName = event ? `${event.product_name}` : null;
       this.selectedGenericName = event ? `${event.generic_name}` : null;
       this.selectedExpireNumDays = event ? event.expire_num_days : 0;
-      this.manufactureList.getManufacture(this.selectedGenericId);
-      this.warehouseList.getWarehouse(this.selectedGenericId);
       this.primaryUnitId = event ? event.primary_unit_id : null;
-      this.unitList.setGenericId(this.selectedGenericId);
-
       // lot control
       this.isLotControl = event ? event.is_lot_control : null;
+
+      this.manufactureList.getManufacture(this.selectedGenericId);
+      this.warehouseList.getWarehouse(this.selectedGenericId);
+      this.unitList.setGenericId(this.selectedGenericId);
+
 
     } catch (error) {
       this.alertService.error(error);

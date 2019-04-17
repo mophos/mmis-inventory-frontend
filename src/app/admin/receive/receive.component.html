@@ -161,7 +161,7 @@
             <div class="btn-group">
               <button [disabled]="purchase.receive_price >= purchase.purchase_price"
                 class="btn btn-sm btn-success wm-small-btn" [routerLink]="['/admin/receives/purchase']"
-                [queryParams]="{purchaseId: purchase.purchase_order_id}">
+                [queryParams]="{purchaseId: purchase.purchase_order_id,asn:purchase.asn}">
                 รับ
               </button>
               <button class="btn btn-sm btn-danger wm-small-btn" (click)="closePurchase(purchase.purchase_order_id)">

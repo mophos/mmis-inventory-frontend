@@ -933,8 +933,6 @@ export class ReceiveComponent implements OnInit {
   }
 
   showASN(asn) {
-    console.log(asn);
-    console.log(asn.header.po_number);
     const url = `${this.apiUrl}/report/asn?purchaseorderId=${asn.header.po_number}&token=${this.token}`;
     this.htmlPreview.showReport(url);
 
