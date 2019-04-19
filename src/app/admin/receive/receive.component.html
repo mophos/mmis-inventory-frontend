@@ -58,6 +58,7 @@
         <clr-dg-column [clrDgField]="'purchase_method_name'">วิธีการจัดซื้อ</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่าจัดซื้อ (บาท)</clr-dg-column>
         <clr-dg-column style="width: 100px;">มูลค่ารับแล้ว (บาท)</clr-dg-column>
+        <clr-dg-column style="width: 120px;">EDI</clr-dg-column>
         <clr-dg-column style="width: 120px;">เลือก</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *ngFor="let purchase of purchases; let idx = index">
@@ -74,87 +75,17 @@
             <span style="color: green; font-weight:bold;"
               *ngIf="purchase.receive_price < purchase.purchase_price">{{purchase.receive_price || 0 | number: '1.2-2'}}</span>
           </clr-dg-cell>
-          <clr-dg-cell style="text-align: center;">
-            <div class="btn-group">
-              <button [disabled]="purchase.receive_price >= purchase.purchase_price"
-                class="btn btn-sm btn-success wm-small-btn" [routerLink]="['/admin/receives/purchase']"
-                [queryParams]="{purchaseId: purchase.purchase_order_id}">
-                รับ
-              </button>
-              <button class="btn btn-sm btn-danger wm-small-btn" (click)="closePurchase(purchase.purchase_order_id)">
-                ปิดรับ
-              </button>
+          <clr-dg-cell style="text-align:center;">
+            <div *ngIf="!purchase.asn && purchase.is_edi == 'Y'">
+              <clr-icon shape="check"></clr-icon>
             </div>
-          </clr-dg-cell>
-          <wm-purchase-detail *clrIfExpanded [purchaseId]="purchase.purchase_order_id" ngProjectAs="clr-dg-row-detail">
-          </wm-purchase-detail>
-        </clr-dg-row>
-
-        <clr-dg-footer>
-          {{pagePo.firstItem + 1}} - {{pagePo.lastItem + 1}} จาก {{pagePo.totalItems}} รายการ
-          <!-- <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination> -->
-          <clr-dg-pagination #pagePo [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
-            [clrDgTotalItems]="totalPurchases"></clr-dg-pagination>
-        </clr-dg-footer>
-      </clr-datagrid>
-    </clr-tab-content>
-
-  </clr-tab>
-  <clr-tab>
-    <button clrTabLink (click)="selectTabPoEDI()">
-      <clr-icon shape="wifi" class="has-badge is-solid"></clr-icon> ใบสั่งซื้อออนไลน์
-      <span class="badge badge-danger">{{ purchasesEDI.length | number }}</span>
-    </button>
-    <clr-tab-content *clrIfActive="tab === 'poEDI'">
-
-      <div class="card">
-        <div class="card-block" style="padding: 0px 5px 5px 5px;">
-          <div class="row wid99">
-            <div class="col-md-6" style="padding-top: 5px;">
-              <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searchPoEDI($event)" name="queryPoEDI" [(ngModel)]="queryPoEDI"
-                placeholder="เลขที่ใบสั่งซื้อ, ผู้จำหน่าย, ชื่อเวชภัณฑ์" style="width: 400px;">
-            </div>
-            <div class="col-md-6" style="padding-top: 5px;">
-              <button (click)="printUnReceive()" style="float: right;" class="btn btn-primary btn-sm btn-icon">
-                <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ค้างส่ง
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <clr-datagrid (clrDgRefresh)="refreshPoEDI($event)" class="grid-order" style="padding-top: 5px; height: 83%;">
-        <clr-dg-column [clrDgField]="'purchase_order_number'" style="width: 150px;">เลขที่ใบสั่งซื้อ</clr-dg-column>
-        <clr-dg-column style="width: 150px;" [clrDgField]="'order_date'">วันที่จัดซื้อ</clr-dg-column>
-        <!-- <clr-dg-column style="width: 150px;">เลขที่สัญญา</clr-dg-column> -->
-        <clr-dg-column [clrDgField]="'labeler_name'">ผู้จำหน่าย</clr-dg-column>
-        <clr-dg-column [clrDgField]="'purchase_method_name'">วิธีการจัดซื้อ</clr-dg-column>
-        <clr-dg-column style="width: 100px;">มูลค่าจัดซื้อ (บาท)</clr-dg-column>
-        <clr-dg-column style="width: 100px;">มูลค่ารับแล้ว (บาท)</clr-dg-column>
-        <clr-dg-column style="width: 150px;">ASN</clr-dg-column>
-        <clr-dg-column style="width: 120px;">เลือก</clr-dg-column>
-        <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let purchase of purchases; let idx = index">
-          <clr-dg-cell *ngIf="!purchase.purchase_order_book_number">{{purchase.purchase_order_number}}</clr-dg-cell>
-          <clr-dg-cell *ngIf="purchase.purchase_order_book_number">{{purchase.purchase_order_book_number}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: center;">{{purchase.order_date | toThaiDate }}</clr-dg-cell>
-          <!-- <clr-dg-cell>{{purchase.contract_no}}</clr-dg-cell> -->
-          <clr-dg-cell>{{purchase.labeler_name}}</clr-dg-cell>
-          <clr-dg-cell>{{purchase.purchase_method_name}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: right;">{{purchase.purchase_price | number: '1.2-2'}}</clr-dg-cell>
-          <clr-dg-cell style="text-align: right;">
-            <span style="color: red; font-weight:bold;"
-              *ngIf="purchase.receive_price >= purchase.purchase_price">{{purchase.receive_price || 0 | number: '1.2-2'}}</span>
-            <span style="color: green; font-weight:bold;"
-              *ngIf="purchase.receive_price < purchase.purchase_price">{{purchase.receive_price || 0 | number: '1.2-2'}}</span>
-          </clr-dg-cell>
-          <clr-dg-cell>
-            <div *ngIf="!purchase.asn"> - </div>
-            <div *ngIf="purchase.asn">
+            <div *ngIf="purchase.asn && purchase.is_edi == 'Y'">
               <button class="btn btn-primary" (click)="showASN(purchase.asn)">
                 ดู ASN
               </button>
+            </div>
+            <div *ngIf="purchase.is_edi =='N'">
+              <clr-icon shape="times"></clr-icon>
             </div>
           </clr-dg-cell>
           <clr-dg-cell style="text-align: center;">
@@ -177,7 +108,7 @@
           {{pagePo.firstItem + 1}} - {{pagePo.lastItem + 1}} จาก {{pagePo.totalItems}} รายการ
           <!-- <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination> -->
           <clr-dg-pagination #pagePo [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
-            [clrDgTotalItems]="totalPurchasesEDI"></clr-dg-pagination>
+            [clrDgTotalItems]="totalPurchases"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>

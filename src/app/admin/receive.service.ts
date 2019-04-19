@@ -407,17 +407,6 @@ export class ReceiveService {
     return res.json();
   }
 
-  async getPurchasesListEDI(limit: number = 100, offset: number = 0, sort: any = {}) {
-    const res = await this.authHttp.post(`${this.url}/receives/purchases/list/edi`, {
-      limit: limit,
-      offset: offset,
-      sort: sort
-    })
-      .toPromise();
-
-    return res.json();
-  }
-
   async searchPurchasesList(query: string, limit: number = 100, offset: number = 0, sort: any = {}) {
     const res = await this.authHttp.post(`${this.url}/receives/s-purchases/list`, {
       query: query,
@@ -432,18 +421,6 @@ export class ReceiveService {
 
   async getPurchasesListSearch(limit: number = 100, offset: number = 0, query: any, sort: any = {}) {
     const res = await this.authHttp.post(`${this.url}/receives/purchases/list/search`, {
-      limit: limit,
-      offset: offset,
-      query: query,
-      sort: sort
-    })
-      .toPromise();
-
-    return res.json();
-  }
-
-  async getPurchasesListSearchEDI(limit: number = 100, offset: number = 0, query: any, sort: any = {}) {
-    const res = await this.authHttp.post(`${this.url}/receives/purchases/list/search/edi`, {
       limit: limit,
       offset: offset,
       query: query,
