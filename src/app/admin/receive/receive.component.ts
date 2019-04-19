@@ -734,7 +734,7 @@ export class ReceiveComponent implements OnInit {
   saveApproveOther() {
     const ids = [];
     this.selectedOtherApprove.forEach(v => {
-      if (!v.approve_id) {
+      if (!v.approve_id && v.is_cancel === 'N') {
         ids.push(v.receive_other_id);
       }
     });
