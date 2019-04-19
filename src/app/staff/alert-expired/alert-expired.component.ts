@@ -94,7 +94,7 @@ export class AlertExpiredComponent implements OnInit {
       } else {
         _genericType = this.genericTypeE;
       }
-        _warehouseId = this.warehouseId;
+      _warehouseId = this.warehouseId;
       const rs: any = await this.alertExpiredService.getProductExpired(_genericType, _warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
@@ -285,9 +285,26 @@ export class AlertExpiredComponent implements OnInit {
     } else {
       _genericType = this.genericTypeE;
     }
-      _warehouseId = this.warehouseId;
+    _warehouseId = this.warehouseId;
     const url = `${this.apiUrl}/report/print/alert-expried?genericTypeId=${_genericType}&warehouseId=${_warehouseId}&token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
+  }
+
+  reportExcel() {
+    let _genericType
+    let _warehouseId
+    if (this.genericTypeE === 'all') {
+      const _g = [];
+      this.genericTypes.forEach(v => {
+        _g.push(v.generic_type_id)
+      });
+      _genericType = _g;
+    } else {
+      _genericType = this.genericTypeE;
+    }
+    _warehouseId = this.warehouseId;
+    const url = `${this.apiUrl}/report/print/alert-expried/excel?genericTypeId=${_genericType}&warehouseId=${_warehouseId}&token=${this.token}`;
+    window.open(url, '_blank');
   }
 
   searc(event: any) {
