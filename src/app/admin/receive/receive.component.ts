@@ -288,6 +288,10 @@ export class ReceiveComponent implements OnInit {
             if (idx > -1) {
               this.waitings[idx].is_cancel = 'Y';
             }
+            const idxS = _.findIndex(this.selectedApprove, { receive_id: w.receive_id });
+            if (idxS > -1) {
+              this.selectedApprove[idxS].is_cancel = 'Y';
+            }
           } else {
             this.alertService.error();
           }
@@ -312,6 +316,10 @@ export class ReceiveComponent implements OnInit {
             const idx = _.findIndex(this.others, { receive_other_id: receive.receive_other_id });
             if (idx > -1) {
               this.others[idx].is_cancel = 'Y';
+            }
+            const idxS = _.findIndex(this.selectedOtherApprove, { receive_other_id: receive.receive_other_id });
+            if (idxS > -1) {
+              this.selectedOtherApprove[idxS].is_cancel = 'Y';
             }
             this.alertService.success();
           } else {
