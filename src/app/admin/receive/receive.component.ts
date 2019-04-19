@@ -35,18 +35,15 @@ export class ReceiveComponent implements OnInit {
   waitings: any = [];
   others: any = [];
   purchases: any = [];
-  purchasesEDI: any = [];
   totalReceive = 0;
   totalReceiveOther = 0;
   totalExpired = 0;
   totalOtherExpired = 0;
   totalPurchases = 0;
-  totalPurchasesEDI = 0;
   perPage = 20;
   query: string;
   queryOther: string;
   queryPo: any;
-  queryPoEDI: any;
   isSearching = false;
   isSearch = false;
   openModal = false;
@@ -134,32 +131,6 @@ export class ReceiveComponent implements OnInit {
         this.totalPurchases = rs.total;
       } else {
         const rs: any = await this.receiveService.getPurchasesList(limit, this.offset, sort);
-        this.purchases = rs.rows;
-        this.totalPurchases = rs.total;
-      }
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(JSON.stringify(error));
-    }
-    this.modalLoading.hide();
-  }
-
-  async refreshPoEDI(state: State) {
-    this.offset = +state.page.from;
-    const limit = +state.page.size;
-    const sort = state.sort;
-
-    sessionStorage.setItem('currentPageReceive', this.currentPage.toString());
-    sessionStorage.setItem('offsetReceive', this.offset.toString());
-
-    this.modalLoading.show();
-    try {
-      if (this.queryPo) {
-        const rs: any = await this.receiveService.getPurchasesListSearchEDI(this.perPage, this.offset, this.queryPo, sort);
-        this.purchases = rs.rows;
-        this.totalPurchases = rs.total;
-      } else {
-        const rs: any = await this.receiveService.getPurchasesListEDI(limit, this.offset, sort);
         this.purchases = rs.rows;
         this.totalPurchases = rs.total;
       }
@@ -317,6 +288,10 @@ export class ReceiveComponent implements OnInit {
             if (idx > -1) {
               this.waitings[idx].is_cancel = 'Y';
             }
+            const idxS = _.findIndex(this.selectedApprove, { receive_id: w.receive_id });
+            if (idxS > -1) {
+              this.selectedApprove[idxS].is_cancel = 'Y';
+            }
           } else {
             this.alertService.error();
           }
@@ -341,6 +316,10 @@ export class ReceiveComponent implements OnInit {
             const idx = _.findIndex(this.others, { receive_other_id: receive.receive_other_id });
             if (idx > -1) {
               this.others[idx].is_cancel = 'Y';
+            }
+            const idxS = _.findIndex(this.selectedOtherApprove, { receive_other_id: receive.receive_other_id });
+            if (idxS > -1) {
+              this.selectedOtherApprove[idxS].is_cancel = 'Y';
             }
             this.alertService.success();
           } else {
@@ -763,7 +742,7 @@ export class ReceiveComponent implements OnInit {
   saveApproveOther() {
     const ids = [];
     this.selectedOtherApprove.forEach(v => {
-      if (!v.approve_id) {
+      if (!v.approve_id && v.is_cancel === 'N') {
         ids.push(v.receive_other_id);
       }
     });
@@ -860,10 +839,7 @@ export class ReceiveComponent implements OnInit {
     this.tab = "po";
     sessionStorage.setItem('tabReceive', this.tab);
   }
-  selectTabPoEDI() {
-    this.tab = "poEDI";
-    sessionStorage.setItem('tabReceive', this.tab);
-  }
+
   selectTabReceive() {
     this.showOption = 1
     this.tab = "receive";
@@ -893,27 +869,12 @@ export class ReceiveComponent implements OnInit {
     this.doSearchPo();
   }
 
-  searchPoEDI(event) {
-    this.offset = 0;
-    this.doSearchPoEDI();
-  }
-
   async doSearchPo() {
     this.modalLoading.show();
     const rs: any = await this.receiveService.getPurchasesListSearch(this.perPage, this.offset, this.queryPo);
     if (rs.ok) {
       this.purchases = rs.rows;
       this.totalPurchases = rs.total;
-    }
-    this.modalLoading.hide();
-  }
-
-  async doSearchPoEDI() {
-    this.modalLoading.show();
-    const rs: any = await this.receiveService.getPurchasesListSearchEDI(this.perPage, this.offset, this.queryPo);
-    if (rs.ok) {
-      this.purchasesEDI = rs.rows;
-      this.totalPurchasesEDI = rs.total;
     }
     this.modalLoading.hide();
   }
