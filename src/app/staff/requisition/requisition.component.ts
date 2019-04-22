@@ -237,7 +237,7 @@ export class RequisitionComponent implements OnInit {
       }
     });
     if (count > 0) {
-      const url = this.url + `/report/UnPaid/requis?token=${this.token}&` + requisition_id.join('&');
+      const url = this.url + `/report/staff/UnPaid/requis?token=${this.token}&` + requisition_id.join('&');
       this.htmlPreview.showReport(url);
     } else {
       this.alertService.error('กรุณาเลือกรายการที่จะพิมพ์');
