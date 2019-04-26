@@ -1,6 +1,6 @@
 import { StaffService } from './../staff.service';
 import { JwtHelper } from 'angular2-jwt';
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AlertService } from "../../alert.service";
 import { ToThaiDatePipe } from "../../helper/to-thai-date.pipe";
@@ -20,6 +20,7 @@ export class MainComponent implements OnInit {
 
   @ViewChild('modalAdjust') modalAdjust: any;
   @ViewChild('modalLoading') public modalLoading: any;
+  @ViewChild('htmlPreview') public htmlPreview: any;
 
   openModalAdjust = false;
   productNewId: any;
@@ -47,13 +48,15 @@ export class MainComponent implements OnInit {
   products: any = [];
   genericTypes = [];
   genericType: any = "";
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
     private toThaiDate: ToThaiDatePipe,
-    private staffService: StaffService
+    private staffService: StaffService,
+    @Inject('API_URL') private apiUrl: string
   ) {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
@@ -240,5 +243,16 @@ export class MainComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.error(error);
     }
+  }
+
+  reportRemain(){
+    const url = `${this.apiUrl}/report/print/staff-remain?token=${this.token}`;
+    console.log(url)
+    this.htmlPreview.showReport(url);
+  }
+
+  exportRemain(){
+    const url = `${this.apiUrl}/report/export/staff-remain?token=${this.token}`;
+    window.open(url, '_blank');
   }
 }

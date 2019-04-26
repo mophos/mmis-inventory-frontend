@@ -24,6 +24,18 @@
           </div>
         </div>
       </div>
+      <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
+        <div class="col-md-2 push-md-8">
+          <button class="btn btn-sm btn-primary wm-small-btn" (click)="reportRemain()">
+            พิมพ์รายการสินค้าคงเหลือ
+          </button>
+        </div>
+        <div class="col-md-2 push-md-10">
+          <button class="btn btn-sm btn-success wm-small-btn" (click)="exportRemain()">
+            export รายการสินค้าคงเหลือ
+          </button>
+        </div>
+      </div>
       <clr-datagrid [style.height.%]="85">
         <clr-dg-column [clrDgField]="'generic_code'">Generic Code</clr-dg-column>
         <clr-dg-column [clrDgField]="'generic_name'">Generic Name</clr-dg-column>
