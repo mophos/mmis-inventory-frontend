@@ -234,31 +234,29 @@ export class BorrowNewComponent implements OnInit {
   async saveBorrow() {
     this.isSave = true;
     if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.borrowDate) {
-      const borrowDate = `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`;
-
       const generics = [];
       let isError = false;
 
       for (const v of this.generics) {
-        let data = [];
+        // let data = [];
         if (v.generic_id && v.borrow_qty) {
-          const _data = {
-            genericId: v.generic_id,
-            genericQty: v.borrow_qty
-          }
+          // const _data = {
+          //   genericId: v.generic_id,
+          //   genericQty: v.borrow_qty
+          // }
 
-          data.push(_data);
+          // data.push(_data);
 
-          let wmRows = [];
-          let allocate = await this.borrowItemsService.allocateBorrow(data, this.srcWarehouseId);
-          wmRows.push(allocate.rows);
+          // let wmRows = [];
+          // let allocate = await this.borrowItemsService.allocateBorrow(data, this.srcWarehouseId);
+          // wmRows.push(allocate.rows);
           
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,
             unit_generic_id: v.unit_generic_id,
             primary_unit_id: v.primary_unit_id,
-            products: wmRows
+            // products: wmRows
           });
         } else {
           isError = false;

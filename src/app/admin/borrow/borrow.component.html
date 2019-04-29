@@ -49,7 +49,7 @@
         <clr-dg-placeholder>ไม่พบรายการ</clr-dg-placeholder>
         <clr-dg-row *ngFor="let b of borrow" [clrDgItem]="b" [ngClass]="{'approve-status': b.approved === 'Y', 'cancel-status': b.mark_deleted === 'Y', 'confirm-status': b.confirmed === 'Y'}">
           <clr-dg-action-overflow>
-            <button [disabled]="b.approved === 'Y' || b.mark_deleted === 'Y'" class="action-item" (click)="doApprove(b.borrow_id)">อนุมัติใบยืม</button>
+            <button [disabled]="b.approved === 'Y' || b.mark_deleted === 'Y' || b.confirmed === 'N'" class="action-item" (click)="doApprove(b.borrow_id)">อนุมัติใบยืม</button>
           </clr-dg-action-overflow>
           <wm-borrow-detail *clrIfExpanded [borrowId]="b.borrow_id" ngProjectAs="clr-dg-row-detail"></wm-borrow-detail>
           <clr-dg-cell>{{b.borrow_code}}</clr-dg-cell>
@@ -61,11 +61,11 @@
           <clr-dg-cell>
             <div class="btn-group btn-sm">
               <button title="แก้ไข" *ngIf="b.mark_deleted === 'N'" class="btn btn-success wm-small-btn" [routerLink]="['/admin/borrow/edit']"
-                [queryParams]="{borrowId: b.borrow_id}" [disabled]="b.mark_deleted === 'Y' || b.approved === 'Y' || b.confirmed === 'Y'">
+                [queryParams]="{borrowId: b.borrow_id}" [disabled]="b.mark_deleted === 'Y' || b.approved === 'Y'">
                 <clr-icon shape="note"></clr-icon>
               </button>
               <button title="ลบ" *ngIf="b.mark_deleted === 'N'" class="btn btn-danger wm-small-btn" (click)="removeBorrow(b)"
-                [disabled]="b.mark_deleted === 'Y' || b.confirmed === 'Y' || b.approved === 'Y'">
+                [disabled]="b.mark_deleted === 'Y' || b.approved === 'Y'">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>

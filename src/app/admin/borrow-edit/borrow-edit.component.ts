@@ -215,6 +215,7 @@ export class BorrowEditComponent implements OnInit {
       this.modalLoading.show();
       const rs: any = await this.borrowItemsService.getDetailInfo(this.borrowId);
       if (rs.ok) {
+        console.log(rs.rows)
         this.generics = rs.rows;
       } else {
         this.alertService.error(rs.error);
