@@ -494,18 +494,22 @@ export class ReceiveComponent implements OnInit {
   saveApprove() {
     const ids = [];
     this.selectedApprove.forEach(v => {
-      if (!v.approve_id && v.purchase_order_number) {
+      if (!v.approve_id && v.purchase_order_number && v.is_cancel !== 'Y') {
         ids.push(v.receive_id);
       }
     });
 
-    this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
-      .then(() => {
-        this.modalApprove.setReceiveIds(ids);
-        this.modalApprove.openModal();
-      }).catch(() => {
-        // cancel
-      });
+    if (ids.length > 0) {
+      this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
+        .then(() => {
+          this.modalApprove.setReceiveIds(ids);
+          this.modalApprove.openModal();
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.alertService.error('ไม่พบราบการที่ต้องอนุมัติ')
+    }
   }
 
   async printDeliveryDate(showOption: any, sDate: any, eDate: any) {
@@ -742,18 +746,21 @@ export class ReceiveComponent implements OnInit {
   saveApproveOther() {
     const ids = [];
     this.selectedOtherApprove.forEach(v => {
-      if (!v.approve_id && v.is_cancel === 'N') {
+      if (!v.approve_id && v.is_cancel !== 'Y') {
         ids.push(v.receive_other_id);
       }
     });
-
-    this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
-      .then(() => {
-        this.modalApproveOther.setReceiveIds(ids);
-        this.modalApproveOther.openModal();
-      }).catch(() => {
-        // cancel
-      });
+    if (ids.length > 0) {
+      this.alertService.confirm('มีรายการที่ต้องการอนุมัติจำนวน ' + ids.length + ' รายการ ต้องการอนุมัติใช่หรือไม่?')
+        .then(() => {
+          this.modalApproveOther.setReceiveIds(ids);
+          this.modalApproveOther.openModal();
+        }).catch(() => {
+          // cancel
+        });
+    } else {
+      this.alertService.error('ไม่พบราบการที่ต้องอนุมัติ')
+    }
   }
 
   approveSuccess(event: any) {
