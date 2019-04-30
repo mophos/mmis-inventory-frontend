@@ -664,6 +664,36 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
+  printReceive2() {
+    const receiveIds = [];
+    _.forEach(this.selectedApprove, (v) => {
+      if (v.purchase_order_number) {
+        receiveIds.push(v.receive_id);
+      }
+    });
+    if (receiveIds.length) {
+      this.alertService.confirm('พิมพ์ใบตรวจรับรูปกรรมการ ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
+        .then(async () => {
+          let strIds = '';
+          receiveIds.forEach((v: any) => {
+            strIds += `receiveID=${v}&`;
+          });
+          const rs: any = await this.receiveService.getReport('CR');
+          const report_url = rs.rows[0].report_url;
+
+          const url = `${this.apiUrl}${report_url}/2?${strIds}token=${this.token}`;
+
+          this.htmlPreview.showReport(url);
+        }).catch((error) => {
+          console.log(error);
+
+          // cancel
+        });
+    } else {
+      this.alertService.error('ไม่พบรายการที่ต้องการพิมพ์ (เลือกรายการที่มีใบสั่งซื้อเท่านั้น)');
+    }
+  }
+
   async printreceiveApprovePO() {
     const receiveIds = [];
     _.forEach(this.selectedApprove, (v) => {

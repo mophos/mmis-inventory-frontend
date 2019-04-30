@@ -305,6 +305,31 @@ export class AlertExpiredComponent implements OnInit {
     this.htmlPreview.showReport(url, 'landscape');
   }
 
+  reportExcel() {
+    let _genericType
+    let _warehouseId
+    if (this.genericTypeE === 'all') {
+      const _g = [];
+      this.genericTypes.forEach(v => {
+        _g.push(v.generic_type_id)
+      });
+      _genericType = _g;
+    } else {
+      _genericType = this.genericTypeE;
+    }
+    if (this.warehouseId === 'all') {
+      const _w = [];
+      this.warehouses.forEach(v => {
+        _w.push(v.warehouse_id)
+      });
+      _warehouseId = _w;
+    } else {
+      _warehouseId = this.warehouseId;
+    }
+    const url = `${this.apiUrl}/report/print/alert-expried/excel?genericTypeId=${_genericType}&warehouseId=${_warehouseId}&token=${this.token}`;
+    window.open(url, '_blank');
+  }
+
   searc(event: any) {
     this.getAllProducts();
   }
