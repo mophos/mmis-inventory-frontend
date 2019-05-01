@@ -33,8 +33,8 @@
       <clr-button [disabled]="!requisitionSelected.length" class="btn btn-sm btn-primary" (click)="printSetProduct()">
         <clr-icon shape="printer"></clr-icon> พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก
       </clr-button>
-      <clr-button *ngIf="selectedTab === 'approved' && tabKeep" [disabled]="!requisitionSelected.length" class="btn btn-sm btn-danger"
-        (click)="keep()">
+      <clr-button *ngIf="selectedTab === 'approved' && tabKeep" [disabled]="!requisitionSelected.length"
+        class="btn btn-sm btn-danger" (click)="keep()">
         <clr-icon shape="redo"></clr-icon> จัดเก็บ
       </clr-button>
     </clr-button-group>
@@ -46,11 +46,17 @@
       </clr-button>
     </clr-button-group>
   </div>
-  
+
   <div *ngIf="selectedTab === 'waiting'" class="col-md-6" style="padding-top: 5px; padding-bottom: 5px;float:right;">
     <clr-button-group style="float:right;">
       <clr-button [disabled]="!requisitionWaitSelected.length" class="btn btn-sm btn-primary" (click)="printWaitReq()">
         <clr-icon shape="printer"></clr-icon> พิมพ์รายการขอเบิก
+      </clr-button>
+    </clr-button-group>
+    <clr-button-group style="float:right;">
+      <clr-button [disabled]="!requisitionWaitSelected.length" class="btn btn-sm btn-primary"
+        (click)="printSumProduct()">
+        <clr-icon shape="printer"></clr-icon> พิมพ์สรุปรายการตามใบเบิก
       </clr-button>
     </clr-button-group>
   </div>
@@ -68,8 +74,8 @@
           <div class="form-group row wid99">
             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
-                style="width:30%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query"
+                placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:30%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
@@ -87,7 +93,8 @@
           </div>
         </div>
       </div>
-      <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="requisitionWaitSelected" style="padding-top: 5px; height: 85%;">
+      <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="requisitionWaitSelected"
+        style="padding-top: 5px; height: 85%;">
         <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -98,13 +105,17 @@
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let order of orders" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y'}">
           <clr-dg-action-overflow>
-            <button class="action-item" [disabled]="order.is_cancel === 'Y'" [routerLink]="['/admin/requisition/confirm']"
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'"
+              [routerLink]="['/admin/requisition/confirm']"
               [queryParams]="{requisitionId: order.requisition_order_id}">บันทึกจ่ายเวชภัณฑ์</button>
-            <button class="action-item" [disabled]="order.is_cancel === 'Y'" [routerLink]="['/admin/requisition/edit/', order.requisition_order_id]">แก้ไขใบเบิก</button>
-            <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrder(order)">ยกเลิกใบเบิก</button>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'"
+              [routerLink]="['/admin/requisition/edit/', order.requisition_order_id]">แก้ไขใบเบิก</button>
+            <button class="action-item" [disabled]="order.is_cancel === 'Y'"
+              (click)="removeOrder(order)">ยกเลิกใบเบิก</button>
             <!-- <button class="action-item" (click)="onDelete(user)">พิมพ์ใบเบิก</button> -->
           </clr-dg-action-overflow>
-          <wm-requisition-order-items *clrIfExpanded [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items>
+          <wm-requisition-order-items *clrIfExpanded [requisitionId]="order.requisition_order_id"
+            ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell>
@@ -126,7 +137,8 @@
 
         <clr-dg-footer>
           {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
-          <clr-dg-pagination #pageWorking [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalWaiting"></clr-dg-pagination>
+          <clr-dg-pagination #pageWorking [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
+            [clrDgTotalItems]="totalWaiting"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -145,8 +157,8 @@
           <div class="form-group row wid99">
             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
-                style="width:30%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query"
+                placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:30%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
@@ -172,15 +184,18 @@
         <!-- <clr-dg-column>เบิกจาก</clr-dg-column> -->
         <clr-dg-column>ประเภทการเบิก</clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let order of waitingApproves" [clrDgItem]="order" [ngClass]="{'isError': order.is_cancel === 'Y', 'isWarning': order.confirm_qty <= 0 || !order.confirm_qty}">
+        <clr-dg-row *ngFor="let order of waitingApproves" [clrDgItem]="order"
+          [ngClass]="{'isError': order.is_cancel === 'Y', 'isWarning': order.confirm_qty <= 0 || !order.confirm_qty}">
           <clr-dg-action-overflow>
             <!-- <button class="action-item" (click)="printApprove(order)">พิมพ์ใบอนุมัติเบิก</button>
             <button class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button> -->
-            <button class="action-item" [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0" routerLink="/admin/requisition/confirm/edit"
+            <button class="action-item" [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0"
+              routerLink="/admin/requisition/confirm/edit"
               [queryParams]="{requisitionId: order.requisition_order_id, confirmId: order.confirm_id}">
               <clr-icon shape="note"></clr-icon> แก้ไขรายการ
             </button>
-            <button class="action-item" [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0" (click)="approveRequisitionCheck(order)">
+            <button class="action-item" [disabled]="order.is_cancel === 'Y' || order.confirm_qty === 0"
+              (click)="approveRequisitionCheck(order)">
               <clr-icon shape="check" class="is-success"></clr-icon> อนุมัติใบจ่าย
             </button>
             <button class="action-item" [disabled]="order.is_cancel === 'Y'" (click)="removeOrderConfirm(order)">
@@ -193,8 +208,9 @@
               <clr-icon shape="refresh" class="is-danger"></clr-icon> บันทึกจ่ายเวชภัณฑ์ใหม่
             </button> -->
           </clr-dg-action-overflow>
-          <wm-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [requisitionId]="order.requisition_order_id"
-            ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items-pay>
+          <wm-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id"
+            [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail">
+          </wm-requisition-order-items-pay>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_warehouse_name}}</clr-dg-cell>
@@ -205,7 +221,8 @@
 
         <clr-dg-footer>
           {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
-          <clr-dg-pagination #pageWorking [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalWaitingApprove"></clr-dg-pagination>
+          <clr-dg-pagination #pageWorking [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
+            [clrDgTotalItems]="totalWaitingApprove"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -223,15 +240,16 @@
           <div class="form-group row wid99">
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
-                style="width:50%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query"
+                placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:50%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
               </button>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              <button class="btn btn-sm btn-danger btn-icon" [disabled]="!selectedCancel.length" (click)="doCancelUnpaids()">
+              <button class="btn btn-sm btn-danger btn-icon" [disabled]="!selectedCancel.length"
+                (click)="doCancelUnpaids()">
                 <clr-icon shape="trash"></clr-icon> ยกเลิกค้างจ่าย ({{selectedCancel.length | number}} รายการ)
               </button>
             </div>
@@ -247,7 +265,8 @@
           </div>
         </div>
       </div>
-      <clr-datagrid (clrDgRefresh)="refreshUnPaid($event)" style="padding-top: 5px; height: 82%;" [(clrDgSelected)]="selectedCancel">
+      <clr-datagrid (clrDgRefresh)="refreshUnPaid($event)" style="padding-top: 5px; height: 82%;"
+        [(clrDgSelected)]="selectedCancel">
         <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
         <clr-dg-column>หน่วยเบิก</clr-dg-column>
@@ -260,7 +279,8 @@
             <button class="action-item" (click)="recreateRequisitionOrder(order)">สร้างใบเบิกใหม่</button>
             <button class="action-item" (click)="cancelUnpaid(order)">ยกเลิกค้างจ่าย</button>
           </clr-dg-action-overflow>
-          <wm-requisition-order-unpaid-items *clrIfExpanded [unpaidId]="order.requisition_order_unpaid_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-unpaid-items>
+          <wm-requisition-order-unpaid-items *clrIfExpanded [unpaidId]="order.requisition_order_unpaid_id"
+            ngProjectAs="clr-dg-row-detail"></wm-requisition-order-unpaid-items>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_warehouse}}</clr-dg-cell>
@@ -271,7 +291,8 @@
 
         <clr-dg-footer>
           {{pageWorking.firstItem + 1}} - {{pageWorking.lastItem + 1}} จาก {{pageWorking.totalItems}} รายการ
-          <clr-dg-pagination #pageWorking [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalUnPaid"></clr-dg-pagination>
+          <clr-dg-pagination #pageWorking [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
+            [clrDgTotalItems]="totalUnPaid"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -289,8 +310,8 @@
           <div class="form-group row wid99">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
-                style="width:20%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query"
+                placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:20%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
@@ -299,7 +320,8 @@
           </div>
         </div>
       </div>
-      <clr-datagrid (clrDgRefresh)="refreshApprove($event)" style="padding-top: 5px; height: 82%;" [(clrDgSelected)]="requisitionSelected">
+      <clr-datagrid (clrDgRefresh)="refreshApprove($event)" style="padding-top: 5px; height: 82%;"
+        [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 150px;">วันที่อนุมัติ</clr-dg-column>
         <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
@@ -315,7 +337,8 @@
             <button class="action-item" (click)="printSetProduct(order)">พิมพ์ใบจัดเวชภัณฑ์ตามใบเบิก</button>
           </clr-dg-action-overflow> -->
           <wm-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [showUnpaid]="false"
-            [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items-pay>
+            [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail">
+          </wm-requisition-order-items-pay>
           <clr-dg-cell>{{order.approve_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
@@ -325,7 +348,8 @@
         </clr-dg-row>
         <clr-dg-footer>
           {{pageApprove.firstItem + 1}} - {{pageApprove.lastItem + 1}} จาก {{pageApprove.totalItems}} รายการ
-          <clr-dg-pagination #pageApprove [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalApproveds"></clr-dg-pagination>
+          <clr-dg-pagination #pageApprove [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
+            [clrDgTotalItems]="totalApproveds"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -343,8 +367,8 @@
           <div class="form-group row wid99">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <label for="gForm_1">ค้นหา</label>
-              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบเบิก, หน่วยเบิก"
-                style="width:20%;">
+              <input type="text" (keyup)="keyUpSearch($event)" name="query" [(ngModel)]="query"
+                placeholder="เลขที่ใบเบิก, หน่วยเบิก" style="width:20%;">
               <span *ngIf="query" (click)="clearQuery()">X</span>
               <button class="btn btn-sm btn-icon btn-primary" (click)="search()" [disabled]="!query">
                 <clr-icon shape="search"></clr-icon>
@@ -353,7 +377,8 @@
           </div>
         </div>
       </div>
-      <clr-datagrid (clrDgRefresh)="refreshKeep($event)" style="padding-top: 5px; height: 82%;" [(clrDgSelected)]="requisitionSelected">
+      <clr-datagrid (clrDgRefresh)="refreshKeep($event)" style="padding-top: 5px; height: 82%;"
+        [(clrDgSelected)]="requisitionSelected">
         <clr-dg-column style="width: 150px;">วันที่อนุมัติ</clr-dg-column>
         <clr-dg-column style="width: 150px;">วันที่เบิก</clr-dg-column>
         <clr-dg-column style="width: 150px;">เลขที่เบิก</clr-dg-column>
@@ -362,7 +387,8 @@
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let order of keeps" [clrDgItem]="order">
           <wm-requisition-order-items-pay *clrIfExpanded [confirmId]="order.confirm_id" [showUnpaid]="false"
-            [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail"></wm-requisition-order-items-pay>
+            [requisitionId]="order.requisition_order_id" ngProjectAs="clr-dg-row-detail">
+          </wm-requisition-order-items-pay>
           <clr-dg-cell>{{order.approve_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{order.requisition_code}}</clr-dg-cell>
@@ -372,14 +398,16 @@
         </clr-dg-row>
         <clr-dg-footer>
           {{pageApprove.firstItem + 1}} - {{pageApprove.lastItem + 1}} จาก {{pageApprove.totalItems}} รายการ
-          <clr-dg-pagination #pageApprove [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalKeeps"></clr-dg-pagination>
+          <clr-dg-pagination #pageApprove [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
+            [clrDgTotalItems]="totalKeeps"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
   </clr-tab>
 
 </clr-tabs>
-<clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
+<clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'"
+  [clrModalClosable]="false">
   <h3 class="modal-title">สิทธิ์การอนุมัติ{{title}}</h3>
   <div class="modal-body" style="height:150px">
 
@@ -398,7 +426,8 @@
     </form>
   </div>
   <div class="modal-footer" style="padding-top: 0px;">
-    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkApprove(username,password)">บันทึก</button>
+    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password"
+      (click)="checkApprove(username,password)">บันทึก</button>
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
 </clr-modal>
