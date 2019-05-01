@@ -281,8 +281,7 @@ export class BorrowComponent implements OnInit {
         this.modalLoading.show();
         const rs: any = await this.borrowItemsService.approveAll(borrowIds);
         if (rs.ok) {
-          console.log(rs.rows)
-          // this.saveMemory(rs.data);          
+          this.saveMemory(rs.data);          
           this.alertService.success();
           this.selectedApprove = [];
           this.selectedApproveReceive = [];

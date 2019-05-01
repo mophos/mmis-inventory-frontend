@@ -306,7 +306,7 @@ Highcharts.setOptions({
     ProductsWarehouseComponent,
     IssueTemplateNewComponent,
     MonthlyReportComponent,
-    PayReportComponent
+    PayReportComponent,
   ],
   providers: [
     MainService,
