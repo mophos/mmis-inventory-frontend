@@ -150,7 +150,7 @@ export class WarehouseService {
     return rs.json();
   }
 
-  save(warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any) {
+  save(warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any, book: any) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/warehouses`, {
         warehouseName: warehouseName,
@@ -160,7 +160,8 @@ export class WarehouseService {
         isReceive: isReceive,
         isUnitIssue: isUnitIssue,
         hospcode: hospcode,
-        depCode: depCode
+        depCode: depCode,
+        book: book
       })
         .map(res => res.json())
         .subscribe(data => {
@@ -171,7 +172,7 @@ export class WarehouseService {
     });
   }
 
-  update(warehouseId: any, warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any) {
+  update(warehouseId: any, warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any, book: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.put(`${this.url}/warehouses/${warehouseId}`, {
         warehouseName: warehouseName,
@@ -181,7 +182,8 @@ export class WarehouseService {
         isReceive: isReceive,
         isUnitIssue: isUnitIssue,
         hospcode: hospcode,
-        depCode: depCode
+        depCode: depCode,
+        book: book
       })
         .map(res => res.json())
         .subscribe(data => {
