@@ -395,6 +395,7 @@ export class BorrowComponent implements OnInit {
         const notes: any = {};
         notes.remark = 'ยืมนอก Stock';
         notes.people_id = v.people_id;
+        notes.document_ref_id = v.borrow_id;
         notes.wm_withdarw = v.src_warehouse_id;
         notes.wm_borrow = v.dst_warehouse_id;
 
