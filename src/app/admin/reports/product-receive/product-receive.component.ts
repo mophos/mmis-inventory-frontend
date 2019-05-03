@@ -117,6 +117,17 @@ export class ProductReceiveComponent implements OnInit {
     this.htmlPreview.showReport(url, 'landscape');
   }
 
+  async ptintReportPurchasingMethod() {
+    let genericType = [];
+    this.genericTypeSelect.forEach(value => {
+      genericType.push('genericType=' + value.generic_type_id)
+    });
+    this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
+    this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
+    const url = `${this.apiUrl}/report/purchase-bit-type?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&token=${this.token}&` + genericType.join('&');
+    this.htmlPreview.showReport(url, 'landscape');
+  }
+
   async exportExcel() {
     let genericType = [];
     this.genericTypeSelect.forEach(value => {

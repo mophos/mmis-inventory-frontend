@@ -28,6 +28,10 @@
       (click)="ptintReportAccount()">
       <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ(แยกตามประเภท)
     </button>
+    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="ptintReportPurchasingMethod()">
+      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ(ตามรูปแบบการจัดซื้อ)
+    </button>
     <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
       (click)="exportExcel()">
       <clr-icon shape="download"></clr-icon>
