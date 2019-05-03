@@ -144,7 +144,7 @@ export class BorrowNoteComponent implements OnInit {
         srcWarehouseId: this.warehouseId,
         dstWarehouseId: this.dstWarehouse,
         peopleId: this.peopleId,
-        // remark: ''
+        remark: this.selectedGenerics[0].borrow_code
       };
 
       let generics = [];
