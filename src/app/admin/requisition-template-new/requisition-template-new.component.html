@@ -99,7 +99,7 @@
             <clr-dg-cell>{{(idx+1)}}</clr-dg-cell>
             <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
             <clr-dg-cell>
-              <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)" [genericId]="g.generic_id"></wm-select-receive-unit>
+              <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)" [selectedUnitGenericId]="g.unit_generic_id" [genericId]="g.generic_id"></wm-select-receive-unit>
             </clr-dg-cell>
             <clr-dg-cell style="text-align: center;">
               <button title="เลื่อนขึ้น" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productUp(g)">
