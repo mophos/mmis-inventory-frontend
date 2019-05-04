@@ -16,7 +16,7 @@ export class ProductsWarehouseComponent implements OnInit {
 
   products = [];
   genericTypes = [];
-  genericType: any = "";
+  genericType: any = "null";
   loading = false;
   totalProducts = 0;
   perPage = 20;
@@ -28,6 +28,8 @@ export class ProductsWarehouseComponent implements OnInit {
   warehouses: any = [];
   warehouseId: any;
   jwtHelper: JwtHelper = new JwtHelper();
+  genericTypeMultis: any;
+  @ViewChild('genericTypeMul') public genericTypeMul: any;
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('pagination') pagination: any;
@@ -41,9 +43,11 @@ export class ProductsWarehouseComponent implements OnInit {
     const decoded = this.jwtHelper.decodeToken(this.token);
     this.genericTypeIds = decoded.generic_type_id ? decoded.generic_type_id.split(',') : [];
     this.warehouseId = decoded.warehouseId;
+
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.genericTypeMultis = this.genericTypeMul.getDefaultGenericType();
     this.getGenericType();
     this.getWarehouseList();
   }
@@ -60,11 +64,36 @@ export class ProductsWarehouseComponent implements OnInit {
     }
   }
 
+  async selectGenericTypeMulti(e) {
+    try {
+      this.genericTypeMultis = e;
+      this.modalLoading.show();
+      let rs: any;
+      if (this.query) {
+        rs = await this.productService.search(this.query, e, this.perPage, 0, this.warehouseId);
+      } else {
+        rs = await this.productService.all(e, this.perPage, 0, this.warehouseId);
+      }
+      this.modalLoading.hide();
+      if (rs.ok) {
+        this.products = rs.rows;
+        this.totalProducts = rs.total;
+        this.currentPage = 1;
+      } else {
+        this.alertService.error(rs.error);
+      }
+
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.serverError();
+      console.log(error.message);
+    }
+
+  }
   async doSearch() {
     try {
       this.modalLoading.show();
-      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
-      const rs = await this.productService.search(this.query, _genericType, this.perPage, 0, this.warehouseId);
+      const rs = await this.productService.search(this.query, this.genericTypeMultis, this.perPage, 0, this.warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
         this.totalProducts = rs.total;
@@ -79,11 +108,9 @@ export class ProductsWarehouseComponent implements OnInit {
   }
 
   async getAllProducts() {
-
     this.modalLoading.show();
     try {
-      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
-      const rs = await this.productService.all(_genericType, this.perPage, 0, this.warehouseId);
+      const rs = await this.productService.all(this.genericTypeMultis, this.perPage, 0, this.warehouseId);
 
       if (rs.ok) {
         this.products = rs.rows;
@@ -114,11 +141,10 @@ export class ProductsWarehouseComponent implements OnInit {
 
     try {
       let rs: any;
-      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       if (this.query) {
-        rs = await this.productService.search(this.query, _genericType, limit, offset, this.warehouseId, this.sort);
+        rs = await this.productService.search(this.query, this.genericTypeMultis, limit, offset, this.warehouseId, this.sort);
       } else {
-        rs = await this.productService.all(_genericType, limit, offset, this.warehouseId, this.sort);
+        rs = await this.productService.all(this.genericTypeMultis, limit, offset, this.warehouseId, this.sort);
       }
       this.modalLoading.hide();
       if (rs.ok) {
@@ -154,31 +180,31 @@ export class ProductsWarehouseComponent implements OnInit {
     }
   }
 
-  async changeGenericType() {
-    try {
-      this.modalLoading.show();
-      let rs: any;
-      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
-      if (this.query) {
-        rs = await this.productService.search(this.query, _genericType, this.perPage, 0, this.warehouseId);
-      } else {
-        rs = await this.productService.all(_genericType, this.perPage, 0, this.warehouseId);
-      }
-      this.modalLoading.hide();
-      if (rs.ok) {
-        this.products = rs.rows;
-        this.totalProducts = rs.total;
-        this.currentPage = 1;
-      } else {
-        this.alertService.error(rs.error);
-      }
+  // async changeGenericType() {
+  //   try {
+  //     this.modalLoading.show();
+  //     let rs: any;
+  //     const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
+  //     if (this.query) {
+  //       rs = await this.productService.search(this.query, _genericType, this.perPage, 0, this.warehouseId);
+  //     } else {
+  //       rs = await this.productService.all(_genericType, this.perPage, 0, this.warehouseId);
+  //     }
+  //     this.modalLoading.hide();
+  //     if (rs.ok) {
+  //       this.products = rs.rows;
+  //       this.totalProducts = rs.total;
+  //       this.currentPage = 1;
+  //     } else {
+  //       this.alertService.error(rs.error);
+  //     }
 
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.serverError();
-      console.log(error.message);
-    }
-  }
+  //   } catch (error) {
+  //     this.modalLoading.hide();
+  //     this.alertService.serverError();
+  //     console.log(error.message);
+  //   }
+  // }
 
   getWarehouseList() {
     this.warehouseService.all()

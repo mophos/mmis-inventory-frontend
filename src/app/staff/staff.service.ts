@@ -158,12 +158,17 @@ export class StaffService {
   }
 
   async getGenericsWarehouse(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics?genericType=${genericType}`).toPromise();
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/generics`, {
+      genericType: genericType
+    }).toPromise();
     return rs.json();
   }
 
   async getGenericsWarehouseSearch(genericType: any, query: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/search?genericType=${genericType}&query=${query}`).toPromise();
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/generics/search`, {
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return rs.json();
   }
 
@@ -173,7 +178,7 @@ export class StaffService {
   }
 
 
-  async saveDefaultMinMax(minF:any , maxF: any) {
+  async saveDefaultMinMax(minF: any, maxF: any) {
     const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-default-minmax`, {
       minF: minF,
       maxF: maxF
@@ -432,7 +437,7 @@ export class StaffService {
     const rs = await this.authHttp.get(`${this.url}/staff/adjust-stock/list?limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
-  async getListStockAdjustSearch(limit, offset,query) {
+  async getListStockAdjustSearch(limit, offset, query) {
     const rs = await this.authHttp.get(`${this.url}/staff/adjust-stock/list/search?limit=${limit}&offset=${offset}&query=${query}`).toPromise();
     return rs.json();
   }

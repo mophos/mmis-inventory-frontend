@@ -1,0 +1,67 @@
+<!-- <span *ngIf="loading" class="spinner spinner-sm">
+  Loading...
+</span> -->
+
+<div class="row">
+  <div class="col-md-10">
+    <div class="select">
+      <select [(ngModel)]="genericTypeId" name="genericTypeId" (change)="changeGenericType()">
+        <option value="null">ทั้งหมด</option>
+        <option [value]="t.generic_type_id" *ngFor="let t of genericTypesLV1">{{t.generic_type_name}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <clr-icon shape="filter" (click)="modal = true"></clr-icon>
+  </div>
+</div>
+
+<clr-modal [(clrModalOpen)]="modal" [clrModalClosable]="false">
+  <h3 class="modal-title">กรองสินค้า</h3>
+  <div class="modal-body">
+    <form>
+      <section class="form-block">
+        <div class="row form-group">
+          <div class="col-md-4">หมวดสินค้า(หลัก)</div>
+          <div class="col-md-8">
+            <div class="select">
+              <select name="genericTypeLV1Id" (change)="selectGenericTypeLV1Id()" [(ngModel)]="genericTypeLV1Id">
+                <option value="null">ทั้งหมด</option>
+                <option *ngFor="let w of genericTypesLV1" [value]="w.generic_type_id">
+                  {{ w.generic_type_name }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">หมวดสินค้า(รอง)</div>
+          <div class="col-md-8">
+            <div class="select">
+              <select name="genericTypeLV2Id" [disabled]="genericTypesLV2.length == 0"
+                (change)="selectGenericTypeLV2Id()" [(ngModel)]="genericTypeLV2Id">
+                <option value="null">ทั้งหมด</option>
+                <option *ngFor="let w of genericTypesLV2" [value]="w.generic_type_lv2_id">
+                  {{ w.generic_type_lv2_name }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">หมวดสินค้า(ย่อย)</div>
+          <div class="col-md-8">
+            <div class="select">
+              <select name="genericTypeLV3Id" [disabled]="genericTypesLV3.length == 0" [(ngModel)]="genericTypeLV3Id">
+                <option value="null">ทั้งหมด</option>
+                <option *ngFor="let w of genericTypesLV3" [value]="w.generic_type_lv3_id">
+                  {{ w.generic_type_lv3_name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!genericTypeLV1Id">กรอง</button>
+    <button type="button" class="btn btn-outline" (click)="modal = false">ยกเลิก</button>
+  </div>
+</clr-modal>

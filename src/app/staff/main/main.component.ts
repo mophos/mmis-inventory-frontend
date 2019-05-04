@@ -18,10 +18,6 @@ export class MainComponent implements OnInit {
   token: string;
   logs: any = [];
 
-  @ViewChild('modalAdjust') modalAdjust: any;
-  @ViewChild('modalLoading') public modalLoading: any;
-  @ViewChild('htmlPreview') public htmlPreview: any;
-
   openModalAdjust = false;
   productNewId: any;
 
@@ -49,12 +45,17 @@ export class MainComponent implements OnInit {
   genericTypes = [];
   genericType: any = "";
 
+
+  genericTypeMultis: any;
+  @ViewChild('genericTypeMul') public genericTypeMul: any;
+  @ViewChild('modalAdjust') modalAdjust: any;
+  @ViewChild('modalLoading') public modalLoading: any;
+  @ViewChild('htmlPreview') public htmlPreview: any;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
-    private toThaiDate: ToThaiDatePipe,
     private staffService: StaffService,
     @Inject('API_URL') private apiUrl: string
   ) {
@@ -65,18 +66,21 @@ export class MainComponent implements OnInit {
 
 
   async ngOnInit() {
+    this.genericTypeMultis = this.genericTypeMul.getDefaultGenericType();
+    console.log(this.genericTypeMultis);
+
     if (!this.warehouseId) {
       this.alertService.error('ไม่พบรหัสคลังสินค้า');
     } else {
       await this.getGenericType();
-      this.getProducts();
+      // this.getProducts();
       this.getGenerics();
     }
   }
 
   getProducts() {
     this.modalLoading.show();
-    this.staffService.getProductsWarehouse(this.genericType)
+    this.staffService.getProductsWarehouse(this.genericTypeMultis)
       .then((result: any) => {
         if (result.ok) {
           this.products = result.rows;
@@ -94,7 +98,7 @@ export class MainComponent implements OnInit {
 
   getGenerics() {
     this.modalLoading.show();
-    this.staffService.getGenericsWarehouse(this.genericType)
+    this.staffService.getGenericsWarehouse(this.genericTypeMultis)
       .then((result: any) => {
         if (result.ok) {
           this.generics = result.rows;
@@ -129,6 +133,27 @@ export class MainComponent implements OnInit {
         this.alertService.error(e.message);
       });
   }
+
+  // async selectGenericTypeMulti(e) {
+  //   this.genericTypeMultis = e;
+  //   this.modalLoading.show();
+  //   // clear old product list
+  //   this.generics = [];
+  //   this.staffService.getGenericsWarehouseSearch(e, this.query)
+  //     .then((result: any) => {
+  //       if (result.ok) {
+  //         this.generics = result.rows;
+  //         this.ref.detectChanges();
+  //       } else {
+  //         this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
+  //       }
+  //       this.modalLoading.hide();
+  //     })
+  //     .catch((e) => {
+  //       this.modalLoading.hide();
+  //       this.alertService.error(e.message);
+  //     });
+  // }
 
   searchGenerics() {
     this.modalLoading.show();
@@ -245,13 +270,13 @@ export class MainComponent implements OnInit {
     }
   }
 
-  reportRemain(){
+  reportRemain() {
     const url = `${this.apiUrl}/report/print/staff-remain?token=${this.token}`;
     console.log(url)
     this.htmlPreview.showReport(url);
   }
 
-  exportRemain(){
+  exportRemain() {
     const url = `${this.apiUrl}/report/export/staff-remain?token=${this.token}`;
     window.open(url, '_blank');
   }
