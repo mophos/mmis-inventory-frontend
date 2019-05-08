@@ -11,7 +11,7 @@ import { WarehouseService } from './../warehouse.service';
 })
 export class ProductsComponent implements OnInit {
   sort: any = {};
-
+  token: any;
   products = [];
   genericTypes = [];
   genericType: any = "";
@@ -19,8 +19,6 @@ export class ProductsComponent implements OnInit {
   totalProducts = 0;
   perPage = 20;
   isSearching = false;
-  token: any;
-  genericTypeIds = [];
   query: any;
   currentPage = 1;
   warehouses: any = [];
@@ -38,9 +36,6 @@ export class ProductsComponent implements OnInit {
     @Inject('API_URL') private apiUrl: string,
   ) {
     this.token = sessionStorage.getItem('token');
-    const decoded = this.jwtHelper.decodeToken(this.token);
-    this.genericTypeIds = decoded.generic_type_id ? decoded.generic_type_id.split(',') : [];
-    // this.warehouseId = decoded.warehouseId;
   }
 
   ngOnInit() {
@@ -64,7 +59,6 @@ export class ProductsComponent implements OnInit {
   async doSearch() {
     try {
       this.modalLoading.show();
-      // const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       const rs = await this.productService.search(this.query, this.genericTypeMultis, this.perPage, 0, this.warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
@@ -83,7 +77,6 @@ export class ProductsComponent implements OnInit {
 
     this.modalLoading.show();
     try {
-      // const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       const rs = await this.productService.all(this.genericTypeMultis, this.perPage, 0, this.warehouseId);
 
       if (rs.ok) {
@@ -115,7 +108,6 @@ export class ProductsComponent implements OnInit {
 
     try {
       let rs: any;
-      // const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       if (this.query) {
         rs = await this.productService.search(this.query, this.genericTypeMultis, limit, offset, this.warehouseId, this.sort);
       } else {

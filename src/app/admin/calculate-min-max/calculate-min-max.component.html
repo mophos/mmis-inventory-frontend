@@ -20,8 +20,8 @@
                   [(ngModel)]="minMaxGroupId">
                   <!-- <option>เลือกคลังสินค้า</option> -->
                   <option *ngFor="let w of minMaxGroups" [value]="w.group_id">
-                  {{ w.group_name }}
-                </option>
+                    {{ w.group_name }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -31,17 +31,19 @@
               <label for="fromDate" class="required">ยอดใช้ตั้งแต่วันที่</label>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-              <my-date-picker-th name="fromDate" [options]="myDatePickerOptions" [(ngModel)]="fromDate" required></my-date-picker-th>
+              <my-date-picker-th name="fromDate" [options]="myDatePickerOptions" [(ngModel)]="fromDate" required>
+              </my-date-picker-th>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
               <label class="required" for="toDate">ถึงวันที่</label>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-              <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
+              <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required>
+              </my-date-picker-th>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-              <button class="btn btn-primary" type="button" (click)="calculateMinMaxGroup()" [disabled]="!fromDate || !toDate"
-                style="margin-top: 0px;">
+              <button class="btn btn-primary" type="button" (click)="calculateMinMaxGroup()"
+                [disabled]="!fromDate || !toDate" style="margin-top: 0px;">
                 <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
               </button>
             </div>
@@ -49,16 +51,12 @@
           <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
             <div class="col-md-9">
               ค้นหา :
-              <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGroup($event)" style="width: 300px;"
-                type="text" placeholder="ค้นหาสินค้า...">
+              <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGroup($event)"
+                style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
             </div>
             <div class="col-md-3" style="text-align: right;">
-              <div class="select">
-                <select [(ngModel)]="genericType" name="genericType" (change)="searchGenericGroup()">
-                  <option value="">ทั้งหมด</option>
-                  <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-                </select>
-              </div>
+              <wm-select-generic-type-multi #genericTypes (onSelect)="selectGenericTypeMultiGroup($event)">
+              </wm-select-generic-type-multi>
             </div>
           </div>
         </section>
@@ -109,16 +107,16 @@
               style="background-color: #FFF9C4" [value]="g.safety_min_day" wmNumberWithOutDot>
           </clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
-            <input type="text" class="wm-edit-box-number" #min (keyup)="onChangeMinQty(min.value, g)" style="background-color: #FFF9C4"
-              [value]="g.min_qty" wmNumberWithOutDot>
+            <input type="text" class="wm-edit-box-number" #min (keyup)="onChangeMinQty(min.value, g)"
+              style="background-color: #FFF9C4" [value]="g.min_qty" wmNumberWithOutDot>
           </clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
             <input type="text" class="wm-edit-box-number" #saftyMax (keyup)="onChangeSaftyStockMax(saftyMax.value, g)"
               style="background-color: #FFF9C4" [value]="g.safety_max_day" wmNumberWithOutDot>
           </clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
-            <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)" style="background-color: #FFF9C4"
-              [value]="g.max_qty" wmNumberWithOutDot>
+            <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)"
+              style="background-color: #FFF9C4" [value]="g.max_qty" wmNumberWithOutDot>
           </clr-dg-cell>
 
         </clr-dg-row>
@@ -150,17 +148,19 @@
               <label for="fromDate" class="required">ยอดใช้ตั้งแต่วันที่</label>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-              <my-date-picker-th name="fromDate" [options]="myDatePickerOptions" [(ngModel)]="fromDate" required></my-date-picker-th>
+              <my-date-picker-th name="fromDate" [options]="myDatePickerOptions" [(ngModel)]="fromDate" required>
+              </my-date-picker-th>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
               <label class="required" for="toDate">ถึงวันที่</label>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-              <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required></my-date-picker-th>
+              <my-date-picker-th name="toDate" [options]="myDatePickerOptions" [(ngModel)]="toDate" required>
+              </my-date-picker-th>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-              <button class="btn btn-primary" type="button" (click)="onClickCalculate()" [disabled]="!fromDate || !toDate"
-                style="margin-top: 0px;">
+              <button class="btn btn-primary" type="button" (click)="onClickCalculate()"
+                [disabled]="!fromDate || !toDate" style="margin-top: 0px;">
                 <clr-icon shape="calculator"></clr-icon> คำนวณ MIN-MAX ({{processDate | toThaiDate}})
               </button>
             </div>
@@ -168,16 +168,12 @@
           <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
             <div class="col-md-9">
               ค้นหา :
-              <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;"
-                type="text" placeholder="ค้นหาสินค้า...">
+              <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)"
+                style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
             </div>
             <div class="col-md-3" style="text-align: right;">
-              <div class="select">
-                <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
-                  <option value="">ทั้งหมด</option>
-                  <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-                </select>
-              </div>
+              <wm-select-generic-type-multi #genericTypes2 (onSelect)="selectGenericTypeMulti($event)">
+              </wm-select-generic-type-multi>
             </div>
           </div>
         </section>
@@ -245,16 +241,16 @@
               style="background-color: #FFF9C4" [value]="g.safety_min_day" wmNumberWithOutDot>
           </clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
-            <input type="text" class="wm-edit-box-number" #min (keyup)="onChangeMinQty(min.value, g)" style="background-color: #FFF9C4"
-              [value]="g.min_qty" wmNumberWithOutDot>
+            <input type="text" class="wm-edit-box-number" #min (keyup)="onChangeMinQty(min.value, g)"
+              style="background-color: #FFF9C4" [value]="g.min_qty" wmNumberWithOutDot>
           </clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
             <input type="text" class="wm-edit-box-number" #saftyMax (keyup)="onChangeSaftyStockMax(saftyMax.value, g)"
               style="background-color: #FFF9C4" [value]="g.safety_max_day" wmNumberWithOutDot>
           </clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
-            <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)" style="background-color: #FFF9C4"
-              [value]="g.max_qty" wmNumberWithOutDot>
+            <input type="text" class="wm-edit-box-number" #max (keyup)="onChangeMaxQty(max.value, g)"
+              style="background-color: #FFF9C4" [value]="g.max_qty" wmNumberWithOutDot>
           </clr-dg-cell>
           <!-- <clr-dg-cell style="text-align: right;">
             <input type="text" class="wm-edit-box-number" #leadTime (keyup)="onChangeLeadTmie(leadTime.value, g)" style="background-color: #FFF9C4"

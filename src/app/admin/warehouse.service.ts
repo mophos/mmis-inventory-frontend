@@ -34,18 +34,11 @@ export class WarehouseService {
     });
   }
 
-  async getMappingsGenerics() {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics`).toPromise();
-    return rs.json();
-  }
-
-  async getMappingsGenericsSearchType(keywords: any, genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics-search-type/${keywords}/${genericType}`).toPromise();
-    return rs.json();
-  }
-
-  async getMappingsGenericsType(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics-type/${genericType}`).toPromise();
+  async getMappingsGenericsSearchType(query: any, genericType: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/warehouses/get-mappings-generics-search-type`, {
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return rs.json();
   }
 
