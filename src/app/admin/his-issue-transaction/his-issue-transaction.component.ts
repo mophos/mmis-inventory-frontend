@@ -25,18 +25,21 @@ export class HisIssueTransactionComponent implements OnInit {
   selected = [];
   openNotMappings = false;
   hisNotMappings: any;
-  genericTypes = [];
-  genericType: any;
-  _genericTypes: any = [];
-  _genericType: any;
+  //// genericTypes = [];
+  //// genericType: any;
+  //// _genericTypes: any = [];
+  //// _genericType: any;
   token: any;
   warehouseId: any;
-  tab = 1;
-  productsHistory: any;
+  //// tab = 1;
+  productsHistory = [];
   dateHistory: any;
   warehouseName: any;
   jwtHelper: JwtHelper = new JwtHelper();
 
+  genericType: any;
+
+  @ViewChild('genericTypes') public genericTypes: any;
   constructor(
     private uploadingService: UploadingService,
     private alertService: AlertService,
@@ -58,47 +61,19 @@ export class HisIssueTransactionComponent implements OnInit {
         day: date.getDate()
       }
     };
-    this.getGenericType();
-    // this.getTransactionList();
+    //// this.getGenericType();
+    //// this.getTransactionList();
   }
 
-  async getGenericType() {
-    try {
-      const rs = await this.hisTransactionService.getGenericType();
-
-      if (rs.ok) {
-        this.genericTypes = rs.rows;
-        this._genericTypes = [];
-        this.genericTypes.forEach((e: any) => {
-          this._genericTypes.push(e.generic_type_id)
-        });
-        this.genericType = '';
-        if (this.tab == 1) {
-          this.getTransactionList();
-        } else if (this.tab == 2) {
-          this.getHistoryTransactionList();
-        }
-      } else {
-        this.alertService.error(rs.error);
-      }
-
-    } catch (error) {
-      console.log(error);
-      this.alertService.serverError();
-    }
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.genericType = this.genericTypes.getDefaultGenericType();
   }
 
   async getTransactionList() {
     try {
-      if (this.genericType === '') {
-        this._genericType = this._genericTypes;
-      } else {
-        this._genericType = [];
-        this._genericType.push(this.genericType)
-      }
-
       this.modalLoading.show();
-      const rs: any = await this.hisTransactionService.getTransactionList(this._genericType);
+      const rs: any = await this.hisTransactionService.getTransactionList(this.genericType);
       if (rs.ok) {
         this.products = rs.rows;
       } else {
@@ -207,7 +182,7 @@ export class HisIssueTransactionComponent implements OnInit {
             }
             this.modalLoading.hide();
           })
-          .catch((error) => {
+          .catch((err) => {
             this.modalLoading.hide();
             this.alertService.serverError();
           });
@@ -229,7 +204,7 @@ export class HisIssueTransactionComponent implements OnInit {
             }
             this.modalLoading.hide();
           })
-          .catch((error: any) => {
+          .catch((err: any) => {
             this.modalLoading.hide();
             this.alertService.serverError();
           });
@@ -237,36 +212,31 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   async showNotMappins() {
-    let rs: any = await this.hisTransactionService.getNotMappings()
-    this.hisNotMappings = rs.rows
-    if (this.hisNotMappings.length) {
-      this.openNotMappings = true;
-    } else {
-      this.alertService.error('ไม่มีรายการที่ยังไม่ได้ map');
+    try {
+      const rs: any = await this.hisTransactionService.getNotMappings();
+      if (rs.ok) {
+        this.hisNotMappings = rs.rows
+        if (this.hisNotMappings.length) {
+          this.openNotMappings = true;
+        } else {
+          this.alertService.error('ไม่มีรายการที่ยังไม่ได้ map');
+        }
+
+      } else {
+        this.alertService.serverError();
+      }
+    } catch (error) {
+      this.alertService.serverError();
     }
+
   }
 
-  async tabHis(event) {
-    this.tab = event
-    if (this.tab == 1) {
-      this.getTransactionList()
-    } else if (this.tab == 2) {
-      this.getHistoryTransactionList();
-    }
-  }
 
   async getHistoryTransactionList() {
-    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    const date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
     try {
-      if (this.genericType === '') {
-        this._genericType = this._genericTypes;
-      } else {
-        this._genericType = [];
-        this._genericType.push(this.genericType)
-      }
-
       this.modalLoading.show();
-      const rs: any = await this.hisTransactionService.getHistoryTransactionList(this._genericType, date);
+      const rs: any = await this.hisTransactionService.getHistoryTransactionList(this.genericType, date);
       if (rs.ok) {
         this.productsHistory = rs.rows;
       } else {
@@ -280,22 +250,28 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   async hisReportHis() {
-    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
-    if (this.genericType === '') {
-      this._genericType = this._genericTypes;
-    } else {
-      this._genericType = [];
-      this._genericType.push(this.genericType)
+    const date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    let genericTypeLV1: any;
+    let genericTypeLV2: any;
+    let genericTypeLV3: any;
+    if (this.genericType.generic_type_lv1_id.length) {
+      genericTypeLV1 = this.genericType.generic_type_lv1_id.join(',')
     }
-    const url = `${this.apiUrl}/report/his-history?warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&date=${date}&genericType=${this._genericType}&token=${this.token}`
+    if (this.genericType.generic_type_lv2_id.length) {
+      genericTypeLV2 = this.genericType.generic_type_lv2_id.join(',')
+    }
+    if (this.genericType.generic_type_lv3_id.length) {
+      genericTypeLV3 = this.genericType.generic_type_lv3_id.join(',')
+    }
+    const url = `${this.apiUrl}/report/his-history?warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&date=${date}&genericTypeLV1Id=${genericTypeLV1}&genericTypeLV2Id=${genericTypeLV2}&genericTypeLV3Id=${genericTypeLV3}&token=${this.token}`
     this.htmlPreview.showReport(url);
   }
 
-  async changeGenericTypes() {
-    if (this.tab == 1) {
-      this.getTransactionList();
-    } else if (this.tab == 2) {
-      this.getHistoryTransactionList();
-    }
+  selectGenericTypeMulti() {
+    this.getTransactionList();
+  }
+
+  selectGenericTypeMultiHistory() {
+    this.getHistoryTransactionList();
   }
 }

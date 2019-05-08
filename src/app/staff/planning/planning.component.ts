@@ -16,8 +16,6 @@ export class PlanningComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: LoadingModalComponent;
   products: any = [];
   generics: any = [];
-  genericTypes = [];
-  genericType: any = "";
   token: string;
   jwtHelper: JwtHelper = new JwtHelper();
   warehouseId: any;
@@ -36,7 +34,8 @@ export class PlanningComponent implements OnInit {
     editableDateField: false,
     showClearDateBtn: false
   };
-
+  genericType: any;
+  @ViewChild('genericTypes') public genericTypes: any;
   constructor(
     private alertService: AlertService,
     private staffService: StaffService
@@ -47,7 +46,8 @@ export class PlanningComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.getGenericType();
+    this.genericType = this.genericTypes.getDefaultGenericType();
+    //// await this.getGenericType();
     await this.getProducts();
     await this.getGenerics();
     const date = new Date();
@@ -71,7 +71,7 @@ export class PlanningComponent implements OnInit {
   async getProducts() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.staffService.getProductsWarehouse(this.genericType);
+      const rs: any = await this.staffService.getProductsWarehouse(this.genericType, this.query);
       if (rs.ok) {
         rs.rows.forEach(v => {
           try {
@@ -101,7 +101,7 @@ export class PlanningComponent implements OnInit {
   async getGenerics() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.staffService.getGenericsWarehosueMinMax(this.genericType);
+      const rs: any = await this.staffService.getGenericsWarehosueMinMax(this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
         this._generics = _.clone(this.generics);
@@ -199,17 +199,17 @@ export class PlanningComponent implements OnInit {
 
       });
   }
-  async cal(){
+  async cal() {
     this.alertService.confirm('ต้องการเปลี่ยนค่า min/max ทุกรายการ ใช่หรือไม่?')
-      .then(async () => { 
+      .then(async () => {
 
         try {
           this.modalLoading.show();
-          const rs: any = await this.staffService.saveDefaultMinMax(this.minQty,this.maxQty);
+          const rs: any = await this.staffService.saveDefaultMinMax(this.minQty, this.maxQty);
           if (rs.ok) {
             this.alertService.success();
             this.openModal = false
-            _.forEach(this.generics,(v: any) => {
+            _.forEach(this.generics, (v: any) => {
               v.safety_min_day = +this.minQty;
               v.safety_max_day = +this.maxQty;
             });
@@ -221,12 +221,12 @@ export class PlanningComponent implements OnInit {
           this.modalLoading.hide();
           this.alertService.error(JSON.stringify(error));
         }
-      }).catch(()=>{
-        
+      }).catch(() => {
+
       })
-      
+
   }
-  
+
   saveMinMax() {
     this.alertService.confirm('ต้องการบันทึกข้อมูล ใช่หรือไม่?')
       .then(async () => {
@@ -249,109 +249,117 @@ export class PlanningComponent implements OnInit {
       });
   }
 
-  async getGenericType() {
-    try {
-      this.modalLoading.show();
-      const rs = await this.staffService.getGenericType();
+  //// async getGenericType() {
+  ////   try {
+  ////     this.modalLoading.show();
+  ////     const rs = await this.staffService.getGenericType();
 
-      if (rs.ok) {
-        this.genericTypes = rs.rows;
-        this.genericType = rs.rows.length === 1 ? rs.rows[0].generic_type_id : "";
-      } else {
-        this.alertService.error(rs.error);
-      }
+  ////     if (rs.ok) {
+  ////       this.genericTypes = rs.rows;
+  ////       this.genericType = rs.rows.length === 1 ? rs.rows[0].generic_type_id : "";
+  ////     } else {
+  ////       this.alertService.error(rs.error);
+  ////     }
 
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      console.log(error);
-      this.alertService.serverError();
-    }
-  }
-  // searchProduct() {
-  //   // if (this.query) {
-  //     this.modalLoading.show();
-  //     // clear old product list
-  //     this.products = [];
-  //     let rs: any = this.staffService.searchProductsWarehouse(this.warehouseId, this.query)
-  //     if (rs.ok) {
-  //       rs.rows.forEach(v => {
-  //         try {
-  //           v.old_qty = v.qty;
-  //           v.large_qty = (v.qty / v.conversion);
-  //         } catch (error) {
-  //           v.old_qty = 0;
-  //           v.large_qty = 0;
-  //         }
-  //       });
-  //       this.products = rs.rows;
-  //       this.modalLoading.hide();
-  //     } else {
-  //       this.modalLoading.hide();
-  //       this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
-  //     }
-  // }
-  async searchProduct() {
-    this.modalLoading.show();
-    try {
-      const rs: any = await this.staffService.searchProductsWarehouse(this.genericType, this.query);
-      if (rs.ok) {
-        rs.rows.forEach(v => {
-          try {
-            v.old_qty = v.qty;
-            v.large_qty = (v.qty / v.conversion);
-          } catch (error) {
-            v.old_qty = 0;
-            v.large_qty = 0;
-          }
-        });
-        this.products = rs.rows;
-      } else {
-        this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error.message);
-    }
+  ////     this.modalLoading.hide();
+  ////   } catch (error) {
+  ////     this.modalLoading.hide();
+  ////     console.log(error);
+  ////     this.alertService.serverError();
+  ////   }
+  //// }
+
+  //// searchProduct() {
+  ////    //if (this.query) {
+  ////     this.modalLoading.show();
+  ////     // clear old product list
+  ////     this.products = [];
+  ////     let rs: any = this.staffService.searchProductsWarehouse(this.warehouseId, this.query)
+  ////     if (rs.ok) {
+  ////       rs.rows.forEach(v => {
+  ////         try {
+  ////           v.old_qty = v.qty;
+  ////           v.large_qty = (v.qty / v.conversion);
+  ////         } catch (error) {
+  ////           v.old_qty = 0;
+  ////           v.large_qty = 0;
+  ////         }
+  ////       });
+  ////       this.products = rs.rows;
+  ////       this.modalLoading.hide();
+  ////     } else {
+  ////       this.modalLoading.hide();
+  ////       this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
+  ////     }
+  //// }
+
+  //// async searchProduct() {
+  ////   this.modalLoading.show();
+  ////   try {
+  ////     const rs: any = await this.staffService.searchProductsWarehouse(this.genericType, this.query);
+  ////     if (rs.ok) {
+  ////       rs.rows.forEach(v => {
+  ////         try {
+  ////           v.old_qty = v.qty;
+  ////           v.large_qty = (v.qty / v.conversion);
+  ////         } catch (error) {
+  ////           v.old_qty = 0;
+  ////           v.large_qty = 0;
+  ////         }
+  ////       });
+  ////       this.products = rs.rows;
+  ////     } else {
+  ////       this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
+  ////     }
+  ////     this.modalLoading.hide();
+  ////   } catch (error) {
+  ////     this.modalLoading.hide();
+  ////     this.alertService.error(error.message);
+  ////   }
+  //// }
+
+  selectGenericTypeMulti(e) {
+    this.genericType = e;
+    this.getGenerics();
   }
 
-  async searchGenerics() {
-    this.modalLoading.show();
-    try {
-      const rs: any = await this.staffService.searchGenericsWarehosue(this.genericType, this.query);
-      if (rs.ok) {
-        this.generics = rs.rows;
-        for (const g of this.generics) {
-          const idx = _.findIndex(this._generics, { generic_id: g.generic_id });
-          if (idx > -1) {
-            g.use_total = this._generics[idx].use_total;
-            g.use_per_day = this._generics[idx].use_per_day;
-            g.safety_min_day = this._generics[idx].safety_min_day;
-            g.safety_max_day = this._generics[idx].safety_max_day;
-            g.qty = this._generics[idx].qty;
-            g.min_qty = this._generics[idx].min_qty;
-            g.max_qty = this._generics[idx].max_qty;
-          }
-        }
-      } else {
-        this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error.message);
-    }
-  }
-  // search when press ENTER
+  //// async searchGenerics() {
+  ////   this.modalLoading.show();
+  ////   try {
+  ////     const rs: any = await this.staffService.searchGenericsWarehosue(this.genericType, this.query);
+  ////     if (rs.ok) {
+  ////       this.generics = rs.rows;
+  ////       for (const g of this.generics) {
+  ////         const idx = _.findIndex(this._generics, { generic_id: g.generic_id });
+  ////         if (idx > -1) {
+  ////           g.use_total = this._generics[idx].use_total;
+  ////           g.use_per_day = this._generics[idx].use_per_day;
+  ////           g.safety_min_day = this._generics[idx].safety_min_day;
+  ////           g.safety_max_day = this._generics[idx].safety_max_day;
+  ////           g.qty = this._generics[idx].qty;
+  ////           g.min_qty = this._generics[idx].min_qty;
+  ////           g.max_qty = this._generics[idx].max_qty;
+  ////         }
+  ////       }
+  ////     } else {
+  ////       this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
+  ////     }
+  ////     this.modalLoading.hide();
+  ////   } catch (error) {
+  ////     this.modalLoading.hide();
+  ////     this.alertService.error(error.message);
+  ////   }
+  //// }
+  //// search when press ENTER
+
   enterSearch(e) {
     if (e.keyCode === 13) {
-      this.searchProduct();
+      this.getProducts();
     }
   }
   enterSearchMinMax(e) {
     if (e.keyCode === 13) {
-      this.searchGenerics();
+      this.getGenerics();
     }
   }
 
