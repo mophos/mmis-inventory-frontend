@@ -27,6 +27,7 @@ import { UsersService } from './users.service';
 import { UomService } from './uom.service';
 import { ImportStockComponent } from './import-stock/import-stock.component';
 import { AccessCheck } from './access-check';
+import { AuthBorrowService } from './auth-borrow.service';
 // import { PeriodComponent } from './admin/period/period.component';
 
 @NgModule({

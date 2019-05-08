@@ -3,7 +3,7 @@
   <span class="breadcrumb-item active">บันทึกช่วยจำการยืมยา/เวชภัณฑ์</span>
 </nav>
 
-<button class="btn btn-sm btn-success btn-icon" routerLink="/staff/borrow-notes/new">
+<button class="btn btn-sm btn-success btn-icon" [disabled]="true" routerLink="/staff/borrow-notes/new">
   <clr-icon shape="plus"></clr-icon> บันทึกยืมยา
 </button>
 
@@ -27,11 +27,11 @@
     <clr-dg-cell>{{note.remark}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">
       <div class="btn-group">
-        <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelNote(note.borrow_note_id)" title="ยกเลิกรายการ" [disabled]="note.is_cancel==='Y'||note.is_approve==='Y'">
+        <button class="btn btn-sm btn-danger wm-small-btn" (click)="cancelNote(note.borrow_note_id)" title="ยกเลิกรายการ" [disabled]="true">
           <clr-icon shape="trash"></clr-icon>
         </button>
         <button class="btn btn-sm btn-success wm-small-btn" routerLink="/staff/borrow-notes/{{note.borrow_note_id}}/edit" title="แก้ไข"
-          [disabled]="note.is_cancel==='Y'|| note.is_approve==='Y'">
+          [disabled]="true">
           <clr-icon shape="note"></clr-icon>
         </button>
       </div>
