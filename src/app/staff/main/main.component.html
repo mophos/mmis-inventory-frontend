@@ -9,33 +9,24 @@
     <button clrTabLink>Generic Group</button>
     <clr-tab-content *clrIfActive>
       <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
-        <div class="col-md-6">
+        <div class="col-md-5">
           ค้นหา :
           <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)"
             style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
-          <!-- <input type="text" class="form-control"> -->
         </div>
-        <div class="col-md-3 push-md-3" style="text-align: right;">
-          <!-- <div class="select">
-            <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
-              <option value="">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div> -->
-          <wm-select-generic-type-multi #genericTypeMul (onSelect)="selectGenericTypeMulti($event)">
-          </wm-select-generic-type-multi>
-        </div>
-      </div>
-      <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
-        <div class="col-md-2 push-md-8">
+        <div class="col-md-2">
           <button class="btn btn-sm btn-primary wm-small-btn" (click)="reportRemain()">
             พิมพ์รายการสินค้าคงเหลือ
           </button>
         </div>
-        <div class="col-md-2 push-md-8">
+        <div class="col-md-2">
           <button class="btn btn-sm btn-success wm-small-btn" (click)="exportRemain()">
             export รายการสินค้าคงเหลือ
           </button>
+        </div>
+        <div class="col-md-3" style="text-align: right;">
+          <wm-select-generic-type-multi #genericMultiGeneric (onSelect)="selectGenericTypeMulti($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <clr-datagrid [style.height.%]="85">
@@ -78,12 +69,8 @@
           <!-- <input type="text" class="form-control"> -->
         </div>
         <div class="col-md-3 push-md-3" style="text-align: right;">
-          <div class="select">
-            <select [(ngModel)]="genericType" name="genericType" (change)="searchProducts()">
-              <option value="">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
+          <wm-select-generic-type-multi #genericMultiProduct (onSelect)="selectGenericTypeMultiProduct($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <clr-datagrid [style.height.%]="85">

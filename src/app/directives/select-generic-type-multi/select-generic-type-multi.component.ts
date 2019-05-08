@@ -23,30 +23,25 @@ export class SelectGenericTypeMultiComponent implements OnInit {
   genericTypeId = 'null';
   loading = false;
   modal = false;
-  // @Input('disabled') disabled;
   jwtHelper: JwtHelper = new JwtHelper();
 
-  // @Input('genericTypeLV1Id')
-  // set setGenericTypeLV1Id(val) {
-  //   this.genericTypeLV1Id = val;
-  //   // this.selectGenericTypeLV1Id();
-  // }
+
 
   @Output('onSelect') onSelect: EventEmitter<any> = new EventEmitter<any>();
 
 
   constructor(private basicService: BasicService, private alertService: AlertService) { }
 
+  public test() {
+    return 'ddddd';
+  }
   getDefaultGenericType() {
     const token = sessionStorage.getItem('token');
     const decoded = this.jwtHelper.decodeToken(token);
-    const genericTypeLV1 = decoded.generic_type_id ? decoded.generic_type_id.split(',') : [];
-    const genericTypeLV2 = decoded.generic_type_lv2_id ? decoded.generic_type_lv2_id.split(',') : [];
-    const genericTypeLV3 = decoded.generic_type_lv3_id ? decoded.generic_type_lv3_id.split(',') : [];
     const obj = {
-      'generic_type_lv1_id': genericTypeLV1,
-      'generic_type_lv2_id': genericTypeLV2,
-      'generic_type_lv3_id': genericTypeLV3
+      'generic_type_lv1_id': decoded.generic_type_id ? decoded.generic_type_id.split(',') : [],
+      'generic_type_lv2_id': decoded.generic_type_lv2_id ? decoded.generic_type_lv2_id.split(',') : [],
+      'generic_type_lv3_id': decoded.generic_type_lv3_id ? decoded.generic_type_lv3_id.split(',') : []
     }
     return obj;
   }

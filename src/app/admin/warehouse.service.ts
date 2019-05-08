@@ -59,11 +59,10 @@ export class WarehouseService {
     return rs.json();
   }
   async getSearchStaffMappings(query: any, genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings/search/${query}/${genericType}`).toPromise();
-    return rs.json();
-  }
-  async getSearchStaffMappingsType(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings/type/${genericType}`).toPromise();
+    const rs: any = await this.authHttp.post(`${this.url}/warehouses/get-staff-mappings/search`, {
+      query: query,
+      genericType: genericType
+    }).toPromise();
     return rs.json();
   }
   async getShipingNetwork(warehouseId: any, type: any) {

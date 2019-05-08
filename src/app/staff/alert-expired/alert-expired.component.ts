@@ -24,16 +24,15 @@ export class AlertExpiredComponent implements OnInit {
   openSetSingleExpire = false;
   openSetAllExpired = false;
   submitLoading = false;
-  genericTypes = [];
-  genericType: any = "all";
-  genericTypeE: any = "all";
   products = [];
   jwtHelper: JwtHelper = new JwtHelper();
   rights: any;
-  menuSettingAlertExpired
+  menuSettingAlertExpired: any;
   token: any;
 
   query: any = '';
+  genericTypeMultis: any;
+  @ViewChild('genericTypeMulti') public genericTypeMulti: any;
   constructor(
     private alertExpiredService: AlertExpiredService,
     private alertService: AlertService,
@@ -51,68 +50,22 @@ export class AlertExpiredComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.getGenericType();
     await this.getAllProducts();
-    // this.getStatus();
     await this.getWarehouses();
     await this.getProductExpired();
-    console.log(this.token);
   }
 
-  // getStatus() {
-  //   this.modalLoading.show();
-  //   this.alertExpiredService.getStatus()
-  //     .then((result: any) => {
-  //       if (result.ok) {
-  //         if (result.status === 'Y') {
-  //           this.isAlert = true;
-  //         } else {
-  //           this.isAlert = false;
-  //         }
-  //       } else {
-  //         this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-  //       }
-  //       this.modalLoading.hide();
-  //     })
-  //     .catch(() => {
-  //       this.modalLoading.hide();
-  //       this.alertService.serverError();
-  //     });
-  // }
-
-  async getProductExpired() {
-    this.modalLoading.show();
-    try {
-      let _genericType;
-      let _warehouseId;
-      if (this.genericTypeE === 'all') {
-        const _g = [];
-        this.genericTypes.forEach(v => {
-          _g.push(v.generic_type_id)
-        });
-        _genericType = _g;
-      } else {
-        _genericType = this.genericTypeE;
-      }
-      _warehouseId = this.warehouseId;
-      const rs: any = await this.alertExpiredService.getProductExpired(_genericType, _warehouseId);
-      if (rs.ok) {
-        this.products = rs.rows;
-      } else {
-        this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(rs.error));
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.serverError();
-    }
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.genericTypeMultis = this.genericTypeMulti.getDefaultGenericType();
   }
+
 
   async getAllProducts() {
     this.isAll = true;
     this.modalLoading.show();
     try {
-      const rs: any = await this.alertExpiredService.getAllGenerics(this.query);
+      const rs: any = await this.alertExpiredService.getAllGenerics(this.genericTypeMultis, this.query);
       if (rs.ok) {
         this.allGenerics = rs.rows;
       } else {
@@ -125,50 +78,54 @@ export class AlertExpiredComponent implements OnInit {
     }
   }
 
-  async changeGenericType() {
-    this.isAll = true;
-    this.modalLoading.show();
-    if (this.genericType === 'all') {
-      this.getAllProducts()
-    } else {
-      try {
-        const rs: any = await this.alertExpiredService.getSelectGenerics(this.genericType);
-        if (rs.ok) {
-          this.allGenerics = rs.rows;
-        } else {
-          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(rs.error));
-        }
-        this.modalLoading.hide();
-      } catch (error) {
-        this.modalLoading.hide();
-        this.alertService.serverError();
-      }
-    }
-
-  }
-
-  async changeGenericTypeE() {
+  selectGenericTypeMulti(e) {
+    this.genericTypeMultis = e;
     this.getProductExpired();
   }
+  selectGenericTypeMultiSetting(e) {
+    this.genericTypeMultis = e;
+    if (this.isAll) {
+      this.getAllProducts();
+    } else {
+      this.getUnsetProducts()
+    }
+  }
 
-  async getGenericType() {
+  async getProductExpired() {
+    this.modalLoading.show();
     try {
-      this.modalLoading.show();
-      const rs = await this.productService.getGenericType();
+      const rs: any = await this.alertExpiredService.getProductExpired(this.genericTypeMultis, this.warehouseId, this.query);
       if (rs.ok) {
-        this.genericTypes = rs.rows;
-        this.genericType = 'all';
-        this.genericTypeE = 'all';
+        this.products = rs.rows;
       } else {
-        this.alertService.error(rs.error);
+        this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(rs.error));
       }
-
       this.modalLoading.hide();
     } catch (error) {
       this.modalLoading.hide();
-      this.alertService.error(error);
+      this.alertService.serverError();
     }
   }
+
+  getUnsetProducts() {
+    this.isAll = false;
+    this.modalLoading.show();
+    this.alertExpiredService.getUnsetProducts(this.genericTypeMultis, this.query)
+      .then((result: any) => {
+        if (result.ok) {
+          this.allGenerics = result.rows;
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+        }
+        this.modalLoading.hide();
+        this.ref.detectChanges();
+      })
+      .catch(() => {
+        this.modalLoading.hide();
+        this.alertService.serverError();
+      });
+  }
+
 
   setExpireCount() {
     try {
@@ -194,69 +151,51 @@ export class AlertExpiredComponent implements OnInit {
     this.openSetSingleExpire = true;
   }
 
-  saveExpireCount() {
-    if (this.numDays > 0) {
-      this.submitLoading = true;
-      this.alertExpiredService.saveExpiredCount(this.selectedGenericIds, this.numDays)
-        .then((result: any) => {
-          if (result.ok) {
-            this.openSetSingleExpire = false;
-            this.getAllProducts();
-          } else {
-            this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-          }
-          this.submitLoading = false;
-        })
-        .catch(() => {
-          this.submitLoading = false;
-          this.alertService.serverError();
-        });
-    } else {
-      this.submitLoading = false;
-      this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
-    }
-  }
-
-  saveExpireCountAll() {
-    if (this.numDays > 0) {
-      this.submitLoading = true;
-      this.alertExpiredService.saveExpiredCountAll(this.selectedGenericIds, this.numDays)
-        .then((result: any) => {
-          if (result.ok) {
-            this.openSetAllExpired = false;
-            this.getAllProducts();
-          } else {
-            this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
-          }
-          this.submitLoading = false;
-        })
-        .catch(() => {
-          this.submitLoading = false;
-          this.alertService.serverError();
-        });
-    } else {
-      this.submitLoading = false;
-      this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
-    }
-  }
-
-  getUnsetProducts() {
-    this.isAll = false;
-    this.modalLoading.show();
-    this.alertExpiredService.getUnsetProducts()
-      .then((result: any) => {
-        if (result.ok) {
-          this.allGenerics = result.rows;
+  async saveExpireCount() {
+    try {
+      if (this.numDays > 0) {
+        this.submitLoading = true;
+        const rs: any = await this.alertExpiredService.saveExpiredCount(this.selectedGenericIds, this.numDays);
+        if (rs.ok) {
+          this.openSetSingleExpire = false;
+          await this.getAllProducts();
+          await this.getProductExpired();
         } else {
-          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(result.error));
+          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(rs.error));
         }
-        this.modalLoading.hide();
-        this.ref.detectChanges();
-      })
-      .catch(() => {
-        this.modalLoading.hide();
-        this.alertService.serverError();
-      });
+        this.submitLoading = false;
+      } else {
+        this.submitLoading = false;
+        this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
+      }
+    } catch (error) {
+      this.submitLoading = false;
+      this.alertService.serverError();
+    }
+  }
+
+  async saveExpireCountAll() {
+    try {
+      if (this.numDays > 0) {
+        this.submitLoading = true;
+        const rs: any = await this.alertExpiredService.saveExpiredCountAll(this.genericTypeMultis, this.numDays);
+        if (rs.ok) {
+          this.openSetAllExpired = false;
+          await this.getAllProducts();
+          await this.getProductExpired();
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด : ' + JSON.stringify(rs.error));
+        }
+        this.submitLoading = false;
+      } else {
+        this.submitLoading = false;
+        this.alertService.error('ควรกำหนดวันที่แจ้งเตือนอย่างน้อย 10 วันขึ้นไป');
+      }
+    } catch (error) {
+      this.submitLoading = false;
+      this.alertService.serverError();
+    }
+
   }
 
   async getWarehouses() {
@@ -274,40 +213,44 @@ export class AlertExpiredComponent implements OnInit {
   }
 
   report() {
-    let _genericType
-    let _warehouseId
-    if (this.genericTypeE === 'all') {
-      const _g = [];
-      this.genericTypes.forEach(v => {
-        _g.push(v.generic_type_id)
-      });
-      _genericType = _g;
-    } else {
-      _genericType = this.genericTypeE;
+    let genericTypeLV1: any;
+    let genericTypeLV2: any;
+    let genericTypeLV3: any;
+    if (this.genericTypeMultis.generic_type_lv1_id.length) {
+      genericTypeLV1 = this.genericTypeMultis.generic_type_lv1_id.join(',')
     }
-    _warehouseId = this.warehouseId;
-    const url = `${this.apiUrl}/report/print/alert-expried?genericTypeId=${_genericType}&warehouseId=${_warehouseId}&token=${this.token}`;
+    if (this.genericTypeMultis.generic_type_lv2_id.length) {
+      genericTypeLV2 = this.genericTypeMultis.generic_type_lv2_id.join(',')
+    }
+    if (this.genericTypeMultis.generic_type_lv3_id.length) {
+      genericTypeLV3 = this.genericTypeMultis.generic_type_lv3_id.join(',')
+    }
+    const url = `${this.apiUrl}/report/print/alert-expried?genericTypeLV1Id=${genericTypeLV1}&genericTypeLV2Id=${genericTypeLV2}&genericTypeLV3Id=${genericTypeLV3}&warehouseId=${this.warehouseId}&token=${this.token}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
 
   reportExcel() {
-    let _genericType
-    let _warehouseId
-    if (this.genericTypeE === 'all') {
-      const _g = [];
-      this.genericTypes.forEach(v => {
-        _g.push(v.generic_type_id)
-      });
-      _genericType = _g;
-    } else {
-      _genericType = this.genericTypeE;
+    let genericTypeLV1: any;
+    let genericTypeLV2: any;
+    let genericTypeLV3: any;
+    if (this.genericTypeMultis.generic_type_lv1_id.length) {
+      genericTypeLV1 = this.genericTypeMultis.generic_type_lv1_id.join(',')
     }
-    _warehouseId = this.warehouseId;
-    const url = `${this.apiUrl}/report/print/alert-expried/excel?genericTypeId=${_genericType}&warehouseId=${_warehouseId}&token=${this.token}`;
+    if (this.genericTypeMultis.generic_type_lv2_id.length) {
+      genericTypeLV2 = this.genericTypeMultis.generic_type_lv2_id.join(',')
+    }
+    if (this.genericTypeMultis.generic_type_lv3_id.length) {
+      genericTypeLV3 = this.genericTypeMultis.generic_type_lv3_id.join(',')
+    }
+    const url = `${this.apiUrl}/report/print/alert-expried/excel?genericTypeLV1Id=${genericTypeLV1}&genericTypeLV2Id=${genericTypeLV2}&genericTypeLV3Id=${genericTypeLV3}&warehouseId=${this.warehouseId}&token=${this.token}`;
     window.open(url, '_blank');
   }
 
-  searc(event: any) {
-    this.getAllProducts();
+  search(event: any) {
+    if (this.isAll) {
+      this.getAllProducts();
+    } else {
+      this.getUnsetProducts()
+    }
   }
 }

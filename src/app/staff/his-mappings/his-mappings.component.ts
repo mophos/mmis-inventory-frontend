@@ -12,53 +12,36 @@ export class HisMappingsComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
 
   mappings = [];
-  query: any;
-  genericType = 'all';
-  genericTypes = [];
-
+  query = '';
+  genericType: any;
+  @ViewChild('genericTypes') public genericTypes: any;
   constructor(
     private warehouseService: WarehouseService,
     private staffService: StaffService,
     private alertService: AlertService) { }
 
   ngOnInit() {
-    this.getMappings();
-    this.getGenericsType();
+    this.genericType = this.genericTypes.getDefaultGenericType();
+    this.searchMappings();
   }
   enterSearch(e) {
     if (e.keyCode === 13) {
       this.searchMappings();
     }
   }
-
-  async searchMappings() {
-    let rs: any;
-    try {
-      if (this.query) {
-        this.modalLoading.show();
-        rs = await this.warehouseService.getSearchStaffMappings(this.query, this.genericType);
-        this.mappings = rs.rows;
-        this.modalLoading.hide();
-      }
-      else if (this.genericType != 'all') {
-        this.modalLoading.show();
-        rs = await this.warehouseService.getSearchStaffMappingsType(this.genericType);
-        this.mappings = rs.rows;
-        this.modalLoading.hide();
-      }
-      else {
-        this.getMappings();
-      }
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error.message);
-    }
+  selectGenericTypeMulti(e) {
+    this.genericType = e;
+    this.searchMappings();
   }
-  async getMappings() {
-    this.modalLoading.show();
+  async searchMappings() {
     try {
-      const rs: any = await this.warehouseService.getStaffMappings();
-      this.mappings = rs.rows;
+      this.modalLoading.show();
+      const rs: any = await this.warehouseService.getSearchStaffMappings(this.query, this.genericType);
+      if (rs.ok) {
+        this.mappings = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
       this.modalLoading.hide();
     } catch (error) {
       this.modalLoading.hide();
@@ -98,24 +81,6 @@ export class HisMappingsComponent implements OnInit {
       }
     } else {
       this.alertService.error('กรุณาระบุข้อมูลให้ครบ')
-    }
-  }
-
-  async getGenericsType() {
-    try {
-      this.modalLoading.show();
-      const rs = await this.staffService.getGenericType();
-      if (rs.ok) {
-        this.genericTypes = rs.rows;
-      } else {
-        this.alertService.error(rs.error);
-      }
-
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      console.log(error);
-      this.alertService.serverError();
     }
   }
 }
