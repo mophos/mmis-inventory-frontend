@@ -48,6 +48,7 @@ import { SearchProductTmtComponent } from './search-product-tmt/search-product-t
 import { ModalReceiveApproveOtherStaffComponent } from './modal-receive-approve-other-staff/modal-receive-approve-other-staff.component';
 import { SelectGenericTypeComponent } from './select-generic-type/select-generic-type.component';
 import { SearchGenericAutocompleteAllComponent } from './search-generic-autocomplete-all/search-generic-autocomplete-all.component';
+import { SelectGenericTypeMultiComponent } from './select-generic-type-multi/select-generic-type-multi.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -98,7 +99,8 @@ import { SearchGenericAutocompleteAllComponent } from './search-generic-autocomp
         SearchProductTmtComponent,
         ModalReceiveApproveOtherStaffComponent,
         SelectGenericTypeComponent,
-        SearchGenericAutocompleteAllComponent
+        SearchGenericAutocompleteAllComponent,
+        SelectGenericTypeMultiComponent
     ],
     providers: [BasicService],
     exports: [
@@ -140,7 +142,8 @@ import { SearchGenericAutocompleteAllComponent } from './search-generic-autocomp
         SearchProductTmtComponent,
         ModalReceiveApproveOtherStaffComponent,
         SelectGenericTypeComponent,
-        SearchGenericAutocompleteAllComponent
+        SearchGenericAutocompleteAllComponent,
+        SelectGenericTypeMultiComponent
     ]
 })
 export class DirectivesModule { }

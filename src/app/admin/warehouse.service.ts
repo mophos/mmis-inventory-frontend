@@ -34,18 +34,11 @@ export class WarehouseService {
     });
   }
 
-  async getMappingsGenerics() {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics`).toPromise();
-    return rs.json();
-  }
-
-  async getMappingsGenericsSearchType(keywords: any, genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics-search-type/${keywords}/${genericType}`).toPromise();
-    return rs.json();
-  }
-
-  async getMappingsGenericsType(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-mappings-generics-type/${genericType}`).toPromise();
+  async getMappingsGenericsSearchType(query: any, genericType: any) {
+    const rs: any = await this.authHttp.post(`${this.url}/warehouses/get-mappings-generics-search-type`, {
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return rs.json();
   }
 
@@ -59,11 +52,10 @@ export class WarehouseService {
     return rs.json();
   }
   async getSearchStaffMappings(query: any, genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings/search/${query}/${genericType}`).toPromise();
-    return rs.json();
-  }
-  async getSearchStaffMappingsType(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/get-staff-mappings/type/${genericType}`).toPromise();
+    const rs: any = await this.authHttp.post(`${this.url}/warehouses/get-staff-mappings/search`, {
+      query: query,
+      genericType: genericType
+    }).toPromise();
     return rs.json();
   }
   async getShipingNetwork(warehouseId: any, type: any) {

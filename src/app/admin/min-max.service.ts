@@ -9,10 +9,15 @@ export class MinMaxService {
     private authHttp: AuthHttp
   ) { }
 
-  async getMinMaxGroupDetail(minMaxGroupId: any,genericType: any, query: any) {
-    const resp = await this.authHttp.get(`${this.url}/min-max/minmax-group-detail?minMaxGroupId=${minMaxGroupId}&genericType=${genericType}&query=${query}`).toPromise();
+  async getMinMaxGroupDetail(minMaxGroupId: any, genericType: any, query: any) {
+    const resp = await this.authHttp.post(`${this.url}/min-max/minmax-group-detail`, {
+      minMaxGroupId: minMaxGroupId,
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return resp.json();
   }
+
   async getMinMaxGroup() {
     const resp = await this.authHttp.get(`${this.url}/min-max/minmax-group`).toPromise();
     return resp.json();
@@ -28,7 +33,10 @@ export class MinMaxService {
   }
 
   async getMinMax(genericType: any, query: any) {
-    const resp = await this.authHttp.get(`${this.url}/min-max/detail?genericType=${genericType}&query=${query}`).toPromise();
+    const resp = await this.authHttp.post(`${this.url}/min-max/detail`, {
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return resp.json();
   }
 
@@ -39,7 +47,7 @@ export class MinMaxService {
     }).toPromise();
     return resp.json();
   }
-  async calculateMinMaxGroup(fromDate: any, toDate: any,minMaxGroupId:any) {
+  async calculateMinMaxGroup(fromDate: any, toDate: any, minMaxGroupId: any) {
     const resp = await this.authHttp.post(`${this.url}/min-max/calculate-group`, {
       fromDate: fromDate,
       toDate: toDate,
@@ -55,7 +63,7 @@ export class MinMaxService {
     }).toPromise();
     return resp.json();
   }
-  async searchGenericsGroupWarehosue(genericType: string, query: string,minMaxGroupId: any) {
+  async searchGenericsGroupWarehosue(genericType: string, query: string, minMaxGroupId: any) {
     const resp = await this.authHttp.post(`${this.url}/min-max/search-group`, {
       query: query,
       genericType: genericType,

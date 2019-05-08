@@ -9,31 +9,24 @@
     <button clrTabLink>Generic Group</button>
     <clr-tab-content *clrIfActive>
       <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
-        <div class="col-md-6">
+        <div class="col-md-5">
           ค้นหา :
-          <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;"
-            type="text" placeholder="ค้นหาสินค้า...">
-          <!-- <input type="text" class="form-control"> -->
+          <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)"
+            style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
         </div>
-        <div class="col-md-3 push-md-3" style="text-align: right;">
-          <div class="select">
-            <select [(ngModel)]="genericType" name="genericType" (change)="searchGenerics()">
-              <option value="">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
-        <div class="col-md-2 push-md-8">
+        <div class="col-md-2">
           <button class="btn btn-sm btn-primary wm-small-btn" (click)="reportRemain()">
             พิมพ์รายการสินค้าคงเหลือ
           </button>
         </div>
-        <div class="col-md-2 push-md-8">
+        <div class="col-md-2">
           <button class="btn btn-sm btn-success wm-small-btn" (click)="exportRemain()">
             export รายการสินค้าคงเหลือ
           </button>
+        </div>
+        <div class="col-md-3" style="text-align: right;">
+          <wm-select-generic-type-multi #genericMultiGeneric (onSelect)="selectGenericTypeMulti($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <clr-datagrid [style.height.%]="85">
@@ -46,7 +39,8 @@
           <clr-dg-action-overflow>
             <button class="action-item" (click)="deleteGeneric(p.generic_id)">ลบรายการ</button>
           </clr-dg-action-overflow>
-          <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [genericId]="p.generic_id"></wm-staff-product-stock-remain>
+          <wm-staff-product-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [genericId]="p.generic_id">
+          </wm-staff-product-stock-remain>
           <clr-dg-cell>{{p.generic_code}}</clr-dg-cell>
           <clr-dg-cell>
             {{p.generic_name}}
@@ -75,12 +69,8 @@
           <!-- <input type="text" class="form-control"> -->
         </div>
         <div class="col-md-3 push-md-3" style="text-align: right;">
-          <div class="select">
-            <select [(ngModel)]="genericType" name="genericType" (change)="searchProducts()">
-              <option value="">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
+          <wm-select-generic-type-multi #genericMultiProduct (onSelect)="selectGenericTypeMultiProduct($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <clr-datagrid [style.height.%]="85">
@@ -93,7 +83,8 @@
           <clr-dg-action-overflow>
             <button class="action-item" (click)="deleteProduct(p.product_id)">ลบรายการ</button>
           </clr-dg-action-overflow>
-          <wm-staff-product-detail-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail" [productId]="p.product_id"></wm-staff-product-detail-stock-remain>
+          <wm-staff-product-detail-stock-remain *clrIfExpanded ngProjectAs="clr-dg-row-detail"
+            [productId]="p.product_id"></wm-staff-product-detail-stock-remain>
           <clr-dg-cell>{{p.trade_code}}</clr-dg-cell>
           <clr-dg-cell>{{p.product_name}}
           </clr-dg-cell>
@@ -112,7 +103,8 @@
 </clr-tabs>
 
 
-<wm-adjust-product-modal [isCounting]="false" #modalAdjust [openModalAdjust]="openModalAdjust" (onSuccess)="successAdjust($event)"></wm-adjust-product-modal>
+<wm-adjust-product-modal [isCounting]="false" #modalAdjust [openModalAdjust]="openModalAdjust"
+  (onSuccess)="successAdjust($event)"></wm-adjust-product-modal>
 
 <wm-loading-modal #modalLoading></wm-loading-modal>
 <wm-html-preview #htmlPreview></wm-html-preview>

@@ -13,8 +13,7 @@
     <input type="text" (keyup)="search($event)" placeholder="พิมพ์แล้วกด Enter" name="query" style="width: 90%;"
       id="query" [(ngModel)]="query">
   </div>
-  <div class="col-md-4"></div>
-  <div class="col-lg-2">
+  <div class="col-lg-2 push-md-6">
     <div class="select">
       <select name="warehouseId" [(ngModel)]="warehouseId" (change)="changewarehouses()">
         <option value="0">ทุกคลังสินค้า</option>
@@ -24,12 +23,28 @@
       </select>
     </div>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-2 push-md-2">
+    <!-- <div class="select">
+      <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
+        <option value="">ทั้งหมด</option>
+        <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
+      </select>
+    </div> -->
     <wm-select-generic-type-multi #genericTypeMul (onSelect)="selectGenericTypeMulti($event)">
     </wm-select-generic-type-multi>
   </div>
 </div>
 <clr-datagrid (clrDgRefresh)="refresh($event)">
+  <!-- <clr-dg-column>
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      Working Code
+    </ng-container>
+  </clr-dg-column> -->
+  <!-- <clr-dg-column>
+    <ng-container *clrDgHideableColumn="{hidden: false}">
+      ชื่อทางการค้า
+    </ng-container>
+  </clr-dg-column> -->
   <clr-dg-column [clrDgField]="'generic_name'">
     <ng-container *clrDgHideableColumn="{hidden: false}">
       ชื่อเวชภัณฑ์

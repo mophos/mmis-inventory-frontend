@@ -13,13 +13,11 @@ export class ProductRequisitionComponent implements OnInit {
   warehouseId: any;
   jwtHelper: JwtHelper = new JwtHelper();
   token: any;
-  genericTypes = [];
-  genericType = 'all';
-  products = [];
   generics = [];
   query = '';
-  genericTypesAll = [];
+  genericTypeMultis: any;
   @ViewChild('modalLoading') public modalLoading: any;
+  @ViewChild('genericTypeMulti') public genericTypeMulti: any;
   constructor(
     private alertService: AlertService,
     private staffService: StaffService
@@ -30,78 +28,27 @@ export class ProductRequisitionComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.genericTypeMultis = this.genericTypeMulti.getDefaultGenericType();
     if (!this.warehouseId) {
       this.alertService.error('ไม่พบรหัสคลังสินค้า');
     } else {
-      await this.getGenericType();
-      await this.getProducts();
       await this.getGenerics();
     }
   }
-
-  async getGenericType() {
-    try {
-      this.modalLoading.show();
-      const rs = await this.staffService.getGenericType();
-      if (rs.ok) {
-        this.genericTypes = rs.rows;
-        rs.rows.forEach(t => {
-          this.genericTypesAll.push(t.generic_type_id);
-        });
-      } else {
-        this.alertService.error(rs.error);
-      }
-
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      console.log(error);
-      this.alertService.serverError();
-    }
+  selectGenericTypeMulti(e) {
+    this.genericTypeMultis = e;
+    this.getGenerics();
   }
 
-  async getProducts() {
-    try {
-      this.modalLoading.show();
-      let result;
-      let type;
-      if (this.genericType === 'all') {
-        type = this.genericTypesAll;
-      } else {
-        type = this.genericType
-      }
-      if (!this.query) {
-        result = await this.staffService.getProductsWarehouse(type)
-      } else {
-        result = await this.staffService.getProductsWarehouseSearch(type, this.query)
-      }
-      if (result.ok) {
-        this.products = result.rows;
-      } else {
-        this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error);
-    }
-
-  }
 
   async getGenerics() {
     try {
       this.modalLoading.show();
       let result;
-      let type;
-      if (this.genericType === 'all') {
-        type = this.genericTypesAll;
-      } else {
-        type = this.genericType
-      }
       if (!this.query) {
-        result = await this.staffService.getGenericsRequisitionWarehouse(type);
+        result = await this.staffService.getGenericsRequisitionWarehouse(this.genericTypeMultis);
       } else {
-        result = await this.staffService.getGenericsRequisitionWarehouseSearch(type, this.query)
+        result = await this.staffService.getGenericsRequisitionWarehouseSearch(this.genericTypeMultis, this.query)
       }
       if (result.ok) {
         this.generics = result.rows;
@@ -112,12 +59,6 @@ export class ProductRequisitionComponent implements OnInit {
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error);
-    }
-  }
-
-  enterSearch(e) {
-    if (e.keyCode === 13) {
-      this.getProducts();
     }
   }
 

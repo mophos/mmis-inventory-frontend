@@ -4,60 +4,63 @@
 </nav>
 <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
   <div class="col-md-6">
-    ค้นหา : <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
+    ค้นหา : <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)"
+      style="width: 300px;" type="text" placeholder="ค้นหาสินค้า...">
     <!-- <input type="text" class="form-control"> -->
   </div>
   <div class="col-md-4" style="text-align: right;">
-    <div class="select">
+    <!-- <div class="select">
       <select [(ngModel)]="genericType" name="genericType" (change)="getProducts()">
         <option value="">ทั้งหมด</option>
         <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
       </select>
-    </div>
+    </div> -->
+    <wm-select-generic-type-multi #genericMulti (onSelect)="selectGenericTypeMulti($event)">
+    </wm-select-generic-type-multi>
   </div>
   <div class="col-md-2">
-      <button class="btn btn-sm btn-success wm-small-btn" (click)="showPrint()">
-          <clr-icon shape="printer"></clr-icon>
-      </button>
-      <button class="btn btn-sm btn-primary wm-small-btn" (click)="outExcel()">
-          <clr-icon shape="export"></clr-icon>
-      </button>
+    <button class="btn btn-sm btn-success wm-small-btn" (click)="showPrint()">
+      <clr-icon shape="printer"></clr-icon>
+    </button>
+    <button class="btn btn-sm btn-primary wm-small-btn" (click)="outExcel()">
+      <clr-icon shape="export"></clr-icon>
+    </button>
 
   </div>
 
 </div>
 
 <div style="width:100%">
-<clr-datagrid [style.height.%]="90">
-  <clr-dg-column [clrDgField]="'trade_code'">Trade code</clr-dg-column>
-  <clr-dg-column [clrDgField]="'product_name'">Trade name</clr-dg-column>
-  <clr-dg-column [clrDgField]="'generic_code'">Generic code</clr-dg-column>
-  <clr-dg-column [clrDgField]="'generic_name'">Generic name</clr-dg-column>
-  <clr-dg-column [clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
-  <!-- <clr-dg-column>
+  <clr-datagrid [style.height.%]="90">
+    <clr-dg-column [clrDgField]="'trade_code'">Trade code</clr-dg-column>
+    <clr-dg-column [clrDgField]="'product_name'">Trade name</clr-dg-column>
+    <clr-dg-column [clrDgField]="'generic_code'">Generic code</clr-dg-column>
+    <clr-dg-column [clrDgField]="'generic_name'">Generic name</clr-dg-column>
+    <clr-dg-column [clrDgField]="'base_unit_name'">Base Unit</clr-dg-column>
+    <!-- <clr-dg-column>
       <ng-container *clrDgHideableColumn="{hidden: true}">
         Package
       </ng-container>
     </clr-dg-column> -->
-  <clr-dg-column>Generic Type</clr-dg-column>
+    <clr-dg-column>Generic Type</clr-dg-column>
 
-  <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
-    <clr-dg-cell>{{p.trade_code}}</clr-dg-cell>
-    <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
-    <clr-dg-cell>{{p.generic_code}}</clr-dg-cell>
-    <clr-dg-cell>{{p.generic_name}}</clr-dg-cell>
-    <clr-dg-cell>{{p.base_unit_name}}</clr-dg-cell>
-    <!-- <clr-dg-cell>
+    <clr-dg-row *clrDgItems="let p of products" [clrDgItem]="p">
+      <clr-dg-cell>{{p.trade_code}}</clr-dg-cell>
+      <clr-dg-cell>{{p.product_name}}</clr-dg-cell>
+      <clr-dg-cell>{{p.generic_code}}</clr-dg-cell>
+      <clr-dg-cell>{{p.generic_name}}</clr-dg-cell>
+      <clr-dg-cell>{{p.base_unit_name}}</clr-dg-cell>
+      <!-- <clr-dg-cell>
       <wm-show-units [genericId]="p.generic_id"></wm-show-units>
     </clr-dg-cell> -->
-    <clr-dg-cell>{{p.generic_type_name}}</clr-dg-cell>
-  </clr-dg-row>
+      <clr-dg-cell>{{p.generic_type_name}}</clr-dg-cell>
+    </clr-dg-row>
 
-  <clr-dg-footer>
-    {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
-    <clr-dg-pagination #paginationA [clrDgPageSize]="10"></clr-dg-pagination>
-  </clr-dg-footer>
-</clr-datagrid>
+    <clr-dg-footer>
+      {{paginationA.firstItem + 1}} - {{paginationA.lastItem + 1}} จาก {{paginationA.totalItems}} รายการ
+      <clr-dg-pagination #paginationA [clrDgPageSize]="10"></clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
 </div>
 <wm-loading-modal #modalLoading></wm-loading-modal>
 <wm-html-preview #htmlPreview></wm-html-preview>

@@ -11,7 +11,7 @@ import { WarehouseService } from './../warehouse.service';
 })
 export class ProductsComponent implements OnInit {
   sort: any = {};
-
+  token: any;
   products = [];
   genericTypes = [];
   genericType: any = "";
@@ -19,16 +19,16 @@ export class ProductsComponent implements OnInit {
   totalProducts = 0;
   perPage = 20;
   isSearching = false;
-  token: any;
-  genericTypeIds = [];
   query: any;
   currentPage = 1;
   warehouses: any = [];
   warehouseId = 0;
   jwtHelper: JwtHelper = new JwtHelper();
+  genericTypeMultis: any;
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('pagination') pagination: any;
+  @ViewChild('genericTypeMul') public genericTypeMul: any;
   constructor(
     private alertService: AlertService,
     private productService: ProductsService,
@@ -36,12 +36,10 @@ export class ProductsComponent implements OnInit {
     @Inject('API_URL') private apiUrl: string,
   ) {
     this.token = sessionStorage.getItem('token');
-    const decoded = this.jwtHelper.decodeToken(this.token);
-    this.genericTypeIds = decoded.generic_type_id ? decoded.generic_type_id.split(',') : [];
-    // this.warehouseId = decoded.warehouseId;
   }
 
   ngOnInit() {
+    this.genericTypeMultis = this.genericTypeMul.getDefaultGenericType();
     this.getGenericType();
     this.getWarehouseList();
   }
@@ -61,8 +59,7 @@ export class ProductsComponent implements OnInit {
   async doSearch() {
     try {
       this.modalLoading.show();
-      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
-      const rs = await this.productService.search(this.query, _genericType, this.perPage, 0, this.warehouseId);
+      const rs = await this.productService.search(this.query, this.genericTypeMultis, this.perPage, 0, this.warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
         this.totalProducts = rs.total;
@@ -80,8 +77,7 @@ export class ProductsComponent implements OnInit {
 
     this.modalLoading.show();
     try {
-      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
-      const rs = await this.productService.all(_genericType, this.perPage, 0, this.warehouseId);
+      const rs = await this.productService.all(this.genericTypeMultis, this.perPage, 0, this.warehouseId);
 
       if (rs.ok) {
         this.products = rs.rows;
@@ -112,11 +108,10 @@ export class ProductsComponent implements OnInit {
 
     try {
       let rs: any;
-      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       if (this.query) {
-        rs = await this.productService.search(this.query, _genericType, limit, offset, this.warehouseId, this.sort);
+        rs = await this.productService.search(this.query, this.genericTypeMultis, limit, offset, this.warehouseId, this.sort);
       } else {
-        rs = await this.productService.all(_genericType, limit, offset, this.warehouseId, this.sort);
+        rs = await this.productService.all(this.genericTypeMultis, limit, offset, this.warehouseId, this.sort);
       }
       this.modalLoading.hide();
       if (rs.ok) {
@@ -152,15 +147,14 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  async changeGenericType() {
+  async selectGenericTypeMulti(e) {
     try {
       this.modalLoading.show();
       let rs: any;
-      const _genericType = this.genericType === '' ? this.genericTypeIds : this.genericType;
       if (this.query) {
-        rs = await this.productService.search(this.query, _genericType, this.perPage, 0, this.warehouseId);
+        rs = await this.productService.search(this.query, e, this.perPage, 0, this.warehouseId);
       } else {
-        rs = await this.productService.all(_genericType, this.perPage, 0, this.warehouseId);
+        rs = await this.productService.all(e, this.perPage, 0, this.warehouseId);
       }
       this.modalLoading.hide();
       if (rs.ok) {

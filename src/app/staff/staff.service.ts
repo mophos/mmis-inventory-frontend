@@ -127,13 +127,11 @@ export class StaffService {
     });
   }
 
-  async getProductsWarehouse(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/products?genericType=${genericType}`).toPromise();
-    return rs.json();
-  }
-
-  async getProductsWarehouseSearch(genericType: any, query: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/products/search?genericType=${genericType}&query=${query}`).toPromise();
+  async getProductsWarehouse(genericType: any, query: any = '') {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/products`, {
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return rs.json();
   }
 
@@ -148,32 +146,45 @@ export class StaffService {
   }
 
   async getGenericsRequisitionWarehouse(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/requisition?genericType=${genericType}`).toPromise();
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/generics/requisition`, {
+      genericType: genericType
+    }).toPromise();
     return rs.json();
   }
 
   async getGenericsRequisitionWarehouseSearch(genericType: any, query: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/requisition/search?genericType=${genericType}&query=${query}`).toPromise();
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/generics/requisition/search`, {
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return rs.json();
   }
 
   async getGenericsWarehouse(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics?genericType=${genericType}`).toPromise();
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/generics`, {
+      genericType: genericType
+    }).toPromise();
     return rs.json();
   }
 
   async getGenericsWarehouseSearch(genericType: any, query: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/search?genericType=${genericType}&query=${query}`).toPromise();
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/generics/search`, {
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return rs.json();
   }
 
-  async getGenericsWarehosueMinMax(genericType: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/staff/warehouse/generics/min-max?genericType=${genericType}`).toPromise();
+  async getGenericsWarehosueMinMax(genericType: any, query: any = '') {
+    const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/generics/min-max`, {
+      genericType: genericType,
+      query: query
+    }).toPromise();
     return rs.json();
   }
 
 
-  async saveDefaultMinMax(minF:any , maxF: any) {
+  async saveDefaultMinMax(minF: any, maxF: any) {
     const rs: any = await this.authHttp.post(`${this.url}/staff/warehouse/save-default-minmax`, {
       minF: minF,
       maxF: maxF
@@ -204,35 +215,6 @@ export class StaffService {
   removeCheck(borrowId: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.delete(`${this.url}/staff/borrow/check/${borrowId}`)
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
-  }
-
-  searchProductsWarehouse(warehouseId: string, query: string) {
-    return new Promise((resolve, reject) => {
-      this.authHttp.post(`${this.url}/staff/warehouse/products/search`, {
-        query: query,
-        warehouseId: warehouseId
-      })
-        .map(res => res.json())
-        .subscribe(data => {
-          resolve(data);
-        }, error => {
-          reject(error);
-        });
-    });
-  }
-  searchGenericsWarehosue(genericType: string, query: string) {
-    return new Promise((resolve, reject) => {
-      this.authHttp.post(`${this.url}/staff/warehouse/generics/min-max/search`, {
-        query: query,
-        genericType: genericType
-      })
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -432,7 +414,7 @@ export class StaffService {
     const rs = await this.authHttp.get(`${this.url}/staff/adjust-stock/list?limit=${limit}&offset=${offset}`).toPromise();
     return rs.json();
   }
-  async getListStockAdjustSearch(limit, offset,query) {
+  async getListStockAdjustSearch(limit, offset, query) {
     const rs = await this.authHttp.get(`${this.url}/staff/adjust-stock/list/search?limit=${limit}&offset=${offset}&query=${query}`).toPromise();
     return rs.json();
   }

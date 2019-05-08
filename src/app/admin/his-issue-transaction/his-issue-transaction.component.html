@@ -4,7 +4,7 @@
 </nav>
 <clr-tabs>
   <clr-tab>
-    <button clrTabLink (click)="tabHis(1)">รายการตัดจ่าย HIS</button>
+    <button clrTabLink (click)="getTransactionList()">รายการตัดจ่าย HIS</button>
     <clr-tab-content *clrIfActive>
       <div class="row wid99">
         <div class=" col-md-10">
@@ -27,12 +27,8 @@
           </button>
         </div>
         <div class="col-md-2" style="text-align: right;">
-          <div class="select">
-            <select class="" [(ngModel)]="genericType" name="genericType" (change)="changeGenericTypes()">
-              <option value="">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
+          <wm-select-generic-type-multi #genericTypes (onSelect)="selectGenericTypeMulti($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <clr-datagrid style="height: 85%;" [(clrDgSelected)]="selected">
@@ -101,7 +97,7 @@
     </clr-tab-content>
   </clr-tab>
   <clr-tab>
-    <button clrTabLink (click)="tabHis(2)">ประวัติรายการตัดจ่าย HIS</button>
+    <button clrTabLink (click)="getHistoryTransactionList();">ประวัติรายการตัดจ่าย HIS</button>
     <clr-tab-content *clrIfActive>
       <div class="row wid99" style="padding:1em">
         <div class=" col-md-3">
@@ -114,17 +110,13 @@
           </button>
         </div>
         <div class="col-md-6">
-          <button class="btn btn-sm btn-primary-outline"(click)="hisReportHis()">
+          <button class="btn btn-sm btn-primary-outline" (click)="hisReportHis()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานประวัติการจ่ายจ่าย HIS
           </button>
         </div>
         <div class="col-md-2" style="text-align: right;">
-          <div class="select">
-            <select class="" [(ngModel)]="genericType" name="genericType" (change)="changeGenericTypes()">
-              <option value="">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
+          <wm-select-generic-type-multi #genericTypes2 (onSelect)="selectGenericTypeMultiHistory($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <clr-datagrid style="height: 85%;">
@@ -245,5 +237,5 @@
     </button>
   </div>
 </clr-modal>
-
+<wm-html-preview #htmlPreview></wm-html-preview>
 <wm-loading-modal #modalLoading></wm-loading-modal>

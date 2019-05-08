@@ -1,12 +1,9 @@
 import { StaffService } from './../staff.service';
 import { JwtHelper } from 'angular2-jwt';
-import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject, AfterViewInit } from '@angular/core';
 import { AlertService } from "../../alert.service";
-import { ToThaiDatePipe } from "../../helper/to-thai-date.pipe";
 
 import * as _ from 'lodash';
-
 @Component({
   selector: 'wm-main',
   templateUrl: './main.component.html',
@@ -17,10 +14,6 @@ export class MainComponent implements OnInit {
   jwtHelper: JwtHelper = new JwtHelper();
   token: string;
   logs: any = [];
-
-  @ViewChild('modalAdjust') modalAdjust: any;
-  @ViewChild('modalLoading') public modalLoading: any;
-  @ViewChild('htmlPreview') public htmlPreview: any;
 
   openModalAdjust = false;
   productNewId: any;
@@ -49,12 +42,15 @@ export class MainComponent implements OnInit {
   genericTypes = [];
   genericType: any = "";
 
+
+  genericTypeMultis: any;
+  @ViewChild('genericMultiGeneric') public genericMultiGeneric: any;
+  @ViewChild('modalAdjust') modalAdjust: any;
+  @ViewChild('modalLoading') public modalLoading: any;
+  @ViewChild('htmlPreview') public htmlPreview: any;
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private alertService: AlertService,
     private ref: ChangeDetectorRef,
-    private toThaiDate: ToThaiDatePipe,
     private staffService: StaffService,
     @Inject('API_URL') private apiUrl: string
   ) {
@@ -63,8 +59,8 @@ export class MainComponent implements OnInit {
     this.warehouseId = decodedToken.warehouseId;
   }
 
-
   async ngOnInit() {
+
     if (!this.warehouseId) {
       this.alertService.error('ไม่พบรหัสคลังสินค้า');
     } else {
@@ -74,9 +70,14 @@ export class MainComponent implements OnInit {
     }
   }
 
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.genericTypeMultis = this.genericMultiGeneric.getDefaultGenericType();
+  }
+
   getProducts() {
     this.modalLoading.show();
-    this.staffService.getProductsWarehouse(this.genericType)
+    this.staffService.getProductsWarehouse(this.genericTypeMultis)
       .then((result: any) => {
         if (result.ok) {
           this.products = result.rows;
@@ -94,7 +95,7 @@ export class MainComponent implements OnInit {
 
   getGenerics() {
     this.modalLoading.show();
-    this.staffService.getGenericsWarehouse(this.genericType)
+    this.staffService.getGenericsWarehouse(this.genericTypeMultis)
       .then((result: any) => {
         if (result.ok) {
           this.generics = result.rows;
@@ -114,7 +115,7 @@ export class MainComponent implements OnInit {
     this.modalLoading.show();
     // clear old product list
     this.products = [];
-    this.staffService.getProductsWarehouseSearch(this.genericType, this.query)
+    this.staffService.getProductsWarehouse(this.genericTypeMultis, this.query)
       .then((result: any) => {
         if (result.ok) {
           this.products = result.rows;
@@ -130,11 +131,53 @@ export class MainComponent implements OnInit {
       });
   }
 
+  async selectGenericTypeMulti(e) {
+    this.genericTypeMultis = e;
+    this.modalLoading.show();
+    // clear old product list
+    this.generics = [];
+    this.staffService.getGenericsWarehouseSearch(e, this.query)
+      .then((result: any) => {
+        if (result.ok) {
+          this.generics = result.rows;
+          this.ref.detectChanges();
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
+        }
+        this.modalLoading.hide();
+      })
+      .catch((err) => {
+        this.modalLoading.hide();
+        this.alertService.error(err.message);
+      });
+  }
+
+  async selectGenericTypeMultiProduct(e) {
+    this.genericTypeMultis = e;
+    this.modalLoading.show();
+    // clear old product list
+    this.products = [];
+    this.staffService.getProductsWarehouse(e, this.query)
+      .then((result: any) => {
+        if (result.ok) {
+          this.products = result.rows;
+          this.ref.detectChanges();
+        } else {
+          this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(result.error));
+        }
+        this.modalLoading.hide();
+      })
+      .catch((err) => {
+        this.modalLoading.hide();
+        this.alertService.error(err.message);
+      });
+  }
+
   searchGenerics() {
     this.modalLoading.show();
     // clear old product list
     this.generics = [];
-    this.staffService.getGenericsWarehouseSearch(this.genericType, this.query)
+    this.staffService.getGenericsWarehouseSearch(this.genericTypeMultis, this.query)
       .then((result: any) => {
         if (result.ok) {
           this.generics = result.rows;
@@ -245,13 +288,13 @@ export class MainComponent implements OnInit {
     }
   }
 
-  reportRemain(){
+  reportRemain() {
     const url = `${this.apiUrl}/report/print/staff-remain?token=${this.token}`;
     console.log(url)
     this.htmlPreview.showReport(url);
   }
 
-  exportRemain(){
+  exportRemain() {
     const url = `${this.apiUrl}/report/export/staff-remain?token=${this.token}`;
     window.open(url, '_blank');
   }
