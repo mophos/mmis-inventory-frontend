@@ -46,6 +46,10 @@ export class SelectGenericTypeMultiComponent implements OnInit {
     return obj;
   }
 
+  cancelFilter() {
+    this.onSelect.emit(this.getDefaultGenericType());
+  }
+
   changeGenericType() {
     this.genericTypeLV1Id = this.genericTypeId;
     this.getGenericTypesLV2();
