@@ -36,10 +36,15 @@ export class SelectGenericTypeMultiComponent implements OnInit {
     return 'ddddd';
   }
   getDefaultGenericType() {
+    // const obj = {
+    //   'generic_type_lv1_id': this.decoded.generic_type_id ? this.decoded.generic_type_id.split(',') : [],
+    //   'generic_type_lv2_id': this.decoded.generic_type_lv2_id ? this.decoded.generic_type_lv2_id.split(',') : [],
+    //   'generic_type_lv3_id': this.decoded.generic_type_lv3_id ? this.decoded.generic_type_lv3_id.split(',') : []
+    // }
     const obj = {
       'generic_type_lv1_id': this.decoded.generic_type_id ? this.decoded.generic_type_id.split(',') : [],
-      'generic_type_lv2_id': this.decoded.generic_type_lv2_id ? this.decoded.generic_type_lv2_id.split(',') : [],
-      'generic_type_lv3_id': this.decoded.generic_type_lv3_id ? this.decoded.generic_type_lv3_id.split(',') : []
+      'generic_type_lv2_id': [],
+      'generic_type_lv3_id': []
     }
     return obj;
   }
@@ -66,12 +71,12 @@ export class SelectGenericTypeMultiComponent implements OnInit {
     if (this.genericTypeLV1Id === 'null' || this.genericTypeLV1Id === null) {
       _genericTypesLV1 = this.decoded.generic_type_id ? this.decoded.generic_type_id.split(',') : null;
     }
-    if (this.genericTypeLV2Id === 'null' || this.genericTypeLV2Id === null) {
-      _genericTypesLV2 = this.decoded.generic_type_lv2_id ? this.decoded.generic_type_lv2_id.split(',') : null;
-    }
-    if (this.genericTypeLV3Id === 'null' || this.genericTypeLV3Id === null) {
-      _genericTypesLV3 = this.decoded.generic_type_lv3_id ? this.decoded.generic_type_lv3_id.split(',') : null;
-    }
+    // if (this.genericTypeLV2Id === 'null' || this.genericTypeLV2Id === null) {
+    //   _genericTypesLV2 = this.decoded.generic_type_lv2_id ? this.decoded.generic_type_lv2_id.split(',') : null;
+    // }
+    // if (this.genericTypeLV3Id === 'null' || this.genericTypeLV3Id === null) {
+    //   _genericTypesLV3 = this.decoded.generic_type_lv3_id ? this.decoded.generic_type_lv3_id.split(',') : null;
+    // }
 
     const obj: any = {
       generic_type_lv1_id: _genericTypesLV1 === 'null' || !_genericTypesLV1 ? [] : typeof _genericTypesLV1 === "string" ? [_genericTypesLV1] : _genericTypesLV1,
@@ -102,9 +107,6 @@ export class SelectGenericTypeMultiComponent implements OnInit {
       this.loading = false;
       if (res.ok) {
         this.genericTypesLV1 = res.rows;
-        // for (const i of res.rows) {
-        //   this._genericTypesLV1.push(i.generic_type_id);
-        // }
       } else {
         this.alertService.error(res.error);
       }
@@ -122,12 +124,6 @@ export class SelectGenericTypeMultiComponent implements OnInit {
       this.loading = false;
       if (res.ok) {
         this.genericTypesLV2 = res.rows;
-        // for (const i of res.rows) {
-        //   this._genericTypesLV2.push(i.generic_type_lv2_id);
-        // }
-        // if (this.genericTypesLV2.length > 0) {
-        //   this.genericTypeLV2Id = this.genericTypesLV2[0].generic_type_lv2_id;
-        // }
       } else {
         this.alertService.error(res.error);
       }
@@ -145,12 +141,6 @@ export class SelectGenericTypeMultiComponent implements OnInit {
       this.loading = false;
       if (res.ok) {
         this.genericTypesLV3 = res.rows;
-        // for (const i of res.rows) {
-        //   this._genericTypesLV3.push(i.generic_type_lv3_id);
-        // }
-        // if (this.genericTypesLV3.length > 0) {
-        //   this.genericTypeLV3Id = this.genericTypesLV3[0].generic_type_lv3_id;
-        // }
       } else {
         this.alertService.error(res.error);
       }
