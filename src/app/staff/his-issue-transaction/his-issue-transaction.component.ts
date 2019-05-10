@@ -26,18 +26,20 @@ export class HisIssueTransactionComponent implements OnInit {
   selected = [];
   warehouseId: any;
   token: any;
-  genericTypes = [];
-  genericType: any;
-  _genericTypes: any = [];
-  _genericType: any;
+  //// genericTypes = [];
+  //// genericType: any;
+  //// _genericTypes: any = [];
+  //// _genericType: any;
   openNotMappings = false;
   hisNotMappings: any;
-  tab = 1;
-  productsHistory: any;
+  //// tab = 1;
+  productsHistory = [];
   dateHistory: any;
   warehouseName: any;
   jwtHelper: JwtHelper = new JwtHelper();
+  genericType: any;
 
+  @ViewChild('genericTypes') public genericTypes: any;
   constructor(
     private alertService: AlertService,
     private hisTransactionService: HisTransactionService,
@@ -58,46 +60,45 @@ export class HisIssueTransactionComponent implements OnInit {
         day: date.getDate()
       }
     };
-    this.getGenericType();
-    // this.getTransactionList();
+    //// this.getGenericType();
+    //// this.getTransactionList();
   }
 
-  async getGenericType() {
-    try {
-      const rs = await this.hisTransactionService.getGenericType();
-
-      if (rs.ok) {
-        this.genericTypes = rs.rows;
-        this._genericTypes = [];
-        this.genericTypes.forEach((e: any) => {
-          this._genericTypes.push(e.generic_type_id)
-        });
-        this.genericType = '';
-        if (this.tab == 1) {
-          this.getTransactionList();
-        } else if (this.tab == 2) {
-          this.getHistoryTransactionList();
-        }
-      } else {
-        this.alertService.error(rs.error);
-      }
-
-    } catch (error) {
-      console.log(error);
-      this.alertService.serverError();
-    }
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.genericType = this.genericTypes.getDefaultGenericType();
   }
+
+  //// async getGenericType() {
+  ////   try {
+  ////     const rs = await this.hisTransactionService.getGenericType();
+
+  ////     if (rs.ok) {
+  ////       this.genericTypes = rs.rows;
+  ////       this._genericTypes = [];
+  ////       this.genericTypes.forEach((e: any) => {
+  ////         this._genericTypes.push(e.generic_type_id)
+  ////       });
+  ////       this.genericType = '';
+  ////       if (this.tab == 1) {
+  ////         this.getTransactionList();
+  ////       } else if (this.tab == 2) {
+  ////         this.getHistoryTransactionList();
+  ////       }
+  ////     } else {
+  ////       this.alertService.error(rs.error);
+  ////     }
+
+  ////   } catch (error) {
+  ////     console.log(error);
+  ////     this.alertService.serverError();
+  ////   }
+  //// } 
 
   async getTransactionList() {
     try {
-      if (this.genericType === '') {
-        this._genericType = this._genericTypes;
-      } else {
-        this._genericType = [];
-        this._genericType.push(this.genericType)
-      }
       this.modalLoading.show();
-      const rs: any = await this.hisTransactionService.getTransactionList(this._genericType, this.warehouseId);
+      const rs: any = await this.hisTransactionService.getTransactionList(this.genericType, this.warehouseId);
       if (rs.ok) {
         this.products = rs.rows;
         this.totalProducts = this.products.length
@@ -109,7 +110,6 @@ export class HisIssueTransactionComponent implements OnInit {
       this.modalLoading.hide();
       this.alertService.serverError();
     }
-    // console.log(this.products);
   }
 
   showUploadModal() {
@@ -117,7 +117,6 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   fileChangeEvent(fileInput: any) {
-    // console.log(fileInput)
     this.file = <Array<File>>fileInput.target.files;
     this.fileName = this.file[0].name;
   }
@@ -134,13 +133,13 @@ export class HisIssueTransactionComponent implements OnInit {
           }
           this.getTransactionList();
           this.modalLoading.hide();
-        }, (error) => {
+        }, (err) => {
           this.modalLoading.hide();
-          this.alertService.error(JSON.stringify(error));
+          this.alertService.error(JSON.stringify(err));
         });
-    } catch (error) {
+    } catch (err) {
       this.modalLoading.hide();
-      this.alertService.error(JSON.stringify(error));
+      this.alertService.error(JSON.stringify(err));
     }
   }
 
@@ -159,7 +158,7 @@ export class HisIssueTransactionComponent implements OnInit {
             }
             this.modalLoading.hide();
           })
-          .catch((error: any) => {
+          .catch((err: any) => {
             this.modalLoading.hide();
             this.alertService.serverError();
           });
@@ -201,8 +200,7 @@ export class HisIssueTransactionComponent implements OnInit {
         this.hisTransactionService.importTransaction(transactionIds)
           .then((rs: any) => {
             if (rs.ok) {
-              let isImportTotal = transactionIds.length - rs.un_cut_stock.length;
-              console.log(rs.un_cut_stock, rs.un_cut_stock.length);
+              const isImportTotal = transactionIds.length - rs.un_cut_stock.length;
               this.alertService.success('ผลการนำเข้าข้อมูลเพื่อตัดสต๊อก', 'นำเข้าข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถนำเข้าได้ ' + rs.un_cut_stock.length + ' รายการ');
               this.getTransactionList();
             } else {
@@ -210,7 +208,7 @@ export class HisIssueTransactionComponent implements OnInit {
             }
             this.modalLoading.hide();
           })
-          .catch((error) => {
+          .catch((err) => {
             this.modalLoading.hide();
             this.alertService.serverError();
           });
@@ -232,7 +230,7 @@ export class HisIssueTransactionComponent implements OnInit {
             }
             this.modalLoading.hide();
           })
-          .catch((error: any) => {
+          .catch((err: any) => {
             this.modalLoading.hide();
             this.alertService.serverError();
           });
@@ -249,31 +247,13 @@ export class HisIssueTransactionComponent implements OnInit {
     }
   }
 
-  async tabHis(event) {
-    this.tab = event
-    if (this.tab == 1) {
-      this.getTransactionList()
-    } else if (this.tab == 2) {
-      this.getHistoryTransactionList();
-      console.log(this.productsHistory);
-    }
-  }
-
   async getHistoryTransactionList() {
-    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    const date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
     try {
-      if (this.genericType === '') {
-        this._genericType = this._genericTypes;
-      } else {
-        this._genericType = [];
-        this._genericType.push(this.genericType)
-      }
-
       this.modalLoading.show();
-      const rs: any = await this.hisTransactionService.getHistoryTransactionList(this._genericType, date, this.warehouseId);
+      const rs: any = await this.hisTransactionService.getHistoryTransactionList(this.genericType, date, this.warehouseId);
       if (rs.ok) {
         this.productsHistory = rs.rows;
-        console.log(this.productsHistory);
       } else {
         this.alertService.error(rs.error);
       }
@@ -285,22 +265,28 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   async hisReportHis() {
-    let date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
-    if (this.genericType === '') {
-      this._genericType = this._genericTypes;
-    } else {
-      this._genericType = [];
-      this._genericType.push(this.genericType)
+    const date = this.dateHistory ? moment(this.dateHistory.jsdate).format('YYYY-MM-DD') : null;
+    let genericTypeLV1: any;
+    let genericTypeLV2: any;
+    let genericTypeLV3: any;
+    if (this.genericType.generic_type_lv1_id.length) {
+      genericTypeLV1 = this.genericType.generic_type_lv1_id.join(',')
     }
-    const url = `${this.apiUrl}/report/his-history?warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&date=${date}&genericType=${this._genericType}&token=${this.token}`
+    if (this.genericType.generic_type_lv2_id.length) {
+      genericTypeLV2 = this.genericType.generic_type_lv2_id.join(',')
+    }
+    if (this.genericType.generic_type_lv3_id.length) {
+      genericTypeLV3 = this.genericType.generic_type_lv3_id.join(',')
+    }
+    const url = `${this.apiUrl}/report/his-history?warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&date=${date}&genericTypeLV1Id=${genericTypeLV1}&genericTypeLV2Id=${genericTypeLV2}&genericTypeLV3Id=${genericTypeLV3}&token=${this.token}`
     this.htmlPreview.showReport(url);
   }
 
-  async changeGenericTypes() {
-    if (this.tab == 1) {
-      this.getTransactionList();
-    } else if (this.tab == 2) {
-      this.getHistoryTransactionList();
-    }
+  selectGenericTypeMulti() {
+    this.getTransactionList();
+  }
+
+  selectGenericTypeMultiHistory() {
+    this.getHistoryTransactionList();
   }
 }

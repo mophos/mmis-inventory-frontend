@@ -5,17 +5,13 @@
 <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
   <div class="col-md-9">
     ค้นหา :
-    <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;" type="text"
-      placeholder="ค้นหาเวชภัณฑ์...">
+    <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;"
+      type="text" placeholder="ค้นหาเวชภัณฑ์...">
     <!-- <input type="text" class="form-control"> -->
   </div>
   <div class="col-md-3" style="text-align: right;">
-    <div class="select">
-      <select [(ngModel)]="genericType" name="genericType" (change)="searchMappings()">
-        <option value="all">ทั้งหมด</option>
-        <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-      </select>
-    </div>
+    <wm-select-generic-type-multi #genericTypes (onSelect)="selectGenericTypeMulti($event)">
+    </wm-select-generic-type-multi>
   </div>
 </div>
 <clr-datagrid class="order-form">
@@ -32,12 +28,13 @@
     <clr-dg-cell>{{m.generic_name}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center;">{{m.base_unit_name}}</clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" class="wm-edit-box-number" #his (keyup)="onChangeCode(his.value, m)" style="background-color: #FFF9C4"
-        #his [value]="m.his">
+      <input type="text" class="wm-edit-box-number" #his (keyup)="onChangeCode(his.value, m)"
+        style="background-color: #FFF9C4" #his [value]="m.his">
     </clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" wmNumberWithOutDot class="wm-edit-box-number" #conversion (keyup)="onChangeConversion(conversion.value, m)"
-        style="background-color: #FFF9C4" #conversion [value]="m.conversion || 1">
+      <input type="text" wmNumberWithOutDot class="wm-edit-box-number" #conversion
+        (keyup)="onChangeConversion(conversion.value, m)" style="background-color: #FFF9C4" #conversion
+        [value]="m.conversion || 1">
     </clr-dg-cell>
     <clr-dg-cell>
       <button class="btn btn-sm btn-success wm-small-btn" (click)="save(m)">
@@ -47,7 +44,8 @@
   </clr-dg-row>
 
   <clr-dg-footer>
-    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+    รายการ
     <clr-dg-pagination #pagination [clrDgPageSize]="20"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>

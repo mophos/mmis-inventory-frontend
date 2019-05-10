@@ -19,8 +19,10 @@ export class HisTransactionService {
   }
 
   async getTransactionList(genericTypes: any, warehouseId: any) {
-    const resp = await this.authHttp.post(`${this.url}/staff/his-transaction/list`,
-      { genericTypes: genericTypes, warehouseId: warehouseId }).toPromise();
+    const resp = await this.authHttp.post(`${this.url}/staff/his-transaction/list`, {
+      genericTypes: genericTypes,
+      warehouseId: warehouseId
+    }).toPromise();
     return resp.json();
   }
 

@@ -15,12 +15,10 @@ export class CalculateMinMaxComponent implements OnInit {
   @ViewChild('modalLoading') private modalLoading;
 
   generics: any = [];
-  genericTypes: any = [];
   _generics: any = [];
 
   fromDate: any;
   toDate: any;
-  genericType: any;
   query: any = "";
   processDate: any;
   processDateGroup: any;
@@ -36,7 +34,8 @@ export class CalculateMinMaxComponent implements OnInit {
     showClearDateBtn: false
   };
   // minMaxGroupDatail: any;
-
+  genericType: any;
+  @ViewChild('genericTypes') public genericTypes: any;
   constructor(
     private minMaxService: MinMaxService,
     private alertService: AlertService,
@@ -44,34 +43,27 @@ export class CalculateMinMaxComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getGenericType();
-    // this.getMinMax();
     this.getMinMaxGroup();
-    // this.getHeader();
   }
 
-  async getGenericType() {
-    try {
-      this.modalLoading.show();
-      const rs = await this.basicService.getGenericTypes();
-      if (rs.ok) {
-        this.genericTypes = rs.rows;
-        this.genericType = rs.rows.length === 1 ? rs.rows[0].generic_type_id : "";
-      } else {
-        this.alertService.error(rs.error);
-      }
-      this.modalLoading.hide();
-    } catch (error) {
-      this.modalLoading.hide();
-      this.alertService.error(error);
-    }
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.genericType = this.genericTypes.getDefaultGenericType();
+  }
+
+  selectGenericTypeMulti(e) {
+    this.genericType = e;
+    this.searchGenerics();
+  }
+
+  selectGenericTypeMultiGroup(e) {
+    this.genericType = e;
+    this.searchGenericGroup();
   }
 
   async getHeader() {
     try {
       this.modalLoading.show();
-      console.log(this.tab);
-
       const rs: any = this.tab == 'minmax_group' ? await this.minMaxService.getHeaderGroup(this.minMaxGroupId) : await this.minMaxService.getHeader();
       if (rs.ok) {
         const result = rs.rows[0];

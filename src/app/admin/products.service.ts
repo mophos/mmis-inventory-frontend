@@ -9,7 +9,7 @@ export class ProductsService {
     private authHttp: AuthHttp
   ) { }
 
-  async all(genericType: any, limit: number = 10, offset: number = 0, warehouseId: any, sort: any = {}) {
+  async all(genericType: any = {}, limit: number = 10, offset: number = 0, warehouseId: any, sort: any = {}) {
     const resp = await this.authHttp.post(`${this.url}/products/stock/products/all`, {
       genericType: genericType,
       limit: limit,
@@ -20,7 +20,7 @@ export class ProductsService {
     return resp.json();
   }
 
-  async search(query: any, genericType: any, limit: number = 10, offset: number = 0, warehouseId: any, sort: any = {}) {
+  async search(query: any, genericType: any = {}, limit: number = 10, offset: number = 0, warehouseId: any, sort: any = {}) {
     const resp = await this.authHttp.post(`${this.url}/products/stock/products/search`, {
       genericType: genericType,
       limit: limit,
@@ -37,13 +37,13 @@ export class ProductsService {
     return resp.json();
   }
   async saveRepack(product: any) {
-    const resp = await this.authHttp.post(`${this.url}/products/save-repackage`,{
+    const resp = await this.authHttp.post(`${this.url}/products/save-repackage`, {
       product: product
     }).toPromise();
     return resp.json();
   }
-  
-  
+
+
   async getProductStockRemain(genericId: any) {
     const resp = await this.authHttp.get(`${this.url}/products/stock/remain/generic/${genericId}`).toPromise();
     return resp.json();

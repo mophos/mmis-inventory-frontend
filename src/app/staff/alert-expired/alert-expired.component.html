@@ -14,17 +14,17 @@
     <clr-tab-content *clrIfActive>
       <div class="row wid99" style="padding-top: 5px; padding-bottom: 5px;">
         <div class="col-md-1">
-          <label for="">คลังสินค้า</label>
+          <!-- <label for="">คลังสินค้า</label> -->
         </div>
         <div class="col-md-3">
-          <div class="select">
+          <!-- <div class="select">
             <select disabled [(ngModel)]="warehouseId" name="warehouseId" (change)="changeWarehouses()">
               <option value="all">ทั้งหมด</option>
               <option [value]="t.warehouse_id" *ngFor="let t of warehouses">{{t.warehouse_name}}</option>
             </select>
-          </div>
+          </div> -->
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 ">
           <button style="float: right;" class="btn btn-sm btn-success wm-small-btn" (click)="reportExcel()">
             <clr-icon shape="printer"></clr-icon>
             ส่งออก excel
@@ -38,12 +38,8 @@
           <label for="">ประเภท</label>
         </div>
         <div class="col-md-3">
-          <div class="select">
-            <select [(ngModel)]="genericTypeE" name="genericTypeE" (change)="changeGenericTypeE()">
-              <option value="all">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
+          <wm-select-generic-type-multi #genericTypeMulti (onSelect)="selectGenericTypeMulti($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <clr-datagrid [style.height.%]="85">
@@ -77,44 +73,49 @@
     <button clrTabLink (click)="getAllProducts()">
       ตั้งค่าวันหมดอายุ</button>
     <clr-tab-content *clrIfActive>
-      <div style="padding-top: 5px; padding-bottom: 5px; display:inline-block;">
-        <div class="btn-group btn-sm">
-          <div class="radio btn">
-            <input type="radio" (click)="getAllProducts()" [checked]="isAll" name="btn-group-demo-radios"
-              id="btn-demo-radio-1">
-            <label for="btn-demo-radio-1">รายการทั้งหมด</label>
-          </div>
-          <div class="radio btn">
-            <input type="radio" (click)="getUnsetProducts()" [checked]="!isAll" name="btn-group-demo-radios"
-              id="btn-demo-radio-2">
-            <label for="btn-demo-radio-2">เฉพาะยังไม่กำหนด</label>
-          </div>
-        </div>
-      </div>
-      <div>
-        <button [disabled]="!selectedGenerics.length" class="btn btn-sm btn-success"
-          (click)="setExpireCount()">กำหนดวันหมดอายุ</button>
-        <button class="btn btn-sm btn-success" (click)="setExpireCountAll()">กำหนดวันหมดอายุทั้งหมด</button>
-        <div class="col-md-2" style="text-align: right;float:right;">
-          <div class="select">
-            <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
-              <option value="all">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-block" style="padding: 0px 5px 5px 5px;">
-          <div class="row wid99">
-            <div class="col-md-6" style="padding-top: 5px;">
-              <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searc($event)" name="query" [(ngModel)]="query"
-                placeholder="generic name,generic code" style="width: 400px;">
+      <div class="row" style="padding-top: 5px;">
+
+        <!--  -->
+        <div class=" col-md-4">
+          <div class="btn-group btn-sm">
+            <div class="radio btn">
+              <input type="radio" (click)="getAllProducts()" [checked]="isAll" name="btn-group-demo-radios"
+                id="btn-demo-radio-1">
+              <label for="btn-demo-radio-1">รายการทั้งหมด</label>
+            </div>
+            <div class="radio btn">
+              <input type="radio" (click)="getUnsetProducts()" [checked]="!isAll" name="btn-group-demo-radios"
+                id="btn-demo-radio-2">
+              <label for="btn-demo-radio-2">เฉพาะยังไม่กำหนด</label>
             </div>
           </div>
         </div>
+
+        <div class="col-md-4 ">
+          <button [disabled]="!selectedGenerics.length" class="btn btn-sm btn-success"
+            (click)="setExpireCount()">กำหนดวันหมดอายุ</button>
+          <button class="btn btn-sm btn-success" (click)="setExpireCountAll()">กำหนดวันหมดอายุทั้งหมด</button>
+        </div>
+        <div class="col-md-1">
+          <label for="">ประเภท</label>
+        </div>
+        <div class="col-md-3">
+          <wm-select-generic-type-multi #genericTypeMulti2 (onSelect)="selectGenericTypeMultiSetting($event)">
+          </wm-select-generic-type-multi>
+        </div>
+        <!--  -->
       </div>
+      <!-- <div class="card" style="margin-top: 0"> -->
+      <!-- <div class="card-block" style="padding: 0px 5px 5px 5px;"> -->
+      <div class="row wid99">
+        <div class="col-md-12" style="padding-top: 5px;">
+          <label for="">ค้นหา</label>
+          <input type="text" (keyup)="search($event)" name="query" [(ngModel)]="query"
+            placeholder="generic name,generic code" style="width: 400px;">
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- </div> -->
       <clr-datagrid [(clrDgSelected)]="selectedGenerics" [style.height.%]="85">
         <clr-dg-column [style.width.px]="150" [clrDgField]="'working_code'">Generic Code</clr-dg-column>
         <!-- <clr-dg-column [style.width.%]="35" [clrDgField]="'product_name'">ชื่อยา (ชื่อการค้า)</clr-dg-column> -->

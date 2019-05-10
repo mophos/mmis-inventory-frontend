@@ -145,7 +145,7 @@ export class WarehouseProductsService {
 
 
   async removeRequisitionTemplate(templateId: any) {
-    const rs: any = await this.authHttp.delete(`${this.url}/staff/warehouses/requisition/remove-template/${templateId}`)
+    const rs: any = await this.authHttp.delete(`${this.url}/staff/requisition/remove-template/${templateId}`)
       .toPromise();
     return rs.json();
   }
@@ -166,7 +166,7 @@ export class WarehouseProductsService {
     });
   }
   async removeRequisitionTemplateIssue(templateId: any) {
-    const rs: any = await this.authHttp.delete(`${this.url}/staff/warehouses/issue/remove-template/${templateId}`)
+    const rs: any = await this.authHttp.delete(`${this.url}/staff/issue/remove-template/${templateId}`)
       .toPromise();
     return rs.json();
   }

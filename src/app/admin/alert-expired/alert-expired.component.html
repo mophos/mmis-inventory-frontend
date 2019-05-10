@@ -38,12 +38,8 @@
           <label for="">ประเภท</label>
         </div>
         <div class="col-md-3">
-          <div class="select">
-            <select [(ngModel)]="genericTypeE" name="genericTypeE" (change)="changeGenericTypeE()">
-              <option value="all">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
+          <wm-select-generic-type-multi #genericTypeMulti (onSelect)="selectGenericTypeMulti($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <clr-datagrid [style.height.%]="85">
@@ -96,12 +92,8 @@
           (click)="setExpireCount()">กำหนดวันหมดอายุ</button>
         <button class="btn btn-sm btn-success" (click)="setExpireCountAll()">กำหนดวันหมดอายุทั้งหมด</button>
         <div class="col-md-2" style="text-align: right;float:right;">
-          <div class="select">
-            <select [(ngModel)]="genericType" name="genericType" (change)="changeGenericType()">
-              <option value="all">ทั้งหมด</option>
-              <option [value]="t.generic_type_id" *ngFor="let t of genericTypes">{{t.generic_type_name}}</option>
-            </select>
-          </div>
+          <wm-select-generic-type-multi #genericTypeMulti2 (onSelect)="selectGenericTypeMultiSetting($event)">
+          </wm-select-generic-type-multi>
         </div>
       </div>
       <div class="card">
@@ -109,7 +101,7 @@
           <div class="row wid99">
             <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searc($event)" name="query" [(ngModel)]="query"
+              <input type="text" (keyup)="search($event)" name="query" [(ngModel)]="query"
                 placeholder="generic name,generic code" style="width: 400px;">
             </div>
           </div>
