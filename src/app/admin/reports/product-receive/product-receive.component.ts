@@ -145,7 +145,7 @@ export class ProductReceiveComponent implements OnInit {
     this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
 
-    const url = `${this.apiUrl}/report/receive-where-vender/export?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&isFree=${this.isFree}&token=${this.token}&` + genericType.join('&');
+    const url = `${this.apiUrl}/report/receive-where-vender/excel?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&isFree=${this.isFree}&token=${this.token}&` + genericType.join('&');
     window.open(url, '_blank');
   }
   async exportExcel() {
