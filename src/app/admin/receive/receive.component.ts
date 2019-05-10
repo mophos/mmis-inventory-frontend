@@ -453,13 +453,12 @@ export class ReceiveComponent implements OnInit {
       this.action = 'WM_RECEIVE_APPROVE'
       this.page = 1;
 
-      this.selectedApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
+      check = this.selectedApprove.length > 0 ? true : false;
     } else if (access = 2) {
       accessName = 'WM_RECEIVE_OTHER_APPROVE'
       this.action = 'WM_RECEIVE_OTHER_APPROVE'
       this.page = 2;
-
-      this.selectedOtherApprove.length ? check = true : this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
+      check = this.selectedOtherApprove.length > 0 ? true : false;
     }
 
     if (check) { // ตรวจสอบสิทธิการอนุมัติใบรับ
@@ -471,6 +470,8 @@ export class ReceiveComponent implements OnInit {
         this.password = ''
         this.openModalConfirm = true
       }
+    } else {
+      this.alertService.error('ไม่พบรายการที่ต้องการอนุมัติ');
     }
   }
 
