@@ -85,6 +85,15 @@ export class MonthlyReportComponent implements OnInit {
     window.open(url);
   }
 
+  monthlyReportAll() {
+    let type = _.map(this.genericTypeSelect, function (v) {
+      return 'genericTypes=' + v.generic_type_id;
+    })
+    const url = `${this.apiUrl}/report/monthlyReportAll?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}`
+    console.log(url);
+    this.htmlPreview.showReport(url);
+  }
+
   getdate() {
     for (let i = 0; i < 10; i++) {
       this.dataYear.push(this.date.getFullYear() - i)
