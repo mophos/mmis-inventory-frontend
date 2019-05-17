@@ -13,7 +13,7 @@
       <clr-icon shape="tools"></clr-icon> Template เบิก/โอน
     </button>
     <clr-tab-content *clrIfActive="tab === 'tmpReq'">
-      <div style="margin-top:10px" class="col-lg-3 col-md-3 col-sm-12 col-xs-3">
+      <div style="margin-top:10px" class="col-lg-6 col-md-6 col-sm-12 col-xs-6">
         <button class="btn btn-sm btn-success" [routerLink]="['/admin/templates/requisition/new']">
           + สร้าง Template เบิก/โอน
         </button>
@@ -73,9 +73,9 @@
         <button class="btn btn-sm btn-success" [routerLink]="['/admin/templates/issue/new']">
           + สร้าง Template ตัดจ่าย
         </button>
-        <!-- <button type="button" class="btn btn-primary btn-sm" (click)="openModal()">
+        <button type="button" class="btn btn-primary btn-sm" (click)="openModal()">
           <clr-icon shape="search"></clr-icon> คัดลอก Template
-        </button> -->
+        </button>
       </div>
       <div class="card">
         <div class="card-block">
@@ -151,7 +151,7 @@
       </div>
       <div class="form-group row">
         <div class="col-md-2">
-          &nbsp;
+          เลือก Template
         </div>
         <div class="col-md-4">
           <div class="select form-control">
