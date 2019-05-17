@@ -205,6 +205,10 @@ export class RequisitionTemplateComponent implements OnInit {
           .then((result: any) => {
             if (result.ok) {
               this.alertService.success();
+              this.templateSubject = null;
+              this.warehouseId = null;
+              this.templateId = null;
+              this.showAllTemplateIssue();
               this.router.navigate(['/admin/templates/main']);
             } else {
               this.alertService.error(JSON.stringify(result.error));
