@@ -119,7 +119,7 @@ export class WarehouseProductsService {
     return rs.json();
   }
   async getTemplateDetail(templateId: any) {
-    const rs: any = await this.authHttp.get(`${this.url}/warehouses/warehousetemplate/detail?templateId=${templateId}`).toPromise();
+    const rs: any = await this.authHttp.get(`${this.url}/warehouses/warehousetemplate/detail/${templateId}`).toPromise();
     return rs.json();
   }
   async getTemplateIssue(templateId: any) {
