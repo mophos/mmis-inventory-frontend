@@ -184,7 +184,7 @@ import { IssueTemplateNewComponent } from './issue-template-new/issue-template-n
 import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.component';
 import { PayReportComponent } from './reports/pay-report/pay-report.component';
 import { AccountPayableComponent } from './reports/account-payable/account-payable.component';
-import { ProductPayComponent } from './exportdatas/product-pay/product-pay.component';
+import { ProductPayComponent } from './reports/product-pay/product-pay.component';
 export function highchartsFactory() {
   return require('highcharts');
 }

@@ -124,7 +124,7 @@ import { IssueTemplateNewComponent } from './issue-template-new/issue-template-n
 import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.component';
 import { PayReportComponent } from './reports/pay-report/pay-report.component';
 import { StockcardBorrowComponent } from './tools/stockcard-borrow/stockcard-borrow.component';
-import { ProductPayComponent } from './exportdatas/product-pay/product-pay.component';
+import { ProductPayComponent } from './reports/product-pay/product-pay.component';
 
 const routes: Routes = [
   {
@@ -160,7 +160,7 @@ const routes: Routes = [
         children: [
           { path: '', redirectTo: 'main', pathMatch: 'full' },
           { path: 'main', component: ExportdataComponent },
-          { path: 'product-pay', component: ProductPayComponent },
+
 
         ],
       },
@@ -188,7 +188,9 @@ const routes: Routes = [
           { path: 'receive-issue-year', component: ReceiveIssueYearComponent },
           { path: 'monthly-report', component: MonthlyReportComponent },
           { path: 'pay-report', component: PayReportComponent },
-          { path: 'account-payable', component: AccountPayableComponent }
+          { path: 'account-payable', component: AccountPayableComponent },
+          { path: 'product-pay', component: ProductPayComponent }
+
         ]
       },
 
