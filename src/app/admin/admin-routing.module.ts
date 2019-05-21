@@ -124,6 +124,7 @@ import { IssueTemplateNewComponent } from './issue-template-new/issue-template-n
 import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.component';
 import { PayReportComponent } from './reports/pay-report/pay-report.component';
 import { StockcardBorrowComponent } from './tools/stockcard-borrow/stockcard-borrow.component';
+import { ProductPayComponent } from './exportdatas/product-pay/product-pay.component';
 
 const routes: Routes = [
   {
@@ -154,7 +155,15 @@ const routes: Routes = [
       { path: 'borrow/returning/:borrowId', component: ReturningComponent },
       { path: 'alert-expired', component: AlertExpiredComponent },
       { path: 'unitissue', component: UnitissueComponent },
-      { path: 'exportdata', component: ExportdataComponent },
+      {
+        path: 'exportdata',
+        children: [
+          { path: '', redirectTo: 'main', pathMatch: 'full' },
+          { path: 'main', component: ExportdataComponent },
+          { path: 'product-pay', component: ProductPayComponent },
+
+        ],
+      },
       { path: 'return-product/new', component: ReturnedComponent },
       { path: 'return-product/edit', component: ReturnedEditComponent },
       {
@@ -182,6 +191,7 @@ const routes: Routes = [
           { path: 'account-payable', component: AccountPayableComponent }
         ]
       },
+
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
       { path: 'transfer/new', canActivate: [AuthTransfer], component: TransferNewComponent },
       { path: 'transfer/edit', canActivate: [AuthTransfer], component: TransferEditComponent },

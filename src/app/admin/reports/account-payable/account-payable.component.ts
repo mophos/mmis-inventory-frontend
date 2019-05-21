@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
-import moment = require('moment');
+import * as moment from 'moment';
 import { JwtHelper } from 'angular2-jwt';
 
 @Component({
