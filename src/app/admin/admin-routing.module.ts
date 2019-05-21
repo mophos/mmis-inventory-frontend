@@ -1,3 +1,4 @@
+import { AccountPayableComponent } from './reports/account-payable/account-payable.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
@@ -177,7 +178,8 @@ const routes: Routes = [
           { path: 'summary-disbursement', component: SummaryDisbursementComponent },
           { path: 'receive-issue-year', component: ReceiveIssueYearComponent },
           { path: 'monthly-report', component: MonthlyReportComponent },
-          { path: 'pay-report', component: PayReportComponent }
+          { path: 'pay-report', component: PayReportComponent },
+          { path: 'account-payable', component: AccountPayableComponent }
         ]
       },
       { path: 'transfer', canActivate: [AuthTransfer], component: TransferComponent },
