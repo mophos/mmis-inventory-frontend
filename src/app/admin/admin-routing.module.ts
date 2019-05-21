@@ -1,3 +1,4 @@
+import { AccountPayableComponent } from './reports/account-payable/account-payable.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
@@ -158,9 +159,7 @@ const routes: Routes = [
         path: 'exportdata',
         children: [
           { path: '', redirectTo: 'main', pathMatch: 'full' },
-          { path: 'main', component: ExportdataComponent },
-          
-
+          { path: 'main', component: ExportdataComponent }
         ],
       },
       { path: 'return-product/new', component: ReturnedComponent },
@@ -187,8 +186,8 @@ const routes: Routes = [
           { path: 'receive-issue-year', component: ReceiveIssueYearComponent },
           { path: 'monthly-report', component: MonthlyReportComponent },
           { path: 'pay-report', component: PayReportComponent },
-          { path: 'product-pay', component: ProductPayComponent },
-
+          { path: 'account-payable', component: AccountPayableComponent },
+          { path: 'product-pay', component: ProductPayComponent }
         ]
       },
 
