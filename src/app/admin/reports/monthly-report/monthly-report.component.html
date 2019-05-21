@@ -73,6 +73,9 @@
           <button class="btn btn-sm btn-primary" [disabled]="!(genericTypeSelect.length && year && month)" (click)="monthlyReport()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปงานคลังประจำเดือน
           </button>
+          <button class="btn btn-sm btn-primary" [disabled]="!(genericTypeSelect.length && year && month)" (click)="monthlyReportAll()">
+            <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปงานคลังประจำเดือน(แยกประเภทการรับ-จ่าย)
+          </button>
           <button class="btn btn-sm btn-success" [disabled]="!(genericTypeSelect.length && year && month)" (click)="monthlyReportExcel()">
             <clr-icon shape="download"></clr-icon> Excel
           </button>

@@ -24,6 +24,7 @@ export class RequisitionTemplateComponent implements OnInit {
   warehouseId: any;
 
   constructor(
+    private router: Router,
     private alertService: AlertService,
     private basicService: BasicService,
     private warehouseProductService: WarehouseProductsService
@@ -180,13 +181,50 @@ export class RequisitionTemplateComponent implements OnInit {
       });
   }
 
-  async onSave(){
+  async onSave() {
     this.isOpenModal = false;
     try {
       const rs = await this.warehouseProductService.getTemplateDetail(this.templateId);
-      console.log(rs);
+      let _data = [];
+      const templateSubject = this.templateSubject;
+      const templateSummary = {
+        // dstwarehouseId: this.dstwarehouseId,
+        warehouseId: this.warehouseId,
+        templateSubject: templateSubject
+      };
+      rs.rows.forEach(v => {
+        const data = {
+          generic_id: v.generic_id,
+          unit_generic_id: v.unit_generic_id
+        }
+        _data.push(data);
+      });
+      if (templateSummary && _data) {
+        this.modalLoading.show();
+        this.warehouseProductService.saveWarehouseProductsTemplateIssue(templateSummary, _data)
+          .then((result: any) => {
+            if (result.ok) {
+              this.alertService.success();
+              this.templateSubject = null;
+              this.warehouseId = null;
+              this.templateId = null;
+              this.showAllTemplateIssue();
+              this.router.navigate(['/admin/templates/main']);
+            } else {
+              this.alertService.error(JSON.stringify(result.error));
+            }
+
+            this.modalLoading.hide();
+          })
+          .catch(error => {
+            this.modalLoading.hide();
+            this.alertService.serverError();
+          });
+      } else {
+        this.alertService.error('ข้อมูลไม่ครบถ้วน')
+      }
     } catch (error) {
-      
+
     }
   }
 

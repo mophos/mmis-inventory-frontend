@@ -19,34 +19,6 @@
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
   </div>
-  <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12">
-    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
-      (click)="ptintReport()">
-      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
-    </button>
-    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
-      (click)="ptintReportAccount()">
-      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ(แยกตามประเภท)
-    </button>
-    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
-      (click)="ptintReportPurchasingMethod()">
-      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ(ตามรูปแบบการจัดซื้อ)
-    </button>
-    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
-      (click)="ptintReportVender()">
-      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ(แยกตามบริษัท)
-    </button>
-    <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
-      (click)="exportExcel()">
-      <clr-icon shape="download"></clr-icon>
-      ส่งออก Excel รับจากการสั่งซื้อ
-    </button>
-    <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
-      (click)="exportExcelVender()">
-      <clr-icon shape="download"></clr-icon>
-      ส่งออก Excel รับจากการสั่งซื้อ(แยกตามบริษัท)
-    </button>
-  </div>
 </div>
 <div class="row" style="padding: 1em">
   <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
@@ -75,11 +47,39 @@
       </clr-dg-row>
     </clr-datagrid>
   </div>
-  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <div class="toggle-switch" (change)="editChangeFree($event)">
       <input type="checkbox" id="toggle_1">
       <label for="toggle_1">แสดงของแถม</label>
     </div>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="ptintReport()">
+      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ
+    </button>
+    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="ptintReportAccount()">
+      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ(แยกตามประเภท)
+    </button>
+    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="ptintReportPurchasingMethod()">
+      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ(ตามรูปแบบการจัดซื้อ)
+    </button>
+    <button class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="ptintReportVender()">
+      <clr-icon shape="printer"></clr-icon> พิมพ์รายงานเวชภัณฑ์ที่รับจากการสั่งซื้อ(แยกตามบริษัท)
+    </button>
+    <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="exportExcel()">
+      <clr-icon shape="download"></clr-icon>
+      ส่งออก Excel รับจากการสั่งซื้อ
+    </button>
+    <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="exportExcelVender()">
+      <clr-icon shape="download"></clr-icon>
+      ส่งออก Excel รับจากการสั่งซื้อ(แยกตามบริษัท)
+    </button>
   </div>
 </div>
 <wm-html-preview #htmlPreview></wm-html-preview>
