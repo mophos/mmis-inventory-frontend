@@ -183,7 +183,7 @@ import { ProductsWarehouseComponent } from './products-warehouse/products-wareho
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.component';
 import { PayReportComponent } from './reports/pay-report/pay-report.component';
-import { ProductPayComponent } from './exportdatas/product-pay/product-pay.component';
+import { ProductPayComponent } from './reports/product-pay/product-pay.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
