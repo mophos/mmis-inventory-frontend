@@ -159,9 +159,7 @@ const routes: Routes = [
         path: 'exportdata',
         children: [
           { path: '', redirectTo: 'main', pathMatch: 'full' },
-          { path: 'main', component: ExportdataComponent },
-
-
+          { path: 'main', component: ExportdataComponent }
         ],
       },
       { path: 'return-product/new', component: ReturnedComponent },
@@ -190,7 +188,6 @@ const routes: Routes = [
           { path: 'pay-report', component: PayReportComponent },
           { path: 'account-payable', component: AccountPayableComponent },
           { path: 'product-pay', component: ProductPayComponent }
-
         ]
       },
 
