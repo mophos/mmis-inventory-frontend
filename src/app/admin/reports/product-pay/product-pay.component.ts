@@ -7,6 +7,7 @@ import { ProductsService } from '../../products.service';
 import { ReceiveService } from '../../receive.service';
 import { WarehouseService } from '../../warehouse.service';
 
+import * as _ from "lodash";
 @Component({
   selector: 'wm-product-pay',
   templateUrl: './product-pay.component.html'
@@ -94,11 +95,30 @@ export class ProductPayComponent implements OnInit {
 
   
   async exportExcel() {
+    let warehouseName = _.find(this.warehouses,(v:any)=>{
+      return v.warehouse_id = this.warehouseId
+    })
+    let type = _.map(this.genericTypeSelect, function (v) {
+      return 'genericTypes=' + v.generic_type_id;
+    })
     this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
 
-    const url = `${this.apiUrl}/report/requisition/generic/excel?startDate=${this.start}&endDate=${this.end}&warehouseId=${this.warehouseId}&genericType=${this.genericTypeSelect.generic_type_id}&token=${this.token}`;
+    const url = `${this.apiUrl}/report/requisition/generic/excel?startDate=${this.start}&endDate=${this.end}&warehouseName=${warehouseName.warehouse_name}&warehouseId=${this.warehouseId}&token=${this.token}&`+ type.join('&');
     window.open(url, '_blank');
+  }
+  async export() {
+    let warehouseName = _.find(this.warehouses,(v:any)=>{
+      return v.warehouse_id = this.warehouseId
+    })
+    let type = _.map(this.genericTypeSelect, function (v) {
+      return 'genericTypes=' + v.generic_type_id;
+    })
+    this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
+    this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
+
+    const url = `${this.apiUrl}/report/requisition/generic?startDate=${this.start}&endDate=${this.end}&warehouseName=${warehouseName.warehouse_name}&warehouseId=${this.warehouseId}&token=${this.token}&`+ type.join('&');
+    this.htmlPreview.showReport(url);
   }
 
 
