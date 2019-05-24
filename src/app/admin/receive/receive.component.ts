@@ -652,7 +652,7 @@ export class ReceiveComponent implements OnInit {
           const rs: any = await this.receiveService.getReport('CR');
           const report_url = rs.rows[0].report_url;
 
-          const url = `${this.apiUrl}${report_url}?${strIds}token=${this.token}`;
+          const url = `${this.apiUrl}${report_url}/2?${strIds}token=${this.token}`;
 
           this.htmlPreview.showReport(url);
         }).catch((error) => {
