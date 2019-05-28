@@ -43,7 +43,8 @@
       <!-- <clr-dg-cell >{{user.status}}</clr-dg-cell> -->
       <clr-dg-cell class="text-right">
         <div class="toggle-switch">
-          <input type="checkbox" id="toggle_{{user.period_id}}" [disabled]="user.disabled ||user.status === 'final_close'" [checked]="user.status === 'open'"
+          <input type="checkbox" id="toggle_{{user.period_id}}"
+            [disabled]="user.disabled ||user.status === 'final_close'" [checked]="user.status === 'open'"
             (change)="switchStatus($event,user.period_id)">
           <label for="toggle_{{user.period_id}}"></label>
         </div>
@@ -53,10 +54,12 @@
       <!-- <clr-dg-cell>{{user.period_month}}</clr-dg-cell>
       <clr-dg-cell>{{user.period_year | yearThai}}</clr-dg-cell> -->
       <clr-dg-cell>01 {{user.period_month | monthToTh}} {{user.period_year | yearThai}} </clr-dg-cell>
-      <clr-dg-cell>{{user.period_month | monthDateperiod}} {{user.period_month | monthToTh}} {{user.period_year | yearThai}} </clr-dg-cell>
+      <clr-dg-cell>{{user.period_month | monthDateperiod}} {{user.period_month | monthToTh}}
+        {{user.period_year | yearThai}} </clr-dg-cell>
       <clr-dg-cell style="text-align: center;">{{user.close_date | toThaiDate}}</clr-dg-cell>
       <clr-dg-cell style="text-align: center;">
-        <button class="btn btn-sm btn-success" [disabled]="user.status === 'open'||user.status === 'final_close' || user.disabled"
+        <button class="btn btn-sm btn-success"
+          [disabled]="user.status === 'open'||user.status === 'final_close' || user.disabled"
           (click)="finalclose(user.period_id,user.status)">Final Close</button>
       </clr-dg-cell>
     </clr-dg-row>
@@ -103,7 +106,7 @@
             <clr-dg-row *ngFor="let p of po;" [clrDgItem]="p">
               <clr-dg-cell>{{p.purchase_order_number}}</clr-dg-cell>
               <clr-dg-cell>{{p.order_date | toThaiDate}}</clr-dg-cell>
-              <clr-dg-cell>{{p.purchase_order_status}}</clr-dg-cell>
+              <clr-dg-cell>ยังไม่อนุมัติ</clr-dg-cell>
               <!-- <clr-dg-cell><clr-icon shape="note"></clr-icon></clr-dg-cell> -->
               <!-- <clr-dg-cell><clr-icon shape="printer"></clr-icon></clr-dg-cell> -->
             </clr-dg-row>
