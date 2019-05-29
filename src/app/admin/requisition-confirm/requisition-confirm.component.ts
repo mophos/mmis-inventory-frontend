@@ -129,6 +129,7 @@ export class RequisitionConfirmComponent implements OnInit {
             confirmItems: [],
             remain_qty: v.small_remain_qty, // small qty
           }
+          console.log(rs);
           const allocate = await this.requisitionService.getAllocate([{ 'genericId': v.generic_id, 'genericQty': v.requisition_qty * v.conversion_qty }])
           if (allocate.ok) {
             for (const z of allocate.rows) {
