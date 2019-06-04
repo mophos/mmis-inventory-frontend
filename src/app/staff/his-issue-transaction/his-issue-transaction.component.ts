@@ -61,7 +61,7 @@ export class HisIssueTransactionComponent implements OnInit {
       }
     };
     //// this.getGenericType();
-    //// this.getTransactionList();
+    this.getTransactionList();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -182,8 +182,12 @@ export class HisIssueTransactionComponent implements OnInit {
 
   confirmImportAll() {
     const transactionIds: any = [];
+    let i: any = 0;
     this.products.forEach(v => {
-      transactionIds.push(v.transaction_id);
+      if(i < 500){
+        transactionIds.push(v.transaction_id);
+      }
+      i++;
     });
 
     if (transactionIds.length) {
