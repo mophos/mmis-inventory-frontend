@@ -50,31 +50,40 @@
 <div class="card">
   <div class="card-block">
     <div class="row">
+      <div class="col-md-3">
+        ค้นหาใบสั่งซื้อ,ใบรับ,ใบส่งของ
+      </div>
       <div class="col-md-6">
-        <form class="form-block">
-          <div class="row form-group">
-            <div class="col-md-4">
-              ค้นหาใบสั่งซื้อ,ใบรับ,ใบส่งของ
-            </div>
-            <div class="col-md-8">
-              <input type="text" class="form-control" name="query" [(ngModel)]="query" (keyup)="search($event)">
-            </div>
-          </div>
-        </form>
-        <clr-datagrid [style.height.px]="200">
-          <clr-dg-column [style.width.%]="15">Generic Code</clr-dg-column>
-          <clr-dg-column [style.width.%]="50">Generic Name</clr-dg-column>
-          <clr-dg-column [style.width.%]="25"></clr-dg-column>
+        <input type="text" class="form-control" name="query" [(ngModel)]="query" (keyup)="search($event)" placeholder="ค้นหา">
+      </div>
+      <div class="col-md-3">
+        <button title="พิมพ์รายงาน" class="btn btn-primary btn-sm" (click)="showReportByPo()">
+          <clr-icon shape="trash"></clr-icon> พิมพ์รายงาน
+        </button>
+        <button title="ลบทั้งหมด" class="btn btn-danger btn-sm" (click)="removeAll()">
+          <clr-icon shape="trash"></clr-icon> ลบทั้งหมด
+        </button>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-6">
+        <clr-datagrid [style.height.px]="400">
+          <clr-dg-column>เลขที่ใบสั่งซื้อ</clr-dg-column>
+          <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+          <clr-dg-column></clr-dg-column>
           <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
           <clr-dg-row *clrDgItems="let l of list" [clrDgItem]="product">
             <clr-dg-cell>{{l.purchase_order_number}}</clr-dg-cell>
             <clr-dg-cell>{{l.receive_code}}</clr-dg-cell>
             <clr-dg-cell>
               <div class="btn-group">
-                <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn"
-                  (click)="removeSelected(product)">
-                  <clr-icon shape="trash"></clr-icon>
+                <button title="เพิ่ม" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="add(l)">
+                  <clr-icon shape="add"></clr-icon>
                 </button>
+                <!-- <button title="รายละเอียด" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="detail(l)">
+                  <clr-icon shape="add"></clr-icon>
+                </button> -->
               </div>
             </clr-dg-cell>
           </clr-dg-row>
@@ -86,18 +95,17 @@
         </clr-datagrid>
       </div>
       <div class="col-md-6">
-        <clr-datagrid>
-          <clr-dg-column [style.width.%]="15">Generic Code</clr-dg-column>
-          <clr-dg-column [style.width.%]="50">Generic Name</clr-dg-column>
-          <clr-dg-column [style.width.%]="25"></clr-dg-column>
+        <clr-datagrid [style.height.px]="400">
+          <clr-dg-column>เลขที่ใบสั่งซื้อ</clr-dg-column>
+          <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+          <clr-dg-column></clr-dg-column>
           <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
-          <clr-dg-row *clrDgItems="let l of listSelect" [clrDgItem]="product">
-            <clr-dg-cell></clr-dg-cell>
-            <clr-dg-cell></clr-dg-cell>
+          <clr-dg-row *clrDgItems="let l of listSelect; let idx=index;" [clrDgItem]="product">
+            <clr-dg-cell>{{l.purchase_order_number}}</clr-dg-cell>
+            <clr-dg-cell>{{l.receive_code}}</clr-dg-cell>
             <clr-dg-cell>
               <div class="btn-group">
-                <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn"
-                  (click)="removeSelected(product)">
+                <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="remove(idx)">
                   <clr-icon shape="trash"></clr-icon>
                 </button>
               </div>

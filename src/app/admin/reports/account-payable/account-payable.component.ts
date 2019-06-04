@@ -4,7 +4,7 @@ import { IMyOptions } from 'mydatepicker-th';
 import * as moment from 'moment';
 import { JwtHelper } from 'angular2-jwt';
 import { ReceiveService } from 'app/admin/receive.service';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'wm-account-payable',
   templateUrl: './account-payable.component.html',
@@ -25,6 +25,7 @@ export class AccountPayableComponent implements OnInit {
   list = [];
   listSelect = [];
   query = '';
+
   @ViewChild('htmlPreview') public htmlPreview: any;
   constructor(
     @Inject('API_URL') private apiUrl: string,
@@ -65,10 +66,20 @@ export class AccountPayableComponent implements OnInit {
     }
 
   }
+
   showReport() {
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
     const url = `${this.apiUrl}/reports/account/payable?startDate=${startDate}&endDate=${endDate}&genericTypeId=${this.genericTypeId}&token=${this.token}`;
+    this.htmlPreview.showReport(url, 'landscape');
+  }
+
+  showReportByPo() {
+    const receive_id: any = [];
+    this.listSelect.forEach(e => {
+      receive_id.push('receiveId=' + e.receive_id);
+    });
+    const url = `${this.apiUrl}/reports/account/payable/select?token=${this.token}&` + receive_id.join('&');
     this.htmlPreview.showReport(url, 'landscape');
   }
 
@@ -90,4 +101,20 @@ export class AccountPayableComponent implements OnInit {
     }
   }
 
+  async add(items) {
+    let idx = _.findIndex(this.listSelect, { "receive_id": items.receive_id });
+    if (idx === -1) {
+      this.listSelect.push(items);
+    } else {
+      this.alertService.error('รายการซ้ำ');
+    }
+  }
+
+  async remove(index) {
+    this.listSelect.splice(index, 1);
+  }
+
+  async removeAll() {
+    this.listSelect = [];
+  }
 }
