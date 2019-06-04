@@ -1,8 +1,10 @@
+import { AlertService } from 'app/alert.service';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import * as moment from 'moment';
 import { JwtHelper } from 'angular2-jwt';
-
+import { ReceiveService } from 'app/admin/receive.service';
+import * as _ from 'lodash';
 @Component({
   selector: 'wm-account-payable',
   templateUrl: './account-payable.component.html',
@@ -20,14 +22,21 @@ export class AccountPayableComponent implements OnInit {
   };
   genericTypeId: any;
   token: any;
+  list = [];
+  listSelect = [];
+  query = '';
+
   @ViewChild('htmlPreview') public htmlPreview: any;
   constructor(
-    @Inject('API_URL') private apiUrl: string
+    @Inject('API_URL') private apiUrl: string,
+    private receiveService: ReceiveService,
+    private alertService: AlertService
   ) {
     this.token = sessionStorage.getItem('token')
   }
 
   ngOnInit() {
+    this.getList();
     const date = new Date();
 
     this.startDate = {
@@ -57,6 +66,7 @@ export class AccountPayableComponent implements OnInit {
     }
 
   }
+
   showReport() {
     const startDate = this.startDate ? moment(this.startDate.jsdate).format('YYYY-MM-DD') : null;
     const endDate = this.endDate ? moment(this.endDate.jsdate).format('YYYY-MM-DD') : null;
@@ -64,6 +74,47 @@ export class AccountPayableComponent implements OnInit {
     this.htmlPreview.showReport(url, 'landscape');
   }
 
+  showReportByPo() {
+    const receive_id: any = [];
+    this.listSelect.forEach(e => {
+      receive_id.push('receiveId=' + e.receive_id);
+    });
+    const url = `${this.apiUrl}/reports/account/payable/select?token=${this.token}&` + receive_id.join('&');
+    this.htmlPreview.showReport(url, 'landscape');
+  }
 
+  async getList() {
+    try {
+      const rs: any = await this.receiveService.getReceiveStatusSearch(20, 0, this.query, 'approve');
+      if (rs.ok) {
+        this.list = rs.rows;
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.serverError();
+    }
+  }
 
+  search(e) {
+    if (e.keyCode === 13) {
+      this.getList();
+    }
+  }
+
+  async add(items) {
+    let idx = _.findIndex(this.listSelect, { "receive_id": items.receive_id });
+    if (idx === -1) {
+      this.listSelect.push(items);
+    } else {
+      this.alertService.error('รายการซ้ำ');
+    }
+  }
+
+  async remove(index) {
+    this.listSelect.splice(index, 1);
+  }
+
+  async removeAll() {
+    this.listSelect = [];
+  }
 }
