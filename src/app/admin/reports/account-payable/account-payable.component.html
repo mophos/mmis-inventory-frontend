@@ -4,43 +4,114 @@
   <span class="breadcrumb-item active">รายงานเจ้าหนี้การค้า</span>
 </nav>
 
-<div class="form-group row wid99" style="padding-top: 5px;">
-  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-    <label for="startDate" class="required">ตั้งแต่</label>
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
-    </my-date-picker-th>
-  </div>
-  <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-    <label for="endDate" class="required">ถึง</label>
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required></my-date-picker-th>
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    ** ช่วงวันที่อนุมัติรับสินค้าเข้าคลัง
+<div class="card">
+  <!-- <div class="card-header">
+  </div> -->
+  <div class="card-block">
+    <div class="form-group row wid99" style="padding-top: 5px;">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ตั้งแต่</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
+        </my-date-picker-th>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="endDate" class="required">ถึง</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required>
+        </my-date-picker-th>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        ** ช่วงวันที่อนุมัติรับสินค้าเข้าคลัง
+      </div>
+    </div>
+    <div class="form-group row wid99" style="padding-top: 5px;">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label class="required">หมวดสินค้า</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <wm-select-generic-type (onSelect)="selectGenericType($event)"></wm-select-generic-type>
+      </div>
+    </div>
+    <div class="form-group row wid99" style="padding-top: 5px;">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <button class="btn btn-primary" [disabled]="!genericTypeId" (click)="showReport()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน
+        </button>
+      </div>
+    </div>
   </div>
 </div>
-<div class="form-group row wid99" style="padding-top: 5px;">
-  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-    <label class="required">หมวดสินค้า</label>
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    <wm-select-generic-type (onSelect)="selectGenericType($event)"></wm-select-generic-type>
+<div class="card">
+  <div class="card-block">
+    <div class="row">
+      <div class="col-md-6">
+        <form class="form-block">
+          <div class="row form-group">
+            <div class="col-md-4">
+              ค้นหาใบสั่งซื้อ,ใบรับ,ใบส่งของ
+            </div>
+            <div class="col-md-8">
+              <input type="text" class="form-control" name="query" [(ngModel)]="query" (keyup)="search($event)">
+            </div>
+          </div>
+        </form>
+        <clr-datagrid [style.height.px]="200">
+          <clr-dg-column [style.width.%]="15">Generic Code</clr-dg-column>
+          <clr-dg-column [style.width.%]="50">Generic Name</clr-dg-column>
+          <clr-dg-column [style.width.%]="25"></clr-dg-column>
+          <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
+          <clr-dg-row *clrDgItems="let l of list" [clrDgItem]="product">
+            <clr-dg-cell>{{l.purchase_order_number}}</clr-dg-cell>
+            <clr-dg-cell>{{l.receive_code}}</clr-dg-cell>
+            <clr-dg-cell>
+              <div class="btn-group">
+                <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn"
+                  (click)="removeSelected(product)">
+                  <clr-icon shape="trash"></clr-icon>
+                </button>
+              </div>
+            </clr-dg-cell>
+          </clr-dg-row>
+
+          <clr-dg-footer>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+            <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+          </clr-dg-footer>
+        </clr-datagrid>
+      </div>
+      <div class="col-md-6">
+        <clr-datagrid>
+          <clr-dg-column [style.width.%]="15">Generic Code</clr-dg-column>
+          <clr-dg-column [style.width.%]="50">Generic Name</clr-dg-column>
+          <clr-dg-column [style.width.%]="25"></clr-dg-column>
+          <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
+          <clr-dg-row *clrDgItems="let l of listSelect" [clrDgItem]="product">
+            <clr-dg-cell></clr-dg-cell>
+            <clr-dg-cell></clr-dg-cell>
+            <clr-dg-cell>
+              <div class="btn-group">
+                <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn"
+                  (click)="removeSelected(product)">
+                  <clr-icon shape="trash"></clr-icon>
+                </button>
+              </div>
+            </clr-dg-cell>
+          </clr-dg-row>
+
+          <clr-dg-footer>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} จาก {{pagination.totalItems}} รายการ
+            <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
+          </clr-dg-footer>
+        </clr-datagrid>
+      </div>
+    </div>
   </div>
 </div>
-<div class="form-group row wid99" style="padding-top: 5px;">
-  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-    <button class="btn btn-primary" [disabled]="!genericTypeId" (click)="showReport()">
-      <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน
-    </button>
-  </div>
-</div>
-
-
 
 <wm-html-preview #htmlPreview></wm-html-preview>

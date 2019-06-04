@@ -1,7 +1,9 @@
+import { AlertService } from 'app/alert.service';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { IMyOptions } from 'mydatepicker-th';
 import * as moment from 'moment';
 import { JwtHelper } from 'angular2-jwt';
+import { ReceiveService } from 'app/admin/receive.service';
 
 @Component({
   selector: 'wm-account-payable',
@@ -20,14 +22,20 @@ export class AccountPayableComponent implements OnInit {
   };
   genericTypeId: any;
   token: any;
+  list = [];
+  listSelect = [];
+  query = '';
   @ViewChild('htmlPreview') public htmlPreview: any;
   constructor(
-    @Inject('API_URL') private apiUrl: string
+    @Inject('API_URL') private apiUrl: string,
+    private receiveService: ReceiveService,
+    private alertService: AlertService
   ) {
     this.token = sessionStorage.getItem('token')
   }
 
   ngOnInit() {
+    this.getList();
     const date = new Date();
 
     this.startDate = {
@@ -64,6 +72,22 @@ export class AccountPayableComponent implements OnInit {
     this.htmlPreview.showReport(url, 'landscape');
   }
 
+  async getList() {
+    try {
+      const rs: any = await this.receiveService.getReceiveStatusSearch(20, 0, this.query, 'approve');
+      if (rs.ok) {
+        this.list = rs.rows;
+      }
+    } catch (error) {
+      console.log(error);
+      this.alertService.serverError();
+    }
+  }
 
+  search(e) {
+    if (e.keyCode === 13) {
+      this.getList();
+    }
+  }
 
 }
