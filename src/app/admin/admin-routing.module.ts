@@ -125,6 +125,7 @@ import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.
 import { PayReportComponent } from './reports/pay-report/pay-report.component';
 import { StockcardBorrowComponent } from './tools/stockcard-borrow/stockcard-borrow.component';
 import { ProductPayComponent } from './reports/product-pay/product-pay.component';
+import { RequisitionSumComponent } from './reports/requisition-sum/requisition-sum.component';
 
 const routes: Routes = [
   {
@@ -187,7 +188,8 @@ const routes: Routes = [
           { path: 'monthly-report', component: MonthlyReportComponent },
           { path: 'pay-report', component: PayReportComponent },
           { path: 'account-payable', component: AccountPayableComponent },
-          { path: 'product-pay', component: ProductPayComponent }
+          { path: 'product-pay', component: ProductPayComponent },
+          { path: 'requisition-sum', component: RequisitionSumComponent }
         ]
       },
 

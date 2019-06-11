@@ -1,0 +1,51 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/reports">ระบบรายงาน</a>
+  <span class="breadcrumb-item active">รายงานรับยาเข้าคลังย่อย</span>
+</nav>
+
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink id="link1" (click)="changeTab()">
+      <clr-icon shape="file"></clr-icon>
+      รายงานรับยาเข้าคลังย่อย
+    </button>
+  </clr-tab>
+</clr-tabs>
+<div class="card">
+  <!-- <div class="card-header">
+  </div> -->
+  <div class="card-block">
+    <div class="form-group row wid99" style="padding-top: 5px;">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ตั้งแต่</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
+        </my-date-picker-th>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="endDate" class="required">ถึง</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required>
+        </my-date-picker-th>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        ** ช่วงวันที่อนุมัติรับสินค้าเข้าคลัง
+      </div>
+    </div>
+    <div class="form-group row wid99" style="padding-top: 5px;">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <button class="btn btn-primary" [disabled]="!startDate || !endDate" (click)="showReport()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงาน
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<wm-loading-modal #modalLoading></wm-loading-modal>
+<wm-html-preview #htmlPreview></wm-html-preview>

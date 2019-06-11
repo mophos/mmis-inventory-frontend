@@ -185,6 +185,7 @@ import { MonthlyReportComponent } from './reports/monthly-report/monthly-report.
 import { PayReportComponent } from './reports/pay-report/pay-report.component';
 import { AccountPayableComponent } from './reports/account-payable/account-payable.component';
 import { ProductPayComponent } from './reports/product-pay/product-pay.component';
+import { RequisitionSumComponent } from './reports/requisition-sum/requisition-sum.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -310,7 +311,8 @@ Highcharts.setOptions({
     MonthlyReportComponent,
     PayReportComponent,
     AccountPayableComponent,
-    ProductPayComponent
+    ProductPayComponent,
+    RequisitionSumComponent
   ],
   providers: [
     MainService,
