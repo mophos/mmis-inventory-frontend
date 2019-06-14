@@ -95,31 +95,28 @@ export class ProductPayComponent implements OnInit {
 
   
   async exportExcel() {
-    let warehouseName = _.find(this.warehouses,(v:any)=>{
-      return v.warehouse_id = this.warehouseId
-    })
+    let warehouseIdx = _.findIndex(this.warehouses, { warehouse_id: this.warehouseId })
+    let warehouseSelect = this.warehouses[warehouseIdx]
     let type = _.map(this.genericTypeSelect, function (v) {
       return 'genericTypes=' + v.generic_type_id;
     })
     this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
 
-    const url = `${this.apiUrl}/report/requisition/generic/excel?startDate=${this.start}&endDate=${this.end}&warehouseName=${warehouseName.warehouse_name}&warehouseId=${this.warehouseId}&token=${this.token}&`+ type.join('&');
+    const url = `${this.apiUrl}/report/requisition/generic/excel?startDate=${this.start}&endDate=${this.end}&warehouseName=${warehouseSelect.warehouse_name}&warehouseId=${this.warehouseId}&token=${this.token}&` + type.join('&');
     window.open(url, '_blank');
   }
   async export() {
-    let warehouseName = _.find(this.warehouses,(v:any)=>{
-      return v.warehouse_id = this.warehouseId
-    })
+    let warehouseIdx = _.findIndex(this.warehouses, { warehouse_id: this.warehouseId })
+    let warehouseSelect = this.warehouses[warehouseIdx]
     let type = _.map(this.genericTypeSelect, function (v) {
       return 'genericTypes=' + v.generic_type_id;
     })
     this.start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
     this.end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
 
-    const url = `${this.apiUrl}/report/requisition/generic?startDate=${this.start}&endDate=${this.end}&warehouseName=${warehouseName.warehouse_name}&warehouseId=${this.warehouseId}&token=${this.token}&`+ type.join('&');
+    const url = `${this.apiUrl}/report/requisition/generic?startDate=${this.start}&endDate=${this.end}&warehouseName=${warehouseSelect.warehouse_name}&warehouseId=${this.warehouseId}&token=${this.token}&` + type.join('&');
     this.htmlPreview.showReport(url);
-  }
 
 
 }
