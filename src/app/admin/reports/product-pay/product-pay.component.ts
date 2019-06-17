@@ -117,6 +117,6 @@ export class ProductPayComponent implements OnInit {
 
     const url = `${this.apiUrl}/report/requisition/generic?startDate=${this.start}&endDate=${this.end}&warehouseName=${warehouseSelect.warehouse_name}&warehouseId=${this.warehouseId}&token=${this.token}&` + type.join('&');
     this.htmlPreview.showReport(url);
-
+  }
 
 }
