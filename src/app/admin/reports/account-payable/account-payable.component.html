@@ -71,11 +71,13 @@
         <clr-datagrid [style.height.px]="400">
           <clr-dg-column>เลขที่ใบสั่งซื้อ</clr-dg-column>
           <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+          <clr-dg-column>เลขที่หนังสือ</clr-dg-column>
           <clr-dg-column></clr-dg-column>
           <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
           <clr-dg-row *clrDgItems="let l of list" [clrDgItem]="product">
             <clr-dg-cell>{{l.purchase_order_number}}</clr-dg-cell>
             <clr-dg-cell>{{l.receive_code}}</clr-dg-cell>
+            <clr-dg-cell>{{l.purchase_order_book_number}}</clr-dg-cell>
             <clr-dg-cell>
               <div class="btn-group">
                 <button title="เพิ่ม" class="btn btn-primary btn-icon btn-sm wm-small-btn" (click)="add(l)">
@@ -98,11 +100,13 @@
         <clr-datagrid [style.height.px]="400">
           <clr-dg-column>เลขที่ใบสั่งซื้อ</clr-dg-column>
           <clr-dg-column>เลขที่ใบรับ</clr-dg-column>
+          <clr-dg-column>เลขที่หนังสือ</clr-dg-column>
           <clr-dg-column></clr-dg-column>
           <clr-dg-placeholder>ไม่พบรายการยา!</clr-dg-placeholder>
           <clr-dg-row *clrDgItems="let l of listSelect; let idx=index;" [clrDgItem]="product">
             <clr-dg-cell>{{l.purchase_order_number}}</clr-dg-cell>
             <clr-dg-cell>{{l.receive_code}}</clr-dg-cell>
+            <clr-dg-cell>{{l.purchase_order_book_number}}</clr-dg-cell>
             <clr-dg-cell>
               <div class="btn-group">
                 <button title="ยกเลิกรายการ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="remove(idx)">

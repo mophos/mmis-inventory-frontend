@@ -286,7 +286,6 @@ export class BorrowComponent implements OnInit {
           this.selectedApprove = [];
           this.selectedApproveReceive = [];
           this.getBorrowList();
-          // this.getRequestBorrow();
         } else {
           this.alertService.error(rs.error);
         }
