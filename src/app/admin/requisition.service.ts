@@ -137,6 +137,11 @@ export class RequisitionService {
     return rs.json();
   }
 
+  async getOrderEditConfirmItems(confirmId: any) {
+    const rs: any = await this.authHttp.get(`${this.url}/requisition/orders/edit-confirm/${confirmId}`).toPromise();
+    return rs.json();
+  }
+
   async saveOrderConfirmItemsWithOutUnpaid(requisitionId: any, items: any) {
     const rs: any = await this.authHttp.post(`${this.url}/requisition/orders/confirm-without-unpaid`, {
       requisitionId: requisitionId,
