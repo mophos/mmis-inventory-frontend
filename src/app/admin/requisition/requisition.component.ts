@@ -25,7 +25,7 @@ export class RequisitionComponent implements OnInit {
   @ViewChild('htmlPreview') public htmlPreview: any;
   @ViewChild('modalLoading') public modalLoading: any;
 
-  selectedTab: any = 'waiting';
+  selectedTab: any ;
 
   filesToUpload: Array<File> = [];
   token: any;
@@ -76,6 +76,7 @@ export class RequisitionComponent implements OnInit {
     this.currentPage = +sessionStorage.getItem('currentPageRequisition') ? +sessionStorage.getItem('currentPageRequisition') : 1;
     const decoded = this.jwtHelper.decodeToken(this.token);
     this.tabKeep = decoded.WM_REQUISITION_TAB_TRASH === 'Y' ? true : false;
+    this.selectedTab = 'waiting'
   }
 
   async ngOnInit() {

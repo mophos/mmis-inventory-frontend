@@ -169,7 +169,7 @@ export class RequisitionConfirmEditComponent implements OnInit {
 
   async getConfirmItems() {
     try {
-      const rs: any = await this.requisitionService.getOrderConfirmItems(this.confirmId);
+      const rs: any = await this.requisitionService.getOrderEditConfirmItems(this.confirmId);
       if (rs.ok) {
         const rows = rs.rows;
         rows.forEach(v => {
