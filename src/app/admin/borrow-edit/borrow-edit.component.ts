@@ -89,7 +89,7 @@ export class BorrowEditComponent implements OnInit {
     try {
       this.modalLoading.show();
       const rs: any = await this.borrowItemsService.getSummaryInfo(this.borrowId);
-      
+
       if (rs.ok) {
         if (rs.info.borrow_date) {
           this.borrowDate = {
@@ -100,14 +100,14 @@ export class BorrowEditComponent implements OnInit {
             }
           }
         }
-        
+
         const fullname = rs.info.fullname;
         this.elSearchPeople.setDefault(fullname);
 
         this.srcWarehouseId = rs.info.src_warehouse_id;
         this.dstWarehouseId = rs.info.dst_warehouse_id;
         this.remark = rs.info.remark;
-        
+
         if (rs.info.confirmed === 'Y' || rs.info.approved === 'Y' || rs.info.mark_deleted === 'Y') {
           this.disableSave = true;
         }
@@ -135,7 +135,7 @@ export class BorrowEditComponent implements OnInit {
         this.primaryUnitId = event ? event.primary_unit_id : null;
         this.primaryUnitName = event ? event.primary_unit_name : null;
         this.unitGenericId = event.unit_generic_id ? event.unit_generic_id : null;
-        
+
         this.unitList.setGenericId(this.genericId);
       } else {
         this.alertService.error('กรุณาเลือกคลังสินค้าต้นทาง และ ปลายทาง');
@@ -337,7 +337,7 @@ export class BorrowEditComponent implements OnInit {
       const generics = [];
       let isError = false;
 
-      _.forEach(this.generics, v => {   
+      _.forEach(this.generics, v => {
         if (v.generic_id && v.borrow_qty) {
           generics.push({
             generic_id: v.generic_id,
@@ -399,6 +399,7 @@ export class BorrowEditComponent implements OnInit {
   }
 
   async getProductList(genericId, qty) {
+    console.log(genericId, qty)
     try {
       this.modalLoading.show();
       const data = [{
