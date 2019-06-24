@@ -17,15 +17,13 @@
           </div>
         </div>
         <div class="form-group row wid99">
-          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-            <label for="peopleName">
-              <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
-              <span *ngIf="peopleId">เจ้าหน้าที่</span>
-            </label>
+          <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
+            <label for="remark">หมายเหตุ</label>
           </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
+          <div class="col-lg-4 col-md-10 col-sm-12 col-xs-12">
+            <input id="remark" class="form-control" type="text" name="remark" [(ngModel)]="remark" placeholder="หมายเหตุ">
           </div>
+
         </div>
         <div class="form-group row wid99">
           <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
@@ -49,11 +47,15 @@
           </div>
         </div>
         <div class="form-group row wid99">
-          <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
-            <label for="remark">หมายเหตุ</label>
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="peopleName">
+              <span *ngIf="!peopleId" style="color: red;">เจ้าหน้าที่</span>
+              <span *ngIf="peopleId">เจ้าหน้าที่</span>
+            </label>
           </div>
-          <div class="col-lg-4 col-md-10 col-sm-12 col-xs-12">
-            <input id="remark" class="form-control" type="text" name="remark" [(ngModel)]="remark" placeholder="หมายเหตุ">
+
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <wm-search-people-autocomplete #elSearchPeople (onChange)="onChangePeople($event)" (onSelect)="onSelectedPeople($event)"></wm-search-people-autocomplete>
           </div>
         </div>
       </section>
@@ -98,8 +100,8 @@
     <clr-dg-cell>&nbsp;</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px;">{{workingCode}}</clr-dg-cell>
     <clr-dg-cell>
-      <wm-search-generic-warehouse-autocomplete [warehouseId]="srcWarehouseId" [clearOnSelected]="false" #elSearchGeneric (onSelect)="setSelectedGeneric($event)"
-        (onChange)="onChangeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
+      <wm-search-generic-warehouse-autocomplete [warehouseId]="srcWarehouseId" [clearOnSelected]="false"
+        #elSearchGeneric (onSelect)="setSelectedGeneric($event)" (onChange)="onChangeSearchGeneric($event)"></wm-search-generic-warehouse-autocomplete>
     </clr-dg-cell>
     <clr-dg-cell>
       <input type="text" #qty (keyup)="onChangeEditQty(qty.value)" [value]="borrowQty" style="width: 100%; text-align: right; background-color:#FFF9C4"
