@@ -135,7 +135,12 @@ export class CalculateMinMaxComponent implements OnInit {
       const rs: any = await this.minMaxService.getMinMaxGroupDetail(this.minMaxGroupId, this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
-        this._generics = _.clone(this.generics);
+        const rsd: any = await this.minMaxService.getMinMax(this.genericType, this.query);
+        if (rsd.ok) {
+          this._generics = _.clone(rsd.rows);
+        } else {
+          this.alertService.error(rsd.error);
+        }
       } else {
         this.alertService.error(rs.error);
       }
@@ -202,7 +207,12 @@ export class CalculateMinMaxComponent implements OnInit {
       const rs: any = await this.minMaxService.calculateMinMaxGroup(_fromDate, _toDate, this.minMaxGroupId);
       if (rs.ok) {
         this.generics = rs.rows;
-        this._generics = _.clone(this.generics);
+        const rsd: any = await this.minMaxService.getMinMax(this.genericType, this.query);
+        if (rsd.ok) {
+          this._generics = _.clone(rsd.rows);
+        } else {
+          this.alertService.error(rsd.error);
+        }
         this.processDate = rs.process_date;
       } else {
         this.alertService.error(rs.error);
@@ -418,6 +428,7 @@ export class CalculateMinMaxComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
+
   async searchGenericGroup() {
     this.modalLoading.show();
     try {
