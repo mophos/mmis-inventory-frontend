@@ -352,14 +352,48 @@ export class PlanningComponent implements OnInit {
   //// }
   //// search when press ENTER
 
-  enterSearch(e) {
-    if (e.keyCode === 13) {
-      this.getProducts();
-    }
-  }
+  // enterSearch(e) {
+  //   if (e.keyCode === 13) {
+  //     this.getProducts();
+  //   }
+  // }
+
   enterSearchMinMax(e) {
     if (e.keyCode === 13) {
-      this.getGenerics();
+      this.searchGenerics();
+    }
+  }
+
+  async searchGenerics() {
+    this.modalLoading.show();
+    try {
+      const rs: any = await this.staffService.searchGenericsWarehosue(this.genericType, this.query);
+      if (rs.ok) {
+        this.generics = rs.rows;
+        for (const g of this.generics) {
+          const idx = _.findIndex(this._generics, { generic_id: g.generic_id });
+          if (idx > -1) {
+            g.use_total = this._generics[idx].use_total;
+            g.use_per_day = this._generics[idx].use_per_day;
+            g.safety_min_day = this._generics[idx].safety_min_day;
+            g.safety_max_day = this._generics[idx].safety_max_day;
+            g.qty = this._generics[idx].qty;
+            g.min_qty = this._generics[idx].min_qty;
+            g.max_qty = this._generics[idx].max_qty;
+            g.lead_time_day = this._generics[idx].lead_time_day;
+            g.rop_qty = this._generics[idx].rop_qty;
+            g.ordering_cost = this._generics[idx].ordering_cost;
+            g.carrying_cost = this._generics[idx].carrying_cost;
+            g.eoq_qty = this._generics[idx].eoq_qty;
+          }
+        }
+      } else {
+        this.alertService.error('เกิดข้อผิดพลาด: ' + JSON.stringify(rs.error));
+      }
+      this.modalLoading.hide();
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.error(error.message);
     }
   }
 
