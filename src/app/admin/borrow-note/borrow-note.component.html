@@ -6,9 +6,9 @@
   <button class="btn btn-sm btn-success btn-icon" routerLink="/admin/borrow-notes/new">
     <clr-icon shape="plus"></clr-icon> บันทึกยืมยา
   </button>
-  <button class="btn btn-sm btn-primary btn-icon" (click)="openModal()">
+  <!-- <button class="btn btn-sm btn-primary btn-icon" (click)="openModal()">
     <clr-icon shape="plus"></clr-icon> สร้างใบยืม
-  </button>
+  </button> -->
   <label for="query">ค้นหา</label>
   <input type="text" placeholder="ระบุคำค้นหา" id="query" [(ngModel)]="query" (keyup)="enterSearch($event)" style="width: 300px;">
   <button style="float: right" [disabled]="!selectedPrint.length" class="btn btn-sm btn-success btn-icon" (click)="printReport()">
