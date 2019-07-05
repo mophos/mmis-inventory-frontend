@@ -5,7 +5,7 @@
 </nav>
 
 
-<div class="row" style="padding:1em">
+<div class="row" style="padding-top:1em">
   <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
     <label for="startDate" class="required">ตั้งแต่</label>
   </div>
@@ -23,15 +23,22 @@
     <button type="button" class="btn btn-sm btn-primary" [disabled]="isPreview || genericTypeSelect.length == 0"
       (click)="export()">
       <clr-icon shape="printer"></clr-icon>
-      พิมพ์ 
+      พิมพ์
     </button>
     <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
       (click)="exportExcel()">
       <clr-icon shape="download"></clr-icon>
-      ส่งออก Excel 
+      ส่งออก Excel รูปแบบที่ 1
     </button>
-   
-    
+  </div>
+</div>
+<div class="row" style="padding-left:1em">
+  <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12 push-lg-9">
+    <button type="button" class="btn btn-sm btn-success" [disabled]="isPreview || genericTypeSelect.length == 0"
+      (click)="exportExcelSum()">
+      <clr-icon shape="download"></clr-icon>
+      ส่งออก Excel รูปแบบที่ 2
+    </button>
   </div>
 </div>
 <div class="row" style="padding: 1em">
