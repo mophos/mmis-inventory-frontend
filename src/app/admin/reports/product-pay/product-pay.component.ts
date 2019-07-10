@@ -121,6 +121,8 @@ export class ProductPayComponent implements OnInit {
   }
 
   async export() {
+    console.log('test');
+    
     let warehouseIdx = _.findIndex(this.warehouses, { warehouse_id: this.warehouseId })
     let warehouseSelect = this.warehouses[warehouseIdx]
     let type = _.map(this.genericTypeSelect, function (v) {
