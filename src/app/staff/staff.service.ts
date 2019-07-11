@@ -200,6 +200,14 @@ export class StaffService {
     return rs.json();
   }
 
+  async searchGenericsWarehosue(genericType: string, query: string) {
+    const resp = await this.authHttp.post(`${this.url}/staff/warehouse/min-max/search`, {
+      query: query,
+      genericType: genericType
+    }).toPromise();
+    return resp.json();
+  }
+
   removeBorrow(borrowId: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.delete(`${this.url}/staff/borrow/${borrowId}`)

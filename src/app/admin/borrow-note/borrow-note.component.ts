@@ -147,13 +147,32 @@ export class BorrowNoteComponent implements OnInit {
         remark: this.selectedGenerics[0].borrow_code
       };
 
-      let generics = [];
+      let group = [];
       for (const v of this.selectedGenerics) {
-        if (v.wpQty > v.unpaidQty) {
+        let _group = {};
+        let idx = _.findIndex(group, { 'genericId': v.generic_id });
+        if (idx > -1) {
+          group[idx].qty += v.unpaidQty;
+        } else {
+          _group = {
+            wpQty: v.wpQty,
+            genericId: v.generic_id,
+            qty: v.unpaidQty,
+            unit_generic_id: v.unit_generic_id
+          }
+          group.push(_group);
+        }
+      }
+      console.log(group);
+      
+
+      let generics = [];
+      for (const v of group) {
+        if (v.wpQty > v.qty) {
           let data = [];
           const _data = {
-            genericId: v.generic_id,
-            genericQty: v.unpaidQty
+            genericId: v.genericId,
+            genericQty: v.qty
           }
 
           data.push(_data);
@@ -163,8 +182,8 @@ export class BorrowNoteComponent implements OnInit {
           wmRows.push(allocate.rows);
 
           generics.push({
-            generic_id: v.generic_id,
-            borrow_qty: +v.unpaidQty,
+            generic_id: v.genericId,
+            borrow_qty: +v.qty,
             unit_generic_id: v.unit_generic_id,
             // primary_unit_id: v.primary_unit_id,
             products: wmRows

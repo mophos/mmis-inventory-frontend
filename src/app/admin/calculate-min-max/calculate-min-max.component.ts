@@ -135,7 +135,12 @@ export class CalculateMinMaxComponent implements OnInit {
       const rs: any = await this.minMaxService.getMinMaxGroupDetail(this.minMaxGroupId, this.genericType, this.query);
       if (rs.ok) {
         this.generics = rs.rows;
-        this._generics = _.clone(this.generics);
+        const rsd: any = await this.minMaxService.getMinMax(this.genericType, this.query);
+        if (rsd.ok) {
+          this._generics = _.clone(rsd.rows);
+        } else {
+          this.alertService.error(rsd.error);
+        }
       } else {
         this.alertService.error(rs.error);
       }
@@ -202,7 +207,23 @@ export class CalculateMinMaxComponent implements OnInit {
       const rs: any = await this.minMaxService.calculateMinMaxGroup(_fromDate, _toDate, this.minMaxGroupId);
       if (rs.ok) {
         this.generics = rs.rows;
-        this._generics = _.clone(this.generics);
+        for (const g of this._generics) {
+          const idx = _.findIndex(this.generics, { generic_id: g.generic_id });
+          if (idx > -1) {
+            g.use_total = this.generics[idx].use_total;
+            g.use_per_day = this.generics[idx].use_per_day;
+            g.safety_min_day = this.generics[idx].safety_min_day;
+            g.safety_max_day = this.generics[idx].safety_max_day;
+            g.qty = this.generics[idx].qty;
+            g.min_qty = this.generics[idx].min_qty;
+            g.max_qty = this.generics[idx].max_qty;
+            g.lead_time_day = this.generics[idx].lead_time_day;
+            g.rop_qty = this.generics[idx].rop_qty;
+            g.ordering_cost = this.generics[idx].ordering_cost;
+            g.carrying_cost = this.generics[idx].carrying_cost;
+            g.eoq_qty = this.generics[idx].eoq_qty;
+          }
+        }
         this.processDate = rs.process_date;
       } else {
         this.alertService.error(rs.error);
@@ -418,6 +439,7 @@ export class CalculateMinMaxComponent implements OnInit {
       this.alertService.error(error.message);
     }
   }
+
   async searchGenericGroup() {
     this.modalLoading.show();
     try {
