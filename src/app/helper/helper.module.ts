@@ -14,6 +14,7 @@ import { YearThaiPipe } from './year-thai.pipe';
 import { ExpiredDatePipe } from './expired-date.pipe';
 import { FloorPipe } from './floor.pipe';
 import { CeilPipe } from './ceil.pipe';
+import { ToThaiDateTimePipe } from './to-thai-date-time.pipe';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { CeilPipe } from './ceil.pipe';
     YearThaiPipe,
     ExpiredDatePipe,
     FloorPipe,
-    CeilPipe
+    CeilPipe,
+    ToThaiDateTimePipe
   ],
   exports: [
     ToThaiDatePipe,
@@ -47,7 +49,8 @@ import { CeilPipe } from './ceil.pipe';
     YearThaiPipe,
     ExpiredDatePipe,
     FloorPipe,
-    CeilPipe
+    CeilPipe,
+    ToThaiDateTimePipe
   ]
 })
 export class HelperModule { }

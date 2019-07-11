@@ -1,3 +1,4 @@
+import { ReportsService } from './reports.service';
 import { AdjustStockService } from './adjust-stock.service';
 import { MinMaxService } from './min-max.service';
 import { TransectionTypeService } from './transection-type.service';
@@ -186,6 +187,7 @@ import { PayReportComponent } from './reports/pay-report/pay-report.component';
 import { AccountPayableComponent } from './reports/account-payable/account-payable.component';
 import { ProductPayComponent } from './reports/product-pay/product-pay.component';
 import { RequisitionSumComponent } from './reports/requisition-sum/requisition-sum.component';
+import { ProcessComponent } from './reports/process/process.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -312,7 +314,8 @@ Highcharts.setOptions({
     PayReportComponent,
     AccountPayableComponent,
     ProductPayComponent,
-    RequisitionSumComponent
+    RequisitionSumComponent,
+    ProcessComponent
   ],
   providers: [
     MainService,
@@ -374,6 +377,7 @@ Highcharts.setOptions({
     BorrowItemsService,
     BorrowOtherService,
     PickService,
+    ReportsService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })
