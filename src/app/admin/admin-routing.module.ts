@@ -1,3 +1,4 @@
+import { ProcessComponent } from './reports/process/process.component';
 import { AccountPayableComponent } from './reports/account-payable/account-payable.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -189,7 +190,8 @@ const routes: Routes = [
           { path: 'pay-report', component: PayReportComponent },
           { path: 'account-payable', component: AccountPayableComponent },
           { path: 'product-pay', component: ProductPayComponent },
-          { path: 'requisition-sum', component: RequisitionSumComponent }
+          { path: 'requisition-sum', component: RequisitionSumComponent },
+          { path: 'process', component: ProcessComponent }
         ]
       },
 
