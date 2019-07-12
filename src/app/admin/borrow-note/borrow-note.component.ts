@@ -163,8 +163,6 @@ export class BorrowNoteComponent implements OnInit {
           group.push(_group);
         }
       }
-      console.log(group);
-      
 
       let generics = [];
       for (const v of group) {
