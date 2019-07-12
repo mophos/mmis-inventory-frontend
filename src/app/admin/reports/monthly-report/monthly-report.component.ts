@@ -7,6 +7,8 @@ import { BasicService } from '../../../basic.service';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { ProductsService } from 'app/admin/products.service';
 import * as _ from 'lodash'
+import { Router } from '@angular/router';
+import { ReportsService } from 'app/admin/reports.service';
 @Component({
   selector: 'wm-monthly-report',
   templateUrl: './monthly-report.component.html',
@@ -34,10 +36,11 @@ export class MonthlyReportComponent implements OnInit {
   genericTypes = [];
   constructor(
     @Inject('API_URL') private apiUrl: string,
-    private warehouseService: WarehouseService,
+    private reportsService: ReportsService,
     private alertService: AlertService,
     private productService: ProductsService,
-    private basicService: BasicService
+    private basicService: BasicService,
+    private router: Router
 
   ) {
     this.token = sessionStorage.getItem('token');
@@ -68,13 +71,16 @@ export class MonthlyReportComponent implements OnInit {
       this.alertService.serverError();
     }
   }
-  monthlyReport() {
+  async monthlyReport() {
     let type = _.map(this.genericTypeSelect, function (v) {
       return 'genericTypes=' + v.generic_type_id;
     })
-    const url = `${this.apiUrl}/report/monthlyReport?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}`
-    console.log(url);
-    this.htmlPreview.showReport(url);
+    // const url = `${this.apiUrl}/reports/monthlyReport?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}&ran=${moment().format('x')}`
+    await this.reportsService.monthlyReport(this.month, this.year, type, this.warehouseId);
+    setTimeout(() => {
+      this.router.navigate(['/admin/reports/process']);
+    }, 1000);
+
   }
 
   monthlyReportExcel() {
@@ -85,13 +91,15 @@ export class MonthlyReportComponent implements OnInit {
     window.open(url);
   }
 
-  monthlyReportAll() {
+  async monthlyReportAll() {
     let type = _.map(this.genericTypeSelect, function (v) {
       return 'genericTypes=' + v.generic_type_id;
     })
-    const url = `${this.apiUrl}/report/monthlyReportAll?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}`
-    console.log(url);
-    this.htmlPreview.showReport(url);
+    // const url = `${this.apiUrl}/reports/monthlyReportAll?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}`
+    await this.reportsService.monthlyReportAll(this.month, this.year, type, this.warehouseId);
+    setTimeout(() => {
+      this.router.navigate(['/admin/reports/process']);
+    }, 1000);
   }
 
   getdate() {

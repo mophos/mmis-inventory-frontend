@@ -1,0 +1,34 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/reports">รายงาน</a>
+  <span class="breadcrumb-item active">ประมวลผลรายงาน</span>
+</nav>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="text-align: left">ไฟล์</th>
+          <th>วันที่สร้าง</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of list">
+          <td style="text-align: left">{{i.report_name}}</td>
+          <td>{{i.create_date | toThaiDateTime}}</td>
+          <td *ngIf="i.is_complete == 'Y'">
+            <button class="btn btn-sm btn-primary wm-small-btn" (click)="print(i)">
+              <clr-icon shape="printer"></clr-icon>
+            </button>
+          </td>
+          <td *ngIf="i.is_complete == 'N'">
+            กำลังประมวลผล <span class="spinner spinner-sm "> </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<wm-html-preview #htmlPreview></wm-html-preview>

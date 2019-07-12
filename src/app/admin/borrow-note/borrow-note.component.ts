@@ -201,7 +201,6 @@ export class BorrowNoteComponent implements OnInit {
         this.alertService.error('ไม่พบรายการที่ต้องการยืม');
       }
       this.modalLoading.hide();
-      console.log(summary, generics)
     } catch (error) {
       this.modalLoading.hide();
     }
