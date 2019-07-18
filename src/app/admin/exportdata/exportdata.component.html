@@ -1,5 +1,5 @@
 <nav class="breadcrumb">
-  <a class="breadcrumb-item" href="javascript://" routerLink="/staff">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
   <span class="breadcrumb-item active">ส่งออกข้อมูล Excel</span>
 </nav>
 
@@ -27,7 +27,39 @@
         </button>
       </td>
     </tr>
-    
+    <tr>
+      <td style="text-align: left">Export file DISTRIBUTE</td>
+      <td>
+        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportDistribute()">
+          <clr-icon shape="export"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Export file DRUGLIST</td>
+      <td>
+        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportDruglist()">
+          <clr-icon shape="export"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Export file INVENTORY</td>
+      <td>
+        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportInventory()">
+          <clr-icon shape="export"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Export file RECEIVE</td>
+      <td>
+        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportReceive()">
+          <clr-icon shape="export"></clr-icon>
+        </button>
+      </td>
+    </tr>
+
   </tbody>
 </table>
 
