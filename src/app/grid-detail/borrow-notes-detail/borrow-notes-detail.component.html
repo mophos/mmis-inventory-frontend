@@ -10,6 +10,7 @@
       <clr-dg-cell style="text-align: right;">{{g.qty * g.conversion_qty | number}} {{ g.to_unit_name }}</clr-dg-cell>
       <clr-dg-cell style="text-align: center;">
         <clr-icon shape="check" class="is-success" *ngIf="g.requisition_order_id"></clr-icon>
+        <clr-icon shape="check" class="is-success" *ngIf="g.borrow_id"></clr-icon>
       </clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>{{generics.length}} รายการ</clr-dg-footer>
