@@ -1,3 +1,4 @@
+import { ReceiveFreeComponent } from './reports/receive-free/receive-free.component';
 import { ProcessComponent } from './reports/process/process.component';
 import { AccountPayableComponent } from './reports/account-payable/account-payable.component';
 import { NgModule } from '@angular/core';
@@ -191,7 +192,8 @@ const routes: Routes = [
           { path: 'account-payable', component: AccountPayableComponent },
           { path: 'product-pay', component: ProductPayComponent },
           { path: 'requisition-sum', component: RequisitionSumComponent },
-          { path: 'process', component: ProcessComponent }
+          { path: 'process', component: ProcessComponent },
+          { path: 'receive-free', component: ReceiveFreeComponent }
         ]
       },
 
