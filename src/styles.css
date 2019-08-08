@@ -1,111 +1,112 @@
 .main-container .content-container .content-area {
-    -webkit-box-flex: 1;
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    overflow-y: auto;
-    padding: 0px 5px 0px 5px;
-    background: white;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0px 5px 0px 5px;
+  background: white;
 }
 
 .datagrid {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .card {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .float-left {
-    float: left !important;
+  float: left !important;
 }
 
 .float-right {
-    float: right !important;
+  float: right !important;
 }
 
 .typeahead-backdrop {
-    position: relative !important;
+  position: relative !important;
 }
 
 .breadcrumb {
-    padding: 0.5rem 0.5rem;
-    list-style: none;
-    background-color: #eceeef;
+  padding: 0.5rem 0.5rem;
+  list-style: none;
+  background-color: #eceeef;
 }
 
 .breadcrumb::after {
-    display: block;
-    content: "";
-    clear: both;
+  display: block;
+  content: "";
+  clear: both;
 }
 
 .breadcrumb-item {
-    float: left;
+  float: left;
 }
 
 .breadcrumb-item+.breadcrumb-item::before {
-    display: inline-block;
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
-    color: #636c72;
-    content: "/";
+  display: inline-block;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  color: #636c72;
+  content: "/";
 }
 
 .breadcrumb-item+.breadcrumb-item:hover::before {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .breadcrumb-item+.breadcrumb-item:hover::before {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .breadcrumb-item.active {
-    color: #636c72;
+  color: #636c72;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .datagrid .datagrid-row-actions clr-icon {
-    height: 14px;
-    vertical-align: middle;
+  height: 14px;
+  vertical-align: middle;
 }
 
 form .form-group {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 chart {
-    display: block;
-    padding: 10px;
+  display: block;
+  padding: 10px;
 }
 
 .datagrid-cell .btn.btn-link {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 @media screen and (max-width: 544px) {
-    form .form-group.form-fid,
-    .form .form-group.form-fid,
-    .form-fid .form-group {
-        padding-left: 0;
-    }
+
+  form .form-group.form-fid,
+  .form .form-group.form-fid,
+  .form-fid .form-group {
+    padding-left: 0;
+  }
 }
 
 .hr {
-    border-top: 1px solid #e4e4e4;
-    border-bottom: none;
-    margin-top: 15px;
+  border-top: 1px solid #e4e4e4;
+  border-bottom: none;
+  margin-top: 15px;
 }
 
 input[type=number] {
-    text-align: right;
+  text-align: right;
 }
 
 .datagrid input[type=text] {
-    margin: 0;
+  margin: 0;
 }
 
 /* .header-right .datagrid-column-flex>.datagrid-column-title {
@@ -130,7 +131,7 @@ input[type=number] {
   background-color: #FFFCE8;
 }
 
-.isProblem{
+.isProblem {
   background-color: #FFE5C9;
 }
 
@@ -140,110 +141,171 @@ input[type=number] {
 }
 
 
-form .form-group label, form .form-group span, form .form-group input[type=text], form .form-group input[type=password], form .form-group input[type=number], form .form-group input[type=email], form .form-group input[type=url], form .form-group input[type=tel], form .form-group input[type=date], form .form-group input[type=time], form .form-group input[type=datetime-local], form .form-group .tooltip-validation, form .form-group textarea, form .form-group .select, form .form-group .checkbox-inline, form .form-group .radio-inline, form .form-group .checkbox, form .form-group .radio, form .form-group .toggle-switch, form .form-group button, form .form-group a, form .form-group input[type=button], form .form-group input[type=submit], form .form-group .btn, .form .form-group label, .form .form-group span, .form .form-group input[type=text], .form .form-group input[type=password], .form .form-group input[type=number], .form .form-group input[type=email], .form .form-group input[type=url], .form .form-group input[type=tel], .form .form-group input[type=date], .form .form-group input[type=time], .form .form-group input[type=datetime-local], .form .form-group .tooltip-validation, .form .form-group textarea, .form .form-group .select, .form .form-group .checkbox-inline, .form .form-group .radio-inline, .form .form-group .checkbox, .form .form-group .radio, .form .form-group .toggle-switch, .form .form-group button, .form .form-group a, .form .form-group input[type=button], .form .form-group input[type=submit], .form .form-group .btn {
+form .form-group label,
+form .form-group span,
+form .form-group input[type=text],
+form .form-group input[type=password],
+form .form-group input[type=number],
+form .form-group input[type=email],
+form .form-group input[type=url],
+form .form-group input[type=tel],
+form .form-group input[type=date],
+form .form-group input[type=time],
+form .form-group input[type=datetime-local],
+form .form-group .tooltip-validation,
+form .form-group textarea,
+form .form-group .select,
+form .form-group .checkbox-inline,
+form .form-group .radio-inline,
+form .form-group .checkbox,
+form .form-group .radio,
+form .form-group .toggle-switch,
+form .form-group button,
+form .form-group a,
+form .form-group input[type=button],
+form .form-group input[type=submit],
+form .form-group .btn,
+.form .form-group label,
+.form .form-group span,
+.form .form-group input[type=text],
+.form .form-group input[type=password],
+.form .form-group input[type=number],
+.form .form-group input[type=email],
+.form .form-group input[type=url],
+.form .form-group input[type=tel],
+.form .form-group input[type=date],
+.form .form-group input[type=time],
+.form .form-group input[type=datetime-local],
+.form .form-group .tooltip-validation,
+.form .form-group textarea,
+.form .form-group .select,
+.form .form-group .checkbox-inline,
+.form .form-group .radio-inline,
+.form .form-group .checkbox,
+.form .form-group .radio,
+.form .form-group .toggle-switch,
+.form .form-group button,
+.form .form-group a,
+.form .form-group input[type=button],
+.form .form-group input[type=submit],
+.form .form-group .btn {
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
 .card {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .wm-small-btn {
-  min-width: 0px;margin: 0 0px 0 0;
+  min-width: 0px;
+  margin: 0 0px 0 0;
 }
 
 .wm-overall-row {
-  border-bottom: 2px solid #007CBB; 
+  border-bottom: 2px solid #007CBB;
   background-color: #E1F1F6;
 }
 
 .wm-add-row {
-  border-top: 2px solid #60B515; 
+  border-top: 2px solid #60B515;
   background-color: #DFF0D0;
 }
 
 .clr-vertical-nav {
-    background-color: #eceeef;
+  background-color: #eceeef;
 }
 
 .wm-edit-box-number {
-    width: 100%;
-    text-align: right;
+  width: 100%;
+  text-align: right;
 }
 
 .wm-select-noline {
-    border-bottom: 0
+  border-bottom: 0
 }
 
-.badge.badge-white, .badge.badge-5 {
-    background: white;
-    color: #000;
+.badge.badge-white,
+.badge.badge-5 {
+  background: white;
+  color: #000;
 }
 
 .error-message {
-    color: #F52F22;
-    font-weight: bold;
+  color: #F52F22;
+  font-weight: bold;
 }
 
 .success-message {
-    color: #85C81A;
+  color: #85C81A;
 }
+
 .info-message {
-    color: rgb(0, 140, 196);
+  color: rgb(0, 140, 196);
 }
 
 .confirm-status {
-    background-color: #FFFCE8;
+  background-color: #FFFCE8;
 }
+
 .success-status {
-    background-color: rgb(238, 234, 9);
+  background-color: rgb(238, 234, 9);
 }
+
 .approve-status {
-    background-color: #DFF0D0;
+  background-color: #DFF0D0;
 }
+
 .cancel-status {
-    background-color: #F89997;
+  background-color: #F89997;
 }
+
 .expired-date-status {
-    background-color: red;
-    color: orange
+  background-color: red;
+  color: orange
 }
+
 .main-container:not([class*="open-overflow-menu"]):not([class*="open-hamburger-menu"]) .clr-vertical-nav.is-collapsed {
-    border-right-style: solid;
-    border-right-color: #ddd;
+  border-right-style: solid;
+  border-right-color: #ddd;
 }
 
 wm-loading-modal .modal-backdrop {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background-color: transparent;
-    opacity: .85;
-    z-index: 1040;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: transparent;
+  opacity: .85;
+  z-index: 1040;
 }
-.wid99{
-    width: 99%;
+
+.wid99 {
+  width: 99%;
 }
 
 .datagrid .datagrid-row-actions clr-icon {
-    height: 14px;
-    vertical-align: middle;
+  height: 14px;
+  vertical-align: middle;
 }
 
 .grid-order .datagrid .datagrid-cell {
-    padding: 5px 10px 5px 10px;
-    line-height: 25px;
+  padding: 5px 10px 5px 10px;
+  line-height: 25px;
 }
 
 button.confirm {
-    background: #EDB200;
-    border-color: #EDB200;
-    color: white;
+  background: #EDB200;
+  border-color: #EDB200;
+  color: white;
 }
 
-.datagrid .datagrid-column .datagrid-filter-toggle, .datagrid .datagrid-head .datagrid-row-actions .datagrid-filter-toggle {
-    display: none;
+.datagrid .datagrid-column .datagrid-filter-toggle,
+.datagrid .datagrid-head .datagrid-row-actions .datagrid-filter-toggle {
+  display: none;
+}
+
+.w3-display-topright {
+  top: 12%
 }
