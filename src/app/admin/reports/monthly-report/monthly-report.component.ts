@@ -75,11 +75,12 @@ export class MonthlyReportComponent implements OnInit {
     let type = _.map(this.genericTypeSelect, function (v) {
       return 'genericTypes=' + v.generic_type_id;
     })
-    // const url = `${this.apiUrl}/reports/monthlyReport?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}&ran=${moment().format('x')}`
-    await this.reportsService.monthlyReport(this.month, this.year, type, this.warehouseId);
-    setTimeout(() => {
-      this.router.navigate(['/admin/reports/process']);
-    }, 1000);
+    const url = `${this.apiUrl}/report/monthlyReport?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}&ran=${moment().format('x')}`
+    this.htmlPreview.showReport(url);
+    // await this.reportsService.monthlyReport(this.month, this.year, type, this.warehouseId);
+    // setTimeout(() => {
+    //   this.router.navigate(['/admin/reports/process']);
+    // }, 1000);
 
   }
 
@@ -95,11 +96,12 @@ export class MonthlyReportComponent implements OnInit {
     let type = _.map(this.genericTypeSelect, function (v) {
       return 'genericTypes=' + v.generic_type_id;
     })
-    // const url = `${this.apiUrl}/reports/monthlyReportAll?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}`
-    await this.reportsService.monthlyReportAll(this.month, this.year, type, this.warehouseId);
-    setTimeout(() => {
-      this.router.navigate(['/admin/reports/process']);
-    }, 1000);
+    const url = `${this.apiUrl}/report/monthlyReportAll?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}`
+    this.htmlPreview.showReport(url);
+    // await this.reportsService.monthlyReportAll(this.month, this.year, type, this.warehouseId);
+    // setTimeout(() => {
+    //   this.router.navigate(['/admin/reports/process']);
+    // }, 1000);
   }
 
   getdate() {
