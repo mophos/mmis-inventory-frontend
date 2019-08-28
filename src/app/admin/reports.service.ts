@@ -25,5 +25,10 @@ export class ReportsService {
     return true;
   }
 
+  async getFinancial(startDate: any, endDate: any, genericTypeId: any) {
+    const res = await this.authHttp.get(`${this.url}/reports/exports/financial/${startDate}/${endDate}/${genericTypeId}`).toPromise();
+    return res.json();
+  }
+
 
 }

@@ -1,0 +1,94 @@
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin/exportdata">ส่งออกข้อมูล Excel</a>
+  <span class="breadcrumb-item active">Export Financial</span>
+</nav>
+<div class="card">
+  <div class="card-block" style="padding: 0px 0px 0px 10px;">
+    <form class="compact" style="padding-top: 0px;">
+      <section class="form-block">
+        <div class="form-group row wid99">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">ประเภทวัสดุ</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <wm-select-generic-type #genericTypes (onSelect)="selectGenericType($event)"></wm-select-generic-type>
+          </div>
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">ช่วงวันที่</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <my-date-picker-th name="startDate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
+            </my-date-picker-th>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+            <label for="dateReceive" class="required">ถึง</label>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <my-date-picker-th name="endDate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required>
+            </my-date-picker-th>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <button class="btn btn-sm btn-primary" (click)="getFinancial()">
+              <clr-icon shape="search"></clr-icon> ค้นหา
+            </button>
+          </div>
+
+        </div>
+
+
+      </section>
+    </form>
+  </div>
+</div>
+
+
+
+
+<clr-datagrid class="grid-order" [style.padding-top.px]="5" [style.height.%]="70">
+  <!-- [style.width.px]="300" -->
+  <clr-dg-column>วันที่เอกสาร</clr-dg-column>
+  <clr-dg-column>เลขที่เอกสาร</clr-dg-column>
+  <clr-dg-column>เลขที่ใบกำกับภาษี</clr-dg-column>
+  <clr-dg-column>รหัสเจ้าหนี้</clr-dg-column>
+  <clr-dg-column>ชื่อบริษัท</clr-dg-column>
+  <clr-dg-column>จำนวนเงิน</clr-dg-column>
+  <clr-dg-column>รหัสบัญชี</clr-dg-column>
+  <clr-dg-column>ประเภทวัสดุ</clr-dg-column>
+  <!-- <clr-dg-column></clr-dg-column> -->
+
+  <clr-dg-row *clrDgItems="let list of lists; let idx = index;">
+    <clr-dg-cell>{{list.receive_date | toThaiDate}}</clr-dg-cell>
+    <clr-dg-cell>{{list.docunoxx }}</clr-dg-cell>
+    <clr-dg-cell>{{list.invxnoxx}}</clr-dg-cell>
+    <clr-dg-cell>{{list.payacode}}</clr-dg-cell>
+    <clr-dg-cell>{{list.payaname1}}</clr-dg-cell>
+    <clr-dg-cell>{{list.sumxgoodamnt | number}}</clr-dg-cell>
+    <clr-dg-cell>{{list.accxcode}}</clr-dg-cell>
+    <clr-dg-cell>{{list.accxthainame}}</clr-dg-cell>
+    <!-- <clr-dg-cell>
+      <button title="ลบ" class="btn btn-sm btn-danger wm-small-btn" (click)="remove(idx)">
+        <clr-icon shape="trash"></clr-icon>
+      </button>
+    </clr-dg-cell> -->
+
+  </clr-dg-row>
+
+  <clr-dg-footer>
+    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+    รายการ
+    <clr-dg-pagination #pagination [clrDgPageSize]="20" [clrDgTotalItems]="lists.length"></clr-dg-pagination>
+  </clr-dg-footer>
+
+</clr-datagrid>
+
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: right;">
+    <button class="btn btn-sm btn-success" (click)="export()">
+      <clr-icon shape="export"></clr-icon> export
+    </button>
+  </div>
+</div>
+<wm-loading-modal #modalLoading></wm-loading-modal>

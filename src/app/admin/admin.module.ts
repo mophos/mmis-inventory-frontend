@@ -189,6 +189,7 @@ import { ProductPayComponent } from './reports/product-pay/product-pay.component
 import { RequisitionSumComponent } from './reports/requisition-sum/requisition-sum.component';
 import { ProcessComponent } from './reports/process/process.component';
 import { ReceiveFreeComponent } from './reports/receive-free/receive-free.component';
+import { ExportFinancialComponent } from './exportdatas/export-financial/export-financial.component';
 export function highchartsFactory() {
   return require('highcharts');
 }
@@ -317,7 +318,8 @@ Highcharts.setOptions({
     ProductPayComponent,
     RequisitionSumComponent,
     ProcessComponent,
-    ReceiveFreeComponent
+    ReceiveFreeComponent,
+    ExportFinancialComponent
   ],
   providers: [
     MainService,

@@ -70,6 +70,44 @@
             </my-date-picker-th>
           </div>
         </div>
+
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="paperNumber">เลขที่เอกสาร</label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="paperNumber" [(ngModel)]="paperNumber">
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <label for="taxNumber">เลขที่ใบกำกับภาษี</label>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+              <input class="form-control" type="text" name="taxNumber" [(ngModel)]="taxNumber">
+            </div>
+          <!-- <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"> -->
+          <!-- <label for="gForm_1">สถานะใบสั่งซื้อ</label> -->
+          <!-- </div> -->
+          <!-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"> -->
+          <!-- <button class="btn btn-success btn-sm" (click)="completedPurchases()" [disabled]="!purchaseOrderNumber">
+                <clr-icon shape="check"></clr-icon>
+                ปิดใบสั่งซื้อ
+              </button> -->
+
+          <!-- <clr-checkbox [(ngModel)]="isSuccess" name="isSuccess"
+            [clrChecked]="false"
+            [clrInline]="true" [disabled]="!purchaseOrderId">
+              รับเสร็จสิ้นแล้ว
+            </clr-checkbox> -->
+          <!-- <clr-checkbox [(ngModel)]="isCompleted" name="isCompleted"
+            [clrChecked]="false" [clrDisabled]="!purchaseOrderNumber"
+            [clrInline]="true">
+              รับครบ
+            </clr-checkbox> -->
+          <!-- <button class="btn btn-success btn-sm" (click)="completedPurchases()" [disabled]="isApprove">
+                <clr-icon shape="check"></clr-icon>
+                รับเสร็จสมบูรณ์
+              </button> -->
+        </div>
         <div class="form-group row wid99">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label class="required" for="slLabeler">ผู้จำหน่าย</label>
@@ -78,33 +116,8 @@
             <wm-search-labeler [disabled]="isApprove" #wmSearchLabeler labelerType="V"
               (onSelect)="selectedSupplier($event)" (onChange)="clearSupplier()"></wm-search-labeler>
           </div>
-
-          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-            <!-- <label for="gForm_1">สถานะใบสั่งซื้อ</label> -->
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <!-- <button class="btn btn-success btn-sm" (click)="completedPurchases()" [disabled]="!purchaseOrderNumber">
-                <clr-icon shape="check"></clr-icon>
-                ปิดใบสั่งซื้อ
-              </button> -->
-
-            <!-- <clr-checkbox [(ngModel)]="isSuccess" name="isSuccess"
-            [clrChecked]="false"
-            [clrInline]="true" [disabled]="!purchaseOrderId">
-              รับเสร็จสิ้นแล้ว
-            </clr-checkbox> -->
-            <!-- <clr-checkbox [(ngModel)]="isCompleted" name="isCompleted"
-            [clrChecked]="false" [clrDisabled]="!purchaseOrderNumber"
-            [clrInline]="true">
-              รับครบ
-            </clr-checkbox> -->
-            <!-- <button class="btn btn-success btn-sm" (click)="completedPurchases()" [disabled]="isApprove">
-                <clr-icon shape="check"></clr-icon>
-                รับเสร็จสมบูรณ์
-              </button> -->
-          </div>
-
         </div>
+        <!-- </div> -->
       </section>
     </form>
   </div>

@@ -62,15 +62,19 @@
             </my-date-picker-th>
           </div>
         </div>
-        <div class="row wid99">
+        <div class="form-group row wid99">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-            <label class="required" for="slLabeler">ผู้จำหน่าย</label>
+            <label for="paperNumber">เลขที่เอกสาร</label>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <wm-search-labeler #wmSearchLabeler labelerType=" V" (onSelect)="selectedSupplier($event)"
-              (onChange)="clearSupplier($event)"></wm-search-labeler>
+            <input class="form-control" type="text" name="paperNumber" [(ngModel)]="paperNumber">
           </div>
-
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="taxNumber">เลขที่ใบกำกับภาษี</label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <input class="form-control" type="text" name="taxNumber" [(ngModel)]="taxNumber">
+          </div>
           <!-- <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label class="required" for="gForm_1">สถานะ</label>
           </div>
@@ -83,6 +87,15 @@
             </div>
           </div> -->
 
+        </div>
+        <div class="form-group row wid99">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label class="required" for="slLabeler">ผู้จำหน่าย</label>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <wm-search-labeler #wmSearchLabeler labelerType=" V" (onSelect)="selectedSupplier($event)"
+              (onChange)="clearSupplier($event)"></wm-search-labeler>
+          </div>
         </div>
       </section>
     </form>

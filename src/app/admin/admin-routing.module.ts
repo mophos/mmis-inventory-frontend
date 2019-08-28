@@ -128,6 +128,7 @@ import { PayReportComponent } from './reports/pay-report/pay-report.component';
 import { StockcardBorrowComponent } from './tools/stockcard-borrow/stockcard-borrow.component';
 import { ProductPayComponent } from './reports/product-pay/product-pay.component';
 import { RequisitionSumComponent } from './reports/requisition-sum/requisition-sum.component';
+import { ExportFinancialComponent } from './exportdatas/export-financial/export-financial.component';
 
 const routes: Routes = [
   {
@@ -163,6 +164,14 @@ const routes: Routes = [
         children: [
           { path: '', redirectTo: 'main', pathMatch: 'full' },
           { path: 'main', component: ExportdataComponent }
+        ],
+      },
+      {
+        path: 'exportdatas',
+        children: [
+          { path: '', redirectTo: 'main', pathMatch: 'full' },
+          { path: 'main', component: ExportdataComponent },
+          { path: 'export-financial', component: ExportFinancialComponent }
         ],
       },
       { path: 'return-product/new', component: ReturnedComponent },

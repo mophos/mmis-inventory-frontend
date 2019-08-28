@@ -128,7 +128,8 @@ export class ReceiveEditComponent implements OnInit {
 
   receiveCode: any;
   receiveTmpCode: any;
-
+  paperNumber: any;
+  taxNumber: any;
   selectedGenericId: null;
   receiveId: any;
 
@@ -638,6 +639,8 @@ export class ReceiveEditComponent implements OnInit {
                   receiveDate: _receiveDate,
                   receiveCode: this.receiveCode,
                   deliveryCode: this.deliveryCode,
+                  paperNumber: this.paperNumber,
+                  taxNumber: this.taxNumber,
                   deliveryDate: _deliveryDate,
                   receiveStatusId: this.receiveStatusId,
                   supplierId: this.selectedSupplierId,
@@ -698,6 +701,8 @@ export class ReceiveEditComponent implements OnInit {
                 receiveDate: _receiveDate,
                 receiveCode: this.receiveCode,
                 deliveryCode: this.deliveryCode,
+                paperNumber: this.paperNumber,
+                taxNumber: this.taxNumber,
                 deliveryDate: _deliveryDate,
                 receiveStatusId: this.receiveStatusId,
                 supplierId: this.selectedSupplierId,
@@ -908,6 +913,8 @@ export class ReceiveEditComponent implements OnInit {
       if (res.ok) {
         if (res.rows) {
           this.receiveCode = res.rows.receive_code;
+          this.paperNumber= res.rows.paper_number,
+          this.taxNumber= res.rows.tax_number,
           this.receiveTmpCode = res.rows.receive_tmp_code;
           this.receiveStatusId = res.rows.receive_status_id;
           this.selectedSupplierId = res.rows.vendor_labeler_id;
