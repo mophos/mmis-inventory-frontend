@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { ReportsService } from 'app/admin/reports.service';
 import { AlertService } from 'app/alert.service';
 import * as _ from "lodash";
-import moment = require('moment');
+import * as moment from'moment';
 @Component({
   selector: 'wm-export-financial',
   templateUrl: './export-financial.component.html',
