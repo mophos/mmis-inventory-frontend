@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { ReportsService } from 'app/admin/reports.service';
 import { AlertService } from 'app/alert.service';
+import { IMyOptions } from 'mydatepicker-th';
+
 import * as _ from "lodash";
 import * as moment from'moment';
 @Component({
@@ -11,7 +13,12 @@ import * as moment from'moment';
 export class ExportFinancialComponent implements OnInit {
   @ViewChild('genericTypes') public genericTypes: any = 0;
   @ViewChild('modalLoading') public modalLoading: any;
-
+  myDatePickerOptions: IMyOptions = {
+    inline: false,
+    dateFormat: 'dd mmm yyyy',
+    editableDateField: false,
+    showClearDateBtn: false
+  };
   genericTypeId: any = 0;
   startDate: any = {
     date: {
