@@ -120,7 +120,8 @@ export class ReceivePurchaseComponent implements OnInit {
   token = null;
 
   receiveCode: any;
-
+  paperNumber: any;
+  taxNumber: any;
   selectedGenericId: null;
   receiveExpired: any;
   maskDate = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
@@ -719,6 +720,8 @@ export class ReceivePurchaseComponent implements OnInit {
                   receiveDate: _receiveDate,
                   receiveCode: this.receiveCode,
                   deliveryCode: this.deliveryCode,
+                  paperNumber: this.paperNumber,
+                  taxNumber: this.taxNumber,
                   deliveryDate: _deliveryDate,
                   receiveStatusId: this.receiveStatusId,
                   supplierId: this.selectedSupplierId,
@@ -793,6 +796,8 @@ export class ReceivePurchaseComponent implements OnInit {
               const summary = {
                 receiveDate: _receiveDate,
                 receiveCode: this.receiveCode,
+                paperNumber: this.paperNumber,
+                taxNumber: this.taxNumber,
                 deliveryCode: this.deliveryCode,
                 deliveryDate: _deliveryDate,
                 receiveStatusId: this.receiveStatusId,
