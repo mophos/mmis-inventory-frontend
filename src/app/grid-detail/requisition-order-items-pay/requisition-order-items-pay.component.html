@@ -16,15 +16,15 @@
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;">
         <div *ngIf="i.confirm_qty">
-          <span class="p4" style="color: #318700;">{{ i.confirm_qty*i.confirm_conversion_qty | number}} {{ i.order_to_unit_name }}</span>
+          <span class="p4" style="color: #318700;">{{ i.small_confirm_qty | number}} {{ i.order_to_unit_name }}</span>
         </div>
         <div *ngIf="!i.confirm_qty">
           <span class="p4" style="color: #E62700;">ไม่พอจ่าย</span>
         </div>
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;" *ngIf="showUnpaid">
-        <span class="p4" style="color: #E62700;" *ngIf="i.small_requisition_qty > (i.confirm_qty*i.confirm_conversion_qty)">{{i.small_requisition_qty - (i.confirm_qty*i.confirm_conversion_qty) | number}} {{ i.order_to_unit_name }}</span>
-        <span class="p4" style="color: #318700;" *ngIf="i.small_requisition_qty <= (i.confirm_qty*i.confirm_conversion_qty)">{{(i.confirm_qty*i.confirm_conversion_qty) - i.small_requisition_qty | number}} {{ i.order_to_unit_name }}</span>
+        <span class="p4" style="color: #E62700;" *ngIf="i.small_requisition_qty > (i.small_confirm_qty)">{{i.small_requisition_qty - (i.small_confirm_qty) | number}} {{ i.order_to_unit_name }}</span>
+        <span class="p4" style="color: #318700;" *ngIf="i.small_requisition_qty <= (i.small_confirm_qty)">{{(i.small_confirm_qty) - i.small_requisition_qty | number}} {{ i.order_to_unit_name }}</span>
       </clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
