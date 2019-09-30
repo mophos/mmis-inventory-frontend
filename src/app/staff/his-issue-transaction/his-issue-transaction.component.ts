@@ -3,7 +3,7 @@ import { AlertService } from 'app/alert.service';
 import * as moment from 'moment';
 import { HisTransactionService } from 'app/staff/his-transaction.service';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
-import { error } from 'util';
+import { error, log } from 'util';
 import * as _ from 'lodash';
 // import * as path from 'path';
 
@@ -184,7 +184,7 @@ export class HisIssueTransactionComponent implements OnInit {
     const transactionIds: any = [];
     let i: any = 0;
     this.products.forEach(v => {
-      if(i < 500){
+      if (i < 500) {
         transactionIds.push(v.transaction_id);
       }
       i++;
@@ -198,14 +198,17 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   doImport(transactionIds: any[]) {
-    this.alertService.confirm('ต้องการนำเข้ารายการที่เลือก ' + transactionIds.length + ' รายการ ใช่หรือไม่?')
+    this.alertService.confirm('ต้องการตัดจ่ายรายการที่เลือก ' + transactionIds.length + ' รายการ ใช่หรือไม่?')
       .then(() => {
         this.modalLoading.show();
         this.hisTransactionService.importTransaction(transactionIds)
           .then((rs: any) => {
+            console.log(rs);
+
             if (rs.ok) {
-              const isImportTotal = transactionIds.length - rs.un_cut_stock.length;
-              this.alertService.success('ผลการนำเข้าข้อมูลเพื่อตัดสต๊อก', 'นำเข้าข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถนำเข้าได้ ' + rs.un_cut_stock.length + ' รายการ');
+              // const isImportTotal = transactionIds.length - rs.un_cut_stock.length;
+              // this.alertService.success('ผลการตัดจ่ายเพื่อตัดสต๊อก', 'ตัดจ่านข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถตัดจ่ายได้ ' + rs.un_cut_stock.length + ' รายการ');
+              this.alertService.success('ตัดจ่ายข้อมูลสำเร็จ');
               this.getTransactionList();
             } else {
               this.alertService.error(rs.error);
@@ -213,6 +216,8 @@ export class HisIssueTransactionComponent implements OnInit {
             this.modalLoading.hide();
           })
           .catch((err) => {
+            console.log(err);
+
             this.modalLoading.hide();
             this.alertService.serverError();
           });
