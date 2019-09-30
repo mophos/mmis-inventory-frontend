@@ -50,6 +50,7 @@ import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 import { InventoryStatusComponent } from './report/inventory-status/inventory-status.component'
 import { AlertExpiredComponent } from './alert-expired/alert-expired.component';
+import { MonthlyReportComponent } from '../../app/staff/report/monthly-report/monthly-report.component'
 
 const routes: Routes = [
   {
@@ -137,7 +138,8 @@ const routes: Routes = [
       { path: 'reports/stock-card', component: StockCardComponent },
       { path: 'exportdata', component: ExportdataComponent },
       { path: 'reports/value-receive-other', component: ValueReceiveOtherComponent },
-      { path: 'reports/inventory-status', component: InventoryStatusComponent }
+      { path: 'reports/inventory-status', component: InventoryStatusComponent },
+      { path: 'reports/monthly-report', component: MonthlyReportComponent }
     ]
   }
 ];
