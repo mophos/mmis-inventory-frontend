@@ -2,7 +2,8 @@
   <clr-header class="header-7">
     <div class="branding">
       <a class="nav-link">
-        <img src="./assets/images/logo-mmis.png" style="width: 100px; height: 70px; padding-right: 5px;" alt="mmis logo" />
+        <img src="./assets/images/logo-mmis.png" style="width: 100px; height: 70px; padding-right: 5px;"
+          alt="mmis logo" />
         <span class="title">Inventory Management (เจ้าหน้าที่หน่วยเบิก)</span>
       </a>
     </div>
@@ -26,7 +27,8 @@
       <router-outlet></router-outlet>
     </div>
 
-    <clr-vertical-nav class="is-collapsed" [clrVerticalNavCollapsible]="collapsible" [(clrVerticalNavCollapsed)]="collapse">
+    <clr-vertical-nav class="is-collapsed" [clrVerticalNavCollapsible]="collapsible"
+      [(clrVerticalNavCollapsed)]="collapse">
       <a clrVerticalNavLink routerLink="/staff/borrow-notes" title="บันทึกช่วยจำการยืมยา" routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="note" class="has-badge is-solid"></clr-icon>
         บันทึกช่วยจำการยืมยา
@@ -35,15 +37,18 @@
         <clr-icon clrVerticalNavIcon shape="folder"></clr-icon>
         สินค้าคงเหลือ
       </a>
-      <a clrVerticalNavLink *ngIf="menuReceive" routerLink="/staff/receives" title="รับสินค้าเข้าคลัง" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuReceive" routerLink="/staff/receives" title="รับสินค้าเข้าคลัง"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="plus"></clr-icon>
         รับสินค้าเข้าคลัง
       </a>
-      <a clrVerticalNavLink routerLink="/staff/product/requisition" title="รายการยาที่ถึงจุดเบิก" routerLinkActive="active">
+      <a clrVerticalNavLink routerLink="/staff/product/requisition" title="รายการยาที่ถึงจุดเบิก"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="export"></clr-icon>
         รายการสินค้าถึงจุดเบิก
       </a>
-      <a clrVerticalNavLink *ngIf="menuRequisition" routerLink="/staff/requisition" title="เบิกสินค้า" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuRequisition" routerLink="/staff/requisition" title="เบิกสินค้า"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="tools"></clr-icon>
         เบิกสินค้า
       </a>
@@ -52,7 +57,8 @@
         <clr-icon clrVerticalNavIcon shape="tools" class="is-solid"></clr-icon>
         จ่ายสินค้า
       </a>
-      <a clrVerticalNavLink *ngIf="menuBorrowProduct" routerLink="/staff/borrow" title="ยืม/คืนสินค้า" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuBorrowProduct" routerLink="/staff/borrow" title="ยืม/คืนสินค้า"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="share"></clr-icon>
         ยืม/คืนสินค้า
       </a>
@@ -62,7 +68,8 @@
         จ่ายยาและเวชภัณฑ์
       </a> -->
       <!-- สิ้นสุดส่วนซ่อนเมนู -->
-      <a clrVerticalNavLink *ngIf="menuTranfer" routerLink="/staff/transfer" title="โอนสินค้า" routerLinkActive="active">
+      <a clrVerticalNavLink *ngIf="menuTranfer" routerLink="/staff/transfer" title="โอนสินค้า"
+        routerLinkActive="active">
         <clr-icon clrVerticalNavIcon shape="two-way-arrows"></clr-icon>
         โอนสินค้า
       </a>
@@ -71,7 +78,7 @@
         <clr-icon clrVerticalNavIcon shape="scissors"></clr-icon>
         บันทึกตัดจ่าย (อื่นๆ)
       </a>
-      <a clrVerticalNavLink  routerLink="/staff/alert-expired" title="แจ้งเตือนยาหมดอายุ" routerLinkActive="active" >
+      <a clrVerticalNavLink routerLink="/staff/alert-expired" title="แจ้งเตือนยาหมดอายุ" routerLinkActive="active">
         <!--   *ngIf="menuAlertExpired" -->
         <clr-icon clrVerticalNavIcon shape="alarm-clock"></clr-icon>
         แจ้งเตือนยาหมดอายุ
@@ -151,6 +158,12 @@
           <a clrVerticalNavLink routerLink="/staff/reports/inventory-status" routerLinkActive="active">
             <clr-icon shape="printer"></clr-icon>
             รายงานสถานะเวชภัณฑ์คงคลัง
+          </a>
+        </clr-vertical-nav-group-children>
+        <clr-vertical-nav-group-children *clrIfExpanded="false">
+          <a clrVerticalNavLink routerLink="/staff/reports/monthly-report" routerLinkActive="active">
+            <clr-icon shape="printer"></clr-icon>
+            รายงานสรุปงานคลังประจำเดือน
           </a>
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>
