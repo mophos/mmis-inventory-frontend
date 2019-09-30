@@ -97,6 +97,7 @@ export class WarehouseComponent implements OnInit {
 
       if (this.isUpdate) {
         promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book);
+        console.log(this.depCode);
       } else {
         if (this.shortCode == null) {
           this.shortCode = wid + 1;
@@ -161,7 +162,7 @@ export class WarehouseComponent implements OnInit {
     this.isUnitIssue = w.is_unit_issue === 'Y' ? true : false;
     this.location = w.location;
     this.hospcode = w.his_hospcode;
-    this.depCode = w.his_warehouse;
+    this.depCode = w.his_dep_code;
     this.book = w.warehouse_book;
     this.isUpdate = true;
     this.opened = true;
