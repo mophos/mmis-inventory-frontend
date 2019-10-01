@@ -73,7 +73,7 @@
     </clr-dg-cell>
     <clr-dg-cell>
       <wm-select-receive-unit #unit (onSelect)="editChangeUnit(idx, $event, unit)" [selectedUnitGenericId]="product.unit_generic_id"
-        [genericId]="product.generic_id"></wm-select-receive-unit>
+        [genericId]="product.generic_id" [disabled]="true"></wm-select-receive-unit>
     </clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.issue_qty*product.conversion_qty | number}} {{product.primary_unit_name}}</clr-dg-cell>
     <clr-dg-cell style="line-height: 25px; text-align: right;">{{product.remain_qty | number}} {{product.unit_name}}</clr-dg-cell>
