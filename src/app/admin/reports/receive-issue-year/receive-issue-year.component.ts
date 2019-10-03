@@ -44,6 +44,15 @@ export class ReceiveIssueYearComponent implements OnInit {
     const url = `${this.apiUrl}/report/receiveIssueYear/${this.yearSelect}?token=${this.token}&` + genericType.join('&')+`&people1=${this.people1}&people2=${this.people2}&people3=${this.people3}`;
     this.htmlPreview.showReport(url, 'landscape');
   }
+
+  showReportGeneric() {
+    let genericType = [];
+    this.genericTypeSelect.forEach(value => {
+      genericType.push('genericType=' + value.generic_type_id)
+    });
+    const url = `${this.apiUrl}/report/receiveIssueYearGeneric/${this.yearSelect}?token=${this.token}&` + genericType.join('&')+`&people1=${this.people1}&people2=${this.people2}&people3=${this.people3}`;
+    this.htmlPreview.showReport(url, 'landscape');
+  }
   async exportExcel() {
     let genericType = [];
     this.genericTypeSelect.forEach(value => {
@@ -51,6 +60,15 @@ export class ReceiveIssueYearComponent implements OnInit {
     });
     const token = sessionStorage.getItem('token');
     const url = `${this.apiUrl}/report/receive-issue/year/export/${this.yearSelect}?token=${token}&` + genericType.join('&');
+    window.open(url, '_blank');
+  }
+  async exportExcelGeneric() {
+    let genericType = [];
+    this.genericTypeSelect.forEach(value => {
+      genericType.push('genericType=' + value.generic_type_id)
+    });
+    const token = sessionStorage.getItem('token');
+    const url = `${this.apiUrl}/report/receive-issue-generic/year/export/${this.yearSelect}?token=${token}&` + genericType.join('&');
     window.open(url, '_blank');
   }
   async getButgetYear() {
