@@ -88,6 +88,7 @@ import { ReturnedEditComponent } from './returned-edit/returned-edit.component';
 import { IssueTemplateNewComponent } from './issue-template-new/issue-template-new.component';
 import { InventoryStatusComponent } from './report/inventory-status/inventory-status.component';
 import { AlertExpiredComponent } from './alert-expired/alert-expired.component';
+import { MonthlyReportComponent } from './report/monthly-report/monthly-report.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -143,7 +144,8 @@ import { AlertExpiredComponent } from './alert-expired/alert-expired.component';
     ReturnedEditComponent,
     IssueTemplateNewComponent,
     InventoryStatusComponent,
-    AlertExpiredComponent
+    AlertExpiredComponent,
+    MonthlyReportComponent
   ],
   providers: [
     ToThaiDatePipe,
