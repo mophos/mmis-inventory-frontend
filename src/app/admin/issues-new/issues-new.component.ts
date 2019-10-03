@@ -195,7 +195,7 @@ export class IssuesNewComponent implements OnInit {
         obj.issue_qty = +this.issueQty;
         obj.generic_id = this.genericId;
         obj.generic_name = this.genericName;
-        obj.remain_qty = +this.remainQty;
+        obj.remain_qty = +this.reserveQty;
         obj.reserve_qty = +this.reserveQty;
         obj.conversion_qty = +this.conversionQty;
         obj.unit_generic_id = this.unitGenericId;
