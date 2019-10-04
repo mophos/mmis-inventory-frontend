@@ -125,8 +125,8 @@
     </clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;" [ngStyle]="{'color': (issueQty * conversionQty) > remainQty ? 'red' : 'green'}">{{
       issueQty*conversionQty | number }} {{primaryUnitName}}</clr-dg-cell>
-    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ remainQty | number }} {{primaryUnitName}}</clr-dg-cell>
     <clr-dg-cell style="text-align: right; line-height: 25px;">{{ reserveQty | number }} {{primaryUnitName}}</clr-dg-cell>
+    <clr-dg-cell style="text-align: right; line-height: 25px;">{{ reserveQty-issueQty*conversionQty | number }} {{primaryUnitName}}</clr-dg-cell>
     <!-- <clr-dg-cell style="text-align: center; line-height: 25px;">{{ primaryUnitName }}</clr-dg-cell> -->
 
     <clr-dg-cell style="text-align: center;">

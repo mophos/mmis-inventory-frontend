@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { ProductsService } from '../products.service';
 import { BasicService } from 'app/basic.service';
 import { IssueService } from 'app/admin/issue.service';
+import { IssueProductComponent } from 'app/grid-detail/issue-product/issue-product.component';
 
 @Component({
   selector: 'wm-issues-edit',
@@ -114,7 +115,8 @@ export class IssuesEditComponent implements OnInit {
         for (const v of genericList.rows) {
           items = [];
           obj = {};
-          obj.remain_qty = v.generic_remain_qty;
+          obj.qty = v.generic_remain_qty;
+          obj.remain_qty = v.generic_remain_qty + (+v.generic_qty * v.generic_conversion);
           obj.issue_qty = +v.generic_qty;
           obj.generic_id = v.generic_id;
           obj.generic_name = v.generic_name;
@@ -260,38 +262,52 @@ export class IssuesEditComponent implements OnInit {
   }
   async alowcate(genericId) {
     try {
-      const data_ = [];
-      const idx = _.findIndex(this.products, { generic_id: genericId });
-      if (idx > -1) {
-        const _data = {
-          genericId: this.products[idx].generic_id,
-          genericQty: this.products[idx].issue_qty * this.products[idx].conversion_qty
-        };
-        data_.push(_data);
-      }
-      const result: any = await this.issueService.getIssuesProduct(data_);
-      if (result.ok) {
-        const list = result.rows;
+      if (this.products) {
+        let idx = _.findIndex(this.products, { generic_id: genericId })
+        let _data = {};
+
         if (idx > -1) {
-          this.products[idx].items = list;
+          _data = {
+            genericId: this.products[idx].generic_id,
+            unitGenericId: this.products[idx].unit_generic_id,
+            genericQty: this.products[idx].issue_qty * this.products[idx].conversion_qty
+          };
         }
-      } else {
-        console.log(result.error);
-        this.alertService.error();
+
+        const data_ = [];
+        data_.push(_data);
+
+        const result: any = await this.issueService.getIssuesProduct(data_);
+
+        if (result.ok) {
+          const list = result.rows;
+          list.forEach(v => {
+            v.unit_generic_id = this.products[idx].unit_generic_id
+          });
+          idx = _.findIndex(this.products, { generic_id: genericId })
+          if (idx > -1) {
+            this.products[idx].items = list;
+          }
+        } else {
+          console.log(result.error);
+          this.alertService.error();
+        }
       }
+      this.modalLoading.hide();
     } catch (error) {
+      this.modalLoading.hide();
       this.alertService.error(error.message);
     }
   }
 
   editChangeIssueQty(idx: any, qty: any) {
-    if (+qty.value > +this.products[idx].qty) {
+    if ((+qty.value * this.products[idx].conversion_qty) > +this.products[idx].remain_qty) {
       this.alertService.error('จำนวนจ่าย มากกว่าจำนวนคงเหลือ');
-      qty.value = this.products[idx].qty;
+      this.products[idx].issue_qty = '';
     } else {
       this.products[idx].issue_qty = +qty.value;
+      this.alowcate(this.products[idx].generic_id);
     }
-    this.alowcate(this.products[idx].generic_id);
   }
 
   editChangeUnit(idx: any, event: any, unitCmp: any) {

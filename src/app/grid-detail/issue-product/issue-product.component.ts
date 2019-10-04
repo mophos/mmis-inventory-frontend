@@ -2,6 +2,7 @@ import { AlertService } from './../../alert.service';
 import { ReceiveService } from './../../admin/receive.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IssueTransactionService } from 'app/staff/issue-transaction.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'wm-issue-product',
@@ -37,4 +38,5 @@ export class IssueProductComponent implements OnInit {
     this.items[idx].unit_generic_id = event.unit_generic_id;
     this.items[idx].conversion_qty = event.qty;
   }
+
 }
