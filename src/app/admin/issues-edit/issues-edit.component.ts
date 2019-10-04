@@ -128,6 +128,7 @@ export class IssuesEditComponent implements OnInit {
               objP.product_id = e.product_id;
               objP.product_name = e.product_name;
               objP.product_qty = e.product_qty;
+              objP._product_qty = e.product_qty;
               objP.generic_id = e.generic_id;
               objP.conversion_qty = e.product_conversion;
               objP.small_remain_qty = e.product_remain_qty;

@@ -87,7 +87,7 @@ export class IssueService {
     return rs.json();
   }
   async getIssuesProduct(data: any) {
-    const rs = await this.authHttp.post(`${this.url}/generics/allocate`, {data: data}).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/generics/allocate-issue`, {data: data}).toPromise();
     return rs.json();
   }
   async getEditProductList(issueId: any) {

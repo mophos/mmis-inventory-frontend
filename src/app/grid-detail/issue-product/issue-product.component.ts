@@ -13,6 +13,7 @@ export class IssueProductComponent implements OnInit {
   loading = false;
   list = [];
   items: any = [];
+  remainQty: any;
 
   @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -26,9 +27,10 @@ export class IssueProductComponent implements OnInit {
   ngOnInit() { }
 
   onChangeQty(qty, idx) {
-    if ((+qty.value) > +this.items[idx].small_remain_qty) {
+    this.remainQty = this.items[idx].small_remain_qty + this.items[idx]._product_qty;
+    if ((+qty.value) > this.remainQty) {
       this.alertService.error('จำนวนตัดจ่าย มากว่าจำนวนคงเหลือ');
-      this.items[idx].product_qty = ''
+      this.items[idx].product_qty = this.items[idx]._product_qty;
     } else {
       this.items[idx].product_qty = +qty.value;
       this.onChange.emit(this.items);
@@ -38,5 +40,4 @@ export class IssueProductComponent implements OnInit {
     this.items[idx].unit_generic_id = event.unit_generic_id;
     this.items[idx].conversion_qty = event.qty;
   }
-
 }
