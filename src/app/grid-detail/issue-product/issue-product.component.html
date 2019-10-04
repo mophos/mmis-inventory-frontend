@@ -15,7 +15,7 @@
           placeholder="" wmNumberWithOutDot [value]="r.product_qty">
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right">{{r.product_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right">{{r.small_remain_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right">{{r.small_remain_qty+r._product_qty-r.product_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
     </clr-dg-row>
     <!-- <clr-dg-footer>{{r.length}} รายการ</clr-dg-footer> -->
   </clr-datagrid>
