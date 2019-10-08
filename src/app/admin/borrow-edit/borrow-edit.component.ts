@@ -215,7 +215,6 @@ export class BorrowEditComponent implements OnInit {
       this.modalLoading.show();
       const rs: any = await this.borrowItemsService.getDetailInfo(this.borrowId);
       if (rs.ok) {
-        console.log(rs.rows)
         this.generics = rs.rows;
       } else {
         this.alertService.error(rs.error);
@@ -337,12 +336,18 @@ export class BorrowEditComponent implements OnInit {
       const generics = [];
       let isError = false;
 
-      _.forEach(this.generics, v => {
+      for (let v of this.generics) {
         if (v.generic_id && v.borrow_qty) {
+          let unitgenericId: any;
+          for (let j of v.products) {
+            if (j.product_qty > 0) {
+              unitgenericId = j.unit_generic_id;
+            }
+          }
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,
-            unit_generic_id: v.unit_generic_id,
+            unit_generic_id: unitgenericId,
             // conversion_qty: +v.conversion_qty,
             primary_unit_id: v.primary_unit_id,
             location_id: v.location_id,
@@ -351,7 +356,7 @@ export class BorrowEditComponent implements OnInit {
         } else {
           isError = false;
         }
-      });
+      }
 
       if (isError) {
         this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
@@ -399,7 +404,6 @@ export class BorrowEditComponent implements OnInit {
   }
 
   async getProductList(genericId, qty) {
-    console.log(genericId, qty)
     try {
       this.modalLoading.show();
       const data = [{
@@ -426,8 +430,6 @@ export class BorrowEditComponent implements OnInit {
 
   onChangePeople(event: any) {
     if (event) {
-      console.log(event);
-
       this.peopleId = null;
     }
   }
