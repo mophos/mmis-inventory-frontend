@@ -96,7 +96,7 @@ export class CalculateMinMaxComponent implements OnInit {
           };
         }
       } else {
-        this.alertService.error(rs.error);
+        this.tab == 'minmax_group' ? this.alertService.error('ไม่มีรายการที่ถูกคำนวณไว้') : this.alertService.error(rs.error);
       }
       this.modalLoading.hide();
     } catch (error) {
