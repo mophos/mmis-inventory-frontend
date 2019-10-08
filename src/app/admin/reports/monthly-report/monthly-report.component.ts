@@ -26,6 +26,7 @@ export class MonthlyReportComponent implements OnInit {
   isPreview = false;
   warehouses: any = [];
   warehouseId: any;
+  warehouseName: any;
   myDatePickerOptions: IMyOptions = {
     inline: false,
     dateFormat: 'dd mmm yyyy',
@@ -46,6 +47,7 @@ export class MonthlyReportComponent implements OnInit {
     this.token = sessionStorage.getItem('token');
     const decodedToken = this.jwtHelper.decodeToken(this.token);
     this.warehouseId = decodedToken.warehouseId
+    this.warehouseName = decodedToken.warehouseName
   }
 
   ngOnInit() {
@@ -75,7 +77,7 @@ export class MonthlyReportComponent implements OnInit {
     let type = _.map(this.genericTypeSelect, function (v) {
       return 'genericTypes=' + v.generic_type_id;
     })
-    const url = `${this.apiUrl}/report/monthlyReport?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}&ran=${moment().format('x')}`
+    const url = `${this.apiUrl}/report/monthlyReport?month=${this.month}&year=${this.year}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}&ran=${moment().format('x')}`
     this.htmlPreview.showReport(url);
     // await this.reportsService.monthlyReport(this.month, this.year, type, this.warehouseId);
     // setTimeout(() => {
