@@ -13,10 +13,10 @@
             <clr-icon shape="upload-cloud"></clr-icon> อัปโหลดไฟล์
           </button>
           <div class="btn-group">
-            <button class="btn btn-sm btn-primary" [disabled]="!selected.length" (click)="confirmImport()">
+            <button class="btn btn-sm btn-primary" [disabled]="!selected.length || isSave" (click)="confirmImport()">
               <clr-icon shape="check-circle"></clr-icon> ยืนยันเฉพาะที่เลือก
             </button>
-            <button class="btn btn-sm btn-primary" [disabled]="!products.length" (click)="confirmImportAll()">
+            <button class="btn btn-sm btn-primary" [disabled]="!products.length || isSave" (click)="confirmImportAll()">
               <clr-icon shape="folder"></clr-icon> ยืนยันทั้งหมด
             </button>
           </div>

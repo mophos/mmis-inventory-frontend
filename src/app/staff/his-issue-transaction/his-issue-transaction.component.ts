@@ -38,6 +38,7 @@ export class HisIssueTransactionComponent implements OnInit {
   warehouseName: any;
   jwtHelper: JwtHelper = new JwtHelper();
   genericType: any;
+  isSave = false;
 
   @ViewChild('genericTypes') public genericTypes: any;
   constructor(
@@ -182,12 +183,8 @@ export class HisIssueTransactionComponent implements OnInit {
 
   confirmImportAll() {
     const transactionIds: any = [];
-    let i: any = 0;
     this.products.forEach(v => {
-      if (i < 500) {
-        transactionIds.push(v.transaction_id);
-      }
-      i++;
+      transactionIds.push(v.transaction_id);
     });
 
     if (transactionIds.length) {
@@ -198,6 +195,8 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   doImport(transactionIds: any[]) {
+    this.isSave = true;
+    console.log(this.isSave);
     this.alertService.confirm('ต้องการตัดจ่ายรายการที่เลือก ' + transactionIds.length + ' รายการ ใช่หรือไม่?')
       .then(() => {
         this.modalLoading.show();
@@ -214,15 +213,16 @@ export class HisIssueTransactionComponent implements OnInit {
               this.alertService.error(rs.error);
             }
             this.modalLoading.hide();
+            this.isSave = false;
           })
           .catch((err) => {
+            this.isSave = false;
             console.log(err);
-
             this.modalLoading.hide();
             this.alertService.serverError();
           });
       }).catch(() => {
-
+        this.isSave = false;
       });
   }
 
