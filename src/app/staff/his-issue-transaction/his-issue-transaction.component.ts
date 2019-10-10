@@ -196,7 +196,6 @@ export class HisIssueTransactionComponent implements OnInit {
 
   doImport(transactionIds: any[]) {
     this.isSave = true;
-    console.log(this.isSave);
     this.alertService.confirm('ต้องการตัดจ่ายรายการที่เลือก ' + transactionIds.length + ' รายการ ใช่หรือไม่?')
       .then(() => {
         this.modalLoading.show();
@@ -216,10 +215,10 @@ export class HisIssueTransactionComponent implements OnInit {
             this.isSave = false;
           })
           .catch((err) => {
-            this.isSave = false;
             console.log(err);
+            this.isSave = false;
             this.modalLoading.hide();
-            this.alertService.serverError();
+            this.alertService.error(err);
           });
       }).catch(() => {
         this.isSave = false;
