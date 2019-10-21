@@ -18,7 +18,8 @@
               <label for="aForm_1" class="required">ชื่อ Template ชุดเบิก</label>
             </div>
             <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-              <input type="text" style="text-align: left;" class="col-lg-9 col-md-9" id="templateSubject" name="templateSubject" [(ngModel)]="templateSubject">
+              <input type="text" style="text-align: left;" class="col-lg-9 col-md-9" id="templateSubject"
+                name="templateSubject" [(ngModel)]="templateSubject">
             </div>
           </div>
           <!--  -->
@@ -28,9 +29,11 @@
             </div>
             <div class="col-md-3">
               <div class="select form-control">
-                <select [disabled]="isRequest" name="srcWarehouseId" id="srcWarehouseId" [(ngModel)]="srcWarehouseId" (change)="onSelectWarehouses()">
+                <select [disabled]="isRequest" name="srcWarehouseId" id="srcWarehouseId" [(ngModel)]="srcWarehouseId"
+                  (change)="onSelectWarehouses()">
                   <option value="">ระบุคลังที่ต้องการเบิก</option>
-                  <option *ngFor="let w of srcWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{w.warehouse_name}}</option>
+                  <option *ngFor="let w of srcWarehouses" [value]="w.warehouse_id">{{ w.short_code }} -
+                    {{w.warehouse_name}}</option>
                 </select>
               </div>
             </div>
@@ -41,7 +44,8 @@
               <div class="select form-control">
                 <select [disabled]="isRequest" name="dstWarehouseId" id="dstWarehouseId" [(ngModel)]="dstWarehouseId">
                   <option value="">ระบุคลังที่ต้องการจ่าย</option>
-                  <option *ngFor="let w of dstWarehouses" [value]="w.warehouse_id">{{ w.short_code }} - {{w.warehouse_name}}</option>
+                  <option *ngFor="let w of dstWarehouses" [value]="w.warehouse_id">{{ w.short_code }} -
+                    {{w.warehouse_name}}</option>
                 </select>
               </div>
             </div>
@@ -52,14 +56,17 @@
             </div>
             <div class="col-md-4">
               <div class="btn-group">
-                <button class="btn btn-sm btn-success" [disabled]="isRequest || !srcWarehouseId || !dstWarehouseId" (click)="showProducts()">
+                <button class="btn btn-sm btn-success" [disabled]="isRequest || !srcWarehouseId || !dstWarehouseId"
+                  (click)="showProducts()">
                   เลือกรายการสินค้า
                 </button>
-                <button class="btn btn-sm btn-danger" [disabled]="!isRequest || !srcWarehouseId || !dstWarehouseId" (click)="changeWarehouse()">
+                <button class="btn btn-sm btn-danger" [disabled]="!isRequest || !srcWarehouseId || !dstWarehouseId"
+                  (click)="changeWarehouse()">
                   เปลี่ยนคลัง
                 </button>
               </div>
-              <button class="btn btn-sm btn-success" [disabled]="!isRequest || !srcWarehouseId || !dstWarehouseId" (click)="showTemplate()">
+              <button class="btn btn-sm btn-success" [disabled]="!isRequest || !srcWarehouseId || !dstWarehouseId"
+                (click)="showTemplate()">
                 เลือกจาก template
               </button>
             </div>
@@ -73,12 +80,14 @@
           <div class="select">
             <select id="slTemplate" name="slTemplateId" [(ngModel)]="templateId" (change)="getGenericItems($event)">
               <option value="">เลือกเทมเพลต (Template)</option>
-              <option *ngFor="let item of templates" [value]="item.template_id">{{item.template_subject}}({{item.warehouse_name}})</option>
+              <option *ngFor="let item of templates" [value]="item.template_id">
+                {{item.template_subject}}({{item.warehouse_name}})</option>
             </select>
           </div>
         </div>
-        <form  *ngIf='!isTemplate' class="search">
-          <wm-search-generic-autocomplete [clearOnSelected]="true" #genericSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-autocomplete>
+        <form *ngIf='!isTemplate' class="search">
+          <!-- <wm-search-generic-autocomplete [clearOnSelected]="true" #genericSearch (onSelect)="setSelectedProduct($event)"></wm-search-generic-autocomplete> -->
+          <wm-search-generic-autocomplete-all [clearOnSelected]="true" [warehouseId]="dstWarehouseId" #searchGenericCmp (onSelect)="setSelectedProduct($event)"></wm-search-generic-autocomplete-all>
         </form>
         <p>รายการเบิก</p>
         <clr-datagrid [style.height.px]="300">
@@ -99,7 +108,8 @@
             <clr-dg-cell>{{(idx+1)}}</clr-dg-cell>
             <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
             <clr-dg-cell>
-              <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)" [selectedUnitGenericId]="g.unit_generic_id" [genericId]="g.generic_id"></wm-select-receive-unit>
+              <wm-select-receive-unit [showAdd]="false" (onSelect)="editChangeUnit(g, $event)"
+                [selectedUnitGenericId]="g.unit_generic_id" [genericId]="g.generic_id"></wm-select-receive-unit>
             </clr-dg-cell>
             <clr-dg-cell style="text-align: center;">
               <button title="เลื่อนขึ้น" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productUp(g)">
@@ -111,7 +121,8 @@
                 <!-- เลื่อนลง -->
               </button>
               <input type="text" class="form-control" size="14" #goto placeholder="ระบุลำดับ เพื่อเลื่อน..">
-              <button title="เลื่อนไปที่" class="btn btn-sm btn-icon btn-success wm-small-btn" (click)="productGoTo(g,goto.value)">
+              <button title="เลื่อนไปที่" class="btn btn-sm btn-icon btn-success wm-small-btn"
+                (click)="productGoTo(g,goto.value)">
                 <clr-icon shape="upload"></clr-icon>
                 <!-- เลื่อนขึ้น -->
               </button>
@@ -122,7 +133,8 @@
           </clr-dg-row>
 
           <clr-dg-footer>
-            {{paginationSelected.firstItem + 1}} - {{paginationSelected.lastItem + 1}} จาก {{paginationSelected.totalItems}} รายการ
+            {{paginationSelected.firstItem + 1}} - {{paginationSelected.lastItem + 1}} จาก
+            {{paginationSelected.totalItems}} รายการ
             <clr-dg-pagination #paginationSelected [clrDgPageSize]="50"></clr-dg-pagination>
           </clr-dg-footer>
 
@@ -132,7 +144,8 @@
     </div>
   </div>
   <div class="card-footer">
-    <button class="btn btn-sm btn-primary" [disabled]="!products2.length || !srcWarehouseId || !dstWarehouseId" (click)="saveTemplate()">บันทึกสร้างชุดเบิก</button>
+    <button class="btn btn-sm btn-primary" [disabled]="!products2.length || !srcWarehouseId || !dstWarehouseId"
+      (click)="saveTemplate()">บันทึกสร้างชุดเบิก</button>
     <a href="#/admin/templates/main" class="btn btn-sm btn-danger">กลับ</a>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { StaffService } from './../staff.service';
 import { SelectUnitsComponent } from 'app/directives/select-units/select-units.component';
+import { SearchGenericAutocompleteAllComponent } from 'app/directives/search-generic-autocomplete-all/search-generic-autocomplete-all.component'
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMyOptions } from 'mydatepicker-th';
@@ -23,6 +24,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('goto') public goto: any;
   @ViewChild('genericSearch') public genericSearch: SearchGenericAutocompleteComponent;
+  @ViewChild('searchGenericCmp') public searchGenericCmp: SearchGenericAutocompleteAllComponent;
   @ViewChild('genericId') public genericId: SelectUnitsComponent;
   isRequest = false;
   dstWarehouses = [];
@@ -87,7 +89,8 @@ export class RequisitionTemplateNewComponent implements OnInit {
         this.alertService.error('มีรายการนี้อยู่แล้ว');
       } else {
         this.products2.push(e);
-        this.genericSearch.clearSearch();
+        // this.genericSearch.clearSearch();
+        this.searchGenericCmp.clearSearch();
       }
     }
   }

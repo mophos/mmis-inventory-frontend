@@ -8,6 +8,7 @@ import { WarehouseService } from "../warehouse.service";
 import { ProductsService } from "../products.service";
 import * as _ from 'lodash';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
+import { SearchGenericAutocompleteAllComponent } from 'app/directives/search-generic-autocomplete-all/search-generic-autocomplete-all.component'
 import { IRequisitionOrderItem } from 'app/shared';
 import { RequisitionService } from '../requisition.service';
 
@@ -19,6 +20,7 @@ export class RequisitionTemplateNewComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('goto') public goto: any;
   @ViewChild('genericSearch') public genericSearch: SearchGenericAutocompleteComponent;
+  @ViewChild('searchGenericCmp') public searchGenericCmp: SearchGenericAutocompleteAllComponent;
   @ViewChild('genericId') public genericId: SelectUnitsComponent;
   isRequest = false;
   dstWarehouses = [];
@@ -69,14 +71,15 @@ export class RequisitionTemplateNewComponent implements OnInit {
     this.products2 = [];
   }
 
-  setSelectedProduct(e) {    
-    if (typeof(e) === 'object') {
+  setSelectedProduct(e) {
+    if (typeof (e) === 'object') {
       const idx = _.findIndex(this.products2, { 'generic_id': e.generic_id });
       if (idx > -1) {
         this.alertService.error('มีรายการนี้อยู่แล้ว');
       } else {
         this.products2.push(e);
-        this.genericSearch.clearSearch();
+        // this.genericSearch.clearSearch();
+        this.searchGenericCmp.clearSearch();
       }
     }
   }
