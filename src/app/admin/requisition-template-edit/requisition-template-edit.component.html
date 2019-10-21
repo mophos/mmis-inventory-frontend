@@ -45,7 +45,8 @@
       <div>
         <p>เลือกสินค้าที่ต้องการเบิก</p>
         <form class="search">
-          <wm-search-generic-autocomplete [clearOnSelected]="true" #genericSearch (onSelect)="addProducts($event)"></wm-search-generic-autocomplete>
+          <!-- <wm-search-generic-autocomplete [clearOnSelected]="true" #genericSearch (onSelect)="addProducts($event)"></wm-search-generic-autocomplete> -->
+          <wm-search-generic-autocomplete-all [clearOnSelected]="true" [warehouseId]="dstWarehouseId" #searchGenericCmp (onSelect)="addProducts($event)"></wm-search-generic-autocomplete-all>
         </form>
 
         <p>รายการเบิก</p>

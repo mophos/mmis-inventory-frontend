@@ -10,7 +10,7 @@ import { WarehouseService } from "../warehouse.service";
 import { ProductsService } from "../products.service";
 import { WarehouseProductsService } from '../warehouse-products.service';
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
-
+import { SearchGenericAutocompleteAllComponent } from 'app/directives/search-generic-autocomplete-all/search-generic-autocomplete-all.component'
 import { JwtHelper } from 'angular2-jwt';
 import { ActivatedRoute } from '@angular/router';
 
@@ -22,6 +22,7 @@ export class RequisitionTemplateEditComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('goto') public goto: any;
   @ViewChild('genericSearch') public genericSearch: SearchGenericAutocompleteComponent;
+  @ViewChild('searchGenericCmp') public searchGenericCmp: SearchGenericAutocompleteAllComponent;
   @ViewChild('genericId') public genericId: SelectUnitsComponent;
   templates = [];
   products = [];
@@ -91,7 +92,8 @@ export class RequisitionTemplateEditComponent implements OnInit {
       this.alertService.error('มีรายการนี้อยู่แล้ว');
     } else {
       this.products.push(e);
-      this.genericSearch.clearSearch();
+      // this.genericSearch.clearSearch();
+      this.searchGenericCmp.clearSearch();
     }
   }
   removeSelected(g) {

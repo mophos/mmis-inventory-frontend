@@ -1,4 +1,5 @@
 import { SearchGenericAutocompleteComponent } from 'app/directives/search-generic-autocomplete/search-generic-autocomplete.component';
+import { SearchGenericAutocompleteAllComponent } from 'app/directives/search-generic-autocomplete-all/search-generic-autocomplete-all.component'
 import { WarehouseProductsService } from './../warehouse-products.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,6 +18,7 @@ export class RequisitionTemplateEditComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('goto') public goto: any;
   @ViewChild('genericSearch') public genericSearch: SearchGenericAutocompleteComponent;
+  @ViewChild('searchGenericCmp') public searchGenericCmp: SearchGenericAutocompleteAllComponent;
   @ViewChild('genericId') public genericId: SelectUnitsComponent;
 
   templates = [];
@@ -88,7 +90,8 @@ export class RequisitionTemplateEditComponent implements OnInit {
       this.alertService.error('มีรายการนี้อยู่แล้ว');
     } else {
       if(e) this.products.push(e);
-      this.genericSearch.clearSearch();
+      // this.genericSearch.clearSearch();
+      this.searchGenericCmp.clearSearch();
     }
   }
   removeSelected(g) {
