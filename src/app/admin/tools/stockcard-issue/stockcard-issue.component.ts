@@ -110,8 +110,6 @@ export class StockcardIssueComponent implements OnInit {
       let items = [];
       let objP: any = {};
       let obj: any = {};
-      console.log(genericList.rows);
-
       if (genericList.ok) {
         for (const v of genericList.rows) {
           items = [];
@@ -138,7 +136,9 @@ export class StockcardIssueComponent implements OnInit {
               objP.to_unit_name = e.to_unit_name;
               objP.issue_product_id = e.issue_product_id;
               objP.lot_no = e.lot_no;
-              items.push(objP);
+              if (e.product_qty > 0) {
+                items.push(objP);
+              }
             }
           }
           obj.items = items;

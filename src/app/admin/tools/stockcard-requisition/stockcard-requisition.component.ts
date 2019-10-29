@@ -1,3 +1,4 @@
+import { log } from 'util';
 import { PeriodService } from 'app/period.service';
 import { ToolsService } from './../../tools.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -96,8 +97,6 @@ export class StockcardRequisitionComponent implements OnInit {
       if (rs.ok) {
         rs.rows.forEach((v: any) => {
           this.genericIds.push(v.generic_id);
-          console.log(v);
-
           const obj: any = {
             conversion_qty: v.conversion_qty,
             confirm_qty: v.confirm_qty,
@@ -190,8 +189,9 @@ export class StockcardRequisitionComponent implements OnInit {
               product_id: v.product_id,
               working_code: v.working_code,
               lot_no: v.lot_no,
-              small_remain_qty: v.remain_qty,
-              pack_remain_qty: v.remain_qty / v.conversion_qty,
+              lot_time: v.lot_time,
+              small_remain_qty: v.remain_qty + (v.confirm_qty * v.conversion_qty),
+              pack_remain_qty: (v.remain_qty / v.conversion_qty) + v.confirm_qty,
               expired_date: v.expired_date,
               from_unit_name: v.from_unit_name,
               to_unit_name: v.to_unit_name,
@@ -298,7 +298,6 @@ export class StockcardRequisitionComponent implements OnInit {
   }
 
   editChangeUnit(genericId, e) {
-    console.log(e);
     const idx = _.findIndex(this.products, { "generic_id": genericId });
     if (idx > -1) {
       this.products[idx].unit_generic_id = e.unit_generic_id;
@@ -306,8 +305,6 @@ export class StockcardRequisitionComponent implements OnInit {
       this.products[idx].to_unit_name = e.to_unit_name;
       this.products[idx].to_unit_name = e.to_unit_name;
       this.products[idx].from_unit_name = e.from_unit_name;
-      console.log(this.products[idx]);
-
     }
   }
 

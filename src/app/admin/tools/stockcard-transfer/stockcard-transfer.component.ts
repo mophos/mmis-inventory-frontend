@@ -216,6 +216,7 @@ export class StockcardTransferComponent implements OnInit {
               expired_date: i.expired_date,
               from_unit_name: i.from_unit_name,
               lot_no: i.lot_no,
+              lot_time: i.lot_time,
               pack_remain_qty: i.pack_remain_qty,
               product_name: i.product_name,
               small_remain_qty: i.small_remain_qty,

@@ -200,14 +200,14 @@ export class HisIssueTransactionComponent implements OnInit {
       .then(() => {
         this.modalLoading.show();
         this.hisTransactionService.importTransaction(transactionIds)
-          .then((rs: any) => {
+          .then(async (rs: any) => {
             console.log(rs);
 
             if (rs.ok) {
               // const isImportTotal = transactionIds.length - rs.un_cut_stock.length;
               // this.alertService.success('ผลการตัดจ่ายเพื่อตัดสต๊อก', 'ตัดจ่านข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถตัดจ่ายได้ ' + rs.un_cut_stock.length + ' รายการ');
               this.alertService.success('ตัดจ่ายข้อมูลสำเร็จ');
-              this.getTransactionList();
+              await this.getTransactionList();
             } else {
               this.alertService.error(rs.error);
             }
