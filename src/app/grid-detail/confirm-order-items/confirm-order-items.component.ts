@@ -62,10 +62,7 @@ export class ConfirmOrderItemsComponent implements OnInit {
 
   onChangeQty(cmp: any, wmProductId: any) {
     try {
-      console.log(wmProductId);
       const idx = _.findIndex(this.confirmItems, { 'wm_product_id': wmProductId });
-      console.log(this.confirmItems[idx], idx);
-
       // ถ้าจำนวนที่คีย์เข้ามามากว่าจำนวนคงเหลือ ให้ใช้จำนวนคงเหลือเป็นยอดยืนยัน
       if (this.confirmItems[idx].pack_remain_qty < cmp.value) {
         cmp.value = this.confirmItems[idx].pack_remain_qty;

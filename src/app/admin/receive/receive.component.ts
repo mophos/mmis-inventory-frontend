@@ -509,7 +509,7 @@ export class ReceiveComponent implements OnInit {
           // cancel
         });
     } else {
-      this.alertService.error('ไม่พบราบการที่ต้องอนุมัติ')
+      this.alertService.error('ไม่พบรายการที่ต้องอนุมัติ')
     }
   }
 
@@ -790,7 +790,7 @@ export class ReceiveComponent implements OnInit {
           // cancel
         });
     } else {
-      this.alertService.error('ไม่พบราบการที่ต้องอนุมัติ')
+      this.alertService.error('ไม่พบรายการที่ต้องอนุมัติ')
     }
   }
 
