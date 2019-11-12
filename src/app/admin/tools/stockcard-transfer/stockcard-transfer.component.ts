@@ -219,7 +219,7 @@ export class StockcardTransferComponent implements OnInit {
               lot_time: i.lot_time,
               pack_remain_qty: i.pack_remain_qty,
               product_name: i.product_name,
-              small_remain_qty: i.small_remain_qty,
+              small_remain_qty: i.small_remain_qty - (i.product_qty * i.conversion_qty),
               to_unit_name: i.to_unit_name,
               transfer_generic_id: i.transfer_generic_id,
               transfer_id: i.transfer_id,
