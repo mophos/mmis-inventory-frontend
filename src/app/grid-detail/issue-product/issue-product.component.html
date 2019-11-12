@@ -11,11 +11,13 @@
       <clr-dg-cell>{{r.lot_no}} <span *ngIf="r.lot_time != 1">#{{r.lot_time}}</span></clr-dg-cell>
       <clr-dg-cell>{{r.expired_date | expiredDate}}</clr-dg-cell>
       <clr-dg-cell>
-        <input type="text" #qty (keyup)="onChangeQty(qty, idx)" style="width: 100%; text-align: right; background-color:#FFF9C4"
-          placeholder="" wmNumberWithOutDot [value]="r.product_qty">
+        <input type="text" #qty (keyup)="onChangeQty(qty, idx)"
+          style="width: 100%; text-align: right; background-color:#FFF9C4" placeholder="" wmNumberWithOutDot
+          [value]="r.product_qty">
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right">{{r.product_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
-      <clr-dg-cell style="text-align: right">{{r.small_remain_qty+r._product_qty-r.product_qty | number}} {{r.to_unit_name}}</clr-dg-cell>
+      <clr-dg-cell style="text-align: right">{{r.small_remain_qty-r.product_qty | number}} {{r.to_unit_name}}
+      </clr-dg-cell>
     </clr-dg-row>
     <!-- <clr-dg-footer>{{r.length}} รายการ</clr-dg-footer> -->
   </clr-datagrid>
