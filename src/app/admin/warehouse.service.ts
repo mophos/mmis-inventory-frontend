@@ -142,9 +142,10 @@ export class WarehouseService {
     return rs.json();
   }
 
-  save(warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any, book: any) {
+  save(warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any, book: any, warehouseDesc: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.post(`${this.url}/warehouses`, {
+        warehouseDesc: warehouseDesc,
         warehouseName: warehouseName,
         shortCode: shortCode,
         location: location,
@@ -164,9 +165,10 @@ export class WarehouseService {
     });
   }
 
-  update(warehouseId: any, warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any, book: string) {
+  update(warehouseId: any, warehouseName: string, shortCode: string, location: string, isActived: string, isReceive: string, isUnitIssue: string, hospcode: any, depCode: any, book: string, warehouseDesc: string) {
     return new Promise((resolve, reject) => {
       this.authHttp.put(`${this.url}/warehouses/${warehouseId}`, {
+        warehouseDesc: warehouseDesc,
         warehouseName: warehouseName,
         shortCode: shortCode,
         location: location,

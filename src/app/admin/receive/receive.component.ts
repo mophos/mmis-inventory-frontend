@@ -132,6 +132,7 @@ export class ReceiveComponent implements OnInit {
       } else {
         const rs: any = await this.receiveService.getPurchasesList(limit, this.offset, sort);
         this.purchases = rs.rows;
+        console.log(this.purchases)
         this.totalPurchases = rs.total;
       }
     } catch (error) {

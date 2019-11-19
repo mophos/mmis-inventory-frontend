@@ -21,6 +21,7 @@ export class WarehouseComponent implements OnInit {
   depCode: any;
   warehouseId: any;
   warehouseName: string;
+  warehouseDesc: string;
   shortCode: string;
   book: string;
 
@@ -70,6 +71,7 @@ export class WarehouseComponent implements OnInit {
     this.isUpdate = false;
     this.warehouseId = null;
     this.warehouseName = null;
+    this.warehouseDesc = null;
     this.shortCode = null;
     this.isEnableWarehouse = false;
     this.isReceiveWarehouse = false;
@@ -96,12 +98,12 @@ export class WarehouseComponent implements OnInit {
     if (this.warehouseName && this.depCode && this.hospcode) {
 
       if (this.isUpdate) {
-        promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book);
+        promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc);
       } else {
         if (this.shortCode == null) {
           this.shortCode = wid + 1;
         }
-        promise = this.warehouseService.save(this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book);
+        promise = this.warehouseService.save(this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc);
       }
 
       promise
@@ -155,6 +157,7 @@ export class WarehouseComponent implements OnInit {
   showEdit(w: any) {
     this.warehouseId = w.warehouse_id;
     this.warehouseName = w.warehouse_name;
+    this.warehouseDesc = w.warehouse_desc;
     this.shortCode = w.short_code;
     this.isEnableWarehouse = w.is_actived === 'Y' ? true : false;
     this.isReceiveWarehouse = w.is_receive === 'Y' ? true : false;
