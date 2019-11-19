@@ -114,7 +114,7 @@ export class StockcardIssueComponent implements OnInit {
         for (const v of genericList.rows) {
           items = [];
           obj = {};
-          obj.remain_qty = (v.generic_remain_qty + (+v.generic_qty * +v.generic_conversion));
+          obj.remain_qty = (v.generic_remain_qty);
           obj.issue_qty = +v.generic_qty;
           obj.generic_id = v.generic_id;
           obj.generic_name = v.generic_name;
