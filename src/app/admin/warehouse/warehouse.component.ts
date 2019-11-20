@@ -72,7 +72,7 @@ export class WarehouseComponent implements OnInit {
     this.isUpdate = false;
     this.warehouseId = null;
     this.warehouseName = null;
-    this.warehouseDesc, this.telDept = null;
+    this.warehouseDesc = null;
     this.telDept = null;
     this.shortCode = null;
     this.isEnableWarehouse = false;
