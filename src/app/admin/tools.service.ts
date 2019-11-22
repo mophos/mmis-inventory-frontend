@@ -136,8 +136,8 @@ export class ToolsService {
     return rs.json();
   }
 
-  async calStockCard() {
-    const rs = await this.authHttp.get(`${this.url}/tools/calculate/stockcard`).toPromise();
+  async calStockCard(warehouseId: any ) {
+    const rs = await this.authHttp.get(`${this.url}/tools/calculate/stockcard?warehouseId=${warehouseId}`).toPromise();
     return rs.json();
   }
 
