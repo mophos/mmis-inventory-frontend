@@ -86,8 +86,8 @@
   <h3 class="modal-title">ค้นหาใบเบิก</h3>
   <div class="modal-body">
     <label for="">เลขที่ใบเบิก</label>
-    <input type="text" style="width: 300px;" #queryRequisition (keyup)="doSearchRequisitions($event, queryRequisition.value)"
-      placeholder="พิมพ์เลขที่ใบเบิก แล้วกด ENTER">
+    <input type="text" style="width: 300px;" #queryRequisition
+      (keyup)="doSearchRequisitions($event, queryRequisition.value)" placeholder="พิมพ์เลขที่ใบเบิก แล้วกด ENTER">
     <clr-datagrid>
       <clr-dg-column>วันที่เบิก</clr-dg-column>
       <clr-dg-column>วันที่จ่าย</clr-dg-column>
@@ -101,7 +101,8 @@
         <clr-dg-cell>{{r.requisition_code}}</clr-dg-cell>
         <clr-dg-cell>{{r.warehouse_name}}</clr-dg-cell>
         <clr-dg-cell style="text-align: center;">
-          <button class="btn btn-sm btn-success wm-small-btn" (click)="gotoRequisition(r.requisition_order_id,r.confirm_id)">
+          <button class="btn btn-sm btn-success wm-small-btn"
+            (click)="gotoRequisition(r.requisition_order_id,r.confirm_id)">
             แก้ไข
           </button>
         </clr-dg-cell>
@@ -191,7 +192,8 @@
   <h3 class="modal-title">ค้นหาใบตัดจ่าย</h3>
   <div class="modal-body">
     <label for="">เลขที่ใบตัดจ่าย</label>
-    <input type="text" style="width: 300px;" #queryIssue (keyup)="doSearchIssues($event, queryIssue.value)" placeholder="พิมพ์เลขที่ใบตัดจ่าย แล้วกด ENTER">
+    <input type="text" style="width: 300px;" #queryIssue (keyup)="doSearchIssues($event, queryIssue.value)"
+      placeholder="พิมพ์เลขที่ใบตัดจ่าย แล้วกด ENTER">
     <clr-datagrid>
       <clr-dg-column>วันที่ตัดจ่าย</clr-dg-column>
       <clr-dg-column>เลขที่ใบตัดจ่าย</clr-dg-column>
@@ -224,7 +226,8 @@
   <h3 class="modal-title">ค้นหาใบหยิบ</h3>
   <div class="modal-body">
     <label for="">เลขที่ใบหยิบ</label>
-    <input type="text" style="width: 300px;" #queryPick (keyup)="doSearchPick($event, queryPick.value)" placeholder="พิมพ์เลขที่ใบหยิบ แล้วกด ENTER">
+    <input type="text" style="width: 300px;" #queryPick (keyup)="doSearchPick($event, queryPick.value)"
+      placeholder="พิมพ์เลขที่ใบหยิบ แล้วกด ENTER">
     <clr-datagrid>
       <clr-dg-column>วันที่หยิบ</clr-dg-column>
       <clr-dg-column>เลขที่หยิบ</clr-dg-column>
@@ -302,14 +305,25 @@
       </div>
     </div>
     <div class="row" style="text-align: center;padding-top:30px;">
-      <div class="col-md-6" style="text-align: right"> รหัสผ่าน</div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="text-align: right">
+        <label class="required">คลัง</label>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="text-align: left;">
+        <wm-select-warehouses [selectedId]="warehouseId" (onSelect)="setSelectedWarehouse($event)">
+
+        </wm-select-warehouses>
+      </div>
+    </div>
+    <div class="row" style="text-align: center;padding-top:30px;">
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="text-align: right"> รหัสผ่าน</div>
       <div class="col-md-6" style="text-align: left;">
         <input type="password" name="password" (keyup)="enterCalStockCard($event)" [(ngModel)]="password">
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success btn-sm" [disabled]="isSaving" (click)="calStockCard()">ประมวลผล</button>
+    <button type="button" class="btn btn-success btn-sm" [disabled]="isSaving"
+      (click)="calStockCard()">ประมวลผล</button>
     <button type="button" class="btn btn-danger btn-sm" (click)="passwordModal = false">ปิดหน้าต่าง</button>
   </div>
 </clr-modal>
@@ -332,12 +346,13 @@
         <label class="required">รหัสผ่าน</label>
       </div>
       <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <input  type="password" [(ngModel)]="passwordRemovestockcard">
+        <input type="password" [(ngModel)]="passwordRemovestockcard">
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success btn-sm" [disabled]="!passwordRemovestockcard.length" (click)="removestockcard()">ประมวลผล</button>
+    <button type="button" class="btn btn-success btn-sm" [disabled]="!passwordRemovestockcard.length"
+      (click)="removestockcard()">ประมวลผล</button>
     <button type="button" class="btn btn-danger btn-sm" (click)="removeStockcardModal = false">ปิดหน้าต่าง</button>
   </div>
 </clr-modal>
@@ -360,12 +375,13 @@
         <label class="required">รหัสผ่าน</label>
       </div>
       <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <input  type="password" [(ngModel)]="passwordcalBalanceUnitCost">
+        <input type="password" [(ngModel)]="passwordcalBalanceUnitCost">
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success btn-sm" [disabled]="!passwordcalBalanceUnitCost.length" (click)="calBalanceUnitCost()">ประมวลผล</button>
+    <button type="button" class="btn btn-success btn-sm" [disabled]="!passwordcalBalanceUnitCost.length"
+      (click)="calBalanceUnitCost()">ประมวลผล</button>
     <button type="button" class="btn btn-danger btn-sm" (click)="calBalanceUnitCostModal = false">ปิดหน้าต่าง</button>
   </div>
 </clr-modal>
@@ -388,12 +404,13 @@
         <label class="required">รหัสผ่าน</label>
       </div>
       <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <input  type="password" [(ngModel)]="passwordcalBalanceLot">
+        <input type="password" [(ngModel)]="passwordcalBalanceLot">
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success btn-sm" [disabled]="!passwordcalBalanceLot.length" (click)="calBalanceLot()">ประมวลผล</button>
+    <button type="button" class="btn btn-success btn-sm" [disabled]="!passwordcalBalanceLot.length"
+      (click)="calBalanceLot()">ประมวลผล</button>
     <button type="button" class="btn btn-danger btn-sm" (click)="calBalanceLotModal = false">ปิดหน้าต่าง</button>
   </div>
 </clr-modal>

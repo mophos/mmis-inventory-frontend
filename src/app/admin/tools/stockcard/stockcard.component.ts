@@ -278,7 +278,7 @@ export class StockcardComponent implements OnInit {
     try {
       this.isSaving = true;
       this.modalLoading.show();
-      const rs: any = this.toolService.calStockCard();
+      const rs: any = this.toolService.calStockCard(this.warehouseId);
       this.modalLoading.hide();
       this.passwordModal = false;
       this.alertService.success('ระบบกำลังประมวลผลอยู่พื้นหลัง อาจใช้เวลา 5 - 20 นาที');
