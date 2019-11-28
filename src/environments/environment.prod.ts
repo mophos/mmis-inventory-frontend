@@ -17,5 +17,5 @@ export const environment = {
   materialsUrl: '/material/#/',
   umUrl: '/um/#/',
   contractsUrl: '/contracts/#/',
-  reportUrl: '/reports/#/',
+  reportUrl: '/report/#/',
 };

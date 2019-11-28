@@ -42,6 +42,11 @@
         <clr-icon shape="cog"></clr-icon>
         <span class="tooltip-content">Administrator</span>
       </a>
+      <a href="{{env.reportRul}}" *ngIf="Report" class=" nav-link nav-icon tooltip tooltip-md tooltip-bottom-right"
+        role="tooltip" aria-haspopup="true">
+        <clr-icon shape="book"></clr-icon>
+        <span class="tooltip-content">Report</span>
+      </a>
     </div>
     <div class="header-actions">
       <clr-dropdown>

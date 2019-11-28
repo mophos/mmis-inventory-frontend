@@ -24,6 +24,7 @@ export class LayoutComponent implements OnInit {
   Materials = false;
   Contracts = false;
   Administrator = false;
+  Report = false;
   jwtHelper: JwtHelper = new JwtHelper();
 
   menuPick: boolean;
@@ -82,7 +83,7 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit() {
     const decoded = this.jwtHelper.decodeToken(this.token);
-    
+
     this.fullname = decoded.fullname;
     this.warehouseId = decoded.warehouseId;
     this.warehouseCode = decoded.warehouseCode;
@@ -138,6 +139,7 @@ export class LayoutComponent implements OnInit {
     this.Materials = _.indexOf(this.rights, 'MM_ADMIN') === -1 ? false : true;
     this.Contracts = _.indexOf(this.rights, 'CM_ADMIN') === -1 ? false : true;
     this.Administrator = _.indexOf(this.rights, 'UM_ADMIN') === -1 ? false : true;
+    this.Report = _.indexOf(this.rights, 'RP_ADMIN') === -1 ? false : true;
   }
 
   openChangePasswordModal() {
