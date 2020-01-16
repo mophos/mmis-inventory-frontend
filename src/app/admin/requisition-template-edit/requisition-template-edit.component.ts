@@ -29,6 +29,8 @@ export class RequisitionTemplateEditComponent implements OnInit {
   templateSubject: any;
   dstWarehouseName: any;
   srcWarehouseName: any;
+  dstWarehouseCode: any;
+  srcWarehouseCode: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,9 +55,11 @@ export class RequisitionTemplateEditComponent implements OnInit {
         this.templates = rs.rows[0];
         this.templateSubject = this.templates['template_subject'];
         this.dstWarehouseName = this.templates['dst_warehouse_name'];
-        this.dstWarehouseId = this.templates['dst_warehouse_code'];
+        this.dstWarehouseId = this.templates['dst_warehouse_id'];
+        this.dstWarehouseCode = this.templates['dst_warehouse_code'];
         this.srcWarehouseName = this.templates['src_warehouse_name'];
-        this.srcWarehouseId = this.templates['src_warehouse_code'];
+        this.srcWarehouseId = this.templates['src_warehouse_id'];
+        this.srcWarehouseCode = this.templates['src_warehouse_code'];
 
         // this.ref.detectChanges();
       } else {
@@ -89,7 +93,7 @@ export class RequisitionTemplateEditComponent implements OnInit {
     if (idx > -1) {
       this.alertService.error('มีรายการนี้อยู่แล้ว');
     } else {
-      if(e) this.products.push(e);
+      if (e) { this.products.push(e); }
       // this.genericSearch.clearSearch();
       this.searchGenericCmp.clearSearch();
     }
