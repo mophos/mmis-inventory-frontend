@@ -18,6 +18,8 @@ export class MonthlyReportComponent implements OnInit {
   @ViewChild('htmlPreview') public htmlPreview: any;
   jwtHelper: JwtHelper = new JwtHelper();
 
+  startDate: any;
+  endDate: any;
   date = new Date();
   month = this.date.getMonth() + 1;
   year = this.date.getFullYear();
@@ -55,11 +57,26 @@ export class MonthlyReportComponent implements OnInit {
     this.getWarehouses();
     // this.getWarehouseList();
     const date = new Date();
-
+    this.startDate = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
+    this.endDate = {
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+      }
+    };
   }
+
   refreshWaiting(state) {
     this.getGenericsType();
   }
+
   async getGenericsType() {
     try {
       const rs = await this.productService.getGenericType();
@@ -104,6 +121,26 @@ export class MonthlyReportComponent implements OnInit {
     // setTimeout(() => {
     //   this.router.navigate(['/admin/reports/process']);
     // }, 1000);
+  }
+
+  async monthlyReportGeneric() {
+    let start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
+    let end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
+    let type = _.map(this.genericTypeSelect, function (v) {
+      return 'genericTypes=' + v.generic_type_id;
+    })
+    const url = `${this.apiUrl}/reports/monthly-report-generic?startDate=${start}&endDate=${end}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}`
+    this.htmlPreview.showReport(url);
+  }
+
+  async monthlyReportGenericExcel() {
+    let start = this.startDate ? `${this.startDate.date.year}-${this.startDate.date.month}-${this.startDate.date.day}` : null;
+    let end = this.endDate ? `${this.endDate.date.year}-${this.endDate.date.month}-${this.endDate.date.day}` : null;
+    let type = _.map(this.genericTypeSelect, function (v) {
+      return 'genericTypes=' + v.generic_type_id;
+    })
+    const url = `${this.apiUrl}/reports/exports/monthly-report-generic?startDate=${start}&endDate=${end}&` + type.join('&') + `&token=${this.token}&warehouseId=${this.warehouseId}&warehouseName=${this.warehouseName}`
+    window.open(url);
   }
 
   getdate() {
