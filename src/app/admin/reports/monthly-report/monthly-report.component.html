@@ -60,7 +60,8 @@
       </div>
       <div class="form-group row">
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-          <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect" style="padding-top: 5px;height: 200px; width: 400px;">
+          <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect"
+            style="padding-top: 5px;height: 200px; width: 400px;">
             <clr-dg-column style="width: 150px;">ทั้งหมด</clr-dg-column>
             <clr-dg-row *ngFor="let order of genericTypes" [clrDgItem]="order">
               <clr-dg-cell>{{order.generic_type_name}}</clr-dg-cell>
@@ -70,13 +71,16 @@
       </div>
       <div class="row" style="padding:1em">
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-          <button class="btn btn-sm btn-primary" [disabled]="!(genericTypeSelect.length && year && month)" (click)="monthlyReport()">
+          <button class="btn btn-sm btn-primary" [disabled]="!(genericTypeSelect.length && year && month)"
+            (click)="monthlyReport()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปงานคลังประจำเดือน
           </button>
-          <button class="btn btn-sm btn-primary" [disabled]="!(genericTypeSelect.length && year && month)" (click)="monthlyReportAll()">
+          <button class="btn btn-sm btn-primary" [disabled]="!(genericTypeSelect.length && year && month)"
+            (click)="monthlyReportAll()">
             <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปงานคลังประจำเดือน(แยกประเภทการรับ-จ่าย)
           </button>
-          <button class="btn btn-sm btn-success" [disabled]="!(genericTypeSelect.length && year && month)" (click)="monthlyReportExcel()">
+          <button class="btn btn-sm btn-success" [disabled]="!(genericTypeSelect.length && year && month)"
+            (click)="monthlyReportExcel()">
             <clr-icon shape="download"></clr-icon> Excel
           </button>
         </div>
@@ -93,6 +97,61 @@
             </select>
           </div>
         </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">รายงานสรุปงานคลัง แยกรายการ</div>
+  <div class="card-block">
+    <div class="row">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ตั้งแต่</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDate" required>
+        </my-date-picker-th>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="endDate" class="required">ถึง</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDate" required>
+        </my-date-picker-th>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label class="required">คลัง</label>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <div class="select">
+          <select [(ngModel)]="warehouseId" name="warehouseId">
+            <option value="all">ทั้งหมด</option>
+            <option [value]="t.warehouse_id" *ngFor="let t of warehouses">{{t.warehouse_name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <clr-datagrid (clrDgRefresh)="refreshWaiting($event)" [(clrDgSelected)]="genericTypeSelect"
+          style="padding-top: 5px;height: 200px; width: 400px;">
+          <clr-dg-column style="width: 150px;">ทั้งหมด</clr-dg-column>
+          <clr-dg-row *ngFor="let order of genericTypes" [clrDgItem]="order">
+            <clr-dg-cell>{{order.generic_type_name}}</clr-dg-cell>
+          </clr-dg-row>
+        </clr-datagrid>
+      </div>
+    </div>
+    <div class="row" style="padding:1em">
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <button class="btn btn-sm btn-primary" [disabled]="!(genericTypeSelect.length && startDate && endDate)"
+          (click)="monthlyReportGeneric()">
+          <clr-icon shape="printer"></clr-icon> พิมพ์รายงานสรุปงานคลัง แยกรายการ
+        </button>
+        <button class="btn btn-sm btn-success" [disabled]="!(genericTypeSelect.length && startDate && endDate)"
+            (click)="monthlyReportGenericExcel()">
+            <clr-icon shape="download"></clr-icon> ส่งออก Excel รายงานสรุปงานคลัง แยกรายการ
+          </button>
       </div>
     </div>
   </div>
