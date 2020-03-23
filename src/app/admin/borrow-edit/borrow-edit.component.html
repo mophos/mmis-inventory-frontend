@@ -66,7 +66,7 @@
   <!-- <clr-dg-column>ยอดโอนจริง <br> (Base Unit)</clr-dg-column> -->
   <clr-dg-column></clr-dg-column>
 
-  <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;" [ngClass]="{'cancel-status': generic.products.length === 0}">
+  <clr-dg-row class="grid-order" *ngFor="let generic of generics; let idx = index;" [ngClass]="{'cancel-status': generic.products.length === 0, 'isWarning': 0 > generic.remain_qty}">
     <wm-borrow-items *clrIfExpanded [products]="generic.products" (onChangeQty)="changeProductQty(generic.generic_id, $event)"
       ngProjectAs="clr-dg-row-detail"></wm-borrow-items>
     <clr-dg-cell style="line-height: 25px;">{{idx + 1}}</clr-dg-cell>
