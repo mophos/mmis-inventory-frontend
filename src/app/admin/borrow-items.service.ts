@@ -26,6 +26,11 @@ export class BorrowItemsService {
     return rs.json();
   }
 
+  async getDetailStockcardInfo(borrowId: string) {
+    const rs: any = await this.authHttp.get(`${this.url}/borrow/info-detail/stockcard/${borrowId}`).toPromise();
+    return rs.json();
+  }
+
   async getDetailInfoEdit(borrowId: string) {
     const rs: any = await this.authHttp.get(`${this.url}/borrow/info-detail-edit/${borrowId}`).toPromise();
     return rs.json();
@@ -108,6 +113,16 @@ export class BorrowItemsService {
 
   async updateBorrow(borrowId: any, summary: Object, generics: any[]) {
     const rs: any = await this.authHttp.put(`${this.url}/borrow/save/${borrowId}`, {
+      summary: summary,
+      generics: generics
+    }).toPromise();
+
+    return rs.json();
+  }
+
+  async stockcardBorrows(borrowId: any, summary: Object, generics: any[]) {
+    const rs: any = await this.authHttp.put(`${this.url}/tools/stockcard/borrow`, {
+      borrowId: borrowId,
       summary: summary,
       generics: generics
     }).toPromise();
