@@ -281,7 +281,7 @@ export class BorrowComponent implements OnInit {
         this.modalLoading.show();
         const rs: any = await this.borrowItemsService.approveAll(borrowIds);
         if (rs.ok) {
-          this.saveMemory(rs.data);          
+          this.saveMemory(rs.data);
           this.alertService.success();
           this.selectedApprove = [];
           this.selectedApproveReceive = [];
@@ -389,7 +389,7 @@ export class BorrowComponent implements OnInit {
   }
 
   async saveMemory(data: any) {
-    if(data.length){
+    if (data.length) {
       for (const v of data) {
         const notes: any = {};
         notes.remark = 'ยืมนอก Stock';

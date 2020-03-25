@@ -217,7 +217,7 @@ export class BorrowEditComponent implements OnInit {
       if (rs.ok) {
         this.generics = rs.rows;
         console.log(this.generics);
-        
+
       } else {
         this.alertService.error(rs.error);
       }
@@ -346,10 +346,11 @@ export class BorrowEditComponent implements OnInit {
               unitgenericId = j.unit_generic_id;
             }
           }
+
           generics.push({
             generic_id: v.generic_id,
             borrow_qty: +v.borrow_qty,
-            unit_generic_id: unitgenericId,
+            unit_generic_id: unitgenericId === undefined ? v.unit_generic_id : unitgenericId,
             // conversion_qty: +v.conversion_qty,
             primary_unit_id: v.primary_unit_id,
             location_id: v.location_id,
