@@ -212,7 +212,7 @@ export class StockcardBorrowComponent implements OnInit {
   async getDetailInfo() {
     try {
       this.modalLoading.show();
-      const rs: any = await this.borrowItemsService.getDetailInfo(this.borrowId);
+      const rs: any = await this.borrowItemsService.getDetailStockcardInfo(this.borrowId);
       if (rs.ok) {
         this.generics = rs.rows;
       } else {
@@ -331,71 +331,67 @@ export class StockcardBorrowComponent implements OnInit {
 
   saveBorrow() {
     this.isSaving = true;
-    if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.borrowDate) {
-      const generics = [];
-      let isError = false;
+    this.alertService.confirm('ต้องการแก้ไข Stockcard ใช่หรือไม่ ?')
+      .then(async () => {
+        if (this.generics.length && this.srcWarehouseId && this.dstWarehouseId && this.borrowDate) {
+          const generics = [];
+          let isError = false;
 
-      _.forEach(this.generics, v => {
-        console.log(v);
+          for (const v of this.generics) {
+            if (v.generic_id && v.borrow_qty) {
+              generics.push({
+                generic_id: v.generic_id,
+                borrow_qty: +v.borrow_qty,
+                borrow_generic_id: v.borrow_generic_id,
+                unit_generic_id: v.unit_generic_id,
+                conversion_qty: v.conversion_qty,
+                primary_unit_id: v.primary_unit_id,
+                location_id: v.location_id,
+                products: v.products
+              });
+            } else {
+              isError = false;
+            }
+          }
+          console.log(this.generics);
 
-        if (v.generic_id && v.borrow_qty_old) {
-          generics.push({
-            generic_id: v.generic_id,
-            borrow_qty: +v.borrow_qty_old,
-            unit_generic_id: v.unit_generic_id,
-            // conversion_qty: +v.conversion_qty,
-            primary_unit_id: v.primary_unit_id,
-            location_id: v.location_id,
-            products: v.products
-          });
-        } else {
-          isError = false;
-        }
-      });
 
-      if (isError) {
-        this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
-      } else {
-        const summary = {
-          borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
-          srcWarehouseId: this.srcWarehouseId,
-          dstWarehouseId: this.dstWarehouseId,
-          peopleId: this.peopleId,
-          remark: this.remark
-        };
+          if (isError) {
+            this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');
+          } else {
+            const summary = {
+              borrowDate: `${this.borrowDate.date.year}-${this.borrowDate.date.month}-${this.borrowDate.date.day}`,
+              srcWarehouseId: this.srcWarehouseId,
+              dstWarehouseId: this.dstWarehouseId,
+              peopleId: this.peopleId,
+              remark: this.remark
+            };
 
-        if (generics.length) {
-          this.alertService.confirm('ต้องการยืมรายการสินค้า ใช่หรือไม่?')
-            .then(async () => {
+            if (generics.length) {
               this.modalLoading.show();
               try {
-                const rs: any = await this.borrowItemsService.updateBorrow(this.borrowId, summary, generics);
+                const rs: any = await this.borrowItemsService.stockcardBorrows(this.borrowId, summary, generics);
                 if (rs.ok) {
-                  this.alertService.success();
-                  this.router.navigate(['/admin/borrow']);
+                  this.modalLoading.hide();
+                  this.router.navigate(['admin/tools/stockcard']);
+                  this.isSaving = false;
                 } else {
                   this.isSaving = false;
+                  this.modalLoading.hide();
                   this.alertService.error(JSON.stringify(rs.error));
                 }
-
                 this.modalLoading.hide();
-
               } catch (error) {
                 this.isSaving = false;
                 this.modalLoading.hide();
               }
-            })
-            .catch(() => {
+            } else {
               this.isSaving = false;
-              this.modalLoading.hide();
-            });
-        } else {
-          this.isSaving = false;
-          this.alertService.error('ไม่พบรายการที่ต้องการยืม');
+              this.alertService.error('ไม่พบรายการที่ต้องการยืม');
+            }
+          }
         }
-      }
-
-    }
+      })
   }
 
   async getProductList(genericId, qty) {

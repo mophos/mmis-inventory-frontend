@@ -7,7 +7,7 @@
         <span class="p4">{{p.generic_name}}</span>
       </clr-dg-cell>
       <clr-dg-cell style="text-align: right;" [ngStyle]="{'color':'#007cbb'}">
-        {{p.qty |
+        {{p.confirm_qty/ p.conversion_qty |
         number}} {{p.from_unit_name}} ({{p.conversion_qty | number}}
         {{p.to_unit_name}})
       </clr-dg-cell>
