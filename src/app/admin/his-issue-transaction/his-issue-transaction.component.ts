@@ -180,8 +180,9 @@ export class HisIssueTransactionComponent implements OnInit {
         this.hisTransactionService.importTransaction(transactionIds)
           .then((rs: any) => {
             if (rs.ok) {
-              const isImportTotal = transactionIds.length - rs.un_cut_stock.length || 0;
-              this.alertService.success('ผลการนำเข้าข้อมูลเพื่อตัดสต๊อก', 'นำเข้าข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถนำเข้าได้ ' + rs.un_cut_stock.length || 0 + ' รายการ');
+              const cut = rs.un_cut_stock ? rs.un_cut_stock : [];
+              const isImportTotal = transactionIds.length - cut.length || 0;
+              this.alertService.success('ผลการนำเข้าข้อมูลเพื่อตัดสต๊อก', 'นำเข้าข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถนำเข้าได้ ' + cut.length || 0 + ' รายการ');
               this.getTransactionList();
             } else {
               this.alertService.error(rs.error);
