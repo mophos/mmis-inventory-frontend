@@ -172,6 +172,8 @@ export class HisIssueTransactionComponent implements OnInit {
   }
 
   doImport(transactionIds: any[]) {
+    console.log(transactionIds);
+    
     this.alertService.confirm('ต้องการนำเข้ารายการที่เลือก ' + transactionIds.length + ' รายการ ใช่หรือไม่?')
       .then(() => {
         this.modalLoading.show();
@@ -179,7 +181,7 @@ export class HisIssueTransactionComponent implements OnInit {
           .then((rs: any) => {
             if (rs.ok) {
               const isImportTotal = transactionIds.length - rs.un_cut_stock.length || 0;
-              this.alertService.success('ผลการนำเข้าข้อมูลเพื่อตัดสต๊อก', 'นำเข้าข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถนำเข้าได้ ' + rs.un_cut_stock.length + ' รายการ');
+              this.alertService.success('ผลการนำเข้าข้อมูลเพื่อตัดสต๊อก', 'นำเข้าข้อมูลได้ ' + isImportTotal + ' รายการ ไม่สามารถนำเข้าได้ ' + rs.un_cut_stock.length || 0 + ' รายการ');
               this.getTransactionList();
             } else {
               this.alertService.error(rs.error);
