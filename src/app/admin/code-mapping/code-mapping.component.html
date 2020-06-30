@@ -5,8 +5,8 @@
 <div class="row" style="padding: 5px;">
   <div class="col-md-3" style="padding-top: 5px; padding-bottom: 5px;">
     ค้นหา :
-    <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;" type="text"
-      placeholder="ค้นหาสินค้า...">
+    <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;"
+      type="text" placeholder="ค้นหาสินค้า...">
   </div>
   <div class="col-md-9">
     <div style="float:right;">
@@ -34,20 +34,30 @@
 <clr-datagrid style="height: 80%;">
   <clr-dg-column [clrDgField]="'working_code'" style="width: 180px;">Trade Code</clr-dg-column>
   <clr-dg-column [clrDgField]="'product_name'">ชื่อยา (Trade name)</clr-dg-column>
-  <clr-dg-column style="width: 350px;">TMT ID (TPU)</clr-dg-column>
+  <clr-dg-column [clrDgField]="'v_labeler_name'">ผู้ผลิต</clr-dg-column>
+  <clr-dg-column [clrDgField]="'tmtid'" style="width: 350px;">TMT ID (TPU)</clr-dg-column>
   <!-- <clr-dg-column>ชื่อยา/เวชภัณฑ์</clr-dg-column> -->
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems='let m of products'>
     <clr-dg-cell>{{m.working_code}}</clr-dg-cell>
-    <clr-dg-cell>{{m.product_name}}</clr-dg-cell>
     <clr-dg-cell>
-      <wm-search-product-tmt #searchTMT [tmtId]='m.tmtid' (onSelect)="setSelectedProduct($event,m)" (onChange)="changeSearchProduct($event,m)"
-        style="display: inline-block;" class="wm-edit-box-number"></wm-search-product-tmt>
+      <span class="p4">{{m.product_name}}</span>
+      <br>
+      <span class="p7">{{m.generic_name}}</span>
+    </clr-dg-cell>
+    <clr-dg-cell>
+      {{m.m_labeler_name}}
+    </clr-dg-cell>
+    <clr-dg-cell>
+      <wm-search-product-tmt #searchTMT [tmtId]='m.tmtid' (onSelect)="setSelectedProduct($event,m)"
+        (onChange)="changeSearchProduct($event,m)" style="display: inline-block;" class="wm-edit-box-number">
+      </wm-search-product-tmt>
     </clr-dg-cell>
     <!-- <clr-dg-cell>{{m.FSN}}</clr-dg-cell> -->
   </clr-dg-row>
   <clr-dg-footer>
-    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}} รายการ
+    {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
+    รายการ
     <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
@@ -65,7 +75,8 @@
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <div>
               <label class="btn btn-sm btn-success btn-link wm-small-btn">
-                <input type="file" #file accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                <input type="file" #file
+                  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                   style="display: none;" (change)="fileChangeEvent($event)">
                 <clr-icon shape="search"></clr-icon>
               </label>
