@@ -20,7 +20,8 @@ export class CodeMappingComponent implements OnInit {
   fileName: any = null;
   file: any;
   query: any = '';
-
+  genericTypeMultis: any;
+  @ViewChild('genericTypeMul') public genericTypeMul: any;
   constructor(
     private uploadingService: UploadingService,
     private productsService: ProductsService,
@@ -29,13 +30,14 @@ export class CodeMappingComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.genericTypeMultis = this.genericTypeMul.getDefaultGenericType();
     this.getAllProduct();
   }
 
   async getAllProduct() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.productsService.getAllProduct();
+      const rs: any = await this.productsService.getAllProduct(this.genericTypeMultis);
       this.products = rs.rows;
       this.modalLoading.hide();
     } catch (error) {
@@ -132,10 +134,9 @@ export class CodeMappingComponent implements OnInit {
 
   enterSearchGeneric(e) {
     if (e.keyCode === 13) {
-      if (this.query != '') {
+      if (this.query !== '') {
         this.searchMappings();
-      }
-      else {
+      } else {
         this.getAllProduct();
       }
     }
@@ -144,12 +145,38 @@ export class CodeMappingComponent implements OnInit {
   async searchMappings() {
     this.modalLoading.show();
     try {
-      const rs: any = await this.productsService.getSearchProduct(this.query);
+      const rs: any = await this.productsService.getSearchProduct(this.query, this.genericTypeMultis);
       this.products = rs.rows;
       this.modalLoading.hide();
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
     }
+  }
+
+
+  async selectGenericTypeMulti(e) {
+    try {
+      this.genericTypeMultis = e;
+      this.modalLoading.show();
+      let rs: any;
+      if (this.query) {
+        rs = await this.productsService.getSearchProduct(this.query, e);
+      } else {
+        rs = await this.productsService.getAllProduct(e);
+      }
+      this.modalLoading.hide();
+      if (rs.ok) {
+        this.products = rs.rows;
+      } else {
+        this.alertService.error(rs.error);
+      }
+
+    } catch (error) {
+      this.modalLoading.hide();
+      this.alertService.serverError();
+      console.log(error.message);
+    }
+
   }
 }

@@ -8,7 +8,7 @@
     <input id="search_input" name="query" [(ngModel)]="query" (keyup)="enterSearchGeneric($event)" style="width: 300px;"
       type="text" placeholder="ค้นหาสินค้า...">
   </div>
-  <div class="col-md-9">
+  <div class="col-md-7">
     <div style="float:right;">
       <button type="button" class="btn btn-sm btn-success" (click)="save()">
         <clr-icon shape="floppy"></clr-icon>
@@ -29,6 +29,10 @@
         </button>
       </div>
     </div>
+  </div>
+  <div class="col-md-2">
+    <wm-select-generic-type-multi #genericTypeMul (onSelect)="selectGenericTypeMulti($event)">
+    </wm-select-generic-type-multi>
   </div>
 </div>
 <clr-datagrid  style="position: relative;">

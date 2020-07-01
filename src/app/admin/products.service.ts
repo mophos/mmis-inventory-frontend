@@ -104,13 +104,17 @@ export class ProductsService {
     return resp.json();
   }
 
-  async getAllProduct() {
-    const resp = await this.authHttp.get(`${this.url}/products/mapping/all-product`).toPromise();
+  async getAllProduct(genericType) {
+    const resp = await this.authHttp.post(`${this.url}/products/mapping/all-product`, {
+      genericType
+    }).toPromise();
     return resp.json();
   }
 
-  async getSearchProduct(query: any) {
-    const resp = await this.authHttp.get(`${this.url}/products/mapping/search-product/${query}`).toPromise();
+  async getSearchProduct(query: any, genericType) {
+    const resp = await this.authHttp.post(`${this.url}/products/mapping/search-product/${query}`, {
+      genericType
+    }).toPromise();
     return resp.json();
   }
 
