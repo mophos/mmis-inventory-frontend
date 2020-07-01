@@ -13,13 +13,13 @@ export class CodeMappingComponent implements OnInit {
   @ViewChild('modalLoading') public modalLoading: any;
   @ViewChild('searchTMT') public searchTMT: any;
 
-  products: any;
+  products: any = [];
   productUpdate: any = [];
   openUpload = false;
   filePath: string;
   fileName: any = null;
   file: any;
-  query: any;
+  query: any = '';
 
   constructor(
     private uploadingService: UploadingService,

@@ -31,7 +31,7 @@
     </div>
   </div>
 </div>
-<clr-datagrid style="height: 80%;">
+<clr-datagrid  style="position: relative;">
   <clr-dg-column [clrDgField]="'working_code'" style="width: 180px;">Trade Code</clr-dg-column>
   <clr-dg-column [clrDgField]="'product_name'">ชื่อยา (Trade name)</clr-dg-column>
   <clr-dg-column [clrDgField]="'v_labeler_name'">ผู้ผลิต</clr-dg-column>
@@ -58,7 +58,7 @@
   <clr-dg-footer>
     {{pagination.firstItem + 1 | number}} - {{pagination.lastItem + 1 | number}} จาก {{pagination.totalItems | number}}
     รายการ
-    <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
+    <clr-dg-pagination #pagination [clrDgPageSize]="50"></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
 
