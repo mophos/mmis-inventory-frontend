@@ -20,8 +20,8 @@
 <!-- <button style="float: right;" class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption()">
   <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง
 </button> -->
-<button *ngIf="tab === 'receive' || tab === 'receiveOther'" style="float: right;"
-  class="btn btn-primary btn-sm btn-icon" (click)="printSelecOption()">
+<button *ngIf="tab === 'receive' || tab === 'receiveOther'" style="float: right;" class="btn btn-primary btn-sm btn-icon"
+  (click)="printSelecOption()">
   <clr-icon shape="printer"></clr-icon> พิมพ์ใบนำส่ง (แบบมีเงื่อนไข)
 </button>
 <clr-tabs>
@@ -38,8 +38,8 @@
           <div class="row wid99">
             <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searchPo($event)" name="queryPo" [(ngModel)]="queryPo"
-                placeholder="เลขที่ใบสั่งซื้อ, ผู้จำหน่าย, ชื่อเวชภัณฑ์" style="width: 400px;">
+              <input type="text" (keyup)="searchPo($event)" name="queryPo" [(ngModel)]="queryPo" placeholder="เลขที่ใบสั่งซื้อ, ผู้จำหน่าย, ชื่อเวชภัณฑ์"
+                style="width: 400px;">
             </div>
             <div class="col-md-6" style="padding-top: 5px;">
               <button (click)="printUnReceive()" style="float: right;" class="btn btn-primary btn-sm btn-icon">
@@ -70,10 +70,10 @@
           <clr-dg-cell>{{purchase.purchase_method_name}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">{{purchase.purchase_price | number: '1.2-2'}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
-            <span style="color: red; font-weight:bold;"
-              *ngIf="purchase.receive_price >= purchase.purchase_price">{{purchase.receive_price || 0 | number: '1.2-2'}}</span>
-            <span style="color: green; font-weight:bold;"
-              *ngIf="purchase.receive_price < purchase.purchase_price">{{purchase.receive_price || 0 | number: '1.2-2'}}</span>
+            <span style="color: red; font-weight:bold;" *ngIf="purchase.receive_price >= purchase.purchase_price">{{purchase.receive_price
+              || 0 | number: '1.2-2'}}</span>
+            <span style="color: green; font-weight:bold;" *ngIf="purchase.receive_price < purchase.purchase_price">{{purchase.receive_price
+              || 0 | number: '1.2-2'}}</span>
           </clr-dg-cell>
           <clr-dg-cell style="text-align:center;">
             <div *ngIf="!purchase.asn && purchase.is_edi == 'Y'">
@@ -90,9 +90,8 @@
           </clr-dg-cell>
           <clr-dg-cell style="text-align: center;">
             <div class="btn-group">
-              <button [disabled]="purchase.receive_price >= purchase.purchase_price"
-                class="btn btn-sm btn-success wm-small-btn" [routerLink]="['/admin/receives/purchase']"
-                [queryParams]="{purchaseId: purchase.purchase_order_id,asn:purchase.asnCheck}">
+              <button [disabled]="purchase.receive_price >= purchase.purchase_price" class="btn btn-sm btn-success wm-small-btn"
+                [routerLink]="['/admin/receives/purchase']" [queryParams]="{purchaseId: purchase.purchase_order_id,asn:purchase.asnCheck}">
                 รับ
               </button>
               <button class="btn btn-sm btn-danger wm-small-btn" (click)="closePurchase(purchase.purchase_order_id)">
@@ -107,8 +106,7 @@
         <clr-dg-footer>
           {{pagePo.firstItem + 1}} - {{pagePo.lastItem + 1}} จาก {{pagePo.totalItems}} รายการ
           <!-- <clr-dg-pagination #pagination [clrDgPageSize]="perPage"></clr-dg-pagination> -->
-          <clr-dg-pagination #pagePo [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
-            [clrDgTotalItems]="totalPurchases"></clr-dg-pagination>
+          <clr-dg-pagination #pagePo [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalPurchases"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -117,8 +115,8 @@
   <clr-tab>
     <button clrTabLink (click)="clearSelectedApproved();selectTabReceive()">
       <clr-icon shape="tasks"></clr-icon> รับจากการซื้อ
-      <span class="badge badge-info"
-        title="ยังไม่ได้อนุมัติอีก {{countApprove | number}} รายการ">{{countApprove | number}}</span>
+      <span class="badge badge-info" title="ยังไม่ได้อนุมัติอีก {{countApprove | number}} รายการ">{{countApprove |
+        number}}</span>
     </button>
     <clr-tab-content *clrIfActive="tab === 'receive'">
       <div class="card">
@@ -126,8 +124,8 @@
           <div class="row wid99">
             <div class="col-md-6" style="padding-top: 5px;">
               <label for="">ค้นหา</label>
-              <input type="text" (keyup)="searchReceive($event)" name="query" [(ngModel)]="query"
-                placeholder="เลขที่ใบสั่งซื้อ, เลขที่ใบรับ, เลขที่ใบส่ง, ชื่อเวชภัณฑ์" style="width: 400px;">
+              <input type="text" (keyup)="searchReceive($event)" name="query" [(ngModel)]="query" placeholder="เลขที่ใบสั่งซื้อ, เลขที่ใบรับ, เลขที่ใบส่ง, ชื่อเวชภัณฑ์"
+                style="width: 400px;">
             </div>
             <div class="col-md-2 push-md-4" style="padding-top: 5px;">
               <div class="select">
@@ -163,9 +161,9 @@
                     <button type="button" clrDropdownItem (click)="printReceive()">
                       <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับ
                     </button>
-                    <!-- <button type="button" clrDropdownItem (click)="printReceive2()">
-                      <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับรูปกรรมการ
-                    </button> -->
+                    <button type="button" clrDropdownItem (click)="openModalSignature()">
+                      <clr-icon shape="printer"></clr-icon> พิมพ์บันทึกข้อความเบิกจ่ายเงิน
+                    </button>
                     <button type="button" clrDropdownItem (click)="printreceiveApprovePO()">
                       <clr-icon shape="printer"></clr-icon> พิมพ์ใบตรวจรับตามใบสั่งซื้อ
                     </button>
@@ -178,8 +176,7 @@
         </div>
       </div>
 
-      <clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px; height: 83%;"
-        [(clrDgSelected)]="selectedApprove">
+      <clr-datagrid (clrDgRefresh)="refresh($event)" style="padding-top: 5px; height: 83%;" [(clrDgSelected)]="selectedApprove">
         <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column style="width: 180px;" [clrDgField]="'purchase_order_number'">เลขที่ใบสั่งซื้อ</clr-dg-column>
@@ -187,8 +184,7 @@
         <clr-dg-column [clrDgField]="'delivery_code'">เลขที่ใบนำส่ง</clr-dg-column>
         <clr-dg-column style="width: 150px;"></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let w of waitings" [clrDgItem]="w"
-          [ngClass]="{'approve-status': w.approve_id, 'isError': w.is_cancel === 'Y'}">
+        <clr-dg-row *ngFor="let w of waitings" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id, 'isError': w.is_cancel === 'Y'}">
           <wm-product-detail *clrIfExpanded [receiveId]="w.receive_id" ngProjectAs="clr-dg-row-detail">
           </wm-product-detail>
           <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
@@ -199,13 +195,12 @@
           <clr-dg-cell>{{w.delivery_code}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
             <div class="btn-group btn-success">
-              <button [disabled]="w.is_cancel === 'Y'" title="แก้ไขข้อมูล/อนุมัติ/เอกสาร"
-                class="btn btn-primary btn-icon btn-sm wm-small-btn" [routerLink]="['/admin/receives/edit']"
-                [queryParams]="{receiveId: w.receive_id}">
+              <button [disabled]="w.is_cancel === 'Y'" title="แก้ไขข้อมูล/อนุมัติ/เอกสาร" class="btn btn-primary btn-icon btn-sm wm-small-btn"
+                [routerLink]="['/admin/receives/edit']" [queryParams]="{receiveId: w.receive_id}">
                 <clr-icon shape="note"></clr-icon>
               </button>
-              <button [disabled]="w.is_cancel === 'Y' || w.approve_id" title="ยกเลิกใบรับ"
-                class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeReceive(w)">
+              <button [disabled]="w.is_cancel === 'Y' || w.approve_id" title="ยกเลิกใบรับ" class="btn btn-danger btn-icon btn-sm wm-small-btn"
+                (click)="removeReceive(w)">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
@@ -219,8 +214,7 @@
           <span class="badge badge-success">อนุมัติแล้ว</span>
           | {{pageWait.firstItem + 1 | number}} - {{pageWait.lastItem + 1 | number}} จาก
           {{pageWait.totalItems | number}} รายการ
-          <clr-dg-pagination #pageWait [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
-            [clrDgTotalItems]="totalReceive"></clr-dg-pagination>
+          <clr-dg-pagination #pageWait [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceive"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -229,8 +223,8 @@
   <clr-tab>
     <button clrTabLink (click)="selectTabReceiveOther()">
       <clr-icon shape="truck"></clr-icon> รับอื่นๆ (เช่นบริจาค)
-      <span class="badge badge-info"
-        title="ยังไม่ได้อนุมัติอีก {{countApproveOther | number}} รายการ">{{countApproveOther | number}}</span>
+      <span class="badge badge-info" title="ยังไม่ได้อนุมัติอีก {{countApproveOther | number}} รายการ">{{countApproveOther
+        | number}}</span>
     </button>
     <clr-tab-content *clrIfActive="tab === 'receiveOther'">
       <div class="card">
@@ -279,8 +273,7 @@
           </div>
         </div>
       </div>
-      <clr-datagrid (clrDgRefresh)="refreshOther($event)" [(clrDgSelected)]="selectedOtherApprove"
-        [style.height.%]="83">
+      <clr-datagrid (clrDgRefresh)="refreshOther($event)" [(clrDgSelected)]="selectedOtherApprove" [style.height.%]="83">
         <clr-dg-column [clrDgField]="'receive_date'" style="width: 150px;">วันที่</clr-dg-column>
         <clr-dg-column [clrDgField]="'receive_code'" style="width: 180px;">เลขที่รับ</clr-dg-column>
         <clr-dg-column [clrDgField]="'receive_type_name'" style="width: 180px;">ประเภทการรับ</clr-dg-column>
@@ -290,10 +283,8 @@
         <clr-dg-column style="width: 150px;">มูลค่า (บาท)</clr-dg-column>
         <clr-dg-column style="width: 150px;"></clr-dg-column>
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
-        <clr-dg-row *ngFor="let w of others" [clrDgItem]="w"
-          [ngClass]="{'approve-status': w.approve_id, 'isError': w.is_cancel === 'Y'}">
-          <wm-product-receive-other-detail [receiveOtherId]="w.receive_other_id" *clrIfExpanded
-            ngProjectAs="clr-dg-row-detail"></wm-product-receive-other-detail>
+        <clr-dg-row *ngFor="let w of others" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id, 'isError': w.is_cancel === 'Y'}">
+          <wm-product-receive-other-detail [receiveOtherId]="w.receive_other_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-product-receive-other-detail>
           <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_code}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_type_name}}</clr-dg-cell>
@@ -303,13 +294,12 @@
           <clr-dg-cell style="text-align: right;">{{w.cost | number: '1.2-2'}}</clr-dg-cell>
           <clr-dg-cell style="text-align: right;">
             <div class="btn-group btn-success">
-              <button title="แก้ไขข้อมูล/อนุมัติ" class="btn btn-primary btn-icon btn-sm wm-small-btn"
-                [disabled]="w.approve_id || w.is_cancel==='Y'" [routerLink]="['/admin/receives/other/edit']"
-                [queryParams]="{receiveOtherId: w.receive_other_id}">
+              <button title="แก้ไขข้อมูล/อนุมัติ" class="btn btn-primary btn-icon btn-sm wm-small-btn" [disabled]="w.approve_id || w.is_cancel==='Y'"
+                [routerLink]="['/admin/receives/other/edit']" [queryParams]="{receiveOtherId: w.receive_other_id}">
                 <clr-icon shape="note"></clr-icon>
               </button>
-              <button title="ยกเลิกใบรับ" class="btn btn-danger btn-icon btn-sm wm-small-btn"
-                (click)="removeReceiveOther(w)" [disabled]="loading || w.approve_id || w.is_cancel==='Y'">
+              <button title="ยกเลิกใบรับ" class="btn btn-danger btn-icon btn-sm wm-small-btn" (click)="removeReceiveOther(w)"
+                [disabled]="loading || w.approve_id || w.is_cancel==='Y'">
                 <clr-icon shape="trash"></clr-icon>
               </button>
             </div>
@@ -319,8 +309,7 @@
         <clr-dg-footer>
           {{pageOther.firstItem + 1 | number}} - {{pageOther.lastItem + 1 | number}} จาก
           {{pageOther.totalItems | number}} รายการ
-          <clr-dg-pagination #pageOther [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
-            [clrDgTotalItems]="totalReceiveOther"></clr-dg-pagination>
+          <clr-dg-pagination #pageOther [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalReceiveOther"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -372,7 +361,8 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pagePurchaseExpired.firstItem + 1 | number}} - {{pagePurchaseExpired.lastItem + 1 | number}} จาก {{pagePurchaseExpired.totalItems
+          {{pagePurchaseExpired.firstItem + 1 | number}} - {{pagePurchaseExpired.lastItem + 1 | number}} จาก
+          {{pagePurchaseExpired.totalItems
           | number}} รายการ
           <clr-dg-pagination #pagePurchaseExpired [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
             [clrDgTotalItems]="totalExpired"></clr-dg-pagination>
@@ -413,8 +403,7 @@
         <!-- <clr-dg-column style="width: 150px;"></clr-dg-column> -->
         <clr-dg-placeholder>ไม่พบรายการ!</clr-dg-placeholder>
         <clr-dg-row *ngFor="let w of otherExpired" [clrDgItem]="w" [ngClass]="{'approve-status': w.approve_id}">
-          <wm-product-receive-other-detail [receiveOtherId]="w.receive_other_id" *clrIfExpanded
-            ngProjectAs="clr-dg-row-detail"></wm-product-receive-other-detail>
+          <wm-product-receive-other-detail [receiveOtherId]="w.receive_other_id" *clrIfExpanded ngProjectAs="clr-dg-row-detail"></wm-product-receive-other-detail>
           <clr-dg-cell style="text-align: center;">{{w.receive_date | toThaiDate}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_code}}</clr-dg-cell>
           <clr-dg-cell>{{w.receive_type_name}}</clr-dg-cell>
@@ -425,10 +414,10 @@
         </clr-dg-row>
 
         <clr-dg-footer>
-          {{pageOtherExpired.firstItem + 1 | number}} - {{pageOtherExpired.lastItem + 1 | number}} จาก {{pageOtherExpired.totalItems
+          {{pageOtherExpired.firstItem + 1 | number}} - {{pageOtherExpired.lastItem + 1 | number}} จาก
+          {{pageOtherExpired.totalItems
           | number}} รายการ
-          <clr-dg-pagination #pageOtherExpired [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage"
-            [clrDgTotalItems]="totalOtherExpired"></clr-dg-pagination>
+          <clr-dg-pagination #pageOtherExpired [(clrDgPage)]="currentPage" [clrDgPageSize]="perPage" [clrDgTotalItems]="totalOtherExpired"></clr-dg-pagination>
         </clr-dg-footer>
       </clr-datagrid>
     </clr-tab-content>
@@ -490,8 +479,8 @@
                     <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="eDate" required>
                     </my-date-picker-th>
                   </div>
-                  <button type="button" class="col-md-1 btn btn-success btn-lg"
-                    (click)="printDeliveryDate(showOption,sDate,eDate)" [disabled]="!sDate || !eDate">พิมพ์</button>
+                  <button type="button" class="col-md-1 btn btn-success btn-lg" (click)="printDeliveryDate(showOption,sDate,eDate)"
+                    [disabled]="!sDate || !eDate">พิมพ์</button>
                 </div>
               </div>
             </div>
@@ -513,8 +502,7 @@
                   <input class="col-md-3 " type="text" name="query" [(ngModel)]="sID" placeholder="RV-61-000000">
                   <label class="col-md-1 required" for="">ถึง</label>
                   <input class="col-md-3" type="text" name="query2" [(ngModel)]="eID" placeholder="RV-61-999999">
-                  <button type="button" class="btn btn-success btn-md" (click)="printDeliveryId(3,sID,eID)"
-                    [disabled]="!sID || !eID">พิมพ์</button>
+                  <button type="button" class="btn btn-success btn-md" (click)="printDeliveryId(3,sID,eID)" [disabled]="!sID || !eID">พิมพ์</button>
                 </div>
               </div>
             </div>
@@ -528,8 +516,7 @@
                   <input class="col-md-3 " type="text" name="query" [(ngModel)]="sIDpo" placeholder="PO-61-000000">
                   <label class="col-md-1 required" for="">ถึง</label>
                   <input class="col-md-3" type="text" name="query2" [(ngModel)]="eIDpo" placeholder="PO-61-999999">
-                  <button type="button" class="btn btn-success btn-md" (click)="printPoId(3,sIDpo,eIDpo)"
-                    [disabled]="!sIDpo || !eIDpo">พิมพ์</button>
+                  <button type="button" class="btn btn-success btn-md" (click)="printPoId(3,sIDpo,eIDpo)" [disabled]="!sIDpo || !eIDpo">พิมพ์</button>
                 </div>
               </div>
             </div>
@@ -561,8 +548,7 @@
     <button type="button" class="btn btn-outline-danger btn-lg" (click)="openModal = false">ปิด</button>
   </div>
 </clr-modal>
-<clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'"
-  [clrModalClosable]="false">
+<clr-modal [(clrModalOpen)]="openModalConfirm" [clrModalStaticBackdrop]="true" [clrModalSize]="'md'" [clrModalClosable]="false">
   <h3 class="modal-title">สิทธิ์การอนุมัติ{{titel}}</h3>
   <div class="modal-body" style="height:150px">
 
@@ -581,8 +567,7 @@
     </form>
   </div>
   <div class="modal-footer" style="padding-top: 0px;">
-    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password"
-      (click)="checkApprove(username,password)">บันทึก</button>
+    <button type="button" class="btn btn-md btn-primary" [disabled]="!username || !password" (click)="checkApprove(username,password)">บันทึก</button>
     <button type="button" class="btn btn-md btn-danger-outline" (click)="close()">ปิด</button>
   </div>
 </clr-modal>
@@ -598,6 +583,18 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-danger btn-sm" (click)="_openModal = false">ปิดหน้าต่าง</button>
     <button type="button" class="btn btn-outline-primary btn-sm" (click)="printReportUnReceive()">พิมพ์</button>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="modalSignature" [clrModalClosable]="false">
+  <h3 class="modal-title">เลือกรายชื่อ</h3>
+  <div class="modal-body" style="height: 300px;">
+    ตำแหน่งที่ 1 <wm-search-people-autocomplete #elSearchPeople (onSelect)="onSelectedPeople1($event)"></wm-search-people-autocomplete>
+    ตำแหน่งที่ 2 <wm-search-people-autocomplete #elSearchPeople (onSelect)="onSelectedPeople2($event)"></wm-search-people-autocomplete>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-md" (click)="modalSignature = false">ปิดหน้าต่าง</button>
+    <button type="button" class="btn btn-success btn-md" [disabled]="!signatureId1 || !signatureId2" (click)="printReqAccount()">พิมพ์</button>
   </div>
 </clr-modal>
 
