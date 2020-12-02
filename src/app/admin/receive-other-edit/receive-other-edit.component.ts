@@ -605,7 +605,7 @@ export class ReceiveOtherEditComponent implements OnInit {
       const receiveOtherId = this.receiveOtherId;
       const rs = await this.receiveService.getReceiveOtherDetailProductList(receiveOtherId);
       if (rs.ok) {
-        rs.rows.forEach(v => {
+        for (const v of rs.rows) {
           const product: any = {};
           product.product_id = v.product_id;
           product.product_name = v.product_name;
@@ -629,7 +629,7 @@ export class ReceiveOtherEditComponent implements OnInit {
           // cal total price
 
           this.countTotalCost();
-        });
+        };
       } else {
         this.alertService.error(rs.error);
       }
