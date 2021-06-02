@@ -129,6 +129,7 @@ import { StockcardBorrowComponent } from './tools/stockcard-borrow/stockcard-bor
 import { ProductPayComponent } from './reports/product-pay/product-pay.component';
 import { RequisitionSumComponent } from './reports/requisition-sum/requisition-sum.component';
 import { ExportFinancialComponent } from './exportdatas/export-financial/export-financial.component';
+import { SummaryDisbursementNonComponent } from './reports/summary-disbursement-non/summary-disbursement-non.component';
 
 const routes: Routes = [
   {
@@ -195,6 +196,7 @@ const routes: Routes = [
           { path: 'product-receive', component: ProductReceiveComponent },
           { path: 'receive-not-match-po', component: ReceiveNotMatchPoComponent },
           { path: 'summary-disbursement', component: SummaryDisbursementComponent },
+          { path: 'summary-disbursement-non', component: SummaryDisbursementNonComponent },
           { path: 'receive-issue-year', component: ReceiveIssueYearComponent },
           { path: 'monthly-report', component: MonthlyReportComponent },
           { path: 'pay-report', component: PayReportComponent },
