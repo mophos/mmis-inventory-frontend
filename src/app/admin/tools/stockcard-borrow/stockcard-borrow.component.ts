@@ -338,6 +338,8 @@ export class StockcardBorrowComponent implements OnInit {
           let isError = false;
 
           for (const v of this.generics) {
+            console.log(v.products);
+            
             if (v.generic_id && v.borrow_qty) {
               generics.push({
                 generic_id: v.generic_id,
@@ -353,8 +355,6 @@ export class StockcardBorrowComponent implements OnInit {
               isError = false;
             }
           }
-          console.log(this.generics);
-
 
           if (isError) {
             this.alertService.error('ข้อมูลไม่ครบถ้วนหรือไม่สมบูรณ์ เช่น จำนวนยืม');

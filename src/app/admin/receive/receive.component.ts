@@ -91,11 +91,15 @@ export class ReceiveComponent implements OnInit {
   currentPage = 1;
   offset = 0;
   offsetOther = 0;
-  _openModal: boolean = false;
+  _openModal = false;
   Sdate: any;
   Edate: any;
   jwtHelper: JwtHelper = new JwtHelper();
   sort;
+
+  modalSignature = false;
+  signatureId1: any;
+  signatureId2: any;
   constructor(
     private receiveService: ReceiveService,
     private alertService: AlertService,
@@ -654,6 +658,46 @@ export class ReceiveComponent implements OnInit {
           const report_url = rs.rows[0].report_url;
 
           const url = `${this.apiUrl}${report_url}?${strIds}token=${this.token}`;
+
+          this.htmlPreview.showReport(url);
+        }).catch((error) => {
+          console.log(error);
+
+          // cancel
+        });
+    } else {
+      this.alertService.error('ไม่พบรายการที่ต้องการพิมพ์ (เลือกรายการที่มีใบสั่งซื้อเท่านั้น)');
+    }
+  }
+
+  onSelectedPeople1(e) {
+    this.signatureId1 = e.people_id;
+  }
+
+  onSelectedPeople2(e) {
+    this.signatureId2 = e.people_id;
+  }
+
+  openModalSignature() {
+    this.modalSignature = true;
+  }
+
+  printReqAccount() {
+    this.modalSignature = false;
+    const receiveIds = [];
+    _.forEach(this.selectedApprove, (v) => {
+      if (v.purchase_order_number) {
+        receiveIds.push(v.receive_id);
+      }
+    });
+    if (receiveIds.length) {
+      this.alertService.confirm('พิมพ์บันทึกข้อความเบิกจ่ายเงิน ' + receiveIds.length + ' รายการ ใช่หรือไม่?')
+        .then(async () => {
+          let strIds = '';
+          receiveIds.forEach((v: any) => {
+            strIds += `receiveID=${v}&`;
+          });
+          const url = `${this.apiUrl}/report/req/account?${strIds}peopleId1=${this.signatureId1}&peopleId2=${this.signatureId2}&token=${this.token}`;
 
           this.htmlPreview.showReport(url);
         }).catch((error) => {

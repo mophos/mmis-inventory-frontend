@@ -9,11 +9,17 @@ import { BasicService } from '../../basic.service';
 })
 export class SelectProductLocationComponent implements OnInit {
   _warehouseId: any;
+  selectedId: any;
   @Output() public onSelect: EventEmitter<any> = new EventEmitter<any>();
-  @Input() public selectedId: any;
   @Input() public productId: any;
   @Input() public disabled: boolean;
 
+  @Input('selectedId')
+  set setLocationId(value) {
+    console.log('setselect', value);
+
+    this.selectedId = value;
+  }
   @Input('warehouseId')
   set setWarehouseId(value) {
     this._warehouseId = value;
@@ -35,6 +41,8 @@ export class SelectProductLocationComponent implements OnInit {
     try {
       if (warehouseId) {
         const res = await this.basicService.getWarehouseLocation(warehouseId);
+        console.log(this.selectedId, this._warehouseId);
+
 
         if (res.ok) {
           this.locations = res.rows;
