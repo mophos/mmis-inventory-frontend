@@ -30,7 +30,7 @@
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.7",
     "lodash": "^4.17.4",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "mutationobserver-shim": "^0.3.2",
     "mydatepicker-th": "^0.1.1",
     "numeral": "^2.0.6",
