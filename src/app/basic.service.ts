@@ -119,5 +119,20 @@ export class BasicService {
     return res.json();
   }
 
+  async getBiProductCategories() {
+    const res: any = await this.authHttp.get(`${this.url}/basic/bi-product-category`).toPromise();
+    return res.json();
+  }
+
+  async getBiBuyMethod() {
+    const res: any = await this.authHttp.get(`${this.url}/basic/bi-buy-method`).toPromise();
+    return res.json();
+  }
+
+  async getBiDepts() {
+    const res: any = await this.authHttp.get(`${this.url}/basic/bi-dept`).toPromise();
+    return res.json();
+  }
+
 
 }

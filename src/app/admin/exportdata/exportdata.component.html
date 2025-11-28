@@ -1,73 +1,1371 @@
 <nav class="breadcrumb">
-  <a class="breadcrumb-item" href="javascript://" routerLink="/admin">หน้าหลัก</a>
-  <span class="breadcrumb-item active">ส่งออกข้อมูล Excel</span>
+  <a class="breadcrumb-item" href="javascript://" routerLink="/admin"
+    >หน้าหลัก</a
+  >
+  <span class="breadcrumb-item active">ส่งออกข้อมูล</span>
 </nav>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th style="text-align: left">ส่งออกข้อมูล Excel</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">ข้อมูลสินค้าคงคลังรูปแบบ Generics</td>
-      <td>
-        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportRemain()">
-          <clr-icon shape="export"></clr-icon>
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">ข้อมูลสินค้าคงคลังรูปแบบ Trade</td>
-      <td>
-        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportRemainTrade()">
-          <clr-icon shape="export"></clr-icon>
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Export file DISTRIBUTE</td>
-      <td>
-        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportDistribute()">
-          <clr-icon shape="export"></clr-icon>
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Export file DRUGLIST</td>
-      <td>
-        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportDruglist()">
-          <clr-icon shape="export"></clr-icon>
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Export file INVENTORY</td>
-      <td>
-        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportInventory()">
-          <clr-icon shape="export"></clr-icon>
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Export file RECEIVE</td>
-      <td>
-        <button class="btn btn-sm btn-success wm-small-btn" (click)="exportReceive()">
-          <clr-icon shape="export"></clr-icon>
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Export Financial</td>
-      <td>
-        <button class="btn btn-sm btn-success wm-small-btn" routerLink="/admin/exportdatas/export-financial">
-          <clr-icon shape="export"></clr-icon>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink>ส่งออกข้อมูล Excel</button>
+    <clr-tab-content *clrIfActive="true">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="text-align: left">ส่งออกข้อมูล Excel</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: left">ข้อมูลสินค้าคงคลังรูปแบบ Generics</td>
+            <td>
+              <button
+                class="btn btn-sm btn-success wm-small-btn"
+                (click)="exportRemain()"
+              >
+                <clr-icon shape="export"></clr-icon>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left">ข้อมูลสินค้าคงคลังรูปแบบ Trade</td>
+            <td>
+              <button
+                class="btn btn-sm btn-success wm-small-btn"
+                (click)="exportRemainTrade()"
+              >
+                <clr-icon shape="export"></clr-icon>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left">Export file DISTRIBUTE</td>
+            <td>
+              <button
+                class="btn btn-sm btn-success wm-small-btn"
+                (click)="exportDistribute()"
+              >
+                <clr-icon shape="export"></clr-icon>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left">Export file DRUGLIST</td>
+            <td>
+              <button
+                class="btn btn-sm btn-success wm-small-btn"
+                (click)="exportDruglist()"
+              >
+                <clr-icon shape="export"></clr-icon>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left">Export file INVENTORY</td>
+            <td>
+              <button
+                class="btn btn-sm btn-success wm-small-btn"
+                (click)="exportInventory()"
+              >
+                <clr-icon shape="export"></clr-icon>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left">Export file RECEIVE</td>
+            <td>
+              <button
+                class="btn btn-sm btn-success wm-small-btn"
+                (click)="exportReceive()"
+              >
+                <clr-icon shape="export"></clr-icon>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left">Export Financial</td>
+            <td>
+              <button
+                class="btn btn-sm btn-success wm-small-btn"
+                routerLink="/admin/exportdatas/export-financial"
+              >
+                <clr-icon shape="export"></clr-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </clr-tab-content>
+  </clr-tab>
 
+  <clr-tab>
+    <button clrTabLink (click)="getDruglist()">ส่งออกข้อมูล API</button>
+    <clr-tab-content *clrIfActive="false">
+      <button
+        class="btn btn-sm btn-primary-outline"
+        (click)="openModalToken()"
+      >
+        จัดการ Token
+      </button>
+
+
+      <clr-tabs>
+
+        <clr-tab>
+          <button clrTabLink (click)="getDruglist()">DRUGLIST</button>
+          <clr-tab-content *clrIfActive>
+            <div class="row">
+              <div
+                class="col-md-4"
+                style="padding-top: 5px; padding-bottom: 5px"
+              >
+                ค้นหา :
+                <input
+                  name="queryGen"
+                  [(ngModel)]="queryGen"
+                  (keyup)="getDruglist()"
+                  style="width: 300px"
+                  type="text"
+                  placeholder="ค้นหาสินค้า..."
+                />
+              </div>
+              <div class="col-md-2">
+                <button
+                  class="btn btn-sm btn-success-outline"
+                  routerLink="/admin/code-mapping"
+                >
+                  Map รหัสยา TMT(TPU)
+                </button>
+              </div>
+              <div class="col-md-6" style="text-align: right">
+                <button
+                  class="btn btn-sm btn-primary-outline"
+                  (click)="getDrugListHistoryByperiodRpt()"
+                >
+                  ประวัติการส่ง
+                </button>
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="saveAllDruglist()"
+                >
+                  ส่งข้อมูลทั้งหมด
+                </button>
+              </div>
+            </div>
+
+            <clr-datagrid style="height: 80%" [(clrDgSelected)]="selected">
+              <clr-dg-column [clrDgField]="'WORKING_CODE'">
+                <ng-container *clrDgHideableColumn="{ hidden: false }">
+                  WORKING_CODE
+                </ng-container>
+              </clr-dg-column>
+              <clr-dg-column [clrDgField]="'GENERIC_NAME'">
+                <ng-container *clrDgHideableColumn="{ hidden: false }">
+                  GENERIC_NAME
+                </ng-container>
+              </clr-dg-column>
+              <clr-dg-column [clrDgField]="'GENERIC_NAME'">
+                <ng-container *clrDgHideableColumn="{ hidden: false }">
+                  GPUID
+                </ng-container>
+              </clr-dg-column>
+              <clr-dg-column [clrDgField]="'NLEM'">
+                <ng-container *clrDgHideableColumn="{ hidden: false }">
+                  NLEM
+                </ng-container>
+              </clr-dg-column>
+              <clr-dg-column [clrDgField]="'PRODUCT_CAT'">
+                <ng-container *clrDgHideableColumn="{ hidden: false }">
+                  PRODUCT_CAT
+                </ng-container>
+              </clr-dg-column>
+              <clr-dg-column [clrDgField]="'BASE_UNIT'">
+                <ng-container *clrDgHideableColumn="{ hidden: false }">
+                  BASE_UNIT
+                </ng-container>
+              </clr-dg-column>
+              <clr-dg-column [clrDgField]="'STATUS'">
+                <ng-container *clrDgHideableColumn="{ hidden: false }">
+                  STATUS
+                </ng-container>
+              </clr-dg-column>
+              <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
+              <clr-dg-row *clrDgItems="let item of druglist" [clrDgItem]="item">
+                <clr-dg-cell>{{ item.WORKING_CODE }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.GENERIC_NAME }}</clr-dg-cell>
+                <clr-dg-cell>{{
+                  item.GPUID === "99" ? "ยังไม่ได้ระบุ TPU" : item.GPUID
+                }}</clr-dg-cell>
+                <clr-dg-cell>{{
+                  item.NLEM === "E"
+                    ? "ยาในบัญชี(ED)"
+                    : item.NLEM === "N"
+                    ? "นอกบัญชียา(Non-ED)"
+                    : "ไม่ระบุ"
+                }}</clr-dg-cell>
+                <clr-dg-cell>
+                  <div class="select">
+                    <select
+                      [(ngModel)]="item.PRODUCT_CAT"
+                      (change)="onChangeProductCat(item)"
+                    >
+                      <option
+                        [value]="t.product_cat_id"
+                        *ngFor="let t of productCategory"
+                      >
+                        {{ t.product_cat_name }}
+                      </option>
+                      <option value="null">ไม่ระบุ</option>
+                    </select>
+                  </div>
+                </clr-dg-cell>
+                <clr-dg-cell>{{ item.BASE_UNIT }}</clr-dg-cell>
+                <clr-dg-cell>{{
+                  item.STATUS === 1
+                    ? "ยาอยู่ในบัญชีและมีการใช้งาน"
+                    : item.STATUS === 2
+                    ? "ตัดจากบัณชียาแต่ยังมียาเหลือ"
+                    : item.STATUS === 3
+                    ? "ยาเฉพาะราย/อื่นๆ"
+                    : item.STATUS === 4
+                    ? "ตัดออกจากบัญชีและไม่มียาเหลือ"
+                    : "ไม่ระบุ"
+                }}</clr-dg-cell>
+              </clr-dg-row>
+
+              <clr-dg-footer>
+                <clr-dg-pagination
+                  #pagehis
+                  [clrDgPageSize]="50"
+                  [clrDgTotalItems]="druglist.length"
+                >
+                  {{ pagehis.firstItem + 1 }} -
+                  {{ pagehis.lastItem + 1 | number }} จาก
+                  {{ pagehis.totalItems | number }} รายการ
+                </clr-dg-pagination>
+              </clr-dg-footer>
+            </clr-datagrid>
+          </clr-tab-content>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink (click)="getPurchasePlan()">PURCHASEPLAN</button>
+          <clr-tab-content *clrIfActive="false">
+            <div class="row">
+              <div
+                class="col-md-4"
+                style="padding-top: 5px; padding-bottom: 5px"
+              >
+                ค้นหา :
+                <input
+                  name="queryGen"
+                  [(ngModel)]="queryGen"
+                  (keyup)="getPurchasePlan($event)"
+                  style="width: 300px"
+                  type="text"
+                  placeholder="ค้นหาสินค้า..."
+                />
+              </div>
+              <div class="col-md-8" style="text-align: right">
+                <button
+                  class="btn btn-sm btn-primary-outline"
+                  (click)="getPurchasePlanHistoryByperiodRpt()"
+                >
+                  ประวัติการส่ง
+                </button>
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="saveAllPurchasePlan()"
+                >
+                  ส่งข้อมูลทั้งหมด
+                </button>
+              </div>
+            </div>
+
+            <clr-datagrid style="height: 80%" [(clrDgSelected)]="selected">
+              <clr-dg-column [clrDgField]="'WORKING_CODE'"
+                >WORKING CODE</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'GENERIC_NAME'"
+                >GENERIC NAME</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'GPUID'">GPU ID</clr-dg-column>
+              <clr-dg-column [clrDgField]="'NLEM'">NLEM</clr-dg-column>
+              <clr-dg-column [clrDgField]="'QTY_USE_YEAR3'"
+                >QTY YEAR 3</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'QTY_USE_YEAR2'"
+                >QTY YEAR 2</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'QTY_USE_YEAR1'"
+                >QTY YEAR 1</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'QTY_THIS_YEAR'"
+                >QTY THIS YEAR</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'PACK_SIZE'"
+                >PACK SIZE</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'BASE_UNIT'"
+                >BASE UNIT</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'PACK_COST'"
+                >PACK COST</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'VALUE_THIS_YEAR'"
+                >VALUE THIS YEAR</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'QTY_PLAN_TRIMES1'"
+                >QTY PLAN T1</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'QTY_PLAN_TRIMES2'"
+                >QTY PLAN T2</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'QTY_PLAN_TRIMES3'"
+                >QTY PLAN T3</clr-dg-column
+              >
+              <clr-dg-column [clrDgField]="'QTY_PLAN_TRIMES4'"
+                >QTY PLAN T4</clr-dg-column
+              >
+
+              <clr-dg-row *clrDgItems="let item of purchasePlanList">
+                <clr-dg-cell>{{ item.WORKING_CODE }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.GENERIC_NAME }}</clr-dg-cell>
+                <clr-dg-cell>{{
+                  item.GPUID === "99" ? "ยังไม่ได้ระบุ TPU" : item.GPUID
+                }}</clr-dg-cell>
+                <clr-dg-cell>{{
+                  item.NLEM === "E"
+                    ? "ยาในบัญชี(ED)"
+                    : item.NLEM === "N"
+                    ? "นอกบัญชียา(Non-ED)"
+                    : "ไม่ระบุ"
+                }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_USE_YEAR3 }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_USE_YEAR2 }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_USE_YEAR1 }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_THIS_YEAR }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.PACK_SIZE }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.BASE_UNIT }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.PACK_COST }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.VALUE_THIS_YEAR }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_PLAN_TRIMES1 }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_PLAN_TRIMES2 }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_PLAN_TRIMES3 }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_PLAN_TRIMES4 }}</clr-dg-cell>
+              </clr-dg-row>
+
+              <clr-dg-footer>
+                <clr-dg-pagination
+                  #pagination
+                  [clrDgPageSize]="50"
+                  [clrDgTotalItems]="purchasePlanList.length"
+                >
+                  {{ pagination.firstItem + 1 }} -
+                  {{ pagination.lastItem + 1 }} จาก
+                  {{ pagination.totalItems }} รายการ
+                </clr-dg-pagination>
+              </clr-dg-footer>
+            </clr-datagrid>
+          </clr-tab-content>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink (click)="getReceipt()">RECEIPT</button>
+          <clr-tab-content *clrIfActive> 
+            <div class="row" style="padding:1em">
+              <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                <label for="startDate" class="required">ตั้งแต่</label>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDateReceipt" required>
+                </my-date-picker-th>
+              </div>
+              <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                <label for="endDate" class="required">ถึง</label>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDateReceipt" required>
+                </my-date-picker-th>
+              </div>
+              <div class="col-md-1">
+                <button class="btn btn-sm btn-primary"
+                  (click)="getReceipt()">
+                  refresh
+                </button>
+              </div>
+              <div class="col-md-3" style="text-align: right">
+                <button
+                  class="btn btn-sm btn-primary-outline"
+                  (click)="getReceiptHistoryByperiodRpt()"
+                >
+                  ประวัติการส่ง
+                </button>
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="saveAllReceipt()"
+                >
+                  ส่งข้อมูลทั้งหมด
+                </button>
+              </div>
+            </div>
+            <clr-datagrid style="height: 75%" [(clrDgSelected)]="selected">
+              <!-- <clr-dg-column [clrDgField]="'WORKING_CODE'">#</clr-dg-column> -->
+              <clr-dg-column [clrDgField]="'WORKING_CODE'">WORKING_CODE</clr-dg-column>
+              <clr-dg-column [clrDgField]="'TRADE_NAME'">TRADE_NAME</clr-dg-column>
+              <clr-dg-column [clrDgField]="'TPUID'">TPUID</clr-dg-column>
+              <clr-dg-column [clrDgField]="'VENDOR_NAME'">VENDOR_NAME</clr-dg-column>
+              <clr-dg-column [clrDgField]="'VENDOR_TAX_ID'">VENDOR_TAX_ID</clr-dg-column>
+              <clr-dg-column [clrDgField]="'QTY_RCV'">QTY_RCV</clr-dg-column>
+              <clr-dg-column [clrDgField]="'PACK_SIZE'">PACK_SIZE</clr-dg-column>
+              <clr-dg-column [clrDgField]="'BASE_UNIT'">BASE_UNIT</clr-dg-column>
+              <clr-dg-column [clrDgField]="'PACK_COST'">PACK_COST</clr-dg-column>
+              <clr-dg-column [clrDgField]="'TOTAL_VALUE'">TOTAL_VALUE</clr-dg-column>
+              <clr-dg-column [clrDgField]="'LOT_NO'">LOT_NO</clr-dg-column>
+              <clr-dg-column [clrDgField]="'EXPIRE_DATE'">EXPIRE_DATE</clr-dg-column>
+              <clr-dg-column [clrDgField]="'RCV_NO'">RCV_NO</clr-dg-column>
+              <clr-dg-column [clrDgField]="'PO_NO'">PO_NO</clr-dg-column>
+              <clr-dg-column [clrDgField]="'CNT_NO'">CNT_NO</clr-dg-column>
+              <clr-dg-column [clrDgField]="'DATE_RCV'">DATE_RCV</clr-dg-column>
+              <clr-dg-column [clrDgField]="'BUY_METHOD_ID'">BUY_METHOD_ID</clr-dg-column>
+              <clr-dg-column [clrDgField]="'CO_PURCHASE'">CO_PURCHASE</clr-dg-column>
+              <clr-dg-column [clrDgField]="'RCV_FLAG'">RCV_FLAG</clr-dg-column>
+
+              <clr-dg-row *clrDgItems="let item of receiptList;let idx = index;">
+                <!-- <clr-dg-cell>{{ idx+1 *(pagination.firstItem+1) }}</clr-dg-cell> -->
+                <clr-dg-cell>{{ item.WORKING_CODE === null || item.WORKING_CODE === undefined ? 'null' : item.WORKING_CODE }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.TRADE_NAME === null || item.TRADE_NAME === undefined ? 'null' : item.TRADE_NAME }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.TPUID === "99" ? "ยังไม่ได้ระบุ TPU" : item.TPUID }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.VENDOR_NAME === null || item.VENDOR_NAME === undefined ? 'null' : item.VENDOR_NAME }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.VENDOR_TAX_ID === null || item.VENDOR_TAX_ID === undefined ? 'null' : item.VENDOR_TAX_ID }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_RCV == null ? 'null' : (item.QTY_RCV | number) }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.PACK_SIZE == null ? 'null' : (item.PACK_SIZE | number) }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.BASE_UNIT === null || item.BASE_UNIT === undefined ? 'null' : item.BASE_UNIT }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.PACK_COST == null ? 'null' : (item.PACK_COST | number) }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.TOTAL_VALUE == null ? 'null' : (item.TOTAL_VALUE | number) }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.LOT_NO === null || item.LOT_NO === undefined ? 'null' : item.LOT_NO }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.EXPIRE_DATE == null ? 'null' : (item.EXPIRE_DATE | date:'yyyy-MM-dd') }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.RCV_NO === null || item.RCV_NO === undefined ? 'null' : item.RCV_NO }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.PO_NO === null || item.PO_NO === undefined ? '-' : item.PO_NO }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.CNT_NO === null || item.CNT_NO === undefined ? '-' : item.CNT_NO }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.DATE_RCV === null || item.DATE_RCV === undefined ? 'null' : item.DATE_RCV }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.buy_method_name === null || item.buy_method_name === undefined ? 'null' : item.buy_method_name}}</clr-dg-cell>
+                <clr-dg-cell>{{ item.bid_name === null || item.bid_name === undefined ? 'null' : item.bid_name }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.RCV_FLAG == null ? 'null' : (item.RCV_FLAG == 1 ? 'รับจากการซื้อ' : item.RCV_FLAG == 2 ? 'รับจากการชดเชย/บริจาค/ส่วนลด/ของแถม' : (item.RCV_FLAG | number)) }}</clr-dg-cell>
+              </clr-dg-row>
+
+              <clr-dg-footer>
+                <clr-dg-pagination #pagination [clrDgPageSize]="50" [clrDgTotalItems]="receiptList.length">
+                  {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} จาก {{ pagination.totalItems }} รายการ
+                </clr-dg-pagination>
+              </clr-dg-footer>
+            </clr-datagrid>
+          </clr-tab-content>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink (click)="getDistribution()">DISTRIBUTION</button>
+            <clr-tab-content *clrIfActive>
+              <div class="row" style="padding:1em">
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                  <label for="startDate" class="required">ตั้งแต่</label>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                  <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDateDistribution" required>
+                  </my-date-picker-th>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                  <label for="endDate" class="required">ถึง</label>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                  <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDateDistribution" required>
+                  </my-date-picker-th>
+                </div>
+                <div class="col-md-3">
+                  <button
+                  class="btn btn-sm btn-success-outline"
+                  routerLink="/admin/warehouse"
+                >
+                  Map กลุ่มหน่วยเบิก
+                  </button>
+                  <button class="btn btn-sm btn-primary"
+                    (click)="getDistribution()">
+                    refresh
+                  </button>
+                </div>
+                <div class="col-md-3" style="text-align: right">
+                  <button
+                    class="btn btn-sm btn-primary-outline"
+                    (click)="getDistributionHistoryByperiodRpt()"
+                  >
+                    ประวัติการส่ง
+                  </button>
+                  <button
+                    class="btn btn-sm btn-success"
+                    (click)="saveAllDistribution()"
+                  >
+                    ส่งข้อมูลทั้งหมด
+                  </button>
+                </div>
+              </div>
+              <clr-datagrid style="height: 75%" [(clrDgSelected)]="selected">
+                <clr-dg-column [clrDgField]="'workingCode'">WORKING CODE</clr-dg-column>
+                <clr-dg-column [clrDgField]="'tradeName'">TRADE NAME</clr-dg-column>
+                <clr-dg-column [clrDgField]="'tpuId'">TPU ID</clr-dg-column>
+                <clr-dg-column [clrDgField]="'baseUnit'">BASE UNIT</clr-dg-column>
+                <clr-dg-column [clrDgField]="'packSize'">PACK SIZE</clr-dg-column>
+                <clr-dg-column [clrDgField]="'qtyDis'">QTY DIS</clr-dg-column>
+                <clr-dg-column [clrDgField]="'value'">VALUE</clr-dg-column>
+                <clr-dg-column [clrDgField]="'disDeptGroup'">DIS DEPT GROUP</clr-dg-column>
+                <clr-dg-column [clrDgField]="'stockDate'">STOCK DATE</clr-dg-column>
+
+                <clr-dg-row *clrDgItems="let item of distributionList">
+                  <clr-dg-cell>{{ item.WORKING_CODE }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.TRADE_NAME }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.TPUID === "99" ? "ยังไม่ได้ระบุ TPU" : item.TPUID }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.BASE_UNIT }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.PACK_SIZE }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.QTY_DIS }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.VALUE | number: '1.2-2' }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.DIS_DEPT_GROUP }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.STOCK_DATE }}</clr-dg-cell>
+                </clr-dg-row>
+
+                <clr-dg-footer>
+                  <clr-dg-pagination
+                    #pagedis
+                    [clrDgPageSize]="50"
+                    [clrDgTotalItems]="distributionList.length"
+                  >
+                    {{ pagedis.firstItem + 1 }} -
+                    {{ pagedis.lastItem + 1 | number }} จาก
+                    {{ pagedis.totalItems | number }} รายการ
+                  </clr-dg-pagination>
+                </clr-dg-footer>
+              </clr-datagrid>
+            </clr-tab-content>
+        </clr-tab>
+
+        <clr-tab>
+          <button clrTabLink (click)="getInventory()">INVENTORY</button>
+          <clr-tab-content *clrIfActive>
+            <div class="row">
+              <div
+                class="col-md-4"
+                style="padding-top: 5px; padding-bottom: 5px"
+              >
+                ค้นหา :
+                <input
+                  name="queryProduct"
+                  [(ngModel)]="queryProduct"
+                  (keyup)="getInventory()"
+                  style="width: 300px"
+                  type="text"
+                  placeholder="ค้นหาสินค้า..."
+                />
+              </div>
+              <div class="col-md-2">
+                <button
+                  class="btn btn-sm btn-success-outline"
+                  routerLink="/admin/code-mapping"
+                >
+                  Map รหัสยา TMT(TPU)
+                </button>
+              </div>
+              <div class="col-md-6" style="text-align: right">
+                <button
+                  class="btn btn-sm btn-primary-outline"
+                  (click)="getInventoryHistoryBydateOnhand()"
+                >
+                  ประวัติการส่ง
+                </button>
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="saveAllInventory()"
+                >
+                  ส่งข้อมูลทั้งหมด
+                </button>
+              </div>
+            </div>
+
+            <clr-datagrid style="height: 75%;" [(clrDgSelected)]="selected">
+              <clr-dg-column [clrDgField]="'WORKING_CODE'">WORKING CODE</clr-dg-column>
+              <clr-dg-column [clrDgField]="'TRADE_NAME'">TRADE NAME</clr-dg-column>
+              <clr-dg-column [clrDgField]="'TPUID'">TPU ID</clr-dg-column>
+              <clr-dg-column [clrDgField]="'VENDOR_NAME'">VENDOR NAME</clr-dg-column>
+              <clr-dg-column [clrDgField]="'VENDOR_TAX_ID'">VENDOR TAX ID</clr-dg-column>
+              <clr-dg-column [clrDgField]="'QTY_ONHAND'">QTY ONHAND</clr-dg-column>
+              <clr-dg-column [clrDgField]="'PACK_SIZE'">PACK SIZE</clr-dg-column>
+              <clr-dg-column [clrDgField]="'BASE_UNIT'">BASE UNIT</clr-dg-column>
+              <clr-dg-column [clrDgField]="'PACK_COST'">PACK COST</clr-dg-column>
+              <clr-dg-column [clrDgField]="'VALUE_ONHAND'">VALUE ONHAND</clr-dg-column>
+              <clr-dg-column [clrDgField]="'LOT_NO'">LOT NO</clr-dg-column>
+              <clr-dg-column [clrDgField]="'EXPIRE_DATE'">EXPIRE DATE</clr-dg-column>
+
+              <clr-dg-row *clrDgItems="let item of inventoryList">
+                <clr-dg-cell>{{ item.WORKING_CODE }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.TRADE_NAME }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.TPUID === "99" ? "ยังไม่ได้ระบุ TPU" : item.TPUID }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.VENDOR_NAME }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.VENDOR_TAX_ID }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.QTY_ONHAND }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.PACK_SIZE }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.BASE_UNIT }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.PACK_COST | number:'1.2-2' }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.VALUE_ONHAND | number:'1.2-2' }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.LOT_NO }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.EXPIRE_DATE }}</clr-dg-cell>
+              </clr-dg-row>
+
+              <clr-dg-footer>
+                <clr-dg-pagination
+                  #pageinv
+                  [clrDgPageSize]="50"
+                  [clrDgTotalItems]="inventoryList.length"
+                >
+                  {{ pageinv.firstItem + 1 }} -
+                  {{ pageinv.lastItem + 1 | number }} จาก
+                  {{ pageinv.totalItems | number }} รายการ
+                </clr-dg-pagination>
+              </clr-dg-footer>
+
+            </clr-datagrid>
+          </clr-tab-content>
+        </clr-tab>
+
+      </clr-tabs>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
+
+<clr-modal
+  [(clrModalOpen)]="modalDrugListHistory"
+  [clrModalClosable]="false"
+  [clrModalSize]="'xl'"
+>
+  <h3 class="modal-title">ประวัติการส่งแฟ้ม DRUGLIST</h3>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-2" style="text-align: right">รายการข้อมูล ณ</div>
+
+      <div class="col-md-1" style="text-align: right">
+        <label class="required">เดือน</label>
+      </div>
+
+      <div class="col-md-2">
+        <div class="select">
+          <select name="month" id="month" [(ngModel)]="month">
+            <option value="1">มกราคม</option>
+            <option value="2">กุมภาพันธ์</option>
+            <option value="3">มีนาคม</option>
+            <option value="4">เมษายน</option>
+            <option value="5">พฤษภาคม</option>
+            <option value="6">มิถุนายน</option>
+            <option value="7">กรกฎาคม</option>
+            <option value="8">สิงหาคม</option>
+            <option value="9">กันยายน</option>
+            <option value="10">ตุลาคม</option>
+            <option value="11">พฤศจิกายน</option>
+            <option value="12">ธันวาคม</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-1" style="text-align: right">
+        <label class="required">ปี</label>
+      </div>
+
+      <div class="col-md-2">
+        <div class="select">
+          <select name="year" id="year" [(ngModel)]="year">
+            <option *ngFor="let w of dataYear" [value]="w">
+              {{ w + 543 }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-4" style="text-align: right">
+        <button
+          class="btn btn-sm btn-primary wm-small-btn"
+          (click)="getDrugListHistoryByperiodRpt()"
+        >
+          refresh
+        </button>
+        <button
+          class="btn btn-sm btn-danger wm-small-btn"
+          (click)="deleteDrugByperiodRpt()"
+        >
+          <clr-icon shape="trash"></clr-icon>
+          ลบข้อมูลของเดือนนี้
+        </button>
+      </div>
+    </div>
+    <clr-datagrid style="height: 500px;" [(clrDgSelected)]="selected">
+      <clr-dg-column [clrDgField]="'workingCode'"
+        >WORKING CODE</clr-dg-column
+      >
+      <clr-dg-column [clrDgField]="'genericName'"
+        >GENERIC NAME</clr-dg-column
+      >
+      <clr-dg-column [clrDgField]="'gpuId'">GPU ID</clr-dg-column>
+      <clr-dg-column [clrDgField]="'productCat'">PRODUCT CAT</clr-dg-column>
+      <clr-dg-column [clrDgField]="'baseUnit'">BASE UNIT</clr-dg-column>
+      <clr-dg-column [clrDgField]="'status'">STATUS</clr-dg-column>
+      <clr-dg-column [clrDgField]="'hospCode'">HOSP CODE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'dateSend'">DATE SEND</clr-dg-column>
+      <clr-dg-column [clrDgField]="'dateStatus'">DATE STATUS</clr-dg-column>
+      <clr-dg-column [clrDgField]="'periodRpt'">PERIOD RPT</clr-dg-column>
+      <!-- <clr-dg-column>#</clr-dg-column> -->
+
+      <clr-dg-row *clrDgItems="let item of druglistHistory">
+        <clr-dg-cell>{{ item.workingCode }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.genericName }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.gpuId }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.productCat }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.baseUnit }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.status }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.hospCode }}</clr-dg-cell>
+        <clr-dg-cell>{{
+          item.dateSend | date : "yyyy-MM-dd HH:mm:ss"
+        }}</clr-dg-cell>
+        <clr-dg-cell>{{
+          item.dateStatus | date : "yyyy-MM-dd"
+        }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.periodRpt }}</clr-dg-cell>
+        <!-- <clr-dg-cell>
+          <button
+            class="btn btn-sm btn-danger wm-small-btn"
+            (click)="deleteDrugById(item)"
+          >
+            <clr-icon shape="trash"></clr-icon>
+            delete
+          </button>
+        </clr-dg-cell> -->
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        <clr-dg-pagination
+          #pagehis
+          [clrDgPageSize]="50"
+          [clrDgTotalItems]="druglistHistory.length"
+        >
+          {{ pagehis.firstItem + 1 }} -
+          {{ pagehis.lastItem + 1 | number }} จาก
+          {{ pagehis.totalItems | number }} รายการ
+        </clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="modalDrugListHistory = false"
+    >
+      ปิด
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal
+  [(clrModalOpen)]="modalPurchasePlanHistory"
+  [clrModalClosable]="false"
+  [clrModalSize]="'xl'"
+>
+  <h3 class="modal-title">ประวัติการส่งแฟ้ม PURCHASEPLAN</h3>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-2" style="text-align: right">รายการข้อมูล ณ เดือน</div>
+
+      <div class="col-md-2">
+        <div class="select">
+          <select name="month" id="month" [(ngModel)]="month">
+            <option value="1">มกราคม</option>
+            <option value="2">กุมภาพันธ์</option>
+            <option value="3">มีนาคม</option>
+            <option value="4">เมษายน</option>
+            <option value="5">พฤษภาคม</option>
+            <option value="6">มิถุนายน</option>
+            <option value="7">กรกฎาคม</option>
+            <option value="8">สิงหาคม</option>
+            <option value="9">กันยายน</option>
+            <option value="10">ตุลาคม</option>
+            <option value="11">พฤศจิกายน</option>
+            <option value="12">ธันวาคม</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-1" style="text-align: right">
+        <label class="required">ปี</label>
+      </div>
+
+      <div class="col-md-2">
+        <div class="select">
+          <select name="year" id="year" [(ngModel)]="year">
+            <option *ngFor="let w of dataYear" [value]="w">
+              {{ w + 543 }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2" style="text-align: right">
+        <button
+          class="btn btn-sm btn-primary wm-small-btn"
+          (click)="getPurchasePlanHistoryByperiodRpt()"
+        >
+          refresh
+        </button>
+      </div>
+      <div class="col-md-2">
+        <button
+          class="btn btn-sm btn-danger wm-small-btn"
+          (click)="deletePurchasePlanByperiodRpt()"
+        >
+          <clr-icon shape="trash"></clr-icon>
+          ลบข้อมูลของเดือนนี้
+        </button>
+        <button
+          class="btn btn-sm btn-danger wm-small-btn"
+          (click)="deletePurchasePlanByBudgeYear()"
+        >
+          <clr-icon shape="trash"></clr-icon>
+          ลบข้อมูลของปีงบประมาณนี้
+        </button>
+      </div>
+    </div>
+    <clr-datagrid style="height: 500px" [(clrDgSelected)]="selected">
+      <clr-dg-column [clrDgField]="'workingCode'">WORKING CODE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'genericName'">GENERIC NAME</clr-dg-column>
+      <clr-dg-column [clrDgField]="'gpuid'">GPU ID</clr-dg-column>
+      <clr-dg-column [clrDgField]="'baseUnit'">BASE UNIT</clr-dg-column>
+      <clr-dg-column [clrDgField]="'packSize'">PACK SIZE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'packCost'">PACK COST</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyUseYear3'">QTY YEAR 3</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyUseYear2'">QTY YEAR 2</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyUseYear1'">QTY YEAR 1</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyThisYear'">QTY THIS YEAR</clr-dg-column>
+      <clr-dg-column [clrDgField]="'valueThisYear'">VALUE THIS YEAR</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyPlanTrimes1'">QTY PLAN T1</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyPlanTrimes2'">QTY PLAN T2</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyPlanTrimes3'">QTY PLAN T3</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyPlanTrimes4'">QTY PLAN T4</clr-dg-column>
+      <clr-dg-column [clrDgField]="'periodRpt'">PERIOD RPT</clr-dg-column>
+      <clr-dg-column [clrDgField]="'yearbudget'">YEAR BUDGET</clr-dg-column>
+      <clr-dg-column [clrDgField]="'hospCode'">HOSP CODE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'dateSend'">DATE SEND</clr-dg-column>
+      <!-- <clr-dg-column>#</clr-dg-column> -->
+
+      <clr-dg-row *clrDgItems="let item of purchasePlanHistory">
+        <clr-dg-cell>{{ item.workingCode }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.genericName }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.gpuid === '99' ? 'ยังไม่ได้ระบุ TPU' : item.gpuid }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.baseUnit || '-' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.packSize }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.packCost }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyUseYear3 }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyUseYear2 }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyUseYear1 }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyThisYear }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.valueThisYear }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyPlanTrimes1 }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyPlanTrimes2 }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyPlanTrimes3 }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyPlanTrimes4 }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.periodRpt }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.yearbudget }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.hospCode }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.dateSend | date : "yyyy-MM-dd HH:mm:ss" }}</clr-dg-cell>
+        <!-- <clr-dg-cell>
+          <button class="btn btn-sm btn-danger wm-small-btn" (click)="deletePurchasePlanById(item)">
+      <clr-icon shape="trash"></clr-icon>
+      delete
+          </button>
+        </clr-dg-cell> -->
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        <clr-dg-pagination #pagehis [clrDgPageSize]="50" [clrDgTotalItems]="purchasePlanHistory.length">
+          {{ pagehis.firstItem + 1 }} - {{ pagehis.lastItem + 1 | number }} จาก {{ pagehis.totalItems | number }} รายการ
+        </clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="modalPurchasePlanHistory = false"
+    >
+      ปิด
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal
+  [(clrModalOpen)]="modalReceiptHistory"
+  [clrModalClosable]="false"
+  [clrModalSize]="'xl'"
+>
+  <h3 class="modal-title">ประวัติการส่งแฟ้ม RECEIPT</h3>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-2" style="text-align: right">รายการข้อมูล ณ</div>
+
+      <div class="col-md-1" style="text-align: right">
+        <label class="required">เดือน</label>
+      </div>
+
+      <div class="col-md-2">
+        <div class="select">
+          <select name="month" id="month" [(ngModel)]="month">
+            <option value="1">มกราคม</option>
+            <option value="2">กุมภาพันธ์</option>
+            <option value="3">มีนาคม</option>
+            <option value="4">เมษายน</option>
+            <option value="5">พฤษภาคม</option>
+            <option value="6">มิถุนายน</option>
+            <option value="7">กรกฎาคม</option>
+            <option value="8">สิงหาคม</option>
+            <option value="9">กันยายน</option>
+            <option value="10">ตุลาคม</option>
+            <option value="11">พฤศจิกายน</option>
+            <option value="12">ธันวาคม</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-1" style="text-align: right">
+        <label class="required">ปี</label>
+      </div>
+
+      <div class="col-md-2">
+        <div class="select">
+          <select name="year" id="year" [(ngModel)]="year">
+            <option *ngFor="let w of dataYear" [value]="w">
+              {{ w + 543 }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-4" style="text-align: right">
+        <button
+          class="btn btn-sm btn-primary wm-small-btn"
+          (click)="getReceiptHistoryByperiodRpt()"
+        >
+          refresh
+        </button>
+        <button
+          class="btn btn-sm btn-danger wm-small-btn"
+          (click)="deleteReceiptByperiodRpt()"
+        >
+          <clr-icon shape="trash"></clr-icon>
+          ลบข้อมูลของเดือนนี้
+        </button>
+      </div>
+    </div>
+    <clr-datagrid style="height: 500px;" [(clrDgSelected)]="selected">
+      <clr-dg-column [clrDgField]="'workingCode'">WORKING CODE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'tradeName'">TRADE NAME</clr-dg-column>
+      <clr-dg-column [clrDgField]="'tpuId'">TPU ID</clr-dg-column>
+      <clr-dg-column [clrDgField]="'baseUnit'">BASE UNIT</clr-dg-column>
+      <clr-dg-column [clrDgField]="'packSize'">PACK SIZE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'packCost'">PACK COST</clr-dg-column>
+      <clr-dg-column [clrDgField]="'totalValue'">TOTAL VALUE</clr-dg-column>
+
+      <clr-dg-column [clrDgField]="'poNo'">PO NO</clr-dg-column>
+      <clr-dg-column [clrDgField]="'rcvNo'">RECEIVE NO</clr-dg-column>
+      <clr-dg-column [clrDgField]="'lotNo'">LOT NO</clr-dg-column>
+
+      <clr-dg-column [clrDgField]="'qtvRcv'">QTY RECEIVE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'rcvFlag'">RECEIVE FLAG</clr-dg-column>
+
+      <clr-dg-column [clrDgField]="'hospCode'">HOSP CODE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'vendorName'">VENDOR NAME</clr-dg-column>
+      <clr-dg-column [clrDgField]="'vendorTaxId'">VENDOR TAX ID</clr-dg-column>
+
+      <clr-dg-column [clrDgField]="'buyMethodId'">BUY METHOD</clr-dg-column>
+      <clr-dg-column [clrDgField]="'coPurchaseId'">CO-PURCHASE ID</clr-dg-column>
+
+      <clr-dg-column [clrDgField]="'dateSend'">DATE SEND</clr-dg-column>
+      <clr-dg-column [clrDgField]="'dateRcv'">DATE RECEIVE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'expireDate'">EXPIRE DATE</clr-dg-column>
+
+      <clr-dg-column [clrDgField]="'periodRpt'">PERIOD RPT</clr-dg-column>
+
+      <!-- <clr-dg-column>#</clr-dg-column> -->
+
+      <clr-dg-row *clrDgItems="let item of receiptHistory">
+        <clr-dg-cell>{{ item.workingCode }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.tradeName }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.tpuId }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.baseUnit }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.packSize }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.packCost }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.totalValue }}</clr-dg-cell>
+
+        <clr-dg-cell>{{ item.poNo }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.rcvNo }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.lotNo }}</clr-dg-cell>
+
+        <clr-dg-cell>{{ item.qtvRcv }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.rcvFlag }}</clr-dg-cell>
+
+        <clr-dg-cell>{{ item.hospCode }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.vendorName }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.vendorTaxId }}</clr-dg-cell>
+
+        <clr-dg-cell>{{ item.buyMethodId }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.coPurchaseId }}</clr-dg-cell>
+
+        <clr-dg-cell>{{ item.dateSend | date: 'yyyy-MM-dd HH:mm:ss' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.dateRcv | date: 'yyyy-MM-dd' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.expireDate | date: 'yyyy-MM-dd' }}</clr-dg-cell>
+
+        <clr-dg-cell>{{ item.periodRpt }}</clr-dg-cell>
+
+        <!-- <clr-dg-cell>
+          <button
+            class="btn btn-sm btn-danger wm-small-btn"
+            (click)="deleteReceiptById(item)"
+          >
+            <clr-icon shape="trash"></clr-icon>
+            delete
+          </button>
+        </clr-dg-cell> -->
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        <clr-dg-pagination
+          #pagehis
+          [clrDgPageSize]="50"
+          [clrDgTotalItems]="receiptHistory.length"
+        >
+          {{ pagehis.firstItem + 1 }} -
+          {{ pagehis.lastItem + 1 | number }} จาก
+          {{ pagehis.totalItems | number }} รายการ
+        </clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="modalReceiptHistory = false"
+    >
+      ปิด
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal
+  [(clrModalOpen)]="modalDistributionHistory"
+  [clrModalClosable]="false"
+  [clrModalSize]="'xl'"
+>
+  <h3 class="modal-title">ประวัติการส่งแฟ้ม DISTRIBUTION</h3>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-2" style="text-align: right">รายการข้อมูล ณ</div>
+
+      <div class="col-md-1" style="text-align: right">
+        <label class="required">เดือน</label>
+      </div>
+
+      <div class="col-md-2">
+        <div class="select">
+          <select name="month" id="month" [(ngModel)]="month">
+            <option value="1">มกราคม</option>
+            <option value="2">กุมภาพันธ์</option>
+            <option value="3">มีนาคม</option>
+            <option value="4">เมษายน</option>
+            <option value="5">พฤษภาคม</option>
+            <option value="6">มิถุนายน</option>
+            <option value="7">กรกฎาคม</option>
+            <option value="8">สิงหาคม</option>
+            <option value="9">กันยายน</option>
+            <option value="10">ตุลาคม</option>
+            <option value="11">พฤศจิกายน</option>
+            <option value="12">ธันวาคม</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-1" style="text-align: right">
+        <label class="required">ปี</label>
+      </div>
+
+      <div class="col-md-2">
+        <div class="select">
+          <select name="year" id="year" [(ngModel)]="year">
+            <option *ngFor="let w of dataYear" [value]="w">
+              {{ w + 543 }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-4" style="text-align: right">
+        <button
+          class="btn btn-sm btn-primary wm-small-btn"
+          (click)="getDistributionHistoryByperiodRpt()"
+        >
+          refresh
+        </button>
+        <button
+          class="btn btn-sm btn-danger wm-small-btn"
+          (click)="deleteDistributionByperiodRpt()"
+        >
+          <clr-icon shape="trash"></clr-icon>
+          ลบข้อมูลของเดือนนี้
+        </button>
+      </div>
+    </div>
+    <clr-datagrid style="height: 500px;" [(clrDgSelected)]="selected">
+      <clr-dg-column [clrDgField]="'id'">ID</clr-dg-column>
+      <clr-dg-column [clrDgField]="'workingCode'">WORKING CODE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'tradeName'">TRADE NAME</clr-dg-column>
+      <clr-dg-column [clrDgField]="'tpuId'">TPU ID</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyDis'">QTY DIS</clr-dg-column>
+      <clr-dg-column [clrDgField]="'baseUnit'">BASE UNIT</clr-dg-column>
+      <clr-dg-column [clrDgField]="'packSize'">PACK SIZE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'value'">VALUE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'disDeptGroup'">DIS DEPT GROUP</clr-dg-column>
+      <clr-dg-column [clrDgField]="'dateSend'">DATE SEND</clr-dg-column>
+      <clr-dg-column [clrDgField]="'periodRpt'">PERIOD RPT</clr-dg-column>
+
+      <clr-dg-row *clrDgItems="let item of distributionHistory">
+        <clr-dg-cell>{{ item.id }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.workingCode }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.tradeName }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.tpuid }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyDis }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.baseUnit }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.packSize }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.value }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.disDeptGroup }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.dateSend | date: 'yyyy-MM-dd HH:mm:ss' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.periodRpt }}</clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        <clr-dg-pagination
+          #pagehis
+          [clrDgPageSize]="50"
+          [clrDgTotalItems]="distributionHistory.length"
+        >
+          {{ pagehis.firstItem + 1 }} -
+          {{ pagehis.lastItem + 1 | number }} จาก
+          {{ pagehis.totalItems | number }} รายการ
+        </clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="modalDistributionHistory = false"
+    >
+      ปิด
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal
+  [(clrModalOpen)]="modalInventoryHistory"
+  [clrModalClosable]="false"
+  [clrModalSize]="'xl'"
+>
+  <h3 class="modal-title">ประวัติการส่งแฟ้ม INVENTORY</h3>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+        <label for="startDate" class="required">ณ วันที่</label>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDateDistribution" required>
+        </my-date-picker-th>
+      </div>
+      <div class="col-md-4">
+        <button
+          class="btn btn-sm btn-primary wm-small-btn"
+          (click)="getInventoryHistoryBydateOnhand()"
+        >
+          refresh
+        </button>
+      </div>
+      <div class="col-md-4" style="text-align: right">
+        <button
+          class="btn btn-sm btn-danger wm-small-btn"
+          (click)="deleteInventoryBydateOnhand()"
+        >
+          <clr-icon shape="trash"></clr-icon>
+          ลบข้อมูลของวันที่เลือก
+        </button>
+      </div>
+    </div>
+    <clr-datagrid style="height: 500px;" [(clrDgSelected)]="selected">
+      
+      <clr-dg-column [clrDgField]="'id'">ID</clr-dg-column>
+      <clr-dg-column [clrDgField]="'workingCode'">WORKING CODE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'tradeName'">TRADE NAME</clr-dg-column>
+      <clr-dg-column [clrDgField]="'tpuid'">TPU ID</clr-dg-column>
+      <clr-dg-column [clrDgField]="'baseUnit'">BASE UNIT</clr-dg-column>
+      <clr-dg-column [clrDgField]="'packSize'">PACK SIZE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'packCost'">PACK COST</clr-dg-column>
+      <clr-dg-column [clrDgField]="'qtyOnhand'">QTY ONHAND</clr-dg-column>
+      <clr-dg-column [clrDgField]="'valueOnhand'">VALUE ONHAND</clr-dg-column>
+      <clr-dg-column [clrDgField]="'lotNo'">LOT NO</clr-dg-column>
+      <clr-dg-column [clrDgField]="'hospCode'">HOSP CODE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'vendorName'">VENDOR NAME</clr-dg-column>
+      <clr-dg-column [clrDgField]="'expireDate'">EXPIRE DATE</clr-dg-column>
+      <clr-dg-column [clrDgField]="'dateOnhand'">DATE ONHAND</clr-dg-column>
+      <clr-dg-column [clrDgField]="'dateSend'">DATE SEND</clr-dg-column>
+
+      <clr-dg-row *clrDgItems="let item of inventoryHistory">
+
+        <clr-dg-cell>{{ item.id }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.workingCode }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.tradeName }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.tpuid }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.baseUnit }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.packSize }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.packCost | number:'1.2-2' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.qtyOnhand }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.valueOnhand | number:'1.2-2' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.lotNo }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.hospCode }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.vendorName }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.expireDate | date:'yyyy-MM-dd' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.dateOnhand | date:'yyyy-MM-dd' }}</clr-dg-cell>
+        <clr-dg-cell>{{ item.dateSend | date:'yyyy-MM-dd HH:mm:ss' }}</clr-dg-cell>
+
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        <clr-dg-pagination
+          #pageinvhis
+          [clrDgPageSize]="50"
+          [clrDgTotalItems]="inventoryHistory.length"
+        >
+          {{ pageinvhis.firstItem + 1 }} -
+          {{ pageinvhis.lastItem + 1 | number }} จาก
+          {{ pageinvhis.totalItems | number }} รายการ
+        </clr-dg-pagination>
+      </clr-dg-footer>
+
+    </clr-datagrid>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="modalInventoryHistory = false"
+    >
+      ปิด
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal
+  [(clrModalOpen)]="modalErrorList"
+  [clrModalClosable]="false"
+  [clrModalSize]="'xl'"
+>
+  <h3 class="modal-title">Error Message การส่งข้อมูล</h3>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <clr-datagrid style="height: 500px" [(clrDgSelected)]="selected">
+          <clr-dg-column [clrDgField]="'defaultMessage'"
+            >Working Code</clr-dg-column
+          >
+          <clr-dg-column [clrDgField]="'code'"
+            >Code</clr-dg-column
+          >
+          <clr-dg-column [clrDgField]="'defaultMessage'"
+            >Error Message</clr-dg-column
+          >
+
+          <clr-dg-row *clrDgItems="let item of errorList">
+            <clr-dg-cell>{{ item.rejectedValue?.workingCode }}</clr-dg-cell>
+            <clr-dg-cell>{{ item.code }}</clr-dg-cell>
+            <clr-dg-cell>{{ item.defaultMessage }}</clr-dg-cell>
+          </clr-dg-row>
+
+          <clr-dg-footer>
+            <clr-dg-pagination
+              #pagehis
+              [clrDgPageSize]="50"
+              [clrDgTotalItems]="errorList.length"
+            >
+              {{ pagehis.firstItem + 1 }} -
+              {{ pagehis.lastItem + 1 | number }} จาก
+              {{ pagehis.totalItems | number }} รายการ
+            </clr-dg-pagination>
+          </clr-dg-footer>
+        </clr-datagrid>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="modalErrorList = false"
+    >
+      ปิด
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal
+  [(clrModalOpen)]="modalToken"
+  [clrModalClosable]="false"
+  [clrModalSize]="'xl'"
+>
+  <h3 class="modal-title">จัดการ Token</h3>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <textarea name="token" rows="8" [(ngModel)]="token"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="testToken()"
+    >
+      ทดสอบ Token
+    </button>
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="saveToken()"
+    >
+      บันทึก Token
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="modalToken = false"
+    >
+      ปิด
+    </button>
+  </div>
+</clr-modal>
 <wm-loading-modal #modalLoading></wm-loading-modal>

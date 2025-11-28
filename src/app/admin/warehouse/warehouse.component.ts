@@ -4,6 +4,7 @@ import { WarehouseService } from '../warehouse.service';
 
 import { AlertService } from '../../alert.service';
 import { WarehouseTypeService } from '../warehouse-type.service';
+import { BasicService } from 'app/basic.service';
 
 @Component({
   selector: 'wm-warehouse',
@@ -25,6 +26,7 @@ export class WarehouseComponent implements OnInit {
   telDept: string;
   shortCode: string;
   book: string;
+  deptId: string;
 
   location: string;
   warehouses: any = [];
@@ -34,6 +36,8 @@ export class WarehouseComponent implements OnInit {
   isReceiveWarehouse = false;
   isUnitIssue = false;
 
+  deptList: any = [];
+
   query: any = ''
 
   constructor(
@@ -41,13 +45,15 @@ export class WarehouseComponent implements OnInit {
     private alertService: AlertService,
     private warehouseTypeService: WarehouseTypeService,
     private ref: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private basicService: BasicService
   ) { }
 
   ngOnInit() {
     // get all warehouse
     this.all();
     this.getWarehouseTypes();
+    this.getBiDepts();
   }
 
   goDetail(warehouseId) {
@@ -82,6 +88,7 @@ export class WarehouseComponent implements OnInit {
     this.location = null;
     this.hospcode = null;
     this.depCode = null;
+    this.deptId = null;
 
     this.opened = true;
   }
@@ -100,12 +107,12 @@ export class WarehouseComponent implements OnInit {
     if (this.warehouseName && this.depCode && this.hospcode) {
 
       if (this.isUpdate) {
-        promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept);
+        promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept, this.deptId);
       } else {
         if (this.shortCode == null) {
           this.shortCode = wid + 1;
         }
-        promise = this.warehouseService.save(this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept);
+        promise = this.warehouseService.save(this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept, this.deptId);
       }
 
       promise
@@ -157,6 +164,7 @@ export class WarehouseComponent implements OnInit {
   }
 
   showEdit(w: any) {
+    this.deptId = w.dept_id;
     this.warehouseId = w.warehouse_id;
     this.warehouseName = w.warehouse_name;
     this.warehouseDesc = w.warehouse_desc;
@@ -207,4 +215,17 @@ export class WarehouseComponent implements OnInit {
   searcWarehouse(event: any) {
     this.all();
   }
+
+  async getBiDepts() {
+    try {
+      const rs: any = await this.basicService.getBiDepts();
+      if (rs.ok) {
+        this.deptList = rs.rows;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
 }

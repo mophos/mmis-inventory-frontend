@@ -19,6 +19,7 @@
 <clr-datagrid [style.height.%]="85">
   <clr-dg-column [style.width.%]="15" [clrDgField]="'short_code'">รหัสคลังสินค้า</clr-dg-column>
   <clr-dg-column [clrDgField]="'warehouse_name'">ชื่อคลังสินค้า</clr-dg-column>
+  <clr-dg-column [clrDgField]="'warehouse_name'">กลุ่มหน่วยเบิก</clr-dg-column>
   <clr-dg-column [clrDgField]="'location'">สถานที่</clr-dg-column>
   <clr-dg-column>สถานะ</clr-dg-column>
   <!-- <clr-dg-column [style.width.%]="10">รับเข้าคลัง</clr-dg-column> -->
@@ -44,6 +45,7 @@
     </clr-dg-action-overflow>
     <clr-dg-cell style="text-align: center">{{h.short_code}}</clr-dg-cell>
     <clr-dg-cell>{{h.warehouse_name}}</clr-dg-cell>
+    <clr-dg-cell>{{h.dept_group || '-'}}</clr-dg-cell>
     <clr-dg-cell>{{h.location}}</clr-dg-cell>
     <clr-dg-cell style="text-align: center">
       <clr-icon title="ไม่ใช้งาน" shape="close" class="is-error" *ngIf="h.is_actived === 'N'"></clr-icon>
@@ -120,7 +122,27 @@
 
         <div class="form-group row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <label class="required" for="depCode">รหัสแผนก (HIS)</label>
+            <label class="required" for="deptId">กลุ่มหน่วยเบิก</label>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <div class="select">
+              <select [(ngModel)]="deptId" name="deptId">
+                <option
+                  [value]="d.dept_id"
+                  *ngFor="let d of deptList"
+                >
+                  {{ d.dept_group }}
+                </option>
+                <!-- <option value="null">ไม่ระบุ</option> -->
+              </select>
+            </div>
+            <!-- <input class="form-control" type="text" name="hospcode" [(ngModel)]="hospcode" placeholder="...."> -->
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <label for="depCode">รหัสแผนก (HIS)</label>
           </div>
           <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
             <input class="form-control" type="text" name="depCode" [(ngModel)]="depCode" placeholder="....">
@@ -129,7 +151,7 @@
 
         <div class="form-group row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <label class="required" for="telDept">เบอร์แผนก</label>
+            <label for="telDept">เบอร์แผนก</label>
           </div>
           <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
             <input class="form-control" type="text" name="telDept" [(ngModel)]="telDept" placeholder="เบอร์โทรศัพท์แผนก เช่น 421">
@@ -187,7 +209,7 @@
   </div>
   <div class="modal-footer">
 
-    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!warehouseName || !hospcode || !depCode">
+    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!warehouseName || !hospcode || !deptId || !depCode">
       บันทึก
     </button>
     <button type="button" class="btn btn-danger-outline" (click)="opened = false">

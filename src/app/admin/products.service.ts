@@ -133,4 +133,14 @@ export class ProductsService {
     return resp.json();
   }
 
+  async updateProductCat(data: any) {
+    const resp = await this.authHttp.post(`${this.url}/products/mapping/update/product-cat`, { data: data }).toPromise();
+    return resp.json();
+  }
+
+  async updateBuyMethod(data: any) {
+    const resp = await this.authHttp.post(`${this.url}/products/mapping/update/buy-method`, { data: data }).toPromise();
+    return resp.json();
+  }
+
 }
