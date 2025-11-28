@@ -59,6 +59,7 @@ import { ShippingNetworkService } from './shipping-network.service';
 import { IssueService } from './issue.service';
 import { AdditionService } from 'app/admin/addition.service';
 import { GenericService } from './generic.service';
+import { ExportdataService } from './exportdata.service';
 
 import { LayoutComponent } from './layout/layout.component';
 import { WarehouseTypeComponent } from './warehouse-type/warehouse-type.component';
@@ -207,6 +208,7 @@ Highcharts.setOptions({
     HelperModule,
     FormsModule,
     ClarityModule,
+
     ChartModule,
     AuthModule,
     MyDatePickerTHModule,
@@ -384,6 +386,7 @@ Highcharts.setOptions({
     BorrowOtherService,
     PickService,
     ReportsService,
+    ExportdataService,
     { provide: HighchartsStatic, useFactory: highchartsFactory }
   ]
 })
