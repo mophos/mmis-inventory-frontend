@@ -21,9 +21,9 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async saveAllDruglist(){
+  async saveAllDruglist(periodRpt:any){
     const body = {}; // provide the appropriate payload here
-    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-drug-list/save`, body).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-drug-list/save?periodRpt=${periodRpt}`, body).toPromise();
     return rs.json();
   }
 
@@ -47,9 +47,9 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async saveAllPurchasePlan(){
+  async saveAllPurchasePlan(periodRpt:any){
     const body = {}; // provide the appropriate payload here
-    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-purchaser-plan/save`, body).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-purchaser-plan/save?periodRpt=${periodRpt}`, body).toPromise();
     return rs.json();
   }
 
@@ -78,9 +78,9 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async saveAllReceipt(startDate: any, endDate: any){
+  async saveAllReceipt(startDate: any, endDate: any, periodRpt:any){
     const body = {startDate, endDate}; // provide the appropriate payload here
-    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-receipt/save`, body).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-receipt/save?periodRpt=${periodRpt}`, body).toPromise();
     return rs.json();
   }
 
@@ -104,9 +104,9 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async saveAllDistribution(startDate: any, endDate: any){
+  async saveAllDistribution(startDate: any, endDate: any, periodRpt:any){
     const body = {startDate, endDate}; // provide the appropriate payload here
-    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-distribution/save`, body).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-distribution/save?periodRpt=${periodRpt}`, body).toPromise();
     return rs.json();
   }
 
@@ -125,9 +125,9 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async saveAllInventory(){
+  async saveAllInventory(dateOnhand:any){
     const body = {}; // provide the appropriate payload here
-    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-inventory/save`, body).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-inventory/save?dateOnhand=${dateOnhand}`, body).toPromise();
     return rs.json();
   }
 

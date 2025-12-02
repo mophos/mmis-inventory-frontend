@@ -24,6 +24,11 @@ export class ExportdataComponent implements OnInit {
   year = this.date.getFullYear();
   dataYear = [];
 
+  monthSend = this.date.getMonth() + 1;
+  yearSend = this.date.getFullYear();
+
+  periodRpt: any = true;
+
   druglist: any = [];
   druglistHistory: any = [];
   productCategory: any = [];
@@ -189,6 +194,7 @@ export class ExportdataComponent implements OnInit {
 
   async getDruglist() {
     try {
+      this.periodRpt = true;
       this.modalLoading.show();
       await this.getProductCategoryName();
       const rs: any = await this.exportdataService.getDrugList(this.queryGen);
@@ -222,11 +228,15 @@ export class ExportdataComponent implements OnInit {
 
   async saveAllDruglist() {
     try {
+      const periodRpt = `${this.yearSend}${
+        this.monthSend < 10 ? "0" + this.monthSend : this.monthSend
+      }`;
+
       this.alertService
-        .confirm("ต้องการส่งข้อมูลทั้งหมด ใช่หรือไม่?")
+        .confirm("ต้องการส่งข้อมูลยาทั้งหมด ใช่หรือไม่?")
         .then(async () => {
           this.modalLoading.show();
-          const rs: any = await this.exportdataService.saveAllDruglist();
+          const rs: any = await this.exportdataService.saveAllDruglist(periodRpt);
 
           if (rs.ok) {
             this.modalLoading.hide();
@@ -297,6 +307,7 @@ export class ExportdataComponent implements OnInit {
 
   async getPurchasePlan() {
     try {
+      this.periodRpt = true;
       this.modalLoading.show();
       const rs: any = await this.exportdataService.getPurchasePlan(
         this.queryGen
@@ -332,11 +343,15 @@ export class ExportdataComponent implements OnInit {
 
   async saveAllPurchasePlan() {
     try {
+      const periodRpt = `${this.yearSend}${
+        this.monthSend < 10 ? "0" + this.monthSend : this.monthSend
+      }`;
+
       this.alertService
         .confirm("ต้องการส่งข้อมูลแผนจัดซื้อทั้งหมด ใช่หรือไม่?")
         .then(async () => {
           this.modalLoading.show();
-          const rs: any = await this.exportdataService.saveAllPurchasePlan();
+          const rs: any = await this.exportdataService.saveAllPurchasePlan(periodRpt);
 
           if (rs.ok) {
             this.modalLoading.hide();
@@ -440,8 +455,8 @@ export class ExportdataComponent implements OnInit {
 
   async getReceipt() {
     try {
+      this.periodRpt = true;
       await this.getBuyMethod();
-
       const start = this.startDateReceipt.date;
       const startDate =
         String(start.year) +
@@ -506,6 +521,10 @@ export class ExportdataComponent implements OnInit {
 
   async saveAllReceipt() {
     try {
+      const periodRpt = `${this.yearSend}${
+        this.monthSend < 10 ? "0" + this.monthSend : this.monthSend
+      }`;
+
       const start = this.startDateReceipt.date;
       const startDate =
         String(start.year) +
@@ -523,7 +542,7 @@ export class ExportdataComponent implements OnInit {
         .then(async () => {
           this.modalLoading.show();
 
-          const rs: any = await this.exportdataService.saveAllReceipt(startDate, endDate);
+          const rs: any = await this.exportdataService.saveAllReceipt(startDate, endDate, periodRpt);
           
           if (rs.ok) {
             this.modalLoading.hide();
@@ -602,6 +621,8 @@ export class ExportdataComponent implements OnInit {
 
   async getDistribution() {
     try {
+      this.periodRpt = true;
+
       const start = this.startDateDistribution.date;
       const startDate =
         String(start.year) +
@@ -646,6 +667,10 @@ export class ExportdataComponent implements OnInit {
 
   async saveAllDistribution() {
     try {
+      const periodRpt = `${this.yearSend}${
+        this.monthSend < 10 ? "0" + this.monthSend : this.monthSend
+      }`;
+
       const start = this.startDateDistribution.date;
       const startDate =
         String(start.year) +
@@ -661,7 +686,7 @@ export class ExportdataComponent implements OnInit {
         .then(async () => {
           this.modalLoading.show();
 
-          const rs: any = await this.exportdataService.saveAllDistribution(startDate, endDate);
+          const rs: any = await this.exportdataService.saveAllDistribution(startDate, endDate, periodRpt);
           
           if (rs.ok) {
             this.modalLoading.hide();
@@ -723,6 +748,7 @@ export class ExportdataComponent implements OnInit {
 
   async getInventory() {
     try {
+      this.periodRpt = false;
       this.modalLoading.show();
       const rs: any = await this.exportdataService.getInventory(this.queryProduct);
       if (rs.ok) {
@@ -755,19 +781,20 @@ export class ExportdataComponent implements OnInit {
 
   async saveAllInventory() {
     try {
+      const dateOnhand = `${this.dateOnhand.date.year}-${this.dateOnhand.date.month}-${this.dateOnhand.date.day}`;
+
       this.alertService
         .confirm("ต้องการส่งข้อมูลรายการยาคงเหลือในหน่วยบริการ ใช่หรือไม่?")
         .then(async () => {
           this.modalLoading.show();
 
-          const rs: any = await this.exportdataService.saveAllInventory();
+          const rs: any = await this.exportdataService.saveAllInventory(dateOnhand);
           
           if (rs.ok) {
             this.modalLoading.hide();
             if (rs.statusCode === 400) {
               this.alertService.error("มีบางรายการที่ส่งข้อมูลไม่สำเร็จ");
               this.errorList = rs.error;
-              console.log(this.errorList);
               
               this.modalErrorList = true;
               this.modalLoading.hide();
