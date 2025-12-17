@@ -40,6 +40,7 @@
   <clr-dg-column [clrDgField]="'product_name'">ชื่อยา (Trade name)</clr-dg-column>
   <clr-dg-column [clrDgField]="'v_labeler_name'">ผู้ผลิต</clr-dg-column>
   <clr-dg-column [clrDgField]="'tmtid'" style="width: 350px;">TMT ID (TPU)</clr-dg-column>
+  <clr-dg-column [clrDgField]="'#'" >#</clr-dg-column>
   <!-- <clr-dg-column>ชื่อยา/เวชภัณฑ์</clr-dg-column> -->
   <clr-dg-placeholder>ไม่พบข้อมูล!</clr-dg-placeholder>
   <clr-dg-row *clrDgItems='let m of products'>
@@ -57,6 +58,12 @@
         (onChange)="changeSearchProduct($event,m)" style="display: inline-block;" class="wm-edit-box-number">
       </wm-search-product-tmt>
     </clr-dg-cell>
+     <clr-dg-cell>
+      <button type="button" class="btn btn-sm btn-danger" (click)="clearTMT(m)">
+        <clr-icon shape="times-circle"></clr-icon>
+        ล้างค่า
+      </button>
+     </clr-dg-cell>
     <!-- <clr-dg-cell>{{m.FSN}}</clr-dg-cell> -->
   </clr-dg-row>
   <clr-dg-footer>

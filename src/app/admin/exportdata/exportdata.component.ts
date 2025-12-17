@@ -4,6 +4,8 @@ import { ExportdataService } from "../exportdata.service";
 import { BasicService } from "../../basic.service";
 import { ProductsService } from "../products.service";
 import { IMyOptions } from "mydatepicker-th";
+import { WarehouseService } from './../warehouse.service';
+import { JwtHelper } from 'angular2-jwt';
 
 @Component({
   selector: "wm-exportdata",
@@ -12,6 +14,8 @@ import { IMyOptions } from "mydatepicker-th";
 })
 export class ExportdataComponent implements OnInit {
   @ViewChild("modalLoading") public modalLoading: any;
+  @ViewChild('genericType') public genericType: any;
+  jwtHelper: JwtHelper = new JwtHelper();
 
   myDatePickerOptions: IMyOptions = {
     inline: false,
@@ -27,6 +31,9 @@ export class ExportdataComponent implements OnInit {
   monthSend = this.date.getMonth() + 1;
   yearSend = this.date.getFullYear();
 
+  warehouses: any = [];
+  genericTypeId: any = null;
+  warehouseId: any = null;
   periodRpt: any = true;
 
   druglist: any = [];
@@ -63,17 +70,26 @@ export class ExportdataComponent implements OnInit {
 
   token: any;
   modalToken: any = false;
+  decodedToken: any;
 
   constructor(
     private alertService: AlertService,
     private exportdataService: ExportdataService,
     private basicService: BasicService,
     private productsService: ProductsService,
+    private warehouseService: WarehouseService,
     @Inject("API_URL") private apiUrl: string
-  ) {}
+  ) {
+    const token = sessionStorage.getItem('token');
+    this.decodedToken = this.jwtHelper.decodeToken(token);
+  }
 
   ngOnInit() {
+    this.warehouseId = this.decodedToken.warehouseId;
+    this.genericTypeId = 1;
     this.getPurchasePlan();
+    this.getWarehouseList();
+
     for (let i = 0; i < 11; i++) {
       this.dataYear.push(this.date.getFullYear() + 1 - i);
     }
@@ -189,6 +205,25 @@ export class ExportdataComponent implements OnInit {
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async getWarehouseList() {
+    await this.warehouseService.all()
+      .then((result: any) => {
+        if (result.ok) {
+          this.warehouses = result.rows;          
+        } else {
+          this.alertService.error(JSON.stringify(result.error));
+        }
+      });
+  }
+
+  async selectGenericType(e) {
+    if (e) {
+      this.genericTypeId = e.generic_type_id;
+    } else {
+      this.genericTypeId = null;
     }
   }
 
@@ -634,7 +669,7 @@ export class ExportdataComponent implements OnInit {
         ("0" + end.month).slice(-2)
 
       this.modalLoading.show();
-      const rs: any = await this.exportdataService.getDistribution(startDate, endDate);
+      const rs: any = await this.exportdataService.getDistribution(startDate, endDate, this.warehouseId);
       if (rs.ok) {
         this.modalLoading.hide();
         this.distributionList = rs.rows;
@@ -686,7 +721,8 @@ export class ExportdataComponent implements OnInit {
         .then(async () => {
           this.modalLoading.show();
 
-          const rs: any = await this.exportdataService.saveAllDistribution(startDate, endDate, periodRpt);
+          const rs: any = await this.exportdataService.saveAllDistribution(startDate, endDate, periodRpt, this.warehouseId);
+          console.log(rs);
           
           if (rs.ok) {
             this.modalLoading.hide();
@@ -750,7 +786,7 @@ export class ExportdataComponent implements OnInit {
     try {
       this.periodRpt = false;
       this.modalLoading.show();
-      const rs: any = await this.exportdataService.getInventory(this.queryProduct);
+      const rs: any = await this.exportdataService.getInventory(this.queryProduct, this.warehouseId);
       if (rs.ok) {
         this.modalLoading.hide();
         this.inventoryList = rs.rows;
@@ -788,14 +824,13 @@ export class ExportdataComponent implements OnInit {
         .then(async () => {
           this.modalLoading.show();
 
-          const rs: any = await this.exportdataService.saveAllInventory(dateOnhand);
+          const rs: any = await this.exportdataService.saveAllInventory(dateOnhand, this.warehouseId);
           
           if (rs.ok) {
             this.modalLoading.hide();
             if (rs.statusCode === 400) {
               this.alertService.error("มีบางรายการที่ส่งข้อมูลไม่สำเร็จ");
               this.errorList = rs.error;
-              
               this.modalErrorList = true;
               this.modalLoading.hide();
             } else if (rs.statusCode === 200) {
