@@ -46,8 +46,7 @@ export class CodeMappingComponent implements OnInit {
     }
   }
 
-  changeSearchProduct(event, tmt) {
-  }
+  changeSearchProduct(event:any, tmt) {}
 
   setSelectedProduct(event, m) {
     const idx = _.findIndex(this.products, { 'product_id': m.product_id });
@@ -58,18 +57,17 @@ export class CodeMappingComponent implements OnInit {
 
   async save() {
     this.modalLoading.show();
-    try {
-
+    try {      
       const items: any = [];
       this.products.forEach(v => {
         if (v.tmtid) {
           const obj: any = {};
-          obj.working_code = v.working_code;
-          obj.product_id = v.product_id;
-          obj.tmt_id = v.tmtid;
+          obj.working_code = v.working_code || null;
+          obj.product_id = v.product_id || null;
+          obj.tmt_id = v.tmtid || null;
           items.push(obj);
         }
-      });
+      });      
 
       if (items.length) {
         const rs = await this.productsService.updateTMT(items)
@@ -81,11 +79,50 @@ export class CodeMappingComponent implements OnInit {
         }
       } else {
         this.alertService.error('ไม่พบรายการที่ต้องการบันทึก');
+        this.modalLoading.hide();
       }
 
     } catch (error) {
       this.modalLoading.hide();
       this.alertService.error(error.message);
+    }
+  }
+
+  clearTMT(m) {
+    this.modalLoading.show();
+    try {
+      this.alertService
+        .confirm("ต้องการล้างค่ารหัส TMT ใช่หรือไม่?")
+        .then(async () => {
+          this.modalLoading.show();
+          const items: any = [];
+          const obj: any = {
+            working_code: m.working_code || null,
+            product_id: m.product_id || null,
+            tmt_id: null
+          };
+          items.push(obj);
+
+          if (items.length) {
+            const rs = await this.productsService.updateTMT(items)
+            this.modalLoading.hide();
+            if (rs.ok) {
+              this.searchTMT.set(null);
+              this.alertService.success();
+            } else {
+              this.alertService.error(rs.error);
+            }
+          } else {
+            this.alertService.error('ไม่พบรายการที่ต้องการบันทึก');
+            this.modalLoading.hide();
+          }
+        })
+        .catch(() => {
+          this.modalLoading.hide();
+        });
+        this.modalLoading.hide();
+    } catch (error) {
+      console.log(error);
     }
   }
 

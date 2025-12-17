@@ -94,8 +94,8 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async getDistribution(startDate: any, endDate: any) {
-    const rs = await this.authHttp.get(`${this.url}/api/view-distribution?startDate=${startDate}&endDate=${endDate}`).toPromise();
+  async getDistribution(startDate: any, endDate: any, warehouseId: any) {
+    const rs = await this.authHttp.get(`${this.url}/api/view-distribution?startDate=${startDate}&endDate=${endDate}&warehouseId=${warehouseId}`).toPromise();
     return rs.json();
   }
 
@@ -104,9 +104,9 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async saveAllDistribution(startDate: any, endDate: any, periodRpt:any){
+  async saveAllDistribution(startDate: any, endDate: any, periodRpt:any, warehouseId: any){
     const body = {startDate, endDate}; // provide the appropriate payload here
-    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-distribution/save?periodRpt=${periodRpt}`, body).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-distribution/save?periodRpt=${periodRpt}&warehouseId=${warehouseId}`, body).toPromise();
     return rs.json();
   }
 
@@ -115,8 +115,8 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async getInventory(query: any) {
-    const rs = await this.authHttp.get(`${this.url}/api/view-inventory?query=${query}`).toPromise();
+  async getInventory(query: any, warehouseId:any) {
+    const rs = await this.authHttp.get(`${this.url}/api/view-inventory?query=${query}&warehouseId=${warehouseId}`).toPromise();
     return rs.json();
   }
 
@@ -125,9 +125,9 @@ export class ExportdataService {
     return rs.json();
   }
 
-  async saveAllInventory(dateOnhand:any){
+  async saveAllInventory(dateOnhand:any, warehouseId:any){
     const body = {}; // provide the appropriate payload here
-    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-inventory/save?dateOnhand=${dateOnhand}`, body).toPromise();
+    const rs = await this.authHttp.post(`${this.url}/api/dmsicapi-inventory/save?dateOnhand=${dateOnhand}&warehouseId=${warehouseId}`, body).toPromise();
     return rs.json();
   }
 

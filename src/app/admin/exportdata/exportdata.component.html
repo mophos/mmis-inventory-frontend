@@ -137,7 +137,21 @@
           </div>
         </div>
 
-        <div class="col-md-5" style="text-align: right">
+        <!-- <div class="col-md-1">
+          <wm-select-generic-type #genericType [selectedId]='genericTypeId' (onSelect)="selectGenericType($event)"></wm-select-generic-type>
+        </div> -->
+        <div class="col-lg-2">
+          <div class="select">
+            <select name="warehouseId" [(ngModel)]="warehouseId" (change)="changewarehouses()">
+              <option value="0">ทุกคลังสินค้า</option>
+              <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+                {{ w.short_code }}-{{ w.warehouse_name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3" style="text-align: right">
             <button
               class="btn btn-sm btn-primary-outline"
               (click)="openModalToken()"
@@ -155,7 +169,18 @@
           <my-date-picker-th name="dateOnhand" [options]="myDatePickerOptions" [(ngModel)]="dateOnhand" required>
           </my-date-picker-th>
         </div>
-        <div class="col-md-7" style="text-align: right">
+        <div class="col-lg-2">
+          <div class="select">
+            <select name="warehouseId" [(ngModel)]="warehouseId" (change)="changewarehouses()">
+              <option value="0">ทุกคลังสินค้า</option>
+              <option *ngFor="let w of warehouses" [value]="w.warehouse_id">
+                {{ w.short_code }}-{{ w.warehouse_name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-5" style="text-align: right">
             <button
               class="btn btn-sm btn-primary-outline"
               (click)="openModalToken()"
@@ -185,6 +210,7 @@
                   placeholder="ค้นหาสินค้า..."
                 />
               </div>
+
               <div class="col-md-2">
                 <button
                   class="btn btn-sm btn-success-outline"
@@ -193,6 +219,7 @@
                   Map รหัสยา TMT(TPU)
                 </button>
               </div>
+
               <div class="col-md-6" style="text-align: right">
                 <button
                   class="btn btn-sm btn-primary-outline"
@@ -549,6 +576,7 @@
                     refresh
                   </button>
                 </div>
+
                 <div class="col-md-3" style="text-align: right">
                   <button
                     class="btn btn-sm btn-primary-outline"
@@ -1249,7 +1277,7 @@
         <label for="startDate" class="required">ณ วันที่</label>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDateDistribution" required>
+        <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateOnhand" required>
         </my-date-picker-th>
       </div>
       <div class="col-md-4">
