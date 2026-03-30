@@ -800,7 +800,7 @@ export class ExportdataComponent implements OnInit {
 
   async getInventoryHistoryBydateOnhand() {
     try {
-      const date = `${this.dateOnhand.date.year}-${this.dateOnhand.date.month}-${this.dateOnhand.date.day}`;
+      const date = `${this.dateOnhand.date.year}-${("0" + this.dateOnhand.date.month).slice(-2)}-${("0" + this.dateOnhand.date.day).slice(-2)}`;
       
       this.modalInventoryHistory = true;
       const rs: any =
@@ -817,7 +817,7 @@ export class ExportdataComponent implements OnInit {
 
   async saveAllInventory() {
     try {
-      const dateOnhand = `${this.dateOnhand.date.year}-${this.dateOnhand.date.month}-${this.dateOnhand.date.day}`;
+      const dateOnhand = `${this.dateOnhand.date.year}-${("0" + this.dateOnhand.date.month).slice(-2)}-${("0" + this.dateOnhand.date.day).slice(-2)}`;
 
       this.alertService
         .confirm("ต้องการส่งข้อมูลรายการยาคงเหลือในหน่วยบริการ ใช่หรือไม่?")
@@ -856,7 +856,7 @@ export class ExportdataComponent implements OnInit {
 
   async deleteInventoryBydateOnhand(){
     try {
-      const date = `${this.dateOnhand.date.year}-${this.dateOnhand.date.month}-${this.dateOnhand.date.day}`;
+      const date = `${this.dateOnhand.date.year}-${("0" + this.dateOnhand.date.month).slice(-2)}-${("0" + this.dateOnhand.date.day).slice(-2)}`;
 
       this.alertService
         .confirm(`ต้องการลบรายการทั้งหมดของวันที่ ${date} ใช่หรือไม่?`)
