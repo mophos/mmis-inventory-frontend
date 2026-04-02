@@ -148,30 +148,6 @@ export class ExportdataComponent implements OnInit {
     window.open(url, "_blank");
   }
 
-  exportDistribute() {
-    const token = sessionStorage.getItem("token");
-    const url = `${this.apiUrl}/reports/export/distribute?token=${token}`;
-    window.open(url, "_blank");
-  }
-
-  exportDruglist() {
-    const token = sessionStorage.getItem("token");
-    const url = `${this.apiUrl}/reports/export/druglist?token=${token}`;
-    window.open(url, "_blank");
-  }
-
-  exportInventory() {
-    const token = sessionStorage.getItem("token");
-    const url = `${this.apiUrl}/reports/export/inventory?token=${token}`;
-    window.open(url, "_blank");
-  }
-
-  exportReceive() {
-    const token = sessionStorage.getItem("token");
-    const url = `${this.apiUrl}/reports/export/receive?token=${token}`;
-    window.open(url, "_blank");
-  }
-
   async getProductCategoryName() {
     try {
       const rs: any = await this.basicService.getBiProductCategories();
@@ -242,6 +218,12 @@ export class ExportdataComponent implements OnInit {
       this.modalLoading.hide();
       console.log(error);
     }
+  }
+
+  exportDruglist() {
+    const token = sessionStorage.getItem("token");
+    const url = `${this.apiUrl}/api/export/drug-list?token=${token}`;
+    window.open(url, "_blank");
   }
 
   async getDrugListHistoryByperiodRpt() {
@@ -356,6 +338,12 @@ export class ExportdataComponent implements OnInit {
       this.modalLoading.hide();
       console.log(error);
     }
+  }
+
+  exportPurchasePlan() {
+    const token = sessionStorage.getItem("token");
+    const url = `${this.apiUrl}/api/export/purchaser-plan?token=${token}`;
+    window.open(url, "_blank");
   }
 
   async getPurchasePlanHistoryByperiodRpt() {
@@ -517,6 +505,24 @@ export class ExportdataComponent implements OnInit {
       this.modalLoading.hide();
       console.log(error);
     }
+  }
+
+  exportReceipt() {
+    const start = this.startDateReceipt.date;
+    const startDate =
+      String(start.year) +
+      ("0" + start.month).slice(-2) +
+      ("0" + start.day).slice(-2);
+
+    const end = this.endDateReceipt.date;
+    const endDate =
+      String(end.year) +
+      ("0" + end.month).slice(-2) +
+      ("0" + end.day).slice(-2);
+
+    const token = sessionStorage.getItem("token");
+    const url = `${this.apiUrl}/api/export/receipt?startDate=${startDate}&endDate=${endDate}&token=${token}`;
+    window.open(url, "_blank");
   }
 
   async onChangeBuyMethod(item){
@@ -681,6 +687,22 @@ export class ExportdataComponent implements OnInit {
     }
   }
 
+  exportDistribution() {
+    const start = this.startDateDistribution.date;
+    const startDate =
+      String(start.year) +
+      ("0" + start.month).slice(-2)
+
+    const end = this.endDateDistribution.date;
+    const endDate =
+      String(end.year) +
+      ("0" + end.month).slice(-2)
+
+    const token = sessionStorage.getItem("token");
+    const url = `${this.apiUrl}/api/export/distribution?startDate=${startDate}&endDate=${endDate}&warehouseId=${this.warehouseId}&token=${token}`;
+    window.open(url, "_blank");
+  }
+
   async getDistributionHistoryByperiodRpt() {
     try {
       const periodRpt = `${this.year}${
@@ -796,6 +818,12 @@ export class ExportdataComponent implements OnInit {
       this.modalLoading.hide();
       console.log(error);
     }
+  }
+
+  exportInventory() {
+    const token = sessionStorage.getItem("token");
+    const url = `${this.apiUrl}/api/export/inventory?query=${this.queryProduct}&warehouseId=${this.warehouseId}}&token=${token}`;
+    window.open(url, "_blank");
   }
 
   async getInventoryHistoryBydateOnhand() {

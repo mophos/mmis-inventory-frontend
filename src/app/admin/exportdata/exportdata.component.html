@@ -39,61 +39,6 @@
               </button>
             </td>
           </tr>
-          <tr>
-            <td style="text-align: left">Export file DISTRIBUTE</td>
-            <td>
-              <button
-                class="btn btn-sm btn-success wm-small-btn"
-                (click)="exportDistribute()"
-              >
-                <clr-icon shape="export"></clr-icon>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: left">Export file DRUGLIST</td>
-            <td>
-              <button
-                class="btn btn-sm btn-success wm-small-btn"
-                (click)="exportDruglist()"
-              >
-                <clr-icon shape="export"></clr-icon>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: left">Export file INVENTORY</td>
-            <td>
-              <button
-                class="btn btn-sm btn-success wm-small-btn"
-                (click)="exportInventory()"
-              >
-                <clr-icon shape="export"></clr-icon>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: left">Export file RECEIVE</td>
-            <td>
-              <button
-                class="btn btn-sm btn-success wm-small-btn"
-                (click)="exportReceive()"
-              >
-                <clr-icon shape="export"></clr-icon>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: left">Export Financial</td>
-            <td>
-              <button
-                class="btn btn-sm btn-success wm-small-btn"
-                routerLink="/admin/exportdatas/export-financial"
-              >
-                <clr-icon shape="export"></clr-icon>
-              </button>
-            </td>
-          </tr>
         </tbody>
       </table>
     </clr-tab-content>
@@ -229,6 +174,12 @@
                 </button>
                 <button
                   class="btn btn-sm btn-success"
+                  (click)="exportDruglist()"
+                >
+                  export Excel
+                </button>
+                <button
+                  class="btn btn-sm btn-primary"
                   (click)="saveAllDruglist()"
                 >
                   ส่งข้อมูลทั้งหมด
@@ -358,6 +309,12 @@
                 </button>
                 <button
                   class="btn btn-sm btn-success"
+                  (click)="exportPurchasePlan()"
+                >
+                  export Excel
+                </button>
+                <button
+                  class="btn btn-sm btn-primary"
                   (click)="saveAllPurchasePlan()"
                 >
                   ส่งข้อมูลทั้งหมด
@@ -460,14 +417,14 @@
               <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                 <label for="startDate" class="required">ตั้งแต่</label>
               </div>
-              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+              <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
                 <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="startDateReceipt" required>
                 </my-date-picker-th>
               </div>
               <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                 <label for="endDate" class="required">ถึง</label>
               </div>
-              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+              <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
                 <my-date-picker-th name="mydate" [options]="myDatePickerOptions" [(ngModel)]="endDateReceipt" required>
                 </my-date-picker-th>
               </div>
@@ -477,7 +434,7 @@
                   refresh
                 </button>
               </div>
-              <div class="col-md-3" style="text-align: right">
+              <div class="col-md-5" style="text-align: right">
                 <button
                   class="btn btn-sm btn-primary-outline"
                   (click)="getReceiptHistoryByperiodRpt()"
@@ -486,6 +443,12 @@
                 </button>
                 <button
                   class="btn btn-sm btn-success"
+                  (click)="exportReceipt()"
+                >
+                  export Excel
+                </button>
+                <button
+                  class="btn btn-sm btn-primary"
                   (click)="saveAllReceipt()"
                 >
                   ส่งข้อมูลทั้งหมด
@@ -533,7 +496,7 @@
                 <clr-dg-cell>{{ item.CNT_NO === null || item.CNT_NO === undefined ? '-' : item.CNT_NO }}</clr-dg-cell>
                 <clr-dg-cell>{{ item.DATE_RCV === null || item.DATE_RCV === undefined ? 'null' : item.DATE_RCV }}</clr-dg-cell>
                 <clr-dg-cell>{{ item.buy_method_name === null || item.buy_method_name === undefined ? 'null' : item.buy_method_name}}</clr-dg-cell>
-                <clr-dg-cell>{{ item.bid_name === null || item.bid_name === undefined ? 'null' : item.bid_name }}</clr-dg-cell>
+                <clr-dg-cell>{{ item.co_purchase_name === null || item.co_purchase_name === undefined ? 'null' : item.co_purchase_name }}</clr-dg-cell>
                 <clr-dg-cell>{{ item.RCV_FLAG == null ? 'null' : (item.RCV_FLAG == 1 ? 'รับจากการซื้อ' : item.RCV_FLAG == 2 ? 'รับจากการชดเชย/บริจาค/ส่วนลด/ของแถม' : (item.RCV_FLAG | number)) }}</clr-dg-cell>
               </clr-dg-row>
 
@@ -585,7 +548,13 @@
                     ประวัติการส่ง
                   </button>
                   <button
-                    class="btn btn-sm btn-success"
+                  class="btn btn-sm btn-success"
+                  (click)="exportDistribution()"
+                >
+                  export Excel
+                </button>
+                  <button
+                    class="btn btn-sm btn-primary"
                     (click)="saveAllDistribution()"
                   >
                     ส่งข้อมูลทั้งหมด
@@ -665,6 +634,12 @@
                 </button>
                 <button
                   class="btn btn-sm btn-success"
+                  (click)="exportInventory()"
+                >
+                  export Excel
+                </button>
+                <button
+                  class="btn btn-sm btn-primary"
                   (click)="saveAllInventory()"
                 >
                   ส่งข้อมูลทั้งหมด

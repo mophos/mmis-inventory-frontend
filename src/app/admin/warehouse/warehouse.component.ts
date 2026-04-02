@@ -21,14 +21,14 @@ export class WarehouseComponent implements OnInit {
   hospcode: any;
   depCode: any;
   warehouseId: any;
-  warehouseName: string;
-  warehouseDesc: string;
-  telDept: string;
-  shortCode: string;
-  book: string;
-  deptId: string;
+  warehouseName: any = null;
+  warehouseDesc: any = null;
+  telDept: any = null;
+  shortCode: any = null;
+  book: any = null;
+  deptId: any = null;
 
-  location: string;
+  location: any = null;
   warehouses: any = [];
   types: any = [];
 
@@ -56,7 +56,7 @@ export class WarehouseComponent implements OnInit {
     this.getBiDepts();
   }
 
-  goDetail(warehouseId) {
+  goDetail(warehouseId: any) {
     this.router.navigate(['/admin/warehouse/detail', { warehouseId: warehouseId }]);
   }
 
@@ -93,54 +93,80 @@ export class WarehouseComponent implements OnInit {
     this.opened = true;
   }
 
+  private hasValue(value: any) {
+    return value !== null && value !== undefined && `${value}`.trim() !== '';
+  }
+
+  isSaveValid() {
+    return this.hasValue(this.warehouseName)
+      && this.hasValue(this.hospcode)
+      && this.hasValue(this.depCode)
+      && this.hasValue(this.deptId);
+  }
+
+  private getNextShortCode(): Promise<string> {
+    return this.warehouseService.all()
+      .then((results: any): string => {
+        if (!results.ok) {
+          throw results.error;
+        }
+
+        const nextWarehouseId = (results.rows || [])
+          .reduce((maxId: number, warehouse: any) => {
+            const warehouseId = Number(warehouse.warehouse_id) || 0;
+            return warehouseId > maxId ? warehouseId : maxId;
+          }, 0) + 1;
+
+        return `${nextWarehouseId}`;
+      });
+  }
+
   save() {
-    this.modalLoading.show();
     let promise;
     const isActived = this.isEnableWarehouse ? 'Y' : 'N';
     const isReceive = this.isReceiveWarehouse ? 'Y' : 'N';
     const isUnitIssue = this.isUnitIssue ? 'Y' : 'N';
-    let wid;
-    this.warehouses.forEach(e => {
-      wid = e.warehouse_id;
-    });
 
-    if (this.warehouseName && this.depCode && this.hospcode) {
+    if (!this.isSaveValid()) {
+      this.alertService.error('กรุณาระบุข้อมูลให้ครบ');
+      return;
+    }
 
-      if (this.isUpdate) {
-        promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept, this.deptId);
-      } else {
-        if (this.shortCode == null) {
-          this.shortCode = wid + 1;
-        }
-        promise = this.warehouseService.save(this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept, this.deptId);
-      }
+    this.modalLoading.show();
 
-      promise
-        .then((results: any) => {
-          if (results.ok) {
-            this.alertService.success();
-            this.all();
-            this.opened = false;
+    if (this.isUpdate) {
+      promise = this.warehouseService.update(this.warehouseId, this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept, this.deptId);
+    } else if (this.hasValue(this.shortCode)) {
+      promise = this.warehouseService.save(this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept, this.deptId);
+    } else {
+      promise = this.getNextShortCode()
+        .then((shortCode: string) => {
+          this.shortCode = shortCode;
+          return this.warehouseService.save(this.warehouseName, this.shortCode, this.location, isActived, isReceive, isUnitIssue, this.hospcode, this.depCode, this.book, this.warehouseDesc, this.telDept, this.deptId);
+        });
+    }
+
+    promise
+      .then((results: any) => {
+        if (results.ok) {
+          this.alertService.success();
+          this.opened = false;
+          this.all();
+        } else {
+          console.log(results.error);
+          if (results.error.code === 'ER_DUP_ENTRY') {
+            this.alertService.error('ข้อมูลซ้ำ ซึ่งอาจซ้ำกับข้อมูลที่ลบไปแล้ว');
           } else {
-            console.log(results.error);
-            if (results.error.code === 'ER_DUP_ENTRY') {
-              this.alertService.error('ข้อมูลซ้ำ ซึ่งอาจซ้ำกับข้อมูลที่ลบไปแล้ว')
-            } else {
-              this.alertService.error(JSON.stringify(results.error.message));
-            }
-
+            this.alertService.error(JSON.stringify(results.error.message));
           }
 
           this.modalLoading.hide();
-        })
-        .catch(() => {
+        }
+      })
+      .catch(() => {
           this.modalLoading.hide();
           this.alertService.serverError();
-        });
-
-    } else {
-      this.alertService.error('กรุณาระบุข้อมูลให้ครบ');
-    }
+      });
 
   }
 
