@@ -571,6 +571,8 @@
                 <clr-dg-column [clrDgField]="'value'">VALUE</clr-dg-column>
                 <clr-dg-column [clrDgField]="'disDeptGroup'">DIS DEPT GROUP</clr-dg-column>
                 <clr-dg-column [clrDgField]="'stockDate'">STOCK DATE</clr-dg-column>
+                <clr-dg-column [clrDgField]="'SrcWarehouse'">SRC WAREHOUSE</clr-dg-column>
+                <clr-dg-column [clrDgField]="'DstWarehouse'">DST WAREHOUSE</clr-dg-column>
 
                 <clr-dg-row *clrDgItems="let item of distributionList">
                   <clr-dg-cell>{{ item.WORKING_CODE }}</clr-dg-cell>
@@ -582,6 +584,8 @@
                   <clr-dg-cell>{{ item.VALUE | number: '1.2-2' }}</clr-dg-cell>
                   <clr-dg-cell>{{ item.DIS_DEPT_GROUP }}</clr-dg-cell>
                   <clr-dg-cell>{{ item.STOCK_DATE }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.SRC_WAREHOUSE_NAME }}</clr-dg-cell>
+                  <clr-dg-cell>{{ item.DST_WAREHOUSE_NAME }}</clr-dg-cell>
                 </clr-dg-row>
 
                 <clr-dg-footer>
