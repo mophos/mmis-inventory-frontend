@@ -1,0 +1,209 @@
+
+/* ---------------------------------------------------------------------------
+   ขั้นตอนความปลอดภัยหลังตรวจรหัสผ่าน (เปลี่ยนรหัสผ่าน / ตั้งค่า 2FA / กรอก OTP)
+   เขียนแยกจาก Clarity ให้น้อยที่สุด ใช้คลาสของ Clarity เป็นหลัก
+   --------------------------------------------------------------------------- */
+
+.mmis-step-hint {
+    margin: 0 0 1rem 0;
+    color: #565656;
+}
+
+.mmis-form-row {
+    display: block;
+    margin-bottom: 0.8rem;
+}
+
+.mmis-form-row label {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.55rem;
+    color: #565656;
+}
+
+.mmis-input {
+    width: 100%;
+    height: 1.2rem;
+    padding: 0 0.3rem;
+    border: none;
+    border-bottom: 1px solid #b3b3b3;
+    background: transparent;
+    font-size: 0.6rem;
+    color: #000;
+}
+
+.mmis-input:focus {
+    outline: none;
+    border-bottom: 2px solid #0072a3;
+}
+
+/* ช่องรหัสผ่าน + ปุ่มเปิด/ปิดการมองเห็น */
+.mmis-password-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.mmis-eye {
+    position: absolute;
+    right: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0 0.2rem;
+    color: #0072a3;
+    font-size: 0.5rem;
+    text-decoration: underline;
+}
+
+.mmis-eye:hover {
+    color: #0072a3;
+}
+
+/* รายการเงื่อนไขรหัสผ่าน อัปเดตสดขณะพิมพ์ */
+.mmis-rules {
+    list-style: none;
+    margin: 0.8rem 0 0 0;
+    padding: 0.5rem 0.6rem;
+    background: #fafafa;
+    border-left: 3px solid #b3b3b3;
+}
+
+.mmis-rules li {
+    margin: 0.15rem 0;
+    font-size: 0.55rem;
+    color: #9a9a9a;
+    display: flex;
+    align-items: center;
+}
+
+.mmis-rules li clr-icon {
+    margin-right: 0.3rem;
+    color: #c92100;
+}
+
+.mmis-rules li.done {
+    color: #266900;
+}
+
+.mmis-rules li.done clr-icon {
+    color: #266900;
+}
+
+/* ขั้นตอนการตั้งค่า 2FA */
+.mmis-steps {
+    margin: 0 0 1rem 0;
+    padding-left: 1rem;
+    color: #565656;
+    font-size: 0.58rem;
+}
+
+.mmis-steps li {
+    margin: 0.2rem 0;
+}
+
+.mmis-qr-area {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.8rem;
+    background: #fafafa;
+    margin-bottom: 1rem;
+}
+
+.mmis-qr-box {
+    width: 190px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    flex: 0 0 auto;
+}
+
+.mmis-qr-box img {
+    width: 100%;
+    height: 100%;
+}
+
+.mmis-qr-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mmis-qr-detail {
+    flex: 1 1 220px;
+    min-width: 220px;
+}
+
+.mmis-qr-issuer {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: #000;
+}
+
+.mmis-qr-account {
+    font-size: 0.58rem;
+    color: #565656;
+    margin-bottom: 0.8rem;
+}
+
+.mmis-secret-label {
+    display: block;
+    font-size: 0.52rem;
+    color: #565656;
+    margin-bottom: 0.2rem;
+}
+
+.mmis-secret-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.mmis-secret {
+    font-family: monospace;
+    letter-spacing: 0.05rem;
+    font-size: 0.55rem;
+}
+
+/* ช่องกรอกรหัส 6 หลัก */
+.mmis-otp {
+    font-family: monospace;
+    letter-spacing: 0.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.mmis-otp-big {
+    height: 1.8rem;
+    font-size: 1.1rem;
+    letter-spacing: 0.7rem;
+    margin: 0.5rem 0;
+}
+
+.mmis-error {
+    margin-top: 0.6rem;
+    padding: 0.4rem 0.5rem;
+    background: #fef4f3;
+    border-left: 3px solid #c92100;
+    color: #c92100;
+    font-size: 0.55rem;
+}
+
+.mmis-warning {
+    margin-top: 0.8rem;
+    padding: 0.4rem 0.5rem;
+    background: #fdf6e3;
+    border-left: 3px solid #efc006;
+    color: #62521b;
+    font-size: 0.53rem;
+}
+
+.mmis-error clr-icon,
+.mmis-warning clr-icon {
+    margin-right: 0.2rem;
+}

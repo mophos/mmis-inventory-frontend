@@ -28,3 +28,170 @@
     </form>
   </div>
 </clr-main-container>
+<!-- =====================================================================
+     ขั้นตอนความปลอดภัยหลังตรวจรหัสผ่าน
+     ทุก modal ปิดเองไม่ได้ (clrModalClosable = false) ผู้ใช้ต้องทำให้จบ
+     หรือกดยกเลิกเพื่อกลับไปหน้าเข้าสู่ระบบ
+     ===================================================================== -->
+
+<!-- 1. บังคับเปลี่ยนรหัสผ่าน -->
+<!-- ไม่ระบุ clrModalSize เพื่อใช้ขนาดมาตรฐาน — Clarity 0.11 รองรับเฉพาะ sm / lg / xl -->
+<clr-modal [(clrModalOpen)]="showChangePassword" [clrModalClosable]="false"
+           [clrModalStaticBackdrop]="true">
+    <h3 class="modal-title">กรุณาเปลี่ยนรหัสผ่านก่อนเข้าใช้งาน</h3>
+    <div class="modal-body">
+        <p class="mmis-step-hint">
+            เพื่อความปลอดภัย ระบบกำหนดให้ท่านตั้งรหัสผ่านใหม่ก่อนเข้าใช้งาน
+        </p>
+
+        <div class="form-group mmis-form-row">
+            <label for="mmis-new-password">รหัสผ่านใหม่</label>
+            <div class="mmis-password-wrap">
+                <input id="mmis-new-password" class="mmis-input"
+                       [type]="showNewPassword ? 'text' : 'password'"
+                       [(ngModel)]="newPassword" name="newPassword" autocomplete="new-password">
+                <!-- ใช้ข้อความแทนไอคอนรูปตา เพราะ Clarity ชุดนี้ไม่มี shape "eye" (มีแต่ eye-hide) -->
+                <button type="button" class="mmis-eye" (click)="showNewPassword = !showNewPassword">
+                    {{showNewPassword ? 'ซ่อน' : 'แสดง'}}
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group mmis-form-row">
+            <label for="mmis-confirm-password">ยืนยันรหัสผ่านใหม่</label>
+            <div class="mmis-password-wrap">
+                <input id="mmis-confirm-password" class="mmis-input"
+                       [type]="showConfirmPassword ? 'text' : 'password'"
+                       [(ngModel)]="confirmPassword" name="confirmPassword" autocomplete="new-password"
+                       (keyup.enter)="submitChangePassword()">
+                <button type="button" class="mmis-eye" (click)="showConfirmPassword = !showConfirmPassword">
+                    {{showConfirmPassword ? 'ซ่อน' : 'แสดง'}}
+                </button>
+            </div>
+        </div>
+
+        <ul class="mmis-rules">
+            <li [class.done]="passwordRules.length">
+                <clr-icon [attr.shape]="passwordRules.length ? 'check-circle' : 'times-circle'"></clr-icon>
+                ความยาวอย่างน้อย 8 ตัวอักษร
+            </li>
+            <li [class.done]="passwordRules.letter">
+                <clr-icon [attr.shape]="passwordRules.letter ? 'check-circle' : 'times-circle'"></clr-icon>
+                มีตัวอักษรภาษาอังกฤษอย่างน้อย 1 ตัว
+            </li>
+            <li [class.done]="passwordRules.number">
+                <clr-icon [attr.shape]="passwordRules.number ? 'check-circle' : 'times-circle'"></clr-icon>
+                มีตัวเลขอย่างน้อย 1 ตัว
+            </li>
+            <li [class.done]="passwordRules.match">
+                <clr-icon [attr.shape]="passwordRules.match ? 'check-circle' : 'times-circle'"></clr-icon>
+                รหัสผ่านทั้งสองช่องตรงกัน
+            </li>
+        </ul>
+
+        <div class="mmis-error" *ngIf="changePasswordError">
+            <clr-icon shape="exclamation-circle"></clr-icon> {{changePasswordError}}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="cancelSteps()" [disabled]="isProcessing">ยกเลิก</button>
+        <button type="button" class="btn btn-primary" (click)="submitChangePassword()" [disabled]="!canSubmitPassword">
+            <span *ngIf="!isProcessing">บันทึก</span>
+            <span *ngIf="isProcessing">กำลังบันทึก...</span>
+        </button>
+    </div>
+</clr-modal>
+
+<!-- 2. ตั้งค่า Google Authenticator -->
+<clr-modal [(clrModalOpen)]="showSetup2fa" [clrModalClosable]="false"
+           [clrModalStaticBackdrop]="true" [clrModalSize]="'lg'">
+    <h3 class="modal-title">ตั้งค่าการยืนยันตัวตน 2 ขั้นตอน</h3>
+    <div class="modal-body">
+        <ol class="mmis-steps">
+            <li>ติดตั้งแอป <strong>Google Authenticator</strong> บนมือถือ</li>
+            <li>เปิดแอปแล้วสแกน QR Code ด้านล่าง</li>
+            <li>กรอกตัวเลข 6 หลักที่แสดงในแอปเพื่อยืนยัน</li>
+        </ol>
+
+        <div class="mmis-qr-area">
+            <div class="mmis-qr-box">
+                <img *ngIf="qrDataUri" [src]="qrDataUri" alt="QR Code สำหรับตั้งค่า 2FA">
+                <div class="mmis-qr-loading" *ngIf="!qrDataUri">
+                    <span class="spinner">Loading...</span>
+                </div>
+            </div>
+            <div class="mmis-qr-detail">
+                <div class="mmis-qr-issuer">{{twoFaIssuer}}</div>
+                <div class="mmis-qr-account">{{twoFaAccount}}</div>
+
+                <label class="mmis-secret-label">สแกนไม่ได้? กรอกรหัสนี้ในแอปแทน</label>
+                <div class="mmis-secret-wrap">
+                    <input id="mmis-2fa-secret" class="mmis-input mmis-secret" readonly [value]="secretText || ''">
+                    <button type="button" class="btn btn-sm btn-outline" (click)="copySecret()">คัดลอก</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mmis-form-row">
+            <label for="mmis-setup-code">รหัสยืนยัน 6 หลัก</label>
+            <!-- ต้องเขียนค่าที่กรองแล้วกลับลง DOM เองด้วย (#setupInput.value)
+                 เพราะถ้าผู้ใช้พิมพ์ตัวอักษร ค่าใน model จะไม่เปลี่ยน Angular จึงไม่อัปเดต view
+                 ทำให้ช่องแสดง 6 ตัวจนชน maxlength แต่ model มีแค่ 5 ปุ่มยืนยันเลยกดไม่ได้ -->
+            <input id="mmis-setup-code" #setupInput class="mmis-input mmis-otp" type="text" inputmode="numeric"
+                   maxlength="6" placeholder="000000" autocomplete="off"
+                   [ngModel]="setupCode"
+                   (ngModelChange)="setupCode = onlyDigits($event); setupInput.value = setupCode"
+                   (keyup.enter)="submitSetup2fa()">
+        </div>
+
+        <div class="mmis-error" *ngIf="setupError">
+            <clr-icon shape="exclamation-circle"></clr-icon> {{setupError}}
+        </div>
+
+        <div class="mmis-warning">
+            <clr-icon shape="warning-standard"></clr-icon>
+            หากลบแอปหรือเปลี่ยนเครื่อง ต้องติดต่อผู้ดูแลระบบเพื่อตั้งค่าใหม่
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="cancelSteps()" [disabled]="isProcessing">ยกเลิก</button>
+        <button type="button" class="btn btn-primary" (click)="submitSetup2fa()"
+                [disabled]="setupCode.length !== 6 || isProcessing">
+            <span *ngIf="!isProcessing">ยืนยัน</span>
+            <span *ngIf="isProcessing">กำลังตรวจสอบ...</span>
+        </button>
+    </div>
+</clr-modal>
+
+<!-- 3. กรอก OTP สำหรับผู้ใช้ที่ตั้งค่าไว้แล้ว -->
+<clr-modal [(clrModalOpen)]="showVerify2fa" [clrModalClosable]="false"
+           [clrModalStaticBackdrop]="true" [clrModalSize]="'sm'">
+    <h3 class="modal-title">ยืนยันตัวตน 2 ขั้นตอน</h3>
+    <div class="modal-body">
+        <p class="mmis-step-hint">
+            เปิดแอป Google Authenticator แล้วกรอกตัวเลข 6 หลักสำหรับ MMIS
+        </p>
+
+        <input #verifyInput class="mmis-input mmis-otp mmis-otp-big" type="text" inputmode="numeric"
+               maxlength="6" placeholder="000000" autocomplete="off" autofocus
+               [ngModel]="verifyCode"
+               (ngModelChange)="verifyCode = onlyDigits($event); verifyInput.value = verifyCode"
+               (keyup.enter)="submitVerify2fa()">
+
+        <div class="mmis-error" *ngIf="verifyError">
+            <clr-icon shape="exclamation-circle"></clr-icon>
+            {{verifyError}}
+            <span *ngIf="remainingAttempts !== null && remainingAttempts !== undefined">
+                (เหลืออีก {{remainingAttempts}} ครั้ง)
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="cancelSteps()" [disabled]="isProcessing">ยกเลิก</button>
+        <button type="button" class="btn btn-primary" (click)="submitVerify2fa()"
+                [disabled]="verifyCode.length !== 6 || isProcessing">
+            <span *ngIf="!isProcessing">เข้าสู่ระบบ</span>
+            <span *ngIf="isProcessing">กำลังตรวจสอบ...</span>
+        </button>
+    </div>
+</clr-modal>
