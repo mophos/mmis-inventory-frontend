@@ -207,3 +207,15 @@
 .mmis-warning clr-icon {
     margin-right: 0.2rem;
 }
+
+/* จำอุปกรณ์นี้ — วางใต้ช่องกรอก OTP ทั้งโมดัลตั้งค่าและโมดัลกรอกรหัส */
+.mmis-remember {
+    margin-top: 0.7rem;
+}
+
+/* Clarity 0.11 ตั้ง margin ของ label ใน clr-checkbox ไว้ ทำให้ชิดขอบบนเกินไป
+   เมื่ออยู่ใต้ช่อง OTP ที่ตัวใหญ่ จึงกำหนดขนาดตัวอักษรให้เท่ากับข้อความอธิบายอื่น */
+.mmis-remember label {
+    font-size: 0.55rem;
+    color: #565656;
+}
