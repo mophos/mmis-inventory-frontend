@@ -144,6 +144,14 @@
                    (keyup.enter)="submitSetup2fa()">
         </div>
 
+        <!-- จำอุปกรณ์นี้ — แสดงเฉพาะเมื่อระบบเปิดใช้ (SYS_2FA_TRUST_DEVICE_DAYS > 0)
+             ค่าเริ่มต้นต้องไม่ติ๊ก ผู้ใช้ต้องเลือกเอง -->
+        <div class="mmis-remember" *ngIf="trustDeviceDays > 0">
+            <clr-checkbox [(clrChecked)]="rememberDevice">
+                จำอุปกรณ์นี้ไว้ {{trustDeviceDays}} วัน
+            </clr-checkbox>
+        </div>
+
         <div class="mmis-error" *ngIf="setupError">
             <clr-icon shape="exclamation-circle"></clr-icon> {{setupError}}
         </div>
@@ -177,6 +185,14 @@
                [ngModel]="verifyCode"
                (ngModelChange)="verifyCode = onlyDigits($event); verifyInput.value = verifyCode"
                (keyup.enter)="submitVerify2fa()">
+
+           <!-- จำอุปกรณ์นี้ — แสดงเฉพาะเมื่อระบบเปิดใช้ (SYS_2FA_TRUST_DEVICE_DAYS > 0)
+                ค่าเริ่มต้นต้องไม่ติ๊ก ผู้ใช้ต้องเลือกเอง -->
+           <div class="mmis-remember" *ngIf="trustDeviceDays > 0">
+               <clr-checkbox [(clrChecked)]="rememberDevice">
+                   จำอุปกรณ์นี้ไว้ {{trustDeviceDays}} วัน
+               </clr-checkbox>
+           </div>
 
         <div class="mmis-error" *ngIf="verifyError">
             <clr-icon shape="exclamation-circle"></clr-icon>
