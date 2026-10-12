@@ -41,7 +41,7 @@
     <clr-dg-cell>{{g.generic_name}}</clr-dg-cell>
     <clr-dg-cell>{{g.old_qty}} {{g.small_unit_name}}</clr-dg-cell>
     <clr-dg-cell>
-      <input type="text" #qty (keyup)="editChangeAdjust(g.generic_id, qty)" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
+      <input type="text" #qty (keyup)="editChangeAdjust(g.generic_id, qty)" [readonly]="g.products?.length > 1" title="หลาย lot: แก้จำนวนราย lot ในตาราง" class="wm-edit-box-number" style="width: 100%; background-color: #FFF9C4"
         wmNumberWithOutDot [value]="g.qty" />
     </clr-dg-cell>
     <clr-dg-cell style="text-align: center;">

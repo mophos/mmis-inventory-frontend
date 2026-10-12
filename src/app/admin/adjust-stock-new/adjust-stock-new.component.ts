@@ -142,45 +142,41 @@ export class AdjustStockNewComponent implements OnInit {
     this.productSearch.clearProductSearch();
   }
 
+  // เดิมเกลี่ยยอดใหม่ให้ทุก lot เท่าๆ กัน ถ้าผู้ใช้ไม่แก้ราย lot จำนวนจะย้ายข้าม lot (มูลค่าเปลี่ยนตามราคาแต่ละ lot)
+  // ตอนนี้: lot เดียว → ใส่ยอดที่กรอกให้ lot นั้น / หลาย lot → คงยอดปัจจุบันไว้ ให้ผู้ใช้กรอกราย lot เอง
   selectAdjust(genericId, qty) {
-    let check = true;
     const idx = _.findIndex(this.generics, { 'generic_id': genericId });
-    if (idx > -1) {
-      this.generics[idx].qty = qty;
+    if (idx === -1) {
+      return;
     }
-    const qtyAdjust = qty / this.generics[idx].products.length;
-    const isDigit = qtyAdjust - Math.floor(qtyAdjust) > 0 ? true : false;
-    for (const p of this.generics[idx].products) {
+    const products = this.generics[idx].products;
+    for (const p of products) {
       p.old_qty = p.qty;
-      if (isDigit) {
-        if (check) {
-          check = false;
-          p.qty = Math.floor(qtyAdjust) + 1
-        } else {
-          p.qty = Math.floor(qtyAdjust);
-        }
-      } else {
-        p.qty = qtyAdjust;
+    }
+    if (products.length === 1) {
+      products[0].qty = +qty;
+      this.generics[idx].qty = +qty;
+    } else {
+      this.generics[idx].qty = _.sumBy(products, (p: any) => +p.qty);
+      if (products.length > 1) {
+        this.alertService.error('รายการนี้มีหลาย lot กรุณาระบุจำนวนคงเหลือจริงของแต่ละ lot ในตาราง');
       }
     }
   }
 
   editChangeAdjust(genericId, qty) {
-    let _qty = qty.value;
     const idx = _.findIndex(this.generics, { 'generic_id': genericId });
-    if (idx > -1) {
-      this.generics[idx].qty = qty.value;
+    if (idx === -1) {
+      return;
     }
-    const qtyAdjust = qty.value / this.generics[idx].products.length;
-    for (const p of this.generics[idx].products) {
-      p.qty = Math.floor(qtyAdjust);
-      _qty -= p.qty;
-    }
-    for (const p of this.generics[idx].products) {
-      if (_qty > 0) {
-        p.qty++;
-        _qty--;
-      }
+    const products = this.generics[idx].products;
+    if (products.length === 1) {
+      products[0].qty = +qty.value;
+      this.generics[idx].qty = +qty.value;
+    } else {
+      // หลาย lot: ไม่เกลี่ยให้ ยอดรวมคำนวณจากราย lot เท่านั้น
+      this.generics[idx].qty = _.sumBy(products, (p: any) => +p.qty);
+      qty.value = this.generics[idx].qty;
     }
   }
 
@@ -207,8 +203,16 @@ export class AdjustStockNewComponent implements OnInit {
             const head = {
               reason: this.reason
             }
-            await this.adjustStockService.save(head, this.generics);
-            this.router.navigate(['/admin/adjust-stock']);
+            // เดิมไม่ดูผล เปลี่ยนหน้าเลย → backend ปฏิเสธ (เช่นรายการไม่ใช่ของคลังนี้) ผู้ใช้ไม่เห็น error
+            const rsSave: any = await this.adjustStockService.save(head, this.generics);
+            if (rsSave && rsSave.ok) {
+              this.router.navigate(['/admin/adjust-stock']);
+            } else {
+              this.isSave = false;
+              this.modalLoading.hide();
+              this.passwordModal = false;
+              this.alertService.error(rsSave && rsSave.error ? rsSave.error : 'บันทึกไม่สำเร็จ');
+            }
           } else {
             this.isSave = false;
             this.modalLoading.hide();
