@@ -546,6 +546,8 @@ export class StockcardReceiveOtherComponent implements OnInit {
       if (rs.ok) {
         rs.rows.forEach(v => {
           const product: any = {};
+          // ระบุบรรทัดใบรับให้ backend แก้ถูกบรรทัด (ใบที่มีของซื้อกับของแถม lot เดียวกัน)
+          product.receive_detail_id = v.receive_detail_id;
           product.product_id = v.product_id;
           product.product_name = v.product_name;
           product.receive_qty = v.receive_qty;

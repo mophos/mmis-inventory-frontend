@@ -322,7 +322,15 @@ export class StockcardReceiveComponent implements OnInit {
 
   editChangeFree(idx: any, value: any) {
     try {
-      this.products[idx].is_free = this.products[idx].is_free === 'Y' ? 'N' : 'Y';
+      const p = this.products[idx];
+      p.is_free = p.is_free === 'Y' ? 'N' : 'Y';
+      // ของแถมราคา 0 (เดิมสลับแค่สถานะ ราคาเดิมยังอยู่ → stock card มีราคาทั้งที่เป็นของแถม) / เอาออกคืนราคาก่อนติ๊ก
+      if (p.is_free === 'Y') {
+        p.cost_before_free = p.cost;
+        p.cost = 0;
+      } else if (+p.cost === 0) {
+        p.cost = p.cost_before_free !== undefined ? p.cost_before_free : p.cost_old;
+      }
       this.countTotalCost();
     } catch (error) {
       this.alertService.error(error);
@@ -435,6 +443,9 @@ export class StockcardReceiveComponent implements OnInit {
           obj.discount = v.discount;
           // ของแถม
           obj.is_free = v.is_free;
+          // ระบุบรรทัดใบรับ + สถานะของแถมเดิม ให้ backend หาบรรทัด/stock card ถูก (หน้าจอสลับของแถมได้)
+          obj.receive_detail_id = v.receive_detail_id;
+          obj.is_free_old = v.is_free;
           obj.is_lot_control = v.is_lot_control;
           console.log(v);
 
